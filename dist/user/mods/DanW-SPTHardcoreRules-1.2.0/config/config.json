@@ -1,0 +1,63 @@
+{
+	"enabled": true,
+	"debug": false,
+	"services": {
+		"flea_market": {
+				"enabled": false,
+				"only_barter_offers": true,
+				"min_level": 15
+		},
+		"disable_repairs": true,
+		"disable_insurance": true,
+		"disable_post_raid_healing": false,
+		"disable_scav_raids": true
+	},
+	"traders": {
+		"ID_money": "543be5dd4bdc2deb348b4569",
+		"disable_fence": true,
+		"barters_only": true,
+		"whitelist_only": false,
+		"whitelist": {
+			"parents": [
+				"543be5dd4bdc2deb348b4569",
+				"5795f317245977243854e041",
+				"5448bf274bdc2dfc2f8b456a",
+				"5447e0e74bdc2d3c308b4567",
+				"567849dd4bdc2d150f8b456e"
+			],
+			"items": [
+				"6217726288ed9f0845317459"
+			]
+		}
+	},
+	"secureContainer": {
+		"only_use_whitelists_in_this_mod": true,
+		"ignored_secure_containers": [ "5c0a5a5986f77476aa30ae64", "5c0a794586f77461c458f892" ],
+		"whitelist": {
+			"inRaid": {
+				"inspected": {
+					"parents": [],
+					"items": []
+				},
+				"uninspected": {
+					"parents":	[ "543be5e94bdc2df1348b4568" ],
+					"items": []
+				}
+			},
+			"inHideout": {
+				"parents":	[ "543be5e94bdc2df1348b4568" ],
+				"items": []
+			},
+			"global": {
+				"parents":	[],
+				"items": [
+					"619cbf9e0a7c3a1a2731940a",
+					"59fafd4b86f7745ca07e1232",
+					"62a09d3bcf4a99369e262447",
+					"5d235bb686f77443f4331278",
+					"590c60fc86f77412b13fddcf"
+				]
+			}
+		}
+	}
+}
