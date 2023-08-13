@@ -1,6 +1,6 @@
 {
-    "name": "SPTHardcoreRules",
-    "version": "1.2.0",
+    "name": "SPTQuestingBots",
+    "version": "0.1.0",
     "main": "src/mod.js",
     "license": "MIT",
     "author": "DanW",

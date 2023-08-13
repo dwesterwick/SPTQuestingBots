@@ -1,0 +1,7 @@
+{
+	"enabled": true,
+	"debug": {
+		"enabled": true,
+		"show_zone_outlines": true
+	}
+}

@@ -6,7 +6,7 @@ import { LocaleService } from "@spt-aki/services/LocaleService";
 
 export class CommonUtils
 {
-    private debugMessagePrefix = "[Hardcore Rules] ";
+    private debugMessagePrefix = "[Questing Bots] ";
     private translations: Record<string, string>;
 	
     constructor (private logger: ILogger, private databaseTables: IDatabaseTables, private localeService: LocaleService)
@@ -15,30 +15,34 @@ export class CommonUtils
         this.translations = this.localeService.getLocaleDb();
     }
 	
-    public logInfo(message: string): void
+    public logInfo(message: string, alwaysShow = false): void
     {
-        if (modConfig.debug)
+        if (modConfig.enabled || alwaysShow)
             this.logger.info(this.debugMessagePrefix + message);
     }
-	
-    public getTraderName(traderID: string): string
+
+    public logWarning(message: string): void
     {
-        const translationKey = traderID + " Nickname";
-        if (translationKey in this.translations)
-            return this.translations[translationKey];
-		
-        // If a key can't be found in the translations dictionary, fall back to the template data
-        const trader = this.databaseTables.traders[traderID];
-        return trader.base.nickname;
+        this.logger.warning(this.debugMessagePrefix + message);
     }
-	
+
+    public logError(message: string): void
+    {
+        this.logger.error(this.debugMessagePrefix + message);
+    }
+
     public getItemName(itemID: string): string
     {
         const translationKey = itemID + " Name";
         if (translationKey in this.translations)
             return this.translations[translationKey];
 		
-        // If a key can't be found in the translations dictionary, fall back to the template data
+        // If a key can't be found in the translations dictionary, fall back to the template data if possible
+        if (!(itemID in this.databaseTables.templates.items))
+        {
+            return undefined;
+        }
+
         const item = this.databaseTables.templates.items[itemID];
         return item._name;
     }
