@@ -292,14 +292,15 @@ namespace QuestingBots.Controllers
 
         public static RaidSettings GetCurrentRaidSettings()
         {
-            if (Singleton<TarkovApplication>.Instance == null)
+            TarkovApplication app = FindObjectOfType<TarkovApplication>();
+            if (app == null)
             {
                 LoggingController.LogError("Cannot retrieve Tarkov application instance");
                 return null;
             }
 
             FieldInfo raidSettingsField = typeof(TarkovApplication).GetField("_raidSettings", BindingFlags.NonPublic | BindingFlags.Instance);
-            RaidSettings raidSettings = raidSettingsField.GetValue(Singleton<TarkovApplication>.Instance) as RaidSettings;
+            RaidSettings raidSettings = raidSettingsField.GetValue(app) as RaidSettings;
             return raidSettings;
         }
 
