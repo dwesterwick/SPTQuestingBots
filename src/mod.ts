@@ -43,17 +43,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "GetConfig"
         ); 
         
-        // Get the logging directory for bepinex crash reports
-        staticRouterModService.registerStaticRouter(`StaticGetLoggingPath${modName}`,
-            [{
-                url: "/SPTQuestingBots/GetLoggingPath",
-                action: () => 
-                {
-                    return JSON.stringify({ path: __dirname + "/../log/" });
-                }
-            }], "GetLoggingPath"
-        );
-
         // Report error messages to the SPT-AKI server console in case the user hasn't enabled the bepinex console
         dynamicRouterModService.registerDynamicRouter(`DynamicReportError${modName}`,
             [{
@@ -86,6 +75,18 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     return JSON.stringify({ resp: "OK" });
                 }
             }], "ForcePMCSpawns"
+        );
+
+        // Set PMC conversion to 100%
+        staticRouterModService.registerStaticRouter(`StaticForceScavSpawns${modName}`,
+            [{
+                url: "/SPTQuestingBots/ForceScavSpawns",
+                action: () => 
+                {
+                    
+                    return JSON.stringify({ resp: "OK" });
+                }
+            }], "ForceScavSpawns"
         );
 
         // Get all quest templates
