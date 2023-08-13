@@ -2,6 +2,7 @@
 	"enabled": true,
 	"debug": {
 		"enabled": true,
+		"scav_cooldown_time": 1500,
 		"show_zone_outlines": true
 	}
 }

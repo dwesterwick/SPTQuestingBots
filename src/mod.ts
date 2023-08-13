@@ -16,6 +16,7 @@ import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
 import { LocaleService } from "@spt-aki/services/LocaleService";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 
 const modName = "SPTQuestingBots";
@@ -30,6 +31,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private databaseTables: IDatabaseTables;
     private localeService: LocaleService;
     private questHelper: QuestHelper;
+    private profileHelper: ProfileHelper;
     private iBotConfig: IBotConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
@@ -73,6 +75,23 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             return;
         }
 
+        // Game start
+        // Needed to update Scav timer
+        staticRouterModService.registerStaticRouter(`StaticAkiGameStart${modName}`,
+            [{
+                url: "/client/game/start",
+                action: (url: string, info: any, sessionId: string, output: string) => 
+                {
+                    if (modConfig.debug.enabled)
+                    {
+                        this.updateScavTimer(sessionId);
+                    }
+
+                    return output;
+                }
+            }], "aki"
+        );
+
         // Set PMC conversion to 100%
         staticRouterModService.registerStaticRouter(`StaticForcePMCSpawns${modName}`,
             [{
@@ -115,16 +134,62 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.databaseServer = container.resolve<DatabaseServer>("DatabaseServer");
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
+        this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
+
+        // Adjust parameters to make debugging easier
+        if (modConfig.debug.enabled)
+        {
+            this.commonUtils.logInfo("Applying debug options...");
+
+            if (modConfig.debug.scav_cooldown_time < this.databaseTables.globals.config.SavagePlayCooldown)
+            {
+                this.databaseTables.globals.config.SavagePlayCooldown = modConfig.debug.scav_cooldown_time;
+            }
+        }
     }
 	
     public postAkiLoad(): void
     {
         this.setOriginalPMCConversionChances();
+    }
+
+    private updateScavTimer(sessionId: string): void
+    {
+        const pmcData = this.profileHelper.getPmcProfile(sessionId);
+        const scavData = this.profileHelper.getScavProfile(sessionId);
+		
+        if ((scavData.Info === null) || (scavData.Info === undefined))
+        {
+            this.commonUtils.logInfo("Scav profile hasn't been created yet.");
+            return;
+        }
+		
+        // In case somebody disables scav runs and later wants to enable them, we need to reset their Scav timer unless it's plausible
+        const worstCooldownFactor = this.getWorstSavageCooldownModifier();
+        if (scavData.Info.SavageLockTime - pmcData.Info.LastTimePlayedAsSavage > this.databaseTables.globals.config.SavagePlayCooldown * worstCooldownFactor * 1.1)
+        {
+            this.commonUtils.logInfo(`Resetting scav timer for sessionId=${sessionId}...`);
+            scavData.Info.SavageLockTime = 0;
+        }
+    }
+	
+    // Return the highest Scav cooldown factor from Fence's rep levels
+    private getWorstSavageCooldownModifier(): number
+    {
+        // Initialize the return value at something very low
+        let worstCooldownFactor = 0.01;
+
+        for (const level in this.databaseTables.globals.config.FenceSettings.Levels)
+        {
+            if (this.databaseTables.globals.config.FenceSettings.Levels[level].SavageCooldownModifier > worstCooldownFactor)
+                worstCooldownFactor = this.databaseTables.globals.config.FenceSettings.Levels[level].SavageCooldownModifier;
+        }
+        return worstCooldownFactor;
     }
 
     private setOriginalPMCConversionChances(): void
