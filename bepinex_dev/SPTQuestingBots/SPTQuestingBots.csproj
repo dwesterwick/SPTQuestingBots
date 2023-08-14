@@ -82,12 +82,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotLogic\BotBrains.cs" />
-    <Compile Include="BotLogic\BotQuestController.cs" />
+    <Compile Include="Controllers\BotQuestController.cs" />
     <Compile Include="BotLogic\PMCObjective.cs" />
     <Compile Include="BotLogic\PMCObjectiveAction.cs" />
     <Compile Include="BotLogic\PMCObjectiveLayer.cs" />
+    <Compile Include="Configuration\BotQuestsConfig.cs" />
+    <Compile Include="Configuration\BotSearchDistanceConfig.cs" />
     <Compile Include="Configuration\DebugConfig.cs" />
+    <Compile Include="Configuration\InitialPMCSpawnsConfig.cs" />
     <Compile Include="Configuration\ModConfig.cs" />
+    <Compile Include="Configuration\QuestGenerationConfig.cs" />
+    <Compile Include="Configuration\QuestSettingsConfig.cs" />
     <Compile Include="Configuration\QuestTemplatesConfig.cs" />
     <Compile Include="Controllers\BotGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />

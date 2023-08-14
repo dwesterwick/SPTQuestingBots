@@ -1,8 +1,41 @@
 {
 	"enabled": true,
 	"debug": {
-		"enabled": true,
+		"enabled": false,
 		"scav_cooldown_time": 1500,
-		"show_zone_outlines": true
+		"show_zone_outlines": false
+	},
+	"max_calc_time_per_frame_ms": 5,
+	"brain_layer_priority": 25,
+	"min_time_between_switching_objectives": 5,
+	"quest_generation": {
+		"navmesh_search_distance_item": 2,
+		"navmesh_search_distance_zone": 2,
+		"navmesh_search_distance_spawn": 10
+	},
+	"bot_search_distances": {
+		"objective_reached_ideal": 3,
+		"objective_reached_navmesh_path_error": 20,
+		"max_navmesh_path_error": 10
+	},
+	"bot_quests": {
+		"eft_quests": {
+			"priority": 5,
+			"chance": 50
+		},
+		"spawn_rush": {
+			"priority": 1,
+			"chance": 50,
+			"max_distance": 75,
+			"max_raid_ET": 30
+		},
+		"spawn_point_wander": {
+			"priority": 10,
+			"chance": 30
+		}
+	},
+	"initial_PMC_spawns": {
+		"enabled": false,
+		"max_raid_ET": 30
 	}
 }

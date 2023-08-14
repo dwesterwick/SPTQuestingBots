@@ -37,9 +37,9 @@ namespace QuestingBots
                 List<string> botBrainsToChange = BotBrains.AllBots.ToList();
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...changing bot brains: " + string.Join(", ", botBrainsToChange));
 
-                BrainManager.AddCustomLayer(typeof(PMCObjectiveLayer), botBrainsToChange, 25);
+                BrainManager.AddCustomLayer(typeof(PMCObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
 
-                if (ConfigController.Config.Debug.Enabled)
+                if (ConfigController.Config.Debug.ShowZoneOutlines)
                 {
                     this.GetOrAddComponent<PathRender>();
                 }

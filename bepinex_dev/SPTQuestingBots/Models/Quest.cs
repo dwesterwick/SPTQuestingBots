@@ -19,7 +19,7 @@ namespace QuestingBots.Models
     {
         public RawQuestClass Template { get; private set; } = null;
         public int MinLevel { get; set; } = 0;
-        public float ChanceForSelecting { get; set; } = 0.5f;
+        public float ChanceForSelecting { get; set; } = 50;
         public int Priority { get; set; }
 
         private string name = "Unnamed Quest";

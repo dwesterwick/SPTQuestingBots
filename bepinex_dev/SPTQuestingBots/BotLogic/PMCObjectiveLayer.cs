@@ -14,7 +14,7 @@ namespace QuestingBots.BotLogic
     {
         private PMCObjective objective;
         private BotOwner botOwner;
-        private float minTimeBetweenSwitchingObjectives = 5f;
+        private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
 
         public PMCObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {

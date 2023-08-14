@@ -10,18 +10,17 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.Quests;
-using QuestingBots.Controllers;
 using QuestingBots.Models;
 using UnityEngine;
 
-namespace QuestingBots.BotLogic
+namespace QuestingBots.Controllers
 {
     public class BotQuestController : MonoBehaviour
     {
         public static bool IsFindingTriggers = false;
         public static bool HaveTriggersBeenFound = false;
 
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(5);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
         private static List<Quest> allQuests = new List<Quest>();
         private static List<string> zoneIDsInLocation = new List<string>();
 
@@ -95,7 +94,7 @@ namespace QuestingBots.BotLogic
 
             foreach (Quest quest in prioritizedQuests)
             {
-                if (random.NextFloat(0, 1) < quest.ChanceForSelecting)
+                if (random.NextFloat(0, 100) < quest.ChanceForSelecting)
                 {
                     return quest;
                 }
@@ -115,7 +114,9 @@ namespace QuestingBots.BotLogic
                     RawQuestClass[] allQuestTemplates = ConfigController.GetAllQuestTemplates();
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
-                        allQuests.Add(new Quest(5, questTemplate));
+                        Quest quest = new Quest(ConfigController.Config.BotQuests.EFTQuests.Priority, questTemplate);
+                        quest.ChanceForSelecting = ConfigController.Config.BotQuests.EFTQuests.Chance;
+                        allQuests.Add(quest);
                     }
 
                     enumeratorWithTimeLimit.Reset();
@@ -208,7 +209,7 @@ namespace QuestingBots.BotLogic
                             return;
                         }
 
-                        Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(itemCollider.bounds.center, 2f);
+                        Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceItem);
                         if (!navMeshTargetPoint.HasValue)
                         {
                             LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
@@ -367,7 +368,7 @@ namespace QuestingBots.BotLogic
                 triggerTargetPosition.y = triggerCollider.bounds.min.y + 0.75f;
             }
 
-            Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(triggerTargetPosition, 2f);
+            Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(triggerTargetPosition, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone);
             if (!navMeshTargetPoint.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh point for trigger " + trigger.Id);
@@ -385,7 +386,7 @@ namespace QuestingBots.BotLogic
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
                 objective.Position = navMeshTargetPoint.Value;
-                objective.MaxBots = triggerCollider.bounds.Volume() > 5 ? 4 : 2;
+                objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? 2 : 1;
 
                 zoneIDsInLocation.Add(trigger.Id);
             }

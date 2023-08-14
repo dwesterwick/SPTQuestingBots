@@ -23,7 +23,8 @@ namespace QuestingBots.Controllers
         public static bool IsGeneratingPMCs { get; private set; } = false;
         public static int SpawnedPMCCount { get; private set; } = 0;
 
-        private static EnumeratorWithTimeLimit enumeratorWithTimeLimit = new EnumeratorWithTimeLimit(5);
+        private static EnumeratorWithTimeLimit enumeratorWithTimeLimit = new EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private static RaidSettings raidSettings = null;
         private static LocationSettingsClass.Location location = null;
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static List<Models.BotSpawnInfo> initialPMCBots = new List<Models.BotSpawnInfo>();
@@ -53,6 +54,7 @@ namespace QuestingBots.Controllers
             initialPMCBotSpawnPoints = new SpawnPointParams[0];
             spawnPositions.Clear();
             location = null;
+            raidSettings = null;
         }
 
         public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
@@ -87,7 +89,13 @@ namespace QuestingBots.Controllers
 
             if (location == null)
             {
-                location = GetCurrentLocation();
+                raidSettings = GetCurrentRaidSettings();
+                location = raidSettings.SelectedLocation;
+            }
+
+            if (!ConfigController.Config.InitialPMCSpawns.Enabled)
+            {
+                return;
             }
 
             // Get the current number of seconds remaining and elapsed in the raid
@@ -95,19 +103,21 @@ namespace QuestingBots.Controllers
             float raidTimeElapsed = (location.EscapeTimeLimit * 60f) - escapeTimeSec;
 
             // Do not force spawns if the player spawned late
-            if (raidTimeElapsed > 30)
+            if (raidTimeElapsed > ConfigController.Config.InitialPMCSpawns.MaxRaidET)
             {
-                //return;
+                return;
             }
 
             if (initialPMCBots.Count == 0)
             {
-                maxPMCBots = location.MaxPlayers - 1;
+                System.Random random = new System.Random();
+                maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers)  - 1;
+
                 ConfigController.ForcePMCSpawns();
 
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBots(WildSpawnType.assault, EPlayerSide.Savage, BotDifficulty.normal, maxPMCBots);
+                generateBots(WildSpawnType.assault, EPlayerSide.Savage, raidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 // Generate inital PMC spawn points
@@ -126,7 +136,7 @@ namespace QuestingBots.Controllers
 
             for (int b = 0; b < initialPMCBots.Count; b++)
             {
-                LoggingController.LogInfo("Assigning initial PMC bot #" + b + " the spawn point " + initialPMCBotSpawnPoints[b]);
+                LoggingController.LogInfo("Assigning initial PMC bot #" + b + " the spawn point " + initialPMCBotSpawnPoints[b].Position.ToUnityVector3().ToString());
                 initialPMCBots[b].SpawnPoint = initialPMCBotSpawnPoints[b];
             }
 
@@ -151,10 +161,17 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(10, "Spawn Points");
-            quest.ChanceForSelecting = 0.3f;
+            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnPointWander.Priority, "Spawn Points");
+            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnPointWander.Chance;
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
+                    continue;
+                }
+
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 quest.AddObjective(objective);
             }
@@ -164,7 +181,7 @@ namespace QuestingBots.Controllers
 
         public static Models.Quest CreateSpawnRushQuest()
         {
-            if (GetRaidET() > 999)
+            if (GetRaidET() > ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
             {
                 return null;
             }
@@ -176,7 +193,7 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            Vector3? navMeshPosition = BotGenerator.FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, 10);
+            Vector3? navMeshPosition = FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogWarning("Cannot find NavMesh position for player spawn point.");
@@ -184,9 +201,9 @@ namespace QuestingBots.Controllers
             }
 
             Models.Quest quest = new Models.Quest(1, "Spawn Rush");
-            //quest.ChanceForSelecting = 1f;
+            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
-            objective.MaxDistanceFromBot = 75f;
+            objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
             quest.AddObjective(objective);
             return quest;
         }
@@ -377,7 +394,7 @@ namespace QuestingBots.Controllers
                 }
 
                 Vector3 spawnPosition = spawnPoint.Position.ToUnityVector3();
-                Vector3? navMeshPosition = BotGenerator.FindNearestNavMeshPosition(spawnPosition, 10);
+                Vector3? navMeshPosition = BotGenerator.FindNearestNavMeshPosition(spawnPosition, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
                     LoggingController.LogInfo("Cannot spawn PMC at " + spawnPoint.Id + ". No valid NavMesh position nearby.");

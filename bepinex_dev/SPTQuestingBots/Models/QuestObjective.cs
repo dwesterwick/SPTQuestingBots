@@ -40,7 +40,6 @@ namespace QuestingBots.Models
             successfulBots.Clear();
             unsuccessfulBots.Clear();
             Position = null;
-            MaxBots = 1;
         }
 
         public bool TryAssignBot(BotOwner bot)
