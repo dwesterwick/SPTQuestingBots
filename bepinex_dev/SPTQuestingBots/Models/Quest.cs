@@ -51,11 +51,7 @@ namespace QuestingBots.Models
         public void Clear()
         {
             blacklistedBots.Clear();
-
-            foreach(QuestObjective objective in objectives)
-            {
-                objective.Clear();
-            }
+            objectives.Clear();
         }
 
         public void BlacklistBot(BotOwner bot)

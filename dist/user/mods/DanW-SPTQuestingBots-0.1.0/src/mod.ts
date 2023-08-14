@@ -222,6 +222,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         let logMessage = "";
         for (const pmcType in this.iBotConfig.pmc.convertIntoPmcChance)
         {
+            // For now, we only want to convert assault bots due to the way the client mod forces spawns
+            if (pmcType != "assault")
+            {
+                continue;
+            }
+
             // Do not allow the chances to exceed 100%. Who knows what might happen...
             const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].min * scalingFactor));
             const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].max * scalingFactor));

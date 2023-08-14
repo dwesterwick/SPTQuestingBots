@@ -6,7 +6,7 @@
 		"show_zone_outlines": false
 	},
 	"max_calc_time_per_frame_ms": 5,
-	"brain_layer_priority": 25,
+	"brain_layer_priority": 21,
 	"min_time_between_switching_objectives": 5,
 	"quest_generation": {
 		"navmesh_search_distance_item": 2,

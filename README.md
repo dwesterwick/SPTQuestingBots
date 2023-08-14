@@ -1,1 +1,3 @@
-Questing Bots
+Requires:
+* BigBrain
+* Waypoints

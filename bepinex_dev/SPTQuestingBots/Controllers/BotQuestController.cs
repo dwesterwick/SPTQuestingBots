@@ -118,10 +118,10 @@ namespace QuestingBots.Controllers
                         quest.ChanceForSelecting = ConfigController.Config.BotQuests.EFTQuests.Chance;
                         allQuests.Add(quest);
                     }
-
-                    enumeratorWithTimeLimit.Reset();
-                    yield return enumeratorWithTimeLimit.Run(allQuests, LoadQuest);
                 }
+
+                enumeratorWithTimeLimit.Reset();
+                yield return enumeratorWithTimeLimit.Run(allQuests, LoadQuest);
 
                 IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
                 //IEnumerable<Type> allTriggerTypes = allTriggers.Select(t => t.GetType()).Distinct();
@@ -351,6 +351,7 @@ namespace QuestingBots.Controllers
             Quest[] matchingQuests = allQuests.Where(q => q.GetObjectiveForZoneID(trigger.Id) != null).ToArray();
             if (matchingQuests.Length == 0)
             {
+                LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
                 return;
             }
 

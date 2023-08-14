@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.Controllers;
+using UnityEngine;
 
 namespace QuestingBots.BotLogic
 {
@@ -36,6 +37,17 @@ namespace QuestingBots.BotLogic
 
         public override bool IsActive()
         {
+            if (BotOwner.BotState != EBotState.Active)
+            {
+                return false;
+            }
+
+            if (WasInCombat(20f))
+            {
+                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " was in combat");
+                return false;
+            }
+
             if (!objective.IsObjectiveActive)
             {
                 return false;
@@ -71,6 +83,16 @@ namespace QuestingBots.BotLogic
         public override bool IsCurrentActionEnding()
         {
             return !objective.IsObjectiveActive || objective.IsObjectiveReached;
+        }
+
+        private bool WasInCombat(float timeframe)
+        {
+            bool wasInCombat = (Time.time - botOwner.Memory.LastTimeHit) < timeframe;
+            wasInCombat |= (Time.time - botOwner.Memory.EnemySetTime) < timeframe;
+            wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < timeframe;
+            wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < timeframe;
+
+            return wasInCombat;
         }
     }
 }
