@@ -99,6 +99,15 @@ namespace QuestingBots.Models
             return possibleObjectives.Random();
         }
 
+        public int GetRemainingObjectiveCount(BotOwner bot)
+        {
+            IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
+                .Where(o => o.CanAssignBot(bot))
+                .Where(o => o.CanAssignMoreBots);
+
+            return possibleObjectives.Count();
+        }
+
         public QuestObjective GetObjectiveForZoneID(string zoneId)
         {
             IEnumerable<QuestZoneObjective> matchingObjectives = objectives

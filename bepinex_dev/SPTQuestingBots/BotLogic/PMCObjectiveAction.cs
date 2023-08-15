@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace QuestingBots.BotLogic
         private PMCObjective objective;
         private BotOwner botOwner;
         private GClass274 baseSteeringLogic = new GClass274();
-
+        
         public PMCObjectiveAction(BotOwner _botOwner) : base(_botOwner)
         {
             botOwner = _botOwner;
@@ -63,7 +64,7 @@ namespace QuestingBots.BotLogic
                 return;
             }
 
-            if (!objective.IsObjectiveReached && Vector3.Distance(objective.Position.Value, botOwner.Position) < 3f)
+            if (!objective.IsObjectiveReached && Vector3.Distance(objective.Position.Value, botOwner.Position) < ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal)
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " reached its objective (" + objective + ").");
                 objective.CompleteObjective();
@@ -90,9 +91,9 @@ namespace QuestingBots.BotLogic
                         distanceToObjective = Vector3.Distance(botOwner.Position, objective.Position.Value);
                     }
 
-                    if (distanceToEndOfPath < 10f)
+                    if (distanceToEndOfPath < ConfigController.Config.BotSearchDistances.MaxNavMeshPathError)
                     {
-                        if (distanceToObjective < 20f)
+                        if (distanceToObjective < ConfigController.Config.BotSearchDistances.ObjectiveReachedNavMeshPathError)
                         {
                             LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " cannot find a complete path to its objective (" + objective + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
                             objective.CompleteObjective();

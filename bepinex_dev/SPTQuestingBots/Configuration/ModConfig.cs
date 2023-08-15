@@ -20,7 +20,10 @@ namespace QuestingBots.Configuration
         public float MaxCalcTimePerFrame { get; set; } = 5;
 
         [JsonProperty("brain_layer_priority")]
-        public int BrainLayerPriority { get; set; } = 25;
+        public int BrainLayerPriority { get; set; } = 21;
+
+        [JsonProperty("search_time_after_combat")]
+        public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
 
         [JsonProperty("min_time_between_switching_objectives")]
         public float MinTimeBetweenSwitchingObjectives { get; set; } = 5;

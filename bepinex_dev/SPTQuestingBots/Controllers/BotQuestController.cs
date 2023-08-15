@@ -351,7 +351,7 @@ namespace QuestingBots.Controllers
             Quest[] matchingQuests = allQuests.Where(q => q.GetObjectiveForZoneID(trigger.Id) != null).ToArray();
             if (matchingQuests.Length == 0)
             {
-                LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
+                //LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
                 return;
             }
 

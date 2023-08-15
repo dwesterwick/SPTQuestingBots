@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
-using EFT.Game.Spawning;
 using QuestingBots.Controllers;
 using UnityEngine;
 
@@ -24,12 +23,10 @@ namespace QuestingBots.BotLogic
 
         private BotOwner botOwner = null;
         private LocationSettingsClass.Location location = null;
-        private SpawnPointParams? targetSpawnPoint = null;
         private Models.Quest targetQuest = null;
         private Models.QuestObjective targetObjective = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
-        private List<SpawnPointParams> blacklistedSpawnPoints = new List<SpawnPointParams>();
 
         public double TimeSpentAtObjective
         {
@@ -67,10 +64,10 @@ namespace QuestingBots.BotLogic
         {
             if (targetQuest != null)
             {
-                return targetObjective?.ToString() ?? "???" + " for quest " + targetQuest.Name;
+                return (targetObjective?.ToString() ?? "???") + " for quest " + targetQuest.Name;
             }
 
-            return "Position " + Position?.ToString() ?? "???";
+            return "Position " + (Position?.ToString() ?? "???");
         }
 
         public void ChangeObjective()
@@ -80,21 +77,11 @@ namespace QuestingBots.BotLogic
                 return;
             }
 
-            if (targetSpawnPoint.HasValue && !blacklistedSpawnPoints.Contains(targetSpawnPoint.Value))
-            {
-                blacklistedSpawnPoints.Add(targetSpawnPoint.Value);
-            }
-
-            targetSpawnPoint = null;
-
             if (TryToGoToRandomQuestObjective())
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + targetObjective.ToString() + " for quest " + targetQuest.Name);
-                return;
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
             }
             //LoggingController.LogWarning("Could not assign quest for bot " + botOwner.Profile.Nickname);
-
-            timeSinceChangingObjectiveTimer.Restart();
         }
 
         private void Update()
@@ -126,19 +113,27 @@ namespace QuestingBots.BotLogic
 
         private bool TryToGoToRandomQuestObjective()
         {
-            if (targetQuest == null)
+            while (targetQuest == null)
             {
                 targetQuest = BotQuestController.GetRandomQuestForBot(botOwner);
-            }
-            if (targetQuest == null)
-            {
-                LoggingController.LogWarning("Could not find a quest for bot " + botOwner.Profile.Nickname);
-                return false;
+
+                if (targetQuest == null)
+                {
+                    LoggingController.LogWarning("Could not find a quest for bot " + botOwner.Profile.Nickname);
+                    return false;
+                }
+
+                if (targetQuest.GetRemainingObjectiveCount(botOwner) == 0)
+                {
+                    targetQuest.BlacklistBot(botOwner);
+                    targetQuest = null;
+                }
             }
 
             Models.QuestObjective nextObjective = targetQuest.GetRandomNewObjective(botOwner);
             if (nextObjective == null)
             {
+                LoggingController.LogWarning("Could not find another objective for bot " + botOwner.Profile.Nickname + " for quest " + targetQuest.Name);
                 targetQuest.BlacklistBot(botOwner);
                 targetQuest = null;
                 return false;
@@ -146,13 +141,13 @@ namespace QuestingBots.BotLogic
 
             if (!nextObjective.TryAssignBot(botOwner))
             {
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + targetObjective.ToString() + " for quest " + targetQuest.Name + ". Too many bots already assigned to it.");
+                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + ". Too many bots already assigned to it.");
                 return false;
             }
 
             if (!nextObjective.Position.HasValue)
             {
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + targetObjective.ToString() + " for quest " + targetQuest.Name + ". Invalid position.");
+                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + targetQuest.Name + ". Invalid position.");
                 nextObjective.BotFailedObjective(botOwner);
                 return false;
             }

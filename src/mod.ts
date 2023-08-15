@@ -223,7 +223,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         for (const pmcType in this.iBotConfig.pmc.convertIntoPmcChance)
         {
             // For now, we only want to convert assault bots due to the way the client mod forces spawns
-            if (pmcType != "assault")
+            if ((scalingFactor > 1) && (pmcType != "assault"))
             {
                 continue;
             }
