@@ -175,6 +175,7 @@ namespace QuestingBots.Controllers
                 }
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
+                objective.MaxBots = ConfigController.Config.BotQuests.SpawnPointWander.MaxBotsPerQuest;
                 quest.AddObjective(objective);
             }
             
@@ -206,6 +207,7 @@ namespace QuestingBots.Controllers
             quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
             objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
+            objective.MaxBots = ConfigController.Config.BotQuests.SpawnRush.MaxBotsPerQuest;
             quest.AddObjective(objective);
             return quest;
         }

@@ -15,11 +15,14 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("chance")]
         public float Chance { get; set; } = 50;
 
-        [JsonProperty("max_distance")]
-        public float MaxDistance { get; set; } = 9999;
+        [JsonProperty("max_bots_per_quest")]
+        public int MaxBotsPerQuest { get; set; } = 10;
 
         [JsonProperty("min_distance")]
         public float MinDistance { get; set; } = 10;
+
+        [JsonProperty("max_distance")]
+        public float MaxDistance { get; set; } = 9999;
 
         [JsonProperty("max_raid_ET")]
         public float MaxRaidET { get; set; } = 999;

@@ -244,7 +244,9 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                quest.AddObjective(new QuestZoneObjective(zoneID));
+                QuestZoneObjective objective = new QuestZoneObjective(zoneID);
+                objective.MaxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
+                quest.AddObjective(objective);
             }
 
             int minLevel = getMinLevelForQuest(quest);

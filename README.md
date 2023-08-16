@@ -31,7 +31,7 @@
 * Optionally overriding the default priority for EFT quests to make bots more or less likely to select them
 
 **Initial PMC Spawn Overview:**
-* PMC's will spawn immediately when the countdown timer at the beginning of the raid reaches 0 (Thanks to Props for sharing his code for DONUTS!).
+* PMC's will spawn immediately when the countdown timer at the beginning of the raid reaches 0 (Thanks to Props for sharing code from DONUTS!).
 * The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values)
 * PMC's will spawn in actual EFT player spawn points using an algorithm to spread bots out across the map as much as possible
 * The PMC difficulty is set by your raid settings in EFT
@@ -39,6 +39,7 @@
 **Known Issues for Initial PMC Spawns:**
 * Rogue and Raider spawning doesn't work correctly
 * In maps with a high number of max players (namely Streets), Scavs don't always spawn when the game generates them
+* In maps with a high number of max players (namely Streets), performance can be pretty bad
 * Noticeable stuttering for the first few seconds of the raid
 * Only solo PMC's spawn
 

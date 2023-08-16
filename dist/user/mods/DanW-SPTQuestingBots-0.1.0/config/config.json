@@ -25,17 +25,20 @@
 	"bot_quests": {
 		"eft_quests": {
 			"priority": 5,
-			"chance": 50
+			"chance": 50,
+			"max_bots_per_quest": 3
 		},
 		"spawn_rush": {
 			"priority": 1,
 			"chance": 50,
+			"max_bots_per_quest": 1,
 			"max_distance": 75,
 			"max_raid_ET": 30
 		},
 		"spawn_point_wander": {
 			"priority": 10,
-			"chance": 30
+			"chance": 30,
+			"max_bots_per_quest": 7
 		}
 	},
 	"initial_PMC_spawns": {
