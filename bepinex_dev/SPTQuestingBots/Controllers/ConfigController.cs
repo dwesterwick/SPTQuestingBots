@@ -24,14 +24,9 @@ namespace QuestingBots.Controllers
             return Config;
         }
 
-        public static void ForcePMCSpawns()
+        public static void AdjustPMCConversionChances(float factor)
         {
-            RequestHandler.GetJson("/QuestingBots/ForcePMCSpawns");
-        }
-
-        public static void ForceScavSpawns()
-        {
-            RequestHandler.GetJson("/QuestingBots/ForceScavSpawns");
+            RequestHandler.GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor);
         }
 
         public static void ReportError(string errorMessage)

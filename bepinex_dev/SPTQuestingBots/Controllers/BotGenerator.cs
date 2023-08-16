@@ -113,7 +113,7 @@ namespace QuestingBots.Controllers
                 System.Random random = new System.Random();
                 maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers)  - 1;
 
-                ConfigController.ForcePMCSpawns();
+                ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorBeforeInitialSpawns);
 
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -141,7 +141,7 @@ namespace QuestingBots.Controllers
             }
 
             StartCoroutine(SpawnInitialPMCs(initialPMCBots, botSpawnerClass, location.SpawnPointParams));
-            ConfigController.ForceScavSpawns();
+            ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
         }
 
         public static float GetRaidET()

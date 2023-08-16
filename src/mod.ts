@@ -92,30 +92,21 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "aki"
         );
 
-        // Set PMC conversion to 100%
-        staticRouterModService.registerStaticRouter(`StaticForcePMCSpawns${modName}`,
+        // Apply a scalar factor to the SPT-AKI PMC conversion chances
+        dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPMCConversionChances${modName}`,
             [{
-                url: "/QuestingBots/ForcePMCSpawns",
-                action: () => 
+                url: "/QuestingBots/AdjustPMCConversionChances/",
+                action: (url: string) => 
                 {
-                    this.adjustPmcConversionChance(999);
+                    const urlParts = url.split("/");
+                    const factor = Number(urlParts[urlParts.length - 1]);
+
+                    this.adjustPmcConversionChance(factor);
                     return JSON.stringify({ resp: "OK" });
                 }
-            }], "ForcePMCSpawns"
+            }], "AdjustPMCConversionChances"
         );
-
-        // Set PMC conversion to 100%
-        staticRouterModService.registerStaticRouter(`StaticForceScavSpawns${modName}`,
-            [{
-                url: "/QuestingBots/ForceScavSpawns",
-                action: () => 
-                {
-                    this.adjustPmcConversionChance(0.1);
-                    return JSON.stringify({ resp: "OK" });
-                }
-            }], "ForceScavSpawns"
-        );
-
+        
         // Get all quest templates
         staticRouterModService.registerStaticRouter(`GetAllQuestTemplates${modName}`,
             [{
@@ -223,7 +214,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         for (const pmcType in this.iBotConfig.pmc.convertIntoPmcChance)
         {
             // For now, we only want to convert assault bots due to the way the client mod forces spawns
-            if ((scalingFactor > 1) && (pmcType != "assault"))
+            if ((scalingFactor > 5) && (pmcType != "assault"))
             {
                 continue;
             }

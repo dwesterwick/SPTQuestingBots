@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Models;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic
@@ -83,24 +84,7 @@ namespace QuestingBots.BotLogic
 
             if (!objective.IsObjectiveReached)
             {
-                if (!lastBotPosition.HasValue)
-                {
-                    lastBotPosition = botOwner.Position;
-                }
-
-                float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, botOwner.Position);
-                if (distanceFromLastUpdate > 2f)
-                {
-                    lastBotPosition = botOwner.Position;
-                    botIsStuckTimer.Restart();
-                }
-
-                if (botIsStuckTimer.ElapsedMilliseconds > 1000 * 20f)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is stuck. Changing objective...");
-                    objective.ChangeObjective();
-                }
-
+                checkIfBotIsStuck();
                 return true;
             }
 
@@ -112,16 +96,23 @@ namespace QuestingBots.BotLogic
             return !objective.IsObjectiveActive || objective.IsObjectiveReached;
         }
 
+        private bool pauseLayer()
+        {
+            botIsStuckTimer.Restart();
+            return false;
+        }
+
         private bool shouldSearchForEnemy(double maxTimeSinceCombatEnded)
         {
             bool hasTarget = botOwner.Memory.GoalTarget.HaveMainTarget();
+            bool hasCloseDanger = botOwner.Memory.DangerData.HaveCloseDanger;
 
             bool wasInCombat = (Time.time - botOwner.Memory.LastTimeHit) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.EnemySetTime) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
 
-            return wasInCombat; //&& hasTarget;
+            return wasInCombat || hasCloseDanger; //&& hasTarget;
         }
 
         private void updateSearchTimeAfterCombat()
@@ -130,10 +121,41 @@ namespace QuestingBots.BotLogic
             searchTimeAfterCombat = random.Next((int)ConfigController.Config.SearchTimeAfterCombat.Min, (int)ConfigController.Config.SearchTimeAfterCombat.Max);
         }
 
-        private bool pauseLayer()
+        private void checkIfBotIsStuck()
         {
-            botIsStuckTimer.Restart();
-            return false;
+            if (!lastBotPosition.HasValue)
+            {
+                lastBotPosition = botOwner.Position;
+            }
+
+            float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, botOwner.Position);
+            if (distanceFromLastUpdate > 2f)
+            {
+                lastBotPosition = botOwner.Position;
+                botIsStuckTimer.Restart();
+            }
+
+            if (botIsStuckTimer.ElapsedMilliseconds > 1000 * 20f)
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is stuck. Changing objective...");
+
+                Vector3[] failedBotPath = botOwner.Mover?.CurPath;
+                if (true && (failedBotPath != null))
+                {
+                    List<Vector3> adjustedPathCorners = new List<Vector3>();
+                    foreach (Vector3 corner in failedBotPath)
+                    {
+                        adjustedPathCorners.Add(new Vector3(corner.x, corner.y + 0.75f, corner.z));
+                    }
+
+                    string pathName = "FailedBotPath_" + botOwner.Id;
+                    PathRender.RemovePath(pathName);
+                    PathVisualizationData failedBotPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), Color.red);
+                    PathRender.AddOrUpdatePath(failedBotPathRendering);
+                }
+
+                objective.ChangeObjective();
+            }
         }
     }
 }
