@@ -40,6 +40,8 @@
 	},
 	"initial_PMC_spawns": {
 		"enabled": false,
+		"conversion_factor_before_initial_spawns": 999,
+		"conversion_factor_after_initial_spawns": 0.1,
 		"max_raid_ET": 30
 	}
 }

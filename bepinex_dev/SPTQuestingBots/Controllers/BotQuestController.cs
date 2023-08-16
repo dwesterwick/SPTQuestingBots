@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using EFT.Interactive;
 using EFT.Quests;
 using QuestingBots.Models;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace QuestingBots.Controllers
 {
@@ -159,9 +161,8 @@ namespace QuestingBots.Controllers
                     LoggingController.LogError("Could not add quest for rushing your spawn point");
                 }
 
-                LoggingController.LogInfo("Finished loading quest data.");
-
                 HaveTriggersBeenFound = true;
+                LoggingController.LogInfo("Finished loading quest data.");
             }
             finally
             {
@@ -365,11 +366,13 @@ namespace QuestingBots.Controllers
             Vector3 triggerTargetPosition = triggerCollider.bounds.center;
             if (triggerCollider.bounds.extents.y > 1.5f)
             {
-                LoggingController.LogInfo("Adjusting position for zone " + trigger.Id);
                 triggerTargetPosition.y = triggerCollider.bounds.min.y + 0.75f;
+                LoggingController.LogInfo("Adjusting position for zone " + trigger.Id + " to " + triggerTargetPosition.ToString());
             }
 
-            Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(triggerTargetPosition, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone);
+            float maxSearchDistance = ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone;
+            maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
+            Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
             if (!navMeshTargetPoint.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh point for trigger " + trigger.Id);

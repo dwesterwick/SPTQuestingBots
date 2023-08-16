@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.Interactive;
 using HarmonyLib;
 using QuestingBots.CoroutineExtensions;
+using QuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -93,7 +95,7 @@ namespace QuestingBots.Controllers
                 location = raidSettings.SelectedLocation;
             }
 
-            if (!ConfigController.Config.InitialPMCSpawns.Enabled)
+            if (!ConfigController.Config.InitialPMCSpawns.Enabled || (raidSettings.BotSettings.BotAmount == EFT.Bots.EBotAmount.NoBots))
             {
                 return;
             }
