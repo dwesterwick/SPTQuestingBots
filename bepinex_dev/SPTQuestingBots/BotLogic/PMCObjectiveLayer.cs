@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using EFT.InventoryLogic;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
 using UnityEngine;
+using static HealthControllerClass;
 
 namespace QuestingBots.BotLogic
 {
@@ -19,6 +21,8 @@ namespace QuestingBots.BotLogic
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasSearchingForEnemy = false;
+        private bool wasAbleBodied = true;
+        private bool wasStuck = false;
         private Vector3? lastBotPosition = null;
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
 
@@ -57,6 +61,17 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
+            if (!isAbleBodied(wasAbleBodied))
+            {
+                wasAbleBodied = false;
+                return pauseLayer();
+            }
+            if (!wasAbleBodied)
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is now able-bodied.");
+            }
+            wasAbleBodied = true;
+
             if (shouldSearchForEnemy(searchTimeAfterCombat))
             {
                 if (!wasSearchingForEnemy)
@@ -84,7 +99,19 @@ namespace QuestingBots.BotLogic
 
             if (!objective.IsObjectiveReached)
             {
-                checkIfBotIsStuck();
+                if (checkIfBotIsStuck())
+                {
+                    if (!wasStuck)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is stuck and will get a new objective.");
+                    }
+                    wasStuck = true;
+                }
+                else
+                {
+                    wasStuck = false;
+                }
+
                 return true;
             }
 
@@ -121,7 +148,7 @@ namespace QuestingBots.BotLogic
             searchTimeAfterCombat = random.Next((int)ConfigController.Config.SearchTimeAfterCombat.Min, (int)ConfigController.Config.SearchTimeAfterCombat.Max);
         }
 
-        private void checkIfBotIsStuck()
+        private bool checkIfBotIsStuck()
         {
             if (!lastBotPosition.HasValue)
             {
@@ -137,8 +164,6 @@ namespace QuestingBots.BotLogic
 
             if (botIsStuckTimer.ElapsedMilliseconds > 1000 * 20f)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is stuck. Changing objective...");
-
                 Vector3[] failedBotPath = botOwner.Mover?.CurPath;
                 if (true && (failedBotPath != null))
                 {
@@ -155,7 +180,58 @@ namespace QuestingBots.BotLogic
                 }
 
                 objective.ChangeObjective();
+                return true;
             }
+
+            return false;
+        }
+
+        private bool isAbleBodied(bool writeToLog)
+        {
+            if (botOwner.Medecine.FirstAid.Have2Do)
+            {
+                if (writeToLog)
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to heal");
+                }
+                return false;
+            }
+
+            if (botOwner.HealthController.Hydration.AtMinimum || botOwner.HealthController.Energy.AtMinimum)
+            {
+                if (writeToLog)
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to eat or drink");
+                }
+                return false;
+            }
+
+            if 
+            (
+                (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Maximum < 0.5)
+                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Maximum < 0.5)
+                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Maximum < 0.5)
+                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Maximum < 0.5)
+                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Maximum < 0.5)
+            )
+            {
+                if (writeToLog)
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " cannot heal");
+                }
+                return false;
+            }
+
+            if (botOwner.GetPlayer.Physical.Overweight > 1f)
+            {
+                if (writeToLog)
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is overweight");
+                }
+                return false;
+            }
+
+            return true;
         }
     }
 }

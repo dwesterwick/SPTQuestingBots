@@ -45,11 +45,11 @@ namespace QuestingBots.BotLogic
 
             botOwner.DoorOpener.Update();
 
-            if (botOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f)
+            if (botOwner.GetPlayer.Physical.CanSprint && (botOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f))
             {
                 botOwner.GetPlayer.EnableSprint(true);
             }
-            if (botOwner.GetPlayer.Physical.Stamina.NormalValue < 0.1f)
+            if (!botOwner.GetPlayer.Physical.CanSprint ||(botOwner.GetPlayer.Physical.Stamina.NormalValue < 0.1f))
             {
                 botOwner.GetPlayer.EnableSprint(false);
             }
