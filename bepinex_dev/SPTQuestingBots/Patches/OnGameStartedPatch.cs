@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
 using EFT.Interactive;
+using QuestingBots.Controllers;
 using UnityEngine;
 
 namespace QuestingBots.Patches
@@ -19,7 +20,7 @@ namespace QuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix()
+        private static void PatchPostfix(GameWorld __instance)
         {
             
         }

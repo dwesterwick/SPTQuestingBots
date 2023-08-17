@@ -76,7 +76,7 @@ namespace QuestingBots.Controllers
 
         private void Update()
         {
-            if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
+            if (!Singleton<IBotGame>.Instantiated)
             {
                 Clear();
 
@@ -115,11 +115,14 @@ namespace QuestingBots.Controllers
                 System.Random random = new System.Random();
                 maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers)  - 1;
 
-                ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorBeforeInitialSpawns);
+                ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
+                
+                WildSpawnType spawnType = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
+                EPlayerSide spawnSide = GetSideForWildSpawnType(spawnType);
 
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBots(WildSpawnType.assault, EPlayerSide.Savage, raidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                generateBots(spawnType, spawnSide, raidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 // Generate inital PMC spawn points
@@ -336,7 +339,26 @@ namespace QuestingBots.Controllers
             return GetNearestSpawnPoint(playerPosition.Value, location.SpawnPointParams);
         }
 
-        private async Task generateBots(WildSpawnType wildSpawnType, EPlayerSide side, BotDifficulty botdifficulty, int count)
+        private EPlayerSide GetSideForWildSpawnType(WildSpawnType spawnType)
+        {
+            WildSpawnType sptUsec = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
+            WildSpawnType sptBear = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue;
+
+            if (spawnType == WildSpawnType.pmcBot || spawnType == sptUsec)
+            {
+                return EPlayerSide.Usec;
+            }
+            else if (spawnType == sptBear)
+            {
+                return EPlayerSide.Bear;
+            }
+            else
+            {
+                return EPlayerSide.Savage;
+            }
+        }
+
+        private async Task generateBots(WildSpawnType wildSpawnType, EPlayerSide side, BotDifficulty botdifficulty, int totalCount)
         {
             IsGeneratingPMCs = true;
 
@@ -346,17 +368,26 @@ namespace QuestingBots.Controllers
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawnerClass), "ginterface17_0").GetValue(botSpawnerClass) as IBotCreator;
             IBotData botData = new GClass629(side, wildSpawnType, botdifficulty, 0f, null);
 
-            for (int i = 0; i < count; i++)
+            System.Random random = new System.Random();
+            int botsGenerated = 0;
+            int botGroup = 1;
+            while (botsGenerated < totalCount)
             {
+                int botsInGroup = random.Next(1, 1);
+                botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
+
                 // This causes a deadlock for some reason
                 /*if (cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     break;
                 }*/
 
-                LoggingController.LogInfo("Generating PMC bot #" + i + "...");
-                GClass628 newBotData = await GClass628.Create(botData, ibotCreator, 1, botSpawnerClass);
+                LoggingController.LogInfo("Generating PMC bot spawn #" + botGroup + "(Number of bots: " + botsInGroup + ")...");
+                GClass628 newBotData = await GClass628.Create(botData, ibotCreator, botsInGroup, botSpawnerClass);
                 initialPMCBots.Add(new Models.BotSpawnInfo(newBotData));
+
+                botsGenerated += botsInGroup;
+                botGroup++;
             }
 
             LoggingController.LogInfo("Generating PMC bots...done.");

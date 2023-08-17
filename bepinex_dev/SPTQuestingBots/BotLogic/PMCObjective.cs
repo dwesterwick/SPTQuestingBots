@@ -44,6 +44,8 @@ namespace QuestingBots.BotLogic
 
             IsObjectiveActive = botOwner.Side != EPlayerSide.Savage;
             CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
+
+            ChangeObjective();
         }
 
         public void CompleteObjective()

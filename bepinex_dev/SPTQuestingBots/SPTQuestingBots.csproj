@@ -40,6 +40,10 @@
     <Reference Include="Aki.Reflection">
       <HintPath>..\Libraries\Managed\Aki.Reflection.dll</HintPath>
     </Reference>
+    <Reference Include="aki_PrePatch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\BepInEx\patchers\aki_PrePatch.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Libraries\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
