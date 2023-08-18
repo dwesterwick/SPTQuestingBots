@@ -19,7 +19,15 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
-            Controllers.LoggingController.LogInfo("Player " + __instance.Profile.Nickname + " was killed by " + aggressor.Profile.Nickname);
+            string message = __instance.Profile.Nickname;
+            message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
+
+            message += " was killed by ";
+
+            message += aggressor.Profile.Nickname;
+            message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
+
+            Controllers.LoggingController.LogInfo(message);
         }
     }
 }

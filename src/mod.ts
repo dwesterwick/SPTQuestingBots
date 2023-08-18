@@ -151,6 +151,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         this.setOriginalPMCConversionChances();
         this.disableCustomBossWaves();
+        this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = 1;
     }
 
     private updateScavTimer(sessionId: string): void

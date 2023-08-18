@@ -16,6 +16,7 @@ using EFT.Interactive;
 using HarmonyLib;
 using QuestingBots.CoroutineExtensions;
 using QuestingBots.Models;
+using QuestingBots.Patches;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -139,7 +140,7 @@ namespace QuestingBots.Controllers
             }
 
             // Ensure the raid is progressing before running anything
-            if (raidTimeElapsed < 1)
+            if ((raidTimeElapsed < 1) || ((BotOwnerCreatePatch.SpawnedBotCount < InitBossSpawnLocationPatch.ZeroWaveBotCount) && !location.Name.ToLower().Contains("factory")))
             {
                 return;
             }

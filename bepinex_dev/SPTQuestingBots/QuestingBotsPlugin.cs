@@ -29,7 +29,10 @@ namespace QuestingBots
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling patches...");
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
-                
+                new Patches.BossLocationSpawnActivatePatch().Enable();
+                new Patches.InitBossSpawnLocationPatch().Enable();
+                new Patches.BotOwnerCreatePatch().Enable();
+
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling controllers...");
                 this.GetOrAddComponent<BotQuestController>();
                 this.GetOrAddComponent<BotGenerator>();
