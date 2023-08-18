@@ -197,11 +197,20 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (botOwner.HealthController.Hydration.AtMinimum || botOwner.HealthController.Energy.AtMinimum)
+            if (botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < 0.2)
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to eat or drink");
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to drink");
+                }
+                return false;
+            }
+
+            if (botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < 0.2)
+            {
+                if (writeToLog)
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to eat");
                 }
                 return false;
             }

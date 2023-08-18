@@ -114,6 +114,7 @@
     <Compile Include="Models\QuestSpawnPointObjective.cs" />
     <Compile Include="Models\QuestZoneObjective.cs" />
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
+    <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsPlugin.cs" />

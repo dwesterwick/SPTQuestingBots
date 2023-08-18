@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using EFT.Game.Spawning;
+using QuestingBots.Controllers;
 using UnityEngine;
 
 namespace QuestingBots.Models
@@ -12,20 +13,29 @@ namespace QuestingBots.Models
     public class BotSpawnInfo
     {
         public GClass628 Data { get; private set; }
-        public BotOwner Owner { get; set; }
+        public BotOwner[] Owners { get; set; }
         public SpawnPointParams? SpawnPoint { get; set; }
-        public Vector3? SpawnPosition { get; set; }
+        public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
 
         public BotSpawnInfo(GClass628 data)
         {
             Data = data;
         }
 
-        public void AssignSpawnPositionFromSpawnPoint()
+        public void AssignSpawnPositionsFromSpawnPoint(int botCount)
         {
+            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
             if (SpawnPoint.HasValue)
             {
-                SpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
+                Vector3 mainSpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
+                spawnPoints.Add(SpawnPoint.Value);
+                int positionsGenerated = 1;
+                while (positionsGenerated < botCount)
+                {
+                    SpawnPointParams nextPosition = BotGenerator.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray());
+                }
+
+                SpawnPositions = spawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray();
                 return;
             }
 

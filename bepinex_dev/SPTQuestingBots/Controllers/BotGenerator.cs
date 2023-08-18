@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Comfort.Common;
@@ -21,6 +23,7 @@ namespace QuestingBots.Controllers
 {
     public class BotGenerator : MonoBehaviour
     {
+        public static bool CanSpawnPMCs { get; private set; } = true;
         public static bool IsSpawningPMCs { get; private set; } = false;
         public static bool IsGeneratingPMCs { get; private set; } = false;
         public static int SpawnedPMCCount { get; private set; } = 0;
@@ -29,14 +32,14 @@ namespace QuestingBots.Controllers
         private static RaidSettings raidSettings = null;
         private static LocationSettingsClass.Location location = null;
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private static List<Models.BotSpawnInfo> initialPMCBots = new List<Models.BotSpawnInfo>();
+        private static List<Models.BotSpawnInfo> initialPMCGroups = new List<Models.BotSpawnInfo>();
         private static SpawnPointParams[] initialPMCBotSpawnPoints = new SpawnPointParams[0];
         private static Dictionary<string, Vector3> spawnPositions = new Dictionary<string, Vector3>();
         private static int maxPMCBots = 0;
 
         public static ReadOnlyCollection<Models.BotSpawnInfo> InitiallySpawnedPMCBots
         {
-            get { return new ReadOnlyCollection<Models.BotSpawnInfo>(initialPMCBots); }
+            get { return new ReadOnlyCollection<Models.BotSpawnInfo>(initialPMCGroups); }
         }
 
         public static void Clear()
@@ -52,7 +55,7 @@ namespace QuestingBots.Controllers
                 TaskWithTimeLimit.WaitForCondition(() => !IsGeneratingPMCs);
             }
 
-            initialPMCBots.Clear();
+            initialPMCGroups.Clear();
             initialPMCBotSpawnPoints = new SpawnPointParams[0];
             spawnPositions.Clear();
             location = null;
@@ -61,7 +64,7 @@ namespace QuestingBots.Controllers
 
         public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
         {
-            return InitiallySpawnedPMCBots.Any(b => b.Owner ==  bot);
+            return InitiallySpawnedPMCBots.Any(b => b.Owners.Contains(bot));
         }
 
         public static Vector3? GetPlayerPosition()
@@ -80,11 +83,12 @@ namespace QuestingBots.Controllers
             {
                 Clear();
 
+                CanSpawnPMCs = true;
                 SpawnedPMCCount = 0;
                 return;
             }
 
-            if (IsSpawningPMCs || IsGeneratingPMCs || (SpawnedPMCCount > 0))
+            if (!CanSpawnPMCs || IsSpawningPMCs || IsGeneratingPMCs || (SpawnedPMCCount > 0))
             {
                 return;
             }
@@ -107,22 +111,25 @@ namespace QuestingBots.Controllers
             // Do not force spawns if the player spawned late
             if (raidTimeElapsed > ConfigController.Config.InitialPMCSpawns.MaxRaidET)
             {
+                if (initialPMCGroups.Count == 0)
+                {
+                    ConfigController.AdjustPMCConversionChances(1);
+                }
+
+                CanSpawnPMCs = false;
                 return;
             }
 
-            if (initialPMCBots.Count == 0)
+            if (initialPMCGroups.Count == 0)
             {
                 System.Random random = new System.Random();
-                maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers)  - 1;
+                maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers) - 1;
 
                 ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
                 
-                WildSpawnType spawnType = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
-                EPlayerSide spawnSide = GetSideForWildSpawnType(spawnType);
-
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBots(spawnType, spawnSide, raidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                generateBots(raidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 // Generate inital PMC spawn points
@@ -139,14 +146,13 @@ namespace QuestingBots.Controllers
 
             BotSpawnerClass botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
-            for (int b = 0; b < initialPMCBots.Count; b++)
+            for (int b = 0; b < initialPMCGroups.Count; b++)
             {
-                LoggingController.LogInfo("Assigning initial PMC bot #" + b + " the spawn point " + initialPMCBotSpawnPoints[b].Position.ToUnityVector3().ToString());
-                initialPMCBots[b].SpawnPoint = initialPMCBotSpawnPoints[b];
+                LoggingController.LogInfo("Assigning initial PMC group #" + b + " the spawn point " + initialPMCBotSpawnPoints[b].Position.ToUnityVector3().ToString());
+                initialPMCGroups[b].SpawnPoint = initialPMCBotSpawnPoints[b];
             }
 
-            StartCoroutine(SpawnInitialPMCs(initialPMCBots, botSpawnerClass, location.SpawnPointParams));
-            ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
+            StartCoroutine(SpawnInitialPMCs(initialPMCGroups, botSpawnerClass, location.SpawnPointParams));
         }
 
         public static float GetRaidET()
@@ -269,13 +275,18 @@ namespace QuestingBots.Controllers
             return furthestSpawnPoint;
         }
 
-        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] allSpawnPoints)
+        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             SpawnPointParams nearestSpawnPoint = allSpawnPoints[0];
             float nearestDistance = Vector3.Distance(postition, nearestSpawnPoint.Position.ToUnityVector3());
 
             for (int s = 1; s < allSpawnPoints.Length; s++)
             {
+                if (excludedSpawnPoints.Any(p => p.Id == allSpawnPoints[s].Id))
+                {
+                    continue;
+                }
+
                 float distance = Vector3.Distance(postition, allSpawnPoints[s].Position.ToUnityVector3());
 
                 if (distance < nearestDistance)
@@ -286,6 +297,16 @@ namespace QuestingBots.Controllers
             }
 
             return nearestSpawnPoint;
+        }
+
+        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
+        {
+            return GetNearestSpawnPoint(postition, new SpawnPointParams[0], location.SpawnPointParams);
+        }
+
+        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
+        {
+            return GetNearestSpawnPoint(postition, excludedSpawnPoints, location.SpawnPointParams);
         }
 
         public static Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)
@@ -358,7 +379,7 @@ namespace QuestingBots.Controllers
             }
         }
 
-        private async Task generateBots(WildSpawnType wildSpawnType, EPlayerSide side, BotDifficulty botdifficulty, int totalCount)
+        private async Task generateBots(BotDifficulty botdifficulty, int totalCount)
         {
             IsGeneratingPMCs = true;
 
@@ -366,8 +387,7 @@ namespace QuestingBots.Controllers
 
             BotSpawnerClass botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawnerClass), "ginterface17_0").GetValue(botSpawnerClass) as IBotCreator;
-            IBotData botData = new GClass629(side, wildSpawnType, botdifficulty, 0f, null);
-
+            
             System.Random random = new System.Random();
             int botsGenerated = 0;
             int botGroup = 1;
@@ -376,15 +396,34 @@ namespace QuestingBots.Controllers
                 int botsInGroup = random.Next(1, 1);
                 botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
+                WildSpawnType[] spawnTypes = new WildSpawnType[2]
+                {
+                    (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue,
+                    (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue
+                };
+
+                WildSpawnType spawnType = spawnTypes.Random();
+                EPlayerSide spawnSide = GetSideForWildSpawnType(spawnType);
+
+                GClass618 spawnParams = new GClass618();
+                spawnParams.TriggerType = SpawnTriggerType.none;
+                //spawnParams.Id_spawn = "InitialPMCGroup" + botGroup;
+                if (botsInGroup > 1)
+                {
+                    spawnParams.ShallBeGroup = new GClass619(true, false, botsInGroup);
+                }
+
+                IBotData botData = new GClass629(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
+
                 // This causes a deadlock for some reason
                 /*if (cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     break;
                 }*/
 
-                LoggingController.LogInfo("Generating PMC bot spawn #" + botGroup + "(Number of bots: " + botsInGroup + ")...");
+                LoggingController.LogInfo("Generating PMC group spawn #" + botGroup + "(Number of bots: " + botsInGroup + ")...");
                 GClass628 newBotData = await GClass628.Create(botData, ibotCreator, botsInGroup, botSpawnerClass);
-                initialPMCBots.Add(new Models.BotSpawnInfo(newBotData));
+                initialPMCGroups.Add(new Models.BotSpawnInfo(newBotData));
 
                 botsGenerated += botsInGroup;
                 botGroup++;
@@ -395,7 +434,7 @@ namespace QuestingBots.Controllers
             IsGeneratingPMCs = false;
         }
 
-        private IEnumerator SpawnInitialPMCs(IEnumerable<Models.BotSpawnInfo> initialPMCs, BotSpawnerClass botSpawnerClass, SpawnPointParams[] allSpawnPoints)
+        private IEnumerator SpawnInitialPMCs(IEnumerable<Models.BotSpawnInfo> initialPMCGroups, BotSpawnerClass botSpawnerClass, SpawnPointParams[] allSpawnPoints)
         {
             IsSpawningPMCs = true;
 
@@ -406,11 +445,23 @@ namespace QuestingBots.Controllers
                 allSpawnPoints[s].DelayToCanSpawnSec = 0;
             }
 
-            yield return enumeratorWithTimeLimit.Run(initialPMCs, spawnInitialPMCAtSpawnPoint, botSpawnerClass);
+            enumeratorWithTimeLimit.Reset();
+            yield return enumeratorWithTimeLimit.Run(initialPMCGroups, spawnInitialPMCsAtSpawnPoint, botSpawnerClass);
 
             for (int s = 0; s < allSpawnPoints.Length; s++)
             {
                 allSpawnPoints[s].DelayToCanSpawnSec = originalSpawnDelays[allSpawnPoints[s].Id];
+            }
+
+            yield return null;
+            yield return null;
+
+            foreach (KeyValuePair<BotZone, GClass510> keyValuePair in Singleton<IBotGame>.Instance.BotsController.Groups())
+            {
+                foreach (BotGroupClass botGroupClass in keyValuePair.Value.GetGroups(true))
+                {
+                    LoggingController.LogInfo("Bot Group Allies: " + string.Join(", ", botGroupClass.Allies.Select(b => b.Profile.Nickname)));
+                }
             }
 
             IsSpawningPMCs = false;
@@ -466,7 +517,7 @@ namespace QuestingBots.Controllers
             return spawnPoints.ToArray();
         }
 
-        private void spawnInitialPMCAtSpawnPoint(Models.BotSpawnInfo initialPMCBot, BotSpawnerClass botSpawnerClass)
+        private void spawnInitialPMCsAtSpawnPoint(Models.BotSpawnInfo initialPMCBot, BotSpawnerClass botSpawnerClass)
         {
             if (SpawnedPMCCount > maxPMCBots)
             {
@@ -474,36 +525,39 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            if (!initialPMCBot.SpawnPoint.HasValue && !initialPMCBot.SpawnPosition.HasValue)
+            if (!initialPMCBot.SpawnPoint.HasValue && (initialPMCBot.SpawnPositions.Length == 0))
             {
-                LoggingController.LogError("No spawn position assigned to initial PMC bot #" + (SpawnedPMCCount + 1) + ".");
+                LoggingController.LogError("No spawn position assigned to initial PMC group #" + (SpawnedPMCCount + 1) + ".");
                 return;
             }
 
-            if (!initialPMCBot.SpawnPosition.HasValue)
+            if (initialPMCBot.SpawnPositions.Length == 0)
             {
-                initialPMCBot.AssignSpawnPositionFromSpawnPoint();
+                initialPMCBot.AssignSpawnPositionsFromSpawnPoint(initialPMCBot.Data.Count);
             }
 
             Action<BotOwner> callback = new Action<BotOwner>((botOwner) =>
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spawned as an initial PMC.");
-                initialPMCBot.Owner = botOwner;
+                initialPMCBot.Owners = new BotOwner[1] { botOwner };
             });
 
-            LoggingController.LogInfo("Spawning PMC #" + (SpawnedPMCCount + 1) + " at " + initialPMCBot.SpawnPosition.Value.ToString() + "...");
-            spawnBot(initialPMCBot.Data, initialPMCBot.SpawnPosition.Value, callback, botSpawnerClass);
+            LoggingController.LogInfo("Spawning PMC group #" + (SpawnedPMCCount + 1) + " at " + initialPMCBot.SpawnPositions[0] + "...");
+            spawnBots(initialPMCBot.Data, initialPMCBot.SpawnPositions, callback, botSpawnerClass);
 
             SpawnedPMCCount++;
         }
 
-        private void spawnBot(GClass628 bot, Vector3 position, Action<BotOwner> callback, BotSpawnerClass botSpawnerClass)
+        private void spawnBots(GClass628 bots, Vector3[] positions, Action<BotOwner> callback, BotSpawnerClass botSpawnerClass)
         {
-            BotZone closestBotZone = botSpawnerClass.GetClosestZone(position, out float dist);
-            bot.AddPosition(position);
+            BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
+            foreach (Vector3 position in positions)
+            {
+                bots.AddPosition(position);
+            }
 
             MethodInfo botSpawnMethod = typeof(BotSpawnerClass).GetMethod("method_11", BindingFlags.Instance | BindingFlags.NonPublic);
-            botSpawnMethod.Invoke(botSpawnerClass, new object[] { closestBotZone, bot, callback, botSpawnerClass.GetCancelToken() });
+            botSpawnMethod.Invoke(botSpawnerClass, new object[] { closestBotZone, bots, callback, botSpawnerClass.GetCancelToken() });
         }
     }
 }

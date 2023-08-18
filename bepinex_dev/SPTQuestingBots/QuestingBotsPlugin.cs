@@ -39,6 +39,11 @@ namespace QuestingBots
 
                 BrainManager.AddCustomLayer(typeof(PMCObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
 
+                if (ConfigController.Config.Debug.Enabled)
+                {
+                    new Patches.OnBeenKilledByAggressorPatch().Enable();
+                }
+
                 if (ConfigController.Config.Debug.ShowZoneOutlines)
                 {
                     this.GetOrAddComponent<PathRender>();
