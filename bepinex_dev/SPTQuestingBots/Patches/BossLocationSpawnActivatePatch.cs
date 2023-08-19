@@ -24,30 +24,36 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         private static bool PatchPrefix(ref BossLocationSpawn bossWave)
         {
-            int maxRogues = 5;
+            int maxRogues = 6;
             int botCount = 1 + bossWave.EscortCount;
             if (bossWave.BossName.ToLower() == "exusec")
             {
                 if (BotGenerator.SpawnedRogueCount + botCount > maxRogues)
                 {
-                    LoggingController.LogWarning("Suppressing boss wave or too many Rogues will be on the map");
+                    BotGenerator.ZeroWaveTotalBotCount -= botCount;
+                    BotGenerator.ZeroWaveTotalRogueCount -= botCount;
+
+                    LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many Rogues will be on the map");
                     return false;
                 }
 
                 LoggingController.LogInfo("Spawning " + (BotGenerator.SpawnedRogueCount + botCount) + "/" + maxRogues + " Rogues...");
             }
 
-            BotGenerator.SpawnedBossWaves++;
-            BotGenerator.SpawnedRogueCount += botCount;
-            bossWave.IgnoreMaxBots = true;
-
             string message = "Spawning boss wave ";
             message += BotGenerator.SpawnedBossWaves + "/" + BotGenerator.ZeroWaveCount;
             message += " for bot type " + bossWave.BossName;
             message += " with " + botCount + " total bots";
             message += "...";
-
             LoggingController.LogInfo(message);
+
+            BotGenerator.SpawnedBossWaves++;
+            if (bossWave.BossName.ToLower() == "exusec")
+            {
+                BotGenerator.SpawnedRogueCount += botCount;
+            }
+
+            bossWave.IgnoreMaxBots = true;
             return true;
         }
     }

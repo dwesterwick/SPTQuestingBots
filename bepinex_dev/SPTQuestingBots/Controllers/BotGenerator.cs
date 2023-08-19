@@ -122,11 +122,13 @@ namespace QuestingBots.Controllers
 
         private void Update()
         {
-            if (!Singleton<IBotGame>.Instantiated)
+            if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
             {
                 if (raidSettings != null)
                 {
+                    LoggingController.LogInfo("Clearing spawn data...");
                     Clear();
+                    LoggingController.LogInfo("Clearing spawn data...done.");
                 }
 
                 return;
@@ -155,6 +157,8 @@ namespace QuestingBots.Controllers
             // Do not force spawns if the player spawned late
             if (raidTimeElapsed > ConfigController.Config.InitialPMCSpawns.MaxRaidET)
             {
+                LoggingController.LogInfo("Too much time has elapsed in the raid to spawn initial PMC's");
+
                 if (initialPMCGroups.Count == 0)
                 {
                     ConfigController.AdjustPMCConversionChances(1);
@@ -166,6 +170,8 @@ namespace QuestingBots.Controllers
 
             if (initialPMCGroups.Count == 0)
             {
+                LoggingController.LogInfo("Generating initial PMC groups...");
+
                 System.Random random = new System.Random();
                 maxPMCBots = random.Next(location.MinPlayers, location.MaxPlayers) - 1;
 
@@ -179,6 +185,7 @@ namespace QuestingBots.Controllers
                 // Generate inital PMC spawn points
                 initialPMCBotSpawnPoints = getPMCSpawnPoints(location.SpawnPointParams, maxPMCBots);
 
+                LoggingController.LogInfo("Generating initial PMC groups...done.");
                 return;
             }
 
