@@ -13,8 +13,6 @@ namespace QuestingBots.Patches
 {
     public class BossLocationSpawnActivatePatch : ModulePatch
     {
-        public static int SpawnedWaves { get; set; } = 0;
-
         protected override MethodBase GetTargetMethod()
         {
             Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
@@ -24,22 +22,33 @@ namespace QuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static void PatchPrefix(ref BossLocationSpawn bossWave)
+        private static bool PatchPrefix(ref BossLocationSpawn bossWave)
         {
-            SpawnedWaves++;
+            int maxRogues = 5;
+            int botCount = 1 + bossWave.EscortCount;
+            if (bossWave.BossName.ToLower() == "exusec")
+            {
+                if (BotGenerator.SpawnedRogueCount + botCount > maxRogues)
+                {
+                    LoggingController.LogWarning("Suppressing boss wave or too many Rogues will be on the map");
+                    return false;
+                }
 
-            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            int boxMax = BotGenerator.GetCurrentLocation().BotMax;
+                LoggingController.LogInfo("Spawning " + (BotGenerator.SpawnedRogueCount + botCount) + "/" + maxRogues + " Rogues...");
+            }
 
+            BotGenerator.SpawnedBossWaves++;
+            BotGenerator.SpawnedRogueCount += botCount;
             bossWave.IgnoreMaxBots = true;
 
             string message = "Spawning boss wave ";
-            message += SpawnedWaves + "/" + InitBossSpawnLocationPatch.ZeroWaveCount;
+            message += BotGenerator.SpawnedBossWaves + "/" + BotGenerator.ZeroWaveCount;
             message += " for bot type " + bossWave.BossName;
-            message += " (" + (allPlayers.Count - 1) + "/" + boxMax + " total bots on map)";
+            message += " with " + botCount + " total bots";
             message += "...";
 
             LoggingController.LogInfo(message);
+            return true;
         }
     }
 }

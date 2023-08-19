@@ -18,6 +18,7 @@ import { LocaleService } from "@spt-aki/services/LocaleService";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
+import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 
 const modName = "SPTQuestingBots";
 
@@ -33,6 +34,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
     private iBotConfig: IBotConfig;
+    private iLocationConfig: ILocationConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
 	
@@ -128,6 +130,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
+        this.iLocationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
@@ -147,6 +150,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     public postAkiLoad(): void
     {
         this.setOriginalPMCConversionChances();
+        this.disableCustomBossWaves();
+        this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = 1;
     }
 
     private updateScavTimer(sessionId: string): void
@@ -230,6 +235,15 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
 
         this.commonUtils.logInfo(`Adjusting PMC spawn chances (${scalingFactor}): ${logMessage}`);
+    }
+
+    private disableCustomBossWaves(): void
+    {
+        if (modConfig.initial_PMC_spawns.enabled)
+        {
+            this.commonUtils.logInfo("Disabling custom boss waves");
+            this.iLocationConfig.customWaves.boss = {};
+        }
     }
 }
 

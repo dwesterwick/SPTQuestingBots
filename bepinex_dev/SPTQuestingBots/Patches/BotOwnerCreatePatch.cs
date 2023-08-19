@@ -13,8 +13,6 @@ namespace QuestingBots.Patches
 {
     public class BotOwnerCreatePatch : ModulePatch
     {
-        public static int SpawnedBotCount { get; set; } = 0;
-
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotOwner).GetMethod("Create", BindingFlags.Public | BindingFlags.Static);
@@ -25,7 +23,7 @@ namespace QuestingBots.Patches
         {
             LoggingController.LogInfo("Spawned bot " + __result.Profile.Nickname + " (Brain: " + __result.Brain.GetType().FullName + ")");
 
-            SpawnedBotCount++;
+            BotGenerator.SpawnedBotCount++;
         }
     }
 }

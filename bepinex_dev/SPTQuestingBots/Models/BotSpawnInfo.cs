@@ -12,8 +12,9 @@ namespace QuestingBots.Models
 {
     public class BotSpawnInfo
     {
+        public bool HasSpawned { get; set; } = false;
         public GClass628 Data { get; private set; }
-        public BotOwner[] Owners { get; set; }
+        public BotOwner[] Owners { get; set; } = new BotOwner[0];
         public SpawnPointParams? SpawnPoint { get; set; }
         public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
 
