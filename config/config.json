@@ -1,7 +1,7 @@
 {
 	"enabled": true,
 	"debug": {
-		"enabled": false,
+		"enabled": true,
 		"scav_cooldown_time": 1500,
 		"show_zone_outlines": false
 	},
@@ -24,12 +24,12 @@
 	},
 	"bot_quests": {
 		"eft_quests": {
-			"priority": 5,
+			"priority": 6,
 			"chance": 50,
 			"max_bots_per_quest": 3
 		},
 		"spawn_rush": {
-			"priority": 1,
+			"priority": 3,
 			"chance": 50,
 			"max_bots_per_quest": 1,
 			"max_distance": 75,
@@ -38,13 +38,20 @@
 		"spawn_point_wander": {
 			"priority": 10,
 			"chance": 30,
-			"max_bots_per_quest": 7
+			"max_bots_per_quest": 30
 		}
 	},
 	"initial_PMC_spawns": {
 		"enabled": false,
-		"conversion_factor_before_initial_spawns": 999,
-		"conversion_factor_after_initial_spawns": 0.1,
-		"max_raid_ET": 30
+		"pmcs_vs_raidET": [
+			[0, 0.2],
+			[0.2, 0.2],
+			[0.6, 0.5],
+			[0.8, 0.7],
+			[0.9, 0.9],
+			[0.95, 1],
+			[1, 1]
+		],
+		"conversion_factor_after_initial_spawns": 0.1
 	}
 }

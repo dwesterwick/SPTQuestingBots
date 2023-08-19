@@ -39,7 +39,6 @@ namespace QuestingBots
 
                 List<string> botBrainsToChange = BotBrains.AllBots.ToList();
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...changing bot brains: " + string.Join(", ", botBrainsToChange));
-
                 BrainManager.AddCustomLayer(typeof(PMCObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
 
                 if (ConfigController.Config.Debug.Enabled)
@@ -50,6 +49,12 @@ namespace QuestingBots
                 if (ConfigController.Config.Debug.ShowZoneOutlines)
                 {
                     this.GetOrAddComponent<PathRender>();
+                }
+
+                if (ConfigController.Config.InitialPMCSpawns.Enabled)
+                {
+                    Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
+                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
                 }
             }
 

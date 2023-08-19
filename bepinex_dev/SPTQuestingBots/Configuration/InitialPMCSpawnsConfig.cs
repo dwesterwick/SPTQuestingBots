@@ -12,14 +12,11 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
-        [JsonProperty("conversion_factor_before_initial_spawns")]
-        public float ConversionFactorBeforeInitialSpawns { get; set; } = 999;
+        [JsonProperty("pmcs_vs_raidET")]
+        public double[][] PMCsVsRaidET { get; set; } = new double[0][];
 
         [JsonProperty("conversion_factor_after_initial_spawns")]
         public float ConversionFactorAfterInitialSpawns { get; set; } = 0.1f;
-
-        [JsonProperty("max_raid_ET")]
-        public float MaxRaidET { get; set; } = 30;
 
         public InitialPMCSpawnsConfig()
         {

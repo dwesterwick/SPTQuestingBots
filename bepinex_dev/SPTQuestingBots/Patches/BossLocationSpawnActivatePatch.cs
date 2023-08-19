@@ -25,6 +25,10 @@ namespace QuestingBots.Patches
         private static bool PatchPrefix(ref BossLocationSpawn bossWave)
         {
             int botCount = 1 + bossWave.EscortCount;
+            if (bossWave.Supports != null)
+            {
+                botCount -= bossWave.Supports.Sum(s => s.BossEscortAmount);
+            }
 
             if ((BotGenerator.SpawnedInitialPMCCount == 0) && (LocationController.SpawnedBotCount + botCount > LocationController.MaxInitialBosses))
             {
@@ -46,18 +50,18 @@ namespace QuestingBots.Patches
                 LoggingController.LogInfo("Spawning " + (LocationController.SpawnedRogueCount + botCount) + "/" + LocationController.MaxInitialRogues + " Rogues...");
             }
 
+            LocationController.SpawnedBossWaves++;
+            if (bossWave.BossName.ToLower() == "exusec")
+            {
+                LocationController.SpawnedRogueCount += botCount;
+            }
+
             string message = "Spawning boss wave ";
             message += LocationController.SpawnedBossWaves + "/" + LocationController.ZeroWaveCount;
             message += " for bot type " + bossWave.BossName;
             message += " with " + botCount + " total bots";
             message += "...";
             LoggingController.LogInfo(message);
-
-            LocationController.SpawnedBossWaves++;
-            if (bossWave.BossName.ToLower() == "exusec")
-            {
-                LocationController.SpawnedRogueCount += botCount;
-            }
 
             // This doesn't seem to work
             //bossWave.IgnoreMaxBots = true;

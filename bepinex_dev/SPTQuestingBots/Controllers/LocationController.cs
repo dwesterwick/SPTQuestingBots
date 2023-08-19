@@ -88,7 +88,7 @@ namespace QuestingBots.Controllers
 
         public static bool IsABoss(BotOwner botOwner)
         {
-            return Bosses.Any(b => b.Id == botOwner.Id);
+            return Bosses.Any(b => b.Profile.Nickname == botOwner.Profile.Nickname);
         }
 
         public static void RegisterBot(BotOwner botOwner)
@@ -129,6 +129,11 @@ namespace QuestingBots.Controllers
             return originalEscapeTimes[locationID];
         }
 
+        public static float? GetCurrentEscapeTime()
+        {
+            return CurrentLocation?.EscapeTimeLimit;
+        }
+
         public static float? GetRemainingRaidTime()
         {
             if (Singleton<AbstractGame>.Instance == null)
@@ -156,6 +161,25 @@ namespace QuestingBots.Controllers
             }
 
             return (originalEscapeTime.Value * 60f) - remainingTime.Value;
+        }
+
+        public static float? GetRaidTimeRemainingFraction()
+        {
+            return GetRaidTimeRemainingFraction(CurrentLocation?.Id);
+        }
+
+        public static float? GetRaidTimeRemainingFraction(string locationID)
+        {
+            float? remainingTime = GetRemainingRaidTime();
+            float? originalEscapeTime = GetOriginalEscapeTime(locationID);
+
+            if (!remainingTime.HasValue || !originalEscapeTime.HasValue)
+            {
+                LoggingController.LogError("Could not calculate elapsed raid time");
+                return null;
+            }
+
+            return remainingTime.Value / (originalEscapeTime * 60f);
         }
 
         public static Models.Quest CreateSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)

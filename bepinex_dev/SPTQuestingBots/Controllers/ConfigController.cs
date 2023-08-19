@@ -71,5 +71,33 @@ namespace QuestingBots.Controllers
 
             return false;
         }
+
+        public static double InterpolateForFirstCol(double[][] array, double value)
+        {
+            if (array.Length == 1)
+            {
+                return array.Last()[1];
+            }
+
+            if (value <= array[0][0])
+            {
+                return array[0][1];
+            }
+
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (array[i][0] >= value)
+                {
+                    if (array[i][0] - array[i - 1][0] == 0)
+                    {
+                        return array[i][1];
+                    }
+
+                    return array[i - 1][1] + (value - array[i - 1][0]) * (array[i][1] - array[i - 1][1]) / (array[i][0] - array[i - 1][0]);
+                }
+            }
+
+            return array.Last()[1];
+        }
     }
 }

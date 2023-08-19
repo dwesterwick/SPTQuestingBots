@@ -114,34 +114,24 @@ namespace QuestingBots.Controllers
             }
 
             float? raidET = LocationController.GetElapsedRaidTime();
-            if (!raidET.HasValue)
+            float? raidTimeRemainingFraction = LocationController.GetRaidTimeRemainingFraction();
+            if (!raidET.HasValue || !raidTimeRemainingFraction.HasValue)
             {
                 return;
             }
 
+            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.PMCsVsRaidET, raidTimeRemainingFraction.Value);
             if (initialPMCGroups.Count == 0)
             {
-                // Do not force spawns if the player spawned late
-                if (raidET.Value > ConfigController.Config.InitialPMCSpawns.MaxRaidET)
-                {
-                    LoggingController.LogInfo("Too much time has elapsed in the raid to spawn initial PMC's");
-
-                    if (initialPMCGroups.Count == 0)
-                    {
-                        ConfigController.AdjustPMCConversionChances(1);
-                    }
-
-                    CanSpawnPMCs = false;
-                    return;
-                }
-
                 LoggingController.LogInfo("Generating initial PMC groups...");
 
-                System.Random random = new System.Random();
-                maxPMCBots = random.Next(LocationController.CurrentLocation.MinPlayers, LocationController.CurrentLocation.MaxPlayers) - 1;
+                int minPlayers = (int)Math.Floor(LocationController.CurrentLocation.MinPlayers * playerCountFactor);
+                int maxPlayers = (int)Math.Ceiling(LocationController.CurrentLocation.MaxPlayers * playerCountFactor);
 
-                ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
-                
+                System.Random random = new System.Random();
+                maxPMCBots = random.Next(minPlayers, maxPlayers) - 1;
+                LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
+
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 generateBots(LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
@@ -162,8 +152,8 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            float minDistanceFromPlayers = SpawnedInitialPMCCount == 0 ? 25 : 100;
-            ESpawnCategoryMask allowedSpawnPointTypes = SpawnedInitialPMCCount == 0 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
+            float minDistanceFromPlayers = playerCountFactor >= 1 ? 25 : 100;
+            ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 1 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
