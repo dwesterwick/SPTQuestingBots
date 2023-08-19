@@ -231,6 +231,39 @@ namespace QuestingBots.Controllers
             return null;
         }
 
+        public static SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
+        {
+            if (referencePositions.Length == 0)
+            {
+                throw new ArgumentException("The reference position array is empty.", "referencePositions");
+            }
+
+            if (allSpawnPoints.Length == 0)
+            {
+                throw new ArgumentException("The spawn-point array is empty.", "allSpawnPoints");
+            }
+
+            Dictionary<SpawnPointParams, float> nearestReferencePoints = new Dictionary<SpawnPointParams, float>();
+            for (int s = 0; s < allSpawnPoints.Length; s++)
+            {
+                float nearestDistance = Vector3.Distance(referencePositions[0], allSpawnPoints[s].Position.ToUnityVector3());
+
+                for (int b = 1; b < referencePositions.Length; b++)
+                {
+                    float distance = Vector3.Distance(referencePositions[b], allSpawnPoints[s].Position.ToUnityVector3());
+
+                    if (distance < nearestDistance)
+                    {
+                        nearestDistance = distance;
+                    }
+                }
+
+                nearestReferencePoints.Add(allSpawnPoints[s], nearestDistance);
+            }
+
+            return nearestReferencePoints.OrderBy(p => p.Value).Last().Key;
+        }
+
         public static SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             if (referenceSpawnPoints.Length == 0)
