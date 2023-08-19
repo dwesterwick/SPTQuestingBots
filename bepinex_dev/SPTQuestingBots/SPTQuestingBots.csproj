@@ -101,6 +101,7 @@
     <Compile Include="Configuration\QuestTemplatesConfig.cs" />
     <Compile Include="Controllers\BotGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
     <Compile Include="Controllers\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />

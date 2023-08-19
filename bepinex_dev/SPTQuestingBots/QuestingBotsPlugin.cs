@@ -7,7 +7,6 @@ using BepInEx;
 using DrakiaXYZ.BigBrain.Brains;
 using QuestingBots.BotLogic;
 using QuestingBots.Controllers;
-using UnityEngine;
 
 namespace QuestingBots
 {
@@ -34,6 +33,7 @@ namespace QuestingBots
                 new Patches.BotOwnerCreatePatch().Enable();
 
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling controllers...");
+                this.GetOrAddComponent<LocationController>();
                 this.GetOrAddComponent<BotQuestController>();
                 this.GetOrAddComponent<BotGenerator>();
 

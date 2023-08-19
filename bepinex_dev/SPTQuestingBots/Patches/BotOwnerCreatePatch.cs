@@ -21,9 +21,7 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(BotOwner __result)
         {
-            LoggingController.LogInfo("Spawned bot " + __result.Profile.Nickname + " (Brain: " + __result.Brain.GetType().FullName + ")");
-
-            BotGenerator.SpawnedBotCount++;
+            LocationController.RegisterBot(__result);
         }
     }
 }

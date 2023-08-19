@@ -27,13 +27,13 @@ namespace QuestingBots.Patches
                     int totalBots = 1 + bossWave.EscortCount;
 
                     LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
-                    BotGenerator.ZeroWaveCount++;
-                    BotGenerator.ZeroWaveTotalBotCount += totalBots;
-                    BotGenerator.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
+                    LocationController.ZeroWaveCount++;
+                    LocationController.ZeroWaveTotalBotCount += totalBots;
+                    LocationController.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
                 }
             }
 
-            LoggingController.LogInfo("Total inital bosses and followers " + BotGenerator.ZeroWaveTotalBotCount);
+            LoggingController.LogInfo("Total inital bosses and followers " + LocationController.ZeroWaveTotalBotCount);
         }
     }
 }

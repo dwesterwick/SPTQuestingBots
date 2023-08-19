@@ -33,7 +33,7 @@ namespace QuestingBots.Models
                 int positionsGenerated = 1;
                 while (positionsGenerated < botCount)
                 {
-                    SpawnPointParams nextPosition = BotGenerator.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray());
+                    SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray());
                 }
 
                 SpawnPositions = spawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray();

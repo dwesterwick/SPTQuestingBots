@@ -24,36 +24,44 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         private static bool PatchPrefix(ref BossLocationSpawn bossWave)
         {
-            int maxRogues = 6;
             int botCount = 1 + bossWave.EscortCount;
+
+            if ((BotGenerator.SpawnedInitialPMCCount == 0) && (LocationController.SpawnedBotCount + botCount > LocationController.MaxInitialBosses))
+            {
+                LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many bosses will be on the map");
+                return false;
+            }
+
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                if (BotGenerator.SpawnedRogueCount + botCount > maxRogues)
+                if (LocationController.SpawnedRogueCount + botCount > LocationController.MaxInitialRogues)
                 {
-                    BotGenerator.ZeroWaveTotalBotCount -= botCount;
-                    BotGenerator.ZeroWaveTotalRogueCount -= botCount;
+                    LocationController.ZeroWaveTotalBotCount -= botCount;
+                    LocationController.ZeroWaveTotalRogueCount -= botCount;
 
                     LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many Rogues will be on the map");
                     return false;
                 }
 
-                LoggingController.LogInfo("Spawning " + (BotGenerator.SpawnedRogueCount + botCount) + "/" + maxRogues + " Rogues...");
+                LoggingController.LogInfo("Spawning " + (LocationController.SpawnedRogueCount + botCount) + "/" + LocationController.MaxInitialRogues + " Rogues...");
             }
 
             string message = "Spawning boss wave ";
-            message += BotGenerator.SpawnedBossWaves + "/" + BotGenerator.ZeroWaveCount;
+            message += LocationController.SpawnedBossWaves + "/" + LocationController.ZeroWaveCount;
             message += " for bot type " + bossWave.BossName;
             message += " with " + botCount + " total bots";
             message += "...";
             LoggingController.LogInfo(message);
 
-            BotGenerator.SpawnedBossWaves++;
+            LocationController.SpawnedBossWaves++;
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                BotGenerator.SpawnedRogueCount += botCount;
+                LocationController.SpawnedRogueCount += botCount;
             }
 
-            bossWave.IgnoreMaxBots = true;
+            // This doesn't seem to work
+            //bossWave.IgnoreMaxBots = true;
+            
             return true;
         }
     }

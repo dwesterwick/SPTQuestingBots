@@ -48,7 +48,7 @@ namespace QuestingBots.Controllers
 
         private void Update()
         {
-            if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
+            if (LocationController.CurrentLocation == null)
             {
                 Clear();
                 return;
@@ -141,7 +141,7 @@ namespace QuestingBots.Controllers
                 enumeratorWithTimeLimit.Reset();
                 yield return enumeratorWithTimeLimit.Run(allQuests, LocateQuestItems, allItems);
 
-                Quest spawnPointQuest = BotGenerator.CreateSpawnPointQuest();
+                Quest spawnPointQuest = LocationController.CreateSpawnPointQuest();
                 if (spawnPointQuest != null)
                 {
                     allQuests.Add(spawnPointQuest);
@@ -151,7 +151,7 @@ namespace QuestingBots.Controllers
                     LoggingController.LogError("Could not add quest for going to random spawn points");
                 }
 
-                Quest spawnRushQuest = BotGenerator.CreateSpawnRushQuest();
+                Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
                 if (spawnRushQuest != null)
                 {
                     allQuests.Add(spawnRushQuest);
@@ -210,7 +210,7 @@ namespace QuestingBots.Controllers
                             return;
                         }
 
-                        Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceItem);
+                        Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceItem);
                         if (!navMeshTargetPoint.HasValue)
                         {
                             LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
@@ -374,7 +374,7 @@ namespace QuestingBots.Controllers
 
             float maxSearchDistance = ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone;
             maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
-            Vector3? navMeshTargetPoint = BotGenerator.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
+            Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
             if (!navMeshTargetPoint.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh point for trigger " + trigger.Id);

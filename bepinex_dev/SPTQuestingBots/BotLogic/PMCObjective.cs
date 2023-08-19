@@ -22,7 +22,6 @@ namespace QuestingBots.BotLogic
         public Vector3? Position { get; set; } = null;
 
         private BotOwner botOwner = null;
-        private LocationSettingsClass.Location location = null;
         private Models.Quest targetQuest = null;
         private Models.QuestObjective targetObjective = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
@@ -43,6 +42,8 @@ namespace QuestingBots.BotLogic
             botOwner = _botOwner;
 
             IsObjectiveActive = botOwner.Side != EPlayerSide.Savage;
+            IsObjectiveActive &= !LocationController.IsABoss(botOwner);
+
             CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
 
             ChangeObjective();
@@ -100,11 +101,6 @@ namespace QuestingBots.BotLogic
             else
             {
                 timeSpentAtObjectiveTimer.Reset();
-            }
-
-            if (location == null)
-            {
-                location = BotGenerator.GetCurrentLocation();
             }
 
             if (!Position.HasValue)
