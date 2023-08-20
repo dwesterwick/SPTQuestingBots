@@ -151,14 +151,21 @@ namespace QuestingBots.Controllers
                     LoggingController.LogError("Could not add quest for going to random spawn points");
                 }
 
-                Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
-                if (spawnRushQuest != null)
+                if (LocationController.GetElapsedRaidTime() < ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
                 {
-                    allQuests.Add(spawnRushQuest);
+                    Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
+                    if (spawnRushQuest != null)
+                    {
+                        allQuests.Add(spawnRushQuest);
+                    }
+                    else
+                    {
+                        LoggingController.LogError("Could not add quest for rushing your spawn point");
+                    }
                 }
                 else
                 {
-                    LoggingController.LogError("Could not add quest for rushing your spawn point");
+                    LoggingController.LogInfo("Too much time has elapsed in the raid to add a spawn-rush quest.");
                 }
 
                 HaveTriggersBeenFound = true;

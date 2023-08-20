@@ -136,7 +136,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
 
         // Adjust parameters to make debugging easier
-        if (modConfig.debug.enabled)
+        if (modConfig.enabled && modConfig.debug.enabled)
         {
             this.commonUtils.logInfo("Applying debug options...");
 
@@ -149,6 +149,16 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 	
     public postAkiLoad(): void
     {
+        if (!modConfig.enabled)
+        {
+            return;
+        }
+
+        if (!modConfig.initial_PMC_spawns.enabled)
+        {
+            return;
+        }
+
         this.setOriginalPMCConversionChances();
         this.disableCustomBossWaves();
         this.increaseBotCaps();

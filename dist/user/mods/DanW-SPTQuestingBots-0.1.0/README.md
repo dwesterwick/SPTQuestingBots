@@ -7,7 +7,10 @@
 **Tested to be compatible with:**
 * SAIN 2.0 Beta 3.5.3
 * Looting Bots 1.1.2
-* Late to the Party 1.3.0+ (only if **adjust_bot_spawn_chances.enabled=false**)
+* Late to the Party 1.3.0+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+
+**NOT compatible with:**
+* AI Limit / AI Disabler (this mod relies on the AI being active throughout the entire map)
 
 **Bot Questing Overview:**
 * All PMC bots will automatically select random quests, regardless of their spawn time

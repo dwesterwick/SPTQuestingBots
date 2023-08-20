@@ -44,6 +44,7 @@ namespace QuestingBots.Controllers
             lootableContainers = new LootableContainer[0];
             CurrentLocation = null;
             CurrentRaidSettings = null;
+            nearestNavMeshPoint.Clear();
         }
 
         private void Update()
@@ -263,7 +264,10 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(1, "Spawn Rush");
+            //Vector3? playerPosition = GetPlayerPosition();
+            //LoggingController.LogInfo("Creating spawn rush quest for " + playerSpawnPoint.Value.Id + " via " + navMeshPosition.Value.ToString() + " for player at " + playerPosition.Value.ToString() + "...");
+
+            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnRush.Priority, "Spawn Rush");
             quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
             objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
@@ -417,7 +421,7 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            return GetNearestSpawnPoint(playerPosition.Value, CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(playerPosition.Value);
         }
 
         private static LocationSettingsClass getLocationSettings(TarkovApplication app)

@@ -23,7 +23,7 @@ namespace QuestingBots.BotLogic
         private bool wasSearchingForEnemy = false;
         private bool wasAbleBodied = true;
         private bool wasLooting = false;
-        private bool canLoot = true;
+        //private bool canLoot = true;
         private bool wasExtracting = false;
         private bool wasStuck = false;
         private Vector3? lastBotPosition = null;

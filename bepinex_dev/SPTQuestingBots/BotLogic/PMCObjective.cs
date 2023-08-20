@@ -116,7 +116,7 @@ namespace QuestingBots.BotLogic
                 return;
             }
 
-            if (LocationController.IsABoss(botOwner))
+            if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
                 IsObjectiveActive = false;
