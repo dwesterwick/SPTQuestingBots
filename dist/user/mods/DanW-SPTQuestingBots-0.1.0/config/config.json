@@ -6,7 +6,7 @@
 		"show_zone_outlines": false
 	},
 	"max_calc_time_per_frame_ms": 5,
-	"brain_layer_priority": 21,
+	"brain_layer_priority": 26,
 	"search_time_after_combat": {
 		"min": 10,
 		"max": 30

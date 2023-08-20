@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +29,7 @@ namespace QuestingBots.Controllers
         private static LocationSettingsClass locationSettings = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
+        private static LootableContainer[] lootableContainers = new LootableContainer[0];
 
         private static void Clear()
         {
@@ -39,6 +41,7 @@ namespace QuestingBots.Controllers
             ZeroWaveTotalBotCount = 0;
             ZeroWaveTotalRogueCount = 0;
 
+            lootableContainers = new LootableContainer[0];
             CurrentLocation = null;
             CurrentRaidSettings = null;
         }
@@ -80,6 +83,8 @@ namespace QuestingBots.Controllers
             {
                 CurrentRaidSettings = getCurrentRaidSettings();
                 CurrentLocation = CurrentRaidSettings.SelectedLocation;
+                lootableContainers = FindObjectsOfType<LootableContainer>();
+                LoggingController.LogInfo("Found " + lootableContainers.Length + " lootable containers in the map");
             }
         }
 
@@ -98,6 +103,28 @@ namespace QuestingBots.Controllers
 
             SpawnedBotCount++;
             LoggingController.LogInfo("Spawned bot " + SpawnedBotCount + "/" + ZeroWaveTotalBotCount + ": " + botOwner.Profile.Nickname + " (" + botOwner.Side + ")");
+        }
+
+        public static LootableContainer GetNearestLootableContainer(BotOwner botOwner)
+        {
+            if (lootableContainers.Length == 0)
+            {
+                return null;
+            }
+
+            IEnumerable<LootableContainer> sortedContainers = lootableContainers.OrderBy(l => Vector3.Distance(botOwner.Position, l.transform.position));
+            return sortedContainers.First();
+        }
+
+        public static float GetDistanceToNearestLootableContainer(BotOwner botOwner)
+        {
+            LootableContainer nearestContainer = GetNearestLootableContainer(botOwner);
+            if (nearestContainer == null)
+            {
+                return float.MaxValue;
+            }
+
+            return Vector3.Distance(botOwner.Position, nearestContainer.transform.position);
         }
 
         public static Vector3? GetPlayerPosition()

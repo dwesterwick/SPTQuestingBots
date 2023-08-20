@@ -1,12 +1,13 @@
 **Please remember this is currently in ALPHA testing! Bugs are likely!**
 
 **Requires:**
-* BigBrain
-* Waypoints
+* BigBrain 0.2.0+
+* Waypoints 1.2.0+
 
 **Tested to be compatible with:**
-* SAIN
-* Late to the Party (only if **adjust_bot_spawn_chances.enabled=false**)
+* SAIN 2.0 Beta 3.5.3
+* Looting Bots 1.1.2
+* Late to the Party 1.3.0+ (only if **adjust_bot_spawn_chances.enabled=false**)
 
 **Bot Questing Overview:**
 * All PMC bots will automatically select random quests, regardless of their spawn time

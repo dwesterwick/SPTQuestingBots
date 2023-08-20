@@ -26,6 +26,7 @@ namespace QuestingBots.BotLogic
         private Models.QuestObjective targetObjective = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
+        private Stopwatch checkForLootTimer = Stopwatch.StartNew();
 
         public double TimeSpentAtObjective
         {
@@ -35,6 +36,11 @@ namespace QuestingBots.BotLogic
         public double TimeSinceChangingObjective
         {
             get { return timeSinceChangingObjectiveTimer.ElapsedMilliseconds / 1000.0; }
+        }
+
+        public bool ShouldCheckForLoot
+        {
+            get { return checkForLootTimer.ElapsedMilliseconds < 3000; }
         }
 
         public void Init(BotOwner _botOwner)
@@ -83,6 +89,24 @@ namespace QuestingBots.BotLogic
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
             }
             //LoggingController.LogWarning("Could not assign quest for bot " + botOwner.Profile.Nickname);
+        }
+
+        public bool TryCheckForLoot()
+        {
+            if (checkForLootTimer.ElapsedMilliseconds > 10000)
+            {
+                checkForLootTimer.Restart();
+
+                if (LocationController.GetDistanceToNearestLootableContainer(botOwner) > 10)
+                {
+                    return false;
+                }
+
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can check for loot.");
+                return true;
+            }
+
+            return false;
         }
 
         private void Update()

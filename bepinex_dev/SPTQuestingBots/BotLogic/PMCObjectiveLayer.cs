@@ -22,6 +22,9 @@ namespace QuestingBots.BotLogic
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasSearchingForEnemy = false;
         private bool wasAbleBodied = true;
+        private bool wasLooting = false;
+        private bool canLoot = true;
+        private bool wasExtracting = false;
         private bool wasStuck = false;
         private Vector3? lastBotPosition = null;
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
@@ -60,6 +63,53 @@ namespace QuestingBots.BotLogic
             {
                 return false;
             }
+
+            /*if (canLoot && objective.ShouldCheckForLoot)
+            {
+                return pauseLayer();
+            }
+            else
+            {
+                canLoot = objective.TryCheckForLoot();
+            }*/
+
+            string layerName = botOwner.Brain.ActiveLayerName()?.ToLower();
+            if (layerName != null)
+            {
+                if (layerName.Contains("looting"))
+                {
+                    if (!wasLooting)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is looting...");
+                    }
+
+                    wasLooting = true;
+                    return pauseLayer();
+                }
+                
+                if (layerName.Contains("extract"))
+                {
+                    if (!wasExtracting)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is extracting...");
+                    }
+
+                    wasExtracting = true;
+                    return pauseLayer();
+                }
+            }
+
+            if (wasLooting)
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is looting...done.");
+            }
+            wasLooting = false;
+
+            if (wasExtracting)
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is extracting...done.");
+            }
+            wasExtracting = false;
 
             if (!isAbleBodied(wasAbleBodied))
             {
