@@ -95,6 +95,19 @@ namespace QuestingBots.Controllers
             return botmax - allPlayers.Count;
         }
 
+        public static IEnumerable<BotOwner> RemainingAliveInitialPMCGroups()
+        {
+            return Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.BotState == EBotState.Active)
+                .Where(b => !b.IsDead)
+                .Where(b => IsBotFromInitialPMCSpawns(b));
+        }
+
+        public static int RemainingAliveInitialPMCGroupCount()
+        {
+            return RemainingAliveInitialPMCGroups().Count();
+        }
+
         private void Update()
         {
             if (LocationController.CurrentLocation == null)
@@ -113,6 +126,11 @@ namespace QuestingBots.Controllers
                 return;
             }
 
+            if (RemainingAliveInitialPMCGroupCount() >= ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs)
+            {
+                return;
+            }
+
             float? raidET = LocationController.GetElapsedRaidTime();
             float? raidTimeRemainingFraction = LocationController.GetRaidTimeRemainingFraction();
             if (!raidET.HasValue || !raidTimeRemainingFraction.HasValue)
@@ -120,7 +138,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.PMCsVsRaidET, raidTimeRemainingFraction.Value);
+            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction.Value);
             if (initialPMCGroups.Count == 0)
             {
                 LoggingController.LogInfo("Generating initial PMC groups...");
@@ -141,7 +159,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            if ((SpawnedInitialPMCCount > 0) && (retrySpawnTimer.ElapsedMilliseconds < 10000))
+            if (retrySpawnTimer.ElapsedMilliseconds < ConfigController.Config.InitialPMCSpawns.SpawnRetryTime * 1000)
             {
                 return;
             }
@@ -152,7 +170,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            float minDistanceFromPlayers = playerCountFactor >= 1 ? 25 : 100;
+            float minDistanceFromPlayers = playerCountFactor >= 1 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
             ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 1 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
@@ -249,8 +267,12 @@ namespace QuestingBots.Controllers
                     allSpawnPoints[s].DelayToCanSpawnSec = 0;
                 }
 
+                int allowedSpawns = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs - RemainingAliveInitialPMCGroupCount();
+                IEnumerable<Models.BotSpawnInfo> initialPMCGroupsToSpawn = initialPMCGroups.Where(g => !g.HasSpawned).Take(allowedSpawns);
+
+                LoggingController.LogInfo("Spawning " + initialPMCGroupsToSpawn.Count() + " initial PMC groups...");
                 enumeratorWithTimeLimit.Reset();
-                yield return enumeratorWithTimeLimit.Run(initialPMCGroups, spawnInitialPMCsAtSpawnPoint, allowedSpawnPointTypes, minDistanceFromPlayers);
+                yield return enumeratorWithTimeLimit.Run(initialPMCGroupsToSpawn, spawnInitialPMCsAtSpawnPoint, allowedSpawnPointTypes, minDistanceFromPlayers);
 
                 for (int s = 0; s < allSpawnPoints.Length; s++)
                 {
@@ -270,6 +292,7 @@ namespace QuestingBots.Controllers
             }
             finally
             {
+                retrySpawnTimer.Restart();
                 IsSpawningPMCs = false;
             }
         }
@@ -281,7 +304,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            if (retrySpawnTimer.ElapsedMilliseconds < 10000)
+            if (retrySpawnTimer.ElapsedMilliseconds < ConfigController.Config.InitialPMCSpawns.SpawnRetryTime * 1000)
             {
                 return;
             }
@@ -294,7 +317,7 @@ namespace QuestingBots.Controllers
             }
 
             int numberOfBotsAllowedToSpawn = NumberOfBotsAllowedToSpawn();
-            if (numberOfBotsAllowedToSpawn < 4)
+            if (numberOfBotsAllowedToSpawn < ConfigController.Config.InitialPMCSpawns.MinOtherBotsAllowedToSpawn)
             {
                 retrySpawnTimer.Restart();
                 LoggingController.LogWarning("Cannot spawn more PMC's or Scavs will not be able to spawn. Bots able to spawn: " + numberOfBotsAllowedToSpawn);

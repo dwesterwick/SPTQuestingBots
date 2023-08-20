@@ -14,9 +14,6 @@ namespace QuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {
-        public static int MaxInitialRogues { get; } = 6;
-        public static int MaxInitialBosses { get; } = 10;
-
         public static List<BotOwner> Bosses = new List<BotOwner>();
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
@@ -211,7 +208,7 @@ namespace QuestingBots.Controllers
 
         public static Models.Quest CreateSpawnRushQuest()
         {
-            if (LocationController.GetElapsedRaidTime(LocationController.CurrentLocation.Id) > ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
+            if (GetElapsedRaidTime(CurrentLocation.Id) > ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
             {
                 return null;
             }
@@ -368,12 +365,12 @@ namespace QuestingBots.Controllers
 
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
         {
-            return GetNearestSpawnPoint(postition, new SpawnPointParams[0], LocationController.CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(postition, new SpawnPointParams[0], CurrentLocation.SpawnPointParams);
         }
 
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
-            return GetNearestSpawnPoint(postition, excludedSpawnPoints, LocationController.CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(postition, excludedSpawnPoints, CurrentLocation.SpawnPointParams);
         }
 
         private static SpawnPointParams? getPlayerSpawnPoint()
@@ -384,7 +381,7 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            return GetNearestSpawnPoint(playerPosition.Value, LocationController.CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(playerPosition.Value, CurrentLocation.SpawnPointParams);
         }
 
         private static LocationSettingsClass getLocationSettings(TarkovApplication app)
@@ -402,17 +399,6 @@ namespace QuestingBots.Controllers
             }
 
             return session.LocationSettings;
-        }
-
-        private static LocationSettingsClass.Location getCurrentLocation()
-        {
-            if (Singleton<GameWorld>.Instance == null)
-            {
-                LoggingController.LogError("Cannot retrieve the GameWorld instance");
-                return null;
-            }
-
-            return getCurrentRaidSettings().SelectedLocation;
         }
 
         private static RaidSettings getCurrentRaidSettings()

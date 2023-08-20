@@ -30,7 +30,7 @@ namespace QuestingBots.Patches
                 botCount -= bossWave.Supports.Sum(s => s.BossEscortAmount);
             }
 
-            if ((BotGenerator.SpawnedInitialPMCCount == 0) && (LocationController.SpawnedBotCount + botCount > LocationController.MaxInitialBosses))
+            if ((BotGenerator.SpawnedInitialPMCCount == 0) && (LocationController.SpawnedBotCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialBosses))
             {
                 LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many bosses will be on the map");
                 return false;
@@ -38,7 +38,7 @@ namespace QuestingBots.Patches
 
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                if (LocationController.SpawnedRogueCount + botCount > LocationController.MaxInitialRogues)
+                if (LocationController.SpawnedRogueCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialRogues)
                 {
                     LocationController.ZeroWaveTotalBotCount -= botCount;
                     LocationController.ZeroWaveTotalRogueCount -= botCount;
@@ -47,7 +47,7 @@ namespace QuestingBots.Patches
                     return false;
                 }
 
-                LoggingController.LogInfo("Spawning " + (LocationController.SpawnedRogueCount + botCount) + "/" + LocationController.MaxInitialRogues + " Rogues...");
+                LoggingController.LogInfo("Spawning " + (LocationController.SpawnedRogueCount + botCount) + "/" + ConfigController.Config.InitialPMCSpawns.MaxInitialRogues + " Rogues...");
             }
 
             LocationController.SpawnedBossWaves++;

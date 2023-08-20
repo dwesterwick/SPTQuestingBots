@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
 
 namespace QuestingBots.Patches
@@ -19,6 +20,8 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
+            BotOwner[] aliveInitialPMCs = Controllers.BotGenerator.RemainingAliveInitialPMCGroups().ToArray();
+
             string message = __instance.Profile.Nickname;
             message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
@@ -26,6 +29,8 @@ namespace QuestingBots.Patches
 
             message += aggressor.Profile.Nickname;
             message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
+
+            message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
 
             Controllers.LoggingController.LogInfo(message);
         }

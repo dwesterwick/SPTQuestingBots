@@ -42,8 +42,6 @@ namespace QuestingBots.BotLogic
             botOwner = _botOwner;
 
             IsObjectiveActive = botOwner.Side != EPlayerSide.Savage;
-            IsObjectiveActive &= !LocationController.IsABoss(botOwner);
-
             CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
 
             ChangeObjective();
@@ -92,6 +90,12 @@ namespace QuestingBots.BotLogic
             if (!IsObjectiveActive)
             {
                 return;
+            }
+
+            if (LocationController.IsABoss(botOwner))
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
+                IsObjectiveActive = false;
             }
 
             if (IsObjectiveReached)

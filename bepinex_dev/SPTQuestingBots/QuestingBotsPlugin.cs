@@ -54,7 +54,7 @@ namespace QuestingBots
                 if (ConfigController.Config.InitialPMCSpawns.Enabled)
                 {
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
-                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ConversionFactorAfterInitialSpawns);
+                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
                 }
             }
 

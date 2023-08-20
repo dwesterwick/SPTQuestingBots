@@ -43,7 +43,11 @@
 	},
 	"initial_PMC_spawns": {
 		"enabled": false,
-		"pmcs_vs_raidET": [
+		"server_pmc_conversion_factor": 0.1,
+		"min_distance_from_players_initial": 25,
+		"min_distance_from_players_during_raid": 100,
+		"max_alive_initial_pmcs": 6,
+		"initial_pmcs_vs_raidET": [
 			[0, 0.2],
 			[0.2, 0.2],
 			[0.6, 0.5],
@@ -52,6 +56,12 @@
 			[0.95, 1],
 			[1, 1]
 		],
-		"conversion_factor_after_initial_spawns": 0.1
+		"spawn_retry_time": 10,
+		"min_other_bots_allowed_to_spawn": 4,
+		"max_initial_bosses": 10,
+		"max_initial_rogues": 6,
+		"add_max_players_to_bot_cap": true,
+		"max_additional_bots": 5,
+		"max_total_bots": 25
 	}
 }

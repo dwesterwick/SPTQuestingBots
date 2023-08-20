@@ -19,7 +19,10 @@
 
 **Known Issues for Bot Questing:**
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
-* Bots tend to get trapped in certain spawn areas, especially in Factory
+* Bots tend to get trapped in certain spawn areas. Known areas:
+    * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0)
+    * Customs between Warehouse 4 and New Gas
+    * Lighthouse near the Resort spawn
 
 **Planned Improvements for Bot Questing:**
 * Custom quests (defined via JSON files)
@@ -32,18 +35,16 @@
 
 **Initial PMC Spawn Overview:**
 * PMC's will spawn immediately when the countdown timer at the beginning of the raid reaches 0 (Thanks to Props for sharing code from DONUTS!).
-* The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values)
-* PMC's will spawn in actual EFT player spawn points using an algorithm to spread bots out across the map as much as possible
+* The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values).
+* Only a certain (configurable) number of initial PMC's will spawn (currently 6) at the beginning of the raid, and the rest will spawn as they die.
+* Initial PMC's will spawn in actual EFT player spawn points using an algorithm to spread bots out across the map as much as possible
 * The PMC difficulty is set by your raid settings in EFT
 
 **Known Issues for Initial PMC Spawns:**
-* Rogue and Raider spawning doesn't work correctly
 * In maps with a high number of max players (namely Streets), Scavs don't always spawn when the game generates them
-* In maps with a high number of max players (namely Streets), performance can be pretty bad
-* Noticeable stuttering for the first few seconds of the raid
+* In maps with a high number of max players (namely Streets), performance can be pretty bad if your **max_alive_initial_pmcs** setting is high
+* Noticeable stuttering for the first few seconds of the raid if your **max_alive_initial_pmcs** setting is high
 * Only solo PMC's spawn
 
 **Planned Improvements for Initial PMC Spawns:**
-* Adding a config setting for capping the initial PMC spawn count (for people with lower-end PC's)
-* Maintain a min/max PMC count vs. raid ET in case the initial PMC spawns are below the max player count for the map
 * Add random PMC group spawns
