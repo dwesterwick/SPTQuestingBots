@@ -138,7 +138,16 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            return GClass1473.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
+            float? escapeTime = GetCurrentEscapeTime();
+            if (!escapeTime.HasValue)
+            {
+                LoggingController.LogError("Could not determine remaining raid time");
+                return null;
+            }
+
+            float remainingTimeFromGame = GClass1473.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
+
+            return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);
         }
 
         public static float? GetElapsedRaidTime()

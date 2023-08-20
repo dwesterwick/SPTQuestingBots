@@ -46,6 +46,7 @@
 		"server_pmc_conversion_factor": 0.1,
 		"min_distance_from_players_initial": 25,
 		"min_distance_from_players_during_raid": 100,
+		"min_distance_from_players_during_raid_factory": 50,
 		"max_alive_initial_pmcs": 6,
 		"initial_pmcs_vs_raidET": [
 			[0, 0.2],

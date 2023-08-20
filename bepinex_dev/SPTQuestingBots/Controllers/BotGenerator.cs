@@ -141,13 +141,13 @@ namespace QuestingBots.Controllers
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction.Value);
             if (initialPMCGroups.Count == 0)
             {
-                LoggingController.LogInfo("Generating initial PMC groups...");
+                LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction.Value, 3) + ")...");
 
-                int minPlayers = (int)Math.Floor(LocationController.CurrentLocation.MinPlayers * playerCountFactor);
-                int maxPlayers = (int)Math.Ceiling(LocationController.CurrentLocation.MaxPlayers * playerCountFactor);
+                int minPlayers = (int)Math.Floor((LocationController.CurrentLocation.MinPlayers * playerCountFactor) - 1);
+                int maxPlayers = (int)Math.Ceiling((LocationController.CurrentLocation.MaxPlayers * playerCountFactor) - 1);
 
                 System.Random random = new System.Random();
-                maxPMCBots = random.Next(minPlayers, maxPlayers) - 1;
+                maxPMCBots = random.Next(minPlayers, maxPlayers);
                 LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
 
                 // Create bot data from the server
@@ -170,8 +170,9 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            float minDistanceFromPlayers = playerCountFactor >= 1 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
-            ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 1 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
+            float minDistanceDuringRaid = LocationController.CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
+            float minDistanceFromPlayers = playerCountFactor >= 0.98 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : minDistanceDuringRaid;
+            ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 0.98 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
@@ -355,6 +356,8 @@ namespace QuestingBots.Controllers
             if ((closestBot != null) && (Vector3.Distance(initialPMCBot.SpawnPositions[0], closestBot.Position) < minDistanceFromPlayers))
             {
                 LoggingController.LogWarning("Cannot spawn PMC group at " + initialPMCBot.SpawnPositions[0].ToString() + ". Another bot is too close.");
+                initialPMCBot.SpawnPoint = null;
+                initialPMCBot.SpawnPositions = new Vector3[0];
                 return;
             }
 
@@ -362,6 +365,8 @@ namespace QuestingBots.Controllers
             if (Vector3.Distance(initialPMCBot.SpawnPositions[0], mainPlayer.Position) < minDistanceFromPlayers)
             {
                 LoggingController.LogWarning("Cannot spawn PMC group at " + initialPMCBot.SpawnPositions[0].ToString() + ". Too close to the main player.");
+                initialPMCBot.SpawnPoint = null;
+                initialPMCBot.SpawnPositions = new Vector3[0];
                 return;
             }
 
