@@ -25,5 +25,7 @@ namespace QuestingBots.BotLogic
         public static IEnumerable<string> AllFollowers => FollowersNormal.Concat(FollowersGoons);
         public static IEnumerable<string> AllBossesWithFollowers => BossesWithKnight.Concat(AllFollowers);
         public static IEnumerable<string> AllBots => AllNormalBots.Concat(AllBossesWithFollowers);
+
+        //FollowerGluharAssault and FollowerGluharProtect max layer = 43
     }
 }

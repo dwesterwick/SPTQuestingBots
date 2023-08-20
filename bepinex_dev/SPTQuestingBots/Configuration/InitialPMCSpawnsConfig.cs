@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonProperty("blacklisted_pmc_bot_brains")]
+        public string[] BlacklistedPMCBotBrains { get; set; } = new string[0];
+
         [JsonProperty("server_pmc_conversion_factor")]
         public float ServerPMCConversionFactor { get; set; } = 0.1f;
 

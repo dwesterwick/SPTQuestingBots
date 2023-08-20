@@ -50,7 +50,17 @@ namespace QuestingBots.BotLogic
             IsObjectiveActive = botOwner.Side != EPlayerSide.Savage;
             CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
 
-            ChangeObjective();
+            if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
+                IsObjectiveActive = false;
+            }
+
+            if (IsObjectiveActive)
+            {
+                LoggingController.LogInfo("Setting objective for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                ChangeObjective();
+            }
         }
 
         public void CompleteObjective()
@@ -116,11 +126,11 @@ namespace QuestingBots.BotLogic
                 return;
             }
 
-            if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
+            /*if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
                 IsObjectiveActive = false;
-            }
+            }*/
 
             if (IsObjectiveReached)
             {

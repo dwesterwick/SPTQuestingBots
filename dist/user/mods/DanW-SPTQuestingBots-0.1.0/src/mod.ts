@@ -154,6 +154,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             this.commonUtils.logInfo("Mod disabled in config.json");
             return;
         }
+        
+        this.removeBlacklistedBrainTypes();
 
         if (!modConfig.initial_PMC_spawns.enabled)
         {
@@ -286,6 +288,33 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         {
             this.commonUtils.logInfo(`Changed bot cap for ${location} to: ${this.iBotConfig.maxBotCap[location]}`);
         }
+    }
+
+    private removeBlacklistedBrainTypes(): void
+    {
+        const badBrains = modConfig.initial_PMC_spawns.blacklisted_pmc_bot_brains;
+        this.commonUtils.logInfo("Removing blacklisted brain types from being used for PMC's...");
+
+        let removedBrains = 0;
+        for (const pmcType in this.iBotConfig.pmc.pmcType)
+        {
+            for (const map in this.iBotConfig.pmc.pmcType[pmcType])
+            {
+                const mapBrains = this.iBotConfig.pmc.pmcType[pmcType][map];
+                
+                for (const i in badBrains)
+                {
+                    if (mapBrains[badBrains[i]] !== undefined)
+                    {
+                        //this.commonUtils.logInfo(`Removing ${badBrains[i]} from ${pmcType} in ${map}...`);
+                        delete mapBrains[badBrains[i]];
+                        removedBrains++;
+                    }
+                }
+            }
+        }
+
+        this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's...done. Removed entries: ${removedBrains}`);
     }
 }
 

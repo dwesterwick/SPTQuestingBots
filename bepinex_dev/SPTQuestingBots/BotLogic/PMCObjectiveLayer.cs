@@ -126,6 +126,18 @@ namespace QuestingBots.BotLogic
             {
                 if (!wasSearchingForEnemy)
                 {
+                    bool hasTarget = botOwner.Memory.GoalTarget.HaveMainTarget();
+                    if (hasTarget)
+                    {
+                        string message = "Bot " + botOwner.Profile.Nickname + " is in combat.";
+                        message += " Close danger: " + botOwner.Memory.DangerData.HaveCloseDanger + ".";
+                        message += " Last Time Hit: " + botOwner.Memory.LastTimeHit + ".";
+                        message += " Enemy Set Time: " + botOwner.Memory.EnemySetTime + ".";
+                        message += " Last Enemy Seen Time: " + botOwner.Memory.LastEnemyTimeSeen + ".";
+                        message += " Under Fire Time: " + botOwner.Memory.UnderFireTime + ".";
+                        LoggingController.LogInfo(message);
+                    }
+
                     updateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
@@ -181,7 +193,6 @@ namespace QuestingBots.BotLogic
 
         private bool shouldSearchForEnemy(double maxTimeSinceCombatEnded)
         {
-            bool hasTarget = botOwner.Memory.GoalTarget.HaveMainTarget();
             bool hasCloseDanger = botOwner.Memory.DangerData.HaveCloseDanger;
 
             bool wasInCombat = (Time.time - botOwner.Memory.LastTimeHit) < maxTimeSinceCombatEnded;
@@ -189,7 +200,7 @@ namespace QuestingBots.BotLogic
             wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
 
-            return wasInCombat || hasCloseDanger; //&& hasTarget;
+            return wasInCombat || hasCloseDanger;
         }
 
         private void updateSearchTimeAfterCombat()
