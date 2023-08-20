@@ -16,7 +16,10 @@ namespace SPTQuestingBots.Configuration
         public long ScavCooldownTime { get; set; } = 1500;
 
         [JsonProperty("show_zone_outlines")]
-        public bool ShowZoneOutlines { get; set; } = true;
+        public bool ShowZoneOutlines { get; set; } = false;
+
+        [JsonProperty("show_failed_paths")]
+        public bool ShowFailedPaths { get; set; } = false;
 
         public DebugConfig()
         {

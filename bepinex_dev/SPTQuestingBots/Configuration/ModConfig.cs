@@ -25,6 +25,9 @@ namespace QuestingBots.Configuration
         [JsonProperty("search_time_after_combat")]
         public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
 
+        [JsonProperty("stuck_bot_detection")]
+        public StuckBotDetectionConfig StuckBotDetection { get; set; } = new StuckBotDetectionConfig();
+
         [JsonProperty("min_time_between_switching_objectives")]
         public float MinTimeBetweenSwitchingObjectives { get; set; } = 5;
 
@@ -33,6 +36,9 @@ namespace QuestingBots.Configuration
 
         [JsonProperty("bot_search_distances")]
         public BotSearchDistanceConfig BotSearchDistances { get; set; } = new BotSearchDistanceConfig();
+
+        [JsonProperty("bot_questing_requirements")]
+        public BotQuestingRequirementsConfig BotQuestingRequirements { get; set; } = new BotQuestingRequirementsConfig();
 
         [JsonProperty("bot_quests")]
         public BotQuestsConfig BotQuests { get; set; } = new BotQuestsConfig();

@@ -10,6 +10,8 @@ using QuestingBots.Controllers;
 
 namespace QuestingBots
 {
+    [BepInIncompatibility("com.pandahhcorp.aidisabler")]
+    [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.2.0")]
     [BepInDependency("xyz.drakia.bigbrain", "0.2.0")]
     [BepInPlugin("com.DanW.QuestingBots", "QuestingBotsPlugin", "0.1.0.0")]

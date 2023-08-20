@@ -217,16 +217,16 @@ namespace QuestingBots.BotLogic
             }
 
             float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, botOwner.Position);
-            if (distanceFromLastUpdate > 2f)
+            if (distanceFromLastUpdate > ConfigController.Config.StuckBotDetection.Distance)
             {
                 lastBotPosition = botOwner.Position;
                 botIsStuckTimer.Restart();
             }
 
-            if (botIsStuckTimer.ElapsedMilliseconds > 1000 * 20f)
+            if (botIsStuckTimer.ElapsedMilliseconds > 1000 * ConfigController.Config.StuckBotDetection.Time)
             {
                 Vector3[] failedBotPath = botOwner.Mover?.CurPath;
-                if (true && (failedBotPath != null))
+                if (ConfigController.Config.Debug.ShowFailedPaths && (failedBotPath != null))
                 {
                     List<Vector3> adjustedPathCorners = new List<Vector3>();
                     foreach (Vector3 corner in failedBotPath)
@@ -258,7 +258,7 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < 0.2)
+            if (100f * botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < ConfigController.Config.BotQuestingRequirements.MinHydration)
             {
                 if (writeToLog)
                 {
@@ -267,7 +267,7 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < 0.2)
+            if (100f * botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < ConfigController.Config.BotQuestingRequirements.MinEnergy)
             {
                 if (writeToLog)
                 {
@@ -278,11 +278,11 @@ namespace QuestingBots.BotLogic
 
             if 
             (
-                (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Maximum < 0.5)
-                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Maximum < 0.5)
-                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Maximum < 0.5)
-                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Maximum < 0.5)
-                || (botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Maximum < 0.5)
+                (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
+                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthChest)
+                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthStomach)
+                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
+                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
             )
             {
                 if (writeToLog)
@@ -292,7 +292,7 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (botOwner.GetPlayer.Physical.Overweight > 1f)
+            if (100f * botOwner.GetPlayer.Physical.Overweight > ConfigController.Config.BotQuestingRequirements.MaxOverweightPercentage)
             {
                 if (writeToLog)
                 {

@@ -3,13 +3,18 @@
 	"debug": {
 		"enabled": true,
 		"scav_cooldown_time": 1500,
-		"show_zone_outlines": false
+		"show_zone_outlines": false,
+		"show_failed_paths": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"brain_layer_priority": 26,
 	"search_time_after_combat": {
 		"min": 10,
 		"max": 30
+	},
+	"stuck_bot_detection": {
+		"distance": 2,
+		"time": 20
 	},
 	"min_time_between_switching_objectives": 5,
 	"quest_generation": {
@@ -21,6 +26,15 @@
 		"objective_reached_ideal": 3,
 		"objective_reached_navmesh_path_error": 20,
 		"max_navmesh_path_error": 10
+	},
+	"bot_questing_requirements": {
+		"min_hydration": 20,
+		"min_energy": 20,
+		"min_health_head": 50,
+		"min_health_chest": 50,
+		"min_health_stomach": 50,
+		"min_health_legs": 50,
+		"max_overweight_percentage": 100
 	},
 	"bot_quests": {
 		"eft_quests": {

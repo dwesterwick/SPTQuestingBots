@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotLogic\BotBrains.cs" />
+    <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
+    <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
     <Compile Include="Controllers\BotQuestController.cs" />
     <Compile Include="BotLogic\PMCObjective.cs" />
     <Compile Include="BotLogic\PMCObjectiveAction.cs" />
