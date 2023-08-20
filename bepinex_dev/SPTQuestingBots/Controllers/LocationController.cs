@@ -19,6 +19,7 @@ namespace QuestingBots.Controllers
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
         public static int SpawnedBotCount { get; set; } = 0;
+        public static int SpawnedBossCount { get; set; } = 0;
         public static int SpawnedRogueCount { get; set; } = 0;
         public static int SpawnedBossWaves { get; set; } = 0;
         public static int ZeroWaveCount { get; set; } = 0;
@@ -36,6 +37,7 @@ namespace QuestingBots.Controllers
             Bosses.Clear();
             SpawnedBossWaves = 0;
             SpawnedBotCount = 0;
+            SpawnedBossCount = 0;
             SpawnedRogueCount = 0;
             ZeroWaveCount = 0;
             ZeroWaveTotalBotCount = 0;

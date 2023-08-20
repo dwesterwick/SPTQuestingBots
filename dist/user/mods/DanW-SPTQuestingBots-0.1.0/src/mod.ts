@@ -151,6 +151,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         if (!modConfig.enabled)
         {
+            this.commonUtils.logInfo("Mod disabled in config.json");
             return;
         }
 
@@ -159,10 +160,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             return;
         }
 
+        this.commonUtils.logInfo("Configuring game for initial PMC spawns...");
         this.setOriginalPMCConversionChances();
         this.disableCustomBossWaves();
         this.increaseBotCaps();
         this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
+        this.commonUtils.logInfo("Configuring game for initial PMC spawns...done.");
     }
 
     private updateScavTimer(sessionId: string): void
