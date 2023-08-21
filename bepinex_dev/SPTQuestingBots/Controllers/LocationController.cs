@@ -86,6 +86,11 @@ namespace QuestingBots.Controllers
             {
                 CurrentRaidSettings = getCurrentRaidSettings();
                 CurrentLocation = CurrentRaidSettings.SelectedLocation;
+                if (CurrentLocation == null)
+                {
+                    return;
+                }
+
                 lootableContainers = FindObjectsOfType<LootableContainer>();
                 LoggingController.LogInfo("Found " + lootableContainers.Length + " lootable containers in the map");
             }
