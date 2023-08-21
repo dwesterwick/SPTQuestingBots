@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
@@ -126,7 +127,7 @@ namespace QuestingBots.BotLogic
             {
                 if (!wasSearchingForEnemy)
                 {
-                    bool hasTarget = botOwner.Memory.GoalTarget.HaveMainTarget();
+                    /*bool hasTarget = botOwner.Memory.GoalTarget.HaveMainTarget();
                     if (hasTarget)
                     {
                         string message = "Bot " + botOwner.Profile.Nickname + " is in combat.";
@@ -136,7 +137,7 @@ namespace QuestingBots.BotLogic
                         message += " Last Enemy Seen Time: " + botOwner.Memory.LastEnemyTimeSeen + ".";
                         message += " Under Fire Time: " + botOwner.Memory.UnderFireTime + ".";
                         LoggingController.LogInfo(message);
-                    }
+                    }*/
 
                     updateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
@@ -155,8 +156,11 @@ namespace QuestingBots.BotLogic
 
             if (objective.CanChangeObjective && (objective.TimeSpentAtObjective > objective.MinTimeAtObjective))
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has spent " + objective.TimeSpentAtObjective + "s at its objective. Setting a new one...");
-                objective.ChangeObjective();
+                string previousObjective = objective.ToString();
+                if (objective.TryChangeObjective())
+                {
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spent " + objective.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
+                }
             }
 
             if (!objective.IsObjectiveReached)
@@ -240,7 +244,11 @@ namespace QuestingBots.BotLogic
                     PathRender.AddOrUpdatePath(failedBotPathRendering);
                 }
 
-                objective.ChangeObjective();
+                if (objective.TryChangeObjective())
+                {
+                    botIsStuckTimer.Restart();
+                }
+
                 return true;
             }
 

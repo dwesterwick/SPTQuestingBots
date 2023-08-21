@@ -59,7 +59,7 @@ namespace QuestingBots.BotLogic
             if (IsObjectiveActive)
             {
                 LoggingController.LogInfo("Setting objective for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
-                ChangeObjective();
+                TryChangeObjective();
             }
         }
 
@@ -87,18 +87,21 @@ namespace QuestingBots.BotLogic
             return "Position " + (Position?.ToString() ?? "???");
         }
 
-        public void ChangeObjective()
+        public bool TryChangeObjective()
         {
             if (!CanChangeObjective)
             {
-                return;
+                return false;
             }
 
             if (TryToGoToRandomQuestObjective())
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
+                return true;
             }
+
             //LoggingController.LogWarning("Could not assign quest for bot " + botOwner.Profile.Nickname);
+            return false;
         }
 
         public bool TryCheckForLoot()
@@ -143,7 +146,7 @@ namespace QuestingBots.BotLogic
 
             if (!Position.HasValue)
             {
-                ChangeObjective();
+                TryChangeObjective();
             }
         }
 

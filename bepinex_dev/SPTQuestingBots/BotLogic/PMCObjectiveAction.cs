@@ -117,7 +117,7 @@ namespace QuestingBots.BotLogic
 
                 if (!objective.CanReachObjective && objective.CanChangeObjective)
                 {
-                    objective.ChangeObjective();
+                    objective.TryChangeObjective();
                 }
             }
         }

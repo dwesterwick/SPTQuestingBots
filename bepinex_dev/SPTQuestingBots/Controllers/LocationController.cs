@@ -98,14 +98,21 @@ namespace QuestingBots.Controllers
 
         public static void RegisterBot(BotOwner botOwner)
         {
+            SpawnedBotCount++;
+            string message = "Spawned ";
+
             if ((BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " (" + botOwner.Side + ") seems to be a boss.");
                 Bosses.Add(botOwner);
+                message += "boss " + botOwner.Profile.Nickname + " (" + Bosses.Count + "/" + ZeroWaveTotalBotCount + ")";
+            }
+            else
+            {
+                message += "bot #" + SpawnedBotCount + ": " + botOwner.Profile.Nickname;
             }
 
-            SpawnedBotCount++;
-            LoggingController.LogInfo("Spawned bot " + SpawnedBotCount + "/" + ZeroWaveTotalBotCount + ": " + botOwner.Profile.Nickname + " (" + botOwner.Side + ")");
+            message += " (" + botOwner.Side + ")";
+            LoggingController.LogInfo(message);
         }
 
         public static LootableContainer GetNearestLootableContainer(BotOwner botOwner)

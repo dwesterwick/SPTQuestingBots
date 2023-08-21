@@ -25,6 +25,10 @@ namespace QuestingBots.Patches
                 if ((bossWave.Time <= 1) && bossWave.ShallSpawn)
                 {
                     int totalBots = 1 + bossWave.EscortCount;
+                    if (bossWave.Supports != null)
+                    {
+                        totalBots -= bossWave.Supports.Sum(s => s.BossEscortAmount);
+                    }
 
                     LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
                     LocationController.ZeroWaveCount++;
