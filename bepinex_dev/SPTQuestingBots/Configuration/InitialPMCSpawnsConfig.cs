@@ -28,7 +28,7 @@ namespace SPTQuestingBots.Configuration
         public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
 
         [JsonProperty("max_alive_initial_pmcs")]
-        public int MaxAliveInitialPMCs { get; set; } = 8;
+        public Dictionary<string, int> MaxAliveInitialPMCs { get; set; } = new Dictionary<string, int>();
 
         [JsonProperty("initial_pmcs_vs_raidET")]
         public double[][] InitialPMCsVsRaidET { get; set; } = new double[0][];

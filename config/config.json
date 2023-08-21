@@ -62,7 +62,19 @@
 		"min_distance_from_players_initial": 25,
 		"min_distance_from_players_during_raid": 100,
 		"min_distance_from_players_during_raid_factory": 50,
-		"max_alive_initial_pmcs": 6,
+		"max_alive_initial_pmcs": {
+			"default": 6,
+			"factory4_day": 5,
+			"factory4_night": 5,
+			"bigmap": 7,
+			"woods": 8,
+			"shoreline": 7,
+			"lighthouse": 6,
+			"rezervbase": 7,
+			"interchange": 8,
+			"laboratory": 7,
+			"tarkovstreets": 8
+		},
 		"initial_pmcs_vs_raidET": [
 			[0, 0.2],
 			[0.2, 0.2],

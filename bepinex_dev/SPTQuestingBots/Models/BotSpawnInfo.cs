@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using HarmonyLib;
 using QuestingBots.Controllers;
 using UnityEngine;
 
@@ -52,6 +53,11 @@ namespace QuestingBots.Models
 
         public void AssignSpawnPositionsFromSpawnPoint(int botCount)
         {
+            AssignSpawnPositionsFromSpawnPoint(botCount, new SpawnPointParams[0]);
+        }
+
+        public void AssignSpawnPositionsFromSpawnPoint(int botCount, SpawnPointParams[] excludedSpawnPoints)
+        {
             if (botCount < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(botCount), "Bot count must be at least 1.");
@@ -65,7 +71,7 @@ namespace QuestingBots.Models
                 int positionsGenerated = 1;
                 while (positionsGenerated < botCount)
                 {
-                    SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray());
+                    SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
 
                     Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
                     if (!navMeshPosition.HasValue)
