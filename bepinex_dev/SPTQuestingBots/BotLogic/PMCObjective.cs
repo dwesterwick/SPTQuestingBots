@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.Controllers;
 using UnityEngine;
@@ -47,12 +48,16 @@ namespace QuestingBots.BotLogic
         {
             botOwner = _botOwner;
 
-            IsObjectiveActive = botOwner.Side != EPlayerSide.Savage;
             CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
 
-            if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
+            if (BotQuestController.IsBotAPMC(botOwner))
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a PMC. Enabling PMCObjective brain layer.");
+                IsObjectiveActive = true;
+            }
+            else
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is not a PMC. Disabling PMCObjective brain layer.");
                 IsObjectiveActive = false;
             }
 
@@ -94,6 +99,8 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
+            LoggingController.LogInfo("Bot brain layers: " + string.Join(", ", BotLogic.BotBrains.GetBrainLayersForBot(botOwner)));
+
             if (TryToGoToRandomQuestObjective())
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
@@ -106,7 +113,9 @@ namespace QuestingBots.BotLogic
 
         public bool TryCheckForLoot()
         {
-            if (checkForLootTimer.ElapsedMilliseconds > 10000)
+            
+
+            /*if (checkForLootTimer.ElapsedMilliseconds > 10000)
             {
                 checkForLootTimer.Restart();
 
@@ -117,7 +126,7 @@ namespace QuestingBots.BotLogic
 
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can check for loot.");
                 return true;
-            }
+            }*/
 
             return false;
         }

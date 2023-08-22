@@ -25,6 +25,7 @@ namespace QuestingBots.Controllers
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
         private static List<Quest> allQuests = new List<Quest>();
         private static List<string> zoneIDsInLocation = new List<string>();
+        private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
 
         public void Clear()
         {
@@ -41,6 +42,7 @@ namespace QuestingBots.Controllers
                 quest.Clear();
             }
 
+            pmcsInLocation.Clear();
             zoneIDsInLocation.Clear();
 
             HaveTriggersBeenFound = false;
@@ -60,6 +62,19 @@ namespace QuestingBots.Controllers
             }
 
             StartCoroutine(LoadAllQuests());
+        }
+
+        public static void RegisterPMC(BotOwner botOwner)
+        {
+            if (!pmcsInLocation.Contains(botOwner))
+            {
+                pmcsInLocation.Add(botOwner);
+            }
+        }
+
+        public static bool IsBotAPMC(BotOwner botOwner)
+        {
+            return pmcsInLocation.Contains(botOwner);
         }
 
         public static void AddQuest(Quest quest)

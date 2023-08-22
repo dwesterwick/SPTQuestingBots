@@ -14,7 +14,7 @@ namespace QuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.2.0")]
     [BepInDependency("xyz.drakia.bigbrain", "0.2.0")]
-    [BepInPlugin("com.DanW.QuestingBots", "QuestingBotsPlugin", "0.1.0.0")]
+    [BepInPlugin("com.DanW.QuestingBots", "QuestingBotsPlugin", "0.1.1.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -30,6 +30,7 @@ namespace QuestingBots
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling patches...");
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
+                new Patches.BotOwnerBrainActivatePatch().Enable();
 
                 if (ConfigController.Config.InitialPMCSpawns.Enabled)
                 {

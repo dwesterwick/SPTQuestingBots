@@ -194,25 +194,6 @@ namespace QuestingBots.Controllers
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
-        private EPlayerSide GetSideForWildSpawnType(WildSpawnType spawnType)
-        {
-            WildSpawnType sptUsec = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
-            WildSpawnType sptBear = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue;
-
-            if (spawnType == WildSpawnType.pmcBot || spawnType == sptUsec)
-            {
-                return EPlayerSide.Usec;
-            }
-            else if (spawnType == sptBear)
-            {
-                return EPlayerSide.Bear;
-            }
-            else
-            {
-                return EPlayerSide.Savage;
-            }
-        }
-
         private async Task generateBots(BotDifficulty botdifficulty, int totalCount)
         {
             try
@@ -232,14 +213,8 @@ namespace QuestingBots.Controllers
                     int botsInGroup = random.Next(1, 1);
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
-                    WildSpawnType[] spawnTypes = new WildSpawnType[2]
-                    {
-                        (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue,
-                        (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue
-                    };
-
-                    WildSpawnType spawnType = spawnTypes.Random();
-                    EPlayerSide spawnSide = GetSideForWildSpawnType(spawnType);
+                    WildSpawnType spawnType = BotLogic.BotBrains.pmcSpawnTypes.Random();
+                    EPlayerSide spawnSide = BotLogic.BotBrains.GetSideForWildSpawnType(spawnType);
 
                     GClass618 spawnParams = new GClass618();
                     spawnParams.TriggerType = SpawnTriggerType.none;

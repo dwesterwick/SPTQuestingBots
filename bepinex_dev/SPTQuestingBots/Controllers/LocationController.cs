@@ -15,7 +15,6 @@ namespace QuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {
-        public static List<BotOwner> Bosses = new List<BotOwner>();
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
         public static int SpawnedBotCount { get; set; } = 0;
@@ -31,10 +30,10 @@ namespace QuestingBots.Controllers
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static LootableContainer[] lootableContainers = new LootableContainer[0];
+        private static List<BotOwner> spawnedBosses = new List<BotOwner>();
 
         private static void Clear()
         {
-            Bosses.Clear();
             SpawnedBossWaves = 0;
             SpawnedBotCount = 0;
             SpawnedBossCount = 0;
@@ -43,6 +42,7 @@ namespace QuestingBots.Controllers
             ZeroWaveTotalBotCount = 0;
             ZeroWaveTotalRogueCount = 0;
 
+            spawnedBosses.Clear();
             lootableContainers = new LootableContainer[0];
             CurrentLocation = null;
             CurrentRaidSettings = null;
@@ -96,11 +96,6 @@ namespace QuestingBots.Controllers
             }
         }
 
-        public static bool IsABoss(BotOwner botOwner)
-        {
-            return Bosses.Any(b => b.Profile.Nickname == botOwner.Profile.Nickname);
-        }
-
         public static void RegisterBot(BotOwner botOwner)
         {
             SpawnedBotCount++;
@@ -108,8 +103,8 @@ namespace QuestingBots.Controllers
 
             if ((BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
             {
-                Bosses.Add(botOwner);
-                message += "boss " + botOwner.Profile.Nickname + " (" + Bosses.Count + "/" + ZeroWaveTotalBotCount + ")";
+                spawnedBosses.Add(botOwner);
+                message += "boss " + botOwner.Profile.Nickname + " (" + spawnedBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
             }
             else
             {
