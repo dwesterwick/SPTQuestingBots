@@ -61,6 +61,7 @@ namespace QuestingBots.Controllers
 
             if (IsGeneratingPMCs)
             {
+                enumeratorWithTimeLimit.Abort();
                 TaskWithTimeLimit.WaitForCondition(() => !IsGeneratingPMCs);
             }
 
@@ -233,8 +234,8 @@ namespace QuestingBots.Controllers
 
                     WildSpawnType[] spawnTypes = new WildSpawnType[2]
                     {
-                    (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue,
-                    (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue
+                        (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue,
+                        (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue
                     };
 
                     WildSpawnType spawnType = spawnTypes.Random();
