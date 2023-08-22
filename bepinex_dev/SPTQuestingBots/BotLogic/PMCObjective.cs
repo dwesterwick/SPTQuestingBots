@@ -27,7 +27,6 @@ namespace QuestingBots.BotLogic
         private Models.QuestObjective targetObjective = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
-        private Stopwatch checkForLootTimer = Stopwatch.StartNew();
 
         public double TimeSpentAtObjective
         {
@@ -37,11 +36,6 @@ namespace QuestingBots.BotLogic
         public double TimeSinceChangingObjective
         {
             get { return timeSinceChangingObjectiveTimer.ElapsedMilliseconds / 1000.0; }
-        }
-
-        public bool ShouldCheckForLoot
-        {
-            get { return checkForLootTimer.ElapsedMilliseconds < 3000; }
         }
 
         public void Init(BotOwner _botOwner)
@@ -99,8 +93,6 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            LoggingController.LogInfo("Bot brain layers: " + string.Join(", ", BotLogic.BotBrains.GetBrainLayersForBot(botOwner)));
-
             if (TryToGoToRandomQuestObjective())
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
@@ -111,38 +103,12 @@ namespace QuestingBots.BotLogic
             return false;
         }
 
-        public bool TryCheckForLoot()
-        {
-            
-
-            /*if (checkForLootTimer.ElapsedMilliseconds > 10000)
-            {
-                checkForLootTimer.Restart();
-
-                if (LocationController.GetDistanceToNearestLootableContainer(botOwner) > 10)
-                {
-                    return false;
-                }
-
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can check for loot.");
-                return true;
-            }*/
-
-            return false;
-        }
-
         private void Update()
         {
             if (!IsObjectiveActive)
             {
                 return;
             }
-
-            /*if (ConfigController.Config.InitialPMCSpawns.Enabled && LocationController.IsABoss(botOwner))
-            {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a boss. Turning off PMCObjective brain layer.");
-                IsObjectiveActive = false;
-            }*/
 
             if (IsObjectiveReached)
             {

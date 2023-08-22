@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using EFT.Interactive;
 using EFT.InventoryLogic;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
+using SPTQuestingBots.BotLogic;
 using UnityEngine;
 using static HealthControllerClass;
 
@@ -24,13 +26,14 @@ namespace QuestingBots.BotLogic
         private bool wasSearchingForEnemy = false;
         private bool wasAbleBodied = true;
         private bool wasLooting = false;
-        //private bool canLoot = true;
         private bool wasExtracting = false;
         private bool wasStuck = false;
         private Vector3? lastBotPosition = null;
+        private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
+        private float pauseLayerTime = 0;
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
-        private AICoreLayerClass<BotLogicDecision> lootingBrainLayer = null;
-        private AICoreLayerClass<BotLogicDecision> extractBrainLayer = null;
+        private LogicLayerMonitor lootingLayerMonitor;
+        private LogicLayerMonitor extractLayerMonitor;
 
         public PMCObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
@@ -38,6 +41,12 @@ namespace QuestingBots.BotLogic
 
             objective = botOwner.GetPlayer.gameObject.AddComponent<PMCObjective>();
             objective.Init(botOwner);
+
+            lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            lootingLayerMonitor.Init(botOwner, "Looting");
+
+            extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
         }
 
         public override string GetName()
@@ -67,55 +76,41 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            /*if (canLoot && objective.ShouldCheckForLoot)
+            if (pauseLayerTimer.ElapsedMilliseconds / 1000 < pauseLayerTime)
             {
-                return pauseLayer();
-            }
-            else
-            {
-                canLoot = objective.TryCheckForLoot();
-            }*/
-
-            if (lootingBrainLayer == null)
-            {
-                lootingBrainLayer = BotBrains.GetBrainLayerForBot(botOwner, "Looting");
+                return false;
             }
 
-            if (lootingBrainLayer?.ShallUseNow() == true)
+            string layerName = botOwner.Brain.ActiveLayerName()?.ToLower();
+
+            bool isLooting = (layerName != null) && layerName.Contains("looting");
+            if (isLooting || lootingLayerMonitor.CanUseLayer(10))
             {
-                if (!wasLooting)
+                lootingLayerMonitor.RestartUseTimer();
+
+                bool nearStaticLoot = LocationController.TryGetObjectNearPosition(botOwner.Position, 10, out LootItem lootItem);
+                bool nearLootContainer = LocationController.TryGetObjectNearPosition(botOwner.Position, 10, out LootableContainer lootContainer);
+
+                if (isLooting || nearStaticLoot ||  nearLootContainer)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is looting...");
-                }
+                    if (!wasLooting)
+                    {
+                        string lootDescription = nearStaticLoot ? lootItem.Item.LocalizedName() : "";
+                        lootDescription += (nearStaticLoot && nearLootContainer) ? " and " : "";
+                        lootDescription += nearLootContainer ? lootContainer.Id : "";
 
-                wasLooting = true;
-                return pauseLayer();
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can loot " + lootDescription);
+                    }
+
+                    wasLooting = true;
+                    return pauseLayer(5);
+                }
             }
             if (wasLooting)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is looting...done.");
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is done looting.");
             }
             wasLooting = false;
-
-            if (extractBrainLayer == null)
-            {
-                extractBrainLayer = BotBrains.GetBrainLayerForBot(botOwner, "SAIN ExtractLayer");
-            }
-            if (extractBrainLayer?.ShallUseNow() == true)
-            {
-                if (!wasExtracting)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is extracting...");
-                }
-
-                wasExtracting = true;
-                return pauseLayer();
-            }
-            if (wasExtracting)
-            {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is extracting...done.");
-            }
-            wasExtracting = false;
 
             if (!isAbleBodied(wasAbleBodied))
             {
@@ -196,6 +191,13 @@ namespace QuestingBots.BotLogic
 
         private bool pauseLayer()
         {
+            return pauseLayer(0);
+        }
+
+        private bool pauseLayer(float minTime)
+        {
+            pauseLayerTime = minTime;
+            pauseLayerTimer.Restart();
             botIsStuckTimer.Restart();
             return false;
         }

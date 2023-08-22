@@ -30,6 +30,7 @@ namespace QuestingBots.Controllers
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static LootableContainer[] lootableContainers = new LootableContainer[0];
+        private static List<LootItem> lootItems = new List<LootItem>();
         private static List<BotOwner> spawnedBosses = new List<BotOwner>();
 
         private static void Clear()
@@ -43,6 +44,7 @@ namespace QuestingBots.Controllers
             ZeroWaveTotalRogueCount = 0;
 
             spawnedBosses.Clear();
+            lootItems.Clear();
             lootableContainers = new LootableContainer[0];
             CurrentLocation = null;
             CurrentRaidSettings = null;
@@ -94,6 +96,27 @@ namespace QuestingBots.Controllers
                 lootableContainers = FindObjectsOfType<LootableContainer>();
                 LoggingController.LogInfo("Found " + lootableContainers.Length + " lootable containers in the map");
             }
+        }
+
+        public static bool TryGetObjectNearPosition<T>(Vector3 position, float distance, out T obj) where T: Behaviour
+        {
+            obj = null;
+
+            if (LocationScene.LoadedScenes.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (T item in LocationScene.GetAllObjects<T>(true))
+            {
+                if (Vector3.Distance(item.transform.position, position) <= distance)
+                {
+                    obj = item;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static void RegisterBot(BotOwner botOwner)
