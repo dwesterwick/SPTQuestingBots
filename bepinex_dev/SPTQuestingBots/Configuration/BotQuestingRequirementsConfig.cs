@@ -30,6 +30,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_overweight_percentage")]
         public float MaxOverweightPercentage { get; set; } = 100;
 
+        [JsonProperty("break_for_looting")]
+        public BreakForLootingConfig BreakForLooting { get; set; } = new BreakForLootingConfig();
+
         public BotQuestingRequirementsConfig()
         {
 

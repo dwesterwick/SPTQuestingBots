@@ -11,6 +11,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.Quests;
+using QuestingBots.BotLogic;
 using QuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,6 +27,7 @@ namespace QuestingBots.Controllers
         private static List<Quest> allQuests = new List<Quest>();
         private static List<string> zoneIDsInLocation = new List<string>();
         private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
+        private static List<BotOwner> bossesInLocation = new List<BotOwner>();
 
         public void Clear()
         {
@@ -43,6 +45,7 @@ namespace QuestingBots.Controllers
             }
 
             pmcsInLocation.Clear();
+            bossesInLocation.Clear();
             zoneIDsInLocation.Clear();
 
             HaveTriggersBeenFound = false;
@@ -64,6 +67,24 @@ namespace QuestingBots.Controllers
             StartCoroutine(LoadAllQuests());
         }
 
+        public static BotType GetBotType(BotOwner botOwner)
+        {
+            if (IsBotAPMC(botOwner))
+            {
+                return BotType.PMC;
+            }
+            if (IsBotABoss(botOwner))
+            {
+                return BotType.Boss;
+            }
+            if (botOwner.Profile.Side == EPlayerSide.Savage)
+            {
+                return BotType.Scav;
+            }
+
+            return BotType.Undetermined;
+        }
+
         public static void RegisterPMC(BotOwner botOwner)
         {
             if (!pmcsInLocation.Contains(botOwner))
@@ -75,6 +96,19 @@ namespace QuestingBots.Controllers
         public static bool IsBotAPMC(BotOwner botOwner)
         {
             return pmcsInLocation.Contains(botOwner);
+        }
+
+        public static void RegisterBoss(BotOwner botOwner)
+        {
+            if (!bossesInLocation.Contains(botOwner))
+            {
+                bossesInLocation.Add(botOwner);
+            }
+        }
+
+        public static bool IsBotABoss(BotOwner botOwner)
+        {
+            return bossesInLocation.Contains(botOwner);
         }
 
         public static void AddQuest(Quest quest)

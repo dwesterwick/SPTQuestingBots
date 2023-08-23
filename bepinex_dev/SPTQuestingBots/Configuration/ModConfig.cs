@@ -22,6 +22,9 @@ namespace QuestingBots.Configuration
         [JsonProperty("brain_layer_priority")]
         public int BrainLayerPriority { get; set; } = 21;
 
+        [JsonProperty("allowed_bot_types_for_questing")]
+        public AllowedBotTypesForQuestingConfig AllowedBotTypesForQuesting { get; set; } = new AllowedBotTypesForQuestingConfig();
+
         [JsonProperty("search_time_after_combat")]
         public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
 

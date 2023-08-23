@@ -42,23 +42,31 @@ namespace QuestingBots.BotLogic
         {
             botOwner = _botOwner;
 
-            CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
+            BotType botType = BotQuestController.GetBotType(botOwner);
 
-            if (BotQuestController.IsBotAPMC(botOwner))
+            if ((botType == BotType.PMC) && ConfigController.Config.AllowedBotTypesForQuesting.PMC)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is a PMC. Enabling PMCObjective brain layer.");
+                CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
                 IsObjectiveActive = true;
             }
-            else
+            if ((botType == BotType.Boss) && ConfigController.Config.AllowedBotTypesForQuesting.Boss)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is not a PMC. Disabling PMCObjective brain layer.");
-                IsObjectiveActive = false;
+                IsObjectiveActive = true;
+            }
+            if ((botType == BotType.Scav) && ConfigController.Config.AllowedBotTypesForQuesting.Scav)
+            {
+                IsObjectiveActive = true;
             }
 
             if (IsObjectiveActive)
             {
-                LoggingController.LogInfo("Setting objective for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 TryChangeObjective();
+            }
+
+            if (botType == BotType.Undetermined)
+            {
+                LoggingController.LogError("Could not determine bot type for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }
         }
 
@@ -74,6 +82,12 @@ namespace QuestingBots.BotLogic
             IsObjectivePathComplete = true;
             CanReachObjective = false;
             targetObjective.BotFailedObjective(botOwner);
+        }
+
+        public void StopQuesting()
+        {
+            IsObjectiveActive = false;
+            LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is no longer allowed to quest.");
         }
 
         public override string ToString()

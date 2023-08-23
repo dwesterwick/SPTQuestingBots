@@ -87,7 +87,9 @@
   <ItemGroup>
     <Compile Include="BotLogic\BotBrains.cs" />
     <Compile Include="BotLogic\LogicLayerMonitor.cs" />
+    <Compile Include="Configuration\AllowedBotTypesForQuestingConfig.cs" />
     <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
+    <Compile Include="Configuration\BreakForLootingConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
     <Compile Include="Controllers\BotQuestController.cs" />

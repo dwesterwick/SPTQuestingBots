@@ -12,8 +12,9 @@ namespace SPTQuestingBots.BotLogic
 {
     public class LogicLayerMonitor : MonoBehaviour
     {
+        public string LayerName { get; private set; } = null;
+
         private BotOwner botOwner = null;
-        private string layerName = null;
         private AICoreLayerClass<BotLogicDecision> layer = null;
         private Stopwatch canUseTimer = Stopwatch.StartNew();
 
@@ -25,19 +26,19 @@ namespace SPTQuestingBots.BotLogic
         public void Init(BotOwner _botOwner, string _layerName)
         {
             botOwner = _botOwner;
-            layerName = _layerName;
+            LayerName = _layerName;
         }
 
         private void Update()
         {
-            if ((botOwner == null) || (layerName == null))
+            if ((botOwner == null) || (LayerName == null))
             {
                 return;
             }
 
             if (layer == null)
             {
-                layer = BotBrains.GetBrainLayerForBot(botOwner, layerName);
+                layer = BotBrains.GetBrainLayerForBot(botOwner, LayerName);
             }
         }
 
@@ -53,17 +54,20 @@ namespace SPTQuestingBots.BotLogic
 
         public bool CanUseLayer(float minTimeFromLastUse)
         {
-            bool shallUse = IsLayerRequested();
-
-            if (shallUse && (canUseTimer.ElapsedMilliseconds / 1000f > minTimeFromLastUse))
+            if (canUseTimer.ElapsedMilliseconds / 1000f < minTimeFromLastUse)
             {
-                return true;
+                return false;
             }
+
+           if (IsLayerRequested())
+           {
+                return true;
+           }
 
             return false;
         }
 
-        public void RestartUseTimer()
+        public void RestartCanUseTimer()
         {
             canUseTimer.Restart();
         }

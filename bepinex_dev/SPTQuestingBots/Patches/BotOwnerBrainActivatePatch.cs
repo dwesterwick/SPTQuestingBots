@@ -25,6 +25,11 @@ namespace QuestingBots.Patches
             {
                 BotQuestController.RegisterPMC(__instance);
             }
+
+            if (BotLogic.BotBrains.WillBotBeABoss(__instance))
+            {
+                BotQuestController.RegisterBoss(__instance);
+            }
         }
     }
 }

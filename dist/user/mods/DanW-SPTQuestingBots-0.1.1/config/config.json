@@ -8,6 +8,11 @@
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"brain_layer_priority": 26,
+	"allowed_bot_types_for_questing": {
+		"scav": false,
+		"pmc": true,
+		"boss": false
+	},
 	"search_time_after_combat": {
 		"min": 10,
 		"max": 30
@@ -34,7 +39,14 @@
 		"min_health_chest": 50,
 		"min_health_stomach": 50,
 		"min_health_legs": 50,
-		"max_overweight_percentage": 100
+		"max_overweight_percentage": 100,
+		"break_for_looting": {
+			"enabled": true,
+			"min_time_between_looting": 10,
+			"max_distance_to_loot": 5,
+			"max_time_to_start_looting": 2,
+			"max_looting_time": 20
+		}
 	},
 	"bot_quests": {
 		"eft_quests": {

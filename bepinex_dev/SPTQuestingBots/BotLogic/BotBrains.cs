@@ -10,6 +10,14 @@ using System.Reflection;
 
 namespace QuestingBots.BotLogic
 {
+    public enum BotType
+    {
+        Undetermined,
+        Scav,
+        PMC,
+        Boss
+    }
+
     public static class BotBrains
     {
         public static string PMC { get { return "PMC"; } }
@@ -43,8 +51,13 @@ namespace QuestingBots.BotLogic
 
         public static bool WillBotBeAPMC(BotOwner botOwner)
         {
-            LoggingController.LogInfo("Spawn type for bot " + botOwner.Profile.Nickname + ": " + botOwner.Profile.Info.Settings.Role.ToString());
+            //LoggingController.LogInfo("Spawn type for bot " + botOwner.Profile.Nickname + ": " + botOwner.Profile.Info.Settings.Role.ToString());
             return pmcSpawnTypes.Select(t => t.ToString()).Contains(botOwner.Profile.Info.Settings.Role.ToString());
+        }
+
+        public static bool WillBotBeABoss(BotOwner botOwner)
+        {
+            return botOwner.Profile.Info.Settings.Role.IsBoss();
         }
 
         public static EPlayerSide GetSideForWildSpawnType(WildSpawnType spawnType)
