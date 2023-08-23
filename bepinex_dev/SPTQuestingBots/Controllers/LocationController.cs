@@ -98,7 +98,7 @@ namespace QuestingBots.Controllers
             }
         }
 
-        public static bool TryGetObjectNearPosition<T>(Vector3 position, float distance, out T obj) where T: Behaviour
+        public static bool TryGetObjectNearPosition<T>(Vector3 position, float maxDistance, bool onlyVisible, out T obj) where T: Behaviour
         {
             obj = null;
 
@@ -109,8 +109,26 @@ namespace QuestingBots.Controllers
 
             foreach (T item in LocationScene.GetAllObjects<T>(true))
             {
-                if (Vector3.Distance(item.transform.position, position) <= distance)
+                float distace = Vector3.Distance(item.transform.position, position);
+                if (distace <= maxDistance)
                 {
+                    if (onlyVisible)
+                    {
+                        float rayEndPointThreshold = 0.02f;
+                        Vector3 direction = item.transform.position - position;
+                        RaycastHit[] raycastHits = Physics.RaycastAll(position, direction, distace, LayerMaskClass.HighPolyWithTerrainMask);
+                        IEnumerable<RaycastHit> filteredRaycastHits = raycastHits
+                            .Where(r => r.distance > distace * rayEndPointThreshold)
+                            .Where(r => r.distance < distace * (1 - rayEndPointThreshold));
+
+                        if (filteredRaycastHits.Any())
+                        {
+                            //IEnumerable<string> raycastDataText = filteredRaycastHits.Select(h => h.collider.name + " (" + h.distance + "/" + distace + ")");
+                            //LoggingController.LogInfo("Ignoring object " + item.GetType().Name + " at " + item.transform.position.ToString() + " due to raycast hits at: " + string.Join(", ", raycastDataText));
+                            continue;
+                        }
+                    }
+
                     obj = item;
                     return true;
                 }

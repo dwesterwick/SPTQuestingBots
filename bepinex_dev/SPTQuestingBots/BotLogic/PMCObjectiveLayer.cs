@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using EFT.HealthSystem;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using QuestingBots.Controllers;
@@ -34,6 +35,7 @@ namespace QuestingBots.BotLogic
         private Stopwatch lootingTimer = new Stopwatch();
         private LogicLayerMonitor lootingLayerMonitor;
         private LogicLayerMonitor extractLayerMonitor;
+        private LogicLayerMonitor stationaryWSLayerMonitor;
 
         public PMCObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
@@ -47,6 +49,9 @@ namespace QuestingBots.BotLogic
 
             extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
+
+            stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
         }
 
         public override string GetName()
@@ -77,6 +82,11 @@ namespace QuestingBots.BotLogic
             }
 
             if (pauseLayerTimer.ElapsedMilliseconds < 1000 * pauseLayerTime)
+            {
+                return false;
+            }
+
+            if (stationaryWSLayerMonitor.IsLayerRequested())
             {
                 return false;
             }
@@ -274,13 +284,19 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
+            ValueStruct healthHead = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head);
+            ValueStruct healthChest = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest);
+            ValueStruct healthStomach = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach);
+            ValueStruct healthLeftLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg);
+            ValueStruct healthRightLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg);
+
             if 
             (
-                (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
-                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthChest)
-                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthStomach)
-                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
-                || (100f * botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Current / botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg).Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
+                (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
+                || (100f * healthChest.Current / healthChest.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthChest)
+                || (100f * healthStomach.Current / healthStomach.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthStomach)
+                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
+                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
             )
             {
                 if (writeToLog)
@@ -315,26 +331,33 @@ namespace QuestingBots.BotLogic
                 //LoggingController.LogInfo("Layer for bot " + botOwner.Profile.Nickname + ": " + layerName);
                 lootingLayerMonitor.RestartCanUseTimer();
 
-                float maxDistance = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxDistanceToLoot;
-                bool nearStaticLoot = LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, out LootItem lootItem);
-                bool nearLootContainer = LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, out LootableContainer lootContainer);
+                bool nearStaticLoot = wasLooting;
+                bool nearLootContainer = wasLooting;
+                LootItem lootItem = null;
+                LootableContainer lootContainer = null;
+
+                if (!wasLooting)
+                {
+                    bool lootProximityCheck = ConfigController.Config.BotQuestingRequirements.BreakForLooting.CheckProximityToLoot;
+                    float maxDistance = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxDistanceToLoot;
+                    
+                    nearStaticLoot = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, true, out lootItem);
+                    nearLootContainer = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, true, out lootContainer);
+                }
 
                 if (layerName.Contains(lootingLayerMonitor.LayerName) || nearStaticLoot || nearLootContainer)
                 {
-                    if (!wasLooting)
-                    {
-                        string lootDescription = nearStaticLoot ? ("loose loot: \"" + lootItem.Item.LocalizedName() + "\"") : "";
-                        lootDescription += (nearStaticLoot && nearLootContainer) ? " and " : "";
-                        lootDescription += nearLootContainer ? ("loot container: \"" + lootContainer.Id + "\"") : "";
+                    string lootDescription = nearStaticLoot ? ("loose loot: \"" + lootItem.Item.LocalizedName() + "\"") : "";
+                    lootDescription += (nearStaticLoot && nearLootContainer) ? " and " : "";
+                    lootDescription += nearLootContainer ? ("loot container: \"" + lootContainer.Id + "\"") : "";
 
-                        if (lootDescription.Length > 0)
-                        {
-                            LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can search " + lootDescription);
-                        }
-                        else
-                        {
-                            LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot");
-                        }
+                    if (lootDescription.Length > 0)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can search " + lootDescription);
+                    }
+                    else
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot");
                     }
 
                     lootingTimer.Start();

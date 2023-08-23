@@ -16,7 +16,9 @@ namespace SPTQuestingBots.BotLogic
 
         private BotOwner botOwner = null;
         private AICoreLayerClass<BotLogicDecision> layer = null;
+        private Stopwatch maxLayerSearchTimer = Stopwatch.StartNew();
         private Stopwatch canUseTimer = Stopwatch.StartNew();
+        private int maxLayerSearchTime = 200;
 
         public bool IsActive
         {
@@ -36,7 +38,7 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
-            if (layer == null)
+            if ((maxLayerSearchTimer.ElapsedMilliseconds < maxLayerSearchTime) && (layer == null))
             {
                 layer = BotBrains.GetBrainLayerForBot(botOwner, LayerName);
             }

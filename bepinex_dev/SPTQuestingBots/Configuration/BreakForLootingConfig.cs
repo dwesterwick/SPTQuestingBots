@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonProperty("check_proximity_to_loot")]
+        public bool CheckProximityToLoot { get; set; } = true;
+
         [JsonProperty("min_time_between_looting")]
         public float MinTimeBetweenLooting { get; set; } = 10;
 

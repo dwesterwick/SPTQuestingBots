@@ -17,6 +17,8 @@ namespace QuestingBots.BotLogic
         private PMCObjective objective;
         private BotOwner botOwner;
         private GClass274 baseSteeringLogic = new GClass274();
+        private Stopwatch updateTimer = Stopwatch.StartNew();
+        private int updateInterval = 100;
         
         public PMCObjectiveAction(BotOwner _botOwner) : base(_botOwner)
         {
@@ -63,6 +65,12 @@ namespace QuestingBots.BotLogic
             {
                 return;
             }
+
+            if (updateTimer.ElapsedMilliseconds < updateInterval)
+            {
+                return;
+            }
+            updateTimer.Restart();
 
             if (!objective.IsObjectiveReached && Vector3.Distance(objective.Position.Value, botOwner.Position) < ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal)
             {

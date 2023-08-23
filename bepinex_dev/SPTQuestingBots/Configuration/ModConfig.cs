@@ -19,6 +19,9 @@ namespace QuestingBots.Configuration
         [JsonProperty("max_calc_time_per_frame_ms")]
         public float MaxCalcTimePerFrame { get; set; } = 5;
 
+        [JsonProperty("bot_pathing_update_interval_ms")]
+        public float BotPathingUpdateInterval { get; set; } = 100;
+
         [JsonProperty("brain_layer_priority")]
         public int BrainLayerPriority { get; set; } = 21;
 
