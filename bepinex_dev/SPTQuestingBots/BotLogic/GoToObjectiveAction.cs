@@ -72,7 +72,7 @@ namespace SPTQuestingBots.BotLogic
             }
             updateTimer.Restart();
 
-            if (!objective.IsObjectiveReached && Vector3.Distance(objective.Position.Value, botOwner.Position) < ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal)
+            if (!objective.IsObjectiveReached && objective.IsCloseToObjective())
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " reached its objective (" + objective + ").");
                 objective.CompleteObjective();

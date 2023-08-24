@@ -62,6 +62,11 @@ namespace SPTQuestingBots.BotLogic
 
         public override Action GetNextAction()
         {
+            if (objective.IsCloseToObjective())
+            {
+                return new Action(typeof(HoldAtObjectiveAction), "HoldAtObjective");
+            }
+
             return new Action(typeof(GoToObjectiveAction), "GoToObjective");
         }
 

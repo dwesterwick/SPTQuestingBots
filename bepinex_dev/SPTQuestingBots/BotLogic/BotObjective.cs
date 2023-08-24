@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
@@ -87,6 +88,16 @@ namespace SPTQuestingBots.BotLogic
         {
             IsObjectiveActive = false;
             LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is no longer allowed to quest.");
+        }
+
+        public bool IsCloseToObjective()
+        {
+            return IsCloseToObjective(ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal);
+        }
+
+        public bool IsCloseToObjective(float distance)
+        {
+            return Vector3.Distance(Position.Value, botOwner.Position) <= distance;
         }
 
         public override string ToString()

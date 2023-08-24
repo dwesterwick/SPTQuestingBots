@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotLogic\BotBrains.cs" />
+    <Compile Include="BotLogic\HoldAtObjectiveAction.cs" />
     <Compile Include="BotLogic\LogicLayerMonitor.cs" />
     <Compile Include="Configuration\AllowedBotTypesForQuestingConfig.cs" />
     <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
