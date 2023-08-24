@@ -15,8 +15,14 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("check_proximity_to_loot")]
         public bool CheckProximityToLoot { get; set; } = true;
 
-        [JsonProperty("min_time_between_looting")]
-        public float MinTimeBetweenLooting { get; set; } = 10;
+        [JsonProperty("loot_must_be_visible")]
+        public bool LootMustBeVisible { get; set; } = true;
+
+        [JsonProperty("min_time_between_looting_checks")]
+        public float MinTimeBetweenLootingChecks { get; set; } = 5;
+
+        [JsonProperty("min_time_between_looting_events")]
+        public float MinTimeBetweenLootingEvents { get; set; } = 30;
 
         [JsonProperty("max_distance_to_loot")]
         public float MaxDistanceToLoot { get; set; } = 5;
@@ -24,8 +30,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_time_to_start_looting")]
         public float MaxTimeToStartLooting { get; set; } = 2;
 
-        [JsonProperty("max_looting_time")]
-        public float MaxLootingTime { get; set; } = 30;
+        [JsonProperty("max_loot_scan_time")]
+        public float MaxLootScanTime { get; set; } = 30;
 
         public BreakForLootingConfig()
         {

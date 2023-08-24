@@ -33,6 +33,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("break_for_looting")]
         public BreakForLootingConfig BreakForLooting { get; set; } = new BreakForLootingConfig();
 
+        [JsonProperty("max_follower_distance")]
+        public MaxFollowerDistanceConfig MaxFollowerDistance { get; set; } = new MaxFollowerDistanceConfig();
+
         public BotQuestingRequirementsConfig()
         {
 

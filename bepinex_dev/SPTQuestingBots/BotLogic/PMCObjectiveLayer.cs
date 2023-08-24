@@ -31,11 +31,13 @@ namespace QuestingBots.BotLogic
         private Vector3? lastBotPosition = null;
         private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
         private float pauseLayerTime = 0;
+        private float nextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
-        private Stopwatch lootingTimer = new Stopwatch();
+        private Stopwatch lootSearchTimer = new Stopwatch();
         private LogicLayerMonitor lootingLayerMonitor;
         private LogicLayerMonitor extractLayerMonitor;
         private LogicLayerMonitor stationaryWSLayerMonitor;
+        //private LogicLayerMonitor patrolFollowerLayerMonitor;
 
         public PMCObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
@@ -52,6 +54,9 @@ namespace QuestingBots.BotLogic
 
             stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
+
+            //patrolFollowerLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            //patrolFollowerLayerMonitor.Init(botOwner, "PatrolFollower");
         }
 
         public override string GetName()
@@ -76,6 +81,21 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
+            if (botOwner.BotFollower.HaveBoss)
+            {
+                BotOwner boss = botOwner.BotFollower.BossToFollow?.Player()?.AIData?.BotOwner;
+
+                if (boss != null)
+                {
+                    string bossName = boss?.Profile?.Nickname ?? "???";
+
+                    LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " is a follower for " + bossName + ". Disabling questing.");
+                    BotQuestController.RegisterBossFollower(boss, botOwner);
+                    objective.StopQuesting();
+                    return false;
+                }
+            }
+
             if (!BotQuestController.HaveTriggersBeenFound)
             {
                 return false;
@@ -91,7 +111,7 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (shouldCheckForLoot(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLooting))
+            if (shouldCheckForLoot(nextLootCheckDelay))
             {
                 return pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
@@ -103,6 +123,12 @@ namespace QuestingBots.BotLogic
 
                 LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " wants to extract and will no longer quest.");
                 return false;
+            }
+
+            if (shouldWaitForFollowers())
+            {
+                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is waiting for its followers...");
+                return pauseLayer(5);
             }
 
             if (!isAbleBodied(wasAbleBodied))
@@ -320,33 +346,38 @@ namespace QuestingBots.BotLogic
 
         private bool shouldCheckForLoot(float minTimeBetweenLooting)
         {
-            string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            if (!ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled)
+            {
+                return false;
+            }
+
+            nextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+            bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
+            bool hasFoundLoot = activeLogicName.Contains("Looting");
+            
             if
             (
-                ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled
-                && (lootingTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxLootingTime)
-                && (layerName.Contains(lootingLayerMonitor.LayerName) || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
+                (hasFoundLoot || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
+                && (hasFoundLoot || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
             )
             {
-                //LoggingController.LogInfo("Layer for bot " + botOwner.Profile.Nickname + ": " + layerName);
-                lootingLayerMonitor.RestartCanUseTimer();
-
-                bool nearStaticLoot = wasLooting;
-                bool nearLootContainer = wasLooting;
-                LootItem lootItem = null;
-                LootableContainer lootContainer = null;
-
-                if (!wasLooting)
+                //LoggingController.LogInfo("Layer for bot " + botOwner.Profile.Nickname + ": " + activeLayerName + ". Logic: " + activeLogicName);
+                
+                /*if (!wasLooting)
                 {
+                    LootItem lootItem = null;
+                    LootableContainer lootContainer = null;
+
                     bool lootProximityCheck = ConfigController.Config.BotQuestingRequirements.BreakForLooting.CheckProximityToLoot;
+                    bool lootMustBeVisible = ConfigController.Config.BotQuestingRequirements.BreakForLooting.LootMustBeVisible;
                     float maxDistance = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxDistanceToLoot;
-                    
-                    nearStaticLoot = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, true, out lootItem);
-                    nearLootContainer = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, true, out lootContainer);
-                }
 
-                if (layerName.Contains(lootingLayerMonitor.LayerName) || nearStaticLoot || nearLootContainer)
-                {
+                    bool nearStaticLoot = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, lootMustBeVisible, out lootItem);
+                    bool nearLootContainer = !lootProximityCheck || LocationController.TryGetObjectNearPosition(botOwner.Position, maxDistance, lootMustBeVisible, out lootContainer);
+
                     string lootDescription = nearStaticLoot ? ("loose loot: \"" + lootItem.Item.LocalizedName() + "\"") : "";
                     lootDescription += (nearStaticLoot && nearLootContainer) ? " and " : "";
                     lootDescription += nearLootContainer ? ("loot container: \"" + lootContainer.Id + "\"") : "";
@@ -359,21 +390,56 @@ namespace QuestingBots.BotLogic
                     {
                         LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot");
                     }
+                }*/
 
-                    lootingTimer.Start();
+                if (hasFoundLoot)
+                {
+                    if (!wasLooting)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has found loot");
+                    }
+
+                    nextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
+                    lootSearchTimer.Reset();
                     wasLooting = true;
-                    return true;
                 }
+                else
+                {
+                    //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot...");
+                    lootSearchTimer.Start();
+                }
+
+                lootingLayerMonitor.RestartCanUseTimer();
+                return true;
             }
 
             if (wasLooting)
             {
                 lootingLayerMonitor.RestartCanUseTimer();
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is done looting.");
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
             }
 
-            lootingTimer.Reset();
+            lootSearchTimer.Reset();
             wasLooting = false;
+            return false;
+        }
+
+        private bool shouldWaitForFollowers()
+        {
+            IReadOnlyCollection<BotOwner> followers = BotQuestController.GetAliveFollowers(botOwner);
+            if (followers.Count > 0)
+            {
+                IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
+                if
+                (
+                    followerDistances.Any(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+                    || followerDistances.All(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+                )
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
     }

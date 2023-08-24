@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -28,6 +29,7 @@ namespace QuestingBots.Controllers
         private static List<string> zoneIDsInLocation = new List<string>();
         private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
         private static List<BotOwner> bossesInLocation = new List<BotOwner>();
+        private static Dictionary<BotOwner, List<BotOwner>> bossFollowersInLocation = new Dictionary<BotOwner, List<BotOwner>>();
 
         public void Clear()
         {
@@ -46,6 +48,7 @@ namespace QuestingBots.Controllers
 
             pmcsInLocation.Clear();
             bossesInLocation.Clear();
+            bossFollowersInLocation.Clear();
             zoneIDsInLocation.Clear();
 
             HaveTriggersBeenFound = false;
@@ -109,6 +112,28 @@ namespace QuestingBots.Controllers
         public static bool IsBotABoss(BotOwner botOwner)
         {
             return bossesInLocation.Contains(botOwner);
+        }
+
+        public static void RegisterBossFollower(BotOwner boss, BotOwner follower)
+        {
+            if (bossFollowersInLocation.ContainsKey(boss))
+            {
+                bossFollowersInLocation[boss].Add(follower);
+            }
+            else
+            {
+                bossFollowersInLocation.Add(boss, new List<BotOwner>() { follower });
+            }
+        }
+
+        public static IReadOnlyCollection<BotOwner> GetAliveFollowers(BotOwner botOwner)
+        {
+            if (!bossFollowersInLocation.ContainsKey(botOwner))
+            {
+                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            }
+
+            return new ReadOnlyCollection<BotOwner>(bossFollowersInLocation[botOwner].Where(b => (b.BotState == EBotState.Active) && !b.IsDead).ToArray());
         }
 
         public static void AddQuest(Quest quest)

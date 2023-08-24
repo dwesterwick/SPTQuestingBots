@@ -44,10 +44,16 @@
 		"break_for_looting": {
 			"enabled": true,
 			"check_proximity_to_loot": true,
-			"min_time_between_looting": 10,
-			"max_distance_to_loot": 5,
+			"loot_must_be_visible": true,
+			"min_time_between_looting_checks": 5,
+			"min_time_between_looting_events": 30,
+			"max_distance_to_loot": 20,
 			"max_time_to_start_looting": 2,
-			"max_looting_time": 20
+			"max_loot_scan_time": 10
+		},
+		"max_follower_distance": {
+			"nearest": 20,
+			"furthest": 40
 		}
 	},
 	"bot_quests": {

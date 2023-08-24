@@ -16,19 +16,34 @@ namespace SPTQuestingBots.BotLogic
 
         private BotOwner botOwner = null;
         private AICoreLayerClass<BotLogicDecision> layer = null;
-        private Stopwatch maxLayerSearchTimer = Stopwatch.StartNew();
+        private Stopwatch maxLayerSearchTimer = new Stopwatch();
         private Stopwatch canUseTimer = Stopwatch.StartNew();
-        private int maxLayerSearchTime = 200;
+        private Stopwatch lastRequestedTimer = new Stopwatch();
+        private float maxLayerSearchTime = 300;
 
         public bool IsActive
         {
             get { return layer?.IsActive == true; }
         }
 
+        public double TimeSinceLastRequested
+        {
+            get { return lastRequestedTimer.IsRunning ? lastRequestedTimer.ElapsedMilliseconds / 1000.0 : double.MaxValue; }
+        }
+
         public void Init(BotOwner _botOwner, string _layerName)
         {
             botOwner = _botOwner;
             LayerName = _layerName;
+
+            maxLayerSearchTimer.Start();
+        }
+
+        public void Init(BotOwner _botOwner, string _layerName, float _maxLayerSearchTime)
+        {
+            maxLayerSearchTime = _maxLayerSearchTime * 1000;
+
+            Init(_botOwner, _layerName);
         }
 
         private void Update()
@@ -38,7 +53,7 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
-            if ((maxLayerSearchTimer.ElapsedMilliseconds < maxLayerSearchTime) && (layer == null))
+            if ((layer == null) && (maxLayerSearchTimer.ElapsedMilliseconds < maxLayerSearchTime))
             {
                 layer = BotBrains.GetBrainLayerForBot(botOwner, LayerName);
             }
@@ -51,7 +66,15 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            return layer?.ShallUseNow() == true;
+            bool isRequested = layer?.ShallUseNow() == true;
+
+            if (isRequested)
+            {
+                lastRequestedTimer.Restart();
+            }
+
+            return isRequested;
+
         }
 
         public bool CanUseLayer(float minTimeFromLastUse)
@@ -72,6 +95,22 @@ namespace SPTQuestingBots.BotLogic
         public void RestartCanUseTimer()
         {
             canUseTimer.Restart();
+        }
+
+        public string GetActiveLogicReason()
+        {
+            if (!IsActive)
+            {
+                return "";
+            }
+
+            AICoreActionResultStruct<BotLogicDecision> lastDecision = layer.GetDecision();
+            if (lastDecision.Reason == null)
+            {
+                return "";
+            }
+
+            return lastDecision.Reason;
         }
     }
 }

@@ -58,13 +58,13 @@ namespace QuestingBots.BotLogic
                 IsObjectiveActive = true;
             }
 
-            if (IsObjectiveActive && (botType != BotType.PMC) && botOwner.Profile.Info.Settings.Role.ToString().ToLower().Contains("follower"))
+            /*if (IsObjectiveActive && (botType != BotType.PMC) && botOwner.Profile.Info.Settings.Role.ToString().ToLower().Contains("follower"))
             {
                 string bossName = botOwner?.BotFollower?.BossToFollow?.Player()?.Profile?.Nickname ?? "???";
 
                 LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " is a follower for " + bossName + ". Disabling questing.");
                 IsObjectiveActive = false;
-            }
+            }*/
 
             if (IsObjectiveActive)
             {
