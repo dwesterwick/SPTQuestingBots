@@ -11,7 +11,7 @@ using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {

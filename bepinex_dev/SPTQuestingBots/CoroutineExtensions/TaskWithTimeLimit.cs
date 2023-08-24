@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using QuestingBots.Controllers;
+using SPTQuestingBots.Controllers;
 
-namespace QuestingBots.CoroutineExtensions
+namespace SPTQuestingBots.CoroutineExtensions
 {
     internal class TaskWithTimeLimit : MethodWithTimeLimit
     {

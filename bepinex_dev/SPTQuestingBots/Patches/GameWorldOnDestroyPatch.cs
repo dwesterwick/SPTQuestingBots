@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using QuestingBots.Controllers;
 
-namespace QuestingBots.Patches
+namespace SPTQuestingBots.Patches
 {
     public class GameWorldOnDestroyPatch : ModulePatch
     {

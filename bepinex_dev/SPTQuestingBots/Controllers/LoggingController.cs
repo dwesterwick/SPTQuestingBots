@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public static class LoggingController
     {

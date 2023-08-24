@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 using DrakiaXYZ.BigBrain.Brains;
-using QuestingBots.BotLogic;
-using QuestingBots.Controllers;
+using SPTQuestingBots.BotLogic;
+using SPTQuestingBots.Controllers;
 
-namespace QuestingBots
+namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
@@ -46,7 +46,7 @@ namespace QuestingBots
 
                 List<string> botBrainsToChange = BotBrains.AllBots.ToList();
                 LoggingController.LogInfo("Loading QuestingBotsPlugin...changing bot brains: " + string.Join(", ", botBrainsToChange));
-                BrainManager.AddCustomLayer(typeof(PMCObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
+                BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
 
                 if (ConfigController.Config.Debug.Enabled)
                 {

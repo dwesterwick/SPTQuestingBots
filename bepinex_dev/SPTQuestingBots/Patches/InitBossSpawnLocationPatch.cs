@@ -1,14 +1,14 @@
-﻿using Aki.Reflection.Patching;
-using EFT;
-using QuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Reflection.Patching;
+using EFT;
+using SPTQuestingBots.Controllers;
 
-namespace QuestingBots.Patches
+namespace SPTQuestingBots.Patches
 {
     public class InitBossSpawnLocationPatch : ModulePatch
     {

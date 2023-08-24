@@ -6,11 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using EFT.Interactive;
-using QuestingBots.Controllers;
-using UnityEngine;
 
-namespace QuestingBots.Patches
+namespace SPTQuestingBots.Patches
 {
     public class OnGameStartedPatch: ModulePatch
     {

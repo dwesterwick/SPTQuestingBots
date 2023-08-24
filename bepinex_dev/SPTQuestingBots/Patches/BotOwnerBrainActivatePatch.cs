@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using QuestingBots.Controllers;
 
-namespace QuestingBots.Patches
+namespace SPTQuestingBots.Patches
 {
     public class BotOwnerBrainActivatePatch : ModulePatch
     {
@@ -23,12 +22,12 @@ namespace QuestingBots.Patches
             Controllers.LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + __instance.Profile.Info.Settings.Role.ToString());
             if (BotLogic.BotBrains.WillBotBeAPMC(__instance))
             {
-                BotQuestController.RegisterPMC(__instance);
+                Controllers.BotQuestController.RegisterPMC(__instance);
             }
 
             if (BotLogic.BotBrains.WillBotBeABoss(__instance))
             {
-                BotQuestController.RegisterBoss(__instance);
+                Controllers.BotQuestController.RegisterBoss(__instance);
             }
         }
     }

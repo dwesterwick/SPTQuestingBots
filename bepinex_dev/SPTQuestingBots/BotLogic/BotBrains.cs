@@ -1,14 +1,12 @@
-﻿using EFT;
-using EFT.UI.Matchmaker;
-using HarmonyLib;
-using QuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using EFT;
+using SPTQuestingBots.Controllers;
 
-namespace QuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic
 {
     public enum BotType
     {
@@ -82,7 +80,7 @@ namespace QuestingBots.BotLogic
         public static ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> GetBrainLayersForBot(BotOwner botOwner)
         {
 
-            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new List<AICoreLayerClass<BotLogicDecision>>());
+            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new AICoreLayerClass<BotLogicDecision>[0]);
 
             Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
             FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);

@@ -6,25 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using QuestingBots.Controllers;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace QuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic
 {
-    internal class PMCObjectiveAction : CustomLogic
+    internal class GoToObjectiveAction : CustomLogic
     {
-        private PMCObjective objective;
+        private BotObjective objective;
         private BotOwner botOwner;
         private GClass274 baseSteeringLogic = new GClass274();
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private int updateInterval = 100;
         
-        public PMCObjectiveAction(BotOwner _botOwner) : base(_botOwner)
+        public GoToObjectiveAction(BotOwner _botOwner) : base(_botOwner)
         {
             botOwner = _botOwner;
 
-            objective = botOwner.GetPlayer.gameObject.GetComponent<PMCObjective>();
+            objective = botOwner.GetPlayer.gameObject.GetComponent<BotObjective>();
         }
 
         public override void Start()

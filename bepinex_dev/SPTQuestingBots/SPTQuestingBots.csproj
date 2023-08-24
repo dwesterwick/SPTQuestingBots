@@ -94,9 +94,9 @@
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
     <Compile Include="Controllers\BotQuestController.cs" />
-    <Compile Include="BotLogic\PMCObjective.cs" />
-    <Compile Include="BotLogic\PMCObjectiveAction.cs" />
-    <Compile Include="BotLogic\PMCObjectiveLayer.cs" />
+    <Compile Include="BotLogic\BotObjective.cs" />
+    <Compile Include="BotLogic\GoToObjectiveAction.cs" />
+    <Compile Include="BotLogic\BotObjectiveLayer.cs" />
     <Compile Include="Configuration\BotQuestsConfig.cs" />
     <Compile Include="Configuration\BotSearchDistanceConfig.cs" />
     <Compile Include="Configuration\DebugConfig.cs" />

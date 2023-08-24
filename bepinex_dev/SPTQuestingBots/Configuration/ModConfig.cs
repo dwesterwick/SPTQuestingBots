@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPTQuestingBots.Configuration;
 
-namespace QuestingBots.Configuration
+namespace SPTQuestingBots.Configuration
 {
     public class ModConfig
     {

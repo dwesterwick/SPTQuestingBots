@@ -8,7 +8,7 @@ using Comfort.Common;
 using EFT;
 using UnityEngine;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public class PathRender : MonoBehaviour
     {

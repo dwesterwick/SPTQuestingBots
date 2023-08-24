@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.Configuration
+namespace SPTQuestingBots.Configuration
 {
     public class MinMaxConfig
     {

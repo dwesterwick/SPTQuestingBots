@@ -7,10 +7,10 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using HarmonyLib;
-using QuestingBots.Controllers;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace QuestingBots.Models
+namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace QuestingBots.Configuration
+namespace SPTQuestingBots.Configuration
 {
     public class QuestTemplatesConfig
     {

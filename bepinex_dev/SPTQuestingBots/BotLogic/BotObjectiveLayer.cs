@@ -2,25 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
-using EFT.Interactive;
-using EFT.InventoryLogic;
-using QuestingBots.Controllers;
-using QuestingBots.Models;
-using SPTQuestingBots.BotLogic;
+using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models;
 using UnityEngine;
-using static HealthControllerClass;
 
-namespace QuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic
 {
-    internal class PMCObjectiveLayer : CustomLayer
+    internal class BotObjectiveLayer : CustomLayer
     {
-        private PMCObjective objective;
+        private BotObjective objective;
         private BotOwner botOwner;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
@@ -40,11 +35,11 @@ namespace QuestingBots.BotLogic
         private LogicLayerMonitor stationaryWSLayerMonitor;
         //private LogicLayerMonitor patrolFollowerLayerMonitor;
 
-        public PMCObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
+        public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
             botOwner = _botOwner;
 
-            objective = botOwner.GetPlayer.gameObject.AddComponent<PMCObjective>();
+            objective = botOwner.GetPlayer.gameObject.AddComponent<BotObjective>();
             objective.Init(botOwner);
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
@@ -67,7 +62,7 @@ namespace QuestingBots.BotLogic
 
         public override Action GetNextAction()
         {
-            return new Action(typeof(PMCObjectiveAction), "GoToObjective");
+            return new Action(typeof(GoToObjectiveAction), "GoToObjective");
         }
 
         public override bool IsActive()
@@ -88,7 +83,7 @@ namespace QuestingBots.BotLogic
 
                 if (boss != null)
                 {
-                    string bossName = boss?.Profile?.Nickname ?? "???";
+                    string bossName = boss.Profile.Nickname;
 
                     LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " is a follower for " + bossName + ". Disabling questing.");
                     BotQuestController.RegisterBossFollower(boss, botOwner);
@@ -287,7 +282,7 @@ namespace QuestingBots.BotLogic
 
         private bool isAbleBodied(bool writeToLog)
         {
-            if (botOwner.Medecine.FirstAid.Have2Do)
+            if (botOwner.Medecine.FirstAid.Have2Do || BotOwner.Medecine.SurgicalKit.HaveWork)
             {
                 if (writeToLog)
                 {

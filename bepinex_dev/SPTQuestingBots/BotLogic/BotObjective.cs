@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using QuestingBots.Controllers;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace QuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic
 {
-    internal class PMCObjective : MonoBehaviour
+    internal class BotObjective : MonoBehaviour
     {
         public bool IsObjectiveActive { get; private set; } = false;
         public bool IsObjectiveReached { get; private set; } = false;
@@ -57,14 +56,6 @@ namespace QuestingBots.BotLogic
             {
                 IsObjectiveActive = true;
             }
-
-            /*if (IsObjectiveActive && (botType != BotType.PMC) && botOwner.Profile.Info.Settings.Role.ToString().ToLower().Contains("follower"))
-            {
-                string bossName = botOwner?.BotFollower?.BossToFollow?.Player()?.Profile?.Nickname ?? "???";
-
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " is a follower for " + bossName + ". Disabling questing.");
-                IsObjectiveActive = false;
-            }*/
 
             if (IsObjectiveActive)
             {

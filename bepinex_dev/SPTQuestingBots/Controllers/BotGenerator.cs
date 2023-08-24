@@ -12,10 +12,10 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using HarmonyLib;
-using QuestingBots.CoroutineExtensions;
+using SPTQuestingBots.CoroutineExtensions;
 using UnityEngine;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public class BotGenerator : MonoBehaviour
     {

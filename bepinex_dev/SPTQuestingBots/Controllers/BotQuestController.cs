@@ -12,12 +12,11 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.Quests;
-using QuestingBots.BotLogic;
-using QuestingBots.Models;
+using SPTQuestingBots.BotLogic;
+using SPTQuestingBots.Models;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public class BotQuestController : MonoBehaviour
     {

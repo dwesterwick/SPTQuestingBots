@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace QuestingBots.Models
+namespace SPTQuestingBots.Models
 {
     public class PathVisualizationData
     {

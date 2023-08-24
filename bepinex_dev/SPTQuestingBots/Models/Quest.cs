@@ -1,19 +1,16 @@
-﻿using EFT;
-using EFT.Game.Spawning;
-using EFT.Interactive;
-using EFT.InventoryLogic;
-using QuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
+using EFT;
+using EFT.Game.Spawning;
+using EFT.Interactive;
+using SPTQuestingBots.Controllers;
 
-namespace QuestingBots.Models
+namespace SPTQuestingBots.Models
 {
     public class Quest
     {

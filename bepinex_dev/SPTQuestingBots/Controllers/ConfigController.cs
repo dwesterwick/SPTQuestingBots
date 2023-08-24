@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Aki.Common.Http;
 using Newtonsoft.Json;
 
-namespace QuestingBots.Controllers
+namespace SPTQuestingBots.Controllers
 {
     public static class ConfigController
     {
