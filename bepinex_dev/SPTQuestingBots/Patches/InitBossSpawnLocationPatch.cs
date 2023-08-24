@@ -22,19 +22,28 @@ namespace QuestingBots.Patches
         {
             foreach (BossLocationSpawn bossWave in bossWaves)
             {
-                if ((bossWave.Time <= 1) && bossWave.ShallSpawn)
+                if ((bossWave.Time > 1) || !bossWave.ShallSpawn)
                 {
-                    int totalBots = 1 + bossWave.EscortCount;
-                    if (bossWave.Supports != null)
-                    {
-                        totalBots -= bossWave.Supports.Sum(s => s.BossEscortAmount);
-                    }
-
-                    LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
-                    LocationController.ZeroWaveCount++;
-                    LocationController.ZeroWaveTotalBotCount += totalBots;
-                    LocationController.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
+                    continue;
                 }
+
+                LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
+
+                if ((bossWave.BossType == WildSpawnType.sectantPriest) || (bossWave.BossType == WildSpawnType.sectantWarrior))
+                {
+                    LoggingController.LogWarning("sectantPriest boss waves with initial PMC spawning may cause some bosses to spawn late.");
+                    continue;
+                }
+
+                int totalBots = 1 + bossWave.EscortCount;
+                if (bossWave.Supports != null)
+                {
+                    totalBots -= bossWave.Supports.Sum(s => s.BossEscortAmount);
+                }
+
+                LocationController.ZeroWaveCount++;
+                LocationController.ZeroWaveTotalBotCount += totalBots;
+                LocationController.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
             }
 
             LoggingController.LogInfo("Total inital bosses and followers " + LocationController.ZeroWaveTotalBotCount);

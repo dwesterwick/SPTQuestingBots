@@ -21,7 +21,7 @@ namespace SPTQuestingBots.BotLogic
         private Stopwatch lastRequestedTimer = new Stopwatch();
         private float maxLayerSearchTime = 300;
 
-        public bool IsActive
+        public bool CanLayerBeUsed
         {
             get { return layer?.IsActive == true; }
         }
@@ -61,7 +61,7 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsLayerRequested()
         {
-            if (!IsActive)
+            if (!CanLayerBeUsed)
             {
                 return false;
             }
@@ -99,7 +99,7 @@ namespace SPTQuestingBots.BotLogic
 
         public string GetActiveLogicReason()
         {
-            if (!IsActive)
+            if (!CanLayerBeUsed)
             {
                 return "";
             }

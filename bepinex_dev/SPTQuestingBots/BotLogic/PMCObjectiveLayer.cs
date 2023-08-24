@@ -107,7 +107,7 @@ namespace QuestingBots.BotLogic
                 return false;
             }
 
-            if (stationaryWSLayerMonitor.IsLayerRequested())
+            if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
             {
                 return false;
             }
@@ -117,13 +117,16 @@ namespace QuestingBots.BotLogic
                 return pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
 
-            string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
+            if (extractLayerMonitor.CanLayerBeUsed)
             {
-                objective.StopQuesting();
+                string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
+                if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
+                {
+                    objective.StopQuesting();
 
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " wants to extract and will no longer quest.");
-                return false;
+                    LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " wants to extract and will no longer quest.");
+                    return false;
+                }
             }
 
             if (shouldWaitForFollowers())
@@ -348,6 +351,11 @@ namespace QuestingBots.BotLogic
         private bool shouldCheckForLoot(float minTimeBetweenLooting)
         {
             if (!ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled)
+            {
+                return false;
+            }
+
+            if (!lootingLayerMonitor.CanLayerBeUsed)
             {
                 return false;
             }
