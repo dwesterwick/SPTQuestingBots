@@ -62,17 +62,16 @@
 * Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-* **0.1.1** (ETA: 8/23)
-    * Prevent Raiders and other late-spawning bosses from doing quests
-    * Allow bots to loot more
 * **0.2.0** (ETA: 9/5)
     * Implement support for basic custom quests (target locations only, no additional actions)
     * Implement min/max player levels for quests
     * Add extra quests to make bots go to other areas on the maps
     * Update bot quest-selection algorithm
+    * Improve bot looting behavior
 * **0.2.1** (ETA: 9/17)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options and high-level overviews for how the algorithms work
+    * Add more quests to make bots go to other areas on the maps
     * Bug fixes for 0.2.0 (hopefully none)
 * **0.3.0** (ETA: Early October)
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:

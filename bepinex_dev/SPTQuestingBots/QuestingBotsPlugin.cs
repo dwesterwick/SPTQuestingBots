@@ -14,7 +14,7 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.2.0")]
     [BepInDependency("xyz.drakia.bigbrain", "0.2.0")]
-    [BepInPlugin("com.DanW.QuestingBots", "QuestingBotsPlugin", "0.1.1.0")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.1.2")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -63,6 +63,8 @@ namespace SPTQuestingBots
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
                 }
+
+                QuestingBotsPluginConfig.BuildConfigOptions(Config);
             }
 
             Logger.LogInfo("Loading QuestingBotsPlugin...done.");

@@ -72,6 +72,11 @@ namespace SPTQuestingBots.BotLogic
 
         public override bool IsActive()
         {
+            if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
+            {
+                return false;
+            }
+
             if (BotOwner.BotState != EBotState.Active)
             {
                 return false;
