@@ -17,10 +17,9 @@ namespace SPTQuestingBots.Models
 
         }
 
-        public QuestItemObjective(LootItem item, Vector3 position) : this()
+        public QuestItemObjective(LootItem item, Vector3 position) : base(position)
         {
             Item = item;
-            Position = position;
         }
 
         public override void Clear()

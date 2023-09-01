@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using EFT.InventoryLogic;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Models
@@ -16,6 +17,7 @@ namespace SPTQuestingBots.Models
     {
         public RawQuestClass Template { get; private set; } = null;
         public int MinLevel { get; set; } = 0;
+        public int MaxLevel { get; set; } = 99;
         public float ChanceForSelecting { get; set; } = 50;
         public int Priority { get; set; }
 
@@ -26,7 +28,7 @@ namespace SPTQuestingBots.Models
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
-        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.Position.HasValue);
+        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.FirstStepPosition != null);
         public int NumberOfObjectives => AllObjectives.Count;
         public int NumberOfValidObjectives => ValidObjectives.Count();
 
@@ -107,75 +109,41 @@ namespace SPTQuestingBots.Models
 
         public QuestObjective GetObjectiveForZoneID(string zoneId)
         {
-            IEnumerable<QuestZoneObjective> matchingObjectives = objectives
-                .OfType<QuestZoneObjective>()
-                .Where(o => o?.ZoneID == zoneId);
-            
-            if (matchingObjectives.Count() == 0)
-            {
-                //LoggingController.LogWarning("Could not find a quest objective for zone " + zoneId);
-                return null;
-            }
-            if (matchingObjectives.Count() > 1)
-            {
-                LoggingController.LogWarning("Found multiple quest objectives for zone " + zoneId + ": " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
-            }
-
-            return matchingObjectives.First();
+            Func<QuestZoneObjective, bool> matchTest = o => o?.ZoneID == zoneId;
+            return GetObjective(matchTest);
         }
 
         public QuestObjective GetObjectiveForLootItem(LootItem item)
         {
-            IEnumerable<QuestItemObjective> matchingObjectives = objectives
-                .OfType<QuestItemObjective>()
-                .Where(o => o.Item?.TemplateId == item.TemplateId);
-            
-            if (matchingObjectives.Count() == 0)
-            {
-                //LoggingController.LogWarning("Could not find a quest objective for item " + item.Item.LocalizedName());
-                return null;
-            }
-            if (matchingObjectives.Count() > 1)
-            {
-                LoggingController.LogWarning("Found multiple quest objectives for item " + item.Item.LocalizedName() + ": " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
-            }
-
-            return matchingObjectives.First();
+            Func<QuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == item.TemplateId;
+            return GetObjective(matchTest);
         }
 
         public QuestObjective GetObjectiveForLootItem(string templateID)
         {
-            IEnumerable<QuestItemObjective> matchingObjectives = objectives
-                .OfType<QuestItemObjective>()
-                .Where(o => o.Item?.TemplateId == templateID);
-            
-            if (matchingObjectives.Count() == 0)
-            {
-                //LoggingController.LogWarning("Could not find a quest objective for item " + templateID);
-                return null;
-            }
-            if (matchingObjectives.Count() > 1)
-            {
-                LoggingController.LogWarning("Found multiple quest objectives for item " + templateID + ": " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
-            }
-
-            return matchingObjectives.First();
+            Func<QuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == templateID;
+            return GetObjective(matchTest);
         }
 
         public QuestObjective GetObjectiveForSpawnPoint(SpawnPointParams spawnPoint)
         {
-            IEnumerable<QuestSpawnPointObjective> matchingObjectives = objectives
-                .OfType<QuestSpawnPointObjective>()
-                .Where(o => o.SpawnPoint?.Id == spawnPoint.Id);
-            
+            Func<QuestSpawnPointObjective, bool> matchTest = o => o.SpawnPoint?.Id == spawnPoint.Id;
+            return GetObjective(matchTest);
+        }
+
+        private QuestObjective GetObjective<T>(Func<T, bool> matchTestFunc) where T : QuestObjective
+        {
+            IEnumerable<T> matchingObjectives = objectives
+                .OfType<T>()
+                .Where(o => matchTestFunc(o) == true);
+
             if (matchingObjectives.Count() == 0)
             {
-                //LoggingController.LogWarning("Could not find a quest objective for spawn point " + spawnPoint.ToString());
                 return null;
             }
             if (matchingObjectives.Count() > 1)
             {
-                LoggingController.LogWarning("Found multiple quest objectives for spawn point " + spawnPoint.ToString() + ": " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
+                LoggingController.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
             }
 
             return matchingObjectives.First();

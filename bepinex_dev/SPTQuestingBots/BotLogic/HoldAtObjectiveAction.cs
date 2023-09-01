@@ -1,47 +1,38 @@
-﻿using DrakiaXYZ.BigBrain.Brains;
-using EFT;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 
 namespace SPTQuestingBots.BotLogic
 {
-    public class HoldAtObjectiveAction : CustomLogic
+    public class HoldAtObjectiveAction : CustomLogicDelayedUpdate
     {
-        private BotOwner botOwner;
-        private Stopwatch updateTimer = Stopwatch.StartNew();
         private GClass104 baseAction = null;
-        private int updateInterval = 10;
 
-        public HoldAtObjectiveAction(BotOwner _botOwner) : base(_botOwner)
+        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner)
         {
-            botOwner = _botOwner;
-
-            baseAction = GClass475.CreateNode(BotLogicDecision.holdPosition, botOwner);
+            baseAction = GClass475.CreateNode(BotLogicDecision.holdPosition, BotOwner);
+            baseAction.Awake();
         }
 
         public override void Start()
         {
-            baseAction.Awake();
-
-            botOwner.PatrollingData.Pause();
+            BotOwner.PatrollingData.Pause();
         }
 
         public override void Stop()
         {
-            botOwner.PatrollingData.Unpause();
+            BotOwner.PatrollingData.Unpause();
         }
 
         public override void Update()
         {
-            if (updateTimer.ElapsedMilliseconds < updateInterval)
+            if (!canUpdate())
             {
                 return;
             }
-            updateTimer.Restart();
 
             baseAction.Update();
         }

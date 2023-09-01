@@ -14,20 +14,20 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.2.0")]
     [BepInDependency("xyz.drakia.bigbrain", "0.2.0")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.1.2")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
         {
-            Logger.LogInfo("Loading QuestingBotsPlugin...");
+            Logger.LogInfo("Loading QuestingBots...");
 
-            Logger.LogInfo("Loading QuestingBotsPlugin...getting configuration data...");
+            Logger.LogInfo("Loading QuestingBots...getting configuration data...");
             ConfigController.GetConfig();
             LoggingController.Logger = Logger;
 
             if (ConfigController.Config.Enabled)
             {
-                LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling patches...");
+                LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
@@ -39,13 +39,13 @@ namespace SPTQuestingBots
                     new Patches.BotOwnerCreatePatch().Enable();
                 }
 
-                LoggingController.LogInfo("Loading QuestingBotsPlugin...enabling controllers...");
+                LoggingController.LogInfo("Loading QuestingBots...enabling controllers...");
                 this.GetOrAddComponent<LocationController>();
                 this.GetOrAddComponent<BotQuestController>();
                 this.GetOrAddComponent<BotGenerator>();
 
                 List<string> botBrainsToChange = BotBrains.AllBots.ToList();
-                LoggingController.LogInfo("Loading QuestingBotsPlugin...changing bot brains: " + string.Join(", ", botBrainsToChange));
+                LoggingController.LogInfo("Loading QuestingBots...changing bot brains: " + string.Join(", ", botBrainsToChange));
                 BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
 
                 if (ConfigController.Config.Debug.Enabled)
@@ -67,7 +67,7 @@ namespace SPTQuestingBots
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
             }
 
-            Logger.LogInfo("Loading QuestingBotsPlugin...done.");
+            Logger.LogInfo("Loading QuestingBots...done.");
         }
     }
 }

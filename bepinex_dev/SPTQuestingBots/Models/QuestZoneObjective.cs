@@ -21,9 +21,9 @@ namespace SPTQuestingBots.Models
             ZoneID = zoneID;
         }
 
-        public QuestZoneObjective(string zoneID, Vector3 position) : this(zoneID)
+        public QuestZoneObjective(string zoneID, Vector3 position) : base(position)
         {
-            Position = position;
+            ZoneID = zoneID;
         }
 
         public override void Clear()

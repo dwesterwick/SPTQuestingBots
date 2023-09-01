@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
 {
-    internal class BotObjective : MonoBehaviour
+    internal class BotObjectiveManager : MonoBehaviour
     {
         public bool IsObjectiveActive { get; private set; } = false;
         public bool IsObjectiveReached { get; private set; } = false;
@@ -25,6 +25,7 @@ namespace SPTQuestingBots.BotLogic
         private BotOwner botOwner = null;
         private Models.Quest targetQuest = null;
         private Models.QuestObjective targetObjective = null;
+        private Models.QuestObjectiveStep targetObjectiveStep = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
 
@@ -117,6 +118,12 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            if (TryPerformNextQuestObjectiveStep())
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is performing the next step for " + targetObjective.ToString());
+                return true;
+            }
+
             if (TryToGoToRandomQuestObjective())
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
@@ -147,6 +154,18 @@ namespace SPTQuestingBots.BotLogic
             {
                 TryChangeObjective();
             }
+        }
+
+        private bool TryPerformNextQuestObjectiveStep()
+        {
+            targetObjectiveStep = targetObjective?.GetNextObjectiveStep(botOwner);
+
+            if (targetObjectiveStep == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool TryToGoToRandomQuestObjective()
@@ -183,15 +202,23 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (!nextObjective.Position.HasValue)
+            Vector3? nextObjectiveFirstPosition = nextObjective.FirstStepPosition;
+            if (!nextObjectiveFirstPosition.HasValue)
             {
                 LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + targetQuest.Name + ". Invalid position.");
                 nextObjective.BotFailedObjective(botOwner);
                 return false;
             }
 
+            targetObjectiveStep = nextObjective.GetNextObjectiveStep(botOwner);
+            if (targetObjectiveStep == null)
+            {
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has completed all steps for " + ToString());
+                return false;
+            }
+
             targetObjective = nextObjective;
-            updateObjective(targetObjective.Position.Value);
+            updateObjective(targetObjectiveStep.Position.Value);
             
             return true;
         }

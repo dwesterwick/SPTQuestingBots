@@ -471,7 +471,7 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name);
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
-                objective.Position = navMeshTargetPoint.Value;
+                objective.SetAllPositions(navMeshTargetPoint.Value);
                 objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? 2 : 1;
 
                 zoneIDsInLocation.Add(trigger.Id);

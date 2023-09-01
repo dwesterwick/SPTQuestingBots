@@ -15,8 +15,9 @@ namespace SPTQuestingBots.BotLogic
 {
     internal class BotObjectiveLayer : CustomLayer
     {
-        private BotObjective objective;
+        private BotObjectiveManager objective;
         private BotOwner botOwner;
+        private BotMonitor botMonitor;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasSearchingForEnemy = false;
@@ -38,8 +39,9 @@ namespace SPTQuestingBots.BotLogic
         public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
             botOwner = _botOwner;
+            botMonitor = new BotMonitor(botOwner);
 
-            objective = botOwner.GetPlayer.gameObject.AddComponent<BotObjective>();
+            objective = botOwner.GetPlayer.gameObject.AddComponent<BotObjectiveManager>();
             objective.Init(botOwner);
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
@@ -70,8 +72,18 @@ namespace SPTQuestingBots.BotLogic
             return new Action(typeof(GoToObjectiveAction), "GoToObjective");
         }
 
+        public override bool IsCurrentActionEnding()
+        {
+            return !objective.IsObjectiveActive || objective.IsObjectiveReached;
+        }
+
         public override bool IsActive()
         {
+            if (pauseLayerTimer.ElapsedMilliseconds < 1000 * pauseLayerTime)
+            {
+                return false;
+            }
+
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
             {
                 return false;
@@ -107,11 +119,6 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (pauseLayerTimer.ElapsedMilliseconds < 1000 * pauseLayerTime)
-            {
-                return false;
-            }
-
             if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
             {
                 return false;
@@ -134,13 +141,13 @@ namespace SPTQuestingBots.BotLogic
                 }
             }
 
-            if (shouldWaitForFollowers())
+            if (botMonitor.ShouldWaitForFollowers())
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is waiting for its followers...");
                 return pauseLayer(5);
             }
 
-            if (!isAbleBodied(wasAbleBodied))
+            if (!botMonitor.IsAbleBodied(wasAbleBodied))
             {
                 wasAbleBodied = false;
                 return pauseLayer();
@@ -151,7 +158,7 @@ namespace SPTQuestingBots.BotLogic
             }
             wasAbleBodied = true;
 
-            if (shouldSearchForEnemy(searchTimeAfterCombat))
+            if (botMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
             {
                 if (!wasSearchingForEnemy)
                 {
@@ -212,11 +219,6 @@ namespace SPTQuestingBots.BotLogic
             return pauseLayer();
         }
 
-        public override bool IsCurrentActionEnding()
-        {
-            return !objective.IsObjectiveActive || objective.IsObjectiveReached;
-        }
-
         private bool pauseLayer()
         {
             return pauseLayer(0);
@@ -228,18 +230,6 @@ namespace SPTQuestingBots.BotLogic
             pauseLayerTimer.Restart();
             botIsStuckTimer.Restart();
             return false;
-        }
-
-        private bool shouldSearchForEnemy(double maxTimeSinceCombatEnded)
-        {
-            bool hasCloseDanger = botOwner.Memory.DangerData.HaveCloseDanger;
-
-            bool wasInCombat = (Time.time - botOwner.Memory.LastTimeHit) < maxTimeSinceCombatEnded;
-            wasInCombat |= (Time.time - botOwner.Memory.EnemySetTime) < maxTimeSinceCombatEnded;
-            wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < maxTimeSinceCombatEnded;
-            wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
-
-            return wasInCombat || hasCloseDanger;
         }
 
         private void updateSearchTimeAfterCombat()
@@ -264,20 +254,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (botIsStuckTimer.ElapsedMilliseconds > 1000 * ConfigController.Config.StuckBotDetection.Time)
             {
-                Vector3[] failedBotPath = botOwner.Mover?.CurPath;
-                if (ConfigController.Config.Debug.ShowFailedPaths && (failedBotPath != null))
-                {
-                    List<Vector3> adjustedPathCorners = new List<Vector3>();
-                    foreach (Vector3 corner in failedBotPath)
-                    {
-                        adjustedPathCorners.Add(new Vector3(corner.x, corner.y + 0.75f, corner.z));
-                    }
-
-                    string pathName = "FailedBotPath_" + botOwner.Id;
-                    PathRender.RemovePath(pathName);
-                    PathVisualizationData failedBotPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), Color.red);
-                    PathRender.AddOrUpdatePath(failedBotPathRendering);
-                }
+                drawStuckBotPath();
 
                 if (objective.TryChangeObjective())
                 {
@@ -290,67 +267,24 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        private bool isAbleBodied(bool writeToLog)
+        private void drawStuckBotPath()
         {
-            if (botOwner.Medecine.FirstAid.Have2Do || BotOwner.Medecine.SurgicalKit.HaveWork)
+            Vector3[] failedBotPath = botOwner.Mover?.CurPath;
+            if (!ConfigController.Config.Debug.ShowFailedPaths || (failedBotPath == null))
             {
-                if (writeToLog)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to heal");
-                }
-                return false;
+                return;
             }
 
-            if (100f * botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < ConfigController.Config.BotQuestingRequirements.MinHydration)
+            List<Vector3> adjustedPathCorners = new List<Vector3>();
+            foreach (Vector3 corner in failedBotPath)
             {
-                if (writeToLog)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to drink");
-                }
-                return false;
+                adjustedPathCorners.Add(new Vector3(corner.x, corner.y + 0.75f, corner.z));
             }
 
-            if (100f * botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < ConfigController.Config.BotQuestingRequirements.MinEnergy)
-            {
-                if (writeToLog)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to eat");
-                }
-                return false;
-            }
-
-            ValueStruct healthHead = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head);
-            ValueStruct healthChest = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest);
-            ValueStruct healthStomach = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach);
-            ValueStruct healthLeftLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg);
-            ValueStruct healthRightLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg);
-
-            if 
-            (
-                (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
-                || (100f * healthChest.Current / healthChest.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthChest)
-                || (100f * healthStomach.Current / healthStomach.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthStomach)
-                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
-                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
-            )
-            {
-                if (writeToLog)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " cannot heal");
-                }
-                return false;
-            }
-
-            if (100f * botOwner.GetPlayer.Physical.Overweight > ConfigController.Config.BotQuestingRequirements.MaxOverweightPercentage)
-            {
-                if (writeToLog)
-                {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is overweight");
-                }
-                return false;
-            }
-
-            return true;
+            string pathName = "FailedBotPath_" + botOwner.Id;
+            PathRender.RemovePath(pathName);
+            PathVisualizationData failedBotPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), Color.red);
+            PathRender.AddOrUpdatePath(failedBotPathRendering);
         }
 
         private bool shouldCheckForLoot(float minTimeBetweenLooting)
@@ -419,25 +353,6 @@ namespace SPTQuestingBots.BotLogic
             lootSearchTimer.Reset();
             wasLooting = false;
             hasFoundLoot = false;
-            return false;
-        }
-
-        private bool shouldWaitForFollowers()
-        {
-            IReadOnlyCollection<BotOwner> followers = BotQuestController.GetAliveFollowers(botOwner);
-            if (followers.Count > 0)
-            {
-                IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
-                if
-                (
-                    followerDistances.Any(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Furthest)
-                    || followerDistances.All(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Nearest)
-                )
-                {
-                    return true;
-                }
-            }
-
             return false;
         }
     }

@@ -17,10 +17,9 @@ namespace SPTQuestingBots.Models
 
         }
 
-        public QuestSpawnPointObjective(SpawnPointParams spawnPoint, Vector3 position) : this()
+        public QuestSpawnPointObjective(SpawnPointParams spawnPoint, Vector3 position) : base(position)
         {
             SpawnPoint = spawnPoint;
-            Position = position;
         }
 
         public override void Clear()
@@ -33,7 +32,7 @@ namespace SPTQuestingBots.Models
         {
             if (SpawnPoint.HasValue)
             {
-                return "Spawn Point " + Position.ToString();
+                return "Spawn Point " + this.FirstStepPosition.ToString();
             }
 
             return base.ToString();
