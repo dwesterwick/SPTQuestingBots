@@ -202,23 +202,24 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            Vector3? nextObjectiveFirstPosition = nextObjective.FirstStepPosition;
-            if (!nextObjectiveFirstPosition.HasValue)
-            {
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + targetQuest.Name + ". Invalid position.");
-                nextObjective.BotFailedObjective(botOwner);
-                return false;
-            }
-
             targetObjectiveStep = nextObjective.GetNextObjectiveStep(botOwner);
+            Vector3? nextObjectiveStepPosition = targetObjectiveStep.GetPosition();
+
             if (targetObjectiveStep == null)
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has completed all steps for " + ToString());
                 return false;
             }
 
+            if (!nextObjectiveStepPosition.HasValue)
+            {
+                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + targetQuest.Name + ". Invalid position.");
+                nextObjective.BotFailedObjective(botOwner);
+                return false;
+            }
+
             targetObjective = nextObjective;
-            updateObjective(targetObjectiveStep.Position.Value);
+            updateObjective(nextObjectiveStepPosition.Value);
             
             return true;
         }

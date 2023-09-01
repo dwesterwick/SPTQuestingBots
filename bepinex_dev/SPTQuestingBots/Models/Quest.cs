@@ -9,30 +9,50 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Models
 {
     public class Quest
     {
-        public RawQuestClass Template { get; private set; } = null;
+        [JsonProperty("min_level")]
         public int MinLevel { get; set; } = 0;
-        public int MaxLevel { get; set; } = 99;
-        public float ChanceForSelecting { get; set; } = 50;
-        public int Priority { get; set; }
 
+        [JsonProperty("max_level")]
+        public int MaxLevel { get; set; } = 99;
+
+        [JsonProperty("chance_for_selecting")]
+        public float ChanceForSelecting { get; set; } = 50;
+
+        [JsonProperty("priority")]
+        public int Priority { get; set; } = 99;
+
+        [JsonIgnore]
+        public RawQuestClass Template { get; private set; } = null;
+
+        [JsonProperty("name")]
         private string name = "Unnamed Quest";
-        private List<QuestObjective> objectives = new List<QuestObjective>();
+
+        [JsonProperty("objectives")]
+        private QuestObjective[] objectives = new QuestObjective[0];
+
+        [JsonIgnore]
         private List<BotOwner> blacklistedBots = new List<BotOwner>();
 
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
-        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.FirstStepPosition != null);
+        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
         public int NumberOfObjectives => AllObjectives.Count;
         public int NumberOfValidObjectives => ValidObjectives.Count();
 
-        public Quest(int priority)
+        public Quest()
+        {
+
+        }
+
+        public Quest(int priority) : this()
         {
             Priority = priority;
         }
@@ -50,7 +70,7 @@ namespace SPTQuestingBots.Models
         public void Clear()
         {
             blacklistedBots.Clear();
-            objectives.Clear();
+            objectives = new QuestObjective[0];
         }
 
         public void BlacklistBot(BotOwner bot)
@@ -68,7 +88,7 @@ namespace SPTQuestingBots.Models
 
         public void AddObjective(QuestObjective objective)
         {
-            objectives.Add(objective);
+            objectives = objectives.Append(objective).ToArray();
         }
 
         public QuestObjective GetRandomObjective()

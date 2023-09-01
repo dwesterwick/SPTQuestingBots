@@ -32,7 +32,7 @@ namespace SPTQuestingBots.Models
         {
             if (SpawnPoint.HasValue)
             {
-                return "Spawn Point " + this.FirstStepPosition.ToString();
+                return "Spawn Point " + (this.GetFirstStepPosition()?.ToString() ?? "???");
             }
 
             return base.ToString();

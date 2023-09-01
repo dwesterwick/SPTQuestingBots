@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,10 @@ namespace SPTQuestingBots.Models
 
     public class QuestObjectiveStep
     {
-        public Vector3? Position { get; set; } = null;
+        [JsonProperty("position")]
+        public SerializableVector3 SerializablePosition { get; set; } = null;
+
+        [JsonProperty("step_type")]
         public QuestObjectiveStepType StepType { get; set; } = QuestObjectiveStepType.MoveToPosition;
 
         public QuestObjectiveStep()
@@ -23,9 +27,35 @@ namespace SPTQuestingBots.Models
 
         }
 
+        public QuestObjectiveStep(SerializableVector3 position) : this()
+        {
+            SerializablePosition = position;
+        }
+
         public QuestObjectiveStep(Vector3 position) : this()
         {
-            Position = position;
+            SerializablePosition = new SerializableVector3(position);
+        }
+
+        public Vector3? GetPosition()
+        {
+            if ((SerializablePosition == null) || SerializablePosition.Any(float.NaN))
+            {
+                return null;
+            }
+
+            return SerializablePosition.ToUnityVector3();
+        }
+
+        public void SetPosition(Vector3? position)
+        {
+            if (!position.HasValue)
+            {
+                SerializablePosition = null;
+                return;
+            }
+
+            SerializablePosition = new SerializableVector3(position.Value);
         }
     }
 }

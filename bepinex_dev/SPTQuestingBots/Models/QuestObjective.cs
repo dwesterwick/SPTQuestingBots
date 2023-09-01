@@ -4,24 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
     public class QuestObjective
     {
+        [JsonProperty("max_bots")]
         public int MaxBots { get; set; } = 2;
+
+        [JsonProperty("min_distance_from_bot")]
         public float MinDistanceFromBot { get; set; } = 10f;
+
+        [JsonProperty("max_distance_from_bot")]
         public float MaxDistanceFromBot { get; set; } = 9999f;
 
+        [JsonProperty("quest_objective_steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
+
+        [JsonIgnore]
         private Dictionary<BotOwner, byte> currentStepsForBots = new Dictionary<BotOwner, byte>();
+
+        [JsonIgnore]
         private List<BotOwner> successfulBots = new List<BotOwner>();
+
+        [JsonIgnore]
         private List<BotOwner> unsuccessfulBots = new List<BotOwner>();
 
         public bool CanAssignMoreBots => currentStepsForBots.Count < MaxBots;
-        public Vector3? FirstStepPosition => questObjectiveSteps.Length > 0 ? questObjectiveSteps[0].Position : null;
-
+        
         public QuestObjective()
         {
 
@@ -55,15 +67,25 @@ namespace SPTQuestingBots.Models
 
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
-                step.Position = null;
+                step.SetPosition(null);
             }
+        }
+
+        public Vector3? GetFirstStepPosition()
+        {
+            if (questObjectiveSteps.Length == 0)
+            {
+                return null;
+            }
+
+            return questObjectiveSteps[0].GetPosition();
         }
 
         public void SetFirstPosition(Vector3 position)
         {
             if (questObjectiveSteps.Length > 0)
             {
-                questObjectiveSteps[0].Position = position;
+                questObjectiveSteps[0].SetPosition(position);
             }
         }
 
@@ -71,7 +93,7 @@ namespace SPTQuestingBots.Models
         {
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
-                step.Position = position;
+                step.SetPosition(position);
             }
         }
 
@@ -141,13 +163,13 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            if (!questObjectiveSteps[0].Position.HasValue)
+            Vector3? position = questObjectiveSteps[0].GetPosition();
+            if (!position.HasValue)
             {
                 return false;
             }
 
-            float distanceFromObjective = Vector3.Distance(bot.Position, questObjectiveSteps[0].Position.Value);
-
+            float distanceFromObjective = Vector3.Distance(bot.Position, position.Value);
             if (distanceFromObjective > MaxDistanceFromBot)
             {
                 //LoggingController.LogInfo("Bot is too far from " + this.ToString() + ". Distance: " + distanceFromObjective);
