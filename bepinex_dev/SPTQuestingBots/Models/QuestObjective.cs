@@ -11,16 +11,16 @@ namespace SPTQuestingBots.Models
 {
     public class QuestObjective
     {
-        [JsonProperty("max_bots")]
+        [JsonProperty("maxBots")]
         public int MaxBots { get; set; } = 2;
 
-        [JsonProperty("min_distance_from_bot")]
+        [JsonProperty("minDistanceFromBot")]
         public float MinDistanceFromBot { get; set; } = 10f;
 
-        [JsonProperty("max_distance_from_bot")]
+        [JsonProperty("maxDistanceFromBot")]
         public float MaxDistanceFromBot { get; set; } = 9999f;
 
-        [JsonProperty("quest_objective_steps")]
+        [JsonProperty("steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
 
         [JsonIgnore]

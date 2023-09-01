@@ -1,5 +1,6 @@
 import modConfig from "../config/config.json";
 import { CommonUtils } from "./CommonUtils";
+import { QuestManager } from "./QuestManager";
 
 import { DependencyContainer } from "tsyringe";
 import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
@@ -25,6 +26,7 @@ const modName = "SPTQuestingBots";
 class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
+    private questManager: QuestManager
 
     private logger: ILogger;
     private configServer: ConfigServer;
@@ -134,6 +136,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
+        this.questManager = new QuestManager(this.logger);
 
         // Adjust parameters to make debugging easier
         if (modConfig.enabled && modConfig.debug.enabled)

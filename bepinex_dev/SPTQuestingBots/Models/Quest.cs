@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
-using EFT.InventoryLogic;
 using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
 
@@ -16,13 +15,13 @@ namespace SPTQuestingBots.Models
 {
     public class Quest
     {
-        [JsonProperty("min_level")]
+        [JsonProperty("minLevel")]
         public int MinLevel { get; set; } = 0;
 
-        [JsonProperty("max_level")]
+        [JsonProperty("maxLevel")]
         public int MaxLevel { get; set; } = 99;
 
-        [JsonProperty("chance_for_selecting")]
+        [JsonProperty("chanceForSelecting")]
         public float ChanceForSelecting { get; set; } = 50;
 
         [JsonProperty("priority")]

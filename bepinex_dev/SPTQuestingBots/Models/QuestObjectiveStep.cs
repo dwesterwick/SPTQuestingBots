@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Models
         [JsonProperty("position")]
         public SerializableVector3 SerializablePosition { get; set; } = null;
 
-        [JsonProperty("step_type")]
+        [JsonProperty("stepType")]
         public QuestObjectiveStepType StepType { get; set; } = QuestObjectiveStepType.MoveToPosition;
 
         public QuestObjectiveStep()

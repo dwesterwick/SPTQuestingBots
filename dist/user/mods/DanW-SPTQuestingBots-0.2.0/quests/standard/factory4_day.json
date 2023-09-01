@@ -1,0 +1,27 @@
+{
+    "quests" : [
+        {
+            "minLevel": 0,
+            "maxLevel": 99,
+            "chanceForSelecting": 100,
+            "priority": 1,
+            "name": "3rd Floor Office",
+            "objectives" : [
+                {
+                    "maxBots": 6,
+                    "minDistanceFromBot": 1,
+                    "maxDistanceFromBot": 999,
+                    "steps": [
+                        {
+                            "position" : {
+                                "x": 9.189334,
+                                "y": 8.210877,
+                                "z": 35.23968
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
