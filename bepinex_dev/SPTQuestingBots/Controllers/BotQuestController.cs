@@ -241,6 +241,13 @@ namespace SPTQuestingBots.Controllers
                     LoggingController.LogInfo("Too much time has elapsed in the raid to add a spawn-rush quest.");
                 }
 
+                Quest[] customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
+                if (customQuests.Length > 0)
+                {
+                    allQuests.AddRange(customQuests);
+                    LoggingController.LogInfo("Added " + customQuests.Length + " custom quests");
+                }
+
                 HaveTriggersBeenFound = true;
                 LoggingController.LogInfo("Finished loading quest data.");
             }

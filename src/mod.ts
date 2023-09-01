@@ -18,6 +18,7 @@ import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
 import { LocaleService } from "@spt-aki/services/LocaleService";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { VFS } from "@spt-aki/utils/VFS";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 
@@ -35,6 +36,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private localeService: LocaleService;
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
+    private vfs: VFS;
     private iBotConfig: IBotConfig;
     private iLocationConfig: ILocationConfig;
 
@@ -117,9 +119,25 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 url: "/QuestingBots/GetAllQuestTemplates",
                 action: () => 
                 {
-                    return JSON.stringify({ quests: this.questHelper.getQuestsFromDb() });
+                    return JSON.stringify({ templates: this.questHelper.getQuestsFromDb() });
                 }
             }], "GetAllQuestTemplates"
+        );
+
+        // Read custom quests from file
+        dynamicRouterModService.registerDynamicRouter(`DynamicGetCustomQuests${modName}`,
+            [{
+                url: "/QuestingBots/GetCustomQuests/",
+                action: (url: string) => 
+                {
+                    const urlParts = url.split("/");
+                    const locationID = urlParts[urlParts.length - 1];
+
+                    const quests = this.questManager.getCustomQuests(locationID);
+                    
+                    return JSON.stringify({ quests: quests });
+                }
+            }], "GetCustomQuests"
         );
     }
 	
@@ -130,13 +148,14 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
+        this.vfs = container.resolve<VFS>("VFS");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iLocationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
-        this.questManager = new QuestManager(this.logger);
+        this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
         // Adjust parameters to make debugging easier
         if (modConfig.enabled && modConfig.debug.enabled)

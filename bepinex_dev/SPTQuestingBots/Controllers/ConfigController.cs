@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Common.Http;
 using Newtonsoft.Json;
+using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -39,7 +40,16 @@ namespace SPTQuestingBots.Controllers
             string errorMessage = "Cannot read quest templates.";
             string json = RequestHandler.GetJson("/QuestingBots/GetAllQuestTemplates");
 
-            TryDeserializeObject(json, errorMessage, out Configuration.QuestTemplatesConfig _templates);
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
+            return _templates.Templates;
+        }
+
+        public static Quest[] GetCustomQuests(string locationID)
+        {
+            string errorMessage = "Cannot read custom quests.";
+            string json = RequestHandler.GetJson("/QuestingBots/GetCustomQuests/" + locationID);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
             return _templates.Quests;
         }
 

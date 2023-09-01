@@ -107,7 +107,7 @@
     <Compile Include="Configuration\ModConfig.cs" />
     <Compile Include="Configuration\QuestGenerationConfig.cs" />
     <Compile Include="Configuration\QuestSettingsConfig.cs" />
-    <Compile Include="Configuration\QuestTemplatesConfig.cs" />
+    <Compile Include="Configuration\QuestDataConfig.cs" />
     <Compile Include="Controllers\BotGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
