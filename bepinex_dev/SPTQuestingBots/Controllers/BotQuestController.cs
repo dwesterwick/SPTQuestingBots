@@ -241,12 +241,7 @@ namespace SPTQuestingBots.Controllers
                     LoggingController.LogInfo("Too much time has elapsed in the raid to add a spawn-rush quest.");
                 }
 
-                Quest[] customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
-                if (customQuests.Length > 0)
-                {
-                    allQuests.AddRange(customQuests);
-                    LoggingController.LogInfo("Added " + customQuests.Length + " custom quests");
-                }
+                LoadCustomQuests();
 
                 HaveTriggersBeenFound = true;
                 LoggingController.LogInfo("Finished loading quest data.");
@@ -255,6 +250,29 @@ namespace SPTQuestingBots.Controllers
             {
                 IsFindingTriggers = false;
             }
+        }
+
+        private void LoadCustomQuests()
+        {
+            Quest[] customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
+            if (customQuests.Length == 0)
+            {
+                return;
+            }
+
+            LoggingController.LogInfo("Loading custom quests...");
+            foreach (Quest quest in customQuests)
+            {
+                LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
+
+                foreach (QuestObjective objective in quest.ValidObjectives)
+                {
+                    LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
+                }
+            }
+
+            allQuests.AddRange(customQuests);
+            LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");
         }
 
         private void LocateQuestItems(Quest quest, IEnumerable<LootItem> allLoot)
