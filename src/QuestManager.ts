@@ -4,6 +4,7 @@ import { VFS } from "@spt-aki/utils/VFS";
 
 export interface Quest
 {
+    repeatable: boolean,
     minLevel: number,
     maxLevel: number,
     chanceForSelecting: number,
@@ -14,6 +15,7 @@ export interface Quest
 
 export interface QuestObjective
 {
+    repeatable: boolean,
     maxBots: number,
     minDistanceFromBot: number,
     maxDistanceFromBot: number,

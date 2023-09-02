@@ -9,6 +9,9 @@ namespace SPTQuestingBots.Configuration
 {
     public class BotQuestingRequirementsConfig
     {
+        [JsonProperty("exclude_bots_by_level")]
+        public bool ExcludeBotsByLevel { get; set; } = false;
+
         [JsonProperty("min_hydration")]
         public float MinHydration { get; set; } = 50;
 

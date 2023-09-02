@@ -34,6 +34,7 @@
 		"max_navmesh_path_error": 10
 	},
 	"bot_questing_requirements": {
+		"exclude_bots_by_level": true,
 		"min_hydration": 20,
 		"min_energy": 20,
 		"min_health_head": 50,
@@ -57,7 +58,15 @@
 		"eft_quests": {
 			"priority": 6,
 			"chance": 50,
-			"max_bots_per_quest": 3
+			"max_bots_per_quest": 3,
+			"level_range": [
+				[0, 80],
+				[1, 8],
+				[10, 15],
+				[20, 25],
+				[30, 30],
+				[40, 40]
+			]
 		},
 		"spawn_rush": {
 			"priority": 3,

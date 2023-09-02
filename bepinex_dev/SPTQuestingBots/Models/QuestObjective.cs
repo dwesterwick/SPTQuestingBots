@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Models
 {
     public class QuestObjective
     {
+        [JsonProperty("repeatable")]
+        public bool IsRepeatable { get; set; } = false;
+
         [JsonProperty("maxBots")]
         public int MaxBots { get; set; } = 2;
 
@@ -168,7 +171,7 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            if (successfulBots.Contains(bot) || unsuccessfulBots.Contains(bot))
+            if ((!IsRepeatable && successfulBots.Contains(bot)) || unsuccessfulBots.Contains(bot))
             {
                 return false;
             }

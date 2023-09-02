@@ -9,6 +9,7 @@ using System.Security.AccessControl;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
@@ -162,29 +163,41 @@ namespace SPTQuestingBots.Controllers
 
         public static Quest GetRandomQuestForBot(BotOwner bot)
         {
-            List<Quest> applicableQuests = allQuests
+            System.Random random = new System.Random();
+
+            var groupedQuests = allQuests
                 .Where(q => q.CanAssignBot(bot))
                 .Where(q => q.NumberOfValidObjectives > 0)
-                .ToList();
-            
-            if (applicableQuests.Count == 0)
+                .GroupBy
+                (
+                    q => q.Priority,
+                    q => q,
+                    (key, q) => new { Priority = key, Quests = q.ToList() }
+                )
+                .OrderBy(g => g.Priority);
+
+            if (!groupedQuests.Any())
             {
                 return null;
             }
 
-            System.Random random = new System.Random();
-            IEnumerable<Quest> prioritizedQuests = applicableQuests.OrderBy(q => q.Priority * 100 + random.NextFloat(-1, 1));
-            //LoggingController.LogInfo("Possible quests (in order of priority) for bot " + bot.Profile.Nickname + ": " + string.Join(", ", orderedQuests.Select(q => q.Name)));
-
-            foreach (Quest quest in prioritizedQuests)
+            foreach (var priorityGroup in groupedQuests)
             {
-                if (random.NextFloat(0, 100) < quest.ChanceForSelecting)
+                IEnumerable<Quest> randomizedQuests = priorityGroup.Quests.OrderBy(q => random.NextFloat(-100, 100));
+
+                if (!randomizedQuests.Any())
                 {
-                    return quest;
+                    continue;
+                }
+
+                Quest firstRandomQuest = randomizedQuests.First();
+                if (random.NextFloat(0, 100) < firstRandomQuest.ChanceForSelecting)
+                {
+                    return firstRandomQuest;
                 }
             }
 
-            return prioritizedQuests.First();
+            return groupedQuests.First().Quests.Random();
         }
 
         private IEnumerator LoadAllQuests()
@@ -363,9 +376,11 @@ namespace SPTQuestingBots.Controllers
                 quest.AddObjective(objective);
             }
 
-            int minLevel = getMinLevelForQuest(quest);
-            //LoggingController.LogInfo("Min level for quest \"" + quest.Name + "\": " + minLevel);
-            quest.MinLevel = minLevel;
+            quest.MinLevel = getMinLevelForQuest(quest);
+            double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
+            quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
+
+            //LoggingController.LogInfo("Level range for quest \"" + quest.Name + "\": " + quest.MinLevel + "-" + quest.MaxLevel);
         }
 
         private int getMinLevelForQuest(Quest quest)
@@ -546,9 +561,9 @@ namespace SPTQuestingBots.Controllers
                     sb.Append(quest.MinLevel + ",");
                     sb.Append(quest.MaxLevel + ",");
                     sb.Append((firstPosition.HasValue ? "\"" + firstPosition.Value.ToString() + "\"" : "N/A") + ",");
-                    sb.Append(string.Join(",", objective.ActiveBots.Select(b => b.Profile.Nickname)) + ",");
-                    sb.Append(string.Join(",", objective.SuccessfulBots.Select(b => b.Profile.Nickname)) + ",");
-                    sb.AppendLine(string.Join(",", objective.UnsuccessfulBots.Select(b => b.Profile.Nickname)));
+                    sb.Append(GetBotListText(objective.ActiveBots) + ",");
+                    sb.Append(GetBotListText(objective.SuccessfulBots) + ",");
+                    sb.AppendLine(GetBotListText(objective.UnsuccessfulBots));
                 }
             }
 
@@ -576,6 +591,11 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogError("Writing quest log file...failed!");
                 LoggingController.LogError(e.ToString());
             }
+        }
+
+        private string GetBotListText(IEnumerable<BotOwner> bots)
+        {
+            return string.Join(",", bots.Select(b => b.Profile.Nickname + " (Level " + b.Profile.Info.Level + ")"));
         }
     }
 }

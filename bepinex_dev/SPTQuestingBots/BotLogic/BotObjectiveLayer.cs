@@ -329,7 +329,7 @@ namespace SPTQuestingBots.BotLogic
                 {
                     if (!wasLooting)
                     {
-                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot...");
+                        //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is searching for loot...");
                     }
 
                     lootSearchTimer.Start();

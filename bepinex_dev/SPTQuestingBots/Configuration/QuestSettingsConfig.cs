@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_raid_ET")]
         public float MaxRaidET { get; set; } = 999;
 
+        [JsonProperty("level_range")]
+        public double[][] LevelRange { get; set; } = new double[0][];
+
         public QuestSettingsConfig()
         {
 

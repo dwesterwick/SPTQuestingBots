@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Models
 {
     public class Quest
     {
+        [JsonProperty("repeatable")]
+        public bool IsRepeatable { get; set; } = false;
+
         [JsonProperty("minLevel")]
         public int MinLevel { get; set; } = 0;
 
@@ -82,7 +85,11 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            return !blacklistedBots.Contains(bot);
+            bool canAssign = !blacklistedBots.Contains(bot)
+                && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel)
+                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel);
+
+            return canAssign;
         }
 
         public void AddObjective(QuestObjective objective)

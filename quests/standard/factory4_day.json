@@ -1,15 +1,17 @@
 [
     {
+        "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 100,
-        "priority": 1,
+        "chanceForSelecting": 30,
+        "priority": 3,
         "name": "3rd Floor Office",
         "objectives" : [
             {
-                "maxBots": 6,
-                "minDistanceFromBot": 1,
-                "maxDistanceFromBot": 999,
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
