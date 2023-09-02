@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
+using EFT.InventoryLogic;
 using EFT.Quests;
 using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Models;
@@ -29,6 +31,7 @@ namespace SPTQuestingBots.Controllers
         private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
         private static List<BotOwner> bossesInLocation = new List<BotOwner>();
         private static Dictionary<BotOwner, List<BotOwner>> bossFollowersInLocation = new Dictionary<BotOwner, List<BotOwner>>();
+        private static string previousLocationID = null;
 
         public void Clear()
         {
@@ -57,6 +60,11 @@ namespace SPTQuestingBots.Controllers
         {
             if (LocationController.CurrentLocation == null)
             {
+                if (HaveTriggersBeenFound)
+                {
+                    WriteQuestLogFile();
+                }
+
                 Clear();
                 return;
             }
@@ -67,6 +75,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             StartCoroutine(LoadAllQuests());
+            previousLocationID = LocationController.CurrentLocation.Id;
         }
 
         public static BotType GetBotType(BotOwner botOwner)
@@ -496,7 +505,7 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name);
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
-                objective.SetAllPositions(navMeshTargetPoint.Value);
+                objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value));
                 objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? 2 : 1;
 
                 zoneIDsInLocation.Add(trigger.Id);
@@ -511,6 +520,61 @@ namespace SPTQuestingBots.Controllers
                 Vector3[] triggerTargetPoint = PathRender.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
                 PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
                 PathRender.AddOrUpdatePath(triggerTargetPosSphere);
+            }
+        }
+
+        private void WriteQuestLogFile()
+        {
+            if (!ConfigController.Config.Debug.Enabled)
+            {
+                return;
+            }
+
+            LoggingController.LogInfo("Writing quest log file...");
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Quest Name,Objective,Steps,Min Level,Max Level,First Step Position,Active Bots,Successful Bots,Unsuccessful Bots");
+            foreach (Quest quest in allQuests)
+            {
+                foreach (QuestObjective objective in quest.AllObjectives)
+                {
+                    Vector3? firstPosition = objective.GetFirstStepPosition();
+
+                    sb.Append(quest.Name + ",");
+                    sb.Append("\"" + objective.ToString() + "\",");
+                    sb.Append(objective.StepCount + ",");
+                    sb.Append(quest.MinLevel + ",");
+                    sb.Append(quest.MaxLevel + ",");
+                    sb.Append((firstPosition.HasValue ? "\"" + firstPosition.Value.ToString() + "\"" : "N/A") + ",");
+                    sb.Append(string.Join(",", objective.ActiveBots.Select(b => b.Profile.Nickname)) + ",");
+                    sb.Append(string.Join(",", objective.SuccessfulBots.Select(b => b.Profile.Nickname)) + ",");
+                    sb.AppendLine(string.Join(",", objective.UnsuccessfulBots.Select(b => b.Profile.Nickname)));
+                }
+            }
+
+            string filename = ConfigController.GetLoggingPath()
+                + "quests_"
+                + previousLocationID.Replace(" ", "")
+                + "_"
+                + DateTime.Now.ToFileTimeUtc()
+                + ".csv";
+
+            try
+            {
+                if (!Directory.Exists(ConfigController.LoggingPath))
+                {
+                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                }
+
+                File.WriteAllText(filename, sb.ToString());
+
+                LoggingController.LogInfo("Writing quest log file...done.");
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Filename", filename);
+                LoggingController.LogError("Writing quest log file...failed!");
+                LoggingController.LogError(e.ToString());
             }
         }
     }

@@ -76,6 +76,17 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "ReportError"
         );
 
+        // Get the logging directory for saving quest information after raids
+        staticRouterModService.registerStaticRouter(`StaticGetLoggingPath${modName}`,
+            [{
+                url: "/QuestingBots/GetLoggingPath",
+                action: () => 
+                {
+                    return JSON.stringify({ path: __dirname + "/../log/" });
+                }
+            }], "GetLoggingPath"
+        );
+
         if (!modConfig.enabled)
         {
             return;

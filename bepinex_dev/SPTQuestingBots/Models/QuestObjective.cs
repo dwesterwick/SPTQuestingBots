@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,11 @@ namespace SPTQuestingBots.Models
         private List<BotOwner> unsuccessfulBots = new List<BotOwner>();
 
         public bool CanAssignMoreBots => currentStepsForBots.Count < MaxBots;
-        
+        public int StepCount => questObjectiveSteps.Length;
+        public ReadOnlyCollection<BotOwner> SuccessfulBots => new ReadOnlyCollection<BotOwner>(successfulBots);
+        public ReadOnlyCollection<BotOwner> UnsuccessfulBots => new ReadOnlyCollection<BotOwner>(unsuccessfulBots);
+        public ReadOnlyCollection<BotOwner> ActiveBots => new ReadOnlyCollection<BotOwner>(currentStepsForBots.Keys.ToArray());
+
         public QuestObjective()
         {
 
@@ -69,6 +74,11 @@ namespace SPTQuestingBots.Models
             {
                 step.SetPosition(null);
             }
+        }
+
+        public void AddStep(QuestObjectiveStep step)
+        {
+            questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();
         }
 
         public Vector3? GetFirstStepPosition()

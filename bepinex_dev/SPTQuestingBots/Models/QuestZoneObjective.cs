@@ -36,7 +36,7 @@ namespace SPTQuestingBots.Models
         {
             if (ZoneID != null)
             {
-                return "Zone " + ZoneID;
+                return "Zone " + (ZoneID ?? "???");
             }
 
             return base.ToString();

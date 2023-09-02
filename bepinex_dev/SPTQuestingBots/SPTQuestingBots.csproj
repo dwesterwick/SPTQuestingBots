@@ -93,6 +93,7 @@
     <Compile Include="Configuration\AllowedBotTypesForQuestingConfig.cs" />
     <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
     <Compile Include="Configuration\BreakForLootingConfig.cs" />
+    <Compile Include="Configuration\LoggingPath.cs" />
     <Compile Include="Configuration\MaxFollowerDistanceConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />

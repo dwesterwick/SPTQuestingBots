@@ -13,6 +13,7 @@ namespace SPTQuestingBots.Controllers
     public static class ConfigController
     {
         public static Configuration.ModConfig Config { get; private set; } = null;
+        public static string LoggingPath { get; private set; } = null;
 
         public static Configuration.ModConfig GetConfig()
         {
@@ -33,6 +34,28 @@ namespace SPTQuestingBots.Controllers
         public static void ReportError(string errorMessage)
         {
             RequestHandler.GetJson("/QuestingBots/ReportError/" + errorMessage);
+        }
+
+        public static string GetLoggingPath()
+        {
+            if (LoggingPath != null)
+            {
+                return LoggingPath;
+            }
+
+            string errorMessage = "Cannot retrieve logging path from the server. Falling back to using the current directory.";
+            string json = RequestHandler.GetJson("/QuestingBots/GetLoggingPath");
+
+            if (TryDeserializeObject(json, errorMessage, out Configuration.LoggingPath _path))
+            {
+                LoggingPath = _path.Path;
+            }
+            else
+            {
+                LoggingPath = Assembly.GetExecutingAssembly().Location;
+            }
+
+            return LoggingPath;
         }
 
         public static RawQuestClass[] GetAllQuestTemplates()

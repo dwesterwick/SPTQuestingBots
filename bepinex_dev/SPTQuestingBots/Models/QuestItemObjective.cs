@@ -12,6 +12,8 @@ namespace SPTQuestingBots.Models
     {
         public LootItem Item { get; set; } = null;
 
+        private string ItemName = null;
+
         public QuestItemObjective() : base()
         {
 
@@ -20,6 +22,7 @@ namespace SPTQuestingBots.Models
         public QuestItemObjective(LootItem item, Vector3 position) : base(position)
         {
             Item = item;
+            ItemName = Item.Item.LocalizedName();
         }
 
         public override void Clear()
@@ -32,7 +35,7 @@ namespace SPTQuestingBots.Models
         {
             if (Item != null)
             {
-                return "Item " + Item.Item.LocalizedName();
+                return "Item " + (ItemName ?? "???");
             }
 
             return base.ToString();
