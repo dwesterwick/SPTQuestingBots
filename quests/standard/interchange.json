@@ -1,0 +1,27 @@
+[
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Back Hall",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 71.6985855,
+                            "y": 27.0862865,
+                            "z": 186.985275
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

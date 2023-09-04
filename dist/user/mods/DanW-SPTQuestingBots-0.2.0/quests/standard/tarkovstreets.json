@@ -1,0 +1,27 @@
+[
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Cinema Under Stairs",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -148.094284,
+                            "y": 2.11337948,
+                            "z": 404.572327
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,798 @@
+[
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Scav Base",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -177.7938,
+                            "y": -1.86498344,
+                            "z": 264.2937
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -167.997452,
+                            "y": -1.86646283,
+                            "z": 254.755524
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -209.643173,
+                            "y": -1.87047768,
+                            "z": 203.157959
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -210.935165,
+                            "y": -1.8704772,
+                            "z": 209.023148
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -205.404922,
+                            "y": -1.870477,
+                            "z": 216.002289
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "RUAF Roadblock Crates",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.865929,
+                            "y": -1.36006165,
+                            "z": 402.163239
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Ambulance",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -97.62972,
+                            "y": -15.4367075,
+                            "z": 219.63356
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Sawmill Shack",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -25.649519,
+                            "y": -3.64485335,
+                            "z": 46.2749367
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 5,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Sawmill Cabins",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -5.1944375,
+                            "y": -1.48043585,
+                            "z": -69.47066
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -5.45717,
+                            "y": -1.48043573,
+                            "z": -74.78532
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -1.8593502,
+                            "y": -1.47943592,
+                            "z": -80.4823456
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 5,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Sawmill Warehouse",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 1,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.10556,
+                            "y": -1.77957737,
+                            "z": -47.3434563
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 22,
+        "name": "Sawmill Common Fund Stash",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 24.0236053,
+                            "y": -2.62782359,
+                            "z": -30.522398
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 3,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Spine",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -248.281311,
+                            "y": 26.28598,
+                            "z": -196.449127
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -333.594666,
+                            "y": 28.02395,
+                            "z": -227.685669
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Mountain Crates",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -155.813644,
+                            "y": 51.1307945,
+                            "z": -275.110626
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -232.665787,
+                            "y": 67.69444,
+                            "z": -229.943024
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -210.42453,
+                            "y": 76.26718,
+                            "z": -272.8206
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Sawmill Checkpoint",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 239.719971,
+                            "y": -1.81444216,
+                            "z": -70.82752
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 7,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "ZB-014 Inner Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 446.2245,
+                            "y": -14.2453909,
+                            "z": 61.3314667
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Scav House Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 315.242,
+                            "y": -5.0619173,
+                            "z": 268.3706
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 388.109528,
+                            "y": -11.7437077,
+                            "z": 286.043579
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 448.592,
+                            "y": -17.1530151,
+                            "z": 245.3854
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Old Sawmill",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -512.148438,
+                            "y": 15.9153662,
+                            "z": -177.12027
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -548.2082,
+                            "y": 18.1274471,
+                            "z": -205.271057
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -534.3246,
+                            "y": 18.10662,
+                            "z": -204.977951
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Scav Town Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -508.473572,
+                            "y": 23.2766037,
+                            "z": -283.2213
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -521.9508,
+                            "y": 21.679018,
+                            "z": -287.813782
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -487.4673,
+                            "y": 22.4202023,
+                            "z": -271.866455
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Scav Town",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -460.5816,
+                            "y": 15.5233068,
+                            "z": -364.776917
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -498.9938,
+                            "y": 15.2425175,
+                            "z": -403.2168
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -454.75824,
+                            "y": 15.3771315,
+                            "z": -399.002716
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Scav Bridge Overlook",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 134.112366,
+                            "y": 24.5597134,
+                            "z": -758.4981
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 141.973083,
+                            "y": 24.399416,
+                            "z": -729.4716
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 140.3757,
+                            "y": 27.19339,
+                            "z": -726.4303
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Scav Bunker",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 232.451248,
+                            "y": 24.2566319,
+                            "z": -701.5514
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 224.623245,
+                            "y": 24.6960411,
+                            "z": -717.584
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 222.829453,
+                            "y": 20.149086,
+                            "z": -707.4061
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp North",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 275.219055,
+                            "y": 22.8832073,
+                            "z": -508.393677
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 295.700378,
+                            "y": 22.8941936,
+                            "z": -505.805725
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp South",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 307.0511,
+                            "y": 23.0367184,
+                            "z": -459.85318
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 278.270233,
+                            "y": 22.9719849,
+                            "z": -434.362
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

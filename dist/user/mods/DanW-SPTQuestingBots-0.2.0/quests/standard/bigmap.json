@@ -1,0 +1,27 @@
+[
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Crackhouse",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 79.08468,
+                            "y": 4.67267847,
+                            "z": -156.714111
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

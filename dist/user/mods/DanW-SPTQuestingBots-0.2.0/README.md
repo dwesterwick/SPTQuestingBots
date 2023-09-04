@@ -33,6 +33,11 @@
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
+* Some quest items or locations can't be resolved:
+    * Fortress in Customs for Capturing Outposts
+    * Scav Base in Woods for Capturing Outposts
+    * Bronze pocket watch
+    * Mountain Area in Woods for Return the Favor
 
 **Planned Improvements for Bot Questing:**
 * Custom quests (defined via JSON files)

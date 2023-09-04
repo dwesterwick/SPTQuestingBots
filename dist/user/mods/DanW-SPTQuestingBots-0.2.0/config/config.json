@@ -56,11 +56,11 @@
 	},
 	"bot_quests": {
 		"eft_quests": {
-			"priority": 6,
+			"priority": 15,
 			"chance": 50,
 			"max_bots_per_quest": 3,
 			"level_range": [
-				[0, 80],
+				[0, 99],
 				[1, 8],
 				[10, 15],
 				[20, 25],
@@ -69,14 +69,14 @@
 			]
 		},
 		"spawn_rush": {
-			"priority": 3,
+			"priority": 5,
 			"chance": 50,
 			"max_bots_per_quest": 1,
 			"max_distance": 75,
 			"max_raid_ET": 30
 		},
 		"spawn_point_wander": {
-			"priority": 10,
+			"priority": 25,
 			"chance": 30,
 			"max_bots_per_quest": 30
 		}

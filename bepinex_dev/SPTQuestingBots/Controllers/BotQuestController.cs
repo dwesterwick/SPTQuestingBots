@@ -341,6 +341,14 @@ namespace SPTQuestingBots.Controllers
                         if (!navMeshTargetPoint.HasValue)
                         {
                             LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
+
+                            if (ConfigController.Config.Debug.ShowZoneOutlines)
+                            {
+                                Vector3[] itemPositionOutline = PathRender.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
+                                PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.cyan);
+                                PathRender.AddOrUpdatePath(itemPositionSphere);
+                            }
+
                             return;
                         }
 

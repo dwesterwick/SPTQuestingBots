@@ -79,8 +79,13 @@ namespace SPTQuestingBots.BotLogic
 
         public static ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> GetBrainLayersForBot(BotOwner botOwner)
         {
-
             ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new AICoreLayerClass<BotLogicDecision>[0]);
+
+            if (botOwner?.Brain?.BaseBrain == null)
+            {
+                LoggingController.LogError("Invalid base brain for bot " + botOwner.Profile.Nickname);
+                return emptyCollection;
+            }
 
             Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
             FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);

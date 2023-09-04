@@ -4,8 +4,83 @@
         "minLevel": 0,
         "maxLevel": 99,
         "chanceForSelecting": 30,
-        "priority": 3,
+        "priority": 20,
         "name": "3rd Floor Office",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "1st Floor Office",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 27.93569,
+                            "y": 1.05174947,
+                            "z": 45.4769974
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "3rd Floor Bridge",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 34.9922,
+                            "y": 7.80017853,
+                            "z": 31.46494
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Med Tent",
         "objectives" : [
             {
                 "repeatable": true,
@@ -15,9 +90,9 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 9.189334,
-                            "y": 8.210877,
-                            "z": 35.23968
+                            "x": -16.1654949,
+                            "y": 0.259162873,
+                            "z": -25.7997437
                         }
                     }
                 ]

@@ -1,0 +1,27 @@
+[
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Armoured Train",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 28.69025,
+                            "y": 10.511529,
+                            "z": -946.2334
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]
