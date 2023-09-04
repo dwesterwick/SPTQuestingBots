@@ -10,6 +10,7 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
+using static GClass1711;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -268,7 +269,7 @@ namespace SPTQuestingBots.Controllers
 
         public static Models.Quest CreateSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
-            IEnumerable<SpawnPointParams> eligibleSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
+            IEnumerable<SpawnPointParams> eligibleSpawnPoints = CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
             if (eligibleSpawnPoints.IsNullOrEmpty())
             {
                 return null;
@@ -287,6 +288,7 @@ namespace SPTQuestingBots.Controllers
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 objective.MaxBots = ConfigController.Config.BotQuests.SpawnPointWander.MaxBotsPerQuest;
+                objective.MinDistanceFromBot = ConfigController.Config.BotQuests.SpawnPointWander.MinDistance;
                 quest.AddObjective(objective);
             }
 
@@ -295,11 +297,6 @@ namespace SPTQuestingBots.Controllers
 
         public static Models.Quest CreateSpawnRushQuest()
         {
-            if (GetElapsedRaidTime(CurrentLocation.Id) > ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
-            {
-                return null;
-            }
-
             SpawnPointParams? playerSpawnPoint = getPlayerSpawnPoint();
             if (!playerSpawnPoint.HasValue)
             {
@@ -319,9 +316,12 @@ namespace SPTQuestingBots.Controllers
 
             Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnRush.Priority, "Spawn Rush");
             quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
+            quest.MaxRaidET = ConfigController.Config.BotQuests.SpawnRush.MaxRaidET;
+
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
             objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
             objective.MaxBots = ConfigController.Config.BotQuests.SpawnRush.MaxBotsPerQuest;
+
             quest.AddObjective(objective);
             return quest;
         }

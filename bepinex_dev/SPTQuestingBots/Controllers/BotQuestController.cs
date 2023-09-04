@@ -263,21 +263,14 @@ namespace SPTQuestingBots.Controllers
                     LoggingController.LogError("Could not add quest for going to random spawn points");
                 }
 
-                if (LocationController.GetElapsedRaidTime() < ConfigController.Config.BotQuests.SpawnRush.MaxRaidET)
+                Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
+                if (spawnRushQuest != null)
                 {
-                    Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
-                    if (spawnRushQuest != null)
-                    {
-                        allQuests.Add(spawnRushQuest);
-                    }
-                    else
-                    {
-                        LoggingController.LogError("Could not add quest for rushing your spawn point");
-                    }
+                    allQuests.Add(spawnRushQuest);
                 }
                 else
                 {
-                    LoggingController.LogInfo("Too much time has elapsed in the raid to add a spawn-rush quest.");
+                    LoggingController.LogError("Could not add quest for rushing your spawn point");
                 }
 
                 LoadCustomQuests();
@@ -299,16 +292,18 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            /*LoggingController.LogInfo("Loading custom quests...");
+            LoggingController.LogInfo("Loading custom quests...");
             foreach (Quest quest in customQuests)
             {
-                LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
+                //LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
 
                 foreach (QuestObjective objective in quest.ValidObjectives)
                 {
-                    LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
+                    objective.SnapAllStepPositionsToNavMesh();
+
+                    //LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
                 }
-            }*/
+            }
 
             allQuests.AddRange(customQuests);
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");

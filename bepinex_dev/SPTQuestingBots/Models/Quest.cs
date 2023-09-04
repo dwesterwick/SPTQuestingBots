@@ -30,6 +30,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("priority")]
         public int Priority { get; set; } = 99;
 
+        [JsonProperty("maxRaidET")]
+        public float MaxRaidET { get; set; } = 99999;
+
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
@@ -87,7 +90,8 @@ namespace SPTQuestingBots.Models
         {
             bool canAssign = !blacklistedBots.Contains(bot)
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel)
-                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel);
+                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel)
+                && LocationController.GetElapsedRaidTime() < MaxRaidET;
 
             return canAssign;
         }

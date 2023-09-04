@@ -34,10 +34,15 @@
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
 * Some quest items or locations can't be resolved:
-    * Fortress in Customs for Capturing Outposts
-    * Scav Base in Woods for Capturing Outposts
-    * Bronze pocket watch
-    * Mountain Area in Woods for Return the Favor
+    * Fortress for Capturing Outposts in Customs
+    * Scav Base for Capturing Outposts in Woods
+    * Bronze pocket watch for Checking in Customs
+    * Flash drive with fake info for Bullshit in Customs
+    * Syringe with a chemical for Chemical Part 3 in Factory
+    * Mountain Area for Return the Favor in Woods
+    * The second and third bunkers for Assessment Part 2 in Woods
+    * The satellite antenna in the USEC camp for Return the Favor in Woods
+    * The USEC camp for Search Mission in Woods
 
 **Planned Improvements for Bot Questing:**
 * Custom quests (defined via JSON files)

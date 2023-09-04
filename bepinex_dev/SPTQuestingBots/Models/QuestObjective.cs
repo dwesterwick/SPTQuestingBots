@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using Newtonsoft.Json;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
@@ -31,14 +32,14 @@ namespace SPTQuestingBots.Models
         private Dictionary<BotOwner, byte> currentStepsForBots = new Dictionary<BotOwner, byte>();
 
         [JsonIgnore]
-        private List<BotOwner> successfulBots = new List<BotOwner>();
+        private Dictionary<BotOwner, DateTime> successfulBots = new Dictionary<BotOwner, DateTime>();
 
         [JsonIgnore]
         private List<BotOwner> unsuccessfulBots = new List<BotOwner>();
 
         public bool CanAssignMoreBots => currentStepsForBots.Count < MaxBots;
         public int StepCount => questObjectiveSteps.Length;
-        public ReadOnlyCollection<BotOwner> SuccessfulBots => new ReadOnlyCollection<BotOwner>(successfulBots);
+        public ReadOnlyCollection<BotOwner> SuccessfulBots => new ReadOnlyCollection<BotOwner>(successfulBots.Keys.ToArray());
         public ReadOnlyCollection<BotOwner> UnsuccessfulBots => new ReadOnlyCollection<BotOwner>(unsuccessfulBots);
         public ReadOnlyCollection<BotOwner> ActiveBots => new ReadOnlyCollection<BotOwner>(currentStepsForBots.Keys.ToArray());
 
@@ -110,6 +111,14 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        public void SnapAllStepPositionsToNavMesh()
+        {
+            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            {
+                step.SnapToNavMesh();
+            }
+        }
+
         public bool TryAssignBot(BotOwner bot)
         {
             if (!CanAssignMoreBots)
@@ -151,9 +160,13 @@ namespace SPTQuestingBots.Models
 
         public void BotCompletedObjective(BotOwner bot)
         {
-            if (!successfulBots.Contains(bot))
+            if (!successfulBots.ContainsKey(bot))
             {
-                successfulBots.Add(bot);
+                successfulBots.Add(bot, DateTime.Now);
+            }
+            else
+            {
+                successfulBots[bot] = DateTime.Now;
             }
 
             RemoveBot(bot);
@@ -171,9 +184,23 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            if ((!IsRepeatable && successfulBots.Contains(bot)) || unsuccessfulBots.Contains(bot))
+            if (unsuccessfulBots.Contains(bot))
             {
                 return false;
+            }
+
+            if (successfulBots.ContainsKey(bot))
+            {
+                if (!IsRepeatable)
+                {
+                    return false;
+                }
+
+                TimeSpan timeSinceCompleted = DateTime.Now - successfulBots[bot];
+                if (timeSinceCompleted.TotalMilliseconds < ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay)
+                {
+                    return false;
+                }
             }
 
             Vector3? position = questObjectiveSteps[0].GetPosition();

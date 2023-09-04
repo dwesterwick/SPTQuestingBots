@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,24 @@ namespace SPTQuestingBots.Models
             }
 
             SerializablePosition = new SerializableVector3(position.Value);
+        }
+
+        public void SnapToNavMesh()
+        {
+            if (SerializablePosition == null)
+            {
+                LoggingController.LogError("Objective step does not have a position defined for it.");
+                return;
+            }
+
+            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+            if (!navMeshPosition.HasValue)
+            {
+                LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
+                return;
+            }
+
+            SerializablePosition = new SerializableVector3(navMeshPosition.Value);
         }
     }
 }

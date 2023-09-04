@@ -203,11 +203,12 @@ namespace SPTQuestingBots.BotLogic
             }
 
             targetObjectiveStep = nextObjective.GetNextObjectiveStep(botOwner);
-            Vector3? nextObjectiveStepPosition = targetObjectiveStep.GetPosition();
+            Vector3? nextObjectiveStepPosition = targetObjectiveStep?.GetPosition();
 
             if (targetObjectiveStep == null)
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has completed all steps for " + ToString());
+                nextObjective.BotCompletedObjective(botOwner);
                 return false;
             }
 

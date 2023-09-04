@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("exclude_bots_by_level")]
         public bool ExcludeBotsByLevel { get; set; } = false;
 
+        [JsonProperty("repeat_quest_delay")]
+        public float RepeatQuestDelay { get; set; } = 300;
+
         [JsonProperty("min_hydration")]
         public float MinHydration { get; set; } = 50;
 

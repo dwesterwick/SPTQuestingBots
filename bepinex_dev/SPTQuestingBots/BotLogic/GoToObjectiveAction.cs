@@ -31,12 +31,12 @@ namespace SPTQuestingBots.BotLogic
 
         public override void Update()
         {
+            UpdateBotMovement();
+
             if (!canUpdate())
             {
                 return;
             }
-
-            UpdateBotMovement();
 
             if (!objective.IsObjectiveActive || !objective.Position.HasValue)
             {
