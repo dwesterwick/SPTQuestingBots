@@ -9,6 +9,9 @@ namespace SPTQuestingBots.Configuration
 {
     public class BotQuestsConfig
     {
+        [JsonProperty("distance_randomness")]
+        public float DistanceRandomness { get; set; } = 50;
+
         [JsonProperty("eft_quests")]
         public QuestSettingsConfig EFTQuests { get; set; } = new QuestSettingsConfig();
 

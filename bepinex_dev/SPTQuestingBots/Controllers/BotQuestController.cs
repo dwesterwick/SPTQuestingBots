@@ -16,6 +16,7 @@ using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT.Quests;
 using SPTQuestingBots.BotLogic;
+using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -163,8 +164,6 @@ namespace SPTQuestingBots.Controllers
 
         public static Quest GetRandomQuestForBot(BotOwner bot)
         {
-            System.Random random = new System.Random();
-
             var groupedQuests = allQuests
                 .Where(q => q.CanAssignBot(bot))
                 .Where(q => q.NumberOfValidObjectives > 0)
@@ -183,12 +182,30 @@ namespace SPTQuestingBots.Controllers
 
             foreach (var priorityGroup in groupedQuests)
             {
-                IEnumerable<Quest> randomizedQuests = priorityGroup.Quests.OrderBy(q => random.NextFloat(-100, 100));
+                Dictionary<Quest, MinMaxConfig> questObjectiveDistances = new Dictionary<Quest, MinMaxConfig>();
+                foreach (Quest quest in priorityGroup.Quests)
+                {
+                    IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
+                    IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p.Value);
+                    IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot.Position, p));
 
-                if (!randomizedQuests.Any())
+                    questObjectiveDistances.Add(quest, new MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
+                }
+
+                if (questObjectiveDistances.Count == 0)
                 {
                     continue;
                 }
+
+                double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
+                int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.BotQuests.DistanceRandomness / 100.0);
+
+                //LoggingController.LogInfo("Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);
+
+                System.Random random = new System.Random();
+                IEnumerable<Quest> randomizedQuests = questObjectiveDistances
+                    .OrderBy(q => q.Value.Min + random.NextFloat(-1 * maxRandomDistance, maxRandomDistance))
+                    .Select(q => q.Key);
 
                 Quest firstRandomQuest = randomizedQuests.First();
                 if (random.NextFloat(0, 100) < firstRandomQuest.ChanceForSelecting)
@@ -282,7 +299,7 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            LoggingController.LogInfo("Loading custom quests...");
+            /*LoggingController.LogInfo("Loading custom quests...");
             foreach (Quest quest in customQuests)
             {
                 LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
@@ -291,7 +308,7 @@ namespace SPTQuestingBots.Controllers
                 {
                     LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
                 }
-            }
+            }*/
 
             allQuests.AddRange(customQuests);
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");
@@ -344,8 +361,8 @@ namespace SPTQuestingBots.Controllers
 
                             if (ConfigController.Config.Debug.ShowZoneOutlines)
                             {
-                                Vector3[] itemPositionOutline = PathRender.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
-                                PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.cyan);
+                                Vector3[] itemPositionOutline = PathRender.GetSpherePoints(item.transform.position, 0.5f, 10);
+                                PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
                                 PathRender.AddOrUpdatePath(itemPositionSphere);
                             }
 

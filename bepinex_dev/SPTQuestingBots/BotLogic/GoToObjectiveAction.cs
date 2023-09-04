@@ -36,6 +36,8 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
+            UpdateBotMovement();
+
             if (!objective.IsObjectiveActive || !objective.Position.HasValue)
             {
                 return;

@@ -19,5 +19,11 @@ namespace SPTQuestingBots.Configuration
         {
 
         }
+
+        public MinMaxConfig(double min, double max): this()
+        {
+            Min = min;
+            Max = max;
+        }
     }
 }

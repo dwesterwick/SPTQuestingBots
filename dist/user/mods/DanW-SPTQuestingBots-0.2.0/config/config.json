@@ -55,6 +55,7 @@
 		}
 	},
 	"bot_quests": {
+		"distance_randomness": 30,
 		"eft_quests": {
 			"priority": 15,
 			"chance": 50,
