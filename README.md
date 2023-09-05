@@ -17,10 +17,28 @@
 * All PMC bots will automatically select random quests, regardless of their spawn time
 * There are currently three types of quests available:
     * (50% Chance) Zones and item locations for actual EFT quests (these are dynamically generated using the quest-data from the server, so it will also work with mods that add or change quests)
-    * (30% Chance) Going to random spawn points on the map
+    * (15% Chance) Going to random spawn points on the map
     * (50% Chance) Rushing your spawn point if it's within 75m and within the first 30s of the raid (configurable)
+    * (User-Specified Chance) Going to user-specified locations
 * After reaching an objective or giving up, the bot will wait a configurable amount of time (currently 10s) before going to its next objective
 * If a bot sees and enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
+* Once a bot begins a quest, it will try to complete all objectives in it before moving to the next one
+* Quests can be configured with the following parameters:
+    * Min/Max player level
+    * Max raid ET
+    * Priority number
+    * Chance of a bot selecting it
+    * Min/Max distance from the bot for each objective
+    * Max number of bots allowed per objective
+
+**---------- Bot Quest-Selection Algorithm Overview ----------**
+1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (is not blocked by player level, etc.)
+2) Quests are grouped by priority number in ascending order
+3) For each group, the following is performed:
+    a) Distances from the bot to each quest objective are calculated
+    b) Quests are sorted in ascending order based on the distance from the nearest objective to the bot, but randomness is added via **distance_randomness**, which is a percentage of the total range of distances for the objectives in the group
+    c) A random number from 0-100 is selected and compared to the **chance** setting for the first quest in the group. If the number is less than the value of **chance**, the quest is assigned to the bot. 
+4) If the bot isn't assigned a quest from any of the groups in step (3), it's assigned a random quest from the lowest-priority group.
 
 **Known Issues for Bot Questing:**
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
@@ -45,12 +63,9 @@
     * The USEC camp for Search Mission in Woods
 
 **Planned Improvements for Bot Questing:**
-* Custom quests (defined via JSON files)
-* Specifying the order in which bots should go to quest objectives
 * Adding an objective type for waiting a specified amount of time while patrolling the last objective area (for quests like Capturing Outposts)
 * Adding a quest for hidden-stash-running with dynamically-generated objectives using the positions of all hidden stashes on the map
 * Being able to invoke SAIN's logic for having bots extract from the map
-* Adding min/max player levels for quests, so bots will only perform them if their level is reasonable
 * Optionally overriding the default priority for EFT quests to make bots more or less likely to select them
 
 **---------- Initial PMC Spawning Overview ----------**

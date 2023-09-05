@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic
 {
     internal class BotObjectiveLayer : CustomLayer
     {
-        private BotObjectiveManager objective;
+        private BotObjectiveManager objectiveManager;
         private BotOwner botOwner;
         private BotMonitor botMonitor;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
@@ -41,8 +41,8 @@ namespace SPTQuestingBots.BotLogic
             botOwner = _botOwner;
             botMonitor = new BotMonitor(botOwner);
 
-            objective = botOwner.GetPlayer.gameObject.AddComponent<BotObjectiveManager>();
-            objective.Init(botOwner);
+            objectiveManager = botOwner.GetPlayer.gameObject.AddComponent<BotObjectiveManager>();
+            objectiveManager.Init(botOwner);
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             lootingLayerMonitor.Init(botOwner, "Looting");
@@ -64,7 +64,7 @@ namespace SPTQuestingBots.BotLogic
 
         public override Action GetNextAction()
         {
-            if (objective.IsCloseToObjective())
+            if (objectiveManager.IsCloseToObjective())
             {
                 return new Action(typeof(HoldAtObjectiveAction), "HoldAtObjective");
             }
@@ -74,7 +74,7 @@ namespace SPTQuestingBots.BotLogic
 
         public override bool IsCurrentActionEnding()
         {
-            return !objective.IsObjectiveActive || objective.IsObjectiveReached;
+            return !objectiveManager.IsObjectiveActive || objectiveManager.IsObjectiveReached;
         }
 
         public override bool IsActive()
@@ -94,7 +94,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (!objective.IsObjectiveActive)
+            if (!objectiveManager.IsObjectiveActive)
             {
                 return false;
             }
@@ -109,7 +109,7 @@ namespace SPTQuestingBots.BotLogic
 
                     LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " is a follower for " + bossName + ". Disabling questing.");
                     BotQuestController.RegisterBossFollower(boss, botOwner);
-                    objective.StopQuesting();
+                    objectiveManager.StopQuesting();
                     return false;
                 }
             }
@@ -134,7 +134,7 @@ namespace SPTQuestingBots.BotLogic
                 string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
                 if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
                 {
-                    objective.StopQuesting();
+                    objectiveManager.StopQuesting();
 
                     LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " wants to extract and will no longer quest.");
                     return false;
@@ -182,23 +182,23 @@ namespace SPTQuestingBots.BotLogic
             }
             wasSearchingForEnemy = false;
 
-            objective.CanChangeObjective = objective.TimeSinceChangingObjective > minTimeBetweenSwitchingObjectives;
+            objectiveManager.CanChangeObjective = objectiveManager.TimeSinceChangingObjective > minTimeBetweenSwitchingObjectives;
 
-            if (!objective.CanReachObjective && !objective.CanChangeObjective)
+            if (!objectiveManager.CanReachObjective && !objectiveManager.CanChangeObjective)
             {
                 return pauseLayer();
             }
 
-            if (objective.CanChangeObjective && (objective.TimeSpentAtObjective > objective.MinTimeAtObjective))
+            if (objectiveManager.CanChangeObjective && (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective))
             {
-                string previousObjective = objective.ToString();
-                if (objective.TryChangeObjective())
+                string previousObjective = objectiveManager.ToString();
+                if (objectiveManager.TryChangeObjective())
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spent " + objective.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
+                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
                 }
             }
 
-            if (!objective.IsObjectiveReached)
+            if (!objectiveManager.IsObjectiveReached)
             {
                 if (checkIfBotIsStuck())
                 {
@@ -256,7 +256,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 drawStuckBotPath();
 
-                if (objective.TryChangeObjective())
+                if (objectiveManager.TryChangeObjective())
                 {
                     botIsStuckTimer.Restart();
                 }
