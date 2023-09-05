@@ -45,8 +45,8 @@
 		"max_overweight_percentage": 100,
 		"break_for_looting": {
 			"enabled": true,
-			"min_time_between_looting_checks": 30,
-			"min_time_between_looting_events": 60,
+			"min_time_between_looting_checks": 50,
+			"min_time_between_looting_events": 80,
 			"max_time_to_start_looting": 2,
 			"max_loot_scan_time": 4
 		},

@@ -59,22 +59,23 @@ namespace SPTQuestingBots.Models
             SerializablePosition = new SerializableVector3(position.Value);
         }
 
-        public void SnapToNavMesh()
+        public bool TrySnapToNavMesh()
         {
             if (SerializablePosition == null)
             {
                 LoggingController.LogError("Objective step does not have a position defined for it.");
-                return;
+                return false;
             }
 
             Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
-                return;
+                return false;
             }
 
             SerializablePosition = new SerializableVector3(navMeshPosition.Value);
+            return true;
         }
     }
 }

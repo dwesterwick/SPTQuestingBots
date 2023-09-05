@@ -25,6 +25,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxDistanceFromBot")]
         public float MaxDistanceFromBot { get; set; } = 9999f;
 
+        [JsonProperty("name")]
+        private string name = "Unnamed Quest Objective";
+
         [JsonProperty("steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
 
@@ -65,7 +68,7 @@ namespace SPTQuestingBots.Models
 
         public override string ToString()
         {
-            return "Unnamed Quest Objective";
+            return name;
         }
 
         public virtual void Clear()
@@ -83,6 +86,11 @@ namespace SPTQuestingBots.Models
         public void AddStep(QuestObjectiveStep step)
         {
             questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();
+        }
+
+        public void SetName(string _name)
+        {
+            name = _name;
         }
 
         public Vector3? GetFirstStepPosition()
@@ -115,7 +123,10 @@ namespace SPTQuestingBots.Models
         {
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
-                step.SnapToNavMesh();
+                if (!step.TrySnapToNavMesh())
+                {
+                    LoggingController.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
+                }
             }
         }
 
@@ -141,7 +152,7 @@ namespace SPTQuestingBots.Models
                 return null;
             }
 
-            if (questObjectiveSteps.Length - 1 > currentStepsForBots[bot])
+            if (currentStepsForBots[bot] > questObjectiveSteps.Length - 1)
             {
                 RemoveBot(bot);
                 return null;

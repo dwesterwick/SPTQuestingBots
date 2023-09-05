@@ -297,8 +297,11 @@ namespace SPTQuestingBots.Controllers
             {
                 //LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
 
+                int objectiveNum = 0;
                 foreach (QuestObjective objective in quest.ValidObjectives)
                 {
+                    objectiveNum++;
+                    objective.SetName(quest.Name + ": Objective #" + objectiveNum);
                     objective.SnapAllStepPositionsToNavMesh();
 
                     //LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
