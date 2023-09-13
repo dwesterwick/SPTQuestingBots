@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
 {
-    internal class BotObjectiveManager : MonoBehaviour
+    internal class BotObjectiveManager : MonoBehaviourDelayedUpdate
     {
         public bool IsObjectiveActive { get; private set; } = false;
         public bool IsObjectiveReached { get; private set; } = false;
@@ -41,6 +41,7 @@ namespace SPTQuestingBots.BotLogic
 
         public void Init(BotOwner _botOwner)
         {
+            base.UpdateInterval = 200;
             botOwner = _botOwner;
 
             BotType botType = BotQuestController.GetBotType(botOwner);
@@ -68,6 +69,33 @@ namespace SPTQuestingBots.BotLogic
             if (botType == BotType.Undetermined)
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+            }
+        }
+
+        private void Update()
+        {
+            if (!IsObjectiveActive)
+            {
+                return;
+            }
+
+            if (IsObjectiveReached)
+            {
+                timeSpentAtObjectiveTimer.Start();
+            }
+            else
+            {
+                timeSpentAtObjectiveTimer.Reset();
+            }
+
+            if (!canUpdate())
+            {
+                return;
+            }
+
+            if (!Position.HasValue)
+            {
+                TryChangeObjective();
             }
         }
 
@@ -132,28 +160,6 @@ namespace SPTQuestingBots.BotLogic
 
             //LoggingController.LogWarning("Could not assign quest for bot " + botOwner.Profile.Nickname);
             return false;
-        }
-
-        private void Update()
-        {
-            if (!IsObjectiveActive)
-            {
-                return;
-            }
-
-            if (IsObjectiveReached)
-            {
-                timeSpentAtObjectiveTimer.Start();
-            }
-            else
-            {
-                timeSpentAtObjectiveTimer.Reset();
-            }
-
-            if (!Position.HasValue)
-            {
-                TryChangeObjective();
-            }
         }
 
         private bool TryPerformNextQuestObjectiveStep()

@@ -113,6 +113,7 @@
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
+    <Compile Include="Controllers\MonoBehaviourDelayedUpdate.cs" />
     <Compile Include="Controllers\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />

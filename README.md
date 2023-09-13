@@ -21,7 +21,7 @@
     * (50% Chance) Rushing your spawn point if it's within 75m and within the first 30s of the raid (configurable)
     * (User-Specified Chance) Going to user-specified locations
 * After reaching an objective or giving up, the bot will wait a configurable amount of time (currently 10s) before going to its next objective
-* If a bot sees and enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
+* If a bot sees an enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
 * Once a bot begins a quest, it will try to complete all objectives in it before moving to the next one
 * Quests can be configured with the following parameters:
     * Min/Max player level
@@ -42,7 +42,7 @@
 
 **Known Issues for Bot Questing:**
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
-* Bots tend to get trapped in certain spawn areas. Known areas:
+* Bots tend to get trapped in certain areas. Known areas:
     * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0)
     * Customs between Warehouse 4 and New Gas
     * Lighthouse in the mountains near the Resort spawn

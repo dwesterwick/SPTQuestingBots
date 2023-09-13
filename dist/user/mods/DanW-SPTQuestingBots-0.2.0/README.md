@@ -21,7 +21,7 @@
     * (50% Chance) Rushing your spawn point if it's within 75m and within the first 30s of the raid (configurable)
     * (User-Specified Chance) Going to user-specified locations
 * After reaching an objective or giving up, the bot will wait a configurable amount of time (currently 10s) before going to its next objective
-* If a bot sees and enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
+* If a bot sees an enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
 * Once a bot begins a quest, it will try to complete all objectives in it before moving to the next one
 * Quests can be configured with the following parameters:
     * Min/Max player level
@@ -35,14 +35,14 @@
 1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (is not blocked by player level, etc.)
 2) Quests are grouped by priority number in ascending order
 3) For each group, the following is performed:
-    a) Distances from the bot to each quest objective are calculated
-    b) Quests are sorted in ascending order based on the distance from the nearest objective to the bot, but randomness is added via **distance_randomness**, which is a percentage of the total range of distances for the objectives in the group
-    c) A random number from 0-100 is selected and compared to the **chance** setting for the first quest in the group. If the number is less than the value of **chance**, the quest is assigned to the bot. 
+    1) Distances from the bot to each quest objective are calculated
+    2) Quests are sorted in ascending order based on the distance from the nearest objective to the bot, but randomness is added via **distance_randomness**, which is a percentage of the total range of distances for the objectives in the group
+    3) A random number from 0-100 is selected and compared to the **chance** setting for the first quest in the group. If the number is less than the value of **chance**, the quest is assigned to the bot. 
 4) If the bot isn't assigned a quest from any of the groups in step (3), it's assigned a random quest from the lowest-priority group.
 
 **Known Issues for Bot Questing:**
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
-* Bots tend to get trapped in certain spawn areas. Known areas:
+* Bots tend to get trapped in certain areas. Known areas:
     * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0)
     * Customs between Warehouse 4 and New Gas
     * Lighthouse in the mountains near the Resort spawn
