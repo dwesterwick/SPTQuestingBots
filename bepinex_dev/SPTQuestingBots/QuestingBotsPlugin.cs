@@ -28,6 +28,7 @@ namespace SPTQuestingBots
             if (ConfigController.Config.Enabled)
             {
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
+                new Patches.MainMenuShowScreenPatch().Enable();
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();

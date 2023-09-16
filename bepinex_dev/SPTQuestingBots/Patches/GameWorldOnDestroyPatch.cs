@@ -19,7 +19,14 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(GameWorld __instance)
         {
-            
+            // Don't do anything if this is for the hideout
+            if (!Controllers.LocationController.HasRaidStarted)
+            {
+                return;
+            }
+
+            // Needed for compatibility with Refringe's CustomRaidTimes mod
+            Controllers.LocationController.ClearEscapeTimes();
         }
     }
 }

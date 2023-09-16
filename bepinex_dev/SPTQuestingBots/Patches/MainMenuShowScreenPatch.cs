@@ -5,21 +5,21 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
-using EFT;
+using EFT.UI;
 
 namespace SPTQuestingBots.Patches
 {
-    public class OnGameStartedPatch: ModulePatch
+    public class MainMenuShowScreenPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GameWorld).GetMethod("OnGameStarted", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(MainMenuController).GetMethod("ShowScreen", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(GameWorld __instance)
+        private static void PatchPostfix(EMenuType screen, bool turnOn)
         {
-            Controllers.LocationController.HasRaidStarted = true;
+            Controllers.LocationController.CacheEscapeTimes();
         }
     }
 }

@@ -8,6 +8,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using EFT.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,6 +16,8 @@ namespace SPTQuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {
+        public static bool HasRaidStarted { get; set; } = false;
+
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
         public static int SpawnedBotCount { get; set; } = 0;
@@ -26,7 +29,6 @@ namespace SPTQuestingBots.Controllers
         public static int ZeroWaveTotalRogueCount { get; set; } = 0;
 
         private static TarkovApplication tarkovApplication = null;
-        private static LocationSettingsClass locationSettings = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static LootableContainer[] lootableContainers = new LootableContainer[0];
@@ -53,24 +55,10 @@ namespace SPTQuestingBots.Controllers
 
         private void Update()
         {
-            if (originalEscapeTimes.Count == 0)
+            if (tarkovApplication == null)
             {
                 tarkovApplication = FindObjectOfType<TarkovApplication>();
-                if (tarkovApplication == null)
-                {
-                    return;
-                }
-
-                locationSettings = getLocationSettings(tarkovApplication);
-                if (locationSettings == null)
-                {
-                    return;
-                }
-
-                foreach (string location in locationSettings.locations.Keys)
-                {
-                    originalEscapeTimes.Add(locationSettings.locations[location].Id, locationSettings.locations[location].EscapeTimeLimit);
-                }
+                return;
             }
 
             if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
@@ -96,6 +84,44 @@ namespace SPTQuestingBots.Controllers
                 lootableContainers = FindObjectsOfType<LootableContainer>();
                 LoggingController.LogInfo("Found " + lootableContainers.Length + " lootable containers in the map");
             }
+        }
+
+        public static void ClearEscapeTimes()
+        {
+            LoggingController.LogInfo("Clearing cached escape times...");
+            originalEscapeTimes.Clear();
+            HasRaidStarted = false;
+        }
+
+        public static void CacheEscapeTimes()
+        {
+            if (originalEscapeTimes.Count > 0)
+            {
+                return;
+            }
+
+            if (tarkovApplication == null)
+            {
+                throw new InvalidOperationException("Location settings cannot be retrieved.");
+            }
+
+            LocationSettingsClass locationSettings = getLocationSettings(tarkovApplication);
+            if (locationSettings == null)
+            {
+                throw new InvalidOperationException("Location settings could not be retrieved.");
+            }
+
+            LoggingController.LogInfo("Caching escape times...");
+
+            foreach (string location in locationSettings.locations.Keys)
+            {
+                originalEscapeTimes.Add(locationSettings.locations[location].Id, locationSettings.locations[location].EscapeTimeLimit);
+                //LoggingController.LogInfo("Caching escape times..." + originalEscapeTimes.Last().Key + ": " + originalEscapeTimes.Last().Value);
+            }
+
+            LoggingController.LogInfo("Caching escape times...done.");
+
+            HasRaidStarted = false;
         }
 
         public static bool TryGetObjectNearPosition<T>(Vector3 position, float maxDistance, bool onlyVisible, out T obj) where T: Behaviour
@@ -142,7 +168,7 @@ namespace SPTQuestingBots.Controllers
             SpawnedBotCount++;
             string message = "Spawned ";
 
-            if ((BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
+            if (BotGenerator.CanSpawnPMCs && (BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
             {
                 spawnedBosses.Add(botOwner);
                 message += "boss " + botOwner.Profile.Nickname + " (" + spawnedBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
@@ -226,6 +252,20 @@ namespace SPTQuestingBots.Controllers
             float remainingTimeFromGame = GClass1473.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
 
             return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);
+        }
+
+        public static float? GetTimeSinceSpawning()
+        {
+            float? remainingTime = GetRemainingRaidTime();
+            int? escapeTime = CurrentLocation?.EscapeTimeLimit;
+
+            if (!remainingTime.HasValue || !escapeTime.HasValue)
+            {
+                LoggingController.LogError("Could not calculate time since spawning");
+                return null;
+            }
+
+            return (escapeTime.Value * 60f) - remainingTime.Value;
         }
 
         public static float? GetElapsedRaidTime()

@@ -49,7 +49,7 @@ namespace SPTQuestingBots.Controllers
 
         public static bool RemainingInitialPMCSpawns
         {
-            get { return (initialPMCGroups.Count == 0) || initialPMCGroups.Any(g => !g.HasSpawned); }
+            get { return (CanSpawnPMCs && (initialPMCGroups.Count == 0)) || initialPMCGroups.Any(g => !g.HasSpawned); }
         }
 
         public static IEnumerator Clear()
@@ -161,7 +161,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction.Value);
-            if (initialPMCGroups.Count == 0)
+            if (CanSpawnPMCs && (initialPMCGroups.Count == 0))
             {
                 LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction.Value, 3) + ")...");
 
@@ -186,10 +186,17 @@ namespace SPTQuestingBots.Controllers
                 int maxPMCBots = random.Next(minPlayers, maxPlayers);
                 LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
 
-                // Create bot data from the server
-                #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBots(LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
-                #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                if (maxPMCBots > 0)
+                {
+                    // Create bot data from the server
+                    #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    generateBots(LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                    #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+                else
+                {
+                    CanSpawnPMCs = false;
+                }
 
                 LoggingController.LogInfo("Generating initial PMC groups...done.");
                 return;
@@ -201,10 +208,13 @@ namespace SPTQuestingBots.Controllers
             }
 
             // Ensure the raid is progressing before running anything
-            if ((raidET < 1) || ((LocationController.SpawnedBotCount < LocationController.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")))
+            float? timeSinceSpawning = LocationController.GetTimeSinceSpawning();
+            if ((timeSinceSpawning < 1) || ((LocationController.SpawnedBotCount < LocationController.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")))
             {
                 return;
             }
+
+            LoggingController.LogInfo("Trying to spawn PMC's...");
 
             float minDistanceDuringRaid = LocationController.CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
             float minDistanceFromPlayers = playerCountFactor >= 0.98 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : minDistanceDuringRaid;
@@ -292,17 +302,6 @@ namespace SPTQuestingBots.Controllers
                         allSpawnPoints[s].DelayToCanSpawnSec = originalSpawnDelays[allSpawnPoints[s].Id];
                     }
                 }
-
-                /*yield return null;
-                yield return null;
-
-                foreach (KeyValuePair<BotZone, GClass510> keyValuePair in Singleton<IBotGame>.Instance.BotsController.Groups())
-                {
-                    foreach (BotGroupClass botGroupClass in keyValuePair.Value.GetGroups(true))
-                    {
-                        LoggingController.LogInfo("Bot Group Allies: " + string.Join(", ", botGroupClass.Allies.Select(b => b.Profile.Nickname)));
-                    }
-                }*/
             }
             finally
             {

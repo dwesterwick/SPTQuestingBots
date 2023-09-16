@@ -131,6 +131,7 @@
     <Compile Include="Patches\BotOwnerCreatePatch.cs" />
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
+    <Compile Include="Patches\MainMenuShowScreenPatch.cs" />
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
