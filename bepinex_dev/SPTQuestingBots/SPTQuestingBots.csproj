@@ -117,7 +117,6 @@
     <Compile Include="Controllers\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
-    <Compile Include="CoroutineExtensions\TaskWithTimeLimit.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />

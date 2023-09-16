@@ -5,9 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT.InventoryLogic;
 using SPTQuestingBots.Controllers;
-using static DrakiaXYZ.BigBrain.Brains.CustomLayer;
 
 namespace SPTQuestingBots.CoroutineExtensions
 {

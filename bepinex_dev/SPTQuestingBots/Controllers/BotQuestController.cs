@@ -34,6 +34,8 @@ namespace SPTQuestingBots.Controllers
 
         public IEnumerator Clear()
         {
+            IsClearing = true;
+
             if (IsFindingTriggers)
             {
                 enumeratorWithTimeLimit.Abort();
@@ -57,6 +59,8 @@ namespace SPTQuestingBots.Controllers
             zoneIDsInLocation.Clear();
 
             HaveTriggersBeenFound = false;
+
+            IsClearing = false;
         }
 
         private void Update()
