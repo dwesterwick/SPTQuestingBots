@@ -31,7 +31,7 @@ namespace SPTQuestingBots.Models
         public int Priority { get; set; } = 99;
 
         [JsonProperty("maxRaidET")]
-        public float MaxRaidET { get; set; } = 99999;
+        public float MaxRaidET { get; set; } = float.MaxValue;
 
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;

@@ -116,7 +116,11 @@ namespace SPTQuestingBots.Controllers
             foreach (string location in locationSettings.locations.Keys)
             {
                 originalEscapeTimes.Add(locationSettings.locations[location].Id, locationSettings.locations[location].EscapeTimeLimit);
-                //LoggingController.LogInfo("Caching escape times..." + originalEscapeTimes.Last().Key + ": " + originalEscapeTimes.Last().Value);
+
+                if (originalEscapeTimes.Last().Value > 0)
+                {
+                    LoggingController.LogInfo("Caching escape times..." + originalEscapeTimes.Last().Key + ": " + originalEscapeTimes.Last().Value);
+                }
             }
 
             LoggingController.LogInfo("Caching escape times...done.");

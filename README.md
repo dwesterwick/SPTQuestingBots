@@ -9,6 +9,8 @@
 * Looting Bots 1.1.2
 * Late to the Party 1.3.0+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 * SWAG + DONUTS 3.1.2 (if **initial_PMC_spawns=false** in this mod)
+* Custom Raid Times 1.4.0
+* Immersive Raids 1.1.3
 
 **NOT compatible with:**
 * AI Limit / AI Disabler (this mod relies on the AI being active throughout the entire map)

@@ -209,12 +209,10 @@ namespace SPTQuestingBots.Controllers
 
             // Ensure the raid is progressing before running anything
             float? timeSinceSpawning = LocationController.GetTimeSinceSpawning();
-            if ((timeSinceSpawning < 1) || ((LocationController.SpawnedBotCount < LocationController.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")))
+            if ((!timeSinceSpawning.HasValue) || (timeSinceSpawning < 1) || ((LocationController.SpawnedBotCount < LocationController.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")))
             {
                 return;
             }
-
-            LoggingController.LogInfo("Trying to spawn PMC's...");
 
             float minDistanceDuringRaid = LocationController.CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
             float minDistanceFromPlayers = playerCountFactor >= 0.98 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : minDistanceDuringRaid;
