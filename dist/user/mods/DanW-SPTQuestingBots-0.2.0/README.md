@@ -87,24 +87,17 @@
 * Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-* **0.2.0** (ETA: 9/5)
-    * Implement support for basic custom quests (target locations only, no additional actions)
-    * Implement min/max player levels for quests
-    * Add extra quests to make bots go to other areas on the maps
-    * Update bot quest-selection algorithm
-    * Improve bot looting behavior
 * **0.2.1** (ETA: 9/17)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options and high-level overviews for how the algorithms work
     * Add more quests to make bots go to other areas on the maps
-    * Bug fixes for 0.2.0 (hopefully none)
 * **0.3.0** (ETA: Early October)
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:
         * Patrol target area for a certain time
         * Wait at specific location for a certain time (mimicing planting items)
     * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
 * **0.3.1** (ETA: Late October)
-    * Add new quest-objective action: unlock doors
+    * Add new quest-objective actions: unlocking doors and pulling levers
     * Add new quest type: hidden-stash running
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.

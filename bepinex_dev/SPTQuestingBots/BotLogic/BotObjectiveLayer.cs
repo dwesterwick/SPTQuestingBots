@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using EFT.HealthSystem;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;

@@ -40,10 +40,10 @@ namespace SPTQuestingBots.CoroutineExtensions
             }
         }
 
-        protected IEnumerator WaitForNextFrame(string extraDetail = "")
+        protected IEnumerator WaitForNextFrame(bool writeConsoleMessage = true, string extraDetail = "")
         {
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
-            if (!hadToWait)
+            if (writeConsoleMessage && !hadToWait)
             {
                 LoggingController.LogWarning(messageTextPrefix(extraDetail) + messageTextSuffix(), true);
             }
@@ -53,10 +53,10 @@ namespace SPTQuestingBots.CoroutineExtensions
             cycleTimer.Restart();
         }
 
-        protected void FinishedWaitingForFrames(string extraDetail = "")
+        protected void FinishedWaitingForFrames(bool writeConsoleMessage = true, string extraDetail = "")
         {
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
-            if (hadToWait)
+            if (writeConsoleMessage && hadToWait)
             {
                 LoggingController.LogWarning(messageTextPrefix(extraDetail) + "done." + messageTextSuffix(), true);
             }

@@ -28,16 +28,6 @@ namespace SPTQuestingBots.CoroutineExtensions
             cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public static void WaitForCondition(Func<bool> conditionCheck)
-        {
-            TaskWithTimeLimit waitForConditionTask = new TaskWithTimeLimit(1);
-            waitForConditionTask.Start(() =>
-            {
-                while (!conditionCheck()) { Thread.Sleep(1); }
-            });
-            waitForConditionTask.WaitUntilTaskIsComplete();
-        }
-
         public void Start(Action action)
         {
             if (base.IsRunning)
@@ -100,27 +90,6 @@ namespace SPTQuestingBots.CoroutineExtensions
             base.FinishedWaitingForFrames();
             base.IsRunning = false;
             base.IsCompleted = true;
-        }
-
-        public void WaitUntilTaskIsComplete()
-        {
-            Task waitforTaskToCompleteTask = new Task(() => {
-                try
-                {
-                    while (WaitForTask().MoveNext()) { }
-                }
-                catch (InvalidOperationException) { }
-            });
-            waitforTaskToCompleteTask.Start();
-
-            if (!waitforTaskToCompleteTask.Wait(3000))
-            {
-                LoggingController.LogError("The task for " + MethodName + " timed out.");
-            }
-            else
-            {
-                //LoggingController.LogInfo("The task for " + MethodName + " is complete.");
-            }
         }
 
         public void Abort()

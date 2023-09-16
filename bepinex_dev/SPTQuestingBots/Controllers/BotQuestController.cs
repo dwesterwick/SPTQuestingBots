@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.AccessControl;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
@@ -15,6 +12,7 @@ using EFT.Interactive;
 using EFT.Quests;
 using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Configuration;
+using SPTQuestingBots.CoroutineExtensions;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -22,6 +20,7 @@ namespace SPTQuestingBots.Controllers
 {
     public class BotQuestController : MonoBehaviour
     {
+        public static bool IsClearing { get; private set; } = false;
         public static bool IsFindingTriggers = false;
         public static bool HaveTriggersBeenFound = false;
 
@@ -33,12 +32,16 @@ namespace SPTQuestingBots.Controllers
         private static Dictionary<BotOwner, List<BotOwner>> bossFollowersInLocation = new Dictionary<BotOwner, List<BotOwner>>();
         private static string previousLocationID = null;
 
-        public void Clear()
+        public IEnumerator Clear()
         {
             if (IsFindingTriggers)
             {
                 enumeratorWithTimeLimit.Abort();
-                CoroutineExtensions.TaskWithTimeLimit.WaitForCondition(() => !IsFindingTriggers);
+
+                EnumeratorWithTimeLimit conditionWaiter = new EnumeratorWithTimeLimit(1);
+                yield return conditionWaiter.WaitForCondition(() => !IsFindingTriggers, nameof(IsFindingTriggers), 3000);
+
+                IsFindingTriggers = false;
             }
 
             allQuests.RemoveAll(q => q.Template == null);
@@ -58,6 +61,11 @@ namespace SPTQuestingBots.Controllers
 
         private void Update()
         {
+            if (IsClearing)
+            {
+                return;
+            }
+
             if (LocationController.CurrentLocation == null)
             {
                 if (HaveTriggersBeenFound)
@@ -65,7 +73,7 @@ namespace SPTQuestingBots.Controllers
                     WriteQuestLogFile();
                 }
 
-                Clear();
+                StartCoroutine(Clear());
                 return;
             }
 

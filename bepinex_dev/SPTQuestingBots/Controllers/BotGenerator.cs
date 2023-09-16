@@ -19,6 +19,7 @@ namespace SPTQuestingBots.Controllers
 {
     public class BotGenerator : MonoBehaviour
     {
+        public static bool IsClearing { get; private set; } = false;
         public static bool CanSpawnPMCs { get; private set; } = true;
         public static bool IsSpawningPMCs { get; private set; } = false;
         public static bool IsGeneratingPMCs { get; private set; } = false;
@@ -51,18 +52,28 @@ namespace SPTQuestingBots.Controllers
             get { return (initialPMCGroups.Count == 0) || initialPMCGroups.Any(g => !g.HasSpawned); }
         }
 
-        public static void Clear()
+        public static IEnumerator Clear()
         {
+            IsClearing = true;
+
             if (IsSpawningPMCs)
             {
                 enumeratorWithTimeLimit.Abort();
-                TaskWithTimeLimit.WaitForCondition(() => !IsSpawningPMCs);
+
+                EnumeratorWithTimeLimit conditionWaiter = new EnumeratorWithTimeLimit(1);
+                yield return conditionWaiter.WaitForCondition(() => !IsSpawningPMCs, nameof(IsSpawningPMCs), 3000);
+
+                IsSpawningPMCs = false;
             }
 
             if (IsGeneratingPMCs)
             {
                 enumeratorWithTimeLimit.Abort();
-                TaskWithTimeLimit.WaitForCondition(() => !IsGeneratingPMCs);
+
+                EnumeratorWithTimeLimit conditionWaiter = new EnumeratorWithTimeLimit(1);
+                yield return conditionWaiter.WaitForCondition(() => !IsGeneratingPMCs, nameof(IsGeneratingPMCs), 3000);
+
+                IsGeneratingPMCs = false;
             }
 
             maxAlivePMCs = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs["default"];
@@ -72,6 +83,8 @@ namespace SPTQuestingBots.Controllers
             blacklistedSpawnPointIDs.Clear();
 
             CanSpawnPMCs = true;
+
+            IsClearing = false;
         }
 
         public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
@@ -108,9 +121,14 @@ namespace SPTQuestingBots.Controllers
 
         private void Update()
         {
+            if (IsClearing)
+            {
+                return;
+            }
+
             if (LocationController.CurrentLocation == null)
             {
-                Clear();
+                StartCoroutine(Clear());
                 return;
             }
 

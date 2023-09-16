@@ -10,7 +10,6 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
-using static GClass1711;
 
 namespace SPTQuestingBots.Controllers
 {
