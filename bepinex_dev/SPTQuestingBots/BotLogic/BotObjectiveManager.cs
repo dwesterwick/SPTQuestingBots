@@ -103,6 +103,7 @@ namespace SPTQuestingBots.BotLogic
             IsObjectivePathComplete = true;
             IsObjectiveReached = true;
             targetObjective.BotCompletedObjective(botOwner);
+            targetQuest.StartQuestForBot(botOwner);
         }
 
         public void RejectObjective()
@@ -187,7 +188,7 @@ namespace SPTQuestingBots.BotLogic
 
                 if (targetQuest.GetRemainingObjectiveCount(botOwner) == 0)
                 {
-                    targetQuest.BlacklistBot(botOwner);
+                    //targetQuest.BlacklistBot(botOwner);
                     targetQuest = null;
                 }
             }
@@ -196,7 +197,8 @@ namespace SPTQuestingBots.BotLogic
             if (nextObjective == null)
             {
                 LoggingController.LogWarning("Could not find another objective for bot " + botOwner.Profile.Nickname + " for quest " + targetQuest.Name);
-                targetQuest.BlacklistBot(botOwner);
+                //targetQuest.BlacklistBot(botOwner);
+                targetQuest.StopQuestForBot(botOwner);
                 targetQuest = null;
                 return false;
             }

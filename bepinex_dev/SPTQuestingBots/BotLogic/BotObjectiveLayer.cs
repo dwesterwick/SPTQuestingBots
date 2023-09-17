@@ -346,7 +346,7 @@ namespace SPTQuestingBots.BotLogic
             if (wasLooting || hasFoundLoot)
             {
                 lootingLayerMonitor.RestartCanUseTimer();
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
+                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
             }
 
             lootSearchTimer.Reset();

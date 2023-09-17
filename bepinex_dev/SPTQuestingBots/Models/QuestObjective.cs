@@ -119,15 +119,20 @@ namespace SPTQuestingBots.Models
             }
         }
 
-        public void SnapAllStepPositionsToNavMesh()
+        public bool TrySnapAllStepPositionsToNavMesh()
         {
+            bool allSnapped = true;
+
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
                 if (!step.TrySnapToNavMesh())
                 {
+                    allSnapped = false;
                     LoggingController.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
                 }
             }
+
+            return allSnapped;
         }
 
         public bool TryAssignBot(BotOwner bot)

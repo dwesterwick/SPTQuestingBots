@@ -89,11 +89,13 @@
 * Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-* **0.2.1** (ETA: 9/17)
+* **0.2.2** (ETA: 9/17)
+    * Add more quests to make bots go to other areas on the maps
+    * Bug fixes
+* **0.2.1** (ETA: 9/24)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options and high-level overviews for how the algorithms work
-    * Add more quests to make bots go to other areas on the maps
-* **0.3.0** (ETA: Early October)
+* **0.3.0** (ETA: Mid October)
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:
         * Patrol target area for a certain time
         * Wait at specific location for a certain time (mimicing planting items)

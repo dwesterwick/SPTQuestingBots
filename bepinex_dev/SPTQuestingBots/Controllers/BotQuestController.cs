@@ -312,13 +312,23 @@ namespace SPTQuestingBots.Controllers
                 {
                     objectiveNum++;
                     objective.SetName(quest.Name + ": Objective #" + objectiveNum);
-                    objective.SnapAllStepPositionsToNavMesh();
+                    
+                    if (!objective.TrySnapAllStepPositionsToNavMesh())
+                    {
+                        objective.MaxBots = 0;
+                    }
 
                     //LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
                 }
+
+                if (quest.ValidObjectives.All(o => o.MaxBots == 0))
+                {
+                    LoggingController.LogError("Could not find any objectives with valid NavMesh positions for quest " + quest.Name + ". Disabling.");
+                    quest.MinLevel = 99;
+                }
             }
 
-            allQuests.AddRange(customQuests);
+            allQuests.AddRange(customQuests.Where(q => q.MinLevel < 99));
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");
         }
 

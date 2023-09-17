@@ -33,6 +33,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxRaidET")]
         public float MaxRaidET { get; set; } = float.MaxValue;
 
+        [JsonProperty("maxTimeOnQuest")]
+        public float MaxTimeOnQuest { get; set; } = 300;
+
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
@@ -45,12 +48,16 @@ namespace SPTQuestingBots.Models
         [JsonIgnore]
         private List<BotOwner> blacklistedBots = new List<BotOwner>();
 
+        [JsonIgnore]
+        private Dictionary<BotOwner, DateTime> activeBots = new Dictionary<BotOwner, DateTime>();
+
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
         public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
         public int NumberOfObjectives => AllObjectives.Count;
         public int NumberOfValidObjectives => ValidObjectives.Count();
+        public ReadOnlyCollection<BotOwner> ActiveBots => new ReadOnlyCollection<BotOwner>(activeBots.Keys.ToArray());
 
         public Quest()
         {
@@ -78,12 +85,30 @@ namespace SPTQuestingBots.Models
             objectives = new QuestObjective[0];
         }
 
+        public void StartQuestForBot(BotOwner bot)
+        {
+            if (!activeBots.ContainsKey(bot))
+            {
+                activeBots.Add(bot, DateTime.Now);
+            }
+        }
+
+        public void StopQuestForBot(BotOwner bot)
+        {
+            if (!activeBots.ContainsKey(bot))
+            {
+                activeBots.Remove(bot);
+            }
+        }
+
         public void BlacklistBot(BotOwner bot)
         {
             if (!blacklistedBots.Contains(bot))
             {
                 blacklistedBots.Add(bot);
             }
+
+            StopQuestForBot(bot);
         }
 
         public bool CanAssignBot(BotOwner bot)
@@ -101,6 +126,11 @@ namespace SPTQuestingBots.Models
             objectives = objectives.Append(objective).ToArray();
         }
 
+        public bool TryRemoveObjective(QuestObjective objective)
+        {
+            return objectives.RemoveFirst(o => o.Equals(objective));
+        }
+
         public QuestObjective GetRandomObjective()
         {
             IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
@@ -116,6 +146,16 @@ namespace SPTQuestingBots.Models
 
         public QuestObjective GetRandomNewObjective(BotOwner bot)
         {
+            if (activeBots.ContainsKey(bot))
+            {
+                TimeSpan timeSinceStarted = DateTime.Now - activeBots[bot];
+                if (timeSinceStarted.TotalSeconds > MaxTimeOnQuest)
+                {
+                    LoggingController.LogWarning("Bot " + bot.Profile.Nickname + " has spent " + timeSinceStarted.TotalSeconds + " on quest " + Name + " and will choose another one.");
+                    return null;
+                }
+            }
+
             IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
                 .Where(o => o.CanAssignBot(bot))
                 .Where(o => o.CanAssignMoreBots);

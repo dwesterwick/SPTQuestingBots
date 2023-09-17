@@ -79,7 +79,7 @@
 		},
 		"spawn_point_wander": {
 			"priority": 25,
-			"chance": 15,
+			"chance": 5,
 			"min_distance": 75,
 			"max_bots_per_quest": 30
 		}
