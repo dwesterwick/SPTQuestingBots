@@ -59,7 +59,7 @@ namespace SPTQuestingBots.BotLogic
                 IsObjectiveActive = true;
             }
 
-            if (IsObjectiveActive)
+            if (IsObjectiveActive && BotQuestController.HaveTriggersBeenFound)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 TryChangeObjective();
@@ -73,6 +73,11 @@ namespace SPTQuestingBots.BotLogic
 
         private void Update()
         {
+            if (!BotQuestController.HaveTriggersBeenFound)
+            {
+                return;
+            }
+
             if (!IsObjectiveActive)
             {
                 return;
