@@ -3,6 +3,110 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 90,
+        "name": "Crackhouse Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 84.9620743,
+                            "y": 1.45260346,
+                            "z": -145.769485
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 90,
+        "name": "Dorms 2 Story Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 229.8411,
+                            "y": -0.128419861,
+                            "z": 141.852676
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 90,
+        "name": "Dorms 3 Story Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 178.223465,
+                            "y": -0.168418393,
+                            "z": 155.413559
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 90,
+        "name": "Big Red Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -204.123047,
+                            "y": 1.08683634,
+                            "z": -105.5931
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
         "name": "Flash-Drive Van",

@@ -3,6 +3,32 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 30,
+        "name": "3rd Floor Office Rush",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "3rd Floor Office",
@@ -93,6 +119,56 @@
                             "x": -16.1654949,
                             "y": 0.259162873,
                             "z": -25.7997437
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Forklift",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 68.7288361,
+                            "y": 0.0977746546,
+                            "z": -38.22054
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Boilers",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 1,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.1654968,
+                            "y": 4.309441,
+                            "z": 10.63328
                         }
                     }
                 ]
