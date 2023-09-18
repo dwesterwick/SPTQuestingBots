@@ -128,7 +128,15 @@ namespace SPTQuestingBots.Models
 
         public bool TryRemoveObjective(QuestObjective objective)
         {
-            return objectives.RemoveFirst(o => o.Equals(objective));
+            if (objectives.Length == 0)
+            {
+                return true;
+            }
+
+            int startingLength = objectives.Length;
+            objectives = objectives.Where(o => !o.Equals(objective)).ToArray();
+
+            return startingLength == objectives.Length - 1;
         }
 
         public QuestObjective GetRandomObjective()

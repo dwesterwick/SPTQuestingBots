@@ -181,6 +181,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             if (modConfig.debug.free_labs_access)
             {
                 this.databaseTables.locations.laboratory.base.AccessKeys = [];
+                this.databaseTables.locations.laboratory.base.DisabledForScav = false;
             }
         }
     }
