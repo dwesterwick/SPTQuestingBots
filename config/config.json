@@ -3,6 +3,7 @@
 	"debug": {
 		"enabled": true,
 		"scav_cooldown_time": 1500,
+		"free_labs_access": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false
 	},
@@ -36,6 +37,7 @@
 	"bot_questing_requirements": {
 		"exclude_bots_by_level": true,
 		"repeat_quest_delay": 300,
+		"max_time_per_quest": 300,
 		"min_hydration": 20,
 		"min_energy": 20,
 		"min_health_head": 50,

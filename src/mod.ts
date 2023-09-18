@@ -177,6 +177,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             {
                 this.databaseTables.globals.config.SavagePlayCooldown = modConfig.debug.scav_cooldown_time;
             }
+
+            if (modConfig.debug.free_labs_access)
+            {
+                this.databaseTables.locations.laboratory.base.AccessKeys = [];
+            }
         }
     }
 	

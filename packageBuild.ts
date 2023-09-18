@@ -31,6 +31,7 @@ console.log("Previous build files deleted.");
 // expanded upon by the mod author to allow for node modules that are used within the mod; example commented out below.
 const ignoreList = [
     "node_modules/",
+    "Icon/",
     // "node_modules/!(weighted|glob)", // Instead of excluding the entire node_modules directory, allow two node modules.
     "src/**/*.js",
     "types/",

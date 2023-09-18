@@ -305,30 +305,32 @@ namespace SPTQuestingBots.Controllers
             LoggingController.LogInfo("Loading custom quests...");
             foreach (Quest quest in customQuests)
             {
-                //LoggingController.LogInfo("Found quest \"" + quest.Name + "\": Priority=" + quest.Priority);
-
                 int objectiveNum = 0;
-                foreach (QuestObjective objective in quest.ValidObjectives)
+                foreach (QuestObjective objective in quest.ValidObjectives.ToArray())
                 {
                     objectiveNum++;
                     objective.SetName(quest.Name + ": Objective #" + objectiveNum);
-                    
+
                     if (!objective.TrySnapAllStepPositionsToNavMesh())
                     {
-                        objective.MaxBots = 0;
+                        LoggingController.LogError("Could not find valid NavMesh positions for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+
+                        if (!quest.TryRemoveObjective(objective))
+                        {
+                            LoggingController.LogError("Could not remove objective " + objective.ToString());
+                            objective.MaxBots = 0;
+                        }
                     }
-
-                    //LoggingController.LogInfo("Found objective at " + objective.GetFirstStepPosition().Value.ToString() + " for quest \"" + quest.Name + "\"");
                 }
 
-                if (quest.ValidObjectives.All(o => o.MaxBots == 0))
+                if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.MaxBots == 0))
                 {
-                    LoggingController.LogError("Could not find any objectives with valid NavMesh positions for quest " + quest.Name + ". Disabling.");
-                    quest.MinLevel = 99;
+                    LoggingController.LogError("Could not find any objectives with valid NavMesh positions for quest " + quest.Name + ". Disabling quest.");
+                    continue;
                 }
-            }
 
-            allQuests.AddRange(customQuests.Where(q => q.MinLevel < 99));
+                allQuests.Add(quest);
+            }
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");
         }
 

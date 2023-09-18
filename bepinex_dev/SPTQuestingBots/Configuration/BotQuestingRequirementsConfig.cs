@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("repeat_quest_delay")]
         public float RepeatQuestDelay { get; set; } = 300;
 
+        [JsonProperty("max_time_per_quest")]
+        public float MaxTimePerQuest { get; set; } = 300;
+
         [JsonProperty("min_hydration")]
         public float MinHydration { get; set; } = 50;
 

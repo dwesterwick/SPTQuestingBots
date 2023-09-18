@@ -34,7 +34,7 @@ namespace SPTQuestingBots.Models
         public float MaxRaidET { get; set; } = float.MaxValue;
 
         [JsonProperty("maxTimeOnQuest")]
-        public float MaxTimeOnQuest { get; set; } = 300;
+        public float MaxTimeOnQuest { get; set; } = ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest;
 
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;

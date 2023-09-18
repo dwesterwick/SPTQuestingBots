@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("scav_cooldown_time")]
         public long ScavCooldownTime { get; set; } = 1500;
 
+        [JsonProperty("free_labs_access")]
+        public bool FreeLabsAccess { get; set; } = false;
+
         [JsonProperty("show_zone_outlines")]
         public bool ShowZoneOutlines { get; set; } = false;
 
