@@ -5,6 +5,31 @@
         "maxLevel": 99,
         "chanceForSelecting": 50,
         "priority": 18,
+        "name": "Power Switch",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 352.194763,
+                            "y": 1.23055232,
+                            "z": -39.12735
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
         "maxRaidET": 90,
         "name": "Crackhouse Rush",
         "objectives" : [
