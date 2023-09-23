@@ -51,21 +51,21 @@ const exclude = glob.sync(`{${ignoreList.join(",")}}`, { realpath: true, dot: tr
 
 // For some reason these basic-bitch functions won't allow us to copy a directory into itself, so we have to resort to
 // using a temporary directory, like an idiot. Excuse the normalize spam; some modules cross-platform, some don't...
-fs.copySync(__dirname, path.normalize(`${__dirname}/../~${modName}/user/mods/${modName}`), {filter:(filePath) => 
+fs.copySync(__dirname, path.normalize(`${__dirname}/../dist/~${modName}/user/mods/${modName}`), {filter:(filePath) => 
 {
     return !exclude.includes(filePath);
 }});
-fs.copySync(path.normalize(`${__dirname}/${csharpDevFolder}/${packageName}/bin/${csharpBuildFolder}/${packageName}.dll`), path.normalize(`${__dirname}/../~${modName}/BepInEx/plugins/${packageName}.dll`));
-fs.moveSync(path.normalize(`${__dirname}/../~${modName}`), path.normalize(`${__dirname}/${modName}`), { overwrite: true });
-fs.copySync(path.normalize(`${__dirname}/${modName}`), path.normalize(`${__dirname}/dist`));
+fs.copySync(path.normalize(`${__dirname}/${csharpDevFolder}/${packageName}/bin/${csharpBuildFolder}/${packageName}.dll`), path.normalize(`${__dirname}/../dist/~${modName}/BepInEx/plugins/${packageName}.dll`));
+fs.moveSync(path.normalize(`${__dirname}/../dist/~${modName}`), path.normalize(`${__dirname}/dist/${modName}`), { overwrite: true });
+fs.copySync(path.normalize(`${__dirname}/dist/${modName}`), path.normalize(`${__dirname}/dist`));
 console.log("Build files copied.");
 
 // Compress the files for easy distribution. The compressed file is saved into the dist directory. When uncompressed we
 // need to be sure that it includes a directory that the user can easily copy into their game mods directory.
 zip({
-    source: modName,
-    destination: `dist/${modName}.zip`,
-    cwd: __dirname
+    source: "",
+    destination: `../${modName}.zip`,
+    cwd: `${__dirname}/dist/${modName}`
 }).catch(function(err)
 {
     console.error("A bestzip error has occurred: ", err.stack);
@@ -74,6 +74,6 @@ zip({
     console.log(`Compressed mod package to: /dist/${modName}.zip`);
 
     // Now that we're done with the compression we can delete the temporary build directory.
-    fs.rmSync(`${__dirname}/${modName}`, { force: true, recursive: true });
+    fs.rmSync(`${__dirname}/dist/${modName}`, { force: true, recursive: true });
     console.log("Build successful! your zip file has been created and is ready to be uploaded to hub.sp-tarkov.com/files/");
 });
