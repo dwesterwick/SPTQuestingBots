@@ -46,22 +46,28 @@ export class QuestManager
     {
         const path = __dirname + "/../quests";
 
-        const standardQuests = this.vfs.getFiles(path + "/standard/");
-        for (const i in standardQuests)
+        if (this.vfs.exists(path + "/standard/"))
         {
-            const questFileText = this.vfs.readFile(path + "/standard/" + standardQuests[i]);
-            const quests : Quest[] = JSON.parse(questFileText)
+            const standardQuests = this.vfs.getFiles(path + "/standard/");
+            for (const i in standardQuests)
+            {
+                const questFileText = this.vfs.readFile(path + "/standard/" + standardQuests[i]);
+                const quests : Quest[] = JSON.parse(questFileText)
 
-            this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
+                this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
+            }
         }
 
-        const customQuests = this.vfs.getFiles(path + "/custom/");
-        for (const i in customQuests)
+        if (this.vfs.exists(path + "/custom/"))
         {
-            const questFileText = this.vfs.readFile(path + "/custom/" + customQuests[i]);
-            const quests : Quest[] = JSON.parse(questFileText)
+            const customQuests = this.vfs.getFiles(path + "/custom/");
+            for (const i in customQuests)
+            {
+                const questFileText = this.vfs.readFile(path + "/custom/" + customQuests[i]);
+                const quests : Quest[] = JSON.parse(questFileText)
 
-            this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${standardQuests[i]}"`);
+                this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${customQuests[i]}"`);
+            }
         }
     }
 
