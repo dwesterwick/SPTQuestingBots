@@ -1851,7 +1851,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
-        "name": "Helicopter Crash ",
+        "name": "Helicopter Crash",
         "objectives" : [
             {
                 "repeatable": false,

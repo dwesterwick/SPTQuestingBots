@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -67,13 +68,45 @@ namespace SPTQuestingBots.Controllers
             return _templates.Templates;
         }
 
-        public static Quest[] GetCustomQuests(string locationID)
+        public static IEnumerable<Quest> GetCustomQuests(string locationID)
         {
-            string errorMessage = "Cannot read custom quests.";
-            string json = RequestHandler.GetJson("/QuestingBots/GetCustomQuests/" + locationID);
+            Quest[] standardQuests = new Quest[0];
+            string filename = GetLoggingPath() + "..\\quests\\standard\\" + locationID + ".json";
+            if (File.Exists(filename))
+            {
+                string errorMessage = "Cannot read standard quests for " + locationID;
+                try
+                {
+                    string json = File.ReadAllText(filename);
+                    TryDeserializeObject(json, errorMessage, out standardQuests);
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                    LoggingController.LogErrorToServerConsole(errorMessage);
+                }
+            }
 
-            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
-            return _templates.Quests;
+            Quest[] customQuests = new Quest[0];
+            filename = GetLoggingPath() + "..\\quests\\custom\\" + locationID + ".json";
+            if (File.Exists(filename))
+            {
+                string errorMessage = "Cannot read custom quests for " + locationID;
+                try
+                {
+                    string json = File.ReadAllText(filename);
+                    TryDeserializeObject(json, errorMessage, out customQuests);
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                    LoggingController.LogErrorToServerConsole(errorMessage);
+                }
+            }
+
+            return standardQuests.Concat(customQuests);
         }
 
         public static bool TryDeserializeObject<T>(string json, string errorMessage, out T obj)

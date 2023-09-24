@@ -296,8 +296,8 @@ namespace SPTQuestingBots.Controllers
 
         private void LoadCustomQuests()
         {
-            Quest[] customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
-            if (customQuests.Length == 0)
+            IEnumerable<Quest> customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
+            if (!customQuests.Any())
             {
                 return;
             }
@@ -331,7 +331,7 @@ namespace SPTQuestingBots.Controllers
 
                 allQuests.Add(quest);
             }
-            LoggingController.LogInfo("Loading custom quests...found " + customQuests.Length + " custom quests.");
+            LoggingController.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
 
         private void LocateQuestItems(Quest quest, IEnumerable<LootItem> allLoot)

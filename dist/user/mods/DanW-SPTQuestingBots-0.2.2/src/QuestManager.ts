@@ -9,6 +9,7 @@ export interface Quest
     maxLevel: number,
     chanceForSelecting: number,
     priority: number,
+    maxRaidET: number,
     name: string,
     objectives: QuestObjective[]
 }
@@ -39,6 +40,29 @@ export class QuestManager
     constructor (private commonUtils: CommonUtils, private vfs: VFS)
     {
 
+    }
+
+    public validateCustomQuests() : void
+    {
+        const path = __dirname + "/../quests";
+
+        const standardQuests = this.vfs.getFiles(path + "/standard/");
+        for (const i in standardQuests)
+        {
+            const questFileText = this.vfs.readFile(path + "/standard/" + standardQuests[i]);
+            const quests : Quest[] = JSON.parse(questFileText)
+
+            this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
+        }
+
+        const customQuests = this.vfs.getFiles(path + "/custom/");
+        for (const i in customQuests)
+        {
+            const questFileText = this.vfs.readFile(path + "/custom/" + customQuests[i]);
+            const quests : Quest[] = JSON.parse(questFileText)
+
+            this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${standardQuests[i]}"`);
+        }
     }
 
     public getCustomQuests(locationID: string) : Quest[]

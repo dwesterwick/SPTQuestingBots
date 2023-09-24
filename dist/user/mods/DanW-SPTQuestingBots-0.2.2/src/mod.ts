@@ -134,22 +134,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 }
             }], "GetAllQuestTemplates"
         );
-
-        // Read custom quests from file
-        dynamicRouterModService.registerDynamicRouter(`DynamicGetCustomQuests${modName}`,
-            [{
-                url: "/QuestingBots/GetCustomQuests/",
-                action: (url: string) => 
-                {
-                    const urlParts = url.split("/");
-                    const locationID = urlParts[urlParts.length - 1];
-
-                    const quests = this.questManager.getCustomQuests(locationID);
-                    
-                    return JSON.stringify({ quests: quests });
-                }
-            }], "GetCustomQuests"
-        );
     }
 	
     public postDBLoad(container: DependencyContainer): void
@@ -167,6 +151,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.questManager = new QuestManager(this.commonUtils, this.vfs);
+
+        this.questManager.validateCustomQuests();
 
         // Adjust parameters to make debugging easier
         if (modConfig.enabled && modConfig.debug.enabled)
