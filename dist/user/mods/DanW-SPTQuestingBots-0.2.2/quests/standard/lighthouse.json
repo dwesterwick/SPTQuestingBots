@@ -1,17 +1,95 @@
 [
     {
         "repeatable": true,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 180,
+        "name": "USEC Camp Building 1 Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 53.9112854,
+                            "y": 4.90694666,
+                            "z": -592.323669
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 180,
+        "name": "USEC Camp Building 2 Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -67.50461,
+                            "y": 4.90693474,
+                            "z": -754.207642
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 50,
+        "priority": 18,
+        "maxRaidET": 180,
+        "name": "USEC Camp Building 3 Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -195.727951,
+                            "y": 4.906942,
+                            "z": -693.660645
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
         "chanceForSelecting": 30,
-        "priority": 19,
+        "priority": 18,
         "name": "Pride Rock",
         "objectives" : [
             {
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -36,7 +114,7 @@
                 "repeatable": false,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {

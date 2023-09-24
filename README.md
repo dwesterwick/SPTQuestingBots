@@ -49,6 +49,7 @@
     * Customs between Warehouse 4 and New Gas
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
+    * Lighthouse in various rocky areas
 * Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there).
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
@@ -56,6 +57,7 @@
 * Some quest items or locations can't be resolved:
     * Fortress for Capturing Outposts in Customs
     * Scav Base for Capturing Outposts in Woods
+    * Health Resort for Capturing Outposts in Shoreline
     * Bronze pocket watch for Checking in Customs
     * Flash drive with fake info for Bullshit in Customs
     * Syringe with a chemical for Chemical Part 3 in Factory
@@ -63,6 +65,11 @@
     * The second and third bunkers for Assessment Part 2 in Woods
     * The satellite antenna in the USEC camp for Return the Favor in Woods
     * The USEC camp for Search Mission in Woods
+    * The cottage area for Overpopulation in Lighthouse
+    * The main area for Assessment - Part 1 in Lighthouse
+    * The bridge for Knock-Knock in Lighthouse
+    * The truck for TerraGroup Trail Part 1 in Shoreline
+    * The meeting spot for TerraGroup Trail Part 4 in Shoreline
 
 **Planned Improvements for Bot Questing:**
 * Adding an objective type for waiting a specified amount of time while patrolling the last objective area (for quests like Capturing Outposts)
@@ -119,12 +126,12 @@ The three major data structures are:
 * **Quests**: A quest is a collection of at least one quest objective, and objectives can be placed anywhere on the map.
 
     Quests have the following properties:
-    * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests are are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
+    * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests that are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
     * **minLevel**: Only bots that are at least this player level will be allowed to select the quest
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest
     * **chanceForSelecting**: The chance (in %) that the bot will accept the quest if the quest-selection algorithm selects it for the bot
     * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
-    * **maxRaidET**: The quest can only be selected if this many seconds (or less) has elapsed in the raid. If you're using mods like **Late to the Party**, this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
+    * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like **Late to the Party**, this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best to make it unique to avoid confusion when troubleshooting.
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
