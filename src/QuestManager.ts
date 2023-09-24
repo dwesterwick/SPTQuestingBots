@@ -57,6 +57,10 @@ export class QuestManager
                 this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
             }
         }
+        else
+        {
+            this.commonUtils.logError("The \"/quests/standard/\" directory is missing.");
+        }
 
         if (this.vfs.exists(path + "/custom/"))
         {
@@ -68,6 +72,10 @@ export class QuestManager
 
                 this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${customQuests[i]}"`);
             }
+        }
+        else
+        {
+            this.commonUtils.logWarning("No custom quests found.");
         }
     }
 
