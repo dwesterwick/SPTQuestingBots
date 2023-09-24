@@ -115,23 +115,6 @@
 
 To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
-The overall data structure for each file is similar to this:
-*    Quest 1
-*        Objective 1
-*            Step 1
-*            Step 2
-*        Objective 2
-*            Step 1
-*    Quest 2
-*        Objective 1
-*            Step 1
-*    Quest 3
-*        Objective 1
-*            Step 1
-*        Objective 2
-*            Step 1
-*            Step 2
-
 The three major data structures are:
 * **Quests**: A quest is a collection of at least one quest objective, and objectives can be placed anywhere on the map.
 
