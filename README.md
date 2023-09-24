@@ -144,18 +144,23 @@ The three major data structures are:
     * **priority**: An integer indicating how quests will be sorted in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
     * **maxRaidET**: The quest can only be selected if this many seconds (or less) has elapsed in the raid. If you're using mods like **Late to the Party**, this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best to make it unique to avoid confusion when troubleshooting.
-    * **objectives**: An array of the objectives in the quest
+    * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
-* **Objective**: A quest is a collection of at least one quest-objective step.
+* **Objectives**: An objective is a collection of at least one quest-objective step. An objective represents a list of actions that the bot must complete. Currently, objectives only contain a list of positions that the bot needs to reach. In the future, an example objective could be: 1) Go to a door, 2) Unlock the door, 3) Go inside of the room
 
     Quest objectives have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest objective later in the raid. This is used for quests are are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
     * **maxBots**: The maximum number of bots that can actively be performing the objective.
     * **minDistanceFromBot**: The objective will only be selected if the bot is at least this many meters away from it.
     * **maxDistanceFromBot**: The objective will only be selected if the bot is no more than this many meters away from it.
-    * **steps**: An array of the steps in the objective
+    * **steps**: An array of the steps in the objective. Bots will complete the steps in the order you specify.
 
-* **Step**: A step is an individual component of a quest objective. Currently, the only types of objective steps are going to a specific position.
+* **Steps**: A step is an individual component of a quest objective. Currently, the only types of objective steps are going to a specific position.
 
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
+
+**Tips and Tricks**
+* Objectives should be sparsely place on the map. Since bots take a break from questing for some time after each objective is completed, they will wander around the area for an unknown distance before continuing the quest. If you have objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
+* If you want a bot to go to several specific positions that are close to each other, use steps instead of multiple objectives. 
+* Bots will use the NavMesh to calculate the more efficient path to their objective. They cannot perform complex actions to reach objectives, so avoid placing objective steps on top of objects (i.e. inside truck beds).
