@@ -112,6 +112,7 @@
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 
 **---------- How to Add Custom Quests ----------**
+
 To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
 The overall data structure for each file is similar to this:
