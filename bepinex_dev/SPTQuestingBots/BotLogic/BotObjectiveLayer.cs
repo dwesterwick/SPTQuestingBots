@@ -197,12 +197,20 @@ namespace SPTQuestingBots.BotLogic
                 }
             }
 
+            if (objectiveManager.StuckCount >= ConfigController.Config.StuckBotDetection.MaxCount)
+            {
+                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
+                objectiveManager.StopQuesting();
+                return false;
+            }
+
             if (!objectiveManager.IsObjectiveReached)
             {
                 if (checkIfBotIsStuck())
                 {
                     if (!wasStuck)
                     {
+                        objectiveManager.StuckCount++;
                         LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is stuck and will get a new objective.");
                     }
                     wasStuck = true;

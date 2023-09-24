@@ -18,6 +18,7 @@ namespace SPTQuestingBots.BotLogic
         public bool CanRushPlayerSpawn { get; private set; } = false;
         public bool CanReachObjective { get; private set; } = true;
         public bool IsObjectivePathComplete { get; set; } = true;
+        public int StuckCount { get; set; } = 0;
         public float MinTimeAtObjective { get; set; } = 10f;
         public Vector3? Position { get; set; } = null;
 
@@ -108,7 +109,9 @@ namespace SPTQuestingBots.BotLogic
             IsObjectivePathComplete = true;
             IsObjectiveReached = true;
             targetObjective.BotCompletedObjective(botOwner);
+            targetQuest.CompleteObjective(botOwner, targetObjective);
             targetQuest.StartQuestForBot(botOwner);
+            StuckCount = 0;
         }
 
         public void RejectObjective()

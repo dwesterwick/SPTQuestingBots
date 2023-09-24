@@ -51,6 +51,9 @@ namespace SPTQuestingBots.Models
         [JsonIgnore]
         private Dictionary<BotOwner, DateTime> activeBots = new Dictionary<BotOwner, DateTime>();
 
+        [JsonIgnore]
+        private Dictionary<BotOwner, List<QuestObjective>> completedObjectives = new Dictionary<BotOwner, List<QuestObjective>>();
+
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
@@ -95,9 +98,14 @@ namespace SPTQuestingBots.Models
 
         public void StopQuestForBot(BotOwner bot)
         {
-            if (!activeBots.ContainsKey(bot))
+            if (activeBots.ContainsKey(bot))
             {
                 activeBots.Remove(bot);
+            }
+
+            if (completedObjectives.ContainsKey(bot))
+            {
+                completedObjectives.Remove(bot);
             }
         }
 
@@ -139,6 +147,18 @@ namespace SPTQuestingBots.Models
             return startingLength == objectives.Length - 1;
         }
 
+        public void CompleteObjective(BotOwner bot, QuestObjective objective)
+        {
+            if (!completedObjectives.ContainsKey(bot))
+            {
+                completedObjectives.Add(bot, new List<QuestObjective>() { objective } );
+            }
+            else
+            {
+                completedObjectives[bot].Add(objective);
+            }
+        }
+
         public QuestObjective GetRandomObjective()
         {
             IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
@@ -166,7 +186,8 @@ namespace SPTQuestingBots.Models
 
             IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
                 .Where(o => o.CanAssignBot(bot))
-                .Where(o => o.CanAssignMoreBots);
+                .Where(o => o.CanAssignMoreBots)
+                .Where(o => !completedObjectives.ContainsKey(bot) || !completedObjectives[bot].Contains(o));
 
             if (!possibleObjectives.Any())
             {

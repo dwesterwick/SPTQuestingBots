@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("time")]
         public float Time { get; set; } = 20;
 
+        [JsonProperty("max_count")]
+        public float MaxCount { get; set; } = 10;
+
         public StuckBotDetectionConfig()
         {
 
