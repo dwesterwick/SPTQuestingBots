@@ -1,5 +1,645 @@
 [
     {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Pride Rock",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 64.66508,
+                            "y": 38.9382439,
+                            "z": -78.0929947
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Scav Hideout",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 162.177292,
+                            "y": 0.0256208926,
+                            "z": -479.701233
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Resort",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -81.1505356,
+                            "y": 18.2847767,
+                            "z": -53.8898
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -78.80603,
+                            "y": 18.2847767,
+                            "z": -87.48046
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -73.03625,
+                            "y": 18.2847385,
+                            "z": -91.0424957
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -79.87281,
+                            "y": 21.8669586,
+                            "z": -90.62389
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -83.6373444,
+                            "y": 24.4348354,
+                            "z": -74.258316
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -79.6947861,
+                            "y": 21.8669586,
+                            "z": -57.0139542
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Chalet",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -123.842087,
+                            "y": 39.87246,
+                            "z": 76.5801239
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.460472,
+                            "y": 39.872406,
+                            "z": 86.66805
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -128.764053,
+                            "y": 39.8724022,
+                            "z": 104.8246
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -118.459038,
+                            "y": 42.89334,
+                            "z": 86.5755539
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.235992,
+                            "y": 36.63736,
+                            "z": 97.2785645
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -129.995453,
+                            "y": 36.23636,
+                            "z": 105.830513
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.0233,
+                            "y": 36.63736,
+                            "z": 105.504707
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.917084,
+                            "y": 36.63736,
+                            "z": 80.0848
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -110.684525,
+                            "y": 33.105854,
+                            "z": 87.32484
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "USEC Camp Building 1",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 53.9112854,
+                            "y": 4.90694666,
+                            "z": -592.323669
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 29.5675945,
+                            "y": 4.90696764,
+                            "z": -614.044067
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 55.6411171,
+                            "y": 7.69775534,
+                            "z": -614.6811
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.8195763,
+                            "y": 8.201273,
+                            "z": -639.0329
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 29.4953289,
+                            "y": 4.90697861,
+                            "z": -641.1743
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 53.5240555,
+                            "y": 4.906996,
+                            "z": -649.356262
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "USEC Camp Building 2",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -67.50461,
+                            "y": 4.90693474,
+                            "z": -754.207642
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -88.3456955,
+                            "y": 4.91758871,
+                            "z": -740.2719
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -120.936417,
+                            "y": 4.906963,
+                            "z": -731.320251
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -113.149574,
+                            "y": 4.90696239,
+                            "z": -754.1892
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -130.085571,
+                            "y": 4.906995,
+                            "z": -754.0141
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -97.84111,
+                            "y": 8.205606,
+                            "z": -729.435
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -89.8229141,
+                            "y": 8.205516,
+                            "z": -755.8042
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "USEC Camp Building 3",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -195.727951,
+                            "y": 4.906942,
+                            "z": -693.660645
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -185.405777,
+                            "y": 4.90699673,
+                            "z": -638.3837
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -174.240128,
+                            "y": 4.90698,
+                            "z": -636.7244
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -173.72937,
+                            "y": 4.906976,
+                            "z": -643.9063
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -198.779663,
+                            "y": 4.907,
+                            "z": -642.526062
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -198.496826,
+                            "y": 4.906988,
+                            "z": -648.87915
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -197.919464,
+                            "y": 7.688438,
+                            "z": -656.2162
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -179.624619,
+                            "y": 4.906964,
+                            "z": -670.1573
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
@@ -257,15 +897,15 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Stage Tent",
         "objectives" : [
             {
                 "repeatable": false,
                 "maxBots": 2,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -434,6 +1074,31 @@
         ]
     },
     {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Long Road Pond Camp",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -12.7992268,
+                            "y": 0.5352798,
+                            "z": 53.52692
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
@@ -504,10 +1169,65 @@
         ]
     },
     {
-        "repeatable": false,
+        "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
         "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Long Road Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 62.5363846,
+                            "y": 20.6935062,
+                            "z": 106.907082
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 69.98734,
+                            "y": 16.9704342,
+                            "z": 180.120728
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 94.97527,
+                            "y": 22.14395,
+                            "z": 158.5869
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Docks Camp",
         "objectives" : [
@@ -530,9 +1250,9 @@
     },
     {
         "repeatable": false,
-        "minLevel": 0,
+        "minLevel": 15,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 50,
         "priority": 20,
         "name": "Merin Car",
         "objectives" : [
@@ -540,7 +1260,7 @@
                 "repeatable": false,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 1500,
                 "steps": [
                     {
                         "position" : {
@@ -557,7 +1277,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Docks",
         "objectives" : [
@@ -597,7 +1317,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Main Road Bridge Beach Container",
         "objectives" : [
@@ -622,7 +1342,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 40,
         "priority": 20,
         "name": "Main Road Bridge Underpass",
         "objectives" : [
@@ -647,7 +1367,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Village East House Backyard",
         "objectives" : [
@@ -672,7 +1392,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Village East House",
         "objectives" : [
@@ -712,7 +1432,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Village Center House",
         "objectives" : [
@@ -755,7 +1475,7 @@
         ]
     },
     {
-        "repeatable": false,
+        "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
         "chanceForSelecting": 30,
@@ -763,10 +1483,10 @@
         "name": "Village West House",
         "objectives" : [
             {
-                "repeatable": false,
+                "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -789,7 +1509,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -808,7 +1528,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 20,
         "name": "Convenience Store House Backyard",
         "objectives" : [
@@ -938,7 +1658,7 @@
     },
     {
         "repeatable": false,
-        "minLevel": 15,
+        "minLevel": 0,
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
@@ -1073,9 +1793,9 @@
     },
     {
         "repeatable": false,
-        "minLevel": 0,
+        "minLevel": 15,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 15,
         "priority": 20,
         "name": "USEC Camp Workshop Buildings",
         "objectives" : [
@@ -1113,15 +1833,15 @@
     },
     {
         "repeatable": false,
-        "minLevel": 0,
+        "minLevel": 10,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 15,
         "priority": 20,
         "name": "USEC Camp Helipad Area",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1136,7 +1856,7 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1151,7 +1871,7 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1166,7 +1886,7 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1181,7 +1901,7 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1196,7 +1916,7 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
+                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1262,7 +1982,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1277,113 +1997,13 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
                             "x": -67.1896057,
                             "y": 17.5896912,
                             "z": -23.5435562
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "name": "Resort",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -81.1505356,
-                            "y": 18.2847767,
-                            "z": -53.8898
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -78.80603,
-                            "y": 18.2847767,
-                            "z": -87.48046
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -73.03625,
-                            "y": 18.2847385,
-                            "z": -91.0424957
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -79.87281,
-                            "y": 21.8669586,
-                            "z": -90.62389
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -83.6373444,
-                            "y": 24.4348354,
-                            "z": -74.258316
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -79.6947861,
-                            "y": 21.8669586,
-                            "z": -57.0139542
                         }
                     }
                 ]
@@ -1402,7 +2022,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1417,7 +2037,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1432,7 +2052,7 @@
                 "repeatable": false,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1457,7 +2077,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1472,7 +2092,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1487,7 +2107,7 @@
                 "repeatable": true,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
@@ -1599,151 +2219,6 @@
                             "x": -149.062241,
                             "y": 39.9193077,
                             "z": 94.82135
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "name": "Chalet",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -123.842087,
-                            "y": 39.87246,
-                            "z": 76.5801239
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -117.460472,
-                            "y": 39.872406,
-                            "z": 86.66805
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -128.764053,
-                            "y": 39.8724022,
-                            "z": 104.8246
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -118.459038,
-                            "y": 42.89334,
-                            "z": 86.5755539
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -122.235992,
-                            "y": 36.63736,
-                            "z": 97.2785645
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -129.995453,
-                            "y": 36.23636,
-                            "z": 105.830513
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -117.0233,
-                            "y": 36.63736,
-                            "z": 105.504707
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -122.917084,
-                            "y": 36.63736,
-                            "z": 80.0848
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "maxBots": 3,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -110.684525,
-                            "y": 33.105854,
-                            "z": 87.32484
                         }
                     }
                 ]
@@ -1864,6 +2339,412 @@
                             "x": -134.072189,
                             "y": 21.61867,
                             "z": 300.528137
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Entrance",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 14.7168531,
+                            "y": 4.606017,
+                            "z": -451.183136
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 18.2275467,
+                            "y": 4.813914,
+                            "z": -445.5997
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 24.4268379,
+                            "y": 4.81391335,
+                            "z": -444.666931
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 31.86294,
+                            "y": 4.809583,
+                            "z": -453.097717
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Entrance Tents",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 11.8840294,
+                            "y": 1.73906469,
+                            "z": -473.790863
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 9.963026,
+                            "y": 1.72979832,
+                            "z": -503.5251
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -28.3330879,
+                            "y": 1.94120026,
+                            "z": -527.640747
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 13.5384655,
+                            "y": 1.65884852,
+                            "z": -547.4041
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Building 1 Stash",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 50.73781,
+                            "y": 4.81484032,
+                            "z": -552.953552
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Building 1 Back Lot",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 300,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 29.6404552,
+                            "y": 4.619076,
+                            "z": -685.001343
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Building 2 Roof",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -90.78155,
+                            "y": 13.94272,
+                            "z": -742.5677
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "USEC Camp Building 3 Roof",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -186.4256,
+                            "y": 13.94274,
+                            "z": -659.88446
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "name": "Drug Lab",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.719414,
+                            "y": 10.51153,
+                            "z": -843.68396
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Tankers",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -92.66,
+                            "y": 10.5197487,
+                            "z": -912.784851
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Train Yard",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 2.606491,
+                            "y": 10.521,
+                            "z": -807.4514
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 56.6297874,
+                            "y": 10.5209932,
+                            "z": -793.4112
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 35.25934,
+                            "y": 11.985465,
+                            "z": -850.7863
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 52.24027,
+                            "y": 10.5115318,
+                            "z": -913.1142
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "North Edge",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 167.569839,
+                            "y": 4.22224,
+                            "z": -661.0765
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 160.546112,
+                            "y": 1.86743045,
+                            "z": -705.7252
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 171.678391,
+                            "y": 0.5209378,
+                            "z": -771.0607
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 124.383125,
+                            "y": 5.91621733,
+                            "z": -824.7657
                         }
                     }
                 ]
