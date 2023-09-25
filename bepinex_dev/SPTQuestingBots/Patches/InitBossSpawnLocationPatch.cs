@@ -27,6 +27,12 @@ namespace SPTQuestingBots.Patches
                     continue;
                 }
 
+                if (bossWave.TriggerType != SpawnTriggerType.none)
+                {
+                    LoggingController.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
+                    continue;
+                }
+
                 LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
 
                 if ((bossWave.BossType == WildSpawnType.sectantPriest) || (bossWave.BossType == WildSpawnType.sectantWarrior))
