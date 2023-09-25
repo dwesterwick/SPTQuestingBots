@@ -3,7 +3,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 20,
+        "chanceForSelecting": 10,
         "priority": 18,
         "name": "Hermetic Door Switch",
         "objectives" : [
@@ -28,7 +28,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 15,
         "priority": 18,
         "name": "D2 Switch",
         "objectives" : [
@@ -55,6 +55,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 18,
+        "maxRaidET": 300,
         "name": "Command Center Rush",
         "objectives" : [
             {
