@@ -979,5 +979,1552 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Loading Dock",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -156.55127,
+                            "y": 27.1066246,
+                            "z": 175.615143
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -156.902008,
+                            "y": 27.1066284,
+                            "z": 146.465546
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -156.737,
+                            "y": 27.10663,
+                            "z": 107.84861
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -169.516464,
+                            "y": 27.1066322,
+                            "z": 86.74304
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -192.3945,
+                            "y": 27.1066341,
+                            "z": 86.28606
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -196.003662,
+                            "y": 27.106638,
+                            "z": 53.420372
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "OLI Loading Dock Sniping Spot",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Loading Dock Stashes",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -174.546478,
+                            "y": 27.0861664,
+                            "z": 64.1145248
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -160.108109,
+                            "y": 27.2935734,
+                            "z": 60.08739
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -137.364777,
+                            "y": 27.2935734,
+                            "z": 66.70027
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -139.660278,
+                            "y": 27.2935734,
+                            "z": 64.06795
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -133.799454,
+                            "y": 27.0861816,
+                            "z": 50.4203758
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan Loading Corridor",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -176.8651,
+                            "y": 27.0861759,
+                            "z": -7.598729
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -178.462082,
+                            "y": 27.0861778,
+                            "z": -27.7299767
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -168.347458,
+                            "y": 27.0861835,
+                            "z": -62.43293
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -154.9661,
+                            "y": 27.244978,
+                            "z": -57.32388
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -174.466324,
+                            "y": 27.0861874,
+                            "z": -107.994423
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -162.3512,
+                            "y": 27.2735672,
+                            "z": -164.727356
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.521652,
+                            "y": 27.0862026,
+                            "z": -153.22522
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Goshan Loading Corridor Stairs Top",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Goshan Loading Corridor Stairs Bottom",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -194.609314,
+                            "y": 20.153717,
+                            "z": -57.69243
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan Interior Tents",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -113.578674,
+                            "y": 27.0862,
+                            "z": -125.651344
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan Food Spawns",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -129.021591,
+                            "y": 27.0862026,
+                            "z": -158.126389
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -129.845718,
+                            "y": 27.0862,
+                            "z": -171.288391
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -121.564888,
+                            "y": 27.0862,
+                            "z": -168.07312
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -122.610207,
+                            "y": 27.0861988,
+                            "z": -176.08165
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.549736,
+                            "y": 27.0861988,
+                            "z": -169.706039
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -118.329826,
+                            "y": 27.0862,
+                            "z": -160.755325
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -117.865623,
+                            "y": 27.0862,
+                            "z": -145.247787
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -112.33091,
+                            "y": 27.0862,
+                            "z": -143.400269
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -111.447861,
+                            "y": 27.0861988,
+                            "z": -159.883545
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -111.321411,
+                            "y": 27.0861988,
+                            "z": -170.551132
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -110.923561,
+                            "y": 27.0861969,
+                            "z": -176.3371
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -105.324974,
+                            "y": 27.0861969,
+                            "z": -176.342056
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan Lockers",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -65.08832,
+                            "y": 27.0864887,
+                            "z": -0.117376477
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -68.6599,
+                            "y": 27.0864868,
+                            "z": 7.38663
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan South Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -76.67584,
+                            "y": 27.08648,
+                            "z": 42.4231873
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -69.00478,
+                            "y": 27.0864754,
+                            "z": 40.4756432
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -77.66552,
+                            "y": 27.0864773,
+                            "z": 48.8652573
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -66.57702,
+                            "y": 27.0864716,
+                            "z": 51.696537
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Goshan North Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -77.25731,
+                            "y": 27.0865059,
+                            "z": -150.086624
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -77.21631,
+                            "y": 27.0865078,
+                            "z": -154.596848
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -77.18332,
+                            "y": 27.0865078,
+                            "z": -159.620163
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -66.0170059,
+                            "y": 27.0864983,
+                            "z": -160.38028
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "IDEA Escalator Top Room",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 58.0378876,
+                            "y": 27.0860214,
+                            "z": -203.1358
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "IDEA Lockers",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 89.81569,
+                            "y": 27.0676746,
+                            "z": -236.53096
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "IDEA Registers",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 10.5109415,
+                            "y": 27.0676746,
+                            "z": -242.93573
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Loading Area",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -108.470634,
+                            "y": 27.0864811,
+                            "z": 77.8563156
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -111.656548,
+                            "y": 27.0864754,
+                            "z": 118.782806
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -94.5671539,
+                            "y": 27.0864677,
+                            "z": 190.148209
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -76.80244,
+                            "y": 27.0864677,
+                            "z": 183.962616
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -86.66275,
+                            "y": 27.0864677,
+                            "z": 177.917389
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Back Storage",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -93.15129,
+                            "y": 27.0864735,
+                            "z": 141.2594
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -80.02157,
+                            "y": 27.08647,
+                            "z": 167.146774
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI SE Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -99.20864,
+                            "y": 27.089056,
+                            "z": 123.110191
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -98.889946,
+                            "y": 27.089056,
+                            "z": 116.795349
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -92.02223,
+                            "y": 27.089056,
+                            "z": 122.250084
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -92.0259247,
+                            "y": 27.0890541,
+                            "z": 130.637451
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI NE Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -98.66047,
+                            "y": 27.089056,
+                            "z": 112.417717
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -92.33623,
+                            "y": 27.0890579,
+                            "z": 100.069061
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -91.80267,
+                            "y": 27.0890579,
+                            "z": 106.482079
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI NW Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -87.24678,
+                            "y": 27.0890579,
+                            "z": 97.27374
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -87.4186,
+                            "y": 27.0890579,
+                            "z": 107.019905
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -81.17139,
+                            "y": 27.089056,
+                            "z": 111.264992
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 10,
+        "maxLevel": 45,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "OLI Utility Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -104.396469,
+                            "y": 27.08906,
+                            "z": 76.9635849
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI East Bathrooms",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -77.26531,
+                            "y": 27.08906,
+                            "z": 82.52976
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Showroom East",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -47.29352,
+                            "y": 27.0864735,
+                            "z": 129.0653
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -38.6161766,
+                            "y": 27.0864716,
+                            "z": 156.983444
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.9692154,
+                            "y": 27.08647,
+                            "z": 174.832611
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -68.06927,
+                            "y": 27.0864677,
+                            "z": 189.494888
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Showroom Center",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -42.6305771,
+                            "y": 27.0864754,
+                            "z": 112.01683
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -26.6971283,
+                            "y": 27.0864773,
+                            "z": 111.309616
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -2.36867857,
+                            "y": 27.0864773,
+                            "z": 107.215172
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -19.088913,
+                            "y": 27.0864716,
+                            "z": 148.086624
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -4.807571,
+                            "y": 27.0864677,
+                            "z": 188.56012
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Showroom West",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 6.80444,
+                            "y": 27.08647,
+                            "z": 170.198486
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 22.401823,
+                            "y": 27.0864773,
+                            "z": 112.065407
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 42.360054,
+                            "y": 27.0864735,
+                            "z": 129.241562
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 18.89523,
+                            "y": 27.08647,
+                            "z": 166.622879
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 13.3992748,
+                            "y": 27.3321686,
+                            "z": 139.481552
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 54.607193,
+                            "y": 27.0864754,
+                            "z": 119.754753
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 38.85411,
+                            "y": 27.0864773,
+                            "z": 99.9045
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 47.1382751,
+                            "y": 27.0864716,
+                            "z": 146.033218
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 39.12195,
+                            "y": 27.0864716,
+                            "z": 150.038956
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 39.3408737,
+                            "y": 27.0864677,
+                            "z": 183.502914
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 49.4871368,
+                            "y": 27.0864677,
+                            "z": 180.1992
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 58.7034378,
+                            "y": 27.08647,
+                            "z": 167.698639
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 66.7198,
+                            "y": 27.08647,
+                            "z": 161.730011
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Logistics Area",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 64.6392,
+                            "y": 27.0864754,
+                            "z": 125.549866
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 76.7203445,
+                            "y": 27.0864754,
+                            "z": 120.15258
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 86.30561,
+                            "y": 27.0864754,
+                            "z": 118.655792
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 87.0766,
+                            "y": 27.0864754,
+                            "z": 127.735718
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 88.91476,
+                            "y": 27.0864735,
+                            "z": 131.885681
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "OLI Logistics Back Offices",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 74.1557,
+                            "y": 27.0862885,
+                            "z": 157.568878
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 79.50485,
+                            "y": 27.0862885,
+                            "z": 165.92598
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 83.50744,
+                            "y": 27.0862885,
+                            "z": 159.207291
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 75.30018,
+                            "y": 27.0862885,
+                            "z": 162.669281
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
