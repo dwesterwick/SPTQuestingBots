@@ -3,7 +3,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 10,
+        "chanceForSelecting": 5,
         "priority": 18,
         "name": "Hermetic Door Switch",
         "objectives" : [
@@ -28,7 +28,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 15,
+        "chanceForSelecting": 10,
         "priority": 18,
         "name": "D2 Switch",
         "objectives" : [
@@ -94,7 +94,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 20,
         "priority": 18,
         "name": "Black Bishop Tech Room",
         "objectives" : [

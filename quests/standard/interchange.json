@@ -916,61 +916,6 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 10,
-        "priority": 20,
-        "name": "Power Station Roof",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -216.995331,
-                            "y": 30.30841,
-                            "z": -345.504456
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -194.1136,
-                            "y": 30.30841,
-                            "z": -346.168243
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -194.536072,
-                            "y": 30.3084145,
-                            "z": -357.34317
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Power Station West Shack",
@@ -1011,31 +956,6 @@
                             "x": -12.325388,
                             "y": 21.3254337,
                             "z": -331.584961
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "IDEA North Sniping Tower",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 48.796154,
-                            "y": 37.3335075,
-                            "z": -371.58255
                         }
                     }
                 ]
@@ -1331,31 +1251,6 @@
                             "x": 268.4296,
                             "y": 21.3223438,
                             "z": 59.4247856
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "SW Sniping Tower",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 207.219925,
-                            "y": 31.4509182,
-                            "z": 215.5884
                         }
                     }
                 ]
@@ -1691,31 +1586,6 @@
                             "x": -196.003662,
                             "y": 27.106638,
                             "z": 53.420372
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 10,
-        "priority": 20,
-        "name": "OLI Loading Dock Sniping Spot",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 300,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -133.942871,
-                            "y": 35.63311,
-                            "z": 93.55811
                         }
                     }
                 ]
@@ -2188,31 +2058,6 @@
         ]
     },
     {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "IDEA Registers",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 10.5109415,
-                            "y": 27.0676746,
-                            "z": -242.93573
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
@@ -2455,31 +2300,6 @@
                             "x": -81.17139,
                             "y": 27.089056,
                             "z": 111.264992
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 10,
-        "maxLevel": 45,
-        "chanceForSelecting": 10,
-        "priority": 20,
-        "name": "OLI Utility Room",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 300,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -104.396469,
-                            "y": 27.08906,
-                            "z": 76.9635849
                         }
                     }
                 ]
@@ -3147,61 +2967,6 @@
         ]
     },
     {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 20,
-        "priority": 20,
-        "name": "2nd Floor Sniping",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 105.367462,
-                            "y": 36.5697479,
-                            "z": -46.3224068
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 106.787888,
-                            "y": 36.54494,
-                            "z": -56.30941
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 105.244492,
-                            "y": 36.5697479,
-                            "z": -63.89896
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
@@ -3260,46 +3025,6 @@
                             "x": 8.395548,
                             "y": 36.5697556,
                             "z": -138.729538
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "IDEA 2nd Floor",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 61.186306,
-                            "y": 32.1979,
-                            "z": -286.7073
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "maxBots": 2,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 77.39655,
-                            "y": 32.1979,
-                            "z": -286.4888
                         }
                     }
                 ]
@@ -3652,6 +3377,284 @@
                             "x": 10.7467718,
                             "y": 27.0934353,
                             "z": 30.5839615
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Power Station Roof",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -216.995331,
+                            "y": 30.30841,
+                            "z": -345.504456
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -194.1136,
+                            "y": 30.30841,
+                            "z": -346.168243
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -194.536072,
+                            "y": 30.3084145,
+                            "z": -357.34317
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 21,
+        "name": "2nd Floor Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 105.367462,
+                            "y": 36.5697479,
+                            "z": -46.3224068
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 106.787888,
+                            "y": 36.54494,
+                            "z": -56.30941
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 105.244492,
+                            "y": 36.5697479,
+                            "z": -63.89896
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "OLI Loading Dock Sniping Spot",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "SW Sniping Tower",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 207.219925,
+                            "y": 31.4509182,
+                            "z": 215.5884
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "IDEA North Sniping Tower",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 48.796154,
+                            "y": 37.3335075,
+                            "z": -371.58255
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "IDEA 2nd Floor",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 61.186306,
+                            "y": 32.1979,
+                            "z": -286.7073
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.39655,
+                            "y": 32.1979,
+                            "z": -286.4888
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 10,
+        "maxLevel": 45,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "OLI Utility Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -104.396469,
+                            "y": 27.08906,
+                            "z": 76.9635849
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 21,
+        "name": "IDEA Registers",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 10.5109415,
+                            "y": 27.0676746,
+                            "z": -242.93573
                         }
                     }
                 ]
