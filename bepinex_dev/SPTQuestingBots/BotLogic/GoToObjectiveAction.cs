@@ -13,6 +13,7 @@ namespace SPTQuestingBots.BotLogic
     internal class GoToObjectiveAction : CustomLogicDelayedUpdate
     {
         private BotObjectiveManager objectiveManager;
+        private bool canSprint = true;
         
         public GoToObjectiveAction(BotOwner _BotOwner) : base(_BotOwner)
         {
@@ -31,12 +32,14 @@ namespace SPTQuestingBots.BotLogic
 
         public override void Update()
         {
-            UpdateBotMovement();
+            UpdateBotMovement(canSprint);
 
             if (!canUpdate())
             {
                 return;
             }
+
+            canSprint = objectiveManager.CanSprintToObjective();
 
             if (!objectiveManager.IsObjectiveActive || !objectiveManager.Position.HasValue)
             {

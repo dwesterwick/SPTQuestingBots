@@ -36,6 +36,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxTimeOnQuest")]
         public float MaxTimeOnQuest { get; set; } = ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest;
 
+        [JsonProperty("canRunBetweenObjectives")]
+        public bool CanRunBetweenObjectives { get; set; } = true;
+
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
@@ -157,6 +160,11 @@ namespace SPTQuestingBots.Models
             {
                 completedObjectives[bot].Add(objective);
             }
+        }
+
+        public bool HasBotCompletedAnyObjectives(BotOwner bot)
+        {
+            return completedObjectives.ContainsKey(bot);
         }
 
         public QuestObjective GetRandomObjective()

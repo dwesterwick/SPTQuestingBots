@@ -39,6 +39,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 BotOwner.GetPlayer.EnableSprint(true);
             }
+
             if (!canSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < 0.1f))
             {
                 BotOwner.GetPlayer.EnableSprint(false);

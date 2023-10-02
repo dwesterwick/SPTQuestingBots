@@ -39,6 +39,11 @@ namespace SPTQuestingBots.BotLogic
             get { return timeSinceChangingObjectiveTimer.ElapsedMilliseconds / 1000.0; }
         }
 
+        public float DistanceToObjective
+        {
+            get { return Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN; }
+        }
+
         public void Init(BotOwner _botOwner)
         {
             base.UpdateInterval = 200;
@@ -134,7 +139,24 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsCloseToObjective(float distance)
         {
-            return Vector3.Distance(Position.Value, botOwner.Position) <= distance;
+            return DistanceToObjective <= distance;
+        }
+
+        public bool CanSprintToObjective()
+        {
+            if ((targetObjective != null) && (DistanceToObjective < targetObjective.MaxRunDistance))
+            {
+                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will stop running because it's too close to " + targetObjective.ToString());
+                return false;
+            }
+
+            if ((targetQuest != null) && targetQuest.HasBotCompletedAnyObjectives(botOwner) && !targetQuest.CanRunBetweenObjectives)
+            {
+                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can no longer run for quest " + targetQuest.Name);
+                return false;
+            }
+
+            return true;
         }
 
         public override string ToString()

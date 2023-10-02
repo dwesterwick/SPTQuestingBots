@@ -159,6 +159,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Crackhouse",
         "objectives" : [
             {
@@ -259,6 +260,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Dorms 2 Story",
         "objectives" : [
             {
@@ -419,6 +421,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Dorms 3 Story",
         "objectives" : [
             {
@@ -639,6 +642,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Big Red",
         "objectives" : [
             {
@@ -724,6 +728,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Fortress",
         "objectives" : [
             {
@@ -839,6 +844,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Storage Building",
         "objectives" : [
             {
@@ -879,6 +885,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Warehouse 4",
         "objectives" : [
             {
@@ -959,6 +966,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Container Building",
         "objectives" : [
             {
@@ -999,6 +1007,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Repair Shop",
         "objectives" : [
             {
@@ -1194,6 +1203,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Glass Building",
         "objectives" : [
             {
@@ -1271,6 +1281,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Smokestack",
         "objectives" : [
             {
@@ -1456,6 +1467,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Substation",
         "objectives" : [
             {
@@ -1896,6 +1908,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Garage",
         "objectives" : [
             {
@@ -2206,6 +2219,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "New Gas",
         "objectives" : [
             {

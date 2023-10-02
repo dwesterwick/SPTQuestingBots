@@ -10,6 +10,7 @@ export interface Quest
     chanceForSelecting: number,
     priority: number,
     maxRaidET: number,
+    canRunBetweenObjectives: boolean,
     name: string,
     objectives: QuestObjective[]
 }
@@ -20,6 +21,7 @@ export interface QuestObjective
     maxBots: number,
     minDistanceFromBot: number,
     maxDistanceFromBot: number,
+    maxRunDistance: number,
     steps: QuestObjectiveStep[]
 }
 

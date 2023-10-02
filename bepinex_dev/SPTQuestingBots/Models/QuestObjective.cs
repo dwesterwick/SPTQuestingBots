@@ -25,6 +25,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxDistanceFromBot")]
         public float MaxDistanceFromBot { get; set; } = 9999f;
 
+        [JsonProperty("maxRunDistance")]
+        public float MaxRunDistance { get; set; } = 0f;
+
         [JsonProperty("name")]
         private string name = "Unnamed Quest Objective";
 
