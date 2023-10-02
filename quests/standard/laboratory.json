@@ -3,21 +3,1874 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "name": "Server Room Stairs",
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "name": "Medical Block Elevator Power Switch",
         "objectives" : [
             {
                 "repeatable": true,
+                "maxBots": 4,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -123.752342,
+                            "y": -4.05300045,
+                            "z": -314.403473
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 18,
+        "name": "Cargo Block Elevator Power Switch",
+        "objectives" : [
+            {
+                "repeatable": false,
                 "maxBots": 3,
                 "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.649429,
+                            "y": -4.043658,
+                            "z": -353.8349
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "name": "Main Elevator Power Switch",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -272.8778,
+                            "y": -4.0509634,
+                            "z": -366.44696
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "name": "Parking Gate Controls",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -244.059341,
+                            "y": 4.10415459,
+                            "z": -380.751038
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 5,
+        "priority": 18,
+        "name": "Parking Gate Alarm Controls",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -219.552612,
+                            "y": 4.104169,
+                            "z": -381.1039
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "name": "Hangar Gate Controls",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -171.800674,
+                            "y": 4.261299,
+                            "z": -283.171753
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Weapons Testing Area Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -182.764542,
+                            "y": 0.329985082,
+                            "z": -315.938141
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Conference Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
                         "position" : {
-                            "x": -122.574593,
-                            "y": 8.134482,
-                            "z": -338.20163
+                            "x": -222.1007,
+                            "y": 4.10213566,
+                            "z": -355.6739
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -230.408325,
+                            "y": 4.11446857,
+                            "z": -340.188873
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -221.847031,
+                            "y": 4.1021266,
+                            "z": -331.040955
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -234.552353,
+                            "y": 4.11446953,
+                            "z": -346.634
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Manager's Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -162.915466,
+                            "y": 4.1250844,
+                            "z": -348.669464
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -161.779419,
+                            "y": 4.125084,
+                            "z": -343.954742
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Red Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 4,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -254.140717,
+                            "y": 4.09802771,
+                            "z": -326.1588
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Violet Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 4,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -267.2484,
+                            "y": 4.09802675,
+                            "z": -321.633545
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Black Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 4,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -126.287308,
+                            "y": 0.009015537,
+                            "z": -361.782043
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 4,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.046768,
+                            "y": 0.009014728,
+                            "z": -356.126434
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 4,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -130.3463,
+                            "y": 0.04799983,
+                            "z": -357.6004
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Blue Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.559189,
+                            "y": 0.008748697,
+                            "z": -403.93515
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -124.239128,
+                            "y": 0.008747022,
+                            "z": -398.360535
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 18,
+        "name": "Green Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -132.090469,
+                            "y": 4.09999132,
+                            "z": -350.505585
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -124.59465,
+                            "y": 4.099992,
+                            "z": -351.075745
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -123.247391,
+                            "y": 4.09999132,
+                            "z": -356.2137
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -137.107269,
+                            "y": 4.09999275,
+                            "z": -368.396942
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -124.027824,
+                            "y": 4.09999275,
+                            "z": -364.899261
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -128.072128,
+                            "y": 4.099995,
+                            "z": -376.822937
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -137.671463,
+                            "y": 4.09999371,
+                            "z": -376.482635
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.272766,
+                            "y": 4.099992,
+                            "z": -357.422058
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 19,
+        "name": "Sanitar's Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -131.376175,
+                            "y": 4.10000944,
+                            "z": -336.304
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 19,
+        "name": "Server Room",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -115.895058,
+                            "y": 1.36848474,
+                            "z": -308.942963
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -126.698868,
+                            "y": 1.36848056,
+                            "z": -290.835724
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -137.589188,
+                            "y": 1.36848271,
+                            "z": -309.430756
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.421249,
+                            "y": 4.09078169,
+                            "z": -318.788147
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.506561,
+                            "y": 4.09080458,
+                            "z": -291.280548
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Server Room Control Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.2993,
+                            "y": 4.121007,
+                            "z": -281.725433
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -133.237747,
+                            "y": 4.10687542,
+                            "z": -285.21698
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -125.381157,
+                            "y": 4.10687542,
+                            "z": -285.2149
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 19,
+        "name": "Main Working Area East",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -183.340866,
+                            "y": 0.0115770483,
+                            "z": -327.968719
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -166.003082,
+                            "y": 0.0110259727,
+                            "z": -323.198517
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -158.598633,
+                            "y": 0.08644405,
+                            "z": -317.9223
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Main Working Area West",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -174.603912,
+                            "y": 0.0111746341,
+                            "z": -372.8383
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -184.400528,
+                            "y": 0.028476391,
+                            "z": -370.521973
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -163.113708,
+                            "y": 0.01118581,
+                            "z": -372.695465
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -160.918823,
+                            "y": 0.0111489492,
+                            "z": -360.408875
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -169.325089,
+                            "y": 0.120026574,
+                            "z": -358.212158
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -181.8382,
+                            "y": 0.0114936717,
+                            "z": -358.7257
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Security Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -266.900757,
+                            "y": 4.09802771,
+                            "z": -326.3459
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -258.14978,
+                            "y": 4.098026,
+                            "z": -318.1145
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 19,
+        "name": "Board Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -168.036743,
+                            "y": 4.1250844,
+                            "z": -345.191559
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -177.072372,
+                            "y": 4.125084,
+                            "z": -342.47113
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Medical Block Elevator Stairwell",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.649429,
+                            "y": -4.043658,
+                            "z": -353.8349
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Ventilation Shaft Stairwell",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -108.057037,
+                            "y": -2.04115081,
+                            "z": -419.187439
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Parking Stairwell",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -269.415863,
+                            "y": -2.070192,
+                            "z": -392.331116
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "NE Stairwell",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -253.733353,
+                            "y": -1.90085018,
+                            "z": -303.509552
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Central Stairwell 1",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -171.216553,
+                            "y": -2.68745828,
+                            "z": -328.741943
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Central Stairwell 2",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -170.746979,
+                            "y": -2.68164682,
+                            "z": -356.9938
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Server Room SW Stairs",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -118.9812,
+                            "y": 1.3761071,
+                            "z": -331.958984
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Server Room NW Stairs",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.329742,
+                            "y": 1.34838676,
+                            "z": -331.890961
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "name": "Server Room Drop-Down Area",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -125.381157,
+                            "y": 4.10687542,
+                            "z": -285.2149
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Negotiation Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -143.668137,
+                            "y": 0.0089041,
+                            "z": -398.7035
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -157.882339,
+                            "y": 0.008903279,
+                            "z": -394.464172
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "name": "Blue Room Entry",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -137.195953,
+                            "y": 0.008749715,
+                            "z": -409.794281
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.914856,
+                            "y": 0.008743235,
+                            "z": -387.08493
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Lecture Hall",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -216.699814,
+                            "y": 0.013099595,
+                            "z": -314.268768
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -219.650223,
+                            "y": 0.363955915,
+                            "z": -307.1396
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -203.52005,
+                            "y": 1.35355473,
+                            "z": -305.3687
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Gym",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -242.112076,
+                            "y": 0.0202135127,
+                            "z": -296.2635
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Security Barracks",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -257.08194,
+                            "y": 0.0144541888,
+                            "z": -321.518616
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Admin Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -250.898926,
+                            "y": 4.117605,
+                            "z": -368.945953
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -257.990356,
+                            "y": 4.117605,
+                            "z": -370.227325
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -267.130432,
+                            "y": 4.11760473,
+                            "z": -371.050049
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "name": "Cafeteria",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -235.26535,
+                            "y": 4.12323761,
+                            "z": -310.987823
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -237.084763,
+                            "y": 4.12323666,
+                            "z": -297.0441
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -223.10556,
+                            "y": 4.123235,
+                            "z": -297.141541
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Infirmary",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.914932,
+                            "y": 4.09998751,
+                            "z": -388.5527
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -127.582268,
+                            "y": 4.200132,
+                            "z": -398.735565
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.297577,
+                            "y": 4.099995,
+                            "z": -409.692322
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -138.087341,
+                            "y": 4.09999132,
+                            "z": -399.554352
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Offices 1",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -189.569687,
+                            "y": 4.10000372,
+                            "z": -409.63974
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -198.903214,
+                            "y": 4.10000324,
+                            "z": -407.8072
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Offices 2",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -142.767776,
+                            "y": 4.094366,
+                            "z": -400.015747
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Offices Outside",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -161.743408,
+                            "y": 4.100833,
+                            "z": -411.55368
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -178.430466,
+                            "y": 4.100834,
+                            "z": -417.776031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Rec Area 2nd Floor Patrol",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -244.4196,
+                            "y": 4.10213232,
+                            "z": -317.5128
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -244.18457,
+                            "y": 4.10214853,
+                            "z": -368.6532
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -208.080536,
+                            "y": 4.10224533,
+                            "z": -369.066925
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -205.870255,
+                            "y": 4.10213757,
+                            "z": -343.240936
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -207.8146,
+                            "y": 4.1020174,
+                            "z": -318.154053
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Main Work Area 2nd Floor Patrol",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -192.596283,
+                            "y": 4.10214,
+                            "z": -349.843231
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -195.215668,
+                            "y": 4.103194,
+                            "z": -383.091675
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -147.927155,
+                            "y": 4.10235453,
+                            "z": -350.9553
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -148.225616,
+                            "y": 4.102269,
+                            "z": -335.0948
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -146.433487,
+                            "y": 4.10276365,
+                            "z": -303.6659
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -194.964752,
+                            "y": 4.10302734,
+                            "z": -303.885864
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Parking",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -226.214859,
+                            "y": 0.0228216033,
+                            "z": -407.116
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -238.762115,
+                            "y": 0.0227194447,
+                            "z": -409.556641
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -247.318985,
+                            "y": 0.0225016177,
+                            "z": -414.7396
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -221.317245,
+                            "y": 0.0220257957,
+                            "z": -426.07608
                         }
                     }
                 ]
