@@ -580,7 +580,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "chanceForSelecting": 25,
+        "chanceForSelecting": 15,
         "priority": 19,
         "name": "Server Room",
         "objectives" : [
