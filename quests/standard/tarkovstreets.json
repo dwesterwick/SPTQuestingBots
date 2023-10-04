@@ -1185,5 +1185,2013 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Koener Steak and Grill",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 47.7307358,
+                            "y": 3.14347935,
+                            "z": 396.2202
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Primorsky Extract Area",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 9.378766,
+                            "y": 2.11336017,
+                            "z": 445.3327
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "TrainHard",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 75,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -167.149963,
+                            "y": 2.43207741,
+                            "z": 465.0839
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Cinema Hideout",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.313,
+                            "y": 2.51420069,
+                            "z": 399.61557
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -130.57222,
+                            "y": 2.36502957,
+                            "z": 395.154022
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Cinema Courtyard",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 50,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -88.3481445,
+                            "y": -0.0618792251,
+                            "z": 415.480927
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Cinema Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -155.487381,
+                            "y": 8.612576,
+                            "z": 417.749939
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -141.055588,
+                            "y": 8.615528,
+                            "z": 407.461823
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -140.654236,
+                            "y": 8.615907,
+                            "z": 393.06662
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -155.320755,
+                            "y": 8.612573,
+                            "z": 379.406738
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -181.624435,
+                            "y": 8.612579,
+                            "z": 376.933472
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Petersen Center",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -126.335716,
+                            "y": 2.29253387,
+                            "z": 334.2128
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -88.3481445,
+                            "y": -0.0618792251,
+                            "z": 415.480927
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -141.275177,
+                            "y": 2.21096277,
+                            "z": 333.902832
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -137.543732,
+                            "y": 2.21096253,
+                            "z": 334.947784
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -136.797363,
+                            "y": 2.210965,
+                            "z": 327.0172
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -140.072937,
+                            "y": 2.21096444,
+                            "z": 326.202026
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -128.156113,
+                            "y": 2.237129,
+                            "z": 344.9648
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Bilbo Coffee",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -78.67731,
+                            "y": 2.19766021,
+                            "z": 346.673157
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -78.4696,
+                            "y": 3.19744158,
+                            "z": 336.493256
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -58.0690536,
+                            "y": 3.19708037,
+                            "z": 328.738983
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -32.7027969,
+                            "y": 2.200041,
+                            "z": 318.871857
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Diner",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -78.99263,
+                            "y": 2.358709,
+                            "z": 235.599411
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -84.37435,
+                            "y": 3.51010847,
+                            "z": 234.712616
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "name": "Diner Hideout",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -115.483795,
+                            "y": 5.314089,
+                            "z": 246.522964
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Car Lot Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -154.48761,
+                            "y": 2.22095561,
+                            "z": 226.666275
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -150.613083,
+                            "y": 2.22095561,
+                            "z": 230.582886
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Finance Building",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -185.2174,
+                            "y": 2.67399049,
+                            "z": 225.920029
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -185.990234,
+                            "y": 2.67399073,
+                            "z": 221.566
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -185.18718,
+                            "y": 6.06641436,
+                            "z": 223.283157
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -176.116653,
+                            "y": 6.0664134,
+                            "z": 226.474213
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -163.22171,
+                            "y": 6.066415,
+                            "z": 229.746353
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -163.523422,
+                            "y": 6.066416,
+                            "z": 225.575333
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -163.652878,
+                            "y": 6.06641626,
+                            "z": 221.2607
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Pinewood Hotel Patrol",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -29.59368,
+                            "y": 2.13255286,
+                            "z": 59.3848534
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -46.74783,
+                            "y": 0.924344242,
+                            "z": 113.845749
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -84.4248,
+                            "y": 0.7818383,
+                            "z": 140.0992
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -118.395714,
+                            "y": 1.39386487,
+                            "z": 116.379974
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -111.091057,
+                            "y": 0.7818203,
+                            "z": 82.57084
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.40102,
+                            "y": 0.9088143,
+                            "z": 71.2935
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -79.6148758,
+                            "y": 1.4166919,
+                            "z": 108.157623
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.3550034,
+                            "y": 0.930239856,
+                            "z": 91.5497742
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Pinewood Hotel Dentist",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -38.2963066,
+                            "y": 0.862365067,
+                            "z": 46.04437
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -60.77056,
+                            "y": 0.825228,
+                            "z": 54.0531769
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -44.55558,
+                            "y": 1.30216122,
+                            "z": 57.5889664
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.53665,
+                            "y": 1.30241525,
+                            "z": 59.6224976
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.4536629,
+                            "y": 1.30241549,
+                            "z": 62.3383179
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Pinewood Hotel Basement Access",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -118.7841,
+                            "y": 0.8623691,
+                            "z": 67.538826
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -102.421928,
+                            "y": 1.3024348,
+                            "z": 64.20833
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Pinewood Hotel 2nd Floor",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -78.39963,
+                            "y": 5.04111958,
+                            "z": 51.8656158
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -67.2412,
+                            "y": 5.406831,
+                            "z": 52.1554642
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -48.3614159,
+                            "y": 5.041134,
+                            "z": 63.0807953
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Pinewood Hotel Main Entrance",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -111.452454,
+                            "y": 5.04,
+                            "z": 85.09824
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.638565,
+                            "y": 1.40553355,
+                            "z": 101.113449
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -93.65344,
+                            "y": 1.40554011,
+                            "z": 120.160233
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Pinewood Hotel Sparja",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -84.87919,
+                            "y": 1.41552281,
+                            "z": 172.934341
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -82.25215,
+                            "y": 1.41551757,
+                            "z": 162.759613
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -76.64591,
+                            "y": 1.41551554,
+                            "z": 157.756989
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.5457268,
+                            "y": 1.415518,
+                            "z": 162.7091
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -56.37617,
+                            "y": 1.41551316,
+                            "z": 149.09993
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Pinewood Hotel Burger Spot",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -25.2881985,
+                            "y": 1.41524637,
+                            "z": 138.7331
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -37.77276,
+                            "y": 1.41524649,
+                            "z": 137.825592
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -27.00257,
+                            "y": 1.41524279,
+                            "z": 128.443451
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -26.5760765,
+                            "y": 1.41524792,
+                            "z": 149.059875
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Nikita Cafe",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -165.343445,
+                            "y": 3.1393652,
+                            "z": 180.151627
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "name": "Shestyorochka",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -201.0825,
+                            "y": 3.36668348,
+                            "z": 189.977859
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -211.642914,
+                            "y": 3.3666842,
+                            "z": 182.945892
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -203.771088,
+                            "y": 3.36668468,
+                            "z": 179.882324
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -194.8432,
+                            "y": 3.366684,
+                            "z": 187.461288
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "ALCO-Point",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -229.972351,
+                            "y": 2.217955,
+                            "z": 283.433441
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -220.285675,
+                            "y": 5.2135,
+                            "z": 277.443
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -225.23909,
+                            "y": 5.213499,
+                            "z": 275.453064
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Coffee Joy",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 39.6098824,
+                            "y": 1.18040562,
+                            "z": 66.18754
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 38.0513153,
+                            "y": 1.18040323,
+                            "z": 73.27199
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.734745,
+                            "y": 1.18033874,
+                            "z": 81.47348
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Post Office",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 46.77202,
+                            "y": 1.18034363,
+                            "z": 96.079
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 48.5160828,
+                            "y": 1.180341,
+                            "z": 102.245285
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 52.4108276,
+                            "y": 1.18034256,
+                            "z": 96.25675
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 52.7779541,
+                            "y": 1.180341,
+                            "z": 100.966194
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 40.9684677,
+                            "y": 1.180394,
+                            "z": 122.460022
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 41.0578575,
+                            "y": 1.18039489,
+                            "z": 112.961975
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Pharmacy",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 40.5223579,
+                            "y": 2.67797041,
+                            "z": 163.1393
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 46.6917076,
+                            "y": 2.67805,
+                            "z": 150.3541
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.3596344,
+                            "y": 2.67804933,
+                            "z": 155.983551
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 41.4061928,
+                            "y": 2.67804146,
+                            "z": 169.504028
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Census Building",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 72.1472549,
+                            "y": 0.3662206,
+                            "z": 139.747971
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 83.8490143,
+                            "y": 0.8640613,
+                            "z": 142.586487
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 79.05966,
+                            "y": 0.8640596,
+                            "z": 125.688652
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 86.58047,
+                            "y": 0.8640603,
+                            "z": 129.947113
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.16726,
+                            "y": 3.90367961,
+                            "z": 134.410675
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Brodian Pub",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 117.564835,
+                            "y": 0.490026951,
+                            "z": 114.563774
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 108.783066,
+                            "y": 0.490023881,
+                            "z": 114.631081
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Scav Checkpoint",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 123.791542,
+                            "y": -2.02420974,
+                            "z": 52.574894
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 110.171463,
+                            "y": -2.13371754,
+                            "z": 55.742836
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Primorsky Locked Apartment",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 59.88339,
+                            "y": 0.5484749,
+                            "z": 44.97897
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 50.22009,
+                            "y": 0.548498154,
+                            "z": 44.2522545
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 59.36107,
+                            "y": 0.548477232,
+                            "z": 37.6915855
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Primorsky Courtyard",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 56.3479233,
+                            "y": 0.3971393,
+                            "z": 65.8521
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 109.903419,
+                            "y": -1.80542445,
+                            "z": 88.87916
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.20853,
+                            "y": 0.4610692,
+                            "z": 103.875023
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 72.19021,
+                            "y": 0.439517617,
+                            "z": 121.300545
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 91.03747,
+                            "y": 0.936500132,
+                            "z": 165.844482
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 69.71718,
+                            "y": 0.8752645,
+                            "z": 190.368637
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 55.30679,
+                            "y": 1.806842,
+                            "z": 211.80069
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 102.5392,
+                            "y": 1.80684209,
+                            "z": 210.893326
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 130.035736,
+                            "y": 1.806843,
+                            "z": 203.031387
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Checkannaya 15",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 102.553955,
+                            "y": 3.50900435,
+                            "z": 231.324356
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 107.031654,
+                            "y": 3.762976,
+                            "z": 223.787964
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 122.383759,
+                            "y": 3.52197075,
+                            "z": 218.807953
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 126.530045,
+                            "y": 2.76816821,
+                            "z": 231.436447
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 131.462723,
+                            "y": 3.528088,
+                            "z": 234.0461
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 136.6608,
+                            "y": 3.52808833,
+                            "z": 229.4865
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 140.617279,
+                            "y": 3.528088,
+                            "z": 232.996
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 150.0387,
+                            "y": 3.529985,
+                            "z": 230.1132
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 153.572723,
+                            "y": 3.52998471,
+                            "z": 233.847214
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Checkannaya 15 Upstairs",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 131.2291,
+                            "y": 3.52246332,
+                            "z": 227.222748
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 145.430145,
+                            "y": 3.52246571,
+                            "z": 209.113754
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 149.266678,
+                            "y": 3.52246571,
+                            "z": 209.40567
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 131.128174,
+                            "y": 9.51623,
+                            "z": 219.004791
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 131.671936,
+                            "y": 9.516229,
+                            "z": 233.566879
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
