@@ -3193,5 +3193,416 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Prestigio",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 50,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 40.5617371,
+                            "y": 2.80999756,
+                            "z": 232.537369
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Aba",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 50,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 44.56196,
+                            "y": 2.818258,
+                            "z": 205.943253
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Convoy",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 15.9891748,
+                            "y": 2.46774936,
+                            "z": 250.710358
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 23.2070961,
+                            "y": 2.45975947,
+                            "z": 253.095032
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 19.0748043,
+                            "y": 2.45240641,
+                            "z": 239.600174
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 20,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 4.358748,
+                            "y": 2.04865384,
+                            "z": 205.190109
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 6.61812639,
+                            "y": 2.10356116,
+                            "z": 209.869644
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Theater Construction",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 2,
+                "minDistanceFromBot": 50,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -16.9014282,
+                            "y": 2.62362361,
+                            "z": 242.336761
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Theater Hideout",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -35.35087,
+                            "y": 3.32768559,
+                            "z": 240.152985
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Nikitskaya 6",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -92.42174,
+                            "y": 3.29378319,
+                            "z": 287.105743
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -88.81224,
+                            "y": 8.406526,
+                            "z": 286.90036
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -104.531021,
+                            "y": 8.497238,
+                            "z": 289.5211
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -133.816177,
+                            "y": 8.310071,
+                            "z": 292.367676
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -131.347824,
+                            "y": 8.31007,
+                            "z": 285.265533
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -131.035019,
+                            "y": 8.702724,
+                            "z": 272.527527
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -130.529388,
+                            "y": 13.060854,
+                            "z": 267.382172
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 3,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -109.479141,
+                            "y": 2.63959885,
+                            "z": 285.0432
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Malevicha 2",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -187.7615,
+                            "y": 7.16760063,
+                            "z": 281.3147
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -174.636978,
+                            "y": 7.152544,
+                            "z": 289.001648
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "name": "Nikitskaya 8",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -148.09642,
+                            "y": 6.14867067,
+                            "z": 265.194977
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Dostoevsky Restaurant",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -193.014969,
+                            "y": 2.3558383,
+                            "z": 256.632141
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -199.201157,
+                            "y": 7.005802,
+                            "z": 238.356354
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "maxBots": 2,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -198.57016,
+                            "y": 7.00579834,
+                            "z": 255.95546
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
