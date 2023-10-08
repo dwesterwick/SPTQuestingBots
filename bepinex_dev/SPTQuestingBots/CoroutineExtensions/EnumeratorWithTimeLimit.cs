@@ -25,6 +25,7 @@ namespace SPTQuestingBots.CoroutineExtensions
 
             base.IsCompleted = false;
             base.hadToWait = false;
+            base.stopRequested = false;
             base.cycleTimes.Clear();
             SetMethodName("");
         }

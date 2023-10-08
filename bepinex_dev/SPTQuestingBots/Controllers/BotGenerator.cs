@@ -291,9 +291,10 @@ namespace SPTQuestingBots.Controllers
                         allSpawnPoints[s].DelayToCanSpawnSec = 0;
                     }
 
-                    LoggingController.LogInfo("Spawning " + initialPMCGroupsToSpawn.Length + " initial PMC groups...");
+                    LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC groups...");
                     enumeratorWithTimeLimit.Reset();
                     yield return enumeratorWithTimeLimit.Run(initialPMCGroupsToSpawn, spawnInitialPMCsAtSpawnPoint, allowedSpawnPointTypes, minDistanceFromPlayers);
+                    //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC groups...done.");
 
                     for (int s = 0; s < allSpawnPoints.Length; s++)
                     {
@@ -312,11 +313,13 @@ namespace SPTQuestingBots.Controllers
         {
             if (initialPMCBot.HasSpawned)
             {
+                //LoggingController.LogError("PMC group has already spawned.");
                 return;
             }
 
             if (retrySpawnTimer.ElapsedMilliseconds < ConfigController.Config.InitialPMCSpawns.SpawnRetryTime * 1000)
             {
+                //LoggingController.LogWarning("Cannot spawn more PMC's right now. Time since retry-timer reset: " + retrySpawnTimer.ElapsedMilliseconds + " ms.");
                 return;
             }
 

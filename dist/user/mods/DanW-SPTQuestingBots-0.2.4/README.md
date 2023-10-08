@@ -74,6 +74,7 @@
     * The 21WS Container for Provocation in Interchange
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
+    * Kaban's office for TerraGroup Trail Part 10 in Streets
 
 **Planned Improvements for Bot Questing:**
 * Adding an objective type for waiting a specified amount of time while patrolling the last objective area (for quests like Capturing Outposts)
@@ -91,6 +92,7 @@
 
 **Known Issues for Initial PMC Spawning:**
 * Only solo PMC's spawn
+* Not all PMC's spawn into Streets because too many Scavs spawn into the map first
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_initial_pmcs** setting is high
 * In maps with a high number of max players, performance can be pretty bad if your **max_alive_initial_pmcs** or **max_total_bots** settings are high
