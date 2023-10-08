@@ -225,6 +225,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "West Cottage",
         "objectives" : [
             {
@@ -282,6 +283,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Sanitar's House",
         "objectives" : [
             {
@@ -514,6 +516,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Weather Station",
         "objectives" : [
             {
@@ -821,6 +824,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Pier",
         "objectives" : [
             {
@@ -1061,6 +1065,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Bus Terminal",
         "objectives" : [
             {
@@ -1158,6 +1163,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Power Station",
         "objectives" : [
             {
@@ -1263,6 +1269,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort West Wing 1st Floor",
         "objectives" : [
             {
@@ -1333,6 +1340,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort West Wing 2nd Floor",
         "objectives" : [
             {
@@ -1448,6 +1456,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort West Wing 3rd Floor",
         "objectives" : [
             {
@@ -1598,6 +1607,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort Main 2nd Floor",
         "objectives" : [
             {
@@ -1698,6 +1708,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort East Wing 1st Floor",
         "objectives" : [
             {
@@ -1738,6 +1749,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort East Wing 2nd Floor",
         "objectives" : [
             {
@@ -1898,6 +1910,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort East Wing 3rd Floor",
         "objectives" : [
             {

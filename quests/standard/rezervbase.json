@@ -135,6 +135,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "RB-ST",
         "objectives" : [
             {
@@ -181,6 +182,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Hermetic Depot",
         "objectives" : [
             {
@@ -311,6 +313,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "White Knight",
         "objectives" : [
             {
@@ -401,6 +404,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Black Knight",
         "objectives" : [
             {
@@ -561,6 +565,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Dome Buildings",
         "objectives" : [
             {
@@ -706,6 +711,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Dome Upper Sniping",
         "objectives" : [
             {
@@ -761,6 +767,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Black Bishop",
         "objectives" : [
             {
@@ -891,6 +898,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Black Bishop Underground",
         "objectives" : [
             {
@@ -991,6 +999,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "White Bishop",
         "objectives" : [
             {
@@ -1136,6 +1145,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "White King",
         "objectives" : [
             {
@@ -1371,6 +1381,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Command Center",
         "objectives" : [
             {
@@ -1531,6 +1542,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Black Pawn",
         "objectives" : [
             {
@@ -1781,6 +1793,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Scav Lands South Building",
         "objectives" : [
             {
@@ -1986,6 +1999,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Sewer Manhole Building",
         "objectives" : [
             {
@@ -2026,6 +2040,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Knight Garages",
         "objectives" : [
             {
@@ -2151,6 +2166,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Train Yard",
         "objectives" : [
             {
@@ -2396,6 +2412,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "White Rook Barracks",
         "objectives" : [
             {
@@ -2521,6 +2538,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Hermetic",
         "objectives" : [
             {
@@ -2876,6 +2894,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "D2 from Dome",
         "objectives" : [
             {
@@ -3201,6 +3220,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "D2 Area",
         "objectives" : [
             {
@@ -3341,6 +3361,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "White Pawn",
         "objectives" : [
             {

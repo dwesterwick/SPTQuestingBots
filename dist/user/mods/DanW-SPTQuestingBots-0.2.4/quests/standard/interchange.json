@@ -55,6 +55,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Techlight",
         "objectives" : [
             {
@@ -248,6 +249,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Safe Room Area",
         "objectives" : [
             {
@@ -288,6 +290,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Power Station",
         "objectives" : [
             {
@@ -349,6 +352,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Goshan Food Spawns",
         "objectives" : [
             {
@@ -467,6 +471,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "OLI Logistics Area",
         "objectives" : [
             {
@@ -567,6 +572,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "IDEA Office",
         "objectives" : [
             {
@@ -643,6 +649,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Emercom",
         "objectives" : [
             {
@@ -698,6 +705,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Mantis",
         "objectives" : [
             {
@@ -768,6 +776,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Generic",
         "objectives" : [
             {
@@ -1598,6 +1607,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Loading Dock Stashes",
         "objectives" : [
             {
@@ -1873,6 +1883,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Goshan Lockers",
         "objectives" : [
             {
@@ -1905,6 +1916,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Goshan South Office",
         "objectives" : [
             {
@@ -1959,6 +1971,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Goshan North Office",
         "objectives" : [
             {
@@ -2148,6 +2161,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Back Storage",
         "objectives" : [
             {
@@ -2188,6 +2202,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI SE Office",
         "objectives" : [
             {
@@ -2234,6 +2249,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI NE Office",
         "objectives" : [
             {
@@ -2273,6 +2289,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI NW Office",
         "objectives" : [
             {
@@ -2337,6 +2354,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Showroom East",
         "objectives" : [
             {
@@ -2407,6 +2425,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Showroom Center",
         "objectives" : [
             {
@@ -2492,6 +2511,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Showroom West",
         "objectives" : [
             {
@@ -2697,6 +2717,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Logistics Back Offices",
         "objectives" : [
             {
@@ -2792,6 +2813,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Mall Entrance",
         "objectives" : [
             {
@@ -2847,6 +2869,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "DOM",
         "objectives" : [
             {
@@ -2932,6 +2955,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "TEXHO",
         "objectives" : [
             {
@@ -2972,6 +2996,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pharma",
         "objectives" : [
             {
@@ -3037,6 +3062,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "IDEA Showroom",
         "objectives" : [
             {
@@ -3137,6 +3163,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "TTS",
         "objectives" : [
             {
@@ -3232,6 +3259,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "ADIK",
         "objectives" : [
             {
@@ -3272,6 +3300,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "The National",
         "objectives" : [
             {
@@ -3319,6 +3348,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Rasmussen",
         "objectives" : [
             {
@@ -3444,6 +3474,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 21,
+        "canRunBetweenObjectives": false,
         "name": "2nd Floor Sniping",
         "objectives" : [
             {
@@ -3576,6 +3607,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 21,
+        "canRunBetweenObjectives": false,
         "name": "IDEA 2nd Floor",
         "objectives" : [
             {

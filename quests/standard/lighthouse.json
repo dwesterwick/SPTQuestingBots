@@ -133,6 +133,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Resort",
         "objectives" : [
             {
@@ -233,6 +234,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Chalet",
         "objectives" : [
             {
@@ -378,6 +380,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "USEC Camp Building 1",
         "objectives" : [
             {
@@ -478,6 +481,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "USEC Camp Building 2",
         "objectives" : [
             {
@@ -593,6 +597,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "USEC Camp Building 3",
         "objectives" : [
             {
@@ -1002,6 +1007,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Stage",
         "objectives" : [
             {
@@ -1472,6 +1478,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Village East House",
         "objectives" : [
             {
@@ -1512,6 +1519,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Village Center House",
         "objectives" : [
             {
@@ -1608,6 +1616,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Convenience Store House Backyard",
         "objectives" : [
             {
@@ -1648,6 +1657,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Convenience Store House",
         "objectives" : [
             {
@@ -2015,6 +2025,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Resort Garage",
         "objectives" : [
             {

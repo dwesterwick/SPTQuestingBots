@@ -332,6 +332,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Black Room",
         "objectives" : [
             {
@@ -387,6 +388,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Blue Room",
         "objectives" : [
             {
@@ -427,6 +429,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Green Room",
         "objectives" : [
             {
@@ -667,6 +670,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Server Room Control Room",
         "objectives" : [
             {
@@ -861,6 +865,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Security Office",
         "objectives" : [
             {
@@ -1166,6 +1171,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Negotiation Room",
         "objectives" : [
             {
@@ -1246,6 +1252,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Lecture Hall",
         "objectives" : [
             {
@@ -1351,6 +1358,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Admin Office",
         "objectives" : [
             {
@@ -1461,6 +1469,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Infirmary",
         "objectives" : [
             {
@@ -1531,6 +1540,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Offices 1",
         "objectives" : [
             {

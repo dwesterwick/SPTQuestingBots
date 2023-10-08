@@ -666,6 +666,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Scav Bunker",
         "objectives" : [
             {
@@ -721,6 +722,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "USEC Camp North",
         "objectives" : [
             {
@@ -761,6 +763,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "USEC Camp South",
         "objectives" : [
             {

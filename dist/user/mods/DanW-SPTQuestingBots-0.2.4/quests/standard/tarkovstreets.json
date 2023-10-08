@@ -5,6 +5,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Lexos Director's Office",
         "objectives" : [
             {
@@ -100,6 +101,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Concordia Apartment 64",
         "objectives" : [
             {
@@ -140,6 +142,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 18,
+        "canRunBetweenObjectives": false,
         "name": "Checkannaya 15",
         "objectives" : [
             {
@@ -425,6 +428,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Lexos Garage",
         "objectives" : [
             {
@@ -655,6 +659,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Lexos Offices",
         "objectives" : [
             {
@@ -755,6 +760,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Petersen Center",
         "objectives" : [
             {
@@ -846,6 +852,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Finance Building",
         "objectives" : [
             {
@@ -937,6 +944,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Dentist",
         "objectives" : [
             {
@@ -1022,6 +1030,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Post Office",
         "objectives" : [
             {
@@ -1098,6 +1107,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Primorsky Locked Apartment",
         "objectives" : [
             {
@@ -1153,6 +1163,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Checkannaya 15 Upstairs",
         "objectives" : [
             {
@@ -1291,6 +1302,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Nikitskaya 6",
         "objectives" : [
             {
@@ -1421,6 +1433,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Dostoevsky Restaurant",
         "objectives" : [
             {
@@ -1476,6 +1489,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 19,
+        "canRunBetweenObjectives": false,
         "name": "Primorksy 46",
         "objectives" : [
             {
@@ -1613,6 +1627,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Concordia Goshan",
         "objectives" : [
             {
@@ -1670,6 +1685,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Concordia Building 9 Gym",
         "objectives" : [
             {
@@ -1740,6 +1756,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Concordia Building 9 Office",
         "objectives" : [
             {
@@ -1970,6 +1987,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Sparja",
         "objectives" : [
             {
@@ -2210,6 +2228,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Bilbo Coffee",
         "objectives" : [
             {
@@ -2280,6 +2299,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Diner",
         "objectives" : [
             {
@@ -2345,6 +2365,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Car Lot Office",
         "objectives" : [
             {
@@ -2377,6 +2398,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Basement Access",
         "objectives" : [
             {
@@ -2417,6 +2439,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel 2nd Floor",
         "objectives" : [
             {
@@ -2472,6 +2495,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Main Entrance",
         "objectives" : [
             {
@@ -2527,6 +2551,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Sparja",
         "objectives" : [
             {
@@ -2612,6 +2637,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Burger Spot",
         "objectives" : [
             {
@@ -2707,6 +2733,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 25,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Shestyorochka",
         "objectives" : [
             {
@@ -2761,6 +2788,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "ALCO-Point",
         "objectives" : [
             {
@@ -2808,6 +2836,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 30,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Coffee Joy",
         "objectives" : [
             {
@@ -2863,6 +2892,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Pharmacy",
         "objectives" : [
             {
@@ -2933,6 +2963,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Census Building",
         "objectives" : [
             {
@@ -3018,6 +3049,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Brodian Pub",
         "objectives" : [
             {
@@ -3158,6 +3190,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Malevicha 2",
         "objectives" : [
             {
@@ -3223,6 +3256,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 15,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Zmejsky 5",
         "objectives" : [
             {
@@ -3263,6 +3297,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 10,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Zmejsky 5",
         "objectives" : [
             {
@@ -3303,6 +3338,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Primorksy 48",
         "objectives" : [
             {
@@ -3343,6 +3379,7 @@
         "maxLevel": 99,
         "chanceForSelecting": 20,
         "priority": 20,
+        "canRunBetweenObjectives": false,
         "name": "Primorksy 48 Apt 10",
         "objectives" : [
             {
