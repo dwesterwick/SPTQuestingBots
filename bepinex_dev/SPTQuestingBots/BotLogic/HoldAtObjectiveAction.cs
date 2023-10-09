@@ -9,11 +9,11 @@ namespace SPTQuestingBots.BotLogic
 {
     public class HoldAtObjectiveAction : CustomLogicDelayedUpdate
     {
-        private GClass104 baseAction = null;
+        private GClass114 baseAction = null;
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner)
         {
-            baseAction = GClass475.CreateNode(BotLogicDecision.holdPosition, BotOwner);
+            baseAction = GClass394.CreateNode(BotLogicDecision.holdPosition, BotOwner);
             baseAction.Awake();
         }
 

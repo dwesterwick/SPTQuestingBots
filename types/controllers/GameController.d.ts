@@ -14,26 +14,32 @@ import { IAkiProfile } from "../models/eft/profile/IAkiProfile";
 import { ICoreConfig } from "../models/spt/config/ICoreConfig";
 import { IHttpConfig } from "../models/spt/config/IHttpConfig";
 import { ILocationConfig } from "../models/spt/config/ILocationConfig";
+import { ILootConfig } from "../models/spt/config/ILootConfig";
+import { IPmcConfig } from "../models/spt/config/IPmcConfig";
+import { IRagfairConfig } from "../models/spt/config/IRagfairConfig";
 import { ILogger } from "../models/spt/utils/ILogger";
 import { ConfigServer } from "../servers/ConfigServer";
 import { DatabaseServer } from "../servers/DatabaseServer";
 import { CustomLocationWaveService } from "../services/CustomLocationWaveService";
 import { GiftService } from "../services/GiftService";
+import { ItemBaseClassService } from "../services/ItemBaseClassService";
 import { LocalisationService } from "../services/LocalisationService";
 import { OpenZoneService } from "../services/OpenZoneService";
 import { ProfileFixerService } from "../services/ProfileFixerService";
 import { SeasonalEventService } from "../services/SeasonalEventService";
-import { EncodingUtil } from "../utils/EncodingUtil";
+import { HashUtil } from "../utils/HashUtil";
 import { JsonUtil } from "../utils/JsonUtil";
+import { RandomUtil } from "../utils/RandomUtil";
 import { TimeUtil } from "../utils/TimeUtil";
 export declare class GameController {
     protected logger: ILogger;
     protected databaseServer: DatabaseServer;
     protected jsonUtil: JsonUtil;
     protected timeUtil: TimeUtil;
+    protected hashUtil: HashUtil;
     protected preAkiModLoader: PreAkiModLoader;
     protected httpServerHelper: HttpServerHelper;
-    protected encodingUtil: EncodingUtil;
+    protected randomUtil: RandomUtil;
     protected hideoutHelper: HideoutHelper;
     protected profileHelper: ProfileHelper;
     protected profileFixerService: ProfileFixerService;
@@ -41,6 +47,7 @@ export declare class GameController {
     protected customLocationWaveService: CustomLocationWaveService;
     protected openZoneService: OpenZoneService;
     protected seasonalEventService: SeasonalEventService;
+    protected itemBaseClassService: ItemBaseClassService;
     protected giftService: GiftService;
     protected applicationContext: ApplicationContext;
     protected configServer: ConfigServer;
@@ -48,11 +55,24 @@ export declare class GameController {
     protected httpConfig: IHttpConfig;
     protected coreConfig: ICoreConfig;
     protected locationConfig: ILocationConfig;
-    constructor(logger: ILogger, databaseServer: DatabaseServer, jsonUtil: JsonUtil, timeUtil: TimeUtil, preAkiModLoader: PreAkiModLoader, httpServerHelper: HttpServerHelper, encodingUtil: EncodingUtil, hideoutHelper: HideoutHelper, profileHelper: ProfileHelper, profileFixerService: ProfileFixerService, localisationService: LocalisationService, customLocationWaveService: CustomLocationWaveService, openZoneService: OpenZoneService, seasonalEventService: SeasonalEventService, giftService: GiftService, applicationContext: ApplicationContext, configServer: ConfigServer);
+    protected ragfairConfig: IRagfairConfig;
+    protected pmcConfig: IPmcConfig;
+    protected lootConfig: ILootConfig;
+    constructor(logger: ILogger, databaseServer: DatabaseServer, jsonUtil: JsonUtil, timeUtil: TimeUtil, hashUtil: HashUtil, preAkiModLoader: PreAkiModLoader, httpServerHelper: HttpServerHelper, randomUtil: RandomUtil, hideoutHelper: HideoutHelper, profileHelper: ProfileHelper, profileFixerService: ProfileFixerService, localisationService: LocalisationService, customLocationWaveService: CustomLocationWaveService, openZoneService: OpenZoneService, seasonalEventService: SeasonalEventService, itemBaseClassService: ItemBaseClassService, giftService: GiftService, applicationContext: ApplicationContext, configServer: ConfigServer);
+    load(): void;
     /**
      * Handle client/game/start
      */
     gameStart(_url: string, _info: IEmptyRequestData, sessionID: string, startTimeStampMS: number): void;
+    protected addCustomLooseLootPositions(): void;
+    protected adjustLooseLootSpawnProbabilities(): void;
+    protected setHideoutAreasAndCraftsTo40Secs(): void;
+    /**
+     * 3.7.0 moved AIDs to be numeric, old profiles need to be migrated
+     * We store the old AID value in new field `sessionId`
+     * @param fullProfile Profile to update
+     */
+    protected fixIncorrectAidValue(fullProfile: IAkiProfile): void;
     /** Apply custom limits on bot types as defined in configs/location.json/botTypeLimits */
     protected adjustMapBotLimits(): void;
     /**
@@ -84,6 +104,7 @@ export declare class GameController {
      * @param pmcProfile Player profile
      */
     protected warnOnActiveBotReloadSkill(pmcProfile: IPmcData): void;
+    protected flagAllItemsInDbAsSellableOnFlea(): void;
     /**
      * When player logs in, iterate over all active effects and reduce timer
      * TODO - add body part HP regen
@@ -118,9 +139,14 @@ export declare class GameController {
     protected validateQuestAssortUnlocksExist(): void;
     /**
      * Add the logged in players name to PMC name pool
-     * @param pmcProfile
+     * @param pmcProfile Profile of player to get name from
      */
     protected addPlayerToPMCNames(pmcProfile: IPmcData): void;
+    /**
+     * Check for a dialog with the key 'undefined', and remove it
+     * @param fullProfile Profile to check for dialog in
+     */
+    protected checkForAndRemoveUndefinedDialogs(fullProfile: IAkiProfile): void;
     /**
      * Blank out the "test" mail message from prapor
      */

@@ -34,9 +34,11 @@ namespace SPTQuestingBots.Models
         [JsonProperty("steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
 
+        // A dictionary containing all bots currently doing performing this objective and the step number each of them are on
         [JsonIgnore]
         private Dictionary<BotOwner, byte> currentStepsForBots = new Dictionary<BotOwner, byte>();
 
+        // A dictionary containing all bots who have completed this objective and the time when they did
         [JsonIgnore]
         private Dictionary<BotOwner, DateTime> successfulBots = new Dictionary<BotOwner, DateTime>();
 
@@ -45,6 +47,7 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignMoreBots => currentStepsForBots.Count < MaxBots;
         public int StepCount => questObjectiveSteps.Length;
+
         public ReadOnlyCollection<BotOwner> SuccessfulBots => new ReadOnlyCollection<BotOwner>(successfulBots.Keys.ToArray());
         public ReadOnlyCollection<BotOwner> UnsuccessfulBots => new ReadOnlyCollection<BotOwner>(unsuccessfulBots);
         public ReadOnlyCollection<BotOwner> ActiveBots => new ReadOnlyCollection<BotOwner>(currentStepsForBots.Keys.ToArray());
@@ -80,6 +83,7 @@ namespace SPTQuestingBots.Models
             successfulBots.Clear();
             unsuccessfulBots.Clear();
 
+            // Steps should never be deleted because some of them are generated from EFT's quests
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
                 step.SetPosition(null);
@@ -108,10 +112,12 @@ namespace SPTQuestingBots.Models
 
         public void SetFirstPosition(Vector3 position)
         {
-            if (questObjectiveSteps.Length > 0)
+            if (questObjectiveSteps.Length == 0)
             {
-                questObjectiveSteps[0].SetPosition(position);
+                throw new InvalidOperationException("There are no steps in the objective.");
             }
+
+            questObjectiveSteps[0].SetPosition(position);
         }
 
         public void SetAllPositions(Vector3 position)
@@ -160,6 +166,7 @@ namespace SPTQuestingBots.Models
                 return null;
             }
 
+            // Check if there are any steps left for the bot to perform
             if (currentStepsForBots[bot] > questObjectiveSteps.Length - 1)
             {
                 RemoveBot(bot);
@@ -215,6 +222,7 @@ namespace SPTQuestingBots.Models
                     return false;
                 }
 
+                // Don't allow a bot to perform a repeatable objective if it already recently completed it
                 TimeSpan timeSinceCompleted = DateTime.Now - successfulBots[bot];
                 if (timeSinceCompleted.TotalMilliseconds < ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay)
                 {

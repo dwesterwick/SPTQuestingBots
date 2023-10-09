@@ -51,23 +51,19 @@ export declare class HideoutHelper {
      * This convenience function initializes new Production Object
      * with all the constants.
      */
-    initProduction(recipeId: string, productionTime: number): Production;
+    initProduction(recipeId: string, productionTime: number, needFuelForAllProductionTime: boolean): Production;
     /**
      * Is the provided object a Production type
      * @param productive
      * @returns
      */
     isProductionType(productive: Productive): productive is Production;
-    applyPlayerUpgradesBonuses(pmcData: IPmcData, bonus: StageBonus): void;
     /**
-     * TODO:
-     * After looking at the skills there doesnt seem to be a configuration per skill to boost
-     * the XP gain PER skill. I THINK you should be able to put the variable "SkillProgress" (just like health has it)
-     * and be able to tune the skill gain PER skill, but I havent tested it and Im not sure!
-     * @param pmcData
-     * @param bonus
+     * Apply bonus to player profile given after completing hideout upgrades
+     * @param pmcData Profile to add bonus to
+     * @param bonus Bonus to add to profile
      */
-    protected applySkillXPBoost(pmcData: IPmcData, bonus: StageBonus): void;
+    applyPlayerUpgradesBonuses(pmcData: IPmcData, bonus: StageBonus): void;
     /**
      * Process a players hideout, update areas that use resources + increment production timers
      * @param sessionID Session id
@@ -83,6 +79,7 @@ export declare class HideoutHelper {
         isGeneratorOn: boolean;
         waterCollectorHasFilter: boolean;
     };
+    protected doesWaterCollectorHaveFilter(waterCollector: HideoutArea): boolean;
     /**
      * Update progress timer for water collector
      * @param pmcData profile to update
@@ -141,9 +138,8 @@ export declare class HideoutHelper {
         isGeneratorOn: boolean;
         waterCollectorHasFilter: boolean;
     }): void;
-    protected updateWaterCollector(sessionId: string, pmcData: IPmcData, area: HideoutArea, isGeneratorOn: boolean): void;
-    protected doesWaterCollectorHaveFilter(waterCollector: HideoutArea): boolean;
     protected updateFuel(generatorArea: HideoutArea, pmcData: IPmcData): void;
+    protected updateWaterCollector(sessionId: string, pmcData: IPmcData, area: HideoutArea, isGeneratorOn: boolean): void;
     /**
      * Adjust water filter objects resourceValue or delete when they reach 0 resource
      * @param waterFilterArea water filter area to update
@@ -153,6 +149,16 @@ export declare class HideoutHelper {
      * @returns Updated HideoutArea object
      */
     protected updateWaterFilters(waterFilterArea: HideoutArea, production: Production, isGeneratorOn: boolean, pmcData: IPmcData): HideoutArea;
+    /**
+     * Get an adjusted water filter drain rate based on time elapsed since last run,
+     * handle edge case when craft time has gone on longer than total production time
+     * @param secondsSinceServerTick Time passed
+     * @param totalProductionTime Total time collecting water
+     * @param productionProgress how far water collector has progressed
+     * @param baseFilterDrainRate Base drain rate
+     * @returns
+     */
+    protected adjustWaterFilterDrainRate(secondsSinceServerTick: number, totalProductionTime: number, productionProgress: number, baseFilterDrainRate: number): number;
     /**
      * Get the water filter drain rate based on hideout bonues player has
      * @param pmcData Player profile
@@ -164,7 +170,7 @@ export declare class HideoutHelper {
      * @param prodId Id, e.g. Water collector id
      * @returns seconds to produce item
      */
-    protected getProductionTimeSeconds(prodId: string): number;
+    protected getTotalProductionTimeSeconds(prodId: string): number;
     /**
      * Create a upd object using passed in parameters
      * @param stackCount
@@ -185,9 +191,10 @@ export declare class HideoutHelper {
      * Get number of ticks that have passed since hideout areas were last processed, reduced when generator is off
      * @param pmcData Player profile
      * @param isGeneratorOn Is the generator on for the duration of elapsed time
+     * @param recipe Hideout production recipe being crafted we need the ticks for
      * @returns Amount of time elapsed in seconds
      */
-    protected getTimeElapsedSinceLastServerTick(pmcData: IPmcData, isGeneratorOn: boolean): number;
+    protected getTimeElapsedSinceLastServerTick(pmcData: IPmcData, isGeneratorOn: boolean, recipe?: IHideoutProduction): number;
     /**
      * Get a count of how many BTC can be gathered by the profile
      * @param pmcData Profile to look up
@@ -210,6 +217,12 @@ export declare class HideoutHelper {
      * @returns Hideout management skill object
      */
     protected getHideoutManagementSkill(pmcData: IPmcData): Common;
+    /**
+     * HideoutManagement skill gives a consumption bonus the higher the level
+     * 0.5% per level per 1-51, (25.5% at max)
+     * @param pmcData Profile to get hideout consumption level level from
+     * @returns consumption bonus
+     */
     protected getHideoutManagementConsumptionBonus(pmcData: IPmcData): number;
     /**
      * Adjust craft time based on crafting skill level found in player profile
@@ -235,7 +248,7 @@ export declare class HideoutHelper {
      */
     protected createBitcoinRequest(pmcData: IPmcData): IAddItemRequestData;
     /**
-     * Upgrade hideout wall from starting level to interactable level if enough time has passed
+     * Upgrade hideout wall from starting level to interactable level if necessary stations have been upgraded
      * @param pmcProfile Profile to upgrade wall in
      */
     unlockHideoutWallInProfile(pmcProfile: IPmcData): void;

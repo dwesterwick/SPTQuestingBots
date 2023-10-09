@@ -51,18 +51,30 @@ namespace SPTQuestingBots.Models
         [JsonIgnore]
         private List<BotOwner> blacklistedBots = new List<BotOwner>();
 
+        // A dictionary of the time when each bot in the dictionary completes its first objective in the quest. The key is removed when the bot
+        // starts a different quest. 
+        // TO DO: This name kinda sucks. 
         [JsonIgnore]
         private Dictionary<BotOwner, DateTime> activeBots = new Dictionary<BotOwner, DateTime>();
 
+        // A dictionary to store all of the objectives each bot completes. The key is removed when the bot starts a different quest. 
+        // TO DO: This name kinda sucks. 
         [JsonIgnore]
         private Dictionary<BotOwner, List<QuestObjective>> completedObjectives = new Dictionary<BotOwner, List<QuestObjective>>();
 
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
+        
+        // Return all objectives in the quest
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
-        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
         public int NumberOfObjectives => AllObjectives.Count;
+
+        // Return all objectives in the quest that have valid positions for their first step
+        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
         public int NumberOfValidObjectives => ValidObjectives.Count();
+
+        // Return the bots that are currently doing this quest and have reached at least one objective
+        // TO DO: This name kinda sucks. 
         public ReadOnlyCollection<BotOwner> ActiveBots => new ReadOnlyCollection<BotOwner>(activeBots.Keys.ToArray());
 
         public Quest()
@@ -91,6 +103,8 @@ namespace SPTQuestingBots.Models
             objectives = new QuestObjective[0];
         }
 
+        // This is called when a bot completes an objective in the quest
+        // TO DO: This name kinda sucks. 
         public void StartQuestForBot(BotOwner bot)
         {
             if (!activeBots.ContainsKey(bot))
@@ -99,6 +113,8 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        // This is called when a bot selects another quest
+        // TO DO: This name kinda sucks. 
         public void StopQuestForBot(BotOwner bot)
         {
             if (activeBots.ContainsKey(bot))
@@ -112,6 +128,7 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        // This is called if a bot is unable to start the quest for some reason
         public void BlacklistBot(BotOwner bot)
         {
             if (!blacklistedBots.Contains(bot))
@@ -182,6 +199,7 @@ namespace SPTQuestingBots.Models
 
         public QuestObjective GetRandomNewObjective(BotOwner bot)
         {
+            // Don't allow bots to spend too much time doing a single quest
             if (activeBots.ContainsKey(bot))
             {
                 TimeSpan timeSinceStarted = DateTime.Now - activeBots[bot];
@@ -192,11 +210,7 @@ namespace SPTQuestingBots.Models
                 }
             }
 
-            IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
-                .Where(o => o.CanAssignBot(bot))
-                .Where(o => o.CanAssignMoreBots)
-                .Where(o => !completedObjectives.ContainsKey(bot) || !completedObjectives[bot].Contains(o));
-
+            IEnumerable<QuestObjective> possibleObjectives = RemainingObjectivesForBot(bot);
             if (!possibleObjectives.Any())
             {
                 return null;
@@ -207,11 +221,7 @@ namespace SPTQuestingBots.Models
 
         public int GetRemainingObjectiveCount(BotOwner bot)
         {
-            IEnumerable<QuestObjective> possibleObjectives = ValidObjectives
-                .Where(o => o.CanAssignBot(bot))
-                .Where(o => o.CanAssignMoreBots);
-
-            return possibleObjectives.Count();
+            return RemainingObjectivesForBot(bot).Count();
         }
 
         public QuestObjective GetObjectiveForZoneID(string zoneId)
@@ -248,12 +258,21 @@ namespace SPTQuestingBots.Models
             {
                 return null;
             }
+
             if (matchingObjectives.Count() > 1)
             {
                 LoggingController.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
             }
 
             return matchingObjectives.First();
+        }
+
+        private IEnumerable<QuestObjective> RemainingObjectivesForBot (BotOwner bot)
+        {
+            return ValidObjectives
+                .Where(o => o.CanAssignBot(bot))
+                .Where(o => o.CanAssignMoreBots)
+                .Where(o => !completedObjectives.ContainsKey(bot) || !completedObjectives[bot].Contains(o));
         }
     }
 }

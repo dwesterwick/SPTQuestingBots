@@ -12,9 +12,9 @@ namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.2.0")]
-    [BepInDependency("xyz.drakia.bigbrain", "0.2.0")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.4")]
+    [BepInDependency("xyz.drakia.waypoints", "1.3.0")]
+    [BepInDependency("xyz.drakia.bigbrain", "0.3.0")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.5")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -38,6 +38,9 @@ namespace SPTQuestingBots
                     new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.BotOwnerCreatePatch().Enable();
+
+                    Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
+                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
                 }
 
                 LoggingController.LogInfo("Loading QuestingBots...enabling controllers...");
@@ -51,20 +54,16 @@ namespace SPTQuestingBots
 
                 if (ConfigController.Config.Debug.Enabled)
                 {
+                    // This patch just writes a debug message saying which bot was killed and by whom
                     new Patches.OnBeenKilledByAggressorPatch().Enable();
+
+                    if (ConfigController.Config.Debug.ShowZoneOutlines || ConfigController.Config.Debug.ShowFailedPaths)
+                    {
+                        this.GetOrAddComponent<PathRender>();
+                    }
                 }
 
-                if (ConfigController.Config.Debug.ShowZoneOutlines)
-                {
-                    this.GetOrAddComponent<PathRender>();
-                }
-
-                if (ConfigController.Config.InitialPMCSpawns.Enabled)
-                {
-                    Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
-                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
-                }
-
+                // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
             }
 

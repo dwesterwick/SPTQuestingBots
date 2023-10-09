@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
         protected override MethodBase GetTargetMethod()
         {
             Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
-            Type targetType = localGameType.GetNestedType("Class1265", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type targetType = localGameType.GetNestedType("Class1290", BindingFlags.NonPublic | BindingFlags.Instance);
 
             return targetType.GetMethod("method_1", BindingFlags.NonPublic | BindingFlags.Instance);
         }
@@ -22,6 +22,7 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static bool PatchPrefix(ref BossLocationSpawn bossWave)
         {
+            // EFT double-counts escorts and supports, so the total number of support bots needs to be subtracted from the total escort count
             int botCount = 1 + bossWave.EscortCount;
             if (bossWave.Supports != null)
             {
@@ -30,6 +31,7 @@ namespace SPTQuestingBots.Patches
 
             if (bossWave.BossName.ToLower() == "exusec")
             {
+                // Prevent too many Rogues from spawning, or they will prevent other bots from spawning
                 if (LocationController.SpawnedRogueCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialRogues)
                 {
                     LocationController.ZeroWaveTotalBotCount -= botCount;
@@ -40,6 +42,7 @@ namespace SPTQuestingBots.Patches
                 }
             }
 
+            // Prevent too many bosses from spawning, or they will prevent other bots from spawning
             if ((BotGenerator.SpawnedInitialPMCCount == 0) && (LocationController.SpawnedBossCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialBosses))
             {
                 LocationController.ZeroWaveTotalBotCount -= botCount;

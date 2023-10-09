@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GClass616).GetMethod("smethod_0", BindingFlags.NonPublic | BindingFlags.Static);
+            return typeof(GClass503).GetMethod("smethod_0", BindingFlags.NonPublic | BindingFlags.Static);
         }
 
         [PatchPostfix]
@@ -22,11 +22,13 @@ namespace SPTQuestingBots.Patches
         {
             foreach (BossLocationSpawn bossWave in bossWaves)
             {
+                // We only care about boss waves that will spawn immediately
                 if ((bossWave.Time > 1) || !bossWave.ShallSpawn)
                 {
                     continue;
                 }
 
+                // Ignore boss waves that require some type of interaction (i.e. Raiders that only spawn when a lever is pulled)
                 if (bossWave.TriggerType != SpawnTriggerType.none)
                 {
                     LoggingController.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
@@ -35,12 +37,15 @@ namespace SPTQuestingBots.Patches
 
                 LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
 
+                // EFT enables Cultist boss waves during daytime raids even though they'll never spawn. For now, ignore them.
+                // TO DO: Check if they'll actually spawn based on time of day (which EFT SHOULD be doing anyway...)
                 if ((bossWave.BossType == WildSpawnType.sectantPriest) || (bossWave.BossType == WildSpawnType.sectantWarrior))
                 {
                     LoggingController.LogWarning("sectantPriest boss waves with initial PMC spawning may cause some bosses to spawn late.");
                     continue;
                 }
 
+                // EFT double-counts escorts and supports, so the total number of support bots needs to be subtracted from the total escort count
                 int totalBots = 1 + bossWave.EscortCount;
                 if (bossWave.Supports != null)
                 {

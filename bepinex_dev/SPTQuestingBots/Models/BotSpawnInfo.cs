@@ -15,27 +15,30 @@ namespace SPTQuestingBots.Models
     public class BotSpawnInfo
     {
         public bool HasSpawned { get; set; } = false;
-        public GClass628 Data { get; private set; }
+        public GClass513 Data { get; private set; }
         public BotOwner[] Owners { get; set; } = new BotOwner[0];
         public SpawnPointParams? SpawnPoint { get; set; }
         public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
 
-        public BotSpawnInfo(GClass628 data)
+        public BotSpawnInfo(GClass513 data)
         {
             Data = data;
         }
 
         public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
         {
+            // Enumerate all valid spawn points
             SpawnPointParams[] validSpawnPoints = LocationController.CurrentLocation.SpawnPointParams
                     .Where(s => !blacklistedSpawnPointIDs.Contains(s.Id))
                     .Where(s => s.Categories.Any(allowedSpawnPointTypes))
                     .ToArray();
+            
             if (validSpawnPoints.Length == 0)
             {
                 return false;
             }
 
+            // Get the locations of all alive bots/players on the map. If the count is 0, you're dead so there's no reason to spawn more bots.
             Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
             if (playerPositions.Length == 0)
             {
@@ -63,30 +66,31 @@ namespace SPTQuestingBots.Models
                 throw new ArgumentOutOfRangeException(nameof(botCount), "Bot count must be at least 1.");
             }
 
-            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
-            if (SpawnPoint.HasValue)
+            if (!SpawnPoint.HasValue)
             {
-                Vector3 mainSpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
-                spawnPoints.Add(SpawnPoint.Value);
-                int positionsGenerated = 1;
-                while (positionsGenerated < botCount)
+                throw new InvalidOperationException("A spawn point has not been assigned to the bot group.");
+            }
+            Vector3 mainSpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
+
+            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>() { SpawnPoint.Value };
+            int positionsGenerated = 1;
+
+            // If there are multiple bots that will spawn, select nearby spawn points for each of them
+            // TO DO: This has the possibility of being an infinite loop, which is scary
+            while (positionsGenerated < botCount)
+            {
+                SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
                 {
-                    SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
-
-                    Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
-                    if (!navMeshPosition.HasValue)
-                    {
-                        continue;
-                    }
-
-                    spawnPoints.Add(nextPosition);
+                    continue;
                 }
 
-                SpawnPositions = spawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray();
-                return;
+                spawnPoints.Add(nextPosition);
             }
 
-            throw new InvalidOperationException("A spawn point has not been assigned to the bot group.");
+            SpawnPositions = spawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray();
         }
     }
 }

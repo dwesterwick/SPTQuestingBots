@@ -11,7 +11,9 @@ namespace SPTQuestingBots.BotLogic
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
-        private GClass274 baseSteeringLogic = new GClass274();
+        // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
+        private GClass288 baseSteeringLogic = new GClass288();
+
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private int updateInterval = 100;
 

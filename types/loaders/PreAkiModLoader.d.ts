@@ -25,6 +25,8 @@ export declare class PreAkiModLoader implements IModLoader {
     protected order: Record<string, number>;
     protected imported: Record<string, IPackageJsonData>;
     protected akiConfig: ICoreConfig;
+    protected serverDependencies: Record<string, string>;
+    protected skippedMods: string[];
     constructor(logger: ILogger, vfs: VFS, jsonUtil: JsonUtil, modCompilerService: ModCompilerService, bundleLoader: BundleLoader, localisationService: LocalisationService, configServer: ConfigServer, modTypeCheck: ModTypeCheck);
     load(container: DependencyContainer): Promise<void>;
     /**
@@ -35,6 +37,7 @@ export declare class PreAkiModLoader implements IModLoader {
     getImportedModDetails(): Record<string, IPackageJsonData>;
     getModPath(mod: string): string;
     protected importMods(): Promise<void>;
+    protected sortMods(prev: string, next: string, missingFromOrderJSON: Record<string, boolean>): number;
     /**
      * Check for duplicate mods loaded, show error if any
      * @param modPackageData Dictionary of mod package.json data
@@ -62,6 +65,7 @@ export declare class PreAkiModLoader implements IModLoader {
     protected executeMods(container: DependencyContainer): Promise<void>;
     sortModsLoadOrder(): string[];
     protected addMod(mod: string): Promise<void>;
+    protected autoInstallDependencies(modPath: string, pkg: IPackageJsonData): void;
     protected areModDependenciesFulfilled(pkg: IPackageJsonData, loadedMods: Record<string, IPackageJsonData>): boolean;
     protected isModCompatible(mod: IPackageJsonData, loadedMods: Record<string, IPackageJsonData>): boolean;
     /**

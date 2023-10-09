@@ -58,7 +58,7 @@ namespace SPTQuestingBots.BotLogic
 
         public override string GetName()
         {
-            return "PMCObjectiveLayer";
+            return "BotObjectiveLayer";
         }
 
         public override Action GetNextAction()

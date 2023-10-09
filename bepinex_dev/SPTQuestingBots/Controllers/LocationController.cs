@@ -253,7 +253,7 @@ namespace SPTQuestingBots.Controllers
                 return null;
             }
 
-            float remainingTimeFromGame = GClass1473.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
+            float remainingTimeFromGame = GClass1368.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
 
             return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);
         }
