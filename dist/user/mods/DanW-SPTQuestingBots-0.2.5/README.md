@@ -1,13 +1,15 @@
 **Please remember this is currently in ALPHA testing! Bugs are likely!**
 
 **Requires:**
-* BigBrain 0.2.0+
-* Waypoints 1.2.0+
+* BigBrain 0.3.0+
+* Waypoints 1.3.0+
 
 **Tested to be compatible with:**
-* SAIN 2.0 Beta 3.5.3
+* SAIN 2.1
+* Late to the Party 1.3.4+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+
+**Previously compatible with (but not confirmed in SPT-AKI 3.7.0):**
 * Looting Bots 1.1.2
-* Late to the Party 1.3.0+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 * SWAG + DONUTS 3.1.2 (if **initial_PMC_spawns=false** in this mod)
 * Custom Raid Times 1.4.0
 * Immersive Raids 1.1.3
@@ -45,7 +47,7 @@
 **Known Issues for Bot Questing:**
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
 * Bots tend to get trapped in certain areas. Known areas:
-    * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0)
+    * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0) <-- need to test this again
     * Customs between Warehouse 4 and New Gas
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
@@ -102,19 +104,19 @@
 * Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-* **0.2.4** (ETA: 10/8)
+* **0.2.6** (ETA: 10/12)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options
     * Add comments to code so I know WTF I'm looking at next year
-    * Standard non-EFT quests for all maps (not including the Streets expansion)
-    * Add quest-objective property to prevent bots from running when they're within a certain distance of their objective location
-    * Add quest property to prevent bots from running after completing their first objective in it (unless they select another quest). This is used to make bots only walk if they're in areas where stealth is more important (i.e. the Resort).
+    * Prevent bots from sprinting in more areas
 * **0.3.0** (ETA: Late October)
+    * New standard quests for Streets expansion areas
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:
         * Patrol target area for a certain time
         * Wait at specific location for a certain time (mimicing planting items)
     * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
+    * Add configuration options to overwrite default settings for EFT-based quests and their objectives
 * **0.3.1** (ETA: Mid November)
     * Add new quest-objective actions: unlocking doors and pulling levers
     * Add new quest type: hidden-stash running
@@ -141,6 +143,8 @@ The three major data structures are:
     * **chanceForSelecting**: The chance (in %) that the bot will accept the quest if the quest-selection algorithm selects it for the bot
     * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
     * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like **Late to the Party**, this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
+    * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
+    * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best to make it unique to avoid confusion when troubleshooting.
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
@@ -151,6 +155,7 @@ The three major data structures are:
     * **maxBots**: The maximum number of bots that can actively be performing the objective.
     * **minDistanceFromBot**: The objective will only be selected if the bot is at least this many meters away from it.
     * **maxDistanceFromBot**: The objective will only be selected if the bot is no more than this many meters away from it.
+    * **maxRunDistance**: If bots get within this radius of the position for the first step in the objective, they will no longer be allowed to sprint. This is intended to be used in areas where stealth is more important (typically in buildings). This is **0** by default. 
     * **steps**: An array of the steps in the objective. Bots will complete the steps exactly in the order you specify.
 
 * **Steps**: A step is an individual component of an objective. Currently, the only types of objective steps are going to a specific position.

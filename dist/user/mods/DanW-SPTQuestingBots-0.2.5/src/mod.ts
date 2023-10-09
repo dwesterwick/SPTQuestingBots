@@ -20,6 +20,7 @@ import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { VFS } from "@spt-aki/utils/VFS";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
+import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 
 const modName = "SPTQuestingBots";
@@ -38,6 +39,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private profileHelper: ProfileHelper;
     private vfs: VFS;
     private iBotConfig: IBotConfig;
+    private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
@@ -146,6 +148,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.vfs = container.resolve<VFS>("VFS");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
+        this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
         this.iLocationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
 
         this.databaseTables = this.databaseServer.getTables();
@@ -233,7 +236,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         // Store the default PMC-conversion chances for each bot type defined in SPT's configuration file
         let logMessage = "";
-        for (const pmcType in this.iBotConfig.pmc.convertIntoPmcChance)
+        for (const pmcType in this.iPmcConfig.convertIntoPmcChance)
         {
             if (this.convertIntoPmcChanceOrig[pmcType] !== undefined)
             {
@@ -242,8 +245,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }
 
             const chances: MinMax = {
-                min: this.iBotConfig.pmc.convertIntoPmcChance[pmcType].min,
-                max: this.iBotConfig.pmc.convertIntoPmcChance[pmcType].max
+                min: this.iPmcConfig.convertIntoPmcChance[pmcType].min,
+                max: this.iPmcConfig.convertIntoPmcChance[pmcType].max
             }
             this.convertIntoPmcChanceOrig[pmcType] = chances;
 
@@ -257,7 +260,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         // Adjust the chances for each applicable bot type
         let logMessage = "";
-        for (const pmcType in this.iBotConfig.pmc.convertIntoPmcChance)
+        for (const pmcType in this.iPmcConfig.convertIntoPmcChance)
         {
             // For now, we only want to convert assault bots due to the way the client mod forces spawns
             if ((scalingFactor > 5) && (pmcType != "assault"))
@@ -269,8 +272,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].min * scalingFactor));
             const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].max * scalingFactor));
 
-            this.iBotConfig.pmc.convertIntoPmcChance[pmcType].min = min;
-            this.iBotConfig.pmc.convertIntoPmcChance[pmcType].max = max;
+            this.iPmcConfig.convertIntoPmcChance[pmcType].min = min;
+            this.iPmcConfig.convertIntoPmcChance[pmcType].max = max;
 
             logMessage += `${pmcType}: ${min}-${max}%, `;
         }
@@ -321,11 +324,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo("Removing blacklisted brain types from being used for PMC's...");
 
         let removedBrains = 0;
-        for (const pmcType in this.iBotConfig.pmc.pmcType)
+        for (const pmcType in this.iPmcConfig.pmcType)
         {
-            for (const map in this.iBotConfig.pmc.pmcType[pmcType])
+            for (const map in this.iPmcConfig.pmcType[pmcType])
             {
-                const mapBrains = this.iBotConfig.pmc.pmcType[pmcType][map];
+                const mapBrains = this.iPmcConfig.pmcType[pmcType][map];
                 
                 for (const i in badBrains)
                 {

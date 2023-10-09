@@ -190,7 +190,7 @@ namespace SPTQuestingBots.Controllers
 
                 // Get the total number of alive bots allowed on the map
                 BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-                int botmax = (int)AccessTools.Field(typeof(BotsController), "int_0").GetValue(botControllerClass);
+                int botmax = (int)AccessTools.Field(typeof(BotsController), "_maxCount").GetValue(botControllerClass);
                 if (botmax > 0)
                 {
                     maxTotalBots = botmax;
@@ -257,7 +257,7 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogInfo("Generating PMC bots...");
 
                 BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "ginterface17_0").GetValue(botSpawnerClass) as IBotCreator;
+                IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
                 System.Random random = new System.Random();
                 int botsGenerated = 0;
@@ -448,7 +448,7 @@ namespace SPTQuestingBots.Controllers
                 bots.AddPosition(position);
             }
 
-            MethodInfo botSpawnMethod = typeof(BotSpawner).GetMethod("method_11", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo botSpawnMethod = typeof(BotSpawner).GetMethod("method_9", BindingFlags.Instance | BindingFlags.NonPublic);
             botSpawnMethod.Invoke(botSpawnerClass, new object[] { closestBotZone, bots, callback, botSpawnerClass.GetCancelToken() });
         }
     }
