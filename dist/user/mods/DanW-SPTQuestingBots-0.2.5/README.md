@@ -6,11 +6,11 @@
 
 **Tested to be compatible with:**
 * SAIN 2.1
+* SWAG + DONUTS 3.2.0 (if **initial_PMC_spawns=false** in this mod)
 * Late to the Party 1.3.4+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 
 **Previously compatible with (but not confirmed in SPT-AKI 3.7.0):**
 * Looting Bots 1.1.2
-* SWAG + DONUTS 3.1.2 (if **initial_PMC_spawns=false** in this mod)
 * Custom Raid Times 1.4.0
 * Immersive Raids 1.1.3
 
