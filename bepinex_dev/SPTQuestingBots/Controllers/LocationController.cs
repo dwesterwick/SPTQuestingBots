@@ -9,6 +9,7 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using EFT.UI;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,8 +32,6 @@ namespace SPTQuestingBots.Controllers
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private static LootableContainer[] lootableContainers = new LootableContainer[0];
-        private static List<LootItem> lootItems = new List<LootItem>();
         private static List<BotOwner> spawnedBosses = new List<BotOwner>();
 
         private static void Clear()
@@ -46,8 +45,6 @@ namespace SPTQuestingBots.Controllers
             ZeroWaveTotalRogueCount = 0;
 
             spawnedBosses.Clear();
-            lootItems.Clear();
-            lootableContainers = new LootableContainer[0];
             CurrentLocation = null;
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
@@ -75,14 +72,12 @@ namespace SPTQuestingBots.Controllers
             if (CurrentLocation == null)
             {
                 CurrentRaidSettings = getCurrentRaidSettings();
-                CurrentLocation = CurrentRaidSettings.SelectedLocation;
+
+                CurrentLocation = CurrentRaidSettings?.SelectedLocation;
                 if (CurrentLocation == null)
                 {
                     return;
                 }
-
-                lootableContainers = FindObjectsOfType<LootableContainer>();
-                LoggingController.LogInfo("Found " + lootableContainers.Length + " lootable containers in the map");
             }
         }
 
@@ -95,6 +90,7 @@ namespace SPTQuestingBots.Controllers
 
         public static void CacheEscapeTimes()
         {
+            // Check if escape-time data has already been cached
             if (originalEscapeTimes.Count > 0)
             {
                 return;
@@ -128,40 +124,51 @@ namespace SPTQuestingBots.Controllers
             HasRaidStarted = false;
         }
 
+        // This isn't actually used anywhere in this mod, but I left it in here because it's a pretty nifty algorithm
         public static bool TryGetObjectNearPosition<T>(Vector3 position, float maxDistance, bool onlyVisible, out T obj) where T: Behaviour
         {
             obj = null;
 
+            // Ensure a map has been loaded in the game
             if (LocationScene.LoadedScenes.Count == 0)
             {
                 return false;
             }
 
+            // Find all objects of the desired type in the map
             foreach (T item in LocationScene.GetAllObjects<T>(true))
             {
+                // Check if the object is close enough
                 float distace = Vector3.Distance(item.transform.position, position);
-                if (distace <= maxDistance)
+                if (distace > maxDistance)
                 {
-                    if (onlyVisible)
-                    {
-                        float rayEndPointThreshold = 0.02f;
-                        Vector3 direction = item.transform.position - position;
-                        RaycastHit[] raycastHits = Physics.RaycastAll(position, direction, distace, LayerMaskClass.HighPolyWithTerrainMask);
-                        IEnumerable<RaycastHit> filteredRaycastHits = raycastHits
-                            .Where(r => r.distance > distace * rayEndPointThreshold)
-                            .Where(r => r.distance < distace * (1 - rayEndPointThreshold));
-
-                        if (filteredRaycastHits.Any())
-                        {
-                            //IEnumerable<string> raycastDataText = filteredRaycastHits.Select(h => h.collider.name + " (" + h.distance + "/" + distace + ")");
-                            //LoggingController.LogInfo("Ignoring object " + item.GetType().Name + " at " + item.transform.position.ToString() + " due to raycast hits at: " + string.Join(", ", raycastDataText));
-                            continue;
-                        }
-                    }
-
-                    obj = item;
-                    return true;
+                    continue;
                 }
+
+                // If the object needs to be visible from the source position, perform additional checks
+                if (onlyVisible)
+                {
+                    // Perform a raycast test from the source position to the object
+                    Vector3 direction = item.transform.position - position;
+                    RaycastHit[] raycastHits = Physics.RaycastAll(position, direction, distace, LayerMaskClass.HighPolyWithTerrainMask);
+
+                    // Ignore raycast hits that are very close to the source position or the object
+                    float rayEndPointThreshold = 0.02f;
+                    IEnumerable<RaycastHit> filteredRaycastHits = raycastHits
+                        .Where(r => r.distance > distace * rayEndPointThreshold)
+                        .Where(r => r.distance < distace * (1 - rayEndPointThreshold));
+
+                    // If there are any remaining raycast hits, assume the object is not visible
+                    if (filteredRaycastHits.Any())
+                    {
+                        //IEnumerable<string> raycastDataText = filteredRaycastHits.Select(h => h.collider.name + " (" + h.distance + "/" + distace + ")");
+                        //LoggingController.LogInfo("Ignoring object " + item.GetType().Name + " at " + item.transform.position.ToString() + " due to raycast hits at: " + string.Join(", ", raycastDataText));
+                        continue;
+                    }
+                }
+
+                obj = item;
+                return true;
             }
 
             return false;
@@ -172,6 +179,7 @@ namespace SPTQuestingBots.Controllers
             SpawnedBotCount++;
             string message = "Spawned ";
 
+            // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
             if (BotGenerator.CanSpawnPMCs && (BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
             {
                 spawnedBosses.Add(botOwner);
@@ -184,28 +192,6 @@ namespace SPTQuestingBots.Controllers
 
             message += " (" + botOwner.Side + ")";
             LoggingController.LogInfo(message);
-        }
-
-        public static LootableContainer GetNearestLootableContainer(BotOwner botOwner)
-        {
-            if (lootableContainers.Length == 0)
-            {
-                return null;
-            }
-
-            IEnumerable<LootableContainer> sortedContainers = lootableContainers.OrderBy(l => Vector3.Distance(botOwner.Position, l.transform.position));
-            return sortedContainers.First();
-        }
-
-        public static float GetDistanceToNearestLootableContainer(BotOwner botOwner)
-        {
-            LootableContainer nearestContainer = GetNearestLootableContainer(botOwner);
-            if (nearestContainer == null)
-            {
-                return float.MaxValue;
-            }
-
-            return Vector3.Distance(botOwner.Position, nearestContainer.transform.position);
         }
 
         public static Vector3? GetPlayerPosition()
@@ -255,6 +241,7 @@ namespace SPTQuestingBots.Controllers
 
             float remainingTimeFromGame = GClass1368.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
 
+            // Until the raid starts, remainingTimeFromGame is a very high number, so it needs to be reduced to the actual starting raid time
             return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);
         }
 
@@ -312,6 +299,7 @@ namespace SPTQuestingBots.Controllers
 
         public static Models.Quest CreateSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
+            // Ensure the map has spawn points
             IEnumerable<SpawnPointParams> eligibleSpawnPoints = CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
             if (eligibleSpawnPoints.IsNullOrEmpty())
             {
@@ -320,8 +308,10 @@ namespace SPTQuestingBots.Controllers
 
             Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnPointWander.Priority, "Spawn Points");
             quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnPointWander.Chance;
+
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
+                // Ensure the spawn point has a valid nearby NavMesh position
                 Vector3? navMeshPosition = FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
@@ -347,6 +337,7 @@ namespace SPTQuestingBots.Controllers
                 return null;
             }
 
+            // Ensure there is a valid NavMesh position near your spawn point
             Vector3? navMeshPosition = FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
@@ -364,13 +355,14 @@ namespace SPTQuestingBots.Controllers
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
             objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
             objective.MaxBots = ConfigController.Config.BotQuests.SpawnRush.MaxBotsPerQuest;
-
             quest.AddObjective(objective);
+
             return quest;
         }
 
         public static Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)
         {
+            // Check if there is a cached value for the position, and if so return it
             if (nearestNavMeshPoint.ContainsKey(position))
             {
                 return nearestNavMeshPoint[position];
@@ -378,7 +370,9 @@ namespace SPTQuestingBots.Controllers
 
             if (NavMesh.SamplePosition(position, out NavMeshHit sourceNearestPoint, searchDistance, NavMesh.AllAreas))
             {
+                // Cache the result to make subsequent calls for the position faster
                 nearestNavMeshPoint.Add(position, sourceNearestPoint.position);
+
                 return sourceNearestPoint.position;
             }
 
@@ -402,6 +396,7 @@ namespace SPTQuestingBots.Controllers
             {
                 float nearestDistance = Vector3.Distance(referencePositions[0], allSpawnPoints[s].Position.ToUnityVector3());
 
+                // Search for the nearest reference position to the spawn point
                 for (int b = 1; b < referencePositions.Length; b++)
                 {
                     float distance = Vector3.Distance(referencePositions[b], allSpawnPoints[s].Position.ToUnityVector3());
@@ -412,80 +407,40 @@ namespace SPTQuestingBots.Controllers
                     }
                 }
 
+                // For each spawn point, store the distance to the nearest reference point
                 nearestReferencePoints.Add(allSpawnPoints[s], nearestDistance);
             }
 
+            // The furthest spawn point from all reference positions is the one that has the furthest minimum distance to all of them
             return nearestReferencePoints.OrderBy(p => p.Value).Last().Key;
         }
 
         public static SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
-            if (referenceSpawnPoints.Length == 0)
-            {
-                throw new ArgumentException("The reference spawn-point array is empty.", "referenceSpawnPoints");
-            }
+            return GetFurthestSpawnPoint(referenceSpawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray(), allSpawnPoints);
+        }
 
+        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        {
             if (allSpawnPoints.Length == 0)
             {
                 throw new ArgumentException("The spawn-point array is empty.", "allSpawnPoints");
             }
 
-            Dictionary<SpawnPointParams, float> nearestReferencePoints = new Dictionary<SpawnPointParams, float>();
-            for (int s = 0; s < allSpawnPoints.Length; s++)
-            {
-                SpawnPointParams nearestSpawnPoint = referenceSpawnPoints[0];
-                float nearestDistance = Vector3.Distance(referenceSpawnPoints[0].Position.ToUnityVector3(), allSpawnPoints[s].Position.ToUnityVector3());
-
-                for (int r = 1; r < referenceSpawnPoints.Length; r++)
-                {
-                    float distance = Vector3.Distance(referenceSpawnPoints[r].Position.ToUnityVector3(), allSpawnPoints[s].Position.ToUnityVector3());
-
-                    if (distance < nearestDistance)
-                    {
-                        nearestSpawnPoint = referenceSpawnPoints[r];
-                        nearestDistance = distance;
-                    }
-                }
-
-                nearestReferencePoints.Add(allSpawnPoints[s], nearestDistance);
-            }
-
-            return nearestReferencePoints.OrderBy(p => p.Value).Last().Key;
-        }
-
-        public static SpawnPointParams GetFurthestSpawnPoint(Vector3 postition, SpawnPointParams[] allSpawnPoints)
-        {
-            SpawnPointParams furthestSpawnPoint = allSpawnPoints[0];
-            float furthestDistance = Vector3.Distance(postition, furthestSpawnPoint.Position.ToUnityVector3());
-
-            for (int s = 1; s < allSpawnPoints.Length; s++)
-            {
-                float distance = Vector3.Distance(postition, allSpawnPoints[s].Position.ToUnityVector3());
-
-                if (distance > furthestDistance)
-                {
-                    furthestSpawnPoint = allSpawnPoints[s];
-                    furthestDistance = distance;
-                }
-            }
-
-            return furthestSpawnPoint;
-        }
-
-        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
-        {
+            // Select the first spawn point by default
             SpawnPointParams nearestSpawnPoint = allSpawnPoints[0];
             float nearestDistance = Vector3.Distance(postition, nearestSpawnPoint.Position.ToUnityVector3());
 
             for (int s = 1; s < allSpawnPoints.Length; s++)
             {
+                // Check if the spawn point is allowed to be selected
                 if (excludedSpawnPoints.Any(p => p.Id == allSpawnPoints[s].Id))
                 {
                     continue;
                 }
 
+                // Check if the spawn point is closer than the previous one selected
                 float distance = Vector3.Distance(postition, allSpawnPoints[s].Position.ToUnityVector3());
-
                 if (distance < nearestDistance)
                 {
                     nearestSpawnPoint = allSpawnPoints[s];

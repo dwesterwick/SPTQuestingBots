@@ -34,11 +34,13 @@ namespace SPTQuestingBots.BotLogic
         {
             UpdateBotMovement(canSprint);
 
+            // Don't allow expensive parts of this behavior (calculating a path to an objective) to run too often
             if (!canUpdate())
             {
                 return;
             }
 
+            // This doesn't really need to be updated every frame
             canSprint = objectiveManager.CanSprintToObjective();
 
             if (!objectiveManager.IsObjectiveActive || !objectiveManager.Position.HasValue)
@@ -51,6 +53,7 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
+            // Check if the bot just completed its objective
             if (!objectiveManager.IsObjectiveReached && objectiveManager.IsCloseToObjective())
             {
                 LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " reached its objective (" + objectiveManager + ").");
@@ -58,6 +61,7 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
+            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             tryMoveToObjective();
         }
 
@@ -65,6 +69,7 @@ namespace SPTQuestingBots.BotLogic
         {
             NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(objectiveManager.Position.Value, true, 0.5f, false, false);
 
+            // If the path is invalid, there's nowhere for the bot to move
             if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
             {
                 LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a path to " + objectiveManager);
@@ -74,18 +79,23 @@ namespace SPTQuestingBots.BotLogic
 
             if (pathStatus.HasValue && (pathStatus.Value == NavMeshPathStatus.PathPartial))
             {
-                Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
-
-                float missingDistance = float.NaN;
                 float distanceToEndOfPath = float.NaN;
                 float distanceToObjective = float.NaN;
+                float missingDistance = float.NaN;
+
+                // Calculate distances between:
+                //  - the bot and the end of the incomplete path to its objective
+                //  - the bot and its objective step position
+                //  - the end of its partial path and its objective step position
+                Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
                 if (lastPathPoint.HasValue)
                 {
-                    missingDistance = Vector3.Distance(objectiveManager.Position.Value, lastPathPoint.Value);
                     distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);
                     distanceToObjective = Vector3.Distance(BotOwner.Position, objectiveManager.Position.Value);
+                    missingDistance = Vector3.Distance(objectiveManager.Position.Value, lastPathPoint.Value);
                 }
 
+                // Check if the bot is nearly at the end of its (incomplete) path
                 if (distanceToEndOfPath < ConfigController.Config.BotSearchDistances.MaxNavMeshPathError)
                 {
                     if (distanceToObjective < ConfigController.Config.BotSearchDistances.ObjectiveReachedNavMeshPathError)
@@ -94,14 +104,13 @@ namespace SPTQuestingBots.BotLogic
                         objectiveManager.CompleteObjective();
                         return true;
                     }
-                    else
-                    {
-                        LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + objectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
-                        objectiveManager.RejectObjective();
-                        return false;
-                    }
+
+                    LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + objectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
+                    objectiveManager.RejectObjective();
+                    return false;
                 }
 
+                // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (objectiveManager.IsObjectivePathComplete)
                 {
                     LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + objectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);

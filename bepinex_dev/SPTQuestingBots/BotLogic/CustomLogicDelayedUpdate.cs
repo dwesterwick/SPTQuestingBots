@@ -29,12 +29,17 @@ namespace SPTQuestingBots.BotLogic
 
         public void UpdateBotMovement(bool canSprint = true)
         {
-            // Look where you're going
+            // Stand up
             BotOwner.SetPose(1f);
+
+            // Look where the bot is moving
             BotOwner.Steering.LookToMovingDirection();
-            BotOwner.SetTargetMoveSpeed(1f);
             baseSteeringLogic.Update(BotOwner);
 
+            // Move as fast as possible
+            BotOwner.SetTargetMoveSpeed(1f);
+            
+            // Open doors blocking the bot's path
             BotOwner.DoorOpener.Update();
 
             if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f))

@@ -18,26 +18,58 @@ namespace SPTQuestingBots.BotLogic
 
     public static class BotBrains
     {
-        public static string PMC { get { return "PMC"; } }
+        public static string SniperScav { get { return "Marksman"; } }
+        public static string Raider { get { return "PMC"; } }
+        public static string Rogue { get { return "ExUsec"; } }
         public static string Cultist { get { return "SectantWarrior"; } }
         public static string Knight { get { return "Knight"; } }
-        public static string Rogue { get { return "ExUsec"; } }
         public static string Tagilla { get { return "Tagilla"; } }
         public static string Killa { get { return "Killa"; } }
 
-        public static IEnumerable<string> Scavs => new string[] { "Assault", "CursAssault" };
-        public static IEnumerable<string> BossesNormal => new string[] { "BossBully","BossSanitar", "Tagilla", "BossGluhar", "BossKojaniy", "SectantPriest" };
-        public static IEnumerable<string> FollowersGoons => new string[] { "BigPipe", "BirdEye" };
-        public static IEnumerable<string> FollowersNormal => new string[] { "FollowerBully", "FollowerSanitar", "TagillaFollower", "FollowerGluharAssault", "FollowerGluharProtect", "FollowerGluharScout" };
+        public static IEnumerable<string> NormalScavs => new string[]
+        {
+            "Assault",
+            "CursAssault"
+        };
+
+        public static IEnumerable<string> BossesNormal => new string[]
+        {
+            "BossBully",
+            "BossSanitar",
+            "Tagilla",
+            "BossGluhar",
+            "BossKojaniy",
+            "SectantPriest",
+            "BossBoar"
+        };
+
+        public static IEnumerable<string> FollowersGoons => new string[]
+        {
+            "BigPipe",
+            "BirdEye"
+        };
+
+        public static IEnumerable<string> FollowersNormal => new string[]
+        {
+            "FollowerBully",
+            "FollowerSanitar",
+            "TagillaFollower",
+            "FollowerGluharAssault",
+            "FollowerGluharProtect",
+            "FollowerGluharScout",
+            "BoarSniper",
+            "FlBoar"
+        };
 
         public static IEnumerable<string> AllGoons => FollowersGoons.Concat(new[] { Knight });
         public static IEnumerable<string> BossesWithoutGoons => BossesNormal.Concat(new[] { Tagilla, Killa });
         public static IEnumerable<string> BossesWithKnight => BossesWithoutGoons.Concat(new[] { Knight });
 
-        public static IEnumerable<string> AllNormalBots => Scavs.Concat(new[] { PMC, Rogue, Cultist });
+        public static IEnumerable<string> AllNormalBots => NormalScavs.Concat(new[] { Raider, Rogue, Cultist });
         public static IEnumerable<string> AllFollowers => FollowersNormal.Concat(FollowersGoons);
         public static IEnumerable<string> AllBossesWithFollowers => BossesWithKnight.Concat(AllFollowers);
-        public static IEnumerable<string> AllBots => AllNormalBots.Concat(AllBossesWithFollowers);
+        public static IEnumerable<string> AllBotsExceptSniperScavs => AllNormalBots.Concat(AllBossesWithFollowers);
+        public static IEnumerable<string> AllBots => AllBotsExceptSniperScavs.Concat(new[] { SniperScav });
 
         //FollowerGluharAssault and FollowerGluharProtect max layer = 43
 
@@ -50,7 +82,10 @@ namespace SPTQuestingBots.BotLogic
         public static bool WillBotBeAPMC(BotOwner botOwner)
         {
             //LoggingController.LogInfo("Spawn type for bot " + botOwner.Profile.Nickname + ": " + botOwner.Profile.Info.Settings.Role.ToString());
-            return pmcSpawnTypes.Select(t => t.ToString()).Contains(botOwner.Profile.Info.Settings.Role.ToString());
+            
+            return pmcSpawnTypes
+                .Select(t => t.ToString())
+                .Contains(botOwner.Profile.Info.Settings.Role.ToString());
         }
 
         public static bool WillBotBeABoss(BotOwner botOwner)
@@ -63,7 +98,8 @@ namespace SPTQuestingBots.BotLogic
             WildSpawnType sptUsec = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
             WildSpawnType sptBear = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue;
 
-            if (spawnType == WildSpawnType.pmcBot || spawnType == sptUsec)
+            //if (spawnType == WildSpawnType.pmcBot || spawnType == sptUsec)
+            if (spawnType == sptUsec)
             {
                 return EPlayerSide.Usec;
             }
@@ -81,12 +117,14 @@ namespace SPTQuestingBots.BotLogic
         {
             ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new AICoreLayerClass<BotLogicDecision>[0]);
 
+            // This happens sometimes, and I don't know why
             if (botOwner?.Brain?.BaseBrain == null)
             {
                 LoggingController.LogError("Invalid base brain for bot " + botOwner.Profile.Nickname);
                 return emptyCollection;
             }
 
+            // Find the field that stores the list of brain layers assigned to the bot
             Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
             FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
             if (layerListField == null)
@@ -95,6 +133,7 @@ namespace SPTQuestingBots.BotLogic
                 return emptyCollection;
             }
 
+            // Get the list of brain layers for the bot
             List<AICoreLayerClass<BotLogicDecision>> layerList = (List<AICoreLayerClass<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
             if (layerList == null)
             {
@@ -113,13 +152,17 @@ namespace SPTQuestingBots.BotLogic
 
         public static AICoreLayerClass<BotLogicDecision> GetBrainLayerForBot(BotOwner botOwner, string layerName)
         {
+            // Get all of the brain layers assigned to the bot
             ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
+
+            // Try to find the matching layer
             IEnumerable<AICoreLayerClass<BotLogicDecision>> matchingLayers = brainLayers.Where(l => l.Name() == layerName);
             if (!matchingLayers.Any())
             {
                 return null;
             }
 
+            // Check if multiple layers with the same name exist in the list
             if (matchingLayers.Count() > 1)
             {
                 LoggingController.LogWarning("Found multiple brain layers with the name \"" + layerName + "\". Returning the first match.");
@@ -128,6 +171,7 @@ namespace SPTQuestingBots.BotLogic
             return matchingLayers.First();
         }
 
+        // This checks if the brain layer CAN be used, not if it's currently being used
         public static bool IsBrainLayerActiveForBot(BotOwner botOwner, string layerName)
         {
             AICoreLayerClass<BotLogicDecision> brainLayer = GetBrainLayerForBot(botOwner, layerName);

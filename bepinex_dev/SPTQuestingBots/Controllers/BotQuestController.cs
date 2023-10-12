@@ -581,6 +581,12 @@ namespace SPTQuestingBots.Controllers
 
         private void ProcessTrigger(TriggerWithId trigger)
         {
+            // Skip zones that have already been processed
+            if (zoneIDsInLocation.Contains(trigger.Id))
+            {
+                return;
+            }
+
             // Find all quests that have objectives using this trigger
             Quest[] matchingQuests = allQuests.Where(q => q.GetObjectiveForZoneID(trigger.Id) != null).ToArray();
             if (matchingQuests.Length == 0)
@@ -606,6 +612,8 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogInfo("Adjusting position for zone " + trigger.Id + " to " + triggerTargetPosition.ToString());
             }
 
+            // Determine how far to search for a valid NavMesh position from the target location. If the collider (zone) is very large, expand the search range.
+            // TO DO: This is kinda sloppy and should be fixed. 
             float maxSearchDistance = ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone;
             maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
             Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
@@ -615,18 +623,18 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
+            // Add a step with the NavMesh position to corresponding objectives in every quest using this zone
             foreach (Quest quest in matchingQuests)
             {
-                if (zoneIDsInLocation.Contains(trigger.Id))
-                {
-                    continue;
-                }
-
                 LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name);
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
                 objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value));
-                objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? 2 : 1;
+
+                // If the zone is large, allow twice as many bots to do the objective at the same time
+                // TO DO: This is kinda sloppy and should be fixed. 
+                int maxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
+                objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? maxBots * 2 : maxBots;
 
                 zoneIDsInLocation.Add(trigger.Id);
             }
@@ -652,8 +660,11 @@ namespace SPTQuestingBots.Controllers
 
             LoggingController.LogInfo("Writing quest log file...");
 
+            // Write the header row
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Quest Name,Objective,Steps,Min Level,Max Level,First Step Position,Active Bots,Successful Bots,Unsuccessful Bots");
+            
+            // Write a row for every objective in every quest
             foreach (Quest quest in allQuests)
             {
                 foreach (QuestObjective objective in quest.AllObjectives)

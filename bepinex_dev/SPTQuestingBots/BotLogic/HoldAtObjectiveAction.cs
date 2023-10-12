@@ -29,6 +29,7 @@ namespace SPTQuestingBots.BotLogic
 
         public override void Update()
         {
+            // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
             {
                 return;

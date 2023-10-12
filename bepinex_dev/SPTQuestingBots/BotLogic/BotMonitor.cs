@@ -33,18 +33,22 @@ namespace SPTQuestingBots.BotLogic
 
         public bool ShouldWaitForFollowers()
         {
+            // Check if the bot has any followers
             IReadOnlyCollection<BotOwner> followers = BotQuestController.GetAliveFollowers(botOwner);
-            if (followers.Count > 0)
+            if (followers.Count == 0)
             {
-                IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
-                if
-                (
-                    followerDistances.Any(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Furthest)
-                    || followerDistances.All(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Nearest)
-                )
-                {
-                    return true;
-                }
+                return false;
+            }
+
+            // Check if the bot is too far from any of its followers
+            IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
+            if
+            (
+                followerDistances.Any(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+                || followerDistances.All(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+            )
+            {
+                return true;
             }
 
             return false;
@@ -52,6 +56,7 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsAbleBodied(bool writeToLog)
         {
+            // Check if the bot needs to heal or perform surgery
             if (botOwner.Medecine.FirstAid.Have2Do || botOwner.Medecine.SurgicalKit.HaveWork)
             {
                 if (writeToLog)
@@ -61,6 +66,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if the bot needs to drink something
             if (100f * botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < ConfigController.Config.BotQuestingRequirements.MinHydration)
             {
                 if (writeToLog)
@@ -70,6 +76,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if the bot needs to eat something
             if (100f * botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < ConfigController.Config.BotQuestingRequirements.MinEnergy)
             {
                 if (writeToLog)
@@ -79,12 +86,14 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Get the health of all of the bot's body parts
             ValueStruct healthHead = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Head);
             ValueStruct healthChest = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Chest);
             ValueStruct healthStomach = botOwner.HealthController.GetBodyPartHealth(EBodyPart.Stomach);
             ValueStruct healthLeftLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.LeftLeg);
             ValueStruct healthRightLeg = botOwner.HealthController.GetBodyPartHealth(EBodyPart.RightLeg);
 
+            // Check if any of the bot's body parts need to be healed
             if
             (
                 (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
@@ -101,6 +110,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if the bot is too overweight
             if (100f * botOwner.GetPlayer.Physical.Overweight > ConfigController.Config.BotQuestingRequirements.MaxOverweightPercentage)
             {
                 if (writeToLog)

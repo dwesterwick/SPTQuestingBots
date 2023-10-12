@@ -83,6 +83,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if somebody disabled questing in the F12 menu
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
             {
                 return false;
@@ -98,10 +99,10 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if the bot is a follower
             if (botOwner.BotFollower.HaveBoss)
             {
                 BotOwner boss = botOwner.BotFollower.BossToFollow?.Player()?.AIData?.BotOwner;
-
                 if (boss != null)
                 {
                     string bossName = boss.Profile.Nickname;
@@ -113,11 +114,13 @@ namespace SPTQuestingBots.BotLogic
                 }
             }
 
+            // Ensure all quests have been loaded and generated
             if (!BotQuestController.HaveTriggersBeenFound)
             {
                 return false;
             }
 
+            // Check if the bot wants to use a mounted weapon
             if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
             {
                 return false;
@@ -128,6 +131,7 @@ namespace SPTQuestingBots.BotLogic
                 return pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
 
+            // Check if the bot is currently extracting or wants to extract via SAIN
             if (extractLayerMonitor.CanLayerBeUsed)
             {
                 string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
@@ -181,13 +185,16 @@ namespace SPTQuestingBots.BotLogic
             }
             wasSearchingForEnemy = false;
 
+            // Check if the bot is allowed to select a new objective based on the time it last selected one
             objectiveManager.CanChangeObjective = objectiveManager.TimeSinceChangingObjective > minTimeBetweenSwitchingObjectives;
 
+            // Temporarily disable the layer if the bot cannot reach its objective and not enough time has passed after it was selected
             if (!objectiveManager.CanReachObjective && !objectiveManager.CanChangeObjective)
             {
                 return pauseLayer();
             }
 
+            // Check if the bot has spent enough time at its objective and enough time has passed since it was selected
             if (objectiveManager.CanChangeObjective && (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective))
             {
                 string previousObjective = objectiveManager.ToString();
@@ -197,6 +204,7 @@ namespace SPTQuestingBots.BotLogic
                 }
             }
 
+            // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
             if (objectiveManager.StuckCount >= ConfigController.Config.StuckBotDetection.MaxCount)
             {
                 LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
@@ -252,6 +260,7 @@ namespace SPTQuestingBots.BotLogic
                 lastBotPosition = botOwner.Position;
             }
 
+            // Check if the bot has moved enough
             float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, botOwner.Position);
             if (distanceFromLastUpdate > ConfigController.Config.StuckBotDetection.Distance)
             {
@@ -259,6 +268,7 @@ namespace SPTQuestingBots.BotLogic
                 botIsStuckTimer.Restart();
             }
 
+            // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (botIsStuckTimer.ElapsedMilliseconds > 1000 * ConfigController.Config.StuckBotDetection.Time)
             {
                 drawStuckBotPath();
@@ -301,6 +311,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // Check if LootingBots is loaded
             if (!lootingLayerMonitor.CanLayerBeUsed)
             {
                 return false;
@@ -310,9 +321,19 @@ namespace SPTQuestingBots.BotLogic
 
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
             string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+
+            // Check if the LootingBots logic layer is active
             bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
+
+            // Check if LootingBots has instructed the bot to check a lootable container
             bool isLooting = activeLogicName.Contains("Looting");
-            
+
+            // The following logic is used to determine if a bot is allowed to search for loot:
+            //      - If LootingBots has instructed the bot to check a lootable container, allow it
+            //      - If the bot hasn't serached for loot for a minimum amount of time, allow it
+            //      - After the minimum amount of time, the bot will only be allowed to search for a certain amount of time. If it doesn't find any loot
+            //        in that time, it will be forced to continue questing
+            //      - The minimum amount of time between loot checks depends on whether the bot successfully found loot during the previous check
             if
             (
                 (isLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))

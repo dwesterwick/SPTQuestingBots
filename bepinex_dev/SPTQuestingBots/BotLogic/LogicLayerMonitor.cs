@@ -60,11 +60,13 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsLayerRequested()
         {
+            // Check if the layer can be used by the bot (but not necessarily is in use)
             if (!CanLayerBeUsed)
             {
                 return false;
             }
 
+            // Check if the layer should be used by the bot
             bool isRequested = layer?.ShallUseNow() == true;
 
             if (isRequested)
@@ -78,15 +80,17 @@ namespace SPTQuestingBots.BotLogic
 
         public bool CanUseLayer(float minTimeFromLastUse)
         {
+            // Only use the layer if enough time has passed from the last time it was used
             if (canUseTimer.ElapsedMilliseconds / 1000f < minTimeFromLastUse)
             {
                 return false;
             }
 
-           if (IsLayerRequested())
-           {
+            // Check if the layer should be used by the bot
+            if (IsLayerRequested())
+            {
                 return true;
-           }
+            }
 
             return false;
         }

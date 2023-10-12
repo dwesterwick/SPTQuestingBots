@@ -65,6 +65,7 @@ namespace SPTQuestingBots.BotLogic
                 IsObjectiveActive = true;
             }
 
+            // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
             if (IsObjectiveActive && BotQuestController.HaveTriggersBeenFound)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
@@ -98,6 +99,7 @@ namespace SPTQuestingBots.BotLogic
                 timeSpentAtObjectiveTimer.Reset();
             }
 
+            // Don't allow expensive parts of this behavior (selecting an objective) to run too often
             if (!canUpdate())
             {
                 return;
@@ -113,9 +115,11 @@ namespace SPTQuestingBots.BotLogic
         {
             IsObjectivePathComplete = true;
             IsObjectiveReached = true;
+
             targetObjective.BotCompletedObjective(botOwner);
             targetQuest.CompleteObjective(botOwner, targetObjective);
             targetQuest.StartQuestForBot(botOwner);
+
             StuckCount = 0;
         }
 
@@ -123,6 +127,7 @@ namespace SPTQuestingBots.BotLogic
         {
             IsObjectivePathComplete = true;
             CanReachObjective = false;
+
             targetObjective.BotFailedObjective(botOwner);
         }
 
@@ -206,6 +211,7 @@ namespace SPTQuestingBots.BotLogic
 
         private bool TryToGoToRandomQuestObjective()
         {
+            // Keep searching for a quest the bot can perform until one is found or there aren't any quests left
             while (targetQuest == null)
             {
                 targetQuest = BotQuestController.GetRandomQuestForBot(botOwner);
@@ -216,6 +222,7 @@ namespace SPTQuestingBots.BotLogic
                     return false;
                 }
 
+                // Ensure there are objectives in the quest that the bot can perform
                 if (targetQuest.GetRemainingObjectiveCount(botOwner) == 0)
                 {
                     //targetQuest.BlacklistBot(botOwner);
