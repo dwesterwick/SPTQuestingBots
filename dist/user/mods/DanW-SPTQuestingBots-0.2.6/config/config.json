@@ -31,7 +31,7 @@
 		"navmesh_search_distance_spawn": 10
 	},
 	"bot_search_distances": {
-		"objective_reached_ideal": 3,
+		"objective_reached_ideal": 0.25,
 		"objective_reached_navmesh_path_error": 20,
 		"max_navmesh_path_error": 10
 	},
@@ -82,7 +82,7 @@
 		},
 		"spawn_point_wander": {
 			"priority": 25,
-			"chance": 5,
+			"chance": 1,
 			"min_distance": 75,
 			"max_bots_per_quest": 30
 		}
@@ -122,6 +122,6 @@
 		"max_initial_rogues": 6,
 		"add_max_players_to_bot_cap": true,
 		"max_additional_bots": 5,
-		"max_total_bots": 25
+		"max_total_bots": 26
 	}
 }

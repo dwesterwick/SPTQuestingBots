@@ -250,6 +250,8 @@ namespace SPTQuestingBots.Controllers
 
         private async Task generateBots(BotDifficulty botdifficulty, int totalCount)
         {
+            int botsGenerated = 0;
+
             try
             {
                 IsGeneratingPMCs = true;
@@ -260,7 +262,6 @@ namespace SPTQuestingBots.Controllers
                 IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
                 System.Random random = new System.Random();
-                int botsGenerated = 0;
                 int botGroup = 1;
                 while (botsGenerated < totalCount)
                 {
@@ -298,8 +299,18 @@ namespace SPTQuestingBots.Controllers
 
                 LoggingController.LogInfo("Generating PMC bots...done.");
             }
+            catch (Exception e)
+            {
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
+            }
             finally
             {
+                if (botsGenerated < totalCount)
+                {
+                    LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " initial PMC's were generated due to an error.");
+                }
+
                 IsGeneratingPMCs = false;
             }
         }
