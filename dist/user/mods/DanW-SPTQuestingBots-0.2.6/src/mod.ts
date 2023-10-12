@@ -126,7 +126,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "AdjustPMCConversionChances"
         );
         
-        // Get all quest templates
+        // Get all EFT quest templates
+        // NOTE: This includes custom quests added by mods
         staticRouterModService.registerStaticRouter(`GetAllQuestTemplates${modName}`,
             [{
                 url: "/QuestingBots/GetAllQuestTemplates",
@@ -155,6 +156,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
+        // Ensure all of the custom quests are valid JSON files
         this.questManager.validateCustomQuests();
 
         // Adjust parameters to make debugging easier
@@ -191,10 +193,18 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
 
         this.commonUtils.logInfo("Configuring game for initial PMC spawns...");
+
+        // Store the current PMC-conversion chances in case they need to be restored later
         this.setOriginalPMCConversionChances();
+
+        // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
         this.disableCustomBossWaves();
-        this.increaseBotCaps();
+
+        // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
         this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
+
+        this.increaseBotCaps();
+
         this.commonUtils.logInfo("Configuring game for initial PMC spawns...done.");
     }
 
@@ -283,11 +293,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
     private disableCustomBossWaves(): void
     {
-        if (modConfig.initial_PMC_spawns.enabled)
-        {
-            this.commonUtils.logInfo("Disabling custom boss waves");
-            this.iLocationConfig.customWaves.boss = {};
-        }
+        this.commonUtils.logInfo("Disabling custom boss waves...");
+        this.iLocationConfig.customWaves.boss = {};
     }
 
     private increaseBotCaps(): void
@@ -332,12 +339,14 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 
                 for (const i in badBrains)
                 {
-                    if (mapBrains[badBrains[i]] !== undefined)
+                    if (mapBrains[badBrains[i]] === undefined)
                     {
-                        //this.commonUtils.logInfo(`Removing ${badBrains[i]} from ${pmcType} in ${map}...`);
-                        delete mapBrains[badBrains[i]];
-                        removedBrains++;
+                        continue;
                     }
+
+                    //this.commonUtils.logInfo(`Removing ${badBrains[i]} from ${pmcType} in ${map}...`);
+                    delete mapBrains[badBrains[i]];
+                    removedBrains++;
                 }
             }
         }

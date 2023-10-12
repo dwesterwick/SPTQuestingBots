@@ -48,13 +48,16 @@ export class QuestManager
     {
         const path = __dirname + "/../quests";
 
+        // Ensure the directory for standard quests exists
         if (this.vfs.exists(path + "/standard/"))
         {
             const standardQuests = this.vfs.getFiles(path + "/standard/");
             for (const i in standardQuests)
             {
                 const questFileText = this.vfs.readFile(path + "/standard/" + standardQuests[i]);
-                const quests : Quest[] = JSON.parse(questFileText)
+
+                // If the JSON file can be parsed into a Quest array, assume it's fine
+                const quests : Quest[] = JSON.parse(questFileText);
 
                 this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
             }
@@ -64,13 +67,16 @@ export class QuestManager
             this.commonUtils.logError("The \"/quests/standard/\" directory is missing.");
         }
 
+        // Check if the directory for custom quests exists
         if (this.vfs.exists(path + "/custom/"))
         {
             const customQuests = this.vfs.getFiles(path + "/custom/");
             for (const i in customQuests)
             {
                 const questFileText = this.vfs.readFile(path + "/custom/" + customQuests[i]);
-                const quests : Quest[] = JSON.parse(questFileText)
+
+                // If the JSON file can be parsed into a Quest array, assume it's fine
+                const quests : Quest[] = JSON.parse(questFileText);
 
                 this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${customQuests[i]}"`);
             }
@@ -79,37 +85,5 @@ export class QuestManager
         {
             this.commonUtils.logWarning("No custom quests found.");
         }
-    }
-
-    public getCustomQuests(locationID: string) : Quest[]
-    {
-        const standardQuestFile = __dirname + "/../quests/standard/" + locationID + ".json";
-        const customQuestFile = __dirname + "/../quests/custom/" + locationID + ".json";
-        let quests: Quest[] = [];
-
-        if (this.vfs.exists(standardQuestFile))
-        {
-            this.commonUtils.logInfo(`Loading standard quests for ${locationID}...`);
-
-            const questFileText = this.vfs.readFile(standardQuestFile);
-            const questData : Quest[] = JSON.parse(questFileText)
-            quests = quests.concat(questData);
-        }
-        else
-        {
-            this.commonUtils.logWarning(`No standard quests found for ${locationID}`);
-        }
-
-        if (this.vfs.exists(customQuestFile))
-        {
-            this.commonUtils.logInfo(`Loading custom quests for ${locationID}...`);
-
-            const questFileText = this.vfs.readFile(customQuestFile);
-            const questData : Quest[] = JSON.parse(questFileText)
-            quests = quests.concat(questData);
-        }
-
-        this.commonUtils.logInfo(`Loaded ${quests.length} quests for ${locationID}.`);
-        return quests;
     }
 }
