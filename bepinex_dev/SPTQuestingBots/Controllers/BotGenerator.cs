@@ -288,10 +288,27 @@ namespace SPTQuestingBots.Controllers
                         break;
                     }*/
 
-                    LoggingController.LogInfo("Generating PMC group spawn #" + botGroup + "(Number of bots: " + botsInGroup + ")...");
-                    GClass514 botData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
-                    GClass513 newBotData = await GClass513.Create(botData, ibotCreator, botsInGroup, botSpawnerClass);
-                    initialPMCGroups.Add(new Models.BotSpawnInfo(newBotData));
+                    LoggingController.LogInfo("Generating PMC group spawn #" + botGroup + " (Number of bots: " + botsInGroup + ")...");
+                    try
+                    {
+                        GClass514 botSettingsData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
+                        GClass513 botSpawnData = await GClass513.Create(botSettingsData, ibotCreator, botsInGroup, botSpawnerClass);
+
+                        initialPMCGroups.Add(new Models.BotSpawnInfo(botSpawnData));
+                    }
+                    catch (NullReferenceException nre)
+                    {
+                        LoggingController.LogWarning("Generating PMC group spawn #" + botGroup + " (Number of bots: " + botsInGroup + ")...failed. Trying again...");
+
+                        LoggingController.LogError(nre.Message);
+                        LoggingController.LogError(nre.StackTrace);
+
+                        continue;
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
 
                     botsGenerated += botsInGroup;
                     botGroup++;
