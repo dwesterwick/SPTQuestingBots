@@ -6,23 +6,23 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **REQUIRES:**
 * [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/)
-* Waypoints
+* [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
 **NOT compatible with:**
-* AI Limit / AI Disabler (this mod relies on the AI being active throughout the entire map)
+* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
+* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. 
 
 **Highly Recommended:**
-* SAIN
-* Looting Bots
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/)
 
 **Compatible with:**
-* SWAG + DONUTS (if **initial_PMC_spawns=false** in this mod)
-* Late to the Party (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) (if **initial_PMC_spawns=false** in this mod)
+* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 
 **Previously compatible with (but not confirmed in SPT-AKI 3.7.0+):**
-* Looting Bots
-* Custom Raid Times
-* Immersive Raids
+* [Custom Raid Times](https://hub.sp-tarkov.com/files/file/771-custom-raid-times/)
+* [Immersive Raids](https://hub.sp-tarkov.com/files/file/876-immersive-raids/)
 
 **---------- Overview ----------**
 
@@ -182,7 +182,7 @@ The three major data structures are:
 
 **---------- Credits ----------**
 
-* Thanks to Props for sharing the code DONUTS uses to spawn bots. This was the inspiration to create this mod. 
-* Thanks to DrakiaXYZ for creating BigBrain and Waypoints and for all of your help with developing this mod. 
+* Thanks to [Props](https://hub.sp-tarkov.com/user/18746-props/) for sharing the code [DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) uses to spawn bots. This was the inspiration to create this mod. 
+* Thanks to [DrakiaXYZ](https://hub.sp-tarkov.com/user/30839-drakiaxyz/) for creating [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/) and [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) and for all of your help with developing this mod. 
 * Thanks to everyone on Discord who helped to test the many alpha releases of this mod and provided feedback to make it better. There are too many people to name, but you're all awesome. 
 * Of course, thanks to the SPT development team who made this possible in the first place. 
