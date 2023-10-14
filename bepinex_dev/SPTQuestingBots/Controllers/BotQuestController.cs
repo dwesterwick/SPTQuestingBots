@@ -234,7 +234,7 @@ namespace SPTQuestingBots.Controllers
 
                 // Use a random number to determine if the bot should be assigned to the first quest in the list
                 Quest firstRandomQuest = randomizedQuests.First();
-                if (random.NextFloat(0, 100) < firstRandomQuest.ChanceForSelecting)
+                if (random.NextFloat(1, 100) < firstRandomQuest.ChanceForSelecting)
                 {
                     return firstRandomQuest;
                 }
