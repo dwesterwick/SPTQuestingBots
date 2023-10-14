@@ -28,7 +28,7 @@
 	"quest_generation": {
 		"navmesh_search_distance_item": 2,
 		"navmesh_search_distance_zone": 2,
-		"navmesh_search_distance_spawn": 10
+		"navmesh_search_distance_spawn": 2
 	},
 	"bot_search_distances": {
 		"objective_reached_ideal": 0.25,
