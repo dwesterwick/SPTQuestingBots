@@ -3,6 +3,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **This is a work-in-progress! Many features are still in development. Please report bugs in the QuestingBots thread in Discord.**
 
 **---------- Mod Compatibility ----------**
+
 **REQUIRES:**
 * BigBrain
 * Waypoints
@@ -24,6 +25,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 * Immersive Raids
 
 **---------- Overview ----------**
+
 There are two main components of this mod: adding an objective system to the AI and spawning PMC's only at the beginning of the raid to mimic live Tarkov.
 
 **Objective System:**
@@ -59,6 +61,7 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
 **NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like SWAG/DONUTS that manage spawning! Otherwise, there will be too many PMC's on the map.**
 
 **---------- Bot Quest-Selection Algorithm Overview ----------**
+
 1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (is not blocked by player level, etc.)
 2) Quests are grouped by priority number in ascending order
 3) For each group, the following is performed:
@@ -68,6 +71,7 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
 4) If the bot isn't assigned a quest from any of the groups in step (3), it's assigned a random quest from the lowest-priority group.
 
 **---------- Known Issues ----------**
+
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
@@ -109,6 +113,7 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_initial_pmcs** setting is high
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
+
 * **0.2.7** (ETA: 10/15)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options
@@ -137,6 +142,7 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 
 **---------- How to Add Custom Quests ----------**
+
 To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
 The three major data structures are:
@@ -175,6 +181,7 @@ The three major data structures are:
 * Bots will use the NavMesh to calculate the more efficient path to their objective. They cannot perform complex actions to reach objective locations, so avoid placing objective steps on top of objects (i.e. inside truck beds) or in areas that are difficult to reach.
 
 **---------- Credits ----------**
+
 * Thanks to Props for sharing the code DONUTS uses to spawn bots. This was the inspiration to create this mod. 
 * Thanks to DrakiaXYZ for creating BigBrain and Waypoints and for all of your help with developing this mod. 
 * Thanks to everyone on Discord who helped to test the many alpha releases of this mod and provided feedback to make it better. There are too many people to name, but you're all awesome. 
