@@ -5,7 +5,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **---------- Mod Compatibility ----------**
 
 **REQUIRES:**
-* BigBrain
+* [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/)
 * Waypoints
 
 **NOT compatible with:**
