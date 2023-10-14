@@ -5,7 +5,7 @@
 * Waypoints 1.3.0+
 
 **Tested to be compatible with:**
-* SAIN 2.1
+* SAIN 2.1.3
 * SWAG + DONUTS 3.2.0 (if **initial_PMC_spawns=false** in this mod)
 * Late to the Party 1.3.4+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 
@@ -21,19 +21,12 @@
 * All PMC bots will automatically select random quests, regardless of their spawn time
 * There are currently three types of quests available:
     * (50% Chance) Zones and item locations for actual EFT quests (these are dynamically generated using the quest-data from the server, so it will also work with mods that add or change quests)
-    * (15% Chance) Going to random spawn points on the map
+    * (1% Chance) Going to random spawn points on the map
     * (50% Chance) Rushing your spawn point if it's within 75m and within the first 30s of the raid (configurable)
     * (User-Specified Chance) Going to user-specified locations
 * After reaching an objective or giving up, the bot will wait a configurable amount of time (currently 10s) before going to its next objective
 * If a bot sees an enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
 * Once a bot begins a quest, it will try to complete all objectives in it before moving to the next one
-* Quests can be configured with the following parameters:
-    * Min/Max player level
-    * Max raid ET
-    * Priority number
-    * Chance of a bot selecting it
-    * Min/Max distance from the bot for each objective
-    * Max number of bots allowed per objective
 
 **---------- Bot Quest-Selection Algorithm Overview ----------**
 1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (is not blocked by player level, etc.)
@@ -62,7 +55,6 @@
     * Health Resort for Capturing Outposts in Shoreline
     * Bronze pocket watch for Checking in Customs
     * Flash drive with fake info for Bullshit in Customs
-    * Syringe with a chemical for Chemical Part 3 in Factory
     * Mountain Area for Return the Favor in Woods
     * The second and third bunkers for Assessment Part 2 in Woods
     * The satellite antenna in the USEC camp for Return the Favor in Woods
@@ -70,13 +62,10 @@
     * The cottage area for Overpopulation in Lighthouse
     * The main area for Assessment - Part 1 in Lighthouse
     * The bridge for Knock-Knock in Lighthouse
-    * The truck for TerraGroup Trail Part 1 in Shoreline
-    * The meeting spot for TerraGroup Trail Part 4 in Shoreline
     * All locations for Long Line in Interchange
     * The 21WS Container for Provocation in Interchange
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
-    * Kaban's office for TerraGroup Trail Part 10 in Streets
 
 **Planned Improvements for Bot Questing:**
 * Adding an objective type for waiting a specified amount of time while patrolling the last objective area (for quests like Capturing Outposts)
@@ -95,6 +84,7 @@
 **Known Issues for Initial PMC Spawning:**
 * Only solo PMC's spawn
 * Not all PMC's spawn into Streets because too many Scavs spawn into the map first
+* Scavs can spawn close to PMC's (SPT limitation)
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_initial_pmcs** setting is high
 * In maps with a high number of max players, performance can be pretty bad if your **max_alive_initial_pmcs** or **max_total_bots** settings are high
@@ -104,25 +94,25 @@
 * Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-* **0.2.6** (ETA: 10/12)
+* **0.2.7** (ETA: 10/15)
     * **First version posted on SPT-AKI website**
     * Add documentation for config options
     * Add comments to code so I know WTF I'm looking at next year
-    * Prevent bots from sprinting in more areas
-* **0.3.0** (ETA: Late October)
+* **0.3.0** (ETA: Early November)
     * New standard quests for Streets expansion areas
+    * Prevent bots from sprinting in more areas
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:
         * Patrol target area for a certain time
         * Wait at specific location for a certain time (mimicing planting items)
     * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.3.1** (ETA: Mid November)
+* **0.3.1** (ETA: Late November)
     * Add new quest-objective actions: unlocking doors and pulling levers
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
-* **0.3.2** (ETA: Early December)
+* **0.3.2** (ETA: Mid December)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
     * Initial PMC group spawns
