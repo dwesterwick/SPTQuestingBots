@@ -1,32 +1,62 @@
-**Please remember this is currently in ALPHA testing! Bugs are likely!**
+You're no longer the only PMC running around placing markers and collecting quest items. The bots have transcended and are coming for you...
 
-**Requires:**
-* BigBrain 0.3.0+
-* Waypoints 1.3.0+
+**This is a work-in-progress! Many features are still in development. Please report bugs in the QuestingBots thread in Discord.**
 
-**Tested to be compatible with:**
-* SAIN 2.1.3
-* SWAG + DONUTS 3.2.0 (if **initial_PMC_spawns=false** in this mod)
-* Late to the Party 1.3.4+ (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
-
-**Previously compatible with (but not confirmed in SPT-AKI 3.7.0):**
-* Looting Bots 1.1.2
-* Custom Raid Times 1.4.0
-* Immersive Raids 1.1.3
+**---------- Mod Compatibility ----------**
+**REQUIRES:**
+* BigBrain
+* Waypoints
 
 **NOT compatible with:**
 * AI Limit / AI Disabler (this mod relies on the AI being active throughout the entire map)
 
-**---------- Bot Questing Overview ----------**
-* All PMC bots will automatically select random quests, regardless of their spawn time
-* There are currently three types of quests available:
-    * (50% Chance) Zones and item locations for actual EFT quests (these are dynamically generated using the quest-data from the server, so it will also work with mods that add or change quests)
-    * (1% Chance) Going to random spawn points on the map
-    * (50% Chance) Rushing your spawn point if it's within 75m and within the first 30s of the raid (configurable)
-    * (User-Specified Chance) Going to user-specified locations
-* After reaching an objective or giving up, the bot will wait a configurable amount of time (currently 10s) before going to its next objective
-* If a bot sees an enemy or was recently engaged in combat of any type, it will wait a configurable random amount of time (currently 10-30s) before resuming its quest
-* Once a bot begins a quest, it will try to complete all objectives in it before moving to the next one
+**Highly Recommended:**
+* SAIN
+* Looting Bots
+
+**Compatible with:**
+* SWAG + DONUTS (if **initial_PMC_spawns=false** in this mod)
+* Late to the Party (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+
+**Previously compatible with (but not confirmed in SPT-AKI 3.7.0+):**
+* Looting Bots
+* Custom Raid Times
+* Immersive Raids
+
+**---------- Overview ----------**
+There are two main components of this mod: adding an objective system to the AI and spawning PMC's only at the beginning of the raid to mimic live Tarkov.
+
+**Objective System:**
+Instead of patrolling their spawn areas, bots will now move around the map to perform randomly-selected objectives. By default this system is only active for PMC's, but it can be enabled for Scavs and bosses if you want an extra challenge.
+
+After spawning (regardless of when this occurs during the raid), bots will immediately begin questing, and there are only a few conditions that will cause them to stop questing:
+* They got stuck too many times
+* They're overencumbered
+* They're trying to extract (using SAIN)
+
+Otherwise, they will only temporarily stop questing for the following reasons:
+* They're currently or were just recently in combat
+* They recently completed an objective
+* They're checking for or have found loot
+* Their health is too low or they have blacked limbs (except arms)
+* Their energy or hydration is too low
+* They have followers that are too far from them
+
+There are currently several types of quests available to every bot:
+* **EFT Quests:** Bots will go to locations specified in EFT quests for placing markers, collecting/placing items, killing bots, etc. Bots can also use quests added by other mods. 
+* **Spawn Rush**: At the beginning of the raid, bots that are within a certain distance of you will run to your spawn point.
+* **Spawn Point Wandering**: Bots will wander to different spawn points around the map
+* **"Standard" Quests:**: Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are close to them. 
+* **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests.
+
+**PMC Spawning System:**
+At the beginning of the raid, PMC's will spawn around the map at actual EFT spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values).
+
+Only a certain (configurable) number of initial PMC's will spawn at the beginning of the raid, and the rest will spawn as the existing ones die. PMC's that spawn after the initial wave can spawn anywhere that is far enough from you and other bots (not just at EFT PMC spawn points). All initial bosses must spawn first (except for Factory) or EFT may suppress them due to the high number of bots on the map. The PMC difficulty is set by your raid settings in EFT.
+
+To accomodate the large initial PMC wave and still allow Scavs and bosses to spawn, the max-bot cap is (optionally) increased.
+
+**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like SWAG/DONUTS that manage spawning! Otherwise, there will be too many PMC's on the map.**
 
 **---------- Bot Quest-Selection Algorithm Overview ----------**
 1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (is not blocked by player level, etc.)
@@ -37,7 +67,9 @@
     3) A random number from 0-100 is selected and compared to the **chance** setting for the first quest in the group. If the number is less than the value of **chance**, the quest is assigned to the bot. 
 4) If the bot isn't assigned a quest from any of the groups in step (3), it's assigned a random quest from the lowest-priority group.
 
-**Known Issues for Bot Questing:**
+**---------- Known Issues ----------**
+**Objective System:**
+* Mods that add a lot of new quests may cause latency issues that may result in game stability problems
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
 * Bots tend to get trapped in certain areas. Known areas:
     * Factory Gate 1 (will be fixed with next Waypoints release for SPT-AKI 3.7.0) <-- need to test this again
@@ -45,7 +77,7 @@
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
     * Lighthouse in various rocky areas
-* Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there).
+* Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there). They will only engage you if they see you, so they may run right past you. 
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
@@ -67,21 +99,7 @@
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
 
-**Planned Improvements for Bot Questing:**
-* Adding an objective type for waiting a specified amount of time while patrolling the last objective area (for quests like Capturing Outposts)
-* Adding a quest for hidden-stash-running with dynamically-generated objectives using the positions of all hidden stashes on the map
-* Being able to invoke SAIN's logic for having bots extract from the map
-* Optionally overriding the default priority for EFT quests to make bots more or less likely to select them
-
-**---------- Initial PMC Spawning Overview ----------**
-* PMC's will spawn at the beginning of the raid (Thanks to Props for sharing code from DONUTS!). However, all initial bosses must spawn first except for Factory. 
-* The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values).
-* Only a certain (configurable) number of initial PMC's will spawn at the beginning of the raid, and the rest will spawn as the existing ones die.
-* Initial PMC's will spawn in actual EFT player spawn points using an algorithm to spread bots out across the map as much as possible. PMC's that spawn after the initial wave can spawn anywhere that is far enough from you and other bots.
-* The PMC difficulty is set by your raid settings in EFT
-* To accomodate the large initial PMC wave and still allow Scavs and bosses to spawn, the max-bot cap is (optionally) increased. 
-
-**Known Issues for Initial PMC Spawning:**
+**PMC Spawning System:**
 * Only solo PMC's spawn
 * Not all PMC's spawn into Streets because too many Scavs spawn into the map first
 * Scavs can spawn close to PMC's (SPT limitation)
@@ -89,9 +107,6 @@
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_initial_pmcs** setting is high
 * In maps with a high number of max players, performance can be pretty bad if your **max_alive_initial_pmcs** or **max_total_bots** settings are high
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_initial_pmcs** setting is high
-
-**Planned Improvements for Initial PMC Spawning:**
-* Add random PMC group spawns
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 * **0.2.7** (ETA: 10/15)
@@ -116,11 +131,12 @@
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
     * Initial PMC group spawns
+* **Backlog**
+    * Invoke SAIN's logic for having bots extract from the map
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 
 **---------- How to Add Custom Quests ----------**
-
 To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
 The three major data structures are:
@@ -157,3 +173,9 @@ The three major data structures are:
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
 * If you want a bot to go to several specific positions that are close to each other (i.e. adjacent rooms), use multiple steps in a single objectives instead of using multiple objectives. 
 * Bots will use the NavMesh to calculate the more efficient path to their objective. They cannot perform complex actions to reach objective locations, so avoid placing objective steps on top of objects (i.e. inside truck beds) or in areas that are difficult to reach.
+
+**---------- Credits ----------**
+* Thanks to Props for sharing the code DONUTS uses to spawn bots. This was the inspiration to create this mod. 
+* Thanks to DrakiaXYZ for creating BigBrain and Waypoints and for all of your help with developing this mod. 
+* Thanks to everyone on Discord who helped to test the many alpha releases of this mod and provided feedback to make it better. There are too many people to name, but you're all awesome. 
+* Of course, thanks to the SPT development team who made this possible in the first place. 
