@@ -8,17 +8,17 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/)
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
-**NOT compatible with:**
-* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
-* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. 
-
 **Highly Recommended:**
 * [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/)
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/)
 
+**NOT compatible with:**
+* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
+* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. 
+
 **Compatible with:**
-* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) (if **initial_PMC_spawns=false** in this mod)
-* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **initial_PMC_spawns=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) (if **initial_PMC_spawns.enabled=false** in this mod)
+* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **initial_PMC_spawns.enabled=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 
 **Previously compatible with (but not confirmed in SPT-AKI 3.7.0+):**
 * [Custom Raid Times](https://hub.sp-tarkov.com/files/file/771-custom-raid-times/)
@@ -29,36 +29,36 @@ You're no longer the only PMC running around placing markers and collecting ques
 There are two main components of this mod: adding an objective system to the AI and spawning PMC's only at the beginning of the raid to mimic live Tarkov.
 
 **Objective System:**
-Instead of patrolling their spawn areas, bots will now move around the map to perform randomly-selected objectives. By default this system is only active for PMC's, but it can be enabled for Scavs and bosses if you want an extra challenge.
+Instead of simply patrolling their spawn areas, bots will now move around the map to perform randomly-selected quest objectives. By default this system is only active for PMC's, but it can be enabled for Scavs and bosses if you want an extra challenge.
 
 After spawning (regardless of when this occurs during the raid), bots will immediately begin questing, and there are only a few conditions that will cause them to stop questing:
 * They got stuck too many times
-* They're overencumbered
-* They're trying to extract (using SAIN)
+* They're over-encumbered
+* They're trying to extract (using [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/))
 
 Otherwise, they will only temporarily stop questing for the following reasons:
 * They're currently or were just recently in combat
 * They recently completed an objective
 * They're checking for or have found loot
-* Their health is too low or they have blacked limbs (except arms)
+* Their health is too low or they have blacked limbs (besides arms)
 * Their energy or hydration is too low
 * They have followers that are too far from them
 
-There are currently several types of quests available to every bot:
-* **EFT Quests:** Bots will go to locations specified in EFT quests for placing markers, collecting/placing items, killing bots, etc. Bots can also use quests added by other mods. 
-* **Spawn Rush**: At the beginning of the raid, bots that are within a certain distance of you will run to your spawn point.
-* **Spawn Point Wandering**: Bots will wander to different spawn points around the map
-* **"Standard" Quests:**: Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are close to them. 
+There are currently several types of quests available to each bot:
+* **EFT Quests:** Bots will go to locations specified in EFT quests for placing markers, collecting/placing items, killing other bots, etc. Bots can also use quests added by other mods. 
+* **Spawn Rush:** At the beginning of the raid, bots that are within a certain distance of you will run to your spawn point. Only a certain number of bots are allowed to perform this quest, and they won't always select it. This makes Factory even more challenging. 
+* **Spawn Point Wandering:** Bots will wander to different spawn points around the map. This is used as a last resort in case the bot doesn't select any other quests. 
+* **"Standard" Quests:** Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are closer to them. 
 * **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests.
 
 **PMC Spawning System:**
-At the beginning of the raid, PMC's will spawn around the map at actual EFT spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The number of initial PMC's is a random number between the min and max player count for the map (other mods can change these values). If you're using [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), the maximum number of PMC's will be reduced if you spawn into the map late for a Scav run. 
+At the beginning of the raid, PMC's will spawn around the map at actual EFT spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The number of initial PMC's is a random number between the minimum and maximum player count for the map (other mods can change these values). If you're using [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), the maximum number of PMC's will be reduced if you spawn into the map late for a Scav run. 
 
-Only a certain (configurable) number of initial PMC's will spawn at the beginning of the raid, and the rest will spawn as the existing ones die. PMC's that spawn after the initial wave can spawn anywhere that is far enough from you and other bots (not just at EFT PMC spawn points). All initial bosses must spawn first (except for Factory) or EFT may suppress them due to the high number of bots on the map. The PMC difficulty is set by your raid settings in EFT.
+Only a certain (configurable) number of initial PMC's will spawn at the beginning of the raid, and the rest will spawn as the existing ones die. PMC's that spawn after the initial wave can spawn anywhere that is far enough from you and other bots (not just at EFT's PMC spawn points). All initial bosses must spawn first (except for Factory) or EFT may suppress them due to the high number of bots on the map. The PMC difficulty is set by your raid settings in EFT.
 
 To accomodate the large initial PMC wave and still allow Scavs and bosses to spawn, the max-bot cap is (optionally) increased.
 
-**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like SWAG/DONUTS that manage spawning! Otherwise, there will be too many PMC's on the map.**
+**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) that manage spawning! Otherwise, there will be too many PMC's on the map.**
 
 **---------- Bot Quest-Selection Algorithm Overview ----------**
 
@@ -83,7 +83,7 @@ The three major data structures are:
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest
     * **chanceForSelecting**: The chance (in %) that the bot will accept the quest if the quest-selection algorithm selects it for the bot
     * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
-    * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like **Late to the Party**, this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
+    * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
     * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best to make it unique to avoid confusion when troubleshooting.
@@ -154,6 +154,19 @@ The three major data structures are:
 * **bot_questing_requirements.break_for_looting.max_loot_scan_time**: The maximum time that bots will be allowed to search for loot via [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/). If the bot hasn't found any loot within this time, it will continue questing. If it has found loot, it will not continue questing until it's completely finished with looting. This is **4** s by default. 
 * **bot_questing_requirements.max_follower_distance.nearest**: If the bot has any followers, it will not be allowed to quest if its nearest follower is more than this distance (in meters) from it. This is **20** m by default. 
 * **bot_questing_requirements.max_follower_distance.furthest**: If the bot has any followers, it will not be allowed to quest if its furthest follower is more than this distance (in meters) from it. This is **40** m by default. 
+* **bot_quests.distance_randomness**: The amount of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest available to it. By default, this is **30%**. 
+* **bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
+* **bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
+* **bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest. 
+
+**Options for Each Section in *bot_quests*:**
+* **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
+* **chance**: The chance (in %) that the bot will accept the quest if the quest-selection algorithm selects it for the bot.
+* **max_bots_per_quest**: The maximum number of bots that can actively be performing each quest of that type.
+* **min_distance**: Each objective in the quest will only be selected if the bot is at least this many meters away from it.
+* **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.
+* **max_raid_ET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid.
+* **level_range**: An array of [minimum player level for the quest, level range] pairs to determine the maximum player level for each quest of that type. This value is added to the minimum player level for the quest. For example, if a quest is only available at level 15, the level range for it will be 20 (as determined via interpolation of this array using its default values). As a result, only bots between levels 15 and 35 will be allowed select that quest. 
 
 **PMC Spawning Options:**
 * **initial_PMC_spawns.enabled**: Enable initial PMC spawning (**true** by default). This should be changed to **false** if you're using any other mod that manages spawning like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/).
