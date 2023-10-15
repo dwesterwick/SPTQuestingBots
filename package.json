@@ -1,10 +1,10 @@
 {
     "name": "SPTQuestingBots",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "main": "src/mod.js",
     "license": "MIT",
     "author": "DanW",
-    "akiVersion": "3.7.0",
+    "akiVersion": ">=3.7.1",
     "scripts": {
         "setup": "npm i",
         "build": "node ./packageBuild.ts"
