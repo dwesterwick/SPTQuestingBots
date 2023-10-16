@@ -36,7 +36,6 @@ namespace SPTQuestingBots.BotLogic
         {
             "BossBully",
             "BossSanitar",
-            "Tagilla",
             "BossGluhar",
             "BossKojaniy",
             "SectantPriest",

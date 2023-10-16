@@ -14,7 +14,7 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.3.1")]
     [BepInDependency("xyz.drakia.bigbrain", "0.3.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.8")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.9")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -48,10 +48,6 @@ namespace SPTQuestingBots
                 this.GetOrAddComponent<BotQuestController>();
                 this.GetOrAddComponent<BotGenerator>();
 
-                List<string> botBrainsToChange = BotBrains.AllBotsExceptSniperScavs.ToList();
-                LoggingController.LogInfo("Loading QuestingBots...changing bot brains: " + string.Join(", ", botBrainsToChange));
-                BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), botBrainsToChange, ConfigController.Config.BrainLayerPriority);
-
                 if (ConfigController.Config.Debug.Enabled)
                 {
                     // This patch just writes a debug message saying which bot was killed and by whom
@@ -65,9 +61,23 @@ namespace SPTQuestingBots
 
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
+
+                performLobotomy();
             }
 
             Logger.LogInfo("Loading QuestingBots...done.");
+        }
+
+        private void performLobotomy()
+        {
+            List<string> allBots = BotBrains.AllBots.ToList();
+            List<string> allBotsExceptSniperScavs = BotBrains.AllBotsExceptSniperScavs.ToList();
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allBotsExceptSniperScavs));
+            BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), allBotsExceptSniperScavs, ConfigController.Config.BrainLayerPriority);
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBots));
+            BrainManager.AddCustomLayer(typeof(SleepingLayer), allBots, 99);
         }
     }
 }

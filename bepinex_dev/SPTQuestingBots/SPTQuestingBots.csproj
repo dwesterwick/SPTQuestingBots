@@ -87,9 +87,12 @@
   <ItemGroup>
     <Compile Include="BotLogic\BotBrains.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
+    <Compile Include="BotLogic\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BotLogic\CustomLogicDelayedUpdate.cs" />
     <Compile Include="BotLogic\HoldAtObjectiveAction.cs" />
     <Compile Include="BotLogic\LogicLayerMonitor.cs" />
+    <Compile Include="BotLogic\SleepingAction.cs" />
+    <Compile Include="BotLogic\SleepingLayer.cs" />
     <Compile Include="Configuration\AllowedBotTypesForQuestingConfig.cs" />
     <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
     <Compile Include="Configuration\BreakForLootingConfig.cs" />
