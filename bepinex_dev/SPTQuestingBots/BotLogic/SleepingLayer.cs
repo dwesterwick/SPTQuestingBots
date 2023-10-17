@@ -51,12 +51,22 @@ namespace SPTQuestingBots.BotLogic
                 objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
             }
 
-            // If the bot is currently allowed to quest, don't allow it to sleep
-            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
+            // Check if the bot is currently allowed to quest
+            if ((objectiveManager?.IsObjectiveActive == true) || (objectiveManager?.IsInitialized == false))
             {
-                if ((objectiveManager?.IsObjectiveActive == true) || (objectiveManager?.IsInitialized == false))
+                // Check if bots that can quest are allowed to sleep
+                if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
                 {
                     return updateUseLayer(false);
+                }
+
+                // If the bot can quest and is allowed to sleep, ensure it's allowed to sleep on the current map
+                if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Controllers.LocationController.CurrentLocation?.Id, out TarkovMaps map))
+                {
+                    if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(map))
+                    {
+                        return updateUseLayer(false);
+                    }
                 }
             }
 
