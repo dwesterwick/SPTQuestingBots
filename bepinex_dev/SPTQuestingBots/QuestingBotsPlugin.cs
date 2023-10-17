@@ -71,7 +71,7 @@ namespace SPTQuestingBots
         private void performLobotomy()
         {
             List<string> allBots = BotBrains.AllBots.ToList();
-            List<string> allBotsExceptSniperScavs = BotBrains.AllBotsExceptSniperScavs.ToList();
+            List<string> allBotsExceptSniperScavs = BotBrains.AllBotsExceptSniperScavsAndZryachiy.ToList();
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allBotsExceptSniperScavs));
             BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), allBotsExceptSniperScavs, ConfigController.Config.BrainLayerPriority);

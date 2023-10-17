@@ -22,9 +22,12 @@ namespace SPTQuestingBots.BotLogic
         public static string Raider { get { return "PMC"; } }
         public static string Rogue { get { return "ExUsec"; } }
         public static string Cultist { get { return "SectantWarrior"; } }
+        public static string CultistPriest { get { return "SectantPriest"; } }
         public static string Knight { get { return "Knight"; } }
         public static string Tagilla { get { return "Tagilla"; } }
         public static string Killa { get { return "Killa"; } }
+        public static string Zryachiy { get { return "BossZryachiy"; } }
+        public static string FollowerZryachiy { get { return "Fl_Zraychiy"; } }
 
         public static IEnumerable<string> NormalScavs => new string[]
         {
@@ -38,7 +41,6 @@ namespace SPTQuestingBots.BotLogic
             "BossSanitar",
             "BossGluhar",
             "BossKojaniy",
-            "SectantPriest",
             "BossBoar"
         };
 
@@ -56,17 +58,24 @@ namespace SPTQuestingBots.BotLogic
             "FollowerGluharAssault",
             "FollowerGluharProtect",
             "FollowerGluharScout",
+            "FollowerKojaniy",
             "BoarSniper",
             "FlBoar"
         };
 
-        public static IEnumerable<string> AllGoons => FollowersGoons.Concat(new[] { Knight });
-        public static IEnumerable<string> BossesWithoutGoons => BossesNormal.Concat(new[] { Tagilla, Killa });
-        public static IEnumerable<string> BossesWithKnight => BossesWithoutGoons.Concat(new[] { Knight });
-
         public static IEnumerable<string> AllNormalBots => NormalScavs.Concat(new[] { Raider, Rogue, Cultist });
-        public static IEnumerable<string> AllFollowers => FollowersNormal.Concat(FollowersGoons);
-        public static IEnumerable<string> AllBossesWithFollowers => BossesWithKnight.Concat(AllFollowers);
+
+        public static IEnumerable<string> AllGoons => FollowersGoons.Concat(new[] { Knight });
+        public static IEnumerable<string> BossesWithoutGoonsOrZryachiy => BossesNormal.Concat(new[] { Tagilla, Killa, CultistPriest });
+        public static IEnumerable<string> BossesWithoutZryachiy => BossesWithoutGoonsOrZryachiy.Concat(new[] { Knight });
+        public static IEnumerable<string> AllBosses => BossesWithoutZryachiy.Concat(new[] { Zryachiy });
+
+        public static IEnumerable<string> AllFollowersWithoutZryachiy => FollowersNormal.Concat(FollowersGoons);
+
+        public static IEnumerable<string> AllBossesWithFollowersWithoutZryachiy => BossesWithoutZryachiy.Concat(AllFollowersWithoutZryachiy);
+        public static IEnumerable<string> AllBossesWithFollowers => AllBossesWithFollowersWithoutZryachiy.Concat(new[] { Zryachiy, FollowerZryachiy });
+
+        public static IEnumerable<string> AllBotsExceptSniperScavsAndZryachiy => AllNormalBots.Concat(AllBossesWithFollowersWithoutZryachiy);
         public static IEnumerable<string> AllBotsExceptSniperScavs => AllNormalBots.Concat(AllBossesWithFollowers);
         public static IEnumerable<string> AllBots => AllBotsExceptSniperScavs.Concat(new[] { SniperScav });
 

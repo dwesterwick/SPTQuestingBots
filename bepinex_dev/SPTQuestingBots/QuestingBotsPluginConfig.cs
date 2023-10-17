@@ -19,6 +19,8 @@ namespace SPTQuestingBots
         Shoreline = 64,
         Streets = 128,
         Woods = 256,
+
+        All = Customs | Factory | Interchange | Labs | Lighthouse | Reserve | Shoreline | Streets | Woods,
     }
 
     public static class QuestingBotsPluginConfig
@@ -46,17 +48,19 @@ namespace SPTQuestingBots
             TarkovMapIDToEnum.Add("TarkovStreets", TarkovMaps.Streets);
             TarkovMapIDToEnum.Add("Woods", TarkovMaps.Woods);
 
-            QuestingEnabled = Config.Bind("Main", "Enable Questing", true, "Allow bots to quest");
+            QuestingEnabled = Config.Bind("Main", "Enable Questing",
+                true, "Allow bots to quest");
 
-            SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting", false, "Improve FPS by minimizing CPU load for AI out of certain ranges");
+            SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
+                false, "Improve FPS by minimizing CPU load for AI out of certain ranges");
             SleepingEnabledForQuestingBots = Config.Bind("AI Limiter", "Enable AI Limiting for Bots That Are Questing",
-                false, "Allow AI to be disabled for bots that are questing");
+                true, "Allow AI to be disabled for bots that are questing");
             MapsToAllowSleepingForQuestingBots = Config.Bind("AI Limiter", "Maps to Allow AI Limiting for Bots That Are Questing",
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
-            SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You", 150,
-                new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
-            SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs", 75,
-                new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
+            SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You",
+                200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
+            SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs",
+                75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
         }
     }
 }
