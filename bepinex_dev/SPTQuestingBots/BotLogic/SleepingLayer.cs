@@ -14,10 +14,11 @@ namespace SPTQuestingBots.BotLogic
         private static int updateInterval = 250;
 
         private bool useLayer = false;
-        
+        private BotObjectiveManager objectiveManager = null;
+
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
         {
-
+            
         }
 
         public override string GetName()
@@ -35,7 +36,7 @@ namespace SPTQuestingBots.BotLogic
             // Check if AI limiting is enabled in the F12 menu
             if (!QuestingBotsPluginConfig.SleepingEnabled.Value)
             {
-                return false;
+                return updateUseLayer(false);
             }
 
             // Don't run this method too often or performance will be impacted (ironically)
@@ -44,25 +45,32 @@ namespace SPTQuestingBots.BotLogic
                 return useLayer;
             }
 
-            // If the bot is allowed to quest, don't allow it to sleep
-            BotObjectiveManager objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
-            if ((QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value == false) && (objectiveManager?.IsObjectiveActive == true))
+            // Check if the bot was ever allowed to quest
+            if (objectiveManager == null)
             {
-                return false;
+                objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
+            }
+
+            // If the bot is currently allowed to quest, don't allow it to sleep
+            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
+            {
+                if ((objectiveManager?.IsObjectiveActive == true) || (objectiveManager?.IsInitialized == false))
+                {
+                    return updateUseLayer(false);
+                }
             }
 
             // Ensure you're not dead
             Player you = Singleton<GameWorld>.Instance.MainPlayer;
             if (you == null)
             {
-                return false;
+                return updateUseLayer(false);
             }
 
             // If the bot is close to you, don't allow it to sleep
             if (Vector3.Distance(BotOwner.Position, you.Position) < QuestingBotsPluginConfig.SleepingMinDistanceToYou.Value)
             {
-                useLayer = false;
-                return useLayer;
+                return updateUseLayer(false);
             }
 
             // Enumerate all other alive bots on the map
@@ -74,8 +82,8 @@ namespace SPTQuestingBots.BotLogic
             foreach (BotOwner bot in allOtherBots)
             {
                 // We only care about other bots that can quest
-                objectiveManager = bot.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
-                if (objectiveManager?.IsObjectiveActive != true)
+                BotObjectiveManager otherBotObjectiveManager = bot.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
+                if (otherBotObjectiveManager?.IsObjectiveActive != true)
                 {
                     continue;
                 }
@@ -83,18 +91,22 @@ namespace SPTQuestingBots.BotLogic
                 // If a questing bot is close to this one, don't allow this one to sleep
                 if (Vector3.Distance(BotOwner.Position, bot.Position) <= QuestingBotsPluginConfig.SleepingMinDistanceToPMCs.Value)
                 {
-                    useLayer = false;
-                    return useLayer;
+                    return updateUseLayer(false);
                 }
             }
 
-            useLayer = true;
-            return useLayer;
+            return updateUseLayer(true);
         }
 
         public override bool IsCurrentActionEnding()
         {
             return !useLayer;
+        }
+
+        private bool updateUseLayer(bool newValue)
+        {
+            useLayer = newValue;
+            return useLayer;
         }
     }
 }

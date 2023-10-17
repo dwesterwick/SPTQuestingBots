@@ -12,6 +12,7 @@ namespace SPTQuestingBots.BotLogic
 {
     internal class BotObjectiveManager : MonoBehaviourDelayedUpdate
     {
+        public bool IsInitialized { get; private set; } = false;
         public bool IsObjectiveActive { get; private set; } = false;
         public bool IsObjectiveReached { get; private set; } = false;
         public bool CanChangeObjective { get; set; } = true;
@@ -76,6 +77,8 @@ namespace SPTQuestingBots.BotLogic
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }
+
+            IsInitialized = true;
         }
 
         private void Update()
