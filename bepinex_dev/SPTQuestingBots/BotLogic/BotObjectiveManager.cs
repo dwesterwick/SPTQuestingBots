@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
 {
-    internal class BotObjectiveManager : MonoBehaviourDelayedUpdate
+    internal class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         public bool IsInitialized { get; private set; } = false;
         public bool IsObjectiveActive { get; private set; } = false;

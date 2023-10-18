@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
 {
-    internal class SleepingLayer : CustomLayerDelayedUpdate
+    internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
         private static int updateInterval = 250;
 

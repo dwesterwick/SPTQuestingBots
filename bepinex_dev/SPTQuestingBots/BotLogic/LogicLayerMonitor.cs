@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using EFT;
+using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
 {
@@ -54,7 +57,7 @@ namespace SPTQuestingBots.BotLogic
 
             if ((layer == null) && (maxLayerSearchTimer.ElapsedMilliseconds < maxLayerSearchTime))
             {
-                layer = BotBrains.GetBrainLayerForBot(botOwner, LayerName);
+                layer = GetBrainLayerForBot(botOwner, LayerName);
             }
         }
 
@@ -114,6 +117,77 @@ namespace SPTQuestingBots.BotLogic
             }
 
             return lastDecision.Reason;
+        }
+
+        public static ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> GetBrainLayersForBot(BotOwner botOwner)
+        {
+            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new AICoreLayerClass<BotLogicDecision>[0]);
+
+            // This happens sometimes, and I don't know why
+            if (botOwner?.Brain?.BaseBrain == null)
+            {
+                LoggingController.LogError("Invalid base brain for bot " + botOwner.Profile.Nickname);
+                return emptyCollection;
+            }
+
+            // Find the field that stores the list of brain layers assigned to the bot
+            Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
+            FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (layerListField == null)
+            {
+                LoggingController.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);
+                return emptyCollection;
+            }
+
+            // Get the list of brain layers for the bot
+            List<AICoreLayerClass<BotLogicDecision>> layerList = (List<AICoreLayerClass<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
+            if (layerList == null)
+            {
+                LoggingController.LogError("Could not retrieve brain layers for bot " + botOwner.Profile.Nickname);
+                return emptyCollection;
+            }
+
+            return new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(layerList);
+        }
+
+        public static IEnumerable<string> GetBrainLayerNamesForBot(BotOwner botOwner)
+        {
+            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
+            return brainLayers.Select(l => l.Name());
+        }
+
+        public static AICoreLayerClass<BotLogicDecision> GetBrainLayerForBot(BotOwner botOwner, string layerName)
+        {
+            // Get all of the brain layers assigned to the bot
+            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
+
+            // Try to find the matching layer
+            IEnumerable<AICoreLayerClass<BotLogicDecision>> matchingLayers = brainLayers.Where(l => l.Name() == layerName);
+            if (!matchingLayers.Any())
+            {
+                return null;
+            }
+
+            // Check if multiple layers with the same name exist in the list
+            if (matchingLayers.Count() > 1)
+            {
+                LoggingController.LogWarning("Found multiple brain layers with the name \"" + layerName + "\". Returning the first match.");
+            }
+
+            return matchingLayers.First();
+        }
+
+        // This checks if the brain layer CAN be used, not if it's currently being used
+        public static bool IsBrainLayerActiveForBot(BotOwner botOwner, string layerName)
+        {
+            AICoreLayerClass<BotLogicDecision> brainLayer = GetBrainLayerForBot(botOwner, layerName);
+            if (brainLayer == null)
+            {
+                //LoggingController.LogWarning("Could not find brain layer with the name \"" + layerName + "\".");
+                return false;
+            }
+
+            return brainLayer.IsActive;
         }
     }
 }

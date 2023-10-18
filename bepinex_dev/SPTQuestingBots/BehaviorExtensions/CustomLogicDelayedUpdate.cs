@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {

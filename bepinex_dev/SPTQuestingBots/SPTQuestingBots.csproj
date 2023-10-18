@@ -85,10 +85,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotLogic\BotBrains.cs" />
+    <Compile Include="Controllers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
-    <Compile Include="BotLogic\CustomLayerDelayedUpdate.cs" />
-    <Compile Include="BotLogic\CustomLogicDelayedUpdate.cs" />
+    <Compile Include="Models\BotBrainType.cs" />
+    <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
+    <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />
     <Compile Include="BotLogic\HoldAtObjectiveAction.cs" />
     <Compile Include="BotLogic\LogicLayerMonitor.cs" />
     <Compile Include="BotLogic\SleepingAction.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
-    <Compile Include="Controllers\MonoBehaviourDelayedUpdate.cs" />
+    <Compile Include="BehaviorExtensions\MonoBehaviourDelayedUpdate.cs" />
     <Compile Include="Controllers\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BehaviorExtensions
 {
     internal class CustomLayerDelayedUpdate : CustomLayer
     {

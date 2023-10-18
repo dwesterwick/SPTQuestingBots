@@ -10,7 +10,7 @@ using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic
 {
-    internal class GoToObjectiveAction : CustomLogicDelayedUpdate
+    internal class GoToObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {
         private BotObjectiveManager objectiveManager;
         private bool canSprint = true;

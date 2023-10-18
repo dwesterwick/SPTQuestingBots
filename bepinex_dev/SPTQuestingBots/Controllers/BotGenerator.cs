@@ -259,6 +259,11 @@ namespace SPTQuestingBots.Controllers
                 LoggingController.LogInfo("Generating PMC bots...");
 
                 BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+                if (botSpawnerClass == null)
+                {
+                    throw new NullReferenceException("Singleton<IBotGame>.Instance.BotsController.BotSpawner is null");
+                }
+
                 IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
                 System.Random random = new System.Random();
@@ -270,8 +275,8 @@ namespace SPTQuestingBots.Controllers
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
-                    WildSpawnType spawnType = BotLogic.BotBrains.pmcSpawnTypes.Random();
-                    EPlayerSide spawnSide = BotLogic.BotBrains.GetSideForWildSpawnType(spawnType);
+                    WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
+                    EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
                     // TO DO: I started the when trying to get PMC groups to spawn, but I could never get it working properly
                     BotSpawnParams spawnParams = new BotSpawnParams();

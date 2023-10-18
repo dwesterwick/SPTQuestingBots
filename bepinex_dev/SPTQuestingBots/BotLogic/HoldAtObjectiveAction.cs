@@ -7,7 +7,7 @@ using EFT;
 
 namespace SPTQuestingBots.BotLogic
 {
-    public class HoldAtObjectiveAction : CustomLogicDelayedUpdate
+    public class HoldAtObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {
         private GClass114 baseAction = null;
 

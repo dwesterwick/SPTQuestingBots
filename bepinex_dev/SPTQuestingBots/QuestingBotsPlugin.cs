@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 using DrakiaXYZ.BigBrain.Brains;
-using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots
 {
@@ -27,7 +27,8 @@ namespace SPTQuestingBots
 
             if (ConfigController.Config.Enabled)
             {
-                LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
+                LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");
+
                 new Patches.MainMenuShowScreenPatch().Enable();
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
@@ -43,7 +44,6 @@ namespace SPTQuestingBots
                     ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
                 }
 
-                LoggingController.LogInfo("Loading QuestingBots...enabling controllers...");
                 this.GetOrAddComponent<LocationController>();
                 this.GetOrAddComponent<BotQuestController>();
                 this.GetOrAddComponent<BotGenerator>();
@@ -62,22 +62,22 @@ namespace SPTQuestingBots
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
 
-                performLobotomy();
+                performLobotomies();
             }
 
             Logger.LogInfo("Loading QuestingBots...done.");
         }
 
-        private void performLobotomy()
+        private void performLobotomies()
         {
-            List<string> allBots = BotBrains.AllBots.ToList();
-            List<string> allBotsExceptSniperScavs = BotBrains.AllBotsExceptSniperScavsAndZryachiy.ToList();
+            IEnumerable<BotBrainType> allNonSniperBrains = BotBrainHelpers.GetAllNonSniperBrains();
+            IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allBotsExceptSniperScavs));
-            BrainManager.AddCustomLayer(typeof(BotObjectiveLayer), allBotsExceptSniperScavs, ConfigController.Config.BrainLayerPriority);
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.BrainLayerPriority);
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBots));
-            BrainManager.AddCustomLayer(typeof(SleepingLayer), allBots, 99);
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.SleepingLayer), allBrains.ToStringList(), 99);
         }
     }
 }

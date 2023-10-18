@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -19,15 +20,15 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotOwner __instance)
         {
-            Controllers.LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + __instance.Profile.Info.Settings.Role.ToString());
-            if (BotLogic.BotBrains.WillBotBeAPMC(__instance))
+            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + __instance.Profile.Info.Settings.Role.ToString());
+            if (BotBrainHelpers.WillBotBeAPMC(__instance))
             {
-                Controllers.BotQuestController.RegisterPMC(__instance);
+                BotQuestController.RegisterPMC(__instance);
             }
 
-            if (BotLogic.BotBrains.WillBotBeABoss(__instance))
+            if (BotBrainHelpers.WillBotBeABoss(__instance))
             {
-                Controllers.BotQuestController.RegisterBoss(__instance);
+                BotQuestController.RegisterBoss(__instance);
             }
         }
     }
