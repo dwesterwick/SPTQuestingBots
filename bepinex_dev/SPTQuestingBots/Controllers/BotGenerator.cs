@@ -12,6 +12,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using HarmonyLib;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Controllers
@@ -35,7 +36,7 @@ namespace SPTQuestingBots.Controllers
         // Temporarily stores spawn points for bots while trying to spawn several of them
         private static List<SpawnPointParams> pendingSpawnPoints = new List<SpawnPointParams>();
 
-        public static ReadOnlyCollection<Models.BotSpawnInfo> InitiallySpawnedPMCBots
+        public static ReadOnlyCollection<Models.BotSpawnInfo> InitialPMCBotGroups
         {
             get { return new ReadOnlyCollection<Models.BotSpawnInfo>(initialPMCGroups); }
         }
@@ -103,7 +104,23 @@ namespace SPTQuestingBots.Controllers
                 return false;
             }
 
-            return InitiallySpawnedPMCBots.Any(b => b.Owners.Contains(bot));
+            return InitialPMCBotGroups.Any(b => b.Owners.Contains(bot));
+        }
+
+        public static IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
+        {
+            IEnumerable<BotSpawnInfo> matchingSpawnGroups = InitialPMCBotGroups.Where(b => b.Owners.Contains(bot));
+            if (matchingSpawnGroups.Count() == 0)
+            {
+                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            }
+            if (matchingSpawnGroups.Count() > 1)
+            {
+                throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.Profile.Nickname);
+            }
+
+            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Id != bot.Id);
+            return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
         public int NumberOfBotsAllowedToSpawn()
@@ -281,10 +298,10 @@ namespace SPTQuestingBots.Controllers
                     // TO DO: I started the when trying to get PMC groups to spawn, but I could never get it working properly
                     BotSpawnParams spawnParams = new BotSpawnParams();
                     spawnParams.TriggerType = SpawnTriggerType.none;
-                    //spawnParams.Id_spawn = "InitialPMCGroup" + botGroup;
+                    spawnParams.Id_spawn = "InitialPMCGroup_" + botGroup;
                     if (botsInGroup > 1)
                     {
-                        spawnParams.ShallBeGroup = new ShallBeGroupParams(true, false, botsInGroup);
+                        spawnParams.ShallBeGroup = new ShallBeGroupParams(true, true, botsInGroup);
                     }
 
                     // This causes a deadlock for some reason
@@ -296,10 +313,10 @@ namespace SPTQuestingBots.Controllers
                     LoggingController.LogInfo("Generating PMC group spawn #" + botGroup + " (Number of bots: " + botsInGroup + ")...");
                     try
                     {
-                        GClass514 botSettingsData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
-                        GClass513 botSpawnData = await GClass513.Create(botSettingsData, ibotCreator, botsInGroup, botSpawnerClass);
+                        GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
+                        GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, botsInGroup, botSpawnerClass);
 
-                        initialPMCGroups.Add(new Models.BotSpawnInfo(botSpawnData));
+                        initialPMCGroups.Add(new Models.BotSpawnInfo(botGroup, botSpawnData));
                     }
                     catch (NullReferenceException nre)
                     {
@@ -408,7 +425,7 @@ namespace SPTQuestingBots.Controllers
             {
                 if (!initialPMCBot.TryAssignFurthestSpawnPoint(allowedSpawnPointTypes, blacklistedSpawnPointIDs.ToArray()))
                 {
-                    LoggingController.LogError("Could not find a valid spawn point for PMC group.");
+                    LoggingController.LogError("Could not find a valid spawn point for PMC group #" + initialPMCBot.GroupNumber);
                     return;
                 }
             }
@@ -427,7 +444,7 @@ namespace SPTQuestingBots.Controllers
                     initialPMCBot.SpawnPoint = null;
                 }
 
-                LoggingController.LogError("No valid spawn positions found for PMC group.");
+                LoggingController.LogError("No valid spawn positions found for PMC group #" + initialPMCBot.GroupNumber);
                 return;
             }
 
@@ -436,7 +453,7 @@ namespace SPTQuestingBots.Controllers
             BotOwner closestBot = botControllerClass.ClosestBotToPoint(initialPMCBot.SpawnPositions[0]);
             if ((closestBot != null) && (Vector3.Distance(initialPMCBot.SpawnPositions[0], closestBot.Position) < minDistanceFromPlayers))
             {
-                LoggingController.LogWarning("Cannot spawn PMC group at " + initialPMCBot.SpawnPositions[0].ToString() + ". Another bot is too close.");
+                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCBot.GroupNumber + " at " + initialPMCBot.SpawnPositions[0].ToString() + ". Another bot is too close.");
                 initialPMCBot.SpawnPoint = null;
                 initialPMCBot.SpawnPositions = new Vector3[0];
                 return;
@@ -446,7 +463,7 @@ namespace SPTQuestingBots.Controllers
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
             if (Vector3.Distance(initialPMCBot.SpawnPositions[0], mainPlayer.Position) < minDistanceFromPlayers)
             {
-                LoggingController.LogWarning("Cannot spawn PMC group at " + initialPMCBot.SpawnPositions[0].ToString() + ". Too close to the main player.");
+                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCBot.GroupNumber + " at " + initialPMCBot.SpawnPositions[0].ToString() + ". Too close to the main player.");
                 initialPMCBot.SpawnPoint = null;
                 initialPMCBot.SpawnPositions = new Vector3[0];
                 return;
@@ -456,11 +473,12 @@ namespace SPTQuestingBots.Controllers
             Action<BotOwner> callback = new Action<BotOwner>((botOwner) =>
             {
                 LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spawned as an initial PMC.");
-                initialPMCBot.Owners = new BotOwner[1] { botOwner };
+                initialPMCBot.Owners.Add(botOwner);
                 initialPMCBot.HasSpawned = true;
             });
 
-            LoggingController.LogInfo("Spawning PMC group #" + (SpawnedInitialPMCCount + 1) + " at " + initialPMCBot.SpawnPositions[0] + "...");
+            string spawnPositionText = string.Join(", ", initialPMCBot.SpawnPositions.Select(s => s.ToString()));
+            LoggingController.LogInfo("Spawning PMC group #" + initialPMCBot.GroupNumber + " at " + spawnPositionText + "...");
             spawnBots(initialPMCBot.Data, initialPMCBot.SpawnPositions, callback);
 
             // Add the bot's spawn point to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each

@@ -20,6 +20,19 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(BotOwner __result)
         {
             Controllers.LocationController.RegisterBot(__result);
+
+            IReadOnlyCollection<BotOwner> friends = Controllers.BotGenerator.GetSpawnGroupMembers(__result);
+            foreach (BotOwner friend in friends)
+            {
+                Player player = friend.GetPlayer;
+                if (!__result.EnemiesController.IsEnemy(player))
+                {
+                    continue;
+                }
+
+                Controllers.LoggingController.LogInfo(friend.Profile.Nickname + " is now friends with " + __result.Profile.Nickname);
+                __result.EnemiesController.Remove(player);
+            }
         }
     }
 }

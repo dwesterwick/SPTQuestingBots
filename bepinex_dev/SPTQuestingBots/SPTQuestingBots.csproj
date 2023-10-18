@@ -56,6 +56,10 @@
     <Reference Include="Comfort.Unity">
       <HintPath>..\Libraries\Managed\Comfort.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="DissonanceVoip, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Managed\DissonanceVoip.dll</HintPath>
+    </Reference>
     <Reference Include="DrakiaXYZ-BigBrain">
       <HintPath>..\Libraries\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
     </Reference>
