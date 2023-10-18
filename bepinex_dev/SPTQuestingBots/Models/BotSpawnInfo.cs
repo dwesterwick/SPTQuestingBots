@@ -76,17 +76,16 @@ namespace SPTQuestingBots.Models
             Vector3 mainSpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
 
             List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>() { SpawnPoint.Value };
-            int positionsGenerated = 1;
 
             // If there are multiple bots that will spawn, select nearby spawn points for each of them
-            // TO DO: This has the possibility of being an infinite loop, which is scary
-            while (positionsGenerated < botCount)
+            while (spawnPoints.Count < botCount)
             {
                 SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
 
                 Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
+                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
                     continue;
                 }
 

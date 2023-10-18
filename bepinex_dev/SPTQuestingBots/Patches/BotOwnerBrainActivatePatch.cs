@@ -20,7 +20,21 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotOwner __instance)
         {
-            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + __instance.Profile.Info.Settings.Role.ToString());
+            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
+            string actualRoleName = currentRoleName;
+
+            if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
+            {
+                if (BotGenerator.TryGetInitialPMCProfile(__instance, out Profile profile))
+                {
+                    __instance.Profile.Info.Settings.Role = profile.Info.Settings.Role;
+                    actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
+
+                    LoggingController.LogInfo("Converted spawn type for bot " + __instance.Profile.Nickname + " from " + currentRoleName + " to " + actualRoleName);
+                }
+            }
+
+            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + actualRoleName);
             if (BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 BotQuestController.RegisterPMC(__instance);

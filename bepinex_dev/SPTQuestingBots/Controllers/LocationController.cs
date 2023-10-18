@@ -448,6 +448,12 @@ namespace SPTQuestingBots.Controllers
                 }
             }
 
+            // Ensure at least one possible spawn point hasn't also been excluded
+            if (excludedSpawnPoints.Contains(nearestSpawnPoint))
+            {
+                throw new InvalidOperationException("All possible spawn points are excluded.");
+            }
+
             return nearestSpawnPoint;
         }
 

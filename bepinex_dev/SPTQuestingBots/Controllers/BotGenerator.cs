@@ -96,54 +96,6 @@ namespace SPTQuestingBots.Controllers
             IsClearing = false;
         }
 
-        public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
-        {
-            if (bot == null)
-            {
-                LoggingController.LogError("Cannot check if null was part of initial PMC spawns.");
-                return false;
-            }
-
-            return InitialPMCBotGroups.Any(b => b.Owners.Contains(bot));
-        }
-
-        public static IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
-        {
-            IEnumerable<BotSpawnInfo> matchingSpawnGroups = InitialPMCBotGroups.Where(b => b.Owners.Contains(bot));
-            if (matchingSpawnGroups.Count() == 0)
-            {
-                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
-            }
-            if (matchingSpawnGroups.Count() > 1)
-            {
-                throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.Profile.Nickname);
-            }
-
-            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Id != bot.Id);
-            return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
-        }
-
-        public int NumberOfBotsAllowedToSpawn()
-        {
-            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            //LoggingController.LogInfo("Alive players: " + string.Join(", ", allPlayers.Select(p => p.Profile.Nickname + " (" + p.Id + ")")));
-
-            return maxTotalBots - allPlayers.Count;
-        }
-
-        public static IEnumerable<BotOwner> RemainingAliveInitialPMCs()
-        {
-            return Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
-                .Where(b => b.BotState == EBotState.Active)
-                .Where(b => !b.IsDead)
-                .Where(b => IsBotFromInitialPMCSpawns(b));
-        }
-
-        public static int RemainingAliveInitialPMCCount()
-        {
-            return RemainingAliveInitialPMCs().Count();
-        }
-
         private void Update()
         {
             // Wait until data from the previous raid has been erased
@@ -172,7 +124,7 @@ namespace SPTQuestingBots.Controllers
             pendingSpawnPoints.Clear();
 
             // Don't allow too many alive PMC's to be on the map for performance and difficulty reasons
-            if (RemainingAliveInitialPMCCount() >= maxAlivePMCs)
+            if (RemainingAliveInitialPMCs().Count() >= maxAlivePMCs)
             {
                 return;
             }
@@ -263,6 +215,71 @@ namespace SPTQuestingBots.Controllers
             
             // Spawn PMC's
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
+        }
+
+        public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
+        {
+            if (bot == null)
+            {
+                LoggingController.LogError("Cannot check if null was part of initial PMC spawns.");
+                return false;
+            }
+
+            //LoggingController.LogInfo("Initial PMC's: " + string.Join(", ", initialPMCGroups.SelectMany(g => g.Owners.Select(o => o.Profile.Nickname))));
+
+            return InitialPMCBotGroups.Any(b => b.Owners.Contains(bot));
+        }
+
+        public static bool TryGetInitialPMCProfile(BotOwner bot, out Profile matchingProfile)
+        {
+            matchingProfile = null;
+
+            // Try to find a matching profile in the spawn data for initial PMC's
+            foreach (BotSpawnInfo info in initialPMCGroups)
+            {
+                foreach (Profile profile in info.Data.Profiles)
+                {
+                    if (profile.Id == bot.Profile.Id)
+                    {
+                        matchingProfile = profile;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
+        {
+            IEnumerable<BotSpawnInfo> matchingSpawnGroups = InitialPMCBotGroups.Where(b => b.Owners.Contains(bot));
+            if (matchingSpawnGroups.Count() == 0)
+            {
+                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            }
+            if (matchingSpawnGroups.Count() > 1)
+            {
+                throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.Profile.Nickname);
+            }
+
+            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Id != bot.Id);
+            return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
+        }
+
+        public int NumberOfBotsAllowedToSpawn()
+        {
+            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
+            //LoggingController.LogInfo("Alive players: " + string.Join(", ", allPlayers.Select(p => p.Profile.Nickname + " (" + p.Id + ")")));
+
+            return maxTotalBots - allPlayers.Count;
+        }
+
+        public static IEnumerable<BotOwner> RemainingAliveInitialPMCs()
+        {
+            return Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.BotState == EBotState.Active)
+                .Where(b => !b.IsDead)
+                .Where(b => IsBotFromInitialPMCSpawns(b));
         }
 
         private async Task generateBots(BotDifficulty botdifficulty, int totalCount)
@@ -361,7 +378,7 @@ namespace SPTQuestingBots.Controllers
                 IsSpawningPMCs = true;
 
                 // Determine how many PMC's are allowed to spawn
-                int allowedSpawns = maxAlivePMCs - RemainingAliveInitialPMCCount();
+                int allowedSpawns = maxAlivePMCs - RemainingAliveInitialPMCs().Count();
                 Models.BotSpawnInfo[] initialPMCGroupsToSpawn = initialPMCGroups.Where(g => !g.HasSpawned).Take(allowedSpawns).ToArray();
                 if (initialPMCGroupsToSpawn.Length == 0)
                 {
@@ -377,7 +394,7 @@ namespace SPTQuestingBots.Controllers
                     allSpawnPoints[s].DelayToCanSpawnSec = 0;
                 }
 
-                LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC groups...");
+                LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC group(s)...");
                 enumeratorWithTimeLimit.Reset();
                 yield return enumeratorWithTimeLimit.Run(initialPMCGroupsToSpawn, spawnInitialPMCsAtSpawnPoint, allowedSpawnPointTypes, minDistanceFromPlayers);
                 //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC groups...done.");
@@ -496,6 +513,7 @@ namespace SPTQuestingBots.Controllers
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
             {
+                //LoggingController.LogInfo("Adding spawn position " + position.ToString() + " for PMC group...");
                 bots.AddPosition(position);
             }
 
