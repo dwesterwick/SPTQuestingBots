@@ -230,18 +230,17 @@ namespace SPTQuestingBots.Controllers
             return InitialPMCBotGroups.Any(b => b.Owners.Contains(bot));
         }
 
-        public static bool TryGetInitialPMCProfile(BotOwner bot, out Profile matchingProfile)
+        public static bool TryGetInitialPMCGroup(BotOwner bot, out BotSpawnInfo matchingGroupData)
         {
-            matchingProfile = null;
+            matchingGroupData = null;
 
-            // Try to find a matching profile in the spawn data for initial PMC's
             foreach (BotSpawnInfo info in initialPMCGroups)
             {
                 foreach (Profile profile in info.Data.Profiles)
                 {
                     if (profile.Id == bot.Profile.Id)
                     {
-                        matchingProfile = profile;
+                        matchingGroupData = info;
                         return true;
                     }
                 }
@@ -305,7 +304,7 @@ namespace SPTQuestingBots.Controllers
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                    int botsInGroup = random.Next(1, 1);
+                    int botsInGroup = random.Next(1,1);
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
@@ -333,7 +332,10 @@ namespace SPTQuestingBots.Controllers
                         GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
                         GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, botsInGroup, botSpawnerClass);
 
-                        initialPMCGroups.Add(new Models.BotSpawnInfo(botGroup, botSpawnData));
+                        Models.BotSpawnInfo botSpawnInfo = new Models.BotSpawnInfo(botGroup, botSpawnData);
+                        botSpawnInfo.UpdateOriginalSpawnTypes();
+
+                        initialPMCGroups.Add(botSpawnInfo);
                     }
                     catch (NullReferenceException nre)
                     {

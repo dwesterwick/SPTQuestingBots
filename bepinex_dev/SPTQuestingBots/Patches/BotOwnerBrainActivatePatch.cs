@@ -20,21 +20,17 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotOwner __instance)
         {
-            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
-            string actualRoleName = currentRoleName;
+            string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
-                if (BotGenerator.TryGetInitialPMCProfile(__instance, out Profile profile))
+                if (TryConvertSpawnType(__instance))
                 {
-                    __instance.Profile.Info.Settings.Role = profile.Info.Settings.Role;
-                    actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
-
-                    LoggingController.LogInfo("Converted spawn type for bot " + __instance.Profile.Nickname + " from " + currentRoleName + " to " + actualRoleName);
+                    roleName = __instance.Profile.Info.Settings.Role.ToString();
                 }
             }
 
-            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + actualRoleName);
+            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + roleName);
             if (BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 BotQuestController.RegisterPMC(__instance);
@@ -44,6 +40,30 @@ namespace SPTQuestingBots.Patches
             {
                 BotQuestController.RegisterBoss(__instance);
             }
+        }
+
+        private static bool TryConvertSpawnType(BotOwner __instance)
+        {
+            if (!BotGenerator.TryGetInitialPMCGroup(__instance, out Models.BotSpawnInfo groupData))
+            {
+                return false;
+            }
+
+            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(__instance);
+            if (originalSpawnType == null)
+            {
+                return false;
+            }
+
+            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
+
+            __instance.Profile.Info.Settings.Role = originalSpawnType.Value;
+
+            string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
+
+            LoggingController.LogInfo("Converted spawn type for bot " + __instance.Profile.Nickname + " from " + currentRoleName + " to " + actualRoleName);
+
+            return true;
         }
     }
 }

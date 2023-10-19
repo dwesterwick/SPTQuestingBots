@@ -22,10 +22,31 @@ namespace SPTQuestingBots.Models
         public SpawnPointParams? SpawnPoint { get; set; }
         public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
 
+        // The key should be Profile.Id for each bot that's generated
+        private Dictionary<string, WildSpawnType> OriginalBotSpawnTypes = new Dictionary<string, WildSpawnType>();
+
         public BotSpawnInfo(int groupNum, GClass513 data)
         {
             GroupNumber = groupNum;
             Data = data;
+        }
+
+        public WildSpawnType? GetOriginalSpawnTypeForBot(BotOwner bot)
+        {
+            if (!OriginalBotSpawnTypes.ContainsKey(bot.Profile.Id))
+            {
+                return null;
+            }
+
+            return OriginalBotSpawnTypes[bot.Profile.Id];
+        }
+
+        public void UpdateOriginalSpawnTypes()
+        {
+            foreach (Profile profile in Data.Profiles)
+            {
+                OriginalBotSpawnTypes.Add(profile.Id, profile.Info.Settings.Role);
+            }
         }
 
         public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
