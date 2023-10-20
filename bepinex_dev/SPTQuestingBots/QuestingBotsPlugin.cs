@@ -14,7 +14,7 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.3.1")]
     [BepInDependency("xyz.drakia.bigbrain", "0.3.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.9")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.2.10")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         private void Awake()
@@ -75,6 +75,9 @@ namespace SPTQuestingBots
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.BrainLayerPriority);
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.BrainLayerPriority + 1);
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.SleepingLayer), allBrains.ToStringList(), 99);

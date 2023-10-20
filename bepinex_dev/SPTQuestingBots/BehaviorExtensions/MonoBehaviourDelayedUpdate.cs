@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
-    public class MonoBehaviourDelayedUpdate : MonoBehaviour
+    public abstract class MonoBehaviourDelayedUpdate : MonoBehaviour
     {
         public int UpdateInterval { get; set; } = 100;
 

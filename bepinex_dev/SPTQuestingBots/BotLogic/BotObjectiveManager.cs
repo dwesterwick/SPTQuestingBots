@@ -22,6 +22,7 @@ namespace SPTQuestingBots.BotLogic
         public int StuckCount { get; set; } = 0;
         public float MinTimeAtObjective { get; set; } = 10f;
         public Vector3? Position { get; set; } = null;
+        public BotMonitor BotMonitor { get; private set; } = null;
 
         private BotOwner botOwner = null;
         private Models.Quest targetQuest = null;
@@ -49,6 +50,8 @@ namespace SPTQuestingBots.BotLogic
         {
             base.UpdateInterval = 200;
             botOwner = _botOwner;
+
+            BotMonitor = new BotMonitor(botOwner);
 
             BotType botType = BotQuestController.GetBotType(botOwner);
 

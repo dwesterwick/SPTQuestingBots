@@ -33,6 +33,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("initial_pmcs_vs_raidET")]
         public double[][] InitialPMCsVsRaidET { get; set; } = new double[0][];
 
+        [JsonProperty("bots_per_group_distribution")]
+        public double[][] BotsPerGroupDistribution { get; set; } = new double[0][];
+
         [JsonProperty("spawn_retry_time")]
         public float SpawnRetryTime { get; set; } = 10;
 

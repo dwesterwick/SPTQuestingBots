@@ -304,14 +304,15 @@ namespace SPTQuestingBots.Controllers
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                    int botsInGroup = random.Next(1,1);
+                    //int botsInGroup = random.Next(1,1);
+                    int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.BotsPerGroupDistribution, random.NextDouble()));
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
                     WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
                     EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
-                    // TO DO: I started the when trying to get PMC groups to spawn, but I could never get it working properly
+                    // TO DO: TriggerType and Id_spawn might not be required
                     BotSpawnParams spawnParams = new BotSpawnParams();
                     spawnParams.TriggerType = SpawnTriggerType.none;
                     spawnParams.Id_spawn = "InitialPMCGroup_" + botGroup;

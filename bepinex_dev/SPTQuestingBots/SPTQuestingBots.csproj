@@ -89,6 +89,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotLogic\BotFollowerLayer.cs" />
+    <Compile Include="BotLogic\FollowBossAction.cs" />
+    <Compile Include="BehaviorExtensions\GoToPositionAbstractAction.cs" />
     <Compile Include="Controllers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Models\BotBrainType.cs" />

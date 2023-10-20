@@ -12,6 +12,8 @@ namespace SPTQuestingBots.BotLogic
 {
     public class BotMonitor
     {
+        public bool IsInCombat { get; set; } = false;
+
         private BotOwner botOwner;
 
         public BotMonitor(BotOwner _botOwner)
@@ -29,6 +31,12 @@ namespace SPTQuestingBots.BotLogic
             wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
 
             return wasInCombat || hasCloseDanger;
+        }
+
+        public int UpdateSearchTimeAfterCombat()
+        {
+            System.Random random = new System.Random();
+            return random.Next((int)ConfigController.Config.SearchTimeAfterCombat.Min, (int)ConfigController.Config.SearchTimeAfterCombat.Max);
         }
 
         public bool ShouldWaitForFollowers()
