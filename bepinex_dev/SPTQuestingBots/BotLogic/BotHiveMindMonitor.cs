@@ -23,6 +23,15 @@ namespace SPTQuestingBots.BotLogic
             UpdateInterval = 100;
         }
 
+        public static void Clear()
+        {
+            botBosses.Clear();
+            botFollowers.Clear();
+            botIsInCombat.Clear();
+            botCanQuest.Clear();
+            botCanSprintToObjective.Clear();
+        }
+
         private void Update()
         {
             if (!canUpdate())
@@ -30,27 +39,51 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
-            foreach (BotOwner bot in botBosses.Keys)
+            foreach (BotOwner bot in botBosses.Keys.ToArray())
             {
+                if (bot == null)
+                {
+                    continue;
+                }
+
                 if (botBosses[bot] == null)
                 {
-                    botBosses[bot] = bot.BotFollower.BossToFollow?.Player()?.AIData?.BotOwner;
+                    botBosses[bot] = bot?.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
+
+                    if (botBosses[bot] != null)
+                    {
+                        Controllers.LoggingController.LogInfo("The boss for " + bot.Profile.Nickname + " is " + botBosses[bot].Profile.Nickname);
+                    }
                 }
                 else
                 {
                     if (!botBosses[bot].isActiveAndEnabled || botBosses[bot].IsDead)
                     {
+                        Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].Profile.Nickname + " is now dead.");
+
                         botBosses[bot] = null;
                     }
                 }
             }
 
-            foreach (BotOwner boss in botFollowers.Keys)
+            foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
+                if (boss == null)
+                {
+                    continue;
+                }
+
                 foreach (BotOwner bot in botFollowers[boss].ToArray())
                 {
+                    if (bot == null)
+                    {
+                        continue;
+                    }
+
                     if (!bot.isActiveAndEnabled || bot.IsDead)
                     {
+                        Controllers.LoggingController.LogInfo("Follower " + botBosses[bot].Profile.Nickname + " is now dead.");
+
                         botFollowers[boss].Remove(bot);
                     }
                 }
@@ -73,7 +106,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (bot == null)
                 {
-                    botCanQuest.Remove(bot);
+                    continue;
                 }
 
                 if (!bot.isActiveAndEnabled || bot.IsDead)
@@ -92,7 +125,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (bot == null)
                 {
-                    botCanSprintToObjective.Remove(bot);
+                    continue;
                 }
 
                 if (!bot.isActiveAndEnabled || bot.IsDead)
@@ -178,7 +211,7 @@ namespace SPTQuestingBots.BotLogic
 
         public static bool IsBossInCombat(BotOwner bot)
         {
-            return checkBossState(botIsInCombat, bot) ?? false;
+            return checkBotState(botIsInCombat, GetBoss(bot)) ?? false;
         }
 
         public static bool AreFollowersInCombat(BotOwner bot)
@@ -198,7 +231,7 @@ namespace SPTQuestingBots.BotLogic
 
         public static bool CanBossQuest(BotOwner bot)
         {
-            return checkBossState(botCanQuest, bot) ?? false;
+            return checkBotState(botCanQuest, GetBoss(bot)) ?? false;
         }
 
         public static bool CanFollowersQuest(BotOwner bot)
@@ -218,7 +251,7 @@ namespace SPTQuestingBots.BotLogic
 
         public static bool CanBossSprintToObjective(BotOwner bot)
         {
-            return checkBossState(botCanSprintToObjective, bot) ?? true;
+            return checkBotState(botCanSprintToObjective, GetBoss(bot)) ?? true;
         }
 
         public static bool CanFollowersSprintToObjective(BotOwner bot)
@@ -243,7 +276,7 @@ namespace SPTQuestingBots.BotLogic
             }
         }
 
-        private static bool? checkBossState(Dictionary<BotOwner, bool> dict, BotOwner bot)
+        private static bool? checkBotState(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
             if (dict.TryGetValue(bot, out bool value))
             {
@@ -260,7 +293,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            foreach (BotOwner follower in botFollowers[bot])
+            foreach (BotOwner follower in botFollowers[bot].ToArray())
             {
                 if (!dict.TryGetValue(follower, out bool value))
                 {
@@ -278,12 +311,12 @@ namespace SPTQuestingBots.BotLogic
 
         private static bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
-            if (checkBossState(dict, bot) == true)
+            if (checkBotState(dict, bot) == true)
             {
                 return true;
             }
 
-            foreach (BotOwner boss in botFollowers.Keys)
+            foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
                 if (checkStateForAnyFollowers(dict, boss))
                 {

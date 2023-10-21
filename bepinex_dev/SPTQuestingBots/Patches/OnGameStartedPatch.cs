@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.BotLogic;
 
 namespace SPTQuestingBots.Patches
 {
@@ -20,6 +21,9 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(GameWorld __instance)
         {
             Controllers.LocationController.HasRaidStarted = true;
+
+            __instance.GetOrAddComponent<BotHiveMindMonitor>();
+            BotHiveMindMonitor.Clear();
         }
     }
 }

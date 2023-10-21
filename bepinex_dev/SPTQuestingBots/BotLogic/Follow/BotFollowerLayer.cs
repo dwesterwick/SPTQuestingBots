@@ -87,8 +87,8 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
             BotHiveMindMonitor.UpdateInCombat(BotOwner, false);
 
-            // If the boss is in combat, the bot should also be in combat
-            if (BotHiveMindMonitor.IsInCombat(BotOwner))
+            // If any group members are in combat, the bot should also be in combat
+            if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
             {
                 return false;
             }
