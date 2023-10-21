@@ -17,6 +17,11 @@ namespace SPTQuestingBots.Controllers
 
     public static class BotBrainHelpers
     {
+        public static IEnumerable<BotBrainType> AddTestBrain(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[] { new BotBrainType("BossTest") });
+        }
+
         public static IEnumerable<BotBrainType> AddNormalScavBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]
@@ -29,6 +34,24 @@ namespace SPTQuestingBots.Controllers
         public static IEnumerable<BotBrainType> AddSniperScavBrain(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[] { new BotBrainType("Marksman") });
+        }
+
+        public static IEnumerable<BotBrainType> AddBloodhoundBrains(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[]
+            {
+                new BotBrainType("ArenaFighter")
+            });
+        }
+
+        public static IEnumerable<BotBrainType> AddCrazyScavBrain(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[] { new BotBrainType("Obdolbs") });
+        }
+
+        public static IEnumerable<BotBrainType> AddSantaBrain(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[] { new BotBrainType("Gifter") });
         }
 
         public static IEnumerable<BotBrainType> AddRogueBrain(this IEnumerable<BotBrainType> list)
@@ -121,7 +144,8 @@ namespace SPTQuestingBots.Controllers
                 .AddKillaBrain()
                 .AddRogueBrain()
                 .AddRaiderBrain()
-                .AddKnightBrain();
+                .AddKnightBrain()
+                .AddBloodhoundBrains();
         }
 
         public static IEnumerable<BotBrainType> AddAllNormalBossFollowerBrains(this IEnumerable<BotBrainType> list)
@@ -164,6 +188,7 @@ namespace SPTQuestingBots.Controllers
         {
             return Enumerable.Empty<BotBrainType>()
                 .AddNormalScavBrains()
+                .AddCrazyScavBrain()
                 .AddAllNormalBossAndFollowerBrains()
                 .AddAllCultistBrains();
         }
