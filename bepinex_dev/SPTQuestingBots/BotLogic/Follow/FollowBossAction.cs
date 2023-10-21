@@ -6,13 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.AI;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class FollowBossAction : GoToPositionAbstractAction
     {
-        private BotOwner boss = null;
-        private BotObjectiveManager objectiveManagerForBoss = null;
-
         public FollowBossAction(BotOwner _BotOwner) : base(_BotOwner)
         {
 
@@ -28,15 +25,9 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
-            if (boss == null)
-            {
-                boss = BotOwner.BotFollower.BossToFollow?.Player()?.AIData?.BotOwner;
-                objectiveManagerForBoss = boss?.GetPlayer?.gameObject?.GetComponent<BotObjectiveManager>();
+            CanSprint = BotHiveMindMonitor.CanBossSprintToObjective(BotOwner);
 
-                return;
-            }
-
-            CanSprint = objectiveManagerForBoss.CanSprintToObjective();
+            BotOwner boss = BotHiveMindMonitor.GetBoss(BotOwner);
             NavMeshPathStatus? pathStatus = RecalculatePath(boss.Position);
         }
     }

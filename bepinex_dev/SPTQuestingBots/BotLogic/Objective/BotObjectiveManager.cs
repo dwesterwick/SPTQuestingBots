@@ -8,7 +8,7 @@ using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {

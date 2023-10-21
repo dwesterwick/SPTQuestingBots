@@ -10,12 +10,11 @@ using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class BotObjectiveLayer : CustomLayer
     {
         private BotObjectiveManager objectiveManager;
-        private BotOwner boss = null;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
@@ -32,7 +31,6 @@ namespace SPTQuestingBots.BotLogic
         private LogicLayerMonitor lootingLayerMonitor;
         private LogicLayerMonitor extractLayerMonitor;
         private LogicLayerMonitor stationaryWSLayerMonitor;
-        //private LogicLayerMonitor patrolFollowerLayerMonitor;
 
         public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
@@ -47,9 +45,6 @@ namespace SPTQuestingBots.BotLogic
 
             stationaryWSLayerMonitor = BotOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(BotOwner, "StationaryWS");
-
-            //patrolFollowerLayerMonitor = BotOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
-            //patrolFollowerLayerMonitor.Init(BotOwner, "PatrolFollower");
         }
 
         public override string GetName()
@@ -96,30 +91,9 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the bot has a boss that's still alive
-            if (boss != null)
+            if (BotHiveMindMonitor.HasBoss(BotOwner))
             {
-                if (!boss.isActiveAndEnabled || boss.IsDead)
-                {
-                    boss = null;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            // Check if the bot is a follower for a boss that's still alive
-            if (BotOwner.BotFollower.HaveBoss)
-            {
-                boss = BotOwner.BotFollower.BossToFollow?.Player()?.AIData?.BotOwner;
-                if ((boss != null) && boss.isActiveAndEnabled && !boss.IsDead)
-                {
-                    string bossName = boss.Profile.Nickname;
-
-                    LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " is a follower for " + bossName);
-                    BotQuestController.RegisterBossFollower(boss, BotOwner);
-                    return false;
-                }
+                return false;
             }
 
             // Ensure all quests have been loaded and generated
@@ -180,7 +154,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
             {
-                if (!objectiveManager.BotMonitor.IsInCombat)
+                if (!BotHiveMindMonitor.IsInCombat(BotOwner))
                 {
                     /*bool hasTarget = BotOwner.Memory.GoalTarget.HaveMainTarget();
                     if (hasTarget)
@@ -197,10 +171,17 @@ namespace SPTQuestingBots.BotLogic
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
-                objectiveManager.BotMonitor.IsInCombat = true;
+                BotHiveMindMonitor.UpdateInCombat(BotOwner, true);
                 return pauseLayer();
             }
-            objectiveManager.BotMonitor.IsInCombat = false;
+            BotHiveMindMonitor.UpdateInCombat(BotOwner, false);
+
+            // Check if any of the bot's group members are in combat
+            // NOTE: This check MUST be performed after updating this bot's combate state!
+            if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
+            {
+                return false;
+            }
 
             // Check if the bot is allowed to select a new objective based on the time it last selected one
             objectiveManager.CanChangeObjective = objectiveManager.TimeSinceChangingObjective > minTimeBetweenSwitchingObjectives;

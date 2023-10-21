@@ -74,13 +74,13 @@ namespace SPTQuestingBots
             IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.BrainLayerPriority);
+            BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.BrainLayerPriority);
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.BrainLayerPriority + 1);
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.BrainLayerPriority + 1);
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.SleepingLayer), allBrains.ToStringList(), 99);
+            BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), 99);
         }
     }
 }

@@ -7,14 +7,14 @@ using Comfort.Common;
 using EFT;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Sleep
 {
     internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
         private static int updateInterval = 250;
 
         private bool useLayer = false;
-        private BotObjectiveManager objectiveManager = null;
+        private Objective.BotObjectiveManager objectiveManager = null;
 
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
         {
@@ -48,7 +48,7 @@ namespace SPTQuestingBots.BotLogic
             // Check if the bot was ever allowed to quest
             if (objectiveManager == null)
             {
-                objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
+                objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
             }
 
             // Check if the bot is currently allowed to quest
@@ -92,7 +92,7 @@ namespace SPTQuestingBots.BotLogic
             foreach (BotOwner bot in allOtherBots)
             {
                 // We only care about other bots that can quest
-                BotObjectiveManager otherBotObjectiveManager = bot.GetPlayer.gameObject.GetComponent<BotObjectiveManager>();
+                Objective.BotObjectiveManager otherBotObjectiveManager = bot.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
                 if (otherBotObjectiveManager?.IsObjectiveActive != true)
                 {
                     continue;

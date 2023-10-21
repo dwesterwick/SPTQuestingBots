@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
@@ -40,6 +41,8 @@ namespace SPTQuestingBots.Patches
             {
                 BotQuestController.RegisterBoss(__instance);
             }
+
+            BotHiveMindMonitor.RegisterBot(__instance);
         }
 
         private static bool TryConvertSpawnType(BotOwner __instance)

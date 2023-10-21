@@ -12,8 +12,6 @@ namespace SPTQuestingBots.BotLogic
 {
     public class BotMonitor
     {
-        public bool IsInCombat { get; set; } = false;
-
         private BotOwner botOwner;
 
         public BotMonitor(BotOwner _botOwner)

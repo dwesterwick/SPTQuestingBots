@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Objective
 {
     public class HoldAtObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {

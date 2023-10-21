@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Sleep
 {
     internal class SleepingAction : CustomLogic
     {

@@ -12,12 +12,12 @@ namespace SPTQuestingBots.BotLogic
 {
     internal abstract class GoToPositionAbstractAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {
-        protected BotObjectiveManager ObjectiveManager;
+        protected Objective.BotObjectiveManager ObjectiveManager;
         protected bool CanSprint = true;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : base(_BotOwner)
         {
-            ObjectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<BotObjectiveManager>();
+            ObjectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<Objective.BotObjectiveManager>();
         }
 
         public override void Start()

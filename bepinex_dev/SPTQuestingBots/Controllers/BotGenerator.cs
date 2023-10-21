@@ -175,9 +175,12 @@ namespace SPTQuestingBots.Controllers
 
                 if (maxPMCBots > 0)
                 {
+                    // If this instance is retrieved in a Task (which runs asynchronously), it can sometimes be null
+                    BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+
                     // Create bot data from the server
                     #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    generateBots(LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                    generateBots(botSpawnerClass, LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                     #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 }
                 else
@@ -281,8 +284,13 @@ namespace SPTQuestingBots.Controllers
                 .Where(b => IsBotFromInitialPMCSpawns(b));
         }
 
-        private async Task generateBots(BotDifficulty botdifficulty, int totalCount)
+        private async Task generateBots(BotSpawner botSpawnerClass, BotDifficulty botdifficulty, int totalCount)
         {
+            if (botSpawnerClass == null)
+            {
+                throw new NullReferenceException("Singleton<IBotGame>.Instance.BotsController.BotSpawner is null");
+            }
+
             int botsGenerated = 0;
 
             try
@@ -290,12 +298,6 @@ namespace SPTQuestingBots.Controllers
                 IsGeneratingPMCs = true;
 
                 LoggingController.LogInfo("Generating PMC bots...");
-
-                BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                if (botSpawnerClass == null)
-                {
-                    throw new NullReferenceException("Singleton<IBotGame>.Instance.BotsController.BotSpawner is null");
-                }
 
                 IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 

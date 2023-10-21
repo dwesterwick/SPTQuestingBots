@@ -8,7 +8,7 @@ using SPTQuestingBots.Controllers;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class GoToObjectiveAction : GoToPositionAbstractAction
     {

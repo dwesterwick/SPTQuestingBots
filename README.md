@@ -221,7 +221,7 @@ The three major data structures are:
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
 
 **PMC Spawning System:**
-* Only solo PMC's spawn
+* If one of the members of a PMC group is a straggler, the whole group will wait around for him
 * Not all PMC's spawn into Streets because too many Scavs spawn into the map first
 * Scavs can spawn close to PMC's (SPT limitation)
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
@@ -249,7 +249,6 @@ The three major data structures are:
 * **0.3.2** (ETA: Mid December)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
-    * Initial PMC group spawns
 * **Backlog**
     * Invoke SAIN's logic for having bots extract from the map
 * **Not Planned**
