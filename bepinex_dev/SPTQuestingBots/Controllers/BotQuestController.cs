@@ -29,7 +29,6 @@ namespace SPTQuestingBots.Controllers
         private static List<string> zoneIDsInLocation = new List<string>();
         private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
         private static List<BotOwner> bossesInLocation = new List<BotOwner>();
-        private static Dictionary<BotOwner, List<BotOwner>> bossFollowersInLocation = new Dictionary<BotOwner, List<BotOwner>>();
         private static string previousLocationID = null;
 
         public IEnumerator Clear()
@@ -57,7 +56,6 @@ namespace SPTQuestingBots.Controllers
 
             pmcsInLocation.Clear();
             bossesInLocation.Clear();
-            bossFollowersInLocation.Clear();
             zoneIDsInLocation.Clear();
 
             HaveTriggersBeenFound = false;
@@ -138,33 +136,6 @@ namespace SPTQuestingBots.Controllers
         public static bool IsBotABoss(BotOwner botOwner)
         {
             return bossesInLocation.Contains(botOwner);
-        }
-
-        public static void RegisterBossFollower(BotOwner boss, BotOwner follower)
-        {
-            if (bossFollowersInLocation.ContainsKey(boss))
-            {
-                bossFollowersInLocation[boss].Add(follower);
-            }
-            else
-            {
-                bossFollowersInLocation.Add(boss, new List<BotOwner>() { follower });
-            }
-        }
-
-        public static IReadOnlyCollection<BotOwner> GetAliveFollowers(BotOwner botOwner)
-        {
-            // Check if the bot has any followers
-            if (!bossFollowersInLocation.ContainsKey(botOwner))
-            {
-                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
-            }
-
-            BotOwner[] aliveFollowers = bossFollowersInLocation[botOwner]
-                .Where(b => (b.BotState == EBotState.Active) && !b.IsDead)
-                .ToArray();
-
-            return new ReadOnlyCollection<BotOwner>(aliveFollowers);
         }
 
         public static void AddQuest(Quest quest)

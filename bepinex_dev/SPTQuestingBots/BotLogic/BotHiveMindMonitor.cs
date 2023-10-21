@@ -52,7 +52,19 @@ namespace SPTQuestingBots.BotLogic
 
                     if (botBosses[bot] != null)
                     {
-                        Controllers.LoggingController.LogInfo("The boss for " + bot.Profile.Nickname + " is " + botBosses[bot].Profile.Nickname);
+                        Controllers.LoggingController.LogInfo("The boss for " + bot.Profile.Nickname + " is now " + botBosses[bot].Profile.Nickname);
+
+                        if (!botFollowers.ContainsKey(botBosses[bot]))
+                        {
+                            throw new InvalidOperationException("Boss " + botBosses[bot].Profile.Nickname + " has not been added to the follower dictionary");
+                        }
+
+                        if (!botFollowers[botBosses[bot]].Contains(bot))
+                        {
+                            Controllers.LoggingController.LogInfo("Bot " + bot.Profile.Nickname + " is now a follower for " + botBosses[bot].Profile.Nickname);
+
+                            botFollowers[botBosses[bot]].Add(bot);
+                        }
                     }
                 }
                 else
@@ -73,18 +85,13 @@ namespace SPTQuestingBots.BotLogic
                     continue;
                 }
 
-                foreach (BotOwner bot in botFollowers[boss].ToArray())
+                foreach (BotOwner follower in botFollowers[boss].ToArray())
                 {
-                    if (bot == null)
+                    if ((follower == null) || !follower.isActiveAndEnabled || follower.IsDead)
                     {
-                        continue;
-                    }
+                        Controllers.LoggingController.LogInfo("Follower " + botBosses[follower].Profile.Nickname + " is now dead.");
 
-                    if (!bot.isActiveAndEnabled || bot.IsDead)
-                    {
-                        Controllers.LoggingController.LogInfo("Follower " + botBosses[bot].Profile.Nickname + " is now dead.");
-
-                        botFollowers[boss].Remove(bot);
+                        botFollowers[boss].Remove(follower);
                     }
                 }
             }
@@ -94,6 +101,7 @@ namespace SPTQuestingBots.BotLogic
                 if (bot == null)
                 {
                     botIsInCombat.Remove(bot);
+                    continue;
                 }
 
                 if (!bot.isActiveAndEnabled || bot.IsDead)
@@ -106,6 +114,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (bot == null)
                 {
+                    botCanQuest.Remove(bot);
                     continue;
                 }
 
