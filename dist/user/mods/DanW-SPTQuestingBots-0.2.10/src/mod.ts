@@ -8,6 +8,7 @@ import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
 import type { IPostAkiLoadMod } from "@spt-aki/models/external/IPostAkiLoadMod";
 import type { StaticRouterModService } from "@spt-aki/services/mod/staticRouter/StaticRouterModService";
 import type { DynamicRouterModService } from "@spt-aki/services/mod/dynamicRouter/DynamicRouterModService";
+import type { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
 
 import { MinMax } from "@spt-aki/models/common/MinMax";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
@@ -177,7 +178,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
     }
 	
-    public postAkiLoad(): void
+    public postAkiLoad(container: DependencyContainer): void
     {
         if (!modConfig.enabled)
         {
@@ -186,6 +187,14 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
         
         this.removeBlacklistedBrainTypes();
+
+        // If we find SWAG, disable initial spawns
+        const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
+        if (preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        {
+            this.commonUtils.logInfo("SWAG Detected; disabling initial PMC spawns");
+            modConfig.initial_PMC_spawns.enabled = false;
+        }
 
         if (!modConfig.initial_PMC_spawns.enabled)
         {

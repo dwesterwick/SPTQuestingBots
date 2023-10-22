@@ -52,7 +52,7 @@ namespace SPTQuestingBots.Models
         public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
         {
             // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = LocationController.CurrentLocation.SpawnPointParams
+            SpawnPointParams[] validSpawnPoints = LocationController.GetAllValidSpawnPointParams()
                     .Where(s => !blacklistedSpawnPointIDs.Contains(s.Id))
                     .Where(s => s.Categories.Any(allowedSpawnPointTypes))
                     .ToArray();

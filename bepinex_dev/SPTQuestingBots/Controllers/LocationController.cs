@@ -81,6 +81,31 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
+        public static SpawnPointParams[] GetAllValidSpawnPointParams()
+        {
+            if (CurrentLocation == null)
+            {
+                throw new InvalidOperationException("Spawn-point data can only be retrieved after a map has been loaded.");
+            }
+
+            if (CurrentLocation.Id == "TarkovStreets")
+            {
+                SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
+                    .Where(s => s.Position.z < 440)
+                    .ToArray();
+
+                IEnumerable<SpawnPointParams> removedSpawnPoints = CurrentLocation.SpawnPointParams
+                    .Where(s => !validSpawnPointParams.Contains(s));
+
+                string removedSpawnPointsText = string.Join(", ", removedSpawnPoints.Select(s => s.Position.ToUnityVector3().ToString()));
+                Controllers.LoggingController.LogWarning("PMC's cannot spawn south of the cinema on Streets or their minds will be broken. Thanks, BSG! Removed spawn points: " + removedSpawnPointsText);
+
+                return validSpawnPointParams;
+            }
+
+            return CurrentLocation.SpawnPointParams;
+        }
+
         public static void ClearEscapeTimes()
         {
             LoggingController.LogInfo("Clearing cached escape times...");
@@ -459,12 +484,12 @@ namespace SPTQuestingBots.Controllers
 
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
         {
-            return GetNearestSpawnPoint(postition, new SpawnPointParams[0], CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(postition, new SpawnPointParams[0], GetAllValidSpawnPointParams());
         }
 
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
-            return GetNearestSpawnPoint(postition, excludedSpawnPoints, CurrentLocation.SpawnPointParams);
+            return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }
 
         private static SpawnPointParams? getPlayerSpawnPoint()
