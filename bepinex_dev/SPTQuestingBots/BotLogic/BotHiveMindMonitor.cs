@@ -1,4 +1,5 @@
 ﻿using EFT;
+using HarmonyLib;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.Controllers;
 using System;
@@ -101,6 +102,18 @@ namespace SPTQuestingBots.BotLogic
             return botFollowers.ContainsKey(bot) ? new ReadOnlyCollection<BotOwner>(botFollowers[bot]) : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
         }
 
+        public static ReadOnlyCollection<BotOwner> GetAllGroupMembers(BotOwner bot)
+        {
+            BotOwner boss = GetBoss(bot) ?? bot;
+
+            BotOwner[] allGroupMembers = GetFollowers(boss)
+                .AddItem(boss)
+                .Where(b => b.Id != bot.Id)
+                .ToArray();
+
+            return new ReadOnlyCollection<BotOwner>(allGroupMembers);
+        }
+
         public static float? GetDistanceToBoss(BotOwner bot)
         {
             if (!HasBoss(bot))
@@ -176,6 +189,37 @@ namespace SPTQuestingBots.BotLogic
             return checkStateForAnyGroupMembers(botCanSprintToObjective, bot);
         }
 
+        public static void AssignTargetEnemyFromGroup(BotOwner bot)
+        {
+            if (bot.Memory.HaveEnemy || bot.Memory.DangerData.HaveCloseDanger)
+            {
+                return;
+            }
+
+            ReadOnlyCollection<BotOwner> groupMembers = GetAllGroupMembers(bot);
+            //Controllers.LoggingController.LogInfo("Group members for " + bot.Profile.Nickname + ": " + string.Join(", ", groupMembers.Select(m => m.Profile.Nickname));
+
+            foreach (BotOwner member in groupMembers)
+            {
+                if (!member.isActiveAndEnabled || member.IsDead)
+                {
+                    continue;
+                }
+
+                if (!member.Memory.HaveEnemy)
+                {
+                    continue;
+                }
+
+                Controllers.LoggingController.LogInfo(member.Profile.Nickname + " informed " + bot.Profile.Nickname + " about spotted enemy " + bot.Memory.GoalEnemy.Owner.Profile.Nickname);
+
+                PlaceForCheck enemyLocation = new PlaceForCheck(member.Memory.GoalEnemy.GetPositionForSearch(), PlaceForCheckType.danger);
+                bot.Memory.DangerData.SetTarget(enemyLocation, member.Memory.GoalEnemy.Owner);
+
+                return;
+            }
+        }
+
         private static void updateDictionaryValue<T>(Dictionary<BotOwner, T> dict, BotOwner bot, T value)
         {
             if (dict.ContainsKey(bot))
@@ -243,22 +287,12 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botBosses.Keys.ToArray())
             {
-                if (bot == null)
-                {
-                    Controllers.LoggingController.LogWarning("Found null key in botBosses dictionary. Removing...");
-
-                    botBosses.Remove(bot);
-                    continue;
-                }
-
                 if (botBosses[bot] == null)
                 {
                     botBosses[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
 
                     if (botBosses[bot] != null)
                     {
-                        Controllers.LoggingController.LogInfo("The boss for " + bot.Profile.Nickname + " is now " + botBosses[bot].Profile.Nickname);
-
                         addBossFollower(botBosses[bot], bot);
                     }
 
@@ -268,6 +302,11 @@ namespace SPTQuestingBots.BotLogic
                 if (!botBosses[bot].isActiveAndEnabled || botBosses[bot].IsDead)
                 {
                     Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].Profile.Nickname + " is now dead.");
+
+                    if (botFollowers.ContainsKey(botBosses[bot]))
+                    {
+                        botFollowers.Remove(botBosses[bot]);
+                    }
 
                     botBosses[bot] = null;
                 }
@@ -303,14 +342,6 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
-                if (boss == null)
-                {
-                    Controllers.LoggingController.LogWarning("Found null key in botFollowers dictionary. Removing...");
-
-                    botFollowers.Remove(boss);
-                    continue;
-                }
-
                 foreach (BotOwner follower in botFollowers[boss].ToArray())
                 {
                     if ((follower == null) || !follower.isActiveAndEnabled || follower.IsDead)
@@ -327,14 +358,6 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botIsInCombat.Keys.ToArray())
             {
-                if (bot == null)
-                {
-                    Controllers.LoggingController.LogWarning("Found null key in botIsInCombat dictionary. Removing...");
-
-                    botIsInCombat.Remove(bot);
-                    continue;
-                }
-
                 if (!bot.isActiveAndEnabled || bot.IsDead)
                 {
                     botIsInCombat[bot] = false;
@@ -346,21 +369,12 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botCanQuest.Keys.ToArray())
             {
-                if (bot == null)
-                {
-                    Controllers.LoggingController.LogWarning("Found null key in botCanQuest dictionary. Removing...");
-
-                    botCanQuest.Remove(bot);
-                    continue;
-                }
-
                 if (!bot.isActiveAndEnabled || bot.IsDead)
                 {
                     botCanQuest[bot] = false;
                 }
 
-                Objective.BotObjectiveManager objectiveManager = bot.GetPlayer?.gameObject?.GetComponent<Objective.BotObjectiveManager>();
-                if (objectiveManager != null)
+                if ((bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) ?? false) == true)
                 {
                     botCanQuest[bot] = objectiveManager.IsObjectiveActive;
                 }
@@ -371,21 +385,12 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botCanSprintToObjective.Keys.ToArray())
             {
-                if (bot == null)
-                {
-                    Controllers.LoggingController.LogWarning("Found null key in botCanSprintToObjective dictionary. Removing...");
-
-                    botCanSprintToObjective.Remove(bot);
-                    continue;
-                }
-
                 if (!bot.isActiveAndEnabled || bot.IsDead)
                 {
-                    botCanSprintToObjective[bot] = false;
+                    botCanSprintToObjective[bot] = true;
                 }
 
-                Objective.BotObjectiveManager objectiveManager = bot.GetPlayer?.gameObject?.GetComponent<Objective.BotObjectiveManager>();
-                if (objectiveManager != null)
+                if ((bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) ?? false) == true)
                 {
                     botCanSprintToObjective[bot] = objectiveManager.CanSprintToObjective();
                 }

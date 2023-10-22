@@ -90,6 +90,9 @@ namespace SPTQuestingBots.BotLogic.Follow
             // If any group members are in combat, the bot should also be in combat
             if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
             {
+                // WIP. Hopefully not needed with SAIN.
+                //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
+
                 return false;
             }
 

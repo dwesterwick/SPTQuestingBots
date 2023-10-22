@@ -180,6 +180,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             // NOTE: This check MUST be performed after updating this bot's combate state!
             if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
             {
+                // WIP. Hopefully not needed with SAIN.
+                //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
+
                 return false;
             }
 
