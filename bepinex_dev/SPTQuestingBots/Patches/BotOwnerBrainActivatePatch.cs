@@ -35,6 +35,7 @@ namespace SPTQuestingBots.Patches
             if (BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 BotQuestController.RegisterPMC(__instance);
+                BotHiveMindMonitor.MakeBotHateEveryoneOutsideOfItsGroup(__instance);
             }
 
             if (BotBrainHelpers.WillBotBeABoss(__instance))

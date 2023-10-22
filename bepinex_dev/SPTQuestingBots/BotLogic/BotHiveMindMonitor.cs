@@ -1,4 +1,5 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using HarmonyLib;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.Controllers;
@@ -217,6 +218,36 @@ namespace SPTQuestingBots.BotLogic
                 bot.Memory.DangerData.SetTarget(enemyLocation, member.Memory.GoalEnemy.Owner);
 
                 return;
+            }
+        }
+
+        public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot)
+        {
+            IReadOnlyCollection<BotOwner> actualGroupMembers = BotGenerator.GetSpawnGroupMembers(bot);
+            string[] actualGroupMemberIds = actualGroupMembers.Select(m => m.Profile.Id).ToArray();
+            
+            IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.BotState == EBotState.Active)
+                .Where(b => !b.IsDead)
+                .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
+
+            foreach (BotOwner player in allPlayersOutsideGroup)
+            {
+                if (player.BotsGroup.Allies.Contains(bot))
+                {
+                    Controllers.LoggingController.LogInfo(player.Profile.Nickname + "'s group was initially friendly with " + bot.Profile.Nickname + ". Not anymore..");
+
+                    player.BotsGroup.RemoveAlly(bot);
+                    player.BotsGroup.AddEnemy(bot, EBotEnemyCause.initial);
+                }
+
+                if (bot.BotsGroup.Allies.Contains(player))
+                {
+                    Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group was initially friendly with " + player.Profile.Nickname + ". Not anymore..");
+
+                    bot.BotsGroup.RemoveAlly(player);
+                    bot.BotsGroup.AddEnemy(player, EBotEnemyCause.initial);
+                }
             }
         }
 
