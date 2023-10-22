@@ -231,6 +231,8 @@ namespace SPTQuestingBots.BotLogic
                 .Where(b => !b.IsDead)
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
+            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", actualGroupMembers.Select(m => m.Profile.Nickname)));
+
             foreach (BotOwner player in allPlayersOutsideGroup)
             {
                 if (player.BotsGroup.Allies.Contains(bot))
@@ -405,7 +407,7 @@ namespace SPTQuestingBots.BotLogic
                     botCanQuest[bot] = false;
                 }
 
-                if ((bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) ?? false) == true)
+                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
                 {
                     botCanQuest[bot] = objectiveManager.IsObjectiveActive;
                 }
@@ -421,7 +423,7 @@ namespace SPTQuestingBots.BotLogic
                     botCanSprintToObjective[bot] = true;
                 }
 
-                if ((bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) ?? false) == true)
+                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
                 {
                     botCanSprintToObjective[bot] = objectiveManager.CanSprintToObjective();
                 }

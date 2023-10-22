@@ -494,7 +494,7 @@ namespace SPTQuestingBots.Controllers
             // Definte the callback action that runs after the bot spawns. This is needed to get the BotOwner object for the bot. 
             Action<BotOwner> callback = new Action<BotOwner>((botOwner) =>
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spawned as an initial PMC.");
+                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spawned in initial PMC group #" + initialPMCBot.GroupNumber);
                 initialPMCBot.Owners.Add(botOwner);
                 initialPMCBot.HasSpawned = true;
             });
