@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Patches
                 return true;
             }
 
-            Controllers.LoggingController.LogInfo("Checking if " + offer.Profile.Nickname + " can be a follower for " + __instance.Owner.Profile.Nickname + "...");
+            //Controllers.LoggingController.LogInfo("Checking if " + offer.Profile.Nickname + " can be a follower for " + __instance.Owner.Profile.Nickname + "...");
 
             if (!BotGenerator.IsBotFromInitialPMCSpawns(offer))
             {
@@ -34,7 +34,7 @@ namespace SPTQuestingBots.Patches
 
             IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(__instance.Owner);
 
-            Controllers.LoggingController.LogInfo(offer.Profile.Nickname + "'s group contains: " + string.Join(",", groupMembers.Select(m => m.Profile.Nickname)));
+            //Controllers.LoggingController.LogInfo(__instance.Owner.Profile.Nickname + "'s group contains: " + string.Join(",", groupMembers.Select(m => m.Profile.Nickname)));
 
             if (!groupMembers.Any(m => m.Id == offer.Id))
             {

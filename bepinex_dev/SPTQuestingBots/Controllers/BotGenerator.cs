@@ -254,7 +254,7 @@ namespace SPTQuestingBots.Controllers
 
         public static IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
         {
-            IEnumerable<BotSpawnInfo> matchingSpawnGroups = InitialPMCBotGroups.Where(b => b.Owners.Contains(bot));
+            IEnumerable<BotSpawnInfo> matchingSpawnGroups = InitialPMCBotGroups.Where(g => g.Owners.Contains(bot));
             if (matchingSpawnGroups.Count() == 0)
             {
                 return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
@@ -264,7 +264,7 @@ namespace SPTQuestingBots.Controllers
                 throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.Profile.Nickname);
             }
 
-            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Id != bot.Id);
+            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Profile.Id != bot.Profile.Id);
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 

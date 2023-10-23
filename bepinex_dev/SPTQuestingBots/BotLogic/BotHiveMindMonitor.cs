@@ -20,6 +20,7 @@ namespace SPTQuestingBots.BotLogic
         private static Dictionary<BotOwner, bool> botIsInCombat = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botCanQuest = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botCanSprintToObjective = new Dictionary<BotOwner, bool>();
+        private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
 
         public BotHiveMindMonitor()
         {
@@ -33,6 +34,7 @@ namespace SPTQuestingBots.BotLogic
             botIsInCombat.Clear();
             botCanQuest.Clear();
             botCanSprintToObjective.Clear();
+            botFriendlinessUpdated.Clear();
         }
 
         private void Update()
@@ -53,6 +55,7 @@ namespace SPTQuestingBots.BotLogic
             updateBotsInCombat();
             updateIfBotsCanQuest();
             updateIfBotsCanSprintToTheirObjective();
+            updateBotGroupFriendliness();
         }
 
         public static void RegisterBot(BotOwner bot)
@@ -80,6 +83,11 @@ namespace SPTQuestingBots.BotLogic
             if (!botCanSprintToObjective.ContainsKey(bot))
             {
                 botCanSprintToObjective.Add(bot, false);
+            }
+
+            if (!botFriendlinessUpdated.ContainsKey(bot))
+            {
+                botFriendlinessUpdated.Add(bot, false);
             }
         }
 
@@ -227,8 +235,6 @@ namespace SPTQuestingBots.BotLogic
             string[] actualGroupMemberIds = actualGroupMembers.Select(m => m.Profile.Id).ToArray();
             
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
-                .Where(b => b.BotState == EBotState.Active)
-                .Where(b => !b.IsDead)
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
             //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", actualGroupMembers.Select(m => m.Profile.Nickname)));
@@ -251,6 +257,16 @@ namespace SPTQuestingBots.BotLogic
                     bot.BotsGroup.AddEnemy(player, EBotEnemyCause.initial);
                 }
             }
+
+            if ((actualGroupMembers.Count() > 0) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
+            {
+                Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group doesn't like you anymore");
+
+                bot.BotsGroup.AddEnemy(Singleton<GameWorld>.Instance.MainPlayer, EBotEnemyCause.initial);
+            }
+
+            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group has the following allies: " + string.Join(",", bot.BotsGroup.Allies.Select(a => a.Profile.Nickname)));
+            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group has the following enemies: " + string.Join(",", bot.BotsGroup.Enemies.Keys.Select(a => a.Profile.Nickname)));
         }
 
         private static void updateDictionaryValue<T>(Dictionary<BotOwner, T> dict, BotOwner bot, T value)
@@ -427,6 +443,25 @@ namespace SPTQuestingBots.BotLogic
                 {
                     botCanSprintToObjective[bot] = objectiveManager.CanSprintToObjective();
                 }
+            }
+        }
+
+        private void updateBotGroupFriendliness()
+        {
+            foreach (BotOwner bot in botFriendlinessUpdated.Keys.ToArray())
+            {
+                if (botFriendlinessUpdated[bot])
+                {
+                    continue;
+                }
+
+                if ((bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
+                {
+                    continue;
+                }
+
+                MakeBotHateEveryoneOutsideOfItsGroup(bot);
+                botFriendlinessUpdated[bot] = true;
             }
         }
     }
