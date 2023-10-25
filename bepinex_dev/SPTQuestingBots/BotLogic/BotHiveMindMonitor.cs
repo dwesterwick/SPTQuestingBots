@@ -60,6 +60,11 @@ namespace SPTQuestingBots.BotLogic
 
         public static void RegisterBot(BotOwner bot)
         {
+            if (bot == null)
+            {
+                throw new ArgumentNullException("Cannot register a null bot", nameof(bot));
+            }
+
             if (!botBosses.ContainsKey(bot))
             {
                 botBosses.Add(bot, null);
@@ -89,6 +94,16 @@ namespace SPTQuestingBots.BotLogic
             {
                 botFriendlinessUpdated.Add(bot, false);
             }
+        }
+
+        public static bool IsRegistered(BotOwner bot)
+        {
+            if (bot == null)
+            {
+                return false;
+            }
+
+            return botBosses.ContainsKey(bot);
         }
 
         public static bool HasBoss(BotOwner bot)
@@ -231,13 +246,18 @@ namespace SPTQuestingBots.BotLogic
 
         public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot)
         {
-            IReadOnlyCollection<BotOwner> actualGroupMembers = BotGenerator.GetSpawnGroupMembers(bot);
-            string[] actualGroupMemberIds = actualGroupMembers.Select(m => m.Profile.Id).ToArray();
+            IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(bot);
+            MakeBotHateEveryoneOutsideOfItsGroup(bot, groupMembers);
+        }
+
+        public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot, IEnumerable<BotOwner> allegedGroupMembers)
+        {
+            string[] actualGroupMemberIds = allegedGroupMembers.Select(m => m.Profile.Id).ToArray();
             
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
-            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", actualGroupMembers.Select(m => m.Profile.Nickname)));
+            Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.Profile.Nickname)));
 
             foreach (BotOwner player in allPlayersOutsideGroup)
             {
@@ -258,9 +278,9 @@ namespace SPTQuestingBots.BotLogic
                 }
             }
 
-            if ((actualGroupMembers.Count() > 0) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
+            if (BotQuestController.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
             {
-                Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group doesn't like you anymore");
+                Controllers.LoggingController.LogInfo(bot.Profile.Nickname + " doesn't like you anymore");
 
                 bot.BotsGroup.AddEnemy(Singleton<GameWorld>.Instance.MainPlayer, EBotEnemyCause.initial);
             }
@@ -271,6 +291,11 @@ namespace SPTQuestingBots.BotLogic
 
         private static void updateDictionaryValue<T>(Dictionary<BotOwner, T> dict, BotOwner bot, T value)
         {
+            if (bot == null)
+            {
+                return;
+            }
+
             if (dict.ContainsKey(bot))
             {
                 dict[bot] = value;
@@ -391,6 +416,12 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (boss == null)
+                {
+                    continue;
+                }
+
                 foreach (BotOwner follower in botFollowers[boss].ToArray())
                 {
                     if ((follower == null) || !follower.isActiveAndEnabled || follower.IsDead)
@@ -407,7 +438,13 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botIsInCombat.Keys.ToArray())
             {
-                if (!bot.isActiveAndEnabled || bot.IsDead)
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
+                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
                 {
                     botIsInCombat[bot] = false;
                 }
@@ -418,14 +455,20 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botCanQuest.Keys.ToArray())
             {
-                if (!bot.isActiveAndEnabled || bot.IsDead)
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
+                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
                 {
                     botCanQuest[bot] = false;
                 }
 
                 if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
                 {
-                    botCanQuest[bot] = objectiveManager.IsObjectiveActive;
+                    botCanQuest[bot] = objectiveManager?.IsObjectiveActive ?? false;
                 }
             }
         }
@@ -434,14 +477,20 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botCanSprintToObjective.Keys.ToArray())
             {
-                if (!bot.isActiveAndEnabled || bot.IsDead)
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
+                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
                 {
                     botCanSprintToObjective[bot] = true;
                 }
 
                 if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
                 {
-                    botCanSprintToObjective[bot] = objectiveManager.CanSprintToObjective();
+                    botCanSprintToObjective[bot] = objectiveManager?.CanSprintToObjective() ?? true;
                 }
             }
         }
@@ -450,17 +499,32 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botFriendlinessUpdated.Keys.ToArray())
             {
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
                 if (botFriendlinessUpdated[bot])
                 {
                     continue;
                 }
 
-                if ((bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
+                Objective.BotObjectiveManager objectiveManager = null;
+                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out objectiveManager) == false)
                 {
                     continue;
                 }
 
-                MakeBotHateEveryoneOutsideOfItsGroup(bot);
+                double timeSinceInitialized = objectiveManager?.TimeSinceInitialization ?? 0;
+
+                IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(bot);
+                if ((timeSinceInitialized < 3) && (groupMembers.Count > 0) && (bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
+                {
+                    continue;
+                }
+
+                MakeBotHateEveryoneOutsideOfItsGroup(bot, groupMembers);
                 botFriendlinessUpdated[bot] = true;
             }
         }

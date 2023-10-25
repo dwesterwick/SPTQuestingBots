@@ -30,6 +30,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Models.QuestObjectiveStep targetObjectiveStep = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
+        private Stopwatch timeSinceInitializationTimer = new Stopwatch();
 
         public double TimeSpentAtObjective
         {
@@ -39,6 +40,11 @@ namespace SPTQuestingBots.BotLogic.Objective
         public double TimeSinceChangingObjective
         {
             get { return timeSinceChangingObjectiveTimer.ElapsedMilliseconds / 1000.0; }
+        }
+
+        public double TimeSinceInitialization
+        {
+            get { return timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0; }
         }
 
         public float DistanceToObjective
@@ -52,6 +58,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             botOwner = _botOwner;
 
             BotMonitor = new BotMonitor(botOwner);
+        }
+
+        private void updateBotType()
+        {
+            if (!BotHiveMindMonitor.IsRegistered(botOwner))
+            {
+                return;
+            }
 
             BotType botType = BotQuestController.GetBotType(botOwner);
 
@@ -79,8 +93,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (botType == BotType.Undetermined)
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                return;
             }
 
+            timeSinceInitializationTimer.Start();
             IsInitialized = true;
         }
 
@@ -88,6 +104,12 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             if (!BotQuestController.HaveTriggersBeenFound)
             {
+                return;
+            }
+
+            if (!IsInitialized)
+            {
+                updateBotType();
                 return;
             }
 

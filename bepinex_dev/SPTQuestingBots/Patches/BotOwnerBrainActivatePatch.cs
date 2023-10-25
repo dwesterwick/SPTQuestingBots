@@ -21,6 +21,23 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotOwner __instance)
         {
+            if (ConfigController.Config.InitialPMCSpawns.Enabled)
+            {
+                registerBot(__instance);
+            }
+        }
+
+        [PatchPostfix]
+        private static void PatchPostfix(BotOwner __instance)
+        {
+            if (!ConfigController.Config.InitialPMCSpawns.Enabled)
+            {
+                registerBot(__instance);
+            }
+        }
+
+        private static void registerBot(BotOwner __instance)
+        {
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
