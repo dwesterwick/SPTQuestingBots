@@ -20,6 +20,7 @@ namespace SPTQuestingBots.BotLogic
         private static Dictionary<BotOwner, bool> botIsInCombat = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botCanQuest = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botCanSprintToObjective = new Dictionary<BotOwner, bool>();
+        private static Dictionary<BotOwner, bool> botWantsToLoot = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
 
         public BotHiveMindMonitor()
@@ -34,6 +35,7 @@ namespace SPTQuestingBots.BotLogic
             botIsInCombat.Clear();
             botCanQuest.Clear();
             botCanSprintToObjective.Clear();
+            botWantsToLoot.Clear();
             botFriendlinessUpdated.Clear();
         }
 
@@ -55,6 +57,7 @@ namespace SPTQuestingBots.BotLogic
             updateBotsInCombat();
             updateIfBotsCanQuest();
             updateIfBotsCanSprintToTheirObjective();
+            updateBotsWantToLoot();
             updateBotGroupFriendliness();
         }
 
@@ -88,6 +91,11 @@ namespace SPTQuestingBots.BotLogic
             if (!botCanSprintToObjective.ContainsKey(bot))
             {
                 botCanSprintToObjective.Add(bot, false);
+            }
+
+            if (!botWantsToLoot.ContainsKey(bot))
+            {
+                botWantsToLoot.Add(bot, false);
             }
 
             if (!botFriendlinessUpdated.ContainsKey(bot))
@@ -213,6 +221,31 @@ namespace SPTQuestingBots.BotLogic
             return checkStateForAnyGroupMembers(botCanSprintToObjective, bot);
         }
 
+        public static void UpdateWantsToLoot(BotOwner bot, bool wantsToLoot)
+        {
+            updateDictionaryValue(botWantsToLoot, bot, wantsToLoot);
+        }
+
+        public static bool WantsToLoot(BotOwner bot)
+        {
+            return botWantsToLoot.ContainsKey(bot) && botWantsToLoot[bot];
+        }
+
+        public static bool DoesBossWantToLoot(BotOwner bot)
+        {
+            return checkBotState(botWantsToLoot, GetBoss(bot)) ?? false;
+        }
+
+        public static bool DoFollowersWantToLoot(BotOwner bot)
+        {
+            return checkStateForAnyFollowers(botWantsToLoot, bot);
+        }
+
+        public static bool DoesGroupWantToLoot(BotOwner bot)
+        {
+            return checkStateForAnyGroupMembers(botWantsToLoot, bot);
+        }
+
         public static void AssignTargetEnemyFromGroup(BotOwner bot)
         {
             if (bot.Memory.HaveEnemy || bot.Memory.DangerData.HaveCloseDanger)
@@ -257,7 +290,7 @@ namespace SPTQuestingBots.BotLogic
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
-            Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.Profile.Nickname)));
+            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.Profile.Nickname)));
 
             foreach (BotOwner player in allPlayersOutsideGroup)
             {
@@ -361,6 +394,12 @@ namespace SPTQuestingBots.BotLogic
         {
             foreach (BotOwner bot in botBosses.Keys.ToArray())
             {
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
                 if (botBosses[bot] == null)
                 {
                     botBosses[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
@@ -491,6 +530,23 @@ namespace SPTQuestingBots.BotLogic
                 if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
                 {
                     botCanSprintToObjective[bot] = objectiveManager?.CanSprintToObjective() ?? true;
+                }
+            }
+        }
+
+        private void updateBotsWantToLoot()
+        {
+            foreach (BotOwner bot in botWantsToLoot.Keys.ToArray())
+            {
+                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
+                if (bot == null)
+                {
+                    continue;
+                }
+
+                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
+                {
+                    botWantsToLoot[bot] = false;
                 }
             }
         }

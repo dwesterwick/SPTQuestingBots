@@ -1,5 +1,6 @@
 ﻿using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,15 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
-    internal class BotFollowerLayer : CustomLayer
+    internal class BotFollowerLayer : CustomLayerDelayedUpdate
     {
+        private static int updateInterval = 1;
+
         private Objective.BotObjectiveManager objectiveManager;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
 
-        public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
+        public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
         {
             objectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<Objective.BotObjectiveManager>();
         }
@@ -38,35 +41,40 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public override bool IsActive()
         {
+            if (!canUpdate())
+            {
+                return previousState;
+            }
+
             // Check if somebody disabled questing in the F12 menu
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
             {
-                return false;
+                return updatePreviousState(false);
             }
 
             if (BotOwner.BotState != EBotState.Active)
             {
-                return false;
+                return updatePreviousState(false);
             }
 
             // Only use this layer if the bot has a boss to follow and the boss can quest
             if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.CanBossQuest(BotOwner))
             {
-                return false;
+                return updatePreviousState(false);
             }
 
             // Only enable the layer if the bot is too far from the boss
             float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
             if (!distanceToBoss.HasValue || (distanceToBoss.Value < ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Target))
             {
-                return false;
+                return updatePreviousState(false);
             }
 
             // Prevent the bot from following its boss if it needs to heal, etc. 
             if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
             {
                 wasAbleBodied = false;
-                return false;
+                return updatePreviousState(false);
             }
             if (!wasAbleBodied)
             {
@@ -83,7 +91,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                     //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
                 BotHiveMindMonitor.UpdateInCombat(BotOwner, true);
-                return false;
+                return updatePreviousState(false);
             }
             BotHiveMindMonitor.UpdateInCombat(BotOwner, false);
 
@@ -93,10 +101,18 @@ namespace SPTQuestingBots.BotLogic.Follow
                 // WIP. Hopefully not needed with SAIN.
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
 
-                return false;
+                return updatePreviousState(false);
             }
 
-            return true;
+            // Check if the bot wants to loot
+            if (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+            {
+                BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, true);
+                return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
+            }
+            BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, false);
+
+            return updatePreviousState(true);
         }
     }
 }

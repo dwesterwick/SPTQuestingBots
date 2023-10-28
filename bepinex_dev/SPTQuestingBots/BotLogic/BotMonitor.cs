@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.Controllers;
@@ -12,11 +14,28 @@ namespace SPTQuestingBots.BotLogic
 {
     public class BotMonitor
     {
+        public float NextLootCheckDelay { get; private set; } = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+
         private BotOwner botOwner;
+        private LogicLayerMonitor lootingLayerMonitor;
+        private LogicLayerMonitor extractLayerMonitor;
+        private LogicLayerMonitor stationaryWSLayerMonitor;
+        private Stopwatch lootSearchTimer = new Stopwatch();
+        private bool wasLooting = false;
+        private bool hasFoundLoot = false;
 
         public BotMonitor(BotOwner _botOwner)
         {
             botOwner = _botOwner;
+
+            lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            lootingLayerMonitor.Init(botOwner, "Looting");
+
+            extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
+
+            stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
+            stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
         }
 
         public bool ShouldSearchForEnemy(double maxTimeSinceCombatEnded)
@@ -35,6 +54,30 @@ namespace SPTQuestingBots.BotLogic
         {
             System.Random random = new System.Random();
             return random.Next((int)ConfigController.Config.SearchTimeAfterCombat.Min, (int)ConfigController.Config.SearchTimeAfterCombat.Max);
+        }
+
+        public bool WantsToUseStationaryWeapon()
+        {
+            if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool WantsToExtract()
+        {
+            if (extractLayerMonitor.CanLayerBeUsed)
+            {
+                string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
+                if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool ShouldWaitForFollowers()
@@ -127,6 +170,86 @@ namespace SPTQuestingBots.BotLogic
             }
 
             return true;
+        }
+
+        public bool ShouldCheckForLoot(float minTimeBetweenLooting)
+        {
+            if (!ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled)
+            {
+                return false;
+            }
+
+            // Check if LootingBots is loaded
+            if (!lootingLayerMonitor.CanLayerBeUsed)
+            {
+                return false;
+            }
+
+            NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+
+            // Check if the LootingBots logic layer is active
+            bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
+
+            // Check if LootingBots has instructed the bot to check a lootable container
+            bool isLooting = activeLogicName.Contains("Looting");
+
+            // The following logic is used to determine if a bot is allowed to search for loot:
+            //      - If LootingBots has instructed the bot to check a lootable container, allow it
+            //      - If the bot hasn't serached for loot for a minimum amount of time, allow it
+            //      - After the minimum amount of time, the bot will only be allowed to search for a certain amount of time. If it doesn't find any loot
+            //        in that time, it will be forced to continue questing
+            //      - The minimum amount of time between loot checks depends on whether the bot successfully found loot during the previous check
+            if
+            (
+                (isLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
+                && (isLooting || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
+            )
+            {
+                //LoggingController.LogInfo("Layer for bot " + BotOwner.Profile.Nickname + ": " + activeLayerName + ". Logic: " + activeLogicName);
+
+                if (isLooting)
+                {
+                    if (!hasFoundLoot)
+                    {
+                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has found loot");
+                    }
+
+                    NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
+                    lootSearchTimer.Reset();
+                    hasFoundLoot = true;
+                }
+                else
+                {
+                    if (!wasLooting)
+                    {
+                        //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is searching for loot...");
+                    }
+
+                    lootSearchTimer.Start();
+                }
+
+                if (isSearchingForLoot || isLooting)
+                {
+                    wasLooting = true;
+                }
+
+                lootingLayerMonitor.RestartCanUseTimer();
+                return true;
+            }
+
+            if (wasLooting || hasFoundLoot)
+            {
+                lootingLayerMonitor.RestartCanUseTimer();
+                //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
+            }
+
+            lootSearchTimer.Reset();
+            wasLooting = false;
+            hasFoundLoot = false;
+            return false;
         }
     }
 }
