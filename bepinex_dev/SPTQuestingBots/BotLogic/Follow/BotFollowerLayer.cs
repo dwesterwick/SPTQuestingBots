@@ -13,7 +13,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class BotFollowerLayer : CustomLayerDelayedUpdate
     {
-        private static int updateInterval = 1;
+        private static int updateInterval = 25;
 
         private Objective.BotObjectiveManager objectiveManager;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
@@ -41,7 +41,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public override bool IsActive()
         {
-            if (!canUpdate())
+            if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
             {
                 return previousState;
             }
@@ -104,8 +104,13 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
-            // Check if the bot wants to loot
-            if (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+            // Check if the bot wants to loot, but only allow it if enough time has elapsed since its boss last looted
+            TimeSpan timeSinceBossLastLooted = DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
+            if
+            (
+                (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+                && (timeSinceBossLastLooted.TotalSeconds > ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks)
+            )
             {
                 BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, true);
                 return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));

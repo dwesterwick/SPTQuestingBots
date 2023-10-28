@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class BotObjectiveLayer : CustomLayerDelayedUpdate
     {
-        private static int updateInterval = 1;
+        private static int updateInterval = 25;
 
         private BotObjectiveManager objectiveManager;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
@@ -52,7 +52,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override bool IsActive()
         {
-            if (!canUpdate())
+            if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
             {
                 return previousState;
             }

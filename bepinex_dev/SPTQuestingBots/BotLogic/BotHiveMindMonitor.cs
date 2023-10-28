@@ -21,6 +21,7 @@ namespace SPTQuestingBots.BotLogic
         private static Dictionary<BotOwner, bool> botCanQuest = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botCanSprintToObjective = new Dictionary<BotOwner, bool>();
         private static Dictionary<BotOwner, bool> botWantsToLoot = new Dictionary<BotOwner, bool>();
+        private static Dictionary<BotOwner, DateTime> botLastLootingTime = new Dictionary<BotOwner, DateTime>();
         private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
 
         public BotHiveMindMonitor()
@@ -36,6 +37,7 @@ namespace SPTQuestingBots.BotLogic
             botCanQuest.Clear();
             botCanSprintToObjective.Clear();
             botWantsToLoot.Clear();
+            botLastLootingTime.Clear();
             botFriendlinessUpdated.Clear();
         }
 
@@ -96,6 +98,11 @@ namespace SPTQuestingBots.BotLogic
             if (!botWantsToLoot.ContainsKey(bot))
             {
                 botWantsToLoot.Add(bot, false);
+            }
+
+            if (!botLastLootingTime.ContainsKey(bot))
+            {
+                botLastLootingTime.Add(bot, DateTime.MinValue);
             }
 
             if (!botFriendlinessUpdated.ContainsKey(bot))
@@ -224,6 +231,11 @@ namespace SPTQuestingBots.BotLogic
         public static void UpdateWantsToLoot(BotOwner bot, bool wantsToLoot)
         {
             updateDictionaryValue(botWantsToLoot, bot, wantsToLoot);
+
+            if (wantsToLoot && (bot != null))
+            {
+                botLastLootingTime[bot] = DateTime.Now;
+            }
         }
 
         public static bool WantsToLoot(BotOwner bot)
@@ -244,6 +256,16 @@ namespace SPTQuestingBots.BotLogic
         public static bool DoesGroupWantToLoot(BotOwner bot)
         {
             return checkStateForAnyGroupMembers(botWantsToLoot, bot);
+        }
+
+        public static DateTime GetLastLootingTimeForBoss(BotOwner bot)
+        {
+            if ((bot == null) || !botBosses.ContainsKey(bot) || (botBosses[bot] == null))
+            {
+                return DateTime.MinValue;
+            }
+
+            return botLastLootingTime[bot];
         }
 
         public static void AssignTargetEnemyFromGroup(BotOwner bot)
