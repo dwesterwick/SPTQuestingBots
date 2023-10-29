@@ -172,6 +172,12 @@ namespace SPTQuestingBots.BotLogic
             return true;
         }
 
+        public bool IsLooting()
+        {
+            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+            return activeLogicName.Contains("Looting");
+        }
+
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
         {
             if (!ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled)
@@ -188,13 +194,8 @@ namespace SPTQuestingBots.BotLogic
             NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
-
-            // Check if the LootingBots logic layer is active
             bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
-
-            // Check if LootingBots has instructed the bot to check a lootable container
-            bool isLooting = activeLogicName.Contains("Looting");
+            bool isLooting = IsLooting();
 
             // The following logic is used to determine if a bot is allowed to search for loot:
             //      - If LootingBots has instructed the bot to check a lootable container, allow it

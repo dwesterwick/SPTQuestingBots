@@ -104,12 +104,15 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
-            // Check if the bot wants to loot, but only allow it if enough time has elapsed since its boss last looted
+            // Check if enough time has elapsed since its boss last looted
             TimeSpan timeSinceBossLastLooted = DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
+            bool bossWillAllowLooting = timeSinceBossLastLooted.TotalSeconds > ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
+
+            // Only allow looting if the bot is already looting or its boss will allow it
             if
             (
-                (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
-                && (timeSinceBossLastLooted.TotalSeconds > ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks)
+                (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay) && bossWillAllowLooting)
+                || objectiveManager.BotMonitor.IsLooting()
             )
             {
                 BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, true);
