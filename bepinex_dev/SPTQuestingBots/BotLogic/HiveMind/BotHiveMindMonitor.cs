@@ -11,34 +11,42 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic
+namespace SPTQuestingBots.BotLogic.HiveMind
 {
+    public enum BotHiveMindSensorType
+    {
+        Undefined,
+        InCombat,
+        CanQuest,
+        CanSprintToObjective,
+        WantsToLoot
+    }
+
     public class BotHiveMindMonitor : MonoBehaviourDelayedUpdate
     {
-        private static Dictionary<BotOwner, BotOwner> botBosses = new Dictionary<BotOwner, BotOwner>();
-        private static Dictionary<BotOwner, List<BotOwner>> botFollowers = new Dictionary<BotOwner, List<BotOwner>>();
-        private static Dictionary<BotOwner, bool> botIsInCombat = new Dictionary<BotOwner, bool>();
-        private static Dictionary<BotOwner, bool> botCanQuest = new Dictionary<BotOwner, bool>();
-        private static Dictionary<BotOwner, bool> botCanSprintToObjective = new Dictionary<BotOwner, bool>();
-        private static Dictionary<BotOwner, bool> botWantsToLoot = new Dictionary<BotOwner, bool>();
-        private static Dictionary<BotOwner, DateTime> botLastLootingTime = new Dictionary<BotOwner, DateTime>();
+        internal static Dictionary<BotOwner, BotOwner> botBosses = new Dictionary<BotOwner, BotOwner>();
+        internal static Dictionary<BotOwner, List<BotOwner>> botFollowers = new Dictionary<BotOwner, List<BotOwner>>();
         private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
+
+        private static Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor> sensors = new Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor>();
 
         public BotHiveMindMonitor()
         {
             UpdateInterval = 50;
+
+            sensors.Add(BotHiveMindSensorType.InCombat, new BotHiveMindIsInCombatSensor());
+            sensors.Add(BotHiveMindSensorType.CanQuest, new BotHiveMindCanQuestSensor());
+            sensors.Add(BotHiveMindSensorType.CanSprintToObjective, new BotHiveMindCanSprintToObjectiveSensor());
+            sensors.Add(BotHiveMindSensorType.WantsToLoot, new BotHiveMindWantsToLootSensor());
         }
 
         public static void Clear()
         {
             botBosses.Clear();
             botFollowers.Clear();
-            botIsInCombat.Clear();
-            botCanQuest.Clear();
-            botCanSprintToObjective.Clear();
-            botWantsToLoot.Clear();
-            botLastLootingTime.Clear();
             botFriendlinessUpdated.Clear();
+
+            sensors.Clear();
         }
 
         private void Update()
@@ -56,11 +64,50 @@ namespace SPTQuestingBots.BotLogic
 
             updateBosses();
             updateBossFollowers();
-            updateBotsInCombat();
-            updateIfBotsCanQuest();
-            updateIfBotsCanSprintToTheirObjective();
-            updateBotsWantToLoot();
             updateBotGroupFriendliness();
+
+            foreach (BotHiveMindAbstractSensor sensor in sensors.Values)
+            {
+                sensor.Update();
+            }
+        }
+
+        public static void UpdateValueForBot(BotHiveMindSensorType sensorType, BotOwner bot, bool value)
+        {
+            throwIfSensorNotRegistred(sensorType);
+            sensors[sensorType].UpdateForBot(bot, value);
+        }
+
+        public static bool GetValueForBot(BotHiveMindSensorType sensorType, BotOwner bot)
+        {
+            throwIfSensorNotRegistred(sensorType);
+            return sensors[sensorType].CheckForBot(bot);
+        }
+
+        public static bool GetValueForBossOfBot(BotHiveMindSensorType sensorType, BotOwner bot)
+        {
+            throwIfSensorNotRegistred(sensorType);
+            return sensors[sensorType].CheckForBossOfBot(bot);
+        }
+
+        public static bool GetValueForFollowers(BotHiveMindSensorType sensorType, BotOwner bot)
+        {
+            throwIfSensorNotRegistred(sensorType);
+            return sensors[sensorType].CheckForFollowers(bot);
+        }
+
+        public static bool GetValueForGroup(BotHiveMindSensorType sensorType, BotOwner bot)
+        {
+            throwIfSensorNotRegistred(sensorType);
+            return sensors[sensorType].CheckForGroup(bot);
+        }
+
+        public static DateTime GetLastLootingTimeForBoss(BotOwner bot)
+        {
+            throwIfSensorNotRegistred(BotHiveMindSensorType.WantsToLoot);
+            BotHiveMindWantsToLootSensor sensor = sensors[BotHiveMindSensorType.WantsToLoot] as BotHiveMindWantsToLootSensor;
+
+            return sensor.GetLastLootingTimeForBoss(bot);
         }
 
         public static void RegisterBot(BotOwner bot)
@@ -80,34 +127,14 @@ namespace SPTQuestingBots.BotLogic
                 botFollowers.Add(bot, new List<BotOwner>());
             }
 
-            if (!botIsInCombat.ContainsKey(bot))
-            {
-                botIsInCombat.Add(bot, false);
-            }
-
-            if (!botCanQuest.ContainsKey(bot))
-            {
-                botCanQuest.Add(bot, false);
-            }
-
-            if (!botCanSprintToObjective.ContainsKey(bot))
-            {
-                botCanSprintToObjective.Add(bot, false);
-            }
-
-            if (!botWantsToLoot.ContainsKey(bot))
-            {
-                botWantsToLoot.Add(bot, false);
-            }
-
-            if (!botLastLootingTime.ContainsKey(bot))
-            {
-                botLastLootingTime.Add(bot, DateTime.MinValue);
-            }
-
             if (!botFriendlinessUpdated.ContainsKey(bot))
             {
                 botFriendlinessUpdated.Add(bot, false);
+            }
+
+            foreach (BotHiveMindAbstractSensor sensor in sensors.Values)
+            {
+                sensor.RegisterBot(bot);
             }
         }
 
@@ -161,111 +188,6 @@ namespace SPTQuestingBots.BotLogic
             }
 
             return Vector3.Distance(bot.Position, botBosses[bot].Position);
-        }
-
-        public static void UpdateInCombat(BotOwner bot, bool inCombat)
-        {
-            updateDictionaryValue(botIsInCombat, bot, inCombat);
-        }
-
-        public static bool IsInCombat(BotOwner bot)
-        {
-            return botIsInCombat.ContainsKey(bot) && botIsInCombat[bot];
-        }
-
-        public static bool IsBossInCombat(BotOwner bot)
-        {
-            return checkBotState(botIsInCombat, GetBoss(bot)) ?? false;
-        }
-
-        public static bool AreFollowersInCombat(BotOwner bot)
-        {
-            return checkStateForAnyFollowers(botIsInCombat, bot);
-        }
-
-        public static bool IsGroupInCombat(BotOwner bot)
-        {
-            return checkStateForAnyGroupMembers(botIsInCombat, bot);
-        }
-
-        public static bool CanQuest(BotOwner bot)
-        {
-            return botCanQuest.ContainsKey(bot) && botCanQuest[bot];
-        }
-
-        public static bool CanBossQuest(BotOwner bot)
-        {
-            return checkBotState(botCanQuest, GetBoss(bot)) ?? false;
-        }
-
-        public static bool CanFollowersQuest(BotOwner bot)
-        {
-            return checkStateForAnyFollowers(botCanQuest, bot);
-        }
-
-        public static bool CanGroupQuest(BotOwner bot)
-        {
-            return checkStateForAnyGroupMembers(botCanQuest, bot);
-        }
-
-        public static bool CanSprintToObjective(BotOwner bot)
-        {
-            return botCanSprintToObjective.ContainsKey(bot) && botCanSprintToObjective[bot];
-        }
-
-        public static bool CanBossSprintToObjective(BotOwner bot)
-        {
-            return checkBotState(botCanSprintToObjective, GetBoss(bot)) ?? true;
-        }
-
-        public static bool CanFollowersSprintToObjective(BotOwner bot)
-        {
-            return checkStateForAnyFollowers(botCanSprintToObjective, bot);
-        }
-
-        public static bool CanGroupSprintToObjective(BotOwner bot)
-        {
-            return checkStateForAnyGroupMembers(botCanSprintToObjective, bot);
-        }
-
-        public static void UpdateWantsToLoot(BotOwner bot, bool wantsToLoot)
-        {
-            updateDictionaryValue(botWantsToLoot, bot, wantsToLoot);
-
-            if (wantsToLoot && (bot != null))
-            {
-                botLastLootingTime[bot] = DateTime.Now;
-            }
-        }
-
-        public static bool WantsToLoot(BotOwner bot)
-        {
-            return botWantsToLoot.ContainsKey(bot) && botWantsToLoot[bot];
-        }
-
-        public static bool DoesBossWantToLoot(BotOwner bot)
-        {
-            return checkBotState(botWantsToLoot, GetBoss(bot)) ?? false;
-        }
-
-        public static bool DoFollowersWantToLoot(BotOwner bot)
-        {
-            return checkStateForAnyFollowers(botWantsToLoot, bot);
-        }
-
-        public static bool DoesGroupWantToLoot(BotOwner bot)
-        {
-            return checkStateForAnyGroupMembers(botWantsToLoot, bot);
-        }
-
-        public static DateTime GetLastLootingTimeForBoss(BotOwner bot)
-        {
-            if ((bot == null) || !botBosses.ContainsKey(bot) || (botBosses[bot] == null))
-            {
-                return DateTime.MinValue;
-            }
-
-            return botLastLootingTime[bot];
         }
 
         public static void AssignTargetEnemyFromGroup(BotOwner bot)
@@ -344,72 +266,12 @@ namespace SPTQuestingBots.BotLogic
             //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group has the following enemies: " + string.Join(",", bot.BotsGroup.Enemies.Keys.Select(a => a.Profile.Nickname)));
         }
 
-        private static void updateDictionaryValue<T>(Dictionary<BotOwner, T> dict, BotOwner bot, T value)
+        private static void throwIfSensorNotRegistred(BotHiveMindSensorType sensorType)
         {
-            if (bot == null)
+            if (!sensors.ContainsKey(sensorType))
             {
-                return;
+                throw new InvalidOperationException("Sensor type " + sensorType.ToString() + " has not been registerd.");
             }
-
-            if (dict.ContainsKey(bot))
-            {
-                dict[bot] = value;
-            }
-            else
-            {
-                dict.Add(bot, value);
-            }
-        }
-
-        private static bool? checkBotState(Dictionary<BotOwner, bool> dict, BotOwner bot)
-        {
-            if (dict.TryGetValue(bot, out bool value))
-            {
-                return value;
-            }
-
-            return null;
-        }
-
-        private static bool checkStateForAnyFollowers(Dictionary<BotOwner, bool> dict, BotOwner bot)
-        {
-            if (!botFollowers.ContainsKey(bot))
-            {
-                return false;
-            }
-
-            foreach (BotOwner follower in botFollowers[bot].ToArray())
-            {
-                if (!dict.TryGetValue(follower, out bool value))
-                {
-                    continue;
-                }
-
-                if (value)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
-        {
-            if (checkBotState(dict, bot) == true)
-            {
-                return true;
-            }
-
-            foreach (BotOwner boss in botFollowers.Keys.ToArray())
-            {
-                if (checkStateForAnyFollowers(dict, boss))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private void updateBosses()
@@ -491,84 +353,6 @@ namespace SPTQuestingBots.BotLogic
 
                         botFollowers[boss].Remove(follower);
                     }
-                }
-            }
-        }
-
-        private void updateBotsInCombat()
-        {
-            foreach (BotOwner bot in botIsInCombat.Keys.ToArray())
-            {
-                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (bot == null)
-                {
-                    continue;
-                }
-
-                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
-                {
-                    botIsInCombat[bot] = false;
-                }
-            }
-        }
-
-        private void updateIfBotsCanQuest()
-        {
-            foreach (BotOwner bot in botCanQuest.Keys.ToArray())
-            {
-                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (bot == null)
-                {
-                    continue;
-                }
-
-                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
-                {
-                    botCanQuest[bot] = false;
-                }
-
-                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
-                {
-                    botCanQuest[bot] = objectiveManager?.IsObjectiveActive ?? false;
-                }
-            }
-        }
-
-        private void updateIfBotsCanSprintToTheirObjective()
-        {
-            foreach (BotOwner bot in botCanSprintToObjective.Keys.ToArray())
-            {
-                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (bot == null)
-                {
-                    continue;
-                }
-
-                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
-                {
-                    botCanSprintToObjective[bot] = true;
-                }
-
-                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
-                {
-                    botCanSprintToObjective[bot] = objectiveManager?.CanSprintToObjective() ?? true;
-                }
-            }
-        }
-
-        private void updateBotsWantToLoot()
-        {
-            foreach (BotOwner bot in botWantsToLoot.Keys.ToArray())
-            {
-                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (bot == null)
-                {
-                    continue;
-                }
-
-                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
-                {
-                    botWantsToLoot[bot] = false;
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
 
             // Only use this layer if the bot has a boss to follow and the boss can quest
-            if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.CanBossQuest(BotOwner))
+            if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner))
             {
                 return updatePreviousState(false);
             }
@@ -85,18 +86,18 @@ namespace SPTQuestingBots.BotLogic.Follow
             // Prevent the bot from following its boss if it's in combat
             if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
             {
-                if (!BotHiveMindMonitor.IsInCombat(BotOwner))
+                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
                 {
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
-                BotHiveMindMonitor.UpdateInCombat(BotOwner, true);
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return updatePreviousState(false);
             }
-            BotHiveMindMonitor.UpdateInCombat(BotOwner, false);
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
 
             // If any group members are in combat, the bot should also be in combat
-            if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
+            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
                 // WIP. Hopefully not needed with SAIN.
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
@@ -115,10 +116,10 @@ namespace SPTQuestingBots.BotLogic.Follow
                 || objectiveManager.BotMonitor.IsLooting()
             )
             {
-                BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, true);
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
                 return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
             }
-            BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, false);
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             return updatePreviousState(true);
         }

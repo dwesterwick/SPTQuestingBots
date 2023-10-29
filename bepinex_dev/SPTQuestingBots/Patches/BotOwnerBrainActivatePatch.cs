@@ -59,7 +59,7 @@ namespace SPTQuestingBots.Patches
                 BotQuestController.RegisterBoss(__instance);
             }
 
-            BotHiveMindMonitor.RegisterBot(__instance);
+            BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
         }
 
         private static bool TryConvertSpawnType(BotOwner __instance)

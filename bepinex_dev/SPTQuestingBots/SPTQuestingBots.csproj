@@ -89,10 +89,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotLogic\BotHiveMindMonitor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindAbstractSensor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindCanQuestSensor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindCanSprintToObjectiveSensor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindIsInCombatSensor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindMonitor.cs" />
     <Compile Include="BotLogic\Follow\BotFollowerLayer.cs" />
     <Compile Include="BotLogic\Follow\FollowBossAction.cs" />
     <Compile Include="BehaviorExtensions\GoToPositionAbstractAction.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindWantsToLootSensor.cs" />
     <Compile Include="Controllers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Models\BotBrainType.cs" />

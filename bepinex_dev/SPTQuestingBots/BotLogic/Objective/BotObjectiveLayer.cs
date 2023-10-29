@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -94,10 +95,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot wants to loot
             if (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
             {
-                BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, true);
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
                 return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
             }
-            BotHiveMindMonitor.UpdateWantsToLoot(BotOwner, false);
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             // Check if the bot is currently extracting or wants to extract via SAIN
             if (objectiveManager.BotMonitor.WantsToExtract())
@@ -136,7 +137,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
             {
-                if (!BotHiveMindMonitor.IsInCombat(BotOwner))
+                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
                 {
                     /*bool hasTarget = BotOwner.Memory.GoalTarget.HaveMainTarget();
                     if (hasTarget)
@@ -153,14 +154,14 @@ namespace SPTQuestingBots.BotLogic.Objective
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
-                BotHiveMindMonitor.UpdateInCombat(BotOwner, true);
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return updatePreviousState(pauseLayer());
             }
-            BotHiveMindMonitor.UpdateInCombat(BotOwner, false);
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
 
             // Check if any of the bot's group members are in combat
             // NOTE: This check MUST be performed after updating this bot's combate state!
-            if (BotHiveMindMonitor.IsGroupInCombat(BotOwner))
+            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
                 // WIP. Hopefully not needed with SAIN.
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);

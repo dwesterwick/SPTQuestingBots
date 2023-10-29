@@ -83,7 +83,7 @@ namespace SPTQuestingBots.BotLogic
         public bool ShouldWaitForFollowers()
         {
             // Check if the bot has any followers
-            IReadOnlyCollection<BotOwner> followers = BotHiveMindMonitor.GetFollowers(botOwner);
+            IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(botOwner);
             if (followers.Count == 0)
             {
                 return false;

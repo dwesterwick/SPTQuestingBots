@@ -25,9 +25,9 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return;
             }
 
-            CanSprint = BotHiveMindMonitor.CanBossSprintToObjective(BotOwner);
+            BotOwner boss = HiveMind.BotHiveMindMonitor.GetBoss(BotOwner);
+            CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
 
-            BotOwner boss = BotHiveMindMonitor.GetBoss(BotOwner);
             NavMeshPathStatus? pathStatus = RecalculatePath(boss.Position);
         }
     }

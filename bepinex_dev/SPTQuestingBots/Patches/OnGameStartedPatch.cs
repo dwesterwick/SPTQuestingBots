@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.BotLogic;
 
 namespace SPTQuestingBots.Patches
 {
@@ -22,8 +21,7 @@ namespace SPTQuestingBots.Patches
         {
             Controllers.LocationController.HasRaidStarted = true;
 
-            __instance.GetOrAddComponent<BotHiveMindMonitor>();
-            BotHiveMindMonitor.Clear();
+            __instance.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
         }
     }
 }

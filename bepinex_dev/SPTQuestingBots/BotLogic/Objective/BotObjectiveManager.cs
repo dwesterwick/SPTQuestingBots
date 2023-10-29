@@ -62,7 +62,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void updateBotType()
         {
-            if (!BotHiveMindMonitor.IsRegistered(botOwner))
+            if (!HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
             {
                 return;
             }

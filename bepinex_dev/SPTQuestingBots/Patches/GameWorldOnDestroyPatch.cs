@@ -27,6 +27,8 @@ namespace SPTQuestingBots.Patches
 
             // Needed for compatibility with Refringe's CustomRaidTimes mod
             Controllers.LocationController.ClearEscapeTimes();
+
+            BotLogic.HiveMind.BotHiveMindMonitor.Clear();
         }
     }
 }
