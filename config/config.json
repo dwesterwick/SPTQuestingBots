@@ -56,7 +56,10 @@
 		},
 		"max_follower_distance": {
 			"max_wait_time": 5,
-			"target": 15,
+			"target_range": {
+				"min": 10,
+				"max": 20
+			},
 			"nearest": 25,
 			"furthest": 40
 		}

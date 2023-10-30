@@ -18,6 +18,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         private Objective.BotObjectiveManager objectiveManager;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
+        private double maxDistanceFromBoss = ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
         private bool wasAbleBodied = true;
 
         public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
@@ -58,6 +59,16 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
+            // If the layer is active, run to the boss. Otherwise, allow a little more space
+            if (previousState)
+            {
+                maxDistanceFromBoss = ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+            }
+            else
+            {
+                maxDistanceFromBoss = ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Max;
+            }
+
             // Only use this layer if the bot has a boss to follow and the boss can quest
             if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner))
             {
@@ -66,7 +77,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             // Only enable the layer if the bot is too far from the boss
             float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-            if (!distanceToBoss.HasValue || (distanceToBoss.Value < ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Target))
+            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
             {
                 return updatePreviousState(false);
             }

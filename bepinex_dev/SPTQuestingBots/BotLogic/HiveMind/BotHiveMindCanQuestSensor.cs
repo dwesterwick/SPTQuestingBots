@@ -18,9 +18,14 @@ namespace SPTQuestingBots.BotLogic.HiveMind
         {
             Action<BotOwner> updateFromObjectiveManager = new Action<BotOwner>((bot) =>
             {
-                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out Objective.BotObjectiveManager objectiveManager) == true)
+                Objective.BotObjectiveManager objectiveManager = Objective.BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                if (objectiveManager != null)
                 {
-                    botState[bot] = objectiveManager?.IsObjectiveActive ?? defaultValue;
+                    botState[bot] = objectiveManager.IsObjectiveActive;
+                }
+                else
+                {
+                    botState[bot] = defaultValue;
                 }
             });
 

@@ -12,8 +12,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_wait_time")]
         public float MaxWaitTime { get; set; } = 10;
 
-        [JsonProperty("target")]
-        public float Target { get; set; } = 20;
+        [JsonProperty("target_range")]
+        public MinMaxConfig TargetRange { get; set; } = new MinMaxConfig();
 
         [JsonProperty("nearest")]
         public float Nearest { get; set; } = 35;

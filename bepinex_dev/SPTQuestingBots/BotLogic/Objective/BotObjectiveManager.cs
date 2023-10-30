@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
@@ -50,6 +51,31 @@ namespace SPTQuestingBots.BotLogic.Objective
         public float DistanceToObjective
         {
             get { return Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN; }
+        }
+
+        public static BotObjectiveManager GetObjectiveManagerForBot(BotOwner bot)
+        {
+            if (bot == null)
+            {
+                return null;
+            }
+
+            if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
+            {
+                return null;
+            }
+
+            if (bot.GetPlayer?.gameObject == null)
+            {
+                return null;
+            }
+
+            if (bot.GetPlayer.gameObject.TryGetComponent(out BotObjectiveManager objectiveManager))
+            {
+                return objectiveManager;
+            }
+
+            return null;
         }
 
         public void Init(BotOwner _botOwner)
