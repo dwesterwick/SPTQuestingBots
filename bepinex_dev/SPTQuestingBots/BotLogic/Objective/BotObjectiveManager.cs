@@ -60,17 +60,24 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return null;
             }
 
-            if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
+            if (!bot.isActiveAndEnabled || bot.IsDead)
             {
                 return null;
             }
 
-            if (bot.GetPlayer?.gameObject == null)
+            Player botPlayer = bot.GetPlayer;
+            if (botPlayer == null)
             {
                 return null;
             }
 
-            if (bot.GetPlayer.gameObject.TryGetComponent(out BotObjectiveManager objectiveManager))
+            GameObject obj = botPlayer.gameObject;
+            if (obj == null)
+            {
+                return null;
+            }
+
+            if (obj.TryGetComponent(out BotObjectiveManager objectiveManager))
             {
                 return objectiveManager;
             }

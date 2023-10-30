@@ -55,7 +55,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     continue;
                 }
 
-                if ((bot?.isActiveAndEnabled == false) || (bot?.IsDead == true))
+                if (!bot.isActiveAndEnabled || bot.IsDead)
                 {
                     botState[bot] = defaultValue;
                 }

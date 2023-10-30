@@ -27,12 +27,26 @@ namespace SPTQuestingBots.Patches
 
             //Controllers.LoggingController.LogInfo("Checking if " + offer.Profile.Nickname + " can be a follower for " + __instance.Owner.Profile.Nickname + "...");
 
-            if (!BotGenerator.IsBotFromInitialPMCSpawns(offer))
+            IEnumerable<BotOwner> groupMembers;
+            if (BotGenerator.SpawnedInitialPMCCount > 0)
             {
-                return true;
-            }
+                if (!BotGenerator.IsBotFromInitialPMCSpawns(offer))
+                {
+                    return true;
+                }
 
-            IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(__instance.Owner);
+                groupMembers = BotGenerator.GetSpawnGroupMembers(__instance.Owner);
+            }
+            else
+            {
+                List<BotOwner> groupMemberList = new List<BotOwner>();
+                for (int m = 0; m < offer.BotsGroup.MembersCount; m++)
+                {
+                    groupMemberList.Add(offer.BotsGroup.Member(m));
+                }
+
+                groupMembers = groupMemberList;
+            }
 
             //Controllers.LoggingController.LogInfo(__instance.Owner.Profile.Nickname + "'s group contains: " + string.Join(",", groupMembers.Select(m => m.Profile.Nickname)));
 

@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_loot_scan_time")]
         public float MaxLootScanTime { get; set; } = 4;
 
+        [JsonProperty("max_distance_from_boss")]
+        public float MaxDistanceFromBoss { get; set; } = 75;
+
         public BreakForLootingConfig()
         {
 

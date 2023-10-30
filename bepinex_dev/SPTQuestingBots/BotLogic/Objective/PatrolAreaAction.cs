@@ -7,13 +7,13 @@ using EFT;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    public class HoldAtObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
+    public class PatrolAreaAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {
         private GClass114 baseAction = null;
 
-        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 1)
+        public PatrolAreaAction(BotOwner _BotOwner) : base(_BotOwner, 1)
         {
-            baseAction = GClass394.CreateNode(BotLogicDecision.holdPosition, BotOwner);
+            baseAction = GClass394.CreateNode(BotLogicDecision.simplePatrol, BotOwner);
             baseAction.Awake();
         }
 

@@ -22,6 +22,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
+        private bool isWaitingForFollowers = false;
         private Vector3? lastBotPosition = null;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
@@ -38,6 +39,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override Action GetNextAction()
         {
+            if (isWaitingForFollowers)
+            {
+                return new Action(typeof(HoldAtObjectiveAction), "WaitForFollowers");
+            }
+
             if (objectiveManager.IsCloseToObjective())
             {
                 return new Action(typeof(HoldAtObjectiveAction), "HoldAtObjective");
@@ -57,6 +63,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 return previousState;
             }
+
+            isWaitingForFollowers = false;
 
             // Check if somebody disabled questing in the F12 menu
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
@@ -109,21 +117,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (objectiveManager.BotMonitor.ShouldWaitForFollowers())
-            {
-                followersTooFarTimer.Start();
-            }
-            else
-            {
-                followersTooFarTimer.Reset();
-            }
-
-            if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
-            {
-                //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is waiting for its followers...");
-                return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime));
-            }
-
             if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
             {
                 wasAbleBodied = false;
@@ -167,6 +160,24 @@ namespace SPTQuestingBots.BotLogic.Objective
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
 
                 return updatePreviousState(false);
+            }
+
+            if (objectiveManager.BotMonitor.ShouldWaitForFollowers())
+            {
+                followersTooFarTimer.Start();
+            }
+            else
+            {
+                followersTooFarTimer.Reset();
+            }
+
+            if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
+            {
+                isWaitingForFollowers = true;
+
+                //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is waiting for its followers...");
+                //return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime));
+                return updatePreviousState(true);
             }
 
             // Check if the bot is allowed to select a new objective based on the time it last selected one

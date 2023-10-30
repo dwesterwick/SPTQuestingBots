@@ -180,11 +180,11 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return new ReadOnlyCollection<BotOwner>(allGroupMembers);
         }
 
-        public static float? GetDistanceToBoss(BotOwner bot)
+        public static float GetDistanceToBoss(BotOwner bot)
         {
             if (!HasBoss(bot))
             {
-                return null;
+                return 0;
             }
 
             return Vector3.Distance(bot.Position, botBosses[bot].Position);

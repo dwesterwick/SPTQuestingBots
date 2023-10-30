@@ -120,11 +120,14 @@ namespace SPTQuestingBots.BotLogic.Follow
             TimeSpan timeSinceBossLastLooted = DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
             bool bossWillAllowLooting = timeSinceBossLastLooted.TotalSeconds > ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
 
+            // Don't allow the follower to wander too far from the boss when it's looting
+            bool tooFarFromBossForLooting = BotHiveMindMonitor.GetDistanceToBoss(BotOwner) > ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
+
             // Only allow looting if the bot is already looting or its boss will allow it
             if
             (
-                (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay) && bossWillAllowLooting)
-                || objectiveManager.BotMonitor.IsLooting()
+                (bossWillAllowLooting && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+                || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.IsLooting())
             )
             {
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
