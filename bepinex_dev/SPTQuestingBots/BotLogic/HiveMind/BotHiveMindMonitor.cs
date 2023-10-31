@@ -190,6 +190,25 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return Vector3.Distance(bot.Position, botBosses[bot].Position);
         }
 
+        public static Vector3 GetLocationOfNearestGroupMember(BotOwner bot)
+        {
+            IReadOnlyCollection<BotOwner> members = GetAllGroupMembers(bot);
+            if (members.Count == 0)
+            {
+                return bot.Position;
+            }
+
+            Dictionary<BotOwner, float> distanceToMember = new Dictionary<BotOwner, float>();
+            foreach (BotOwner member in members)
+            {
+                distanceToMember.Add(member, Vector3.Distance(bot.Position, member.Position));
+            }
+
+            BotOwner nearestMember = distanceToMember.OrderBy(x => x.Value).First().Key;
+
+            return nearestMember.Position;
+        }
+
         public static void AssignTargetEnemyFromGroup(BotOwner bot)
         {
             if (bot.Memory.HaveEnemy || bot.Memory.DangerData.HaveCloseDanger)

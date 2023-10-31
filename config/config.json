@@ -57,6 +57,7 @@
 		},
 		"max_follower_distance": {
 			"max_wait_time": 5,
+			"min_regroup_time": 1,
 			"target_range": {
 				"min": 10,
 				"max": 20

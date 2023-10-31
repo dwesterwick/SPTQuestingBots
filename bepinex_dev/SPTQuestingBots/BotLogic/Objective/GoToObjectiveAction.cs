@@ -10,7 +10,7 @@ using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    internal class GoToObjectiveAction : GoToPositionAbstractAction
+    internal class GoToObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         public GoToObjectiveAction(BotOwner _BotOwner) : base(_BotOwner)
         {

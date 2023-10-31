@@ -17,7 +17,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         GoToObjective,
         FollowBoss,
         HoldPosition,
-        PatrolArea
+        Regroup
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -60,7 +60,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.GoToObjective: return new Action(typeof(GoToObjectiveAction), actionReason);
                 case BotActionType.FollowBoss: return new Action(typeof(FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(HoldAtObjectiveAction), actionReason);
-                case BotActionType.PatrolArea: return new Action(typeof(PatrolAreaAction), actionReason);
+                case BotActionType.Regroup: return new Action(typeof(RegroupAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

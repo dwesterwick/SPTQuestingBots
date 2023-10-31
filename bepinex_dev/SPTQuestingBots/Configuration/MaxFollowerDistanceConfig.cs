@@ -10,7 +10,10 @@ namespace SPTQuestingBots.Configuration
     public class MaxFollowerDistanceConfig
     {
         [JsonProperty("max_wait_time")]
-        public float MaxWaitTime { get; set; } = 10;
+        public float MaxWaitTime { get; set; } = 5;
+
+        [JsonProperty("min_regroup_time")]
+        public float MinRegroupTime { get; set; } = 1;
 
         [JsonProperty("target_range")]
         public MinMaxConfig TargetRange { get; set; } = new MinMaxConfig();

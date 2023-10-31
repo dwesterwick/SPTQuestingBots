@@ -52,10 +52,12 @@
 			"min_time_between_follower_looting_checks": 30,
 			"min_time_between_looting_events": 80,
 			"max_time_to_start_looting": 2,
-			"max_loot_scan_time": 4
+			"max_loot_scan_time": 4,
+			"max_distance_from_boss": 75
 		},
 		"max_follower_distance": {
 			"max_wait_time": 5,
+			"min_regroup_time": 1,
 			"target_range": {
 				"min": 10,
 				"max": 20

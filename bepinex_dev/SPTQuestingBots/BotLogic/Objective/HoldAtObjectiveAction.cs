@@ -11,7 +11,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     {
         private GClass114 baseAction = null;
 
-        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 1)
+        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             baseAction = GClass394.CreateNode(BotLogicDecision.holdPosition, BotOwner);
             baseAction.Awake();
@@ -29,13 +29,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override void Update()
         {
+            baseAction.Update();
+
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
             {
                 return;
             }
-
-            baseAction.Update();
         }
     }
 }

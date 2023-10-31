@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
-    internal class FollowBossAction : GoToPositionAbstractAction
+    internal class FollowBossAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         public FollowBossAction(BotOwner _BotOwner) : base(_BotOwner)
         {

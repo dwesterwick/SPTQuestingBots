@@ -162,7 +162,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is waiting for its followers...");
                 
-                setNextAction(BotActionType.HoldPosition, "WaitForFollowers");
+                setNextAction(BotActionType.Regroup, "Regroup");
                 return updatePreviousState(true);
             }
 
