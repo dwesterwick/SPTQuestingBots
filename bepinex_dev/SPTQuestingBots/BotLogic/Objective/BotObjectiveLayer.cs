@@ -22,7 +22,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
-        private bool isWaitingForFollowers = false;
         private Vector3? lastBotPosition = null;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
@@ -39,22 +38,12 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override Action GetNextAction()
         {
-            if (isWaitingForFollowers)
-            {
-                return new Action(typeof(HoldAtObjectiveAction), "WaitForFollowers");
-            }
-
-            if (objectiveManager.IsCloseToObjective())
-            {
-                return new Action(typeof(HoldAtObjectiveAction), "HoldAtObjective");
-            }
-
-            return new Action(typeof(GoToObjectiveAction), "GoToObjective");
+            return base.GetNextAction();
         }
 
         public override bool IsCurrentActionEnding()
         {
-            return !objectiveManager.IsObjectiveActive || objectiveManager.IsObjectiveReached;
+            return base.IsCurrentActionEnding();
         }
 
         public override bool IsActive()
@@ -63,8 +52,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 return previousState;
             }
-
-            isWaitingForFollowers = false;
 
             // Check if somebody disabled questing in the F12 menu
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
@@ -173,10 +160,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
             {
-                isWaitingForFollowers = true;
-
                 //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is waiting for its followers...");
-                //return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime));
+                
+                setNextAction(BotActionType.HoldPosition, "WaitForFollowers");
                 return updatePreviousState(true);
             }
 
@@ -223,6 +209,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     wasStuck = false;
                 }
 
+                setNextAction(BotActionType.GoToObjective, "GoToObjective");
                 return updatePreviousState(true);
             }
 

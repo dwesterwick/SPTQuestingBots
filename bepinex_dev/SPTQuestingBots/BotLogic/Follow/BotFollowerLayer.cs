@@ -33,12 +33,12 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public override Action GetNextAction()
         {
-            return new Action(typeof(FollowBossAction), "FollowBoss");
+            return base.GetNextAction();
         }
 
         public override bool IsCurrentActionEnding()
         {
-            return false;
+            return base.IsCurrentActionEnding();
         }
 
         public override bool IsActive()
@@ -135,6 +135,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
+            setNextAction(BotActionType.FollowBoss, "FollowBoss");
             return updatePreviousState(true);
         }
     }

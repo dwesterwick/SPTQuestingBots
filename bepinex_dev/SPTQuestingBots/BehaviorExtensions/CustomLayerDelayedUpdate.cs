@@ -6,14 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.BotLogic.Follow;
+using SPTQuestingBots.BotLogic.Objective;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
+    public enum BotActionType
+    {
+        Undefined,
+        GoToObjective,
+        FollowBoss,
+        HoldPosition,
+        PatrolArea
+    }
+
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
     {
         protected bool previousState { get; private set; } = false;
-        protected bool wasStuck = false;
+        protected bool wasStuck { get; set; } = false;
 
+        private BotActionType nextAction = BotActionType.Undefined;
+        private BotActionType previousAction = BotActionType.Undefined;
+        private string actionReason = "???";
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
         private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
@@ -30,6 +44,32 @@ namespace SPTQuestingBots.BehaviorExtensions
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority, int delayInterval) : this(_botOwner, _priority)
         {
             updateInterval = delayInterval;
+        }
+
+        public override bool IsCurrentActionEnding()
+        {
+            return nextAction != previousAction;
+        }
+
+        public override Action GetNextAction()
+        {
+            previousAction = nextAction;
+
+            switch (nextAction)
+            {
+                case BotActionType.GoToObjective: return new Action(typeof(GoToObjectiveAction), actionReason);
+                case BotActionType.FollowBoss: return new Action(typeof(FollowBossAction), actionReason);
+                case BotActionType.HoldPosition: return new Action(typeof(HoldAtObjectiveAction), actionReason);
+                case BotActionType.PatrolArea: return new Action(typeof(PatrolAreaAction), actionReason);
+            }
+
+            throw new InvalidOperationException("Invalid action selected for layer");
+        }
+
+        protected void setNextAction(BotActionType actionType, string reason)
+        {
+            nextAction = actionType;
+            actionReason = reason;
         }
 
         protected bool canUpdate()
