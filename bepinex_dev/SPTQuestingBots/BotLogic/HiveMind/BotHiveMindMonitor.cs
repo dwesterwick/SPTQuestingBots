@@ -315,7 +315,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     continue;
                 }
 
-                if (!botBosses[bot].isActiveAndEnabled || botBosses[bot].IsDead)
+                if (botBosses[bot].IsDead)
                 {
                     Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].Profile.Nickname + " is now dead.");
 
@@ -366,7 +366,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 foreach (BotOwner follower in botFollowers[boss].ToArray())
                 {
-                    if ((follower == null) || !follower.isActiveAndEnabled || follower.IsDead)
+                    if ((follower == null) || follower.IsDead)
                     {
                         Controllers.LoggingController.LogInfo("Follower " + follower.Profile.Nickname + " for " + boss.Profile.Nickname + " is now dead.");
 

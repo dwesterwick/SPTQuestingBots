@@ -144,12 +144,13 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
         private bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
-            if (checkBotState(dict, bot) == true)
+            BotOwner boss = BotHiveMindMonitor.GetBoss(bot) ?? bot;
+
+            if (checkBotState(dict, boss) == true)
             {
                 return true;
             }
 
-            BotOwner boss = BotHiveMindMonitor.GetBoss(bot) ?? bot;
             if (checkStateForAnyFollowers(dict, boss))
             {
                 return true;

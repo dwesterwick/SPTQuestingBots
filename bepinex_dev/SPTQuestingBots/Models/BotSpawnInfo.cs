@@ -25,6 +25,8 @@ namespace SPTQuestingBots.Models
         // The key should be Profile.Id for each bot that's generated
         private Dictionary<string, WildSpawnType> OriginalBotSpawnTypes = new Dictionary<string, WildSpawnType>();
 
+        public int Count => Data?.Profiles?.Count ?? 0;
+
         public BotSpawnInfo(int groupNum, GClass513 data)
         {
             GroupNumber = groupNum;

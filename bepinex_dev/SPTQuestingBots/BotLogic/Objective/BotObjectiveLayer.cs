@@ -146,6 +146,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // WIP. Hopefully not needed with SAIN.
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
 
+                //IReadOnlyCollection<BotOwner> groupMembers = BotHiveMindMonitor.GetAllGroupMembers(BotOwner);
+                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.Profile.Nickname)));
+
                 return updatePreviousState(false);
             }
 

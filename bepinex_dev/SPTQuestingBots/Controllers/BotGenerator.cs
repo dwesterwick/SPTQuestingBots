@@ -217,7 +217,7 @@ namespace SPTQuestingBots.Controllers
             ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 0.98 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             
             // Spawn PMC's
-            StartCoroutine(SpawnInitialPMCs(initialPMCGroups, LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
+            StartCoroutine(SpawnInitialPMCs(initialPMCGroups.ToArray(), LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
         public static bool IsBotFromInitialPMCSpawns(BotOwner bot)
@@ -376,7 +376,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        private IEnumerator SpawnInitialPMCs(IEnumerable<Models.BotSpawnInfo> initialPMCGroups, SpawnPointParams[] allSpawnPoints, ESpawnCategoryMask allowedSpawnPointTypes, float minDistanceFromPlayers)
+        private IEnumerator SpawnInitialPMCs(Models.BotSpawnInfo[] initialPMCGroups, SpawnPointParams[] allSpawnPoints, ESpawnCategoryMask allowedSpawnPointTypes, float minDistanceFromPlayers)
         {
             try
             {
@@ -384,8 +384,23 @@ namespace SPTQuestingBots.Controllers
 
                 // Determine how many PMC's are allowed to spawn
                 int allowedSpawns = maxAlivePMCs - RemainingAliveInitialPMCs().Count();
-                Models.BotSpawnInfo[] initialPMCGroupsToSpawn = initialPMCGroups.Where(g => !g.HasSpawned).Take(allowedSpawns).ToArray();
-                if (initialPMCGroupsToSpawn.Length == 0)
+                List<Models.BotSpawnInfo> initialPMCGroupsToSpawn = new List<BotSpawnInfo>();
+                for (int i = 0; i < initialPMCGroups.Length;  i++)
+                {
+                    if (initialPMCGroups[i].HasSpawned)
+                    {
+                        continue;
+                    }
+
+                    if (initialPMCGroupsToSpawn.Sum(g => g.Count) + initialPMCGroups[i].Count > allowedSpawns)
+                    {
+                        break;
+                    }
+
+                    initialPMCGroupsToSpawn.Add(initialPMCGroups[i]);
+                }
+
+                if (initialPMCGroupsToSpawn.Count == 0)
                 {
                     yield break;
                 }
@@ -399,10 +414,10 @@ namespace SPTQuestingBots.Controllers
                     allSpawnPoints[s].DelayToCanSpawnSec = 0;
                 }
 
-                LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC group(s)...");
+                LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Count + " initial PMC group(s)...");
                 enumeratorWithTimeLimit.Reset();
                 yield return enumeratorWithTimeLimit.Run(initialPMCGroupsToSpawn, spawnInitialPMCsAtSpawnPoint, allowedSpawnPointTypes, minDistanceFromPlayers);
-                //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Length + " initial PMC groups...done.");
+                //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Count + " initial PMC groups...done.");
 
                 // Restore the original "DelayToCanSpawnSec" values for all spawn points
                 for (int s = 0; s < allSpawnPoints.Length; s++)
