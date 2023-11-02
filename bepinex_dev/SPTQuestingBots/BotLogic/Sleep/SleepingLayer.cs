@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.UI.Ragfair;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
@@ -28,7 +29,12 @@ namespace SPTQuestingBots.BotLogic.Sleep
 
         public override Action GetNextAction()
         {
-            return new Action(typeof(SleepingAction), "Sleeping");
+            return base.GetNextAction();
+        }
+
+        public override bool IsCurrentActionEnding()
+        {
+            return base.IsCurrentActionEnding();
         }
 
         public override bool IsActive()
@@ -83,10 +89,11 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 return updateUseLayer(false);
             }
 
-            // Enumerate all other alive bots on the map
+            // Enumerate all other bots on the map that are alive and active
             IEnumerable<BotOwner> allOtherBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(b => b.BotState == EBotState.Active)
                 .Where(b => !b.IsDead)
+                .Where(b => b.gameObject.activeSelf)
                 .Where(b => b.Id != BotOwner.Id);
 
             foreach (BotOwner bot in allOtherBots)
@@ -98,6 +105,19 @@ namespace SPTQuestingBots.BotLogic.Sleep
                     continue;
                 }
 
+                // Get the bot's current group members
+                List<BotOwner> groupMemberList = new List<BotOwner>();
+                for (int m = 0; m < bot.BotsGroup.MembersCount; m++)
+                {
+                    groupMemberList.Add(bot.BotsGroup.Member(m));
+                }
+
+                // Ignore bots that are in the same group
+                if (groupMemberList.Contains(BotOwner))
+                {
+                    continue;
+                }
+
                 // If a questing bot is close to this one, don't allow this one to sleep
                 if (Vector3.Distance(BotOwner.Position, bot.Position) <= QuestingBotsPluginConfig.SleepingMinDistanceToPMCs.Value)
                 {
@@ -105,12 +125,8 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 }
             }
 
+            setNextAction(BehaviorExtensions.BotActionType.Sleep, "Sleep");
             return updateUseLayer(true);
-        }
-
-        public override bool IsCurrentActionEnding()
-        {
-            return !useLayer;
         }
 
         private bool updateUseLayer(bool newValue)

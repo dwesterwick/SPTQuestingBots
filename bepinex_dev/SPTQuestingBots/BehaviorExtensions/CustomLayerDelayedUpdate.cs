@@ -8,6 +8,7 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SPTQuestingBots.BotLogic.Follow;
 using SPTQuestingBots.BotLogic.Objective;
+using SPTQuestingBots.BotLogic.Sleep;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
@@ -17,7 +18,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         GoToObjective,
         FollowBoss,
         HoldPosition,
-        Regroup
+        Regroup,
+        Sleep
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -61,6 +63,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.FollowBoss: return new Action(typeof(FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(HoldAtObjectiveAction), actionReason);
                 case BotActionType.Regroup: return new Action(typeof(RegroupAction), actionReason);
+                case BotActionType.Sleep: return new Action(typeof(SleepingAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");
