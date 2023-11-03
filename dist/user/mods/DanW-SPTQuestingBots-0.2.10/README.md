@@ -60,6 +60,8 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
 
 **NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) that manage spawning! Otherwise, there will be too many PMC's on the map.**
 
+**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
+
 **---------- Bot Quest-Selection Algorithm Overview ----------**
 
 1) All quests are filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (it's not blocked by player level, etc.)
@@ -111,6 +113,24 @@ The three major data structures are:
 * If you want a bot to go to several specific positions that are close to each other (i.e. small, adjacent rooms), use multiple steps in a single objective instead of using multiple objectives each with a single step. 
 * Bots will use the NavMesh to calculate the more efficient path to their objective (using an internal Unity algorithm). They cannot perform complex actions to reach objective locations, so avoid placing objective steps on top of objects (i.e. inside truck beds) or in areas that are difficult to reach. Bots will not know to crouch or jump to get around obstacles. 
 
+**---------- PMC Group Spawning System ----------**
+
+* Spawn chances for various group sizes are configurable. By default, solo spawns are most likely, but 2-man and 3-man groups will be commonly seen. 4-man and 5-man groups are rare but possible. 
+* EFT will assign one bot in the group to be a "boss", and the boss will select the quest to perform. All other bots in the group will follow the boss.
+* If any group members stray too far from the boss, the boss will stop questing and attempt to regroup
+* If any member of the group engages in combat, all other members will stop questing (or following) and engage in combat too. 
+* If the boss is allowed to sprint, so are its followers and vice versa. 
+* If the boss of a PMC group dies, EFT will automatically assign a new one from the remaining members
+* Followers are only allowed to loot if they remain within a certain distance from the boss
+
+**---------- AI Limiter System ----------**
+
+Since normal AI Limit mods will disable bots that are questing (which will prevent them from exploring the map), this mod has its own AI Limiter with the following features:
+* AI Limiting must be explicitly enabled in the F12 menu. 
+* AI Limiting must be explicitly enabled for bots that are questing for each map. By default, questing bots will only be disabled on Streets. 
+* Bots will only be allowed to be disabled if they are beyond a certain distance (200m by default) from you
+* Bots will only be allowed to be disabled if they are beyond a certain distance (75m by default) from other bots that are questing (and not disabled)
+
 **---------- Configuration Options in *config.json* ----------**
 
 **Main Options:**
@@ -151,10 +171,15 @@ The three major data structures are:
 * **bot_questing_requirements.max_overweight_percentage**: The maximum total weight permitted for bots (as a percentage of their overweight threshold) or they will not be allowed to quest. This is **100%** by default. 
 * **bot_questing_requirements.break_for_looting.enabled**: If **true** (the default setting), bots will temporarily stop questing at certain intervals to check for loot (or whatever). 
 * **bot_questing_requirements.break_for_looting.min_time_between_looting_checks**: The minimum delay (in seconds) after a bot takes a break to check for loot before it will be allowed to take a break again. If this value is very low, bots may frequently back-track and may never reach their objectives. If this value is high, bots will rarely loot. This is **50** s by default. 
+* **bot_questing_requirements.break_for_looting.min_time_between_follower_looting_checks**: The minimum delay (in seconds) after any of a bot's followers take a break to check for loot before they will be allowed to take a break again. If this value is very low, bot groups may frequently back-track and may never reach their objectives. If this value is high, followers will rarely loot. This is **30** s by default. 
 * **bot_questing_requirements.break_for_looting.min_time_between_looting_events**: The minimum delay (in seconds) after a bot successfully finds loot before it will be allowed to take a break again. If this value is very low, bots may frequently back-track and may never reach their objectives. If this value is high, bots will rarely loot. This supersedes **bot_questing_requirements.break_for_looting.min_time_between_looting_checks**, and it requires [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (or it will be ignored). This is **80** s by default. 
 * **bot_questing_requirements.break_for_looting.max_time_to_start_looting**: The duration of each break (in seconds). If one of the [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) brain layers is not active after this time, the bot will resume questing. This is **2** s by default. 
 * **bot_questing_requirements.break_for_looting.max_loot_scan_time**: The maximum time that bots will be allowed to search for loot via [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/). If the bot hasn't found any loot within this time, it will continue questing. If it has found loot, it will not continue questing until it's completely finished with looting. This is **4** s by default. 
-* **bot_questing_requirements.max_follower_distance.nearest**: If the bot has any followers, it will not be allowed to quest if its nearest follower is more than this distance (in meters) from it. This is **20** m by default. 
+* **bot_questing_requirements.break_for_looting.max_distance_from_boss**: The maximum distance (in meters) that a follower will be allowed to travel from its boss while looting. If the follower exceeds this distance, it will be forced to stop looting and regroup. This is **75** m by default. 
+* **bot_questing_requirements.max_follower_distance.max_wait_time**: The maximum time (in seconds) that a bot's followers are allowed to be too far from it before it will stop questing and regroup. This is **5** s by default. 
+* **bot_questing_requirements.max_follower_distance.min_regroup_time**: The minimum time (in seconds) that a bot will be forced to regroup with its followers if it's too far from them. After this time, the bot will be allowed to patrol its area instead. This is **1** s by default. 
+* **bot_questing_requirements.max_follower_distance.target_range.min/max**: The allowed range of distances (in meters) that followers will try to be from their boss while questing. If a follower needs to get closer to its boss, it will try to get within the **min** distance (**10** m by default) of it. After that, it will be allowed to wander up to the **max** distance (**20** m by default) from it.
+* **bot_questing_requirements.max_follower_distance.nearest**: If the bot has any followers, it will not be allowed to quest if its nearest follower is more than this distance (in meters) from it. This is **25** m by default. 
 * **bot_questing_requirements.max_follower_distance.furthest**: If the bot has any followers, it will not be allowed to quest if its furthest follower is more than this distance (in meters) from it. This is **40** m by default. 
 * **bot_quests.distance_randomness**: The amount of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest objective available to it. By default, this is **30%**. 
 * **bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
@@ -179,6 +204,7 @@ The three major data structures are:
 * **initial_PMC_spawns.min_distance_from_players_during_raid_factory**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of initial PMC spawns and is **50** m by default. However, this is only used for Factory raids and replaces **initial_PMC_spawns.min_distance_from_players_during_raid**.
 * **initial_PMC_spawns.max_alive_initial_pmcs**: The maximum number of initial PMC's that can be alive at the same time on each map. This only applies to initial PMC's generated by this mod; it doesn't apply to PMC's spawned by other mods or for Scavs converted to PMC's automatically by SPT. 
 * **initial_PMC_spawns.initial_pmcs_vs_raidET**: If you spawn late into the raid, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of initial PMC's allowed] pairs, and there is no limit to the number of pairs. This requires [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) to function. 
+* **initial_PMC_spawns.bots_per_group_distribution**: An array describing how likely PMC groups of various sizes are allowed to spawn. When generating initial PMC groups, this mod will select a random number for each group between 0 and 1. It will then use interpolation to determine how many bots to add to the group using this array. The first column is the look-up value for the random number selected for the group, and the second column is the number of bots to add to the group. The interpolated value for number of bots is rounded to the nearest integer.
 * **initial_PMC_spawns.spawn_retry_time**: If any PMC's fail to spawn, no other attempts will be made to spawn PMC's for this amount of time (in seconds). By default, this is **10** s.
 * **initial_PMC_spawns.min_other_bots_allowed_to_spawn**: PMC's will not be allowed to spawn unless there are fewer than this value below the maximum bot count for the map. For example, if this value is 4 and the maximum bot cap is 20, PMC's will not be allowed to spawn if there are 17 or more alive bots in the map. This is to retain a "buffer" below the maximum bot cap so that Scavs are able to continue spawning throughout the raid. This is **4** by default. 
 * **initial_PMC_spawns.max_initial_bosses**: The maximum number of bosses that are allowed to spawn at the beginning of the raid (including Raiders and Rogues). After this number is reached, all remaining initial boss spawns will be canceled. If this number is too high, few Scavs will be able to spawn after the initial PMC spawns. This is **10** by default. 
@@ -190,7 +216,7 @@ The three major data structures are:
 **---------- Known Issues ----------**
 
 **Objective System:**
-* Mods that add a lot of new quests may cause latency issues that may result in game stability problems
+* Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
 * Bots tend to get trapped in certain areas. Known areas:
     * Factory Gate 1 (should be fixed as of the Waypoints release for SPT-AKI 3.7.0; need to test again)
@@ -231,7 +257,7 @@ The three major data structures are:
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.3.0** (ETA: Early November)
+* **0.3.0** (ETA: Mid November)
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Rework quest data structures and logic layer to allow additional actions. Initially planned:
@@ -241,12 +267,14 @@ The three major data structures are:
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
     * Refactoring terrible code
-* **0.3.1** (ETA: Late November)
+* **0.3.1** (ETA: Early December)
     * Add new quest-objective actions: unlocking doors and pulling levers
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
+    * Add new quest type: air-drop chaser
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
 * **0.3.2** (ETA: Mid December)
+    * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 * **Backlog**
