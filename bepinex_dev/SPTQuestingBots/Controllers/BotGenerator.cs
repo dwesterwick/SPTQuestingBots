@@ -241,11 +241,13 @@ namespace SPTQuestingBots.Controllers
             {
                 foreach (Profile profile in info.Data.Profiles)
                 {
-                    if (profile.Id == bot.Profile.Id)
+                    if (profile.Id != bot.Profile.Id)
                     {
-                        matchingGroupData = info;
-                        return true;
+                        continue;
                     }
+
+                    matchingGroupData = info;
+                    return true;
                 }
             }
 

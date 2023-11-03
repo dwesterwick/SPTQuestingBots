@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
-using EFT.Interactive;
-using EFT.UI;
-using HarmonyLib;
 using UnityEngine;
 using UnityEngine.AI;
 

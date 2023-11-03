@@ -1,27 +1,23 @@
-﻿using DrakiaXYZ.BigBrain.Brains;
-using EFT;
-using SPTQuestingBots.BehaviorExtensions;
-using SPTQuestingBots.BotLogic.HiveMind;
-using SPTQuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
+using EFT;
+using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.HiveMind;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class BotFollowerLayer : CustomLayerDelayedUpdate
     {
-        private static int updateInterval = 25;
-
         private Objective.BotObjectiveManager objectiveManager;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private double maxDistanceFromBoss = ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
         private bool wasAbleBodied = true;
 
-        public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
+        public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
             objectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<Objective.BotObjectiveManager>();
         }

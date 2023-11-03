@@ -31,10 +31,14 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
-            float targetDistance = (float)ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+            // Force the bot to regroup for a certain amount of time after starting this action
             bool mustRegroup = actionElapsedTime.ElapsedMilliseconds / 1000.0 < ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
 
+            // determine the location of the nearest follower and the target distance to it
+            Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
+            float targetDistance = (float)ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+            
+            // Check if the bot should find its nearest follower
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)
             {
                 RecalculatePath(locationOfNearestGroupMember, targetDistance);

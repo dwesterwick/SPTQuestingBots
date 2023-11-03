@@ -11,11 +11,11 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
+        protected static int updateInterval { get; private set; } = 100;
+        private Stopwatch updateTimer = Stopwatch.StartNew();
+
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
         private GClass288 baseSteeringLogic = new GClass288();
-
-        private Stopwatch updateTimer = Stopwatch.StartNew();
-        private int updateInterval = 100;
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {

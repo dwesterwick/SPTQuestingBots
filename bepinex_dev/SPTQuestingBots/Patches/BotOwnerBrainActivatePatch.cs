@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
@@ -18,6 +17,7 @@ namespace SPTQuestingBots.Patches
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
+        // Only used if Questing Bots manages PMC spawns
         [PatchPrefix]
         private static void PatchPrefix(BotOwner __instance)
         {
@@ -27,6 +27,7 @@ namespace SPTQuestingBots.Patches
             }
         }
 
+        // Only used if another mod (i.e. SWAG+DONUTS) manages PMC spawns
         [PatchPostfix]
         private static void PatchPostfix(BotOwner __instance)
         {
@@ -40,6 +41,7 @@ namespace SPTQuestingBots.Patches
         {
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
+            // PMC groups are automatically converted to "assaultGroup" wildSpawnTypes by EFT, so they need to be changed back for the SPT PMC patch to work
             if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
                 if (TryConvertSpawnType(__instance))

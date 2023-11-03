@@ -1,9 +1,9 @@
-﻿using EFT;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 
 namespace SPTQuestingBots.BotLogic.HiveMind
 {
@@ -92,6 +92,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return checkStateForAnyGroupMembers(botState, bot);
         }
 
+        // NOTE: It didn't make sense to use generics for the rest of the class, but we'll keep it here just in case
         private void updateDictionaryValue<T>(Dictionary<BotOwner, T> dict, BotOwner bot, T value)
         {
             if (bot == null)

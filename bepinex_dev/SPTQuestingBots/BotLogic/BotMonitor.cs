@@ -68,13 +68,15 @@ namespace SPTQuestingBots.BotLogic
 
         public bool WantsToExtract()
         {
-            if (extractLayerMonitor.CanLayerBeUsed)
+            if (!extractLayerMonitor.CanLayerBeUsed)
             {
-                string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
-                if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
-                {
-                    return true;
-                }
+                return false;
+            }
+
+            string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
+            {
+                return true;
             }
 
             return false;

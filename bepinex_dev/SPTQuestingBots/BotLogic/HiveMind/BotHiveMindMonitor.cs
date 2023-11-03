@@ -1,14 +1,14 @@
-﻿using Comfort.Common;
-using EFT;
-using HarmonyLib;
-using SPTQuestingBots.BehaviorExtensions;
-using SPTQuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
+using EFT;
+using HarmonyLib;
+using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.HiveMind
@@ -209,6 +209,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return nearestMember.Position;
         }
 
+        // NOTE: This currently isn't used but it may be in the future
         public static void AssignTargetEnemyFromGroup(BotOwner bot)
         {
             if (bot.Memory.HaveEnemy || bot.Memory.DangerData.HaveCloseDanger)
@@ -255,6 +256,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.Profile.Nickname)));
 
+            // TO DO: Is this loop actually needed?
             foreach (BotOwner player in allPlayersOutsideGroup)
             {
                 if (player.BotsGroup.Allies.Contains(bot))
@@ -274,6 +276,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 }
             }
 
+            // Force PMC's to be hostile toward you
             if (BotQuestController.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
             {
                 Controllers.LoggingController.LogInfo(bot.Profile.Nickname + " doesn't like you anymore");
@@ -386,21 +389,27 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     continue;
                 }
 
+                // This only needs to be updated once
                 if (botFriendlinessUpdated[bot])
                 {
                     continue;
                 }
 
-                Objective.BotObjectiveManager objectiveManager = null;
-                if (bot?.GetPlayer?.gameObject?.TryGetComponent(out objectiveManager) == false)
+                Objective.BotObjectiveManager objectiveManager = Objective.BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                if (objectiveManager == null)
                 {
                     continue;
                 }
 
-                double timeSinceInitialized = objectiveManager?.TimeSinceInitialization ?? 0;
+                // Wait for a few seconds after the bot has been initialized so EFT can update group properties
+                if (objectiveManager.TimeSinceInitialization < 3)
+                {
+                    continue;
+                }
 
+                // If the bot is a member of a group, wait until it has at least one ally or enemy
                 IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(bot);
-                if ((timeSinceInitialized < 3) && (groupMembers.Count > 0) && (bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
+                if ((groupMembers.Count > 0) && (bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
                 {
                     continue;
                 }

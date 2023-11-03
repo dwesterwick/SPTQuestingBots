@@ -5,19 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using EFT.UI.Ragfair;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
 {
     internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
-        private static int updateInterval = 250;
-
         private bool useLayer = false;
         private Objective.BotObjectiveManager objectiveManager = null;
 
-        public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
+        public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 250)
         {
             
         }

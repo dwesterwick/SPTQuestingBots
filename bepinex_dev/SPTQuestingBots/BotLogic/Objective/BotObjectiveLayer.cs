@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.HiveMind;
@@ -16,8 +15,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class BotObjectiveLayer : CustomLayerDelayedUpdate
     {
-        private static int updateInterval = 25;
-
         private BotObjectiveManager objectiveManager;
         private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
@@ -25,7 +22,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? lastBotPosition = null;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
-        public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, updateInterval)
+        public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
             objectiveManager = BotOwner.GetPlayer.gameObject.AddComponent<BotObjectiveManager>();
             objectiveManager.Init(BotOwner);
@@ -104,6 +101,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
+            // Check if the bot needs to heal, eat, drink, etc. 
             if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
             {
                 wasAbleBodied = false;
@@ -115,6 +113,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
             wasAbleBodied = true;
 
+            // Check if the bot should be in combat
             if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
             {
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
@@ -152,6 +151,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
+            // Check if the bot has wandered too far from its followers.
             if (objectiveManager.BotMonitor.ShouldWaitForFollowers())
             {
                 followersTooFarTimer.Start();
@@ -161,10 +161,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 followersTooFarTimer.Reset();
             }
 
+            // If the bot has wandered too far from its followers for long enough, regroup with them
             if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
             {
-                //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is waiting for its followers...");
-                
                 setNextAction(BotActionType.Regroup, "Regroup");
                 return updatePreviousState(true);
             }
@@ -196,6 +195,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
+            // Check if the bot has reached its currently assigned objective
             if (!objectiveManager.IsObjectiveReached)
             {
                 if (checkIfBotIsStuck())

@@ -21,6 +21,7 @@ namespace SPTQuestingBots.Patches
         {
             Controllers.LocationController.RegisterBot(__result);
 
+            // TO DO: Is the code below even needed?
             IReadOnlyCollection<BotOwner> friends = Controllers.BotGenerator.GetSpawnGroupMembers(__result);
             foreach (BotOwner friend in friends)
             {

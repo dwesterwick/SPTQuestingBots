@@ -1,11 +1,10 @@
-﻿using EFT;
-using SPTQuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,14 +16,14 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected Stopwatch actionElapsedTime = new Stopwatch();
         protected bool CanSprint = true;
 
-        public GoToPositionAbstractAction(BotOwner _BotOwner) : base(_BotOwner)
-        {
-            getObjectiveManager();
-        }
-
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
-            getObjectiveManager();
+            ObjectiveManager = BotLogic.Objective.BotObjectiveManager.GetObjectiveManagerForBot(_BotOwner);
+        }
+
+        public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
+        {
+
         }
 
         public override void Start()
@@ -48,11 +47,6 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             return BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
-        }
-
-        private void getObjectiveManager()
-        {
-            ObjectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<BotLogic.Objective.BotObjectiveManager>();
         }
     }
 }

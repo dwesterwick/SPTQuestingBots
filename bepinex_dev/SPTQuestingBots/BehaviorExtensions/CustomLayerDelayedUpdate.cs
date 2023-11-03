@@ -24,6 +24,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
     {
+        protected static int updateInterval { get; private set; } = 100;
+
         protected bool previousState { get; private set; } = false;
         protected bool wasStuck { get; set; } = false;
 
@@ -34,8 +36,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private Stopwatch botIsStuckTimer = Stopwatch.StartNew();
         private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
         private float pauseLayerTime = 0;
-        private int updateInterval = 100;
-
+        
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
 
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)

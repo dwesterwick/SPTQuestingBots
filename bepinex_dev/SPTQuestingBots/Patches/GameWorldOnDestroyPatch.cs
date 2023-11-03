@@ -28,6 +28,7 @@ namespace SPTQuestingBots.Patches
             // Needed for compatibility with Refringe's CustomRaidTimes mod
             Controllers.LocationController.ClearEscapeTimes();
 
+            // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();
         }
     }

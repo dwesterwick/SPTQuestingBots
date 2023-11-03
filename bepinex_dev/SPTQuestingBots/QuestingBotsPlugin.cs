@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 using DrakiaXYZ.BigBrain.Brains;
-using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 

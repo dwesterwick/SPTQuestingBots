@@ -98,7 +98,7 @@
     <Compile Include="BotLogic\Follow\FollowBossAction.cs" />
     <Compile Include="BehaviorExtensions\GoToPositionAbstractAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindWantsToLootSensor.cs" />
-    <Compile Include="BotLogic\Objective\PatrolAreaAction.cs" />
+    <Compile Include="BotLogic\Objective\RegroupAction.cs" />
     <Compile Include="Controllers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Models\BotBrainType.cs" />
