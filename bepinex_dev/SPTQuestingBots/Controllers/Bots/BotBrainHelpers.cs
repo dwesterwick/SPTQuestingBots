@@ -5,7 +5,7 @@ using System.Reflection;
 using EFT;
 using SPTQuestingBots.Models;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Controllers.Bots
 {
     public enum BotType
     {
@@ -17,6 +17,8 @@ namespace SPTQuestingBots.Controllers
 
     public static class BotBrainHelpers
     {
+        //FollowerGluharAssault and FollowerGluharProtect max layer = 43
+
         public static IEnumerable<BotBrainType> AddTestBrain(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[] { new BotBrainType("BossTest") });
@@ -208,8 +210,6 @@ namespace SPTQuestingBots.Controllers
         {
             return list.Select(i => i.ToString()).ToList();
         }
-
-        //FollowerGluharAssault and FollowerGluharProtect max layer = 43
 
         public static readonly WildSpawnType[] pmcSpawnTypes = new WildSpawnType[2]
         {

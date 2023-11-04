@@ -51,14 +51,14 @@ namespace SPTQuestingBots.Patches
             }
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + roleName);
-            if (BotBrainHelpers.WillBotBeAPMC(__instance))
+            if (Controllers.Bots.BotBrainHelpers.WillBotBeAPMC(__instance))
             {
-                BotQuestBuilder.RegisterPMC(__instance);
+                Controllers.Bots.BotRegistrationManager.RegisterPMC(__instance);
             }
 
-            if (BotBrainHelpers.WillBotBeABoss(__instance))
+            if (Controllers.Bots.BotBrainHelpers.WillBotBeABoss(__instance))
             {
-                BotQuestBuilder.RegisterBoss(__instance);
+                Controllers.Bots.BotRegistrationManager.RegisterBoss(__instance);
             }
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
@@ -66,7 +66,7 @@ namespace SPTQuestingBots.Patches
 
         private static bool TryConvertSpawnType(BotOwner __instance)
         {
-            if (!BotGenerator.TryGetInitialPMCGroup(__instance, out Models.BotSpawnInfo groupData))
+            if (!Controllers.Bots.BotGenerator.TryGetInitialPMCGroup(__instance, out Models.BotSpawnInfo groupData))
             {
                 return false;
             }

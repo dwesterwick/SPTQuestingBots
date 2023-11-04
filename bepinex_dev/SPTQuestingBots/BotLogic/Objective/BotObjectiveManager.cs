@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -99,7 +100,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            BotType botType = BotQuestBuilder.GetBotType(botOwner);
+            BotType botType = BotRegistrationManager.GetBotType(botOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.AllowedBotTypesForQuesting.PMC)
             {
@@ -116,7 +117,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsObjectiveActive && BotQuestBuilder.HaveTriggersBeenFound)
+            if (IsObjectiveActive && BotQuestBuilder.HaveQuestsBeenBuilt)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 TryChangeObjective();
@@ -134,7 +135,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void Update()
         {
-            if (!BotQuestBuilder.HaveTriggersBeenFound)
+            if (!BotQuestBuilder.HaveQuestsBeenBuilt)
             {
                 return;
             }

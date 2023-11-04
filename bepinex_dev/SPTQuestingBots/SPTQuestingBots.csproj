@@ -99,9 +99,10 @@
     <Compile Include="BehaviorExtensions\GoToPositionAbstractAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindWantsToLootSensor.cs" />
     <Compile Include="BotLogic\Objective\RegroupAction.cs" />
-    <Compile Include="Controllers\BotBrainHelpers.cs" />
+    <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
-    <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
+    <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
+    <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="Configuration\MaxFollowerDistanceConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
-    <Compile Include="Controllers\BotQuestBuilder.cs" />
+    <Compile Include="Controllers\Bots\BotQuestBuilder.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveManager.cs" />
     <Compile Include="BotLogic\Objective\GoToObjectiveAction.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveLayer.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Configuration\QuestGenerationConfig.cs" />
     <Compile Include="Configuration\QuestSettingsConfig.cs" />
     <Compile Include="Configuration\QuestDataConfig.cs" />
-    <Compile Include="Controllers\BotGenerator.cs" />
+    <Compile Include="Controllers\Bots\BotGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />

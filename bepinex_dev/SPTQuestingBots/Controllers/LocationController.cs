@@ -15,33 +15,15 @@ namespace SPTQuestingBots.Controllers
     public class LocationController : MonoBehaviour
     {
         public static bool HasRaidStarted { get; set; } = false;
-
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
-        public static int SpawnedBotCount { get; set; } = 0;
-        public static int SpawnedBossCount { get; set; } = 0;
-        public static int SpawnedRogueCount { get; set; } = 0;
-        public static int SpawnedBossWaves { get; set; } = 0;
-        public static int ZeroWaveCount { get; set; } = 0;
-        public static int ZeroWaveTotalBotCount { get; set; } = 0;
-        public static int ZeroWaveTotalRogueCount { get; set; } = 0;
-
+        
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private static List<BotOwner> spawnedBosses = new List<BotOwner>();
-
+        
         private static void Clear()
         {
-            SpawnedBossWaves = 0;
-            SpawnedBotCount = 0;
-            SpawnedBossCount = 0;
-            SpawnedRogueCount = 0;
-            ZeroWaveCount = 0;
-            ZeroWaveTotalBotCount = 0;
-            ZeroWaveTotalRogueCount = 0;
-
-            spawnedBosses.Clear();
             CurrentLocation = null;
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
@@ -192,26 +174,6 @@ namespace SPTQuestingBots.Controllers
             }
 
             return false;
-        }
-
-        public static void RegisterBot(BotOwner botOwner)
-        {
-            SpawnedBotCount++;
-            string message = "Spawned ";
-
-            // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
-            if (BotGenerator.CanSpawnPMCs && (BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
-            {
-                spawnedBosses.Add(botOwner);
-                message += "boss " + botOwner.Profile.Nickname + " (" + spawnedBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
-            }
-            else
-            {
-                message += "bot #" + SpawnedBotCount + ": " + botOwner.Profile.Nickname;
-            }
-
-            message += " (" + botOwner.Side + ")";
-            LoggingController.LogInfo(message);
         }
 
         public static Vector3? GetPlayerPosition()

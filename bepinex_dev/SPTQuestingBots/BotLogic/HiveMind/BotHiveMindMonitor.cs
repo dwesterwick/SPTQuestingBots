@@ -243,7 +243,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
         public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot)
         {
-            IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(bot);
+            IReadOnlyCollection<BotOwner> groupMembers = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(bot);
             MakeBotHateEveryoneOutsideOfItsGroup(bot, groupMembers);
         }
 
@@ -277,7 +277,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             }
 
             // Force PMC's to be hostile toward you
-            if (BotQuestBuilder.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
+            if (Controllers.Bots.BotRegistrationManager.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
             {
                 Controllers.LoggingController.LogInfo(bot.Profile.Nickname + " doesn't like you anymore");
 
@@ -408,7 +408,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 }
 
                 // If the bot is a member of a group, wait until it has at least one ally or enemy
-                IReadOnlyCollection<BotOwner> groupMembers = BotGenerator.GetSpawnGroupMembers(bot);
+                IReadOnlyCollection<BotOwner> groupMembers = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(bot);
                 if ((groupMembers.Count > 0) && (bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
                 {
                     continue;

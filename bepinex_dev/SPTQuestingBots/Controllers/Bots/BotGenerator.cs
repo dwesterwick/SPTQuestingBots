@@ -15,7 +15,7 @@ using HarmonyLib;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Controllers.Bots
 {
     public class BotGenerator : MonoBehaviour
     {
@@ -206,7 +206,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             // Wait until all initial bosses have spawned before spawning inital PMC's (except for Factory)
-            if ((LocationController.SpawnedBotCount < LocationController.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory"))
+            if ((BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory"))
             {
                 return;
             }

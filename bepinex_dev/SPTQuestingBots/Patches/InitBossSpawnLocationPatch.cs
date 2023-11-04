@@ -52,12 +52,12 @@ namespace SPTQuestingBots.Patches
                     totalBots -= bossWave.Supports.Sum(s => s.BossEscortAmount);
                 }
 
-                LocationController.ZeroWaveCount++;
-                LocationController.ZeroWaveTotalBotCount += totalBots;
-                LocationController.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
+                Controllers.Bots.BotRegistrationManager.ZeroWaveCount++;
+                Controllers.Bots.BotRegistrationManager.ZeroWaveTotalBotCount += totalBots;
+                Controllers.Bots.BotRegistrationManager.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
             }
 
-            LoggingController.LogInfo("Total inital bosses and followers " + LocationController.ZeroWaveTotalBotCount);
+            LoggingController.LogInfo("Total inital bosses and followers " + Controllers.Bots.BotRegistrationManager.ZeroWaveTotalBotCount);
         }
     }
 }

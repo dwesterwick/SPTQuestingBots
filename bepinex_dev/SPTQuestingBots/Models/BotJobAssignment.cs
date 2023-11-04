@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EFT;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,35 @@ namespace SPTQuestingBots.Models
     public class BotJobAssignment
     {
         public JobAssignmentStatus Status { get; private set; } = JobAssignmentStatus.NotStarted;
-        public Quest QuestAssignment { get; private set; } = null;
-        public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
-        public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
+        public BotOwner BotOwner { get; private set; }
 
-        public BotJobAssignment()
+        private Quest questAssignment = null;
+        private QuestObjective questObjectiveAssignment = null;
+        private QuestObjectiveStep questObjectiveStepAssignment = null;
+
+        public BotJobAssignment(BotOwner bot)
         {
+            BotOwner = bot;
+        }
 
+        public BotJobAssignment(BotOwner bot, Quest quest, QuestObjective objective) : this(bot)
+        {
+            questAssignment = quest;
+            questObjectiveAssignment = objective;
+            TrySetNextObjectiveStep(out questObjectiveStepAssignment);
+        }
+
+        public bool TrySetNextObjectiveStep(out QuestObjectiveStep step)
+        {
+            step = questObjectiveAssignment.GetNextObjectiveStep(BotOwner);
+            if (step == null)
+            {
+                return false;
+            }
+
+            questObjectiveStepAssignment = step;
+            Status = JobAssignmentStatus.Pending;
+            return true;
         }
     }
 }

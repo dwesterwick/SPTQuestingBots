@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Controllers.Bots
 {
     public static class BotJobAssignmentFactory
     {
@@ -55,14 +55,12 @@ namespace SPTQuestingBots.Controllers
 
         public static IEnumerator ProcessAllQuests(Action<Quest> action)
         {
-            // Process each of the quests created by an EFT quest template using the provided action
             enumeratorWithTimeLimit.Reset();
             yield return enumeratorWithTimeLimit.Run(allQuests, action);
         }
 
         public static IEnumerator ProcessAllQuests<T1>(Action<Quest, T1> action, T1 param1)
         {
-            // Process each of the quests created by an EFT quest template using the provided action
             enumeratorWithTimeLimit.Reset();
             yield return enumeratorWithTimeLimit.Run(allQuests, action, param1);
         }

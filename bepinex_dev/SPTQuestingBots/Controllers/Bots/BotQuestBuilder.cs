@@ -13,41 +13,34 @@ using EFT.Quests;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Controllers.Bots
 {
     public class BotQuestBuilder : MonoBehaviour
     {
         public static bool IsClearing { get; private set; } = false;
-        public static bool IsFindingTriggers { get; private set; } = false;
-        public static bool HaveTriggersBeenFound { get; private set; } = false;
+        public static bool IsBuildingQuests { get; private set; } = false;
+        public static bool HaveQuestsBeenBuilt { get; private set; } = false;
         public static string PreviousLocationID { get; private set; } = null;
 
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
         private static List<string> zoneIDsInLocation = new List<string>();
-        private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
-        private static List<BotOwner> bossesInLocation = new List<BotOwner>();
         
         public IEnumerator Clear()
         {
             IsClearing = true;
 
-            if (IsFindingTriggers)
+            if (IsBuildingQuests)
             {
                 enumeratorWithTimeLimit.Abort();
 
                 CoroutineExtensions.EnumeratorWithTimeLimit conditionWaiter = new CoroutineExtensions.EnumeratorWithTimeLimit(1);
-                yield return conditionWaiter.WaitForCondition(() => !IsFindingTriggers, nameof(IsFindingTriggers), 3000);
+                yield return conditionWaiter.WaitForCondition(() => !IsBuildingQuests, nameof(IsBuildingQuests), 3000);
 
-                IsFindingTriggers = false;
+                IsBuildingQuests = false;
             }
 
-            BotJobAssignmentFactory.Clear();
-
-            pmcsInLocation.Clear();
-            bossesInLocation.Clear();
+            HaveQuestsBeenBuilt = false;
             zoneIDsInLocation.Clear();
-
-            HaveTriggersBeenFound = false;
 
             IsClearing = false;
         }
@@ -63,7 +56,7 @@ namespace SPTQuestingBots.Controllers
             if (LocationController.CurrentLocation == null)
             {
                 // Write a log file containing all loaded quests, their objectives, and which bots have interacted with them. 
-                if (HaveTriggersBeenFound)
+                if (HaveQuestsBeenBuilt)
                 {
                     BotJobAssignmentFactory.WriteQuestLogFile();
                 }
@@ -72,7 +65,7 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            if (IsFindingTriggers || HaveTriggersBeenFound)
+            if (IsBuildingQuests || HaveQuestsBeenBuilt)
             {
                 return;
             }
@@ -83,53 +76,9 @@ namespace SPTQuestingBots.Controllers
             PreviousLocationID = LocationController.CurrentLocation.Id;
         }
 
-        public static BotType GetBotType(BotOwner botOwner)
-        {
-            if (IsBotAPMC(botOwner))
-            {
-                return BotType.PMC;
-            }
-            if (IsBotABoss(botOwner))
-            {
-                return BotType.Boss;
-            }
-            if (botOwner.Profile.Side == EPlayerSide.Savage)
-            {
-                return BotType.Scav;
-            }
-
-            return BotType.Undetermined;
-        }
-
-        public static void RegisterPMC(BotOwner botOwner)
-        {
-            if (!pmcsInLocation.Contains(botOwner))
-            {
-                pmcsInLocation.Add(botOwner);
-            }
-        }
-
-        public static bool IsBotAPMC(BotOwner botOwner)
-        {
-            return pmcsInLocation.Contains(botOwner);
-        }
-
-        public static void RegisterBoss(BotOwner botOwner)
-        {
-            if (!bossesInLocation.Contains(botOwner))
-            {
-                bossesInLocation.Add(botOwner);
-            }
-        }
-
-        public static bool IsBotABoss(BotOwner botOwner)
-        {
-            return bossesInLocation.Contains(botOwner);
-        }
-
         private IEnumerator LoadAllQuests()
         {
-            IsFindingTriggers = true;
+            IsBuildingQuests = true;
 
             try
             {
@@ -190,12 +139,12 @@ namespace SPTQuestingBots.Controllers
 
                 LoadCustomQuests();
 
-                HaveTriggersBeenFound = true;
+                HaveQuestsBeenBuilt = true;
                 LoggingController.LogInfo("Finished loading quest data.");
             }
             finally
             {
-                IsFindingTriggers = false;
+                IsBuildingQuests = false;
             }
         }
 

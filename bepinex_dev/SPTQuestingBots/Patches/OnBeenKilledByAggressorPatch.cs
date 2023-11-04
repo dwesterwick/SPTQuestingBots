@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
-            BotOwner[] aliveInitialPMCs = Controllers.BotGenerator.RemainingAliveInitialPMCs().ToArray();
+            BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();
 
             string message = __instance.Profile.Nickname;
             message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
