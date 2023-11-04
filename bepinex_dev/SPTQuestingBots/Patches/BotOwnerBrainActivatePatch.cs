@@ -53,12 +53,12 @@ namespace SPTQuestingBots.Patches
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + roleName);
             if (BotBrainHelpers.WillBotBeAPMC(__instance))
             {
-                BotQuestController.RegisterPMC(__instance);
+                BotQuestBuilder.RegisterPMC(__instance);
             }
 
             if (BotBrainHelpers.WillBotBeABoss(__instance))
             {
-                BotQuestController.RegisterBoss(__instance);
+                BotQuestBuilder.RegisterBoss(__instance);
             }
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);

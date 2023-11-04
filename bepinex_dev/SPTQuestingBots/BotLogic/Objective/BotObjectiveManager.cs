@@ -99,7 +99,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            BotType botType = BotQuestController.GetBotType(botOwner);
+            BotType botType = BotQuestBuilder.GetBotType(botOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.AllowedBotTypesForQuesting.PMC)
             {
@@ -116,7 +116,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsObjectiveActive && BotQuestController.HaveTriggersBeenFound)
+            if (IsObjectiveActive && BotQuestBuilder.HaveTriggersBeenFound)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 TryChangeObjective();
@@ -134,7 +134,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void Update()
         {
-            if (!BotQuestController.HaveTriggersBeenFound)
+            if (!BotQuestBuilder.HaveTriggersBeenFound)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Keep searching for a quest the bot can perform until one is found or there aren't any quests left
             while (targetQuest == null)
             {
-                targetQuest = BotQuestController.GetRandomQuestForBot(botOwner);
+                targetQuest = BotJobAssignmentFactory.GetRandomQuestForBot(botOwner);
 
                 if (targetQuest == null)
                 {

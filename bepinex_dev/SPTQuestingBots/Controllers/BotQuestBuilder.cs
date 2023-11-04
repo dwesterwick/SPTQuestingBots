@@ -10,25 +10,23 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.Quests;
-using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Controllers
 {
-    public class BotQuestController : MonoBehaviour
+    public class BotQuestBuilder : MonoBehaviour
     {
         public static bool IsClearing { get; private set; } = false;
         public static bool IsFindingTriggers { get; private set; } = false;
         public static bool HaveTriggersBeenFound { get; private set; } = false;
+        public static string PreviousLocationID { get; private set; } = null;
 
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
-        private static List<Quest> allQuests = new List<Quest>();
         private static List<string> zoneIDsInLocation = new List<string>();
         private static List<BotOwner> pmcsInLocation = new List<BotOwner>();
         private static List<BotOwner> bossesInLocation = new List<BotOwner>();
-        private static string previousLocationID = null;
-
+        
         public IEnumerator Clear()
         {
             IsClearing = true;
@@ -43,14 +41,7 @@ namespace SPTQuestingBots.Controllers
                 IsFindingTriggers = false;
             }
 
-            // Only remove quests that are not based on an EFT quest template
-            allQuests.RemoveAll(q => q.Template == null);
-
-            // Remove all objectives for remaining quests. New objectives will be generated after loading the map.
-            foreach (Quest quest in allQuests)
-            {
-                quest.Clear();
-            }
+            BotJobAssignmentFactory.Clear();
 
             pmcsInLocation.Clear();
             bossesInLocation.Clear();
@@ -74,7 +65,7 @@ namespace SPTQuestingBots.Controllers
                 // Write a log file containing all loaded quests, their objectives, and which bots have interacted with them. 
                 if (HaveTriggersBeenFound)
                 {
-                    WriteQuestLogFile();
+                    BotJobAssignmentFactory.WriteQuestLogFile();
                 }
 
                 StartCoroutine(Clear());
@@ -89,7 +80,7 @@ namespace SPTQuestingBots.Controllers
             StartCoroutine(LoadAllQuests());
 
             // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
-            previousLocationID = LocationController.CurrentLocation.Id;
+            PreviousLocationID = LocationController.CurrentLocation.Id;
         }
 
         public static BotType GetBotType(BotOwner botOwner)
@@ -136,90 +127,13 @@ namespace SPTQuestingBots.Controllers
             return bossesInLocation.Contains(botOwner);
         }
 
-        public static void AddQuest(Quest quest)
-        {
-            allQuests.Add(quest);
-        }
-
-        public static Quest FindQuest(string questID)
-        {
-            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.TemplateId == questID);
-            if (matchingQuests.Count() == 0)
-            {
-                return null;
-            }
-
-            return matchingQuests.First();
-        }
-
-        public static Quest GetRandomQuestForBot(BotOwner bot)
-        {
-            // Group all valid quests by their priority number in ascending order
-            var groupedQuests = allQuests
-                .Where(q => q.CanAssignBot(bot))
-                .Where(q => q.NumberOfValidObjectives > 0)
-                .GroupBy
-                (
-                    q => q.Priority,
-                    q => q,
-                    (key, q) => new { Priority = key, Quests = q.ToList() }
-                )
-                .OrderBy(g => g.Priority);
-
-            if (!groupedQuests.Any())
-            {
-                return null;
-            }
-
-            foreach (var priorityGroup in groupedQuests)
-            {
-                // Get the distances to the nearest and furthest objectives for each quest in the group
-                Dictionary<Quest, MinMaxConfig> questObjectiveDistances = new Dictionary<Quest, MinMaxConfig>();
-                foreach (Quest quest in priorityGroup.Quests)
-                {
-                    IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
-                    IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p.Value);
-                    IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot.Position, p));
-
-                    questObjectiveDistances.Add(quest, new MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
-                }
-
-                if (questObjectiveDistances.Count == 0)
-                {
-                    continue;
-                }
-
-                // Calculate the maximum amount of "randomness" to apply to each quest
-                double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
-                int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.BotQuests.DistanceRandomness / 100.0);
-
-                //LoggingController.LogInfo("Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);
-
-                // Sort the quests in the group by their distance to you, with some randomness applied, in ascending order
-                System.Random random = new System.Random();
-                IEnumerable<Quest> randomizedQuests = questObjectiveDistances
-                    .OrderBy(q => q.Value.Min + random.NextFloat(-1 * maxRandomDistance, maxRandomDistance))
-                    .Select(q => q.Key);
-
-                // Use a random number to determine if the bot should be assigned to the first quest in the list
-                Quest firstRandomQuest = randomizedQuests.First();
-                if (random.NextFloat(1, 100) < firstRandomQuest.ChanceForSelecting)
-                {
-                    return firstRandomQuest;
-                }
-            }
-
-            // If no quest was assigned to the bot, randomly assign a quest in the first priority group as a fallback method
-            return groupedQuests.First().Quests.Random();
-        }
-
         private IEnumerator LoadAllQuests()
         {
             IsFindingTriggers = true;
 
             try
             {
-                if (allQuests.Count == 0)
+                if (BotJobAssignmentFactory.QuestCount == 0)
                 {
                     // Create quests based on the EFT quest templates loaded from the server. This may include custom quests added by mods. 
                     RawQuestClass[] allQuestTemplates = ConfigController.GetAllQuestTemplates();
@@ -228,13 +142,12 @@ namespace SPTQuestingBots.Controllers
                     {
                         Quest quest = new Quest(ConfigController.Config.BotQuests.EFTQuests.Priority, questTemplate);
                         quest.ChanceForSelecting = ConfigController.Config.BotQuests.EFTQuests.Chance;
-                        allQuests.Add(quest);
+                        BotJobAssignmentFactory.AddQuest(quest);
                     }
                 }
 
-                // Process each of the quests created by an EFT quest template
-                enumeratorWithTimeLimit.Reset();
-                yield return enumeratorWithTimeLimit.Run(allQuests, LoadQuest);
+                // Process each of the quests created by an EFT quest template using the provided action
+                BotJobAssignmentFactory.ProcessAllQuests(LoadQuest);
 
                 IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
                 //IEnumerable<Type> allTriggerTypes = allTriggers.Select(t => t.GetType()).Distinct();
@@ -251,14 +164,13 @@ namespace SPTQuestingBots.Controllers
                 //LoggingController.LogInfo("Quest items: " + string.Join(", ", allQuestItems.Select(l => l.Item.LocalizedName())));
 
                 // Create quest objectives for all matching quest items found in the map
-                enumeratorWithTimeLimit.Reset();
-                yield return enumeratorWithTimeLimit.Run(allQuests, LocateQuestItems, allItems);
+                BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 Quest spawnPointQuest = LocationController.CreateSpawnPointQuest();
                 if (spawnPointQuest != null)
                 {
-                    allQuests.Add(spawnPointQuest);
+                    BotJobAssignmentFactory.AddQuest(spawnPointQuest);
                 }
                 else
                 {
@@ -269,7 +181,7 @@ namespace SPTQuestingBots.Controllers
                 Quest spawnRushQuest = LocationController.CreateSpawnRushQuest();
                 if (spawnRushQuest != null)
                 {
-                    allQuests.Add(spawnRushQuest);
+                    BotJobAssignmentFactory.AddQuest(spawnRushQuest);
                 }
                 else
                 {
@@ -326,7 +238,7 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                allQuests.Add(quest);
+                BotJobAssignmentFactory.AddQuest(quest);
             }
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
@@ -474,7 +386,7 @@ namespace SPTQuestingBots.Controllers
                     {
                         // Find the required quest
                         string preReqQuestID = conditionQuest.target;
-                        Quest preReqQuest = allQuests.First(q => q.Template.Id == preReqQuestID);
+                        Quest preReqQuest = BotJobAssignmentFactory.FindQuest(preReqQuestID);
 
                         // Get the minimum player level to start that quest
                         int minLevelForPreReqQuest = getMinLevelForQuest(preReqQuest);
@@ -557,7 +469,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             // Find all quests that have objectives using this trigger
-            Quest[] matchingQuests = allQuests.Where(q => q.GetObjectiveForZoneID(trigger.Id) != null).ToArray();
+            Quest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
             if (matchingQuests.Length == 0)
             {
                 //LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
@@ -618,69 +530,6 @@ namespace SPTQuestingBots.Controllers
                 PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
                 PathRender.AddOrUpdatePath(triggerTargetPosSphere);
             }
-        }
-
-        private void WriteQuestLogFile()
-        {
-            if (!ConfigController.Config.Debug.Enabled)
-            {
-                return;
-            }
-
-            LoggingController.LogInfo("Writing quest log file...");
-
-            // Write the header row
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Quest Name,Objective,Steps,Min Level,Max Level,First Step Position,Active Bots,Successful Bots,Unsuccessful Bots");
-            
-            // Write a row for every objective in every quest
-            foreach (Quest quest in allQuests)
-            {
-                foreach (QuestObjective objective in quest.AllObjectives)
-                {
-                    Vector3? firstPosition = objective.GetFirstStepPosition();
-
-                    sb.Append(quest.Name + ",");
-                    sb.Append("\"" + objective.ToString() + "\",");
-                    sb.Append(objective.StepCount + ",");
-                    sb.Append(quest.MinLevel + ",");
-                    sb.Append(quest.MaxLevel + ",");
-                    sb.Append((firstPosition.HasValue ? "\"" + firstPosition.Value.ToString() + "\"" : "N/A") + ",");
-                    sb.Append(GetBotListText(objective.ActiveBots) + ",");
-                    sb.Append(GetBotListText(objective.SuccessfulBots) + ",");
-                    sb.AppendLine(GetBotListText(objective.UnsuccessfulBots));
-                }
-            }
-
-            string filename = ConfigController.GetLoggingPath()
-                + "quests_"
-                + previousLocationID.Replace(" ", "")
-                + "_"
-                + DateTime.Now.ToFileTimeUtc()
-                + ".csv";
-
-            try
-            {
-                if (!Directory.Exists(ConfigController.LoggingPath))
-                {
-                    Directory.CreateDirectory(ConfigController.LoggingPath);
-                }
-
-                File.WriteAllText(filename, sb.ToString());
-
-                LoggingController.LogInfo("Writing quest log file...done.");
-            }
-            catch (Exception e)
-            {
-                e.Data.Add("Filename", filename);
-                LoggingController.LogError("Writing quest log file...failed!");
-                LoggingController.LogError(e.ToString());
-            }
-        }
-
-        private string GetBotListText(IEnumerable<BotOwner> bots)
-        {
-            return string.Join(",", bots.Select(b => b.Profile.Nickname + " (Level " + b.Profile.Info.Level + ")"));
         }
     }
 }

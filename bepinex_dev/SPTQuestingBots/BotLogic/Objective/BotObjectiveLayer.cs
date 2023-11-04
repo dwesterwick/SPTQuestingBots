@@ -73,7 +73,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Ensure all quests have been loaded and generated
-            if (!BotQuestController.HaveTriggersBeenFound)
+            if (!BotQuestBuilder.HaveTriggersBeenFound)
             {
                 return updatePreviousState(false);
             }

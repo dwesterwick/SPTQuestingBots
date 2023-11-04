@@ -277,7 +277,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             }
 
             // Force PMC's to be hostile toward you
-            if (BotQuestController.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
+            if (BotQuestBuilder.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
             {
                 Controllers.LoggingController.LogInfo(bot.Profile.Nickname + " doesn't like you anymore");
 

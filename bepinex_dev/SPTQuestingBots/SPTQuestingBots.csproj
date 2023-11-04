@@ -101,6 +101,7 @@
     <Compile Include="BotLogic\Objective\RegroupAction.cs" />
     <Compile Include="Controllers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
+    <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="Configuration\MaxFollowerDistanceConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
-    <Compile Include="Controllers\BotQuestController.cs" />
+    <Compile Include="Controllers\BotQuestBuilder.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveManager.cs" />
     <Compile Include="BotLogic\Objective\GoToObjectiveAction.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveLayer.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Controllers\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
+    <Compile Include="Models\BotJobAssignment.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />
