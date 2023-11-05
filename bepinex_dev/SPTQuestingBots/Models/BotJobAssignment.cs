@@ -89,7 +89,10 @@ namespace SPTQuestingBots.Models
 
         private void endJobAssingment()
         {
-            EndingTime = DateTime.Now;
+            if (EndingTime == DateTime.MaxValue)
+            {
+                EndingTime = DateTime.Now;
+            }
         }
     }
 }

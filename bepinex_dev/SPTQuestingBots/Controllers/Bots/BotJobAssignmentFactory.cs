@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -289,6 +290,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 objective = botJobAssignments[bot.Profile.Id].Last().QuestObjectiveAssignment;
             }
 
+            Stopwatch timeoutMonitor = Stopwatch.StartNew();
             do
             {
                 objective = quest?
@@ -304,6 +306,11 @@ namespace SPTQuestingBots.Controllers.Bots
                 quest = bot.GetRandomQuest();
 
                 //LoggingController.LogInfo("Checking quest " + quest.ToString() + " for bot " + bot.GetText() + "...");
+
+                if (timeoutMonitor.ElapsedMilliseconds > 3000)
+                {
+                    throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long");
+                }
 
             } while (objective == null);
 

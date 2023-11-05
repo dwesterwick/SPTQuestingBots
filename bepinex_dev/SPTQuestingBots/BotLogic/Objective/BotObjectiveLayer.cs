@@ -171,9 +171,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective)
             {
                 string previousObjective = objectiveManager.ToString();
-                objectiveManager.ChangeObjective();
-
-                LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
+                if (objectiveManager.TryChangeObjective())
+                {
+                    LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
+                }
             }
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
@@ -185,7 +186,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has reached its currently assigned objective
-            if (!objectiveManager.IsCloseToObjective())
+            if (objectiveManager.IsJobAssignmentActive)
             {
                 if (checkIfBotIsStuck())
                 {
@@ -228,9 +229,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 drawStuckBotPath();
 
-                objectiveManager.ChangeObjective();
-
-                restartStuckTimer();
+                if (objectiveManager.TryChangeObjective())
+                {
+                    restartStuckTimer();
+                }
 
                 return true;
             }

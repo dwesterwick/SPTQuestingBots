@@ -174,13 +174,20 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             assignment.FailJobAssingment();
 
-            ChangeObjective();
+            TryChangeObjective();
         }
 
-        public void ChangeObjective()
+        public bool TryChangeObjective()
         {
+            if (assignment?.TimeSinceJobEnded < ConfigController.Config.MinTimeBetweenSwitchingObjectives)
+            {
+                return false;
+            }
+
             assignment = botOwner.GetNewBotJobAssignment();
             //LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
+
+            return true;
         }
 
         public void StartJobAssigment()
