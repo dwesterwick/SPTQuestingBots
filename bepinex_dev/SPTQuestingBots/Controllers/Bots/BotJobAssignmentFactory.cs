@@ -63,6 +63,16 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static IEnumerable<QuestObjective> RemainingObjectivesForBot(this Quest quest, BotOwner bot)
         {
+            if (bot == null)
+            {
+                throw new ArgumentNullException("Bot is null", nameof(bot));
+            }
+
+            if (quest == null)
+            {
+                throw new ArgumentNullException("Quest is null", nameof(quest));
+            }
+
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
                 return quest.AllObjectives;
@@ -153,7 +163,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (quest == null)
             {
-                throw new ArgumentNullException("Quest is null", nameof(bot));
+                throw new ArgumentNullException("Quest is null", nameof(quest));
             }
 
             // Check if the bot is eligible to do the quest
@@ -242,13 +252,19 @@ namespace SPTQuestingBots.Controllers.Bots
                 {
                     return false;
                 }
+
+                if (botJobAssignments[bot.Profile.Id].Last().TrySetNextObjectiveStep())
+                {
+                    return true;
+                }
             }
 
-            if (botJobAssignments[bot.Profile.Id].Last().TrySetNextObjectiveStep())
-            {
-                return true;
-            }
+            bot.GetNewBotJobAssignment();
+            return true;
+        }
 
+        public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
+        {
             Quest quest = null;
             QuestObjective objective = null;
             if (botJobAssignments[bot.Profile.Id].Count > 0)
@@ -259,7 +275,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
             do
             {
-                objective = quest.RemainingObjectivesForBot(bot).Nearest(bot);
+                objective = quest?
+                    .RemainingObjectivesForBot(bot)?
+                    .Where(o => o.CanAssignBot(bot))?
+                    .Nearest(bot);
+                
                 if (objective != null)
                 {
                     break;
@@ -267,11 +287,13 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 quest = bot.GetRandomQuest();
 
+                //LoggingController.LogInfo("Checking quest " + quest.ToString() + " for bot " + bot.GetText() + "...");
+
             } while (objective == null);
 
             BotJobAssignment assignment = new BotJobAssignment(bot, quest, objective);
             botJobAssignments[bot.Profile.Id].Add(assignment);
-            return true;
+            return assignment;
         }
 
         public static IEnumerator ProcessAllQuests(Action<Quest> action)

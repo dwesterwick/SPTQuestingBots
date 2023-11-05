@@ -55,7 +55,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             }
 
             // Check if the bot is currently allowed to quest
-            if ((objectiveManager?.IsObjectiveActive == true) || (objectiveManager?.IsInitialized == false))
+            if ((objectiveManager?.IsQuestingAllowed == true) || (objectiveManager?.IsInitialized == false))
             {
                 // Check if bots that can quest are allowed to sleep
                 if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
@@ -97,7 +97,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             {
                 // We only care about other bots that can quest
                 Objective.BotObjectiveManager otherBotObjectiveManager = bot.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
-                if (otherBotObjectiveManager?.IsObjectiveActive != true)
+                if (otherBotObjectiveManager?.IsQuestingAllowed != true)
                 {
                     continue;
                 }

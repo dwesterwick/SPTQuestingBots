@@ -67,6 +67,11 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        public void DeleteAllSteps()
+        {
+            questObjectiveSteps = new QuestObjectiveStep[0];
+        }
+
         public void AddStep(QuestObjectiveStep step)
         {
             questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();

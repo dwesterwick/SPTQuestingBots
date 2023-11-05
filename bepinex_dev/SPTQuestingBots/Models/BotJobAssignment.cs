@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
@@ -27,6 +28,7 @@ namespace SPTQuestingBots.Models
         public DateTime AssignmentTime { get; private set; } = DateTime.MaxValue;
         public DateTime EndingTime { get; private set; } = DateTime.MaxValue;
 
+        public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public double TimeSinceAssignment => (DateTime.Now - AssignmentTime).TotalMilliseconds / 1000.0;
         public double TimeSinceJobEnded => (DateTime.Now - EndingTime).TotalMilliseconds / 1000.0;
         public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition() ?? null;
@@ -67,12 +69,16 @@ namespace SPTQuestingBots.Models
         {
             endJobAssingment();
             Status = JobAssignmentStatus.Complete;
+
+            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
         }
 
         public void FailJobAssingment()
         {
             endJobAssingment();
             Status = JobAssignmentStatus.Failed;
+
+            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
         }
 
         private void endJobAssingment()

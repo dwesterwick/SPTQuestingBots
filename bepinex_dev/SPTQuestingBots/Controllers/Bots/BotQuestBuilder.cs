@@ -175,13 +175,13 @@ namespace SPTQuestingBots.Controllers.Bots
                         if (!quest.TryRemoveObjective(objective))
                         {
                             LoggingController.LogError("Could not remove objective " + objective.ToString());
-                            objective.MaxBots = 0;
+                            objective.DeleteAllSteps();
                         }
                     }
                 }
 
                 // Do not use quests that don't have any valid objectives (using the check above)
-                if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.MaxBots == 0))
+                if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.StepCount == 0))
                 {
                     LoggingController.LogError("Could not find any objectives with valid NavMesh positions for quest " + quest.Name + ". Disabling quest.");
                     continue;
@@ -266,6 +266,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private void LoadQuest(Quest quest)
         {
+            quest.MaxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
+
             // Enumerate all zones used by the quest (in any of its objectives)
             List<string> zoneIDs = new List<string>();
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
@@ -289,7 +291,6 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 // Add a new objective for the zone
                 QuestZoneObjective objective = new QuestZoneObjective(zoneID);
-                objective.MaxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
                 quest.AddObjective(objective);
             }
 
@@ -464,7 +465,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 // If the zone is large, allow twice as many bots to do the objective at the same time
                 // TO DO: This is kinda sloppy and should be fixed. 
                 int maxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
-                objective.MaxBots *= triggerCollider.bounds.Volume() > 5 ? maxBots * 2 : maxBots;
+                quest.MaxBots *= triggerCollider.bounds.Volume() > 5 ? maxBots * 2 : maxBots;
 
                 zoneIDsInLocation.Add(trigger.Id);
             }

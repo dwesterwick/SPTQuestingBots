@@ -16,7 +16,6 @@ namespace SPTQuestingBots.BotLogic.Objective
     internal class BotObjectiveLayer : CustomLayerDelayedUpdate
     {
         private BotObjectiveManager objectiveManager;
-        private float minTimeBetweenSwitchingObjectives = ConfigController.Config.MinTimeBetweenSwitchingObjectives;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
         private Vector3? lastBotPosition = null;
@@ -61,7 +60,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (!objectiveManager.IsObjectiveActive)
+            if (!objectiveManager.IsQuestingAllowed)
             {
                 return updatePreviousState(false);
             }
@@ -168,23 +167,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(true);
             }
 
-            // Check if the bot is allowed to select a new objective based on the time it last selected one
-            objectiveManager.CanChangeObjective = objectiveManager.TimeSinceChangingObjective > minTimeBetweenSwitchingObjectives;
-
-            // Temporarily disable the layer if the bot cannot reach its objective and not enough time has passed after it was selected
-            if (!objectiveManager.CanReachObjective && !objectiveManager.CanChangeObjective)
-            {
-                return updatePreviousState(pauseLayer());
-            }
-
             // Check if the bot has spent enough time at its objective and enough time has passed since it was selected
-            if (objectiveManager.CanChangeObjective && (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective))
+            if (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective)
             {
                 string previousObjective = objectiveManager.ToString();
-                if (objectiveManager.TryChangeObjective())
-                {
-                    LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
-                }
+                objectiveManager.ChangeObjective();
+
+                LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
             }
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
@@ -196,7 +185,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has reached its currently assigned objective
-            if (!objectiveManager.IsObjectiveReached)
+            if (!objectiveManager.IsCloseToObjective())
             {
                 if (checkIfBotIsStuck())
                 {
@@ -239,10 +228,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 drawStuckBotPath();
 
-                if (objectiveManager.TryChangeObjective())
-                {
-                    restartStuckTimer();
-                }
+                objectiveManager.ChangeObjective();
+
+                restartStuckTimer();
 
                 return true;
             }

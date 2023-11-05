@@ -21,7 +21,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 Objective.BotObjectiveManager objectiveManager = Objective.BotObjectiveManager.GetObjectiveManagerForBot(bot);
                 if (objectiveManager != null)
                 {
-                    botState[bot] = objectiveManager.IsObjectiveActive;
+                    botState[bot] = objectiveManager.IsQuestingAllowed;
                 }
                 else
                 {

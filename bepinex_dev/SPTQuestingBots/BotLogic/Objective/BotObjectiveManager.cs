@@ -15,31 +15,23 @@ namespace SPTQuestingBots.BotLogic.Objective
     internal class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         public bool IsInitialized { get; private set; } = false;
-        public bool IsObjectiveActive { get; private set; } = false;
-        public bool IsObjectiveReached { get; private set; } = false;
-        public bool CanChangeObjective { get; set; } = true;
+        public bool IsQuestingAllowed { get; private set; } = false;
         public bool CanRushPlayerSpawn { get; private set; } = false;
-        public bool CanReachObjective { get; private set; } = true;
-        public bool IsObjectivePathComplete { get; set; } = true;
         public int StuckCount { get; set; } = 0;
         public float MinTimeAtObjective { get; set; } = 10f;
-        public Vector3? Position { get; set; } = null;
         public BotMonitor BotMonitor { get; private set; } = null;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
-        private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceInitializationTimer = new Stopwatch();
+
+        public Vector3? Position => assignment?.Position;
+        public bool IsJobAssignmentActive => assignment?.IsActive == true;
 
         public double TimeSpentAtObjective
         {
             get { return timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0; }
-        }
-
-        public double TimeSinceChangingObjective
-        {
-            get { return timeSinceChangingObjectiveTimer.ElapsedMilliseconds / 1000.0; }
         }
 
         public double TimeSinceInitialization
@@ -104,22 +96,22 @@ namespace SPTQuestingBots.BotLogic.Objective
             if ((botType == BotType.PMC) && ConfigController.Config.AllowedBotTypesForQuesting.PMC)
             {
                 CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
-                IsObjectiveActive = true;
+                IsQuestingAllowed = true;
             }
             if ((botType == BotType.Boss) && ConfigController.Config.AllowedBotTypesForQuesting.Boss)
             {
-                IsObjectiveActive = true;
+                IsQuestingAllowed = true;
             }
             if ((botType == BotType.Scav) && ConfigController.Config.AllowedBotTypesForQuesting.Scav)
             {
-                IsObjectiveActive = true;
+                IsQuestingAllowed = true;
             }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsObjectiveActive && BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (IsQuestingAllowed && BotQuestBuilder.HaveQuestsBeenBuilt)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
-                TryChangeObjective();
+                assignment = botOwner.GetCurrentJobAssignment();
             }
 
             if (botType == BotType.Undetermined)
@@ -145,12 +137,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (!IsObjectiveActive)
+            if (!IsQuestingAllowed)
             {
                 return;
             }
 
-            if (IsObjectiveReached)
+            if (IsCloseToObjective())
             {
                 timeSpentAtObjectiveTimer.Start();
             }
@@ -165,33 +157,32 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (!Position.HasValue)
-            {
-                TryChangeObjective();
-            }
+            assignment = botOwner.GetCurrentJobAssignment();
         }
 
         public void CompleteObjective()
         {
-            IsObjectivePathComplete = true;
-            IsObjectiveReached = true;
-
             assignment.CompleteJobAssingment();
 
             StuckCount = 0;
         }
 
-        public void RejectObjective()
+        public void FailObjective()
         {
-            IsObjectivePathComplete = true;
-            CanReachObjective = false;
+            assignment.FailJobAssingment();
 
-            TryChangeObjective();
+            ChangeObjective();
+        }
+
+        public void ChangeObjective()
+        {
+            assignment = botOwner.GetNewBotJobAssignment();
+            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
         }
 
         public void StopQuesting()
         {
-            IsObjectiveActive = false;
+            IsQuestingAllowed = false;
             LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is no longer allowed to quest.");
         }
 
@@ -207,6 +198,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool CanSprintToObjective()
         {
+            if (assignment == null)
+            {
+                return true;
+            }
+
             if ((assignment.QuestObjectiveAssignment != null) && (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance))
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will stop running because it's too close to " + targetObjective.ToString());
@@ -235,42 +231,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return "Position " + (Position?.ToString() ?? "???");
-        }
-
-        public bool TryChangeObjective()
-        {
-            if (!CanChangeObjective)
-            {
-                return false;
-            }
-
-            assignment = botOwner.GetCurrentJobAssignment();
-            if (assignment == null)
-            {
-                return false;
-            }
-
-            if (!tryUpdateObjective(assignment.Position))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool tryUpdateObjective(Vector3? newTargetPosition)
-        {
-            if (newTargetPosition.HasValue)
-            {
-                return false;
-            }
-
-            Position = newTargetPosition;
-            IsObjectiveReached = false;
-            CanReachObjective = true;
-            timeSinceChangingObjectiveTimer.Restart();
-
-            return true;
         }
     }
 }
