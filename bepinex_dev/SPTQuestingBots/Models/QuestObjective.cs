@@ -128,6 +128,12 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
+            if (questObjectiveSteps.Length == 0)
+            {
+                //LoggingController.LogWarning("Quest objective " + ToString() + " has no steps.");
+                return false;
+            }
+
             Vector3? position = questObjectiveSteps[0].GetPosition();
             if (!position.HasValue)
             {

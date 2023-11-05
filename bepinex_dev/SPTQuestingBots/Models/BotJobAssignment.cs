@@ -27,6 +27,7 @@ namespace SPTQuestingBots.Models
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
         public DateTime AssignmentTime { get; private set; } = DateTime.MaxValue;
         public DateTime EndingTime { get; private set; } = DateTime.MaxValue;
+        public bool HasCompletePath { get; set; } = true;
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public double TimeSinceAssignment => (DateTime.Now - AssignmentTime).TotalMilliseconds / 1000.0;
@@ -63,6 +64,7 @@ namespace SPTQuestingBots.Models
             }
 
             Status = JobAssignmentStatus.Pending;
+            HasCompletePath = true;
             return true;
         }
 

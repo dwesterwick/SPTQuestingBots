@@ -28,6 +28,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public Vector3? Position => assignment?.Position;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
+        public bool HasCompletePath => assignment.HasCompletePath;
 
         public double TimeSpentAtObjective
         {
@@ -185,7 +186,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             assignment = botOwner.GetNewBotJobAssignment();
-            //LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
+            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
 
             return true;
         }
@@ -193,6 +194,11 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void StartJobAssigment()
         {
             assignment.StartJobAssignment();
+        }
+
+        public void ReportIncompletePath()
+        {
+            assignment.HasCompletePath = false;
         }
 
         public void StopQuesting()

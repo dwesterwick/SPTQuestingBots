@@ -217,6 +217,7 @@ namespace SPTQuestingBots.Controllers.Bots
             double? timeSinceQuestEnded = quest.TimeSinceLastObjectiveEndedForBot(bot);
             if (quest.IsRepeatable && timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay))
             {
+                //LoggingController.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
                 return true;
             }
 

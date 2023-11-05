@@ -96,7 +96,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 // Process each of the quests created by an EFT quest template using the provided action
-                BotJobAssignmentFactory.ProcessAllQuests(LoadQuest);
+                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest);
 
                 IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
                 //IEnumerable<Type> allTriggerTypes = allTriggers.Select(t => t.GetType()).Distinct();
@@ -113,7 +113,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 //LoggingController.LogInfo("Quest items: " + string.Join(", ", allQuestItems.Select(l => l.Item.LocalizedName())));
 
                 // Create quest objectives for all matching quest items found in the map
-                BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
+                yield return BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 Quest spawnPointQuest = LocationController.CreateSpawnPointQuest();

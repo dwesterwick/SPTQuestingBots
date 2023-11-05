@@ -101,7 +101,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
 
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
-                LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
+                if (ObjectiveManager.HasCompletePath)
+                {
+                    LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
+                    ObjectiveManager.ReportIncompletePath();
+                }
             }
 
             return true;

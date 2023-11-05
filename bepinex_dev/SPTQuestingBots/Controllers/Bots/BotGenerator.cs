@@ -36,25 +36,11 @@ namespace SPTQuestingBots.Controllers.Bots
         // Temporarily stores spawn points for bots while trying to spawn several of them
         private static List<SpawnPointParams> pendingSpawnPoints = new List<SpawnPointParams>();
 
-        public static ReadOnlyCollection<Models.BotSpawnInfo> InitialPMCBotGroups
-        {
-            get { return new ReadOnlyCollection<Models.BotSpawnInfo>(initialPMCGroups); }
-        }
-
-        public static int SpawnedInitialPMCCount
-        {
-            get {  return initialPMCGroups.Count(g => g.HasSpawned); }
-        }
-
-        public static int RemainingInitialPMCSpawnCount
-        {
-            get { return initialPMCGroups.Count(g => !g.HasSpawned); }
-        }
-
-        public static bool HasRemainingInitialPMCSpawns
-        {
-            get { return (CanSpawnPMCs && (initialPMCGroups.Count == 0)) || initialPMCGroups.Any(g => !g.HasSpawned); }
-        }
+        public static ReadOnlyCollection<Models.BotSpawnInfo> InitialPMCBotGroups => new ReadOnlyCollection<Models.BotSpawnInfo>(initialPMCGroups);
+        public static int SpawnedInitialPMCCount => initialPMCGroups.Count(g => g.HasSpawned);
+        public static int RemainingInitialPMCSpawnCount => initialPMCGroups.Count(g => !g.HasSpawned);
+        public static bool HasRemainingInitialPMCSpawns => (CanSpawnPMCs && (initialPMCGroups.Count == 0)) || initialPMCGroups.Any(g => !g.HasSpawned);
+        public bool PlayerWantsBots = LocationController.CurrentRaidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
 
         public static IEnumerator Clear()
         {
@@ -115,7 +101,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            if (LocationController.CurrentRaidSettings.BotSettings.BotAmount == EFT.Bots.EBotAmount.NoBots)
+            if (!PlayerWantsBots)
             {
                 //return;
             }
@@ -211,7 +197,12 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             // Wait until all initial bosses have spawned before spawning inital PMC's (except for Factory)
-            if ((BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount) && !LocationController.CurrentLocation.Name.ToLower().Contains("factory"))
+            if 
+            (
+                PlayerWantsBots
+                && (BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
+                && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")
+            )
             {
                 return;
             }
