@@ -104,11 +104,11 @@ namespace SPTQuestingBots.Controllers.Bots
             return objectiveDistances.OrderBy(i => i.Value).First().Key;
         }
 
-        public static DateTime LastObjectiveEndingTimeForBot(this Quest quest, BotOwner bot)
+        public static DateTime? LastObjectiveEndingTimeForBot(this Quest quest, BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
-                return DateTime.MaxValue;
+                return null;
             }
 
             DateTime lastTime = DateTime.MinValue;
@@ -119,22 +119,28 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (!matchingAssignments.Any())
             {
-                return DateTime.MaxValue;
+                return null;
             }
 
             return matchingAssignments.First().EndingTime;
         }
 
-        public static double TimeSinceLastObjectiveEndedForBot(this Quest quest, BotOwner bot)
+        public static double? TimeSinceLastObjectiveEndedForBot(this Quest quest, BotOwner bot)
         {
-            return (DateTime.Now - quest.LastObjectiveEndingTimeForBot(bot)).TotalSeconds;
+            DateTime? lastObjectiveEndingTime = quest.LastObjectiveEndingTimeForBot(bot);
+            if (!lastObjectiveEndingTime.HasValue)
+            {
+                return null;
+            }
+
+            return (DateTime.Now - lastObjectiveEndingTime.Value).TotalSeconds;
         }
 
-        public static DateTime FirstObjectiveEndingTimeForBot(this Quest quest, BotOwner bot)
+        public static DateTime? FirstObjectiveEndingTimeForBot(this Quest quest, BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
-                return DateTime.MinValue;
+                return null;
             }
 
             IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
@@ -143,15 +149,21 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (!matchingAssignments.Any())
             {
-                return DateTime.MinValue;
+                return null;
             }
 
             return matchingAssignments.Last().EndingTime;
         }
 
-        public static double TimeSinceFirstObjectiveEndedForBot(this Quest quest, BotOwner bot)
+        public static double? TimeSinceFirstObjectiveEndedForBot(this Quest quest, BotOwner bot)
         {
-            return (DateTime.Now - quest.FirstObjectiveEndingTimeForBot(bot)).TotalSeconds;
+            DateTime? firstObjectiveEndingTime = quest.FirstObjectiveEndingTimeForBot(bot);
+            if (!firstObjectiveEndingTime.HasValue)
+            {
+                return null;
+            }
+
+            return (DateTime.Now - firstObjectiveEndingTime.Value).TotalSeconds;
         }
 
         public static bool CanBotDoQuest(Quest quest, BotOwner bot)
@@ -169,6 +181,7 @@ namespace SPTQuestingBots.Controllers.Bots
             // Check if the bot is eligible to do the quest
             if (!quest.CanAssignBot(bot))
             {
+                //LoggingController.LogInfo("Cannot assign " + bot.GetText() + " to quest " + quest.ToString());
                 return false;
             }
 
@@ -181,13 +194,15 @@ namespace SPTQuestingBots.Controllers.Bots
             // Ensure the bot can do at least one of the objectives
             if (!quest.AllObjectives.Any(o => o.CanAssignBot(bot)))
             {
+                //LoggingController.LogInfo("Cannot assign " + bot.GetText() + " to any objectives in quest " + quest.ToString());
                 return false;
             }
 
             // Check if the bot is has been performing the same quest for too long
-            double timeSinceQuestStarted = (DateTime.Now - quest.FirstObjectiveEndingTimeForBot(bot)).TotalSeconds;
-            if (quest.IsRepeatable && (timeSinceQuestStarted >= ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest))
+            double? timeSinceQuestStarted = quest.TimeSinceFirstObjectiveEndedForBot(bot);
+            if (quest.IsRepeatable && timeSinceQuestStarted.HasValue && (timeSinceQuestStarted >= ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest))
             {
+                //LoggingController.LogInfo(bot.GetText() + " has been performing quest " + quest.ToString() + " for too long");
                 return false;
             }
 
@@ -198,7 +213,8 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             // Check if the bot is allowed to repeat the quest
-            if (quest.IsRepeatable && (quest.TimeSinceFirstObjectiveEndedForBot(bot) >= ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay))
+            double? timeSinceQuestEnded = quest.TimeSinceLastObjectiveEndedForBot(bot);
+            if (quest.IsRepeatable && timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay))
             {
                 return true;
             }

@@ -31,6 +31,7 @@ namespace SPTQuestingBots.Models
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public double TimeSinceAssignment => (DateTime.Now - AssignmentTime).TotalMilliseconds / 1000.0;
         public double TimeSinceJobEnded => (DateTime.Now - EndingTime).TotalMilliseconds / 1000.0;
+        public bool HasWaitedLongEnoughAfterEnding => TimeSinceJobEnded >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
         public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition() ?? null;
 
         public BotJobAssignment(BotOwner bot)
@@ -79,6 +80,11 @@ namespace SPTQuestingBots.Models
             Status = JobAssignmentStatus.Failed;
 
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
+        }
+
+        public void StartJobAssignment()
+        {
+            Status = JobAssignmentStatus.Active;
         }
 
         private void endJobAssingment()

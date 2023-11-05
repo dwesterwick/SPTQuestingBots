@@ -110,9 +110,14 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            if (!ConfigController.Config.InitialPMCSpawns.Enabled || (LocationController.CurrentRaidSettings.BotSettings.BotAmount == EFT.Bots.EBotAmount.NoBots))
+            if (!ConfigController.Config.InitialPMCSpawns.Enabled)
             {
                 return;
+            }
+
+            if (LocationController.CurrentRaidSettings.BotSettings.BotAmount == EFT.Bots.EBotAmount.NoBots)
+            {
+                //return;
             }
 
             if (!CanSpawnPMCs || IsSpawningPMCs || IsGeneratingPMCs || !HasRemainingInitialPMCSpawns)

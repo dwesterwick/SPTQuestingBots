@@ -157,7 +157,10 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            assignment = botOwner.GetCurrentJobAssignment();
+            if ((assignment == null) || assignment.HasWaitedLongEnoughAfterEnding)
+            {
+                assignment = botOwner.GetCurrentJobAssignment();
+            }
         }
 
         public void CompleteObjective()
@@ -177,13 +180,18 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void ChangeObjective()
         {
             assignment = botOwner.GetNewBotJobAssignment();
-            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
+            //LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
+        }
+
+        public void StartJobAssigment()
+        {
+            assignment.StartJobAssignment();
         }
 
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
-            LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is no longer allowed to quest.");
+            LoggingController.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
         }
 
         public bool IsCloseToObjective()

@@ -49,6 +49,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            ObjectiveManager.StartJobAssigment();
+
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             tryMoveToObjective();
         }

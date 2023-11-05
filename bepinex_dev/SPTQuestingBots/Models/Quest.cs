@@ -82,6 +82,11 @@ namespace SPTQuestingBots.Models
             Template = template;
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public void Clear()
         {
             objectives = new QuestObjective[0];
