@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -26,9 +27,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public BotMonitor BotMonitor { get; private set; } = null;
 
         private BotOwner botOwner = null;
-        private Models.Quest targetQuest = null;
-        private Models.QuestObjective targetObjective = null;
-        private Models.QuestObjectiveStep targetObjectiveStep = null;
+        private BotJobAssignment assignment = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
         private Stopwatch timeSinceChangingObjectiveTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceInitializationTimer = new Stopwatch();
@@ -177,9 +176,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             IsObjectivePathComplete = true;
             IsObjectiveReached = true;
 
-            targetObjective.BotCompletedObjective(botOwner);
-            targetQuest.CompleteObjective(botOwner, targetObjective);
-            targetQuest.StartQuestForBot(botOwner);
+            assignment.CompleteJobAssingment();
 
             StuckCount = 0;
         }
@@ -189,7 +186,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             IsObjectivePathComplete = true;
             CanReachObjective = false;
 
-            targetObjective.BotFailedObjective(botOwner);
+            TryChangeObjective();
         }
 
         public void StopQuesting()
@@ -210,13 +207,18 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool CanSprintToObjective()
         {
-            if ((targetObjective != null) && (DistanceToObjective < targetObjective.MaxRunDistance))
+            if ((assignment.QuestObjectiveAssignment != null) && (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance))
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will stop running because it's too close to " + targetObjective.ToString());
                 return false;
             }
 
-            if ((targetQuest != null) && targetQuest.HasBotCompletedAnyObjectives(botOwner) && !targetQuest.CanRunBetweenObjectives)
+            if 
+            (
+                (assignment.QuestAssignment != null)
+                && !assignment.QuestAssignment.CanRunBetweenObjectives
+                && (assignment.QuestAssignment.TimeSinceLastObjectiveEndedForBot(botOwner) > 0)
+            )
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can no longer run for quest " + targetQuest.Name);
                 return false;
@@ -227,9 +229,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override string ToString()
         {
-            if (targetQuest != null)
+            if (assignment.QuestAssignment != null)
             {
-                return (targetObjective?.ToString() ?? "???") + " for quest " + targetQuest.Name;
+                return (assignment.QuestObjectiveAssignment?.ToString() ?? "???") + " for quest " + assignment.QuestAssignment.Name;
             }
 
             return "Position " + (Position?.ToString() ?? "???");
@@ -242,27 +244,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            if (TryPerformNextQuestObjectiveStep())
+            assignment = botOwner.GetCurrentJobAssignment();
+            if (assignment == null)
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is performing the next step for " + targetObjective.ToString());
-                return true;
+                return false;
             }
 
-            if (TryToGoToRandomQuestObjective())
-            {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has accepted objective " + ToString());
-                return true;
-            }
-
-            //LoggingController.LogWarning("Could not assign quest for bot " + botOwner.Profile.Nickname);
-            return false;
-        }
-
-        private bool TryPerformNextQuestObjectiveStep()
-        {
-            targetObjectiveStep = targetObjective?.GetNextObjectiveStep(botOwner);
-
-            if (targetObjectiveStep == null)
+            if (!tryUpdateObjective(assignment.Position))
             {
                 return false;
             }
@@ -270,72 +258,19 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
-        private bool TryToGoToRandomQuestObjective()
+        private bool tryUpdateObjective(Vector3? newTargetPosition)
         {
-            // Keep searching for a quest the bot can perform until one is found or there aren't any quests left
-            while (targetQuest == null)
+            if (newTargetPosition.HasValue)
             {
-                targetQuest = BotJobAssignmentFactory.GetRandomQuestForBot(botOwner);
-
-                if (targetQuest == null)
-                {
-                    LoggingController.LogWarning("Could not find a quest for bot " + botOwner.Profile.Nickname);
-                    return false;
-                }
-
-                // Ensure there are objectives in the quest that the bot can perform
-                if (targetQuest.GetRemainingObjectiveCount(botOwner) == 0)
-                {
-                    //targetQuest.BlacklistBot(botOwner);
-                    targetQuest = null;
-                }
-            }
-
-            Models.QuestObjective nextObjective = targetQuest.GetRandomNewObjective(botOwner);
-            if (nextObjective == null)
-            {
-                LoggingController.LogWarning("Could not find another objective for bot " + botOwner.Profile.Nickname + " for quest " + targetQuest.Name);
-                //targetQuest.BlacklistBot(botOwner);
-                targetQuest.StopQuestForBot(botOwner);
-                targetQuest = null;
                 return false;
             }
 
-            if (!nextObjective.TryAssignBot(botOwner))
-            {
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + ". Too many bots already assigned to it.");
-                return false;
-            }
-
-            targetObjectiveStep = nextObjective.GetNextObjectiveStep(botOwner);
-            Vector3? nextObjectiveStepPosition = targetObjectiveStep?.GetPosition();
-
-            if (targetObjectiveStep == null)
-            {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has completed all steps for " + ToString());
-                nextObjective.BotCompletedObjective(botOwner);
-                return false;
-            }
-
-            if (!nextObjectiveStepPosition.HasValue)
-            {
-                LoggingController.LogWarning("Bot " + botOwner.Profile.Nickname + " cannot be assigned to " + ToString() + targetQuest.Name + ". Invalid position.");
-                nextObjective.BotFailedObjective(botOwner);
-                return false;
-            }
-
-            targetObjective = nextObjective;
-            updateObjective(nextObjectiveStepPosition.Value);
-            
-            return true;
-        }
-
-        private void updateObjective(Vector3 newTargetPosition)
-        {
             Position = newTargetPosition;
             IsObjectiveReached = false;
             CanReachObjective = true;
             timeSinceChangingObjectiveTimer.Restart();
+
+            return true;
         }
     }
 }

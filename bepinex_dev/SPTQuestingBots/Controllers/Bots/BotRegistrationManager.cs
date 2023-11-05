@@ -36,6 +36,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static BotType GetBotType(BotOwner botOwner)
         {
+            if (botOwner?.Profile?.Side == null)
+            {
+                return BotType.Undetermined;
+            }
+
             if (IsBotAPMC(botOwner))
             {
                 return BotType.PMC;

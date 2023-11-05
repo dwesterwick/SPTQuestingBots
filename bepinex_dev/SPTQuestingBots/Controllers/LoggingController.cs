@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 
 namespace SPTQuestingBots.Controllers
 {
     public static class LoggingController
     {
         public static BepInEx.Logging.ManualLogSource Logger { get; set; } = null;
+
+        public static string GetText(this BotOwner bot) => bot.Profile.Nickname + " (ID: " + bot.Profile.Id + ", Level: " + bot.Profile.Info.Level + ")";
+        public static string GetText(this IEnumerable<BotOwner> bots) => string.Join(",", bots.Select(b => b.GetText()));
 
         public static void LogInfo(string message)
         {
