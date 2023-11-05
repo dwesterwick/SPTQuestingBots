@@ -1,18 +1,19 @@
-﻿using Newtonsoft.Json;
-using SPTQuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
-    public enum QuestObjectiveStepType
+    public enum QuestAction
     {
         Undefined = 0,
         MoveToPosition = 1,
+        PlantItem = 2,
     }
 
     public class QuestObjectiveStep
@@ -24,7 +25,7 @@ namespace SPTQuestingBots.Models
         public SerializableVector3 SerializablePosition { get; set; } = null;
 
         [JsonProperty("stepType")]
-        public QuestObjectiveStepType StepType { get; set; } = QuestObjectiveStepType.MoveToPosition;
+        public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
 
         public QuestObjectiveStep()
         {

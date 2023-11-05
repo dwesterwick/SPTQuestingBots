@@ -25,14 +25,11 @@ namespace SPTQuestingBots.Models
         public Quest QuestAssignment { get; private set; } = null;
         public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
-        public DateTime AssignmentTime { get; private set; } = DateTime.MaxValue;
-        public DateTime EndingTime { get; private set; } = DateTime.MaxValue;
+        public DateTime? AssignmentTime { get; private set; } = null;
+        public DateTime? EndingTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
-        public double TimeSinceAssignment => (DateTime.Now - AssignmentTime).TotalMilliseconds / 1000.0;
-        public double TimeSinceJobEnded => (DateTime.Now - EndingTime).TotalMilliseconds / 1000.0;
-        public bool HasWaitedLongEnoughAfterEnding => TimeSinceJobEnded >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
         public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition() ?? null;
 
         public BotJobAssignment(BotOwner bot)
@@ -53,6 +50,31 @@ namespace SPTQuestingBots.Models
         {
             int stepNumber = QuestObjectiveAssignment?.GetObjectiveStepNumber(QuestObjectiveStepAssignment) ?? 0;
             return "Step #" + stepNumber + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
+        }
+
+        public double? TimeSinceAssignment()
+        {
+            if (!AssignmentTime.HasValue)
+            {
+                return null;
+            }
+
+            return (DateTime.Now - AssignmentTime.Value).TotalMilliseconds / 1000.0;
+        }
+
+        public double? TimeSinceJobEnded()
+        {
+            if (!EndingTime.HasValue)
+            {
+                return null;
+            }
+
+            return (DateTime.Now - EndingTime.Value).TotalMilliseconds / 1000.0;
+        }
+
+        public bool HasWaitedLongEnoughAfterEnding()
+        {
+            return TimeSinceJobEnded() >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
         }
 
         public bool TrySetNextObjectiveStep()

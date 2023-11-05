@@ -32,7 +32,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Force the bot to regroup for a certain amount of time after starting this action
-            bool mustRegroup = actionElapsedTime.ElapsedMilliseconds / 1000.0 < ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
+            bool mustRegroup = ActionElpasedTime < ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
 
             // determine the location of the nearest follower and the target distance to it
             Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);

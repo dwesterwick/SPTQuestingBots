@@ -18,7 +18,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         private BotObjectiveManager objectiveManager;
         private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
-        private Vector3? lastBotPosition = null;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
         public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
@@ -185,79 +184,25 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            // Check if the bot has reached its currently assigned objective
-            if (objectiveManager.IsJobAssignmentActive)
+            // Check if the bot needs to complete its assignment
+            if (!objectiveManager.IsJobAssignmentActive)
             {
-                if (checkIfBotIsStuck())
-                {
-                    if (!wasStuck)
-                    {
-                        objectiveManager.StuckCount++;
-                        LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is stuck and will get a new objective.");
-                    }
-                    wasStuck = true;
-                }
-                else
-                {
-                    wasStuck = false;
-                }
-
-                setNextAction(BotActionType.GoToObjective, "GoToObjective");
-                return updatePreviousState(true);
+                return updatePreviousState(pauseLayer());
             }
 
-            return updatePreviousState(pauseLayer());
-        }
-
-        private bool checkIfBotIsStuck()
-        {
-            if (!lastBotPosition.HasValue)
+            // Determine what type of action is needed for the bot to complete its assignment
+            switch (objectiveManager.CurrentQuestAction)
             {
-                lastBotPosition = BotOwner.Position;
+                case QuestAction.MoveToPosition:
+                    setNextAction(BotActionType.GoToObjective, "GoToObjective");
+                    return updatePreviousState(true);
+                case QuestAction.PlantItem:
+                    setNextAction(BotActionType.HoldPosition, "PlantItem");
+                    return updatePreviousState(true);
             }
 
-            // Check if the bot has moved enough
-            float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, BotOwner.Position);
-            if (distanceFromLastUpdate > ConfigController.Config.StuckBotDetection.Distance)
-            {
-                lastBotPosition = BotOwner.Position;
-                restartStuckTimer();
-            }
-
-            // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
-            if (StuckTime > ConfigController.Config.StuckBotDetection.Time)
-            {
-                drawStuckBotPath();
-
-                if (objectiveManager.TryChangeObjective())
-                {
-                    restartStuckTimer();
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void drawStuckBotPath()
-        {
-            Vector3[] failedBotPath = BotOwner.Mover?.CurPath;
-            if (!ConfigController.Config.Debug.ShowFailedPaths || (failedBotPath == null))
-            {
-                return;
-            }
-
-            List<Vector3> adjustedPathCorners = new List<Vector3>();
-            foreach (Vector3 corner in failedBotPath)
-            {
-                adjustedPathCorners.Add(new Vector3(corner.x, corner.y + 0.75f, corner.z));
-            }
-
-            string pathName = "FailedBotPath_" + BotOwner.Id;
-            PathRender.RemovePath(pathName);
-            PathVisualizationData failedBotPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), Color.red);
-            PathRender.AddOrUpdatePath(failedBotPathRendering);
+            // Failsafe
+            return updatePreviousState(false);
         }
     }
 }

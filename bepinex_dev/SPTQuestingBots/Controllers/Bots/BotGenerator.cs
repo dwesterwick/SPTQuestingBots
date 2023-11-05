@@ -40,8 +40,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static int SpawnedInitialPMCCount => initialPMCGroups.Count(g => g.HasSpawned);
         public static int RemainingInitialPMCSpawnCount => initialPMCGroups.Count(g => !g.HasSpawned);
         public static bool HasRemainingInitialPMCSpawns => (CanSpawnPMCs && (initialPMCGroups.Count == 0)) || initialPMCGroups.Any(g => !g.HasSpawned);
-        public bool PlayerWantsBots = LocationController.CurrentRaidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
-
+        
         public static IEnumerator Clear()
         {
             IsClearing = true;
@@ -101,7 +100,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            if (!PlayerWantsBots)
+            if (!PlayerWantsBotsInRaid())
             {
                 //return;
             }
@@ -199,7 +198,7 @@ namespace SPTQuestingBots.Controllers.Bots
             // Wait until all initial bosses have spawned before spawning inital PMC's (except for Factory)
             if 
             (
-                PlayerWantsBots
+                PlayerWantsBotsInRaid()
                 && (BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
                 && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")
             )
@@ -214,6 +213,17 @@ namespace SPTQuestingBots.Controllers.Bots
             
             // Spawn PMC's
             StartCoroutine(SpawnInitialPMCs(initialPMCGroups.ToArray(), LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
+        }
+
+        public bool PlayerWantsBotsInRaid()
+        {
+            RaidSettings raidSettings = LocationController.CurrentRaidSettings;
+            if (raidSettings == null)
+            {
+                return false;
+            }
+
+            return raidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
         }
 
         public static bool IsBotFromInitialPMCSpawns(BotOwner bot)

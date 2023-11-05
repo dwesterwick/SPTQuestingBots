@@ -245,6 +245,20 @@ namespace SPTQuestingBots.Controllers.Bots
             if (DoesBotHaveNewJobAssignment(bot))
             {
                 LoggingController.LogInfo("Bot " + bot.GetText() + " is now doing " + botJobAssignments[bot.Profile.Id].Last().ToString());
+
+                if (botJobAssignments[bot.Profile.Id].Count > 1)
+                {
+                    BotJobAssignment lastAssignment = botJobAssignments[bot.Profile.Id].TakeLast(2).First();
+
+                    LoggingController.LogInfo("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
+
+                    double? timeSinceFirstObjectiveEnded = lastAssignment.QuestAssignment.TimeSinceFirstObjectiveEndedForBot(bot);
+                    double? timeSinceLastObjectiveEnded = lastAssignment.QuestAssignment.TimeSinceLastObjectiveEndedForBot(bot);
+
+                    string firstObjTimeText = timeSinceFirstObjectiveEnded.HasValue ? timeSinceFirstObjectiveEnded.Value.ToString() : "N/A";
+                    string lastObjTimeText = timeSinceLastObjectiveEnded.HasValue ? timeSinceLastObjectiveEnded.Value.ToString() : "N/A";
+                    LoggingController.LogInfo("Time since first objective ended: " + firstObjTimeText + ", Time since last objective ended: " + lastObjTimeText);
+                }
             }
 
             if (botJobAssignments[bot.Profile.Id].Count > 0)

@@ -29,21 +29,17 @@ namespace SPTQuestingBots.BotLogic.Objective
         public Vector3? Position => assignment?.Position;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
+        public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
 
-        public double TimeSpentAtObjective
-        {
-            get { return timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0; }
-        }
+        public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
+        public double TimeSinceInitialization => timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0;
+        public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
-        public double TimeSinceInitialization
-        {
-            get { return timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0; }
-        }
+        public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
+        public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal);
 
-        public float DistanceToObjective
-        {
-            get { return Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN; }
-        }
+        public void StartJobAssigment() => assignment.StartJobAssignment();
+        public void ReportIncompletePath() => assignment.HasCompletePath = false;
 
         public static BotObjectiveManager GetObjectiveManagerForBot(BotOwner bot)
         {
@@ -75,6 +71,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return null;
+        }
+
+        public override string ToString()
+        {
+            if (assignment.QuestAssignment != null)
+            {
+                return (assignment.QuestObjectiveAssignment?.ToString() ?? "???") + " for quest " + assignment.QuestAssignment.Name;
+            }
+
+            return "Position " + (Position?.ToString() ?? "???");
         }
 
         public void Init(BotOwner _botOwner)
@@ -158,7 +164,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if ((assignment == null) || assignment.HasWaitedLongEnoughAfterEnding)
+            bool? hasWaitedLongEnough = assignment?.HasWaitedLongEnoughAfterEnding();
+            if (hasWaitedLongEnough.HasValue && hasWaitedLongEnough.Value)
             {
                 assignment = botOwner.GetCurrentJobAssignment();
             }
@@ -180,7 +187,8 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool TryChangeObjective()
         {
-            if (assignment?.TimeSinceJobEnded < ConfigController.Config.MinTimeBetweenSwitchingObjectives)
+            double? timeSinceJobEnded = assignment?.TimeSinceJobEnded();
+            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < ConfigController.Config.MinTimeBetweenSwitchingObjectives))
             {
                 return false;
             }
@@ -191,30 +199,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
-        public void StartJobAssigment()
-        {
-            assignment.StartJobAssignment();
-        }
-
-        public void ReportIncompletePath()
-        {
-            assignment.HasCompletePath = false;
-        }
-
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
             LoggingController.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
-        }
-
-        public bool IsCloseToObjective()
-        {
-            return IsCloseToObjective(ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal);
-        }
-
-        public bool IsCloseToObjective(float distance)
-        {
-            return DistanceToObjective <= distance;
         }
 
         public bool CanSprintToObjective()
@@ -242,16 +230,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            if (assignment.QuestAssignment != null)
-            {
-                return (assignment.QuestObjectiveAssignment?.ToString() ?? "???") + " for quest " + assignment.QuestAssignment.Name;
-            }
-
-            return "Position " + (Position?.ToString() ?? "???");
         }
     }
 }

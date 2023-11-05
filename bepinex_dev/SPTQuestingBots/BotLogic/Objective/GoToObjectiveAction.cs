@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,9 +14,21 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     internal class GoToObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        public GoToObjectiveAction(BotOwner _BotOwner) : base(_BotOwner)
+        private bool wasStuck = false;
+
+        public GoToObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
 
+        }
+
+        public override void Start()
+        {
+            base.Start();
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
         }
 
         public override void Update()
@@ -53,6 +66,25 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             tryMoveToObjective();
+
+            if (checkIfBotIsStuck())
+            {
+                if (!wasStuck)
+                {
+                    ObjectiveManager.StuckCount++;
+                    LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is stuck and will get a new objective.");
+                }
+                wasStuck = true;
+
+                if (ObjectiveManager.TryChangeObjective())
+                {
+                    restartStuckTimer();
+                }
+            }
+            else
+            {
+                wasStuck = false;
+            }
         }
 
         private bool tryMoveToObjective()
