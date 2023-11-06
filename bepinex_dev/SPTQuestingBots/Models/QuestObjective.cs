@@ -163,7 +163,9 @@ namespace SPTQuestingBots.Models
         public QuestObjectiveStep GetNextObjectiveStep(QuestObjectiveStep currentStep)
         {
             int currentIndex = questObjectiveSteps.IndexOf(currentStep);
-            IEnumerable<QuestObjectiveStep> nextStep = questObjectiveSteps.Skip(currentIndex + 1).Take(1);
+            IEnumerable<QuestObjectiveStep> nextStep = questObjectiveSteps
+                .Skip(currentIndex + 1)
+                .Take(1);
 
             if (nextStep.Any())
             {

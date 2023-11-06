@@ -14,8 +14,9 @@ namespace SPTQuestingBots.Models
         NotStarted,
         Pending,
         Active,
-        Complete,
-        Failed
+        Completed,
+        Failed,
+        Archived
     }
 
     public class BotJobAssignment
@@ -25,8 +26,8 @@ namespace SPTQuestingBots.Models
         public Quest QuestAssignment { get; private set; } = null;
         public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
-        public DateTime? AssignmentTime { get; private set; } = null;
-        public DateTime? EndingTime { get; private set; } = null;
+        public DateTime? StartTime { get; private set; } = null;
+        public DateTime? EndTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
@@ -41,9 +42,11 @@ namespace SPTQuestingBots.Models
         {
             QuestAssignment = quest;
             QuestObjectiveAssignment = objective;
-            TrySetNextObjectiveStep();
 
-            AssignmentTime = DateTime.Now;
+            if (!TrySetNextObjectiveStep())
+            {
+                LoggingController.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
+            }
         }
 
         public override string ToString()
@@ -54,22 +57,22 @@ namespace SPTQuestingBots.Models
 
         public double? TimeSinceAssignment()
         {
-            if (!AssignmentTime.HasValue)
+            if (!StartTime.HasValue)
             {
                 return null;
             }
 
-            return (DateTime.Now - AssignmentTime.Value).TotalMilliseconds / 1000.0;
+            return (DateTime.Now - StartTime.Value).TotalMilliseconds / 1000.0;
         }
 
         public double? TimeSinceJobEnded()
         {
-            if (!EndingTime.HasValue)
+            if (!EndTime.HasValue)
             {
                 return null;
             }
 
-            return (DateTime.Now - EndingTime.Value).TotalMilliseconds / 1000.0;
+            return (DateTime.Now - EndTime.Value).TotalMilliseconds / 1000.0;
         }
 
         public bool HasWaitedLongEnoughAfterEnding()
@@ -79,21 +82,27 @@ namespace SPTQuestingBots.Models
 
         public bool TrySetNextObjectiveStep()
         {
+            if ((Status != JobAssignmentStatus.Completed) && (Status != JobAssignmentStatus.NotStarted))
+            {
+                return false;
+            }
+
             QuestObjectiveStepAssignment = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment);
             if (QuestObjectiveStepAssignment == null)
             {
                 return false;
             }
 
-            Status = JobAssignmentStatus.Pending;
-            HasCompletePath = true;
+            EndTime = null;
+            startJobAssingment();
+            
             return true;
         }
 
         public void CompleteJobAssingment()
         {
             endJobAssingment();
-            Status = JobAssignmentStatus.Complete;
+            Status = JobAssignmentStatus.Completed;
 
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
         }
@@ -111,11 +120,27 @@ namespace SPTQuestingBots.Models
             Status = JobAssignmentStatus.Active;
         }
 
+        public void ArchiveJobAssignment()
+        {
+            Status = JobAssignmentStatus.Archived;
+        }
+
+        private void startJobAssingment()
+        {
+            if (!StartTime.HasValue)
+            {
+                StartTime = DateTime.Now;
+            }
+
+            Status = JobAssignmentStatus.Pending;
+            HasCompletePath = true;
+        }
+
         private void endJobAssingment()
         {
-            if (EndingTime == DateTime.MaxValue)
+            if (!EndTime.HasValue)
             {
-                EndingTime = DateTime.Now;
+                EndTime = DateTime.Now;
             }
         }
     }

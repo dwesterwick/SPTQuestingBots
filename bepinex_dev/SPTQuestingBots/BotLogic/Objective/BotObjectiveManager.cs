@@ -117,7 +117,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
             if (IsQuestingAllowed && BotQuestBuilder.HaveQuestsBeenBuilt)
             {
-                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 assignment = botOwner.GetCurrentJobAssignment();
             }
 
@@ -222,7 +222,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             (
                 (assignment.QuestAssignment != null)
                 && !assignment.QuestAssignment.CanRunBetweenObjectives
-                && (assignment.QuestAssignment.TimeSinceLastObjectiveEndedForBot(botOwner) > 0)
+                && (assignment.QuestAssignment.TimeSinceLastAssignmentEndedForBot(botOwner) > 0)
             )
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can no longer run for quest " + targetQuest.Name);
