@@ -29,8 +29,8 @@ namespace SPTQuestingBots.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
 
-        [JsonProperty("plantTime")]
-        public double PlantTime { get; set; } = 3;
+        [JsonProperty("minElapsedTime")]
+        public double MinElapsedTime { get; set; } = 0;
 
         public QuestObjectiveStep()
         {

@@ -102,17 +102,25 @@ namespace SPTQuestingBots.Models
         public void CompleteJobAssingment()
         {
             endJobAssingment();
-            Status = JobAssignmentStatus.Completed;
 
-            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
+            if (Status != JobAssignmentStatus.Completed)
+            {
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
+            }
+
+            Status = JobAssignmentStatus.Completed;
         }
 
         public void FailJobAssingment()
         {
             endJobAssingment();
-            Status = JobAssignmentStatus.Failed;
 
-            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
+            if (Status != JobAssignmentStatus.Failed)
+            {
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
+            }
+
+            Status = JobAssignmentStatus.Failed;
         }
 
         public void StartJobAssignment()

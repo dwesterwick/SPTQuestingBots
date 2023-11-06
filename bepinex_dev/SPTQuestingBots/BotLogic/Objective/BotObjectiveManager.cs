@@ -29,7 +29,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
-        public double PlantTime => assignment?.QuestObjectiveStepAssignment?.PlantTime ?? 0;
+        public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public double TimeSinceInitialization => timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0;
@@ -232,6 +232,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             )
             {
                 //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can no longer run for quest " + targetQuest.Name);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsAllowedToTakeABreak()
+        {
+            if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
+            {
                 return false;
             }
 

@@ -77,13 +77,13 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot wants to use a mounted weapon
-            if (objectiveManager.BotMonitor.WantsToUseStationaryWeapon())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.WantsToUseStationaryWeapon())
             {
                 return updatePreviousState(false);
             }
 
             // Check if the bot wants to loot
-            if (objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
             {
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
                 return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
@@ -91,7 +91,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             // Check if the bot is currently extracting or wants to extract via SAIN
-            if (objectiveManager.BotMonitor.WantsToExtract())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.WantsToExtract())
             {
                 objectiveManager.StopQuesting();
 
@@ -138,7 +138,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Check if any of the bot's group members are in combat
             // NOTE: This check MUST be performed after updating this bot's combate state!
-            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
+            if (objectiveManager.IsAllowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
                 // WIP. Hopefully not needed with SAIN.
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
@@ -150,7 +150,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has wandered too far from its followers.
-            if (objectiveManager.BotMonitor.ShouldWaitForFollowers())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldWaitForFollowers())
             {
                 followersTooFarTimer.Start();
             }
@@ -202,7 +202,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     // Only plant items if the bot is close enough to them
                     if (objectiveManager.IsCloseToObjective())
                     {
-                        setNextAction(BotActionType.PlantItem, "PlantItem");
+                        setNextAction(BotActionType.PlantItem, "PlantItem (" + objectiveManager.MinElapsedActionTime + "s)");
                     }
                     else
                     {

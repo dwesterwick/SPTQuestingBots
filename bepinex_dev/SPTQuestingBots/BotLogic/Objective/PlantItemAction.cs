@@ -40,7 +40,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
-            if (ActionElpasedTime >= ObjectiveManager.PlantTime)
+            if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
             {
                 ObjectiveManager.CompleteObjective();
             }

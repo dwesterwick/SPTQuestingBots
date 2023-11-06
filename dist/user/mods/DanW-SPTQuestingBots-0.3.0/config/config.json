@@ -31,7 +31,7 @@
 		"navmesh_search_distance_spawn": 2
 	},
 	"bot_search_distances": {
-		"objective_reached_ideal": 0.25,
+		"objective_reached_ideal": 0.5,
 		"objective_reached_navmesh_path_error": 20,
 		"max_navmesh_path_error": 10
 	},

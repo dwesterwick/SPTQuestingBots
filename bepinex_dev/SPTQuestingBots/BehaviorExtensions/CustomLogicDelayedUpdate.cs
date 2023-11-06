@@ -35,7 +35,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public override void Start()
         {
-            actionElapsedTime.Start();
+            actionElapsedTime.Restart();
         }
 
         public override void Stop()
