@@ -15,6 +15,16 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         }
 
+        public override void Start()
+        {
+            base.Start();
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
+        }
+
         public override void Update()
         {
             UpdateBotMovement(CanSprint);

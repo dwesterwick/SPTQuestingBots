@@ -15,6 +15,16 @@
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 19.6659336,
                             "y": 8.210877,
@@ -40,6 +50,16 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 19.6659336,
                             "y": 8.210877,
@@ -65,6 +85,16 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 27.93569,
+                            "y": 1.05174947,
+                            "z": 45.4769974
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 27.93569,
                             "y": 1.05174947,
@@ -90,6 +120,16 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 34.9922,
+                            "y": 7.80017853,
+                            "z": 31.46494
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 34.9922,
                             "y": 7.80017853,
@@ -115,6 +155,16 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -16.1654949,
+                            "y": 0.259162873,
+                            "z": -25.7997437
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": -16.1654949,
                             "y": 0.259162873,
@@ -140,6 +190,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 68.7288361,
+                            "y": 0.0977746546,
+                            "z": -38.22054
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 68.7288361,
                             "y": 0.0977746546,
@@ -165,6 +225,16 @@
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 51.1654968,
+                            "y": 4.309441,
+                            "z": 10.63328
+                        }
+                    },
+                    {
+                        "stepType": "PlantItem",
+                        "plantTime": 15,
                         "position" : {
                             "x": 51.1654968,
                             "y": 4.309441,

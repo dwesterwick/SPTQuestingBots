@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
-using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -57,8 +55,13 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot just completed its objective
             if (ObjectiveManager.IsCloseToObjective())
             {
-                LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " reached its objective (" + ObjectiveManager + ").");
-                ObjectiveManager.CompleteObjective();
+                if (ObjectiveManager.CurrentQuestAction == Models.QuestAction.MoveToPosition)
+                {
+                    ObjectiveManager.CompleteObjective();
+                }
+
+                LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
+
                 return;
             }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -25,7 +26,11 @@ namespace SPTQuestingBots.Models
         public SerializableVector3 SerializablePosition { get; set; } = null;
 
         [JsonProperty("stepType")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
+
+        [JsonProperty("plantTime")]
+        public double PlantTime { get; set; } = 3;
 
         public QuestObjectiveStep()
         {

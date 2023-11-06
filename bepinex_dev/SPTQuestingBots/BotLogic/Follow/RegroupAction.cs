@@ -9,21 +9,28 @@ using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic.Objective
+namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class RegroupAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private GClass114 baseAction = null;
-
         public RegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            baseAction = GClass394.CreateNode(BotLogicDecision.simplePatrol, BotOwner);
-            baseAction.Awake();
+            SetBaseAction(GClass394.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
+        }
+
+        public override void Start()
+        {
+            base.Start();
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
         }
 
         public override void Update()
         {
-            baseAction.Update();
+            UpdateBaseAction();
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())

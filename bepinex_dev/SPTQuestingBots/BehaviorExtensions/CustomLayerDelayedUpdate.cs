@@ -6,9 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using SPTQuestingBots.BotLogic.Follow;
-using SPTQuestingBots.BotLogic.Objective;
-using SPTQuestingBots.BotLogic.Sleep;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
@@ -18,6 +15,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         GoToObjective,
         FollowBoss,
         HoldPosition,
+        PlantItem,
         Regroup,
         Sleep
     }
@@ -36,7 +34,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
-
+            
         }
 
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority, int delayInterval) : this(_botOwner, _priority)
@@ -55,11 +53,12 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             switch (nextAction)
             {
-                case BotActionType.GoToObjective: return new Action(typeof(GoToObjectiveAction), actionReason);
-                case BotActionType.FollowBoss: return new Action(typeof(FollowBossAction), actionReason);
-                case BotActionType.HoldPosition: return new Action(typeof(HoldAtObjectiveAction), actionReason);
-                case BotActionType.Regroup: return new Action(typeof(RegroupAction), actionReason);
-                case BotActionType.Sleep: return new Action(typeof(SleepingAction), actionReason);
+                case BotActionType.GoToObjective: return new Action(typeof(BotLogic.Objective.GoToObjectiveAction), actionReason);
+                case BotActionType.FollowBoss: return new Action(typeof(BotLogic.Follow.FollowBossAction), actionReason);
+                case BotActionType.HoldPosition: return new Action(typeof(BotLogic.Objective.HoldAtObjectiveAction), actionReason);
+                case BotActionType.PlantItem: return new Action(typeof(BotLogic.Objective.PlantItemAction), actionReason);
+                case BotActionType.Regroup: return new Action(typeof(BotLogic.Follow.RegroupAction), actionReason);
+                case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

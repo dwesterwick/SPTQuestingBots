@@ -12,13 +12,12 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    internal class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
+    public class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         public bool IsInitialized { get; private set; } = false;
         public bool IsQuestingAllowed { get; private set; } = false;
         public bool CanRushPlayerSpawn { get; private set; } = false;
         public int StuckCount { get; set; } = 0;
-        public float MinTimeAtObjective { get; set; } = 10f;
         public BotMonitor BotMonitor { get; private set; } = null;
 
         private BotOwner botOwner = null;
@@ -30,6 +29,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
+        public double PlantTime => assignment?.QuestObjectiveStepAssignment?.PlantTime ?? 0;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public double TimeSinceInitialization => timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0;
@@ -77,7 +77,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             if (assignment.QuestAssignment != null)
             {
-                return (assignment.QuestObjectiveAssignment?.ToString() ?? "???") + " for quest " + assignment.QuestAssignment.Name;
+                return assignment.ToString();
             }
 
             return "Position " + (Position?.ToString() ?? "???");
@@ -189,8 +189,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void FailObjective()
         {
             assignment.FailJobAssingment();
-
-            TryChangeObjective();
         }
 
         public bool TryChangeObjective()

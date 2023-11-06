@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,19 +13,16 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     internal abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
     {
-        protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
         protected bool CanSprint { get; set; } = true;
 
-        private Stopwatch actionElapsedTime = new Stopwatch();
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Vector3? lastBotPosition = null;
 
-        protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
-            ObjectiveManager = BotLogic.Objective.BotObjectiveManager.GetObjectiveManagerForBot(_BotOwner);
+            
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -36,14 +32,14 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public override void Start()
         {
-            actionElapsedTime.Start();
+            base.Start();
             botIsStuckTimer.Start();
             BotOwner.PatrollingData.Pause();
         }
 
         public override void Stop()
         {
-            actionElapsedTime.Stop();
+            base.Stop();
             botIsStuckTimer.Stop();
             BotOwner.PatrollingData.Unpause();
         }
@@ -106,7 +102,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
             PathRender.RemovePath(pathName);
-            PathVisualizationData botPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
+            Models.PathVisualizationData botPathRendering = new Models.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
             PathRender.AddOrUpdatePath(botPathRendering);
         }
     }

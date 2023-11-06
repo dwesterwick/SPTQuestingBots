@@ -167,14 +167,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has spent enough time at its objective and enough time has passed since it was selected
-            if (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective)
+            /*if (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective)
             {
                 string previousObjective = objectiveManager.ToString();
                 if (objectiveManager.TryChangeObjective())
                 {
                     LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
                 }
-            }
+            }*/
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
             if (objectiveManager.StuckCount >= ConfigController.Config.StuckBotDetection.MaxCount)
@@ -197,8 +197,17 @@ namespace SPTQuestingBots.BotLogic.Objective
                 case QuestAction.MoveToPosition:
                     setNextAction(BotActionType.GoToObjective, "GoToObjective");
                     return updatePreviousState(true);
+                
                 case QuestAction.PlantItem:
-                    setNextAction(BotActionType.HoldPosition, "PlantItem");
+                    // Only plant items if the bot is close enough to them
+                    if (objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.PlantItem, "PlantItem");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToObjective");
+                    }
                     return updatePreviousState(true);
             }
 

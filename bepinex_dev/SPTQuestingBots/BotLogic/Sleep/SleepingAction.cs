@@ -15,13 +15,10 @@ namespace SPTQuestingBots.BotLogic.Sleep
             
         }
 
-        public override void Update()
-        {
-            return;
-        }
-
         public override void Start()
         {
+            base.Start();
+
             BotOwner.DecisionQueue.Clear();
             BotOwner.Memory.GoalEnemy = null;
             BotOwner.PatrollingData.Pause();
@@ -30,8 +27,15 @@ namespace SPTQuestingBots.BotLogic.Sleep
 
         public override void Stop()
         {
+            base.Stop();
+
             BotOwner.gameObject.SetActive(true);
             BotOwner.PatrollingData.Unpause();
+        }
+
+        public override void Update()
+        {
+            return;
         }
     }
 }

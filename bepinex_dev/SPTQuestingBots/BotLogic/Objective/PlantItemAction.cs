@@ -7,11 +7,11 @@ using EFT;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    public class HoldAtObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
+    public class PlantItemAction : BehaviorExtensions.CustomLogicDelayedUpdate
     {
-        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public PlantItemAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass394.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(GClass394.CreateNode(BotLogicDecision.lay, BotOwner));
         }
 
         public override void Start()

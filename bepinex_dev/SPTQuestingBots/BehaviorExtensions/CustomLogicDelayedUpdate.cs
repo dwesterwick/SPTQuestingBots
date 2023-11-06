@@ -11,20 +11,47 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
+        protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
+        protected GClass114 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
+
         private Stopwatch updateTimer = Stopwatch.StartNew();
+        private Stopwatch actionElapsedTime = new Stopwatch();
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
         private GClass288 baseSteeringLogic = new GClass288();
 
+        protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
+
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
-
+            ObjectiveManager = BotLogic.Objective.BotObjectiveManager.GetObjectiveManagerForBot(botOwner);
         }
 
         public CustomLogicDelayedUpdate(BotOwner botOwner, int delayInterval) : this(botOwner)
         {
             updateInterval = delayInterval;
+        }
+
+        public override void Start()
+        {
+            actionElapsedTime.Start();
+        }
+
+        public override void Stop()
+        {
+            actionElapsedTime.Stop();
+        }
+
+        public void SetBaseAction(GClass114 _baseAction)
+        {
+            baseAction = _baseAction;
+            baseAction.Awake();
+        }
+
+        public void UpdateBaseAction()
+        {
+            baseAction?.Update();
         }
 
         public void UpdateBotMovement(bool canSprint = true)
