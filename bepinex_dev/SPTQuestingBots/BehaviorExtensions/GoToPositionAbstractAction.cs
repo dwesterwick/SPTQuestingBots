@@ -82,7 +82,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > ConfigController.Config.StuckBotDetection.Time)
             {
-                drawStuckBotPath();
+                drawBotPath(Color.red);
 
                 return true;
             }
@@ -90,24 +90,24 @@ namespace SPTQuestingBots.BehaviorExtensions
             return false;
         }
 
-        protected void drawStuckBotPath()
+        protected void drawBotPath(Color color)
         {
-            Vector3[] failedBotPath = BotOwner.Mover?.CurPath;
-            if (!ConfigController.Config.Debug.ShowFailedPaths || (failedBotPath == null))
+            Vector3[] botPath = BotOwner.Mover?.CurPath;
+            if (!ConfigController.Config.Debug.ShowFailedPaths || (botPath == null))
             {
                 return;
             }
 
             List<Vector3> adjustedPathCorners = new List<Vector3>();
-            foreach (Vector3 corner in failedBotPath)
+            foreach (Vector3 corner in botPath)
             {
                 adjustedPathCorners.Add(new Vector3(corner.x, corner.y + 0.75f, corner.z));
             }
 
-            string pathName = "FailedBotPath_" + BotOwner.Id;
+            string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
             PathRender.RemovePath(pathName);
-            PathVisualizationData failedBotPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), Color.red);
-            PathRender.AddOrUpdatePath(failedBotPathRendering);
+            PathVisualizationData botPathRendering = new PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
+            PathRender.AddOrUpdatePath(botPathRendering);
         }
     }
 }

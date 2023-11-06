@@ -167,6 +167,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             bool? hasWaitedLongEnough = assignment?.HasWaitedLongEnoughAfterEnding();
             if (hasWaitedLongEnough.HasValue && hasWaitedLongEnough.Value)
             {
+                if (botOwner.NumberOfConsecutiveFailedAssignments() >= ConfigController.Config.StuckBotDetection.MaxCount)
+                {
+                    LoggingController.LogWarning(botOwner.GetText() + " has failed too many consecutive assignments and is no longer allowed to quest.");
+                    botOwner.Mover.Stop();
+                    IsQuestingAllowed = false;
+                    return;
+                }
+
                 assignment = botOwner.GetCurrentJobAssignment();
             }
         }

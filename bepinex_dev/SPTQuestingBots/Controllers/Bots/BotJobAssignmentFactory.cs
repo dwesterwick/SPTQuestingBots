@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Common.Http;
 using EFT;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -46,6 +47,20 @@ namespace SPTQuestingBots.Controllers.Bots
         public static void FailJobAssingment(BotJobAssignment assignment)
         {
             assignment.FailJobAssingment();
+        }
+
+        public static int NumberOfConsecutiveFailedAssignments(this BotOwner bot)
+        {
+            if (!botJobAssignments.ContainsKey(bot.Profile.Id))
+            {
+                return 0;
+            }
+
+            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
+                .Reverse<BotJobAssignment>()
+                .TakeWhile(a => a.Status == JobAssignmentStatus.Failed);
+
+            return matchingAssignments.Count();
         }
 
         public static int NumberOfActiveBots(this Quest quest)

@@ -181,6 +181,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
                 objectiveManager.StopQuesting();
+                BotOwner.Mover.Stop();
                 return updatePreviousState(false);
             }
 
