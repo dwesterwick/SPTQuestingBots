@@ -4,6 +4,7 @@
 		"enabled": true,
 		"scav_cooldown_time": 1500,
 		"free_labs_access": false,
+		"always_spawn_pmcs": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false
 	},

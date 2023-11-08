@@ -186,6 +186,17 @@ namespace SPTQuestingBots.Controllers
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
         }
 
+        public static SpawnPointParams? GetPlayerSpawnPoint()
+        {
+            Vector3? playerPosition = GetPlayerPosition();
+            if (!playerPosition.HasValue)
+            {
+                return null;
+            }
+
+            return GetNearestSpawnPoint(playerPosition.Value);
+        }
+
         public static float? GetOriginalEscapeTime()
         {
             return GetOriginalEscapeTime(CurrentLocation?.Id);
@@ -277,69 +288,6 @@ namespace SPTQuestingBots.Controllers
             }
 
             return remainingTime.Value / (originalEscapeTime * 60f);
-        }
-
-        public static Models.Quest CreateSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
-        {
-            // Ensure the map has spawn points
-            IEnumerable<SpawnPointParams> eligibleSpawnPoints = CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
-            if (eligibleSpawnPoints.IsNullOrEmpty())
-            {
-                return null;
-            }
-
-            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnPointWander.Priority, "Spawn Points");
-            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnPointWander.Chance;
-            quest.MaxBots = ConfigController.Config.BotQuests.SpawnPointWander.MaxBotsPerQuest;
-
-            foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
-            {
-                // Ensure the spawn point has a valid nearby NavMesh position
-                Vector3? navMeshPosition = FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
-                {
-                    LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
-                    continue;
-                }
-
-                Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                objective.MinDistanceFromBot = ConfigController.Config.BotQuests.SpawnPointWander.MinDistance;
-                quest.AddObjective(objective);
-            }
-
-            return quest;
-        }
-
-        public static Models.Quest CreateSpawnRushQuest()
-        {
-            SpawnPointParams? playerSpawnPoint = getPlayerSpawnPoint();
-            if (!playerSpawnPoint.HasValue)
-            {
-                LoggingController.LogWarning("Cannot find player spawn point.");
-                return null;
-            }
-
-            // Ensure there is a valid NavMesh position near your spawn point
-            Vector3? navMeshPosition = FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
-            if (!navMeshPosition.HasValue)
-            {
-                LoggingController.LogWarning("Cannot find NavMesh position for player spawn point.");
-                return null;
-            }
-
-            //Vector3? playerPosition = GetPlayerPosition();
-            //LoggingController.LogInfo("Creating spawn rush quest for " + playerSpawnPoint.Value.Id + " via " + navMeshPosition.Value.ToString() + " for player at " + playerPosition.Value.ToString() + "...");
-
-            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnRush.Priority, "Spawn Rush");
-            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
-            quest.MaxRaidET = ConfigController.Config.BotQuests.SpawnRush.MaxRaidET;
-            quest.MaxBots = ConfigController.Config.BotQuests.SpawnRush.MaxBotsPerQuest;
-
-            Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
-            objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
-            quest.AddObjective(objective);
-
-            return quest;
         }
 
         public static Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)
@@ -447,17 +395,6 @@ namespace SPTQuestingBots.Controllers
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
-        }
-
-        private static SpawnPointParams? getPlayerSpawnPoint()
-        {
-            Vector3? playerPosition = GetPlayerPosition();
-            if (!playerPosition.HasValue)
-            {
-                return null;
-            }
-
-            return GetNearestSpawnPoint(playerPosition.Value);
         }
 
         private static LocationSettingsClass getLocationSettings(TarkovApplication app)

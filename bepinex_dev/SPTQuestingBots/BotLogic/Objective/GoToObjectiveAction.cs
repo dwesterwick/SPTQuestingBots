@@ -60,7 +60,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     ObjectiveManager.CompleteObjective();
                 }
 
-                LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
+                //LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
 
                 return;
             }

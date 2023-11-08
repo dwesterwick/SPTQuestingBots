@@ -47,6 +47,16 @@ namespace SPTQuestingBots.Models
             SerializablePosition = new SerializableVector3(position);
         }
 
+        public QuestObjectiveStep(Vector3 position, QuestAction actionType) : this(position)
+        {
+            ActionType = actionType;
+        }
+
+        public QuestObjectiveStep(Vector3 position, QuestAction actionType, double minElapsedTime) : this(position, actionType)
+        {
+            MinElapsedTime = minElapsedTime;
+        }
+
         public Vector3? GetPosition()
         {
             if ((SerializablePosition == null) || SerializablePosition.Any(float.NaN))

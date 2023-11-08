@@ -100,9 +100,9 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            if (!PlayerWantsBotsInRaid())
+            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPMCs)
             {
-                //return;
+                return;
             }
 
             if (!CanSpawnPMCs || IsSpawningPMCs || IsGeneratingPMCs || !HasRemainingInitialPMCSpawns)
