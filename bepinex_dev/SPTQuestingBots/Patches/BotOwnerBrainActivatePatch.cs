@@ -50,7 +50,7 @@ namespace SPTQuestingBots.Patches
                 }
             }
 
-            LoggingController.LogInfo("Initial spawn type for bot " + __instance.Profile.Nickname + ": " + roleName);
+            LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
             if (Controllers.Bots.BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 Controllers.Bots.BotRegistrationManager.RegisterPMC(__instance);
@@ -83,7 +83,7 @@ namespace SPTQuestingBots.Patches
 
             string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
 
-            LoggingController.LogInfo("Converted spawn type for bot " + __instance.Profile.Nickname + " from " + currentRoleName + " to " + actualRoleName);
+            LoggingController.LogInfo("Converted spawn type for bot " + __instance.GetText() + " from " + currentRoleName + " to " + actualRoleName);
 
             return true;
         }

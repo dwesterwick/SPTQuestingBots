@@ -65,11 +65,11 @@ namespace SPTQuestingBots.Controllers.Bots
             // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
             if (BotGenerator.CanSpawnPMCs && (BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
             {
-                message += "boss " + botOwner.Profile.Nickname + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
+                message += "boss " + botOwner.GetText() + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
             }
             else
             {
-                message += "bot #" + SpawnedBotCount + ": " + botOwner.Profile.Nickname;
+                message += "bot #" + SpawnedBotCount + ": " + botOwner.GetText();
             }
 
             message += " (" + botOwner.Side + ")";

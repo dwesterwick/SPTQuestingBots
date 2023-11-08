@@ -75,7 +75,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is stuck and will get a new objective.");
+                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
                 }
                 wasStuck = true;
 
@@ -97,7 +97,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // If the path is invalid, there's nowhere for the bot to move
             if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
             {
-                LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a path to " + ObjectiveManager);
+                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a path to " + ObjectiveManager);
                 ObjectiveManager.FailObjective();
                 return false;
             }
@@ -125,12 +125,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 {
                     if (distanceToObjective < ConfigController.Config.BotSearchDistances.ObjectiveReachedNavMeshPathError)
                     {
-                        LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
+                        LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
                         ObjectiveManager.CompleteObjective();
                         return true;
                     }
 
-                    LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
+                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
                     ObjectiveManager.FailObjective();
                     return false;
                 }
@@ -138,7 +138,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (ObjectiveManager.HasCompletePath)
                 {
-                    LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
+                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
                     ObjectiveManager.ReportIncompletePath();
                 }
             }

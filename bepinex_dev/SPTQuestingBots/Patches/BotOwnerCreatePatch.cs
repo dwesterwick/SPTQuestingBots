@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -31,7 +32,7 @@ namespace SPTQuestingBots.Patches
                     continue;
                 }
 
-                Controllers.LoggingController.LogInfo(friend.Profile.Nickname + " is now friends with " + __result.Profile.Nickname);
+                Controllers.LoggingController.LogInfo(friend.GetText() + " is now friends with " + __result.GetText());
                 __result.EnemiesController.Remove(player);
             }
         }

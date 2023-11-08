@@ -95,7 +95,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 objectiveManager.StopQuesting();
 
-                LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " wants to extract and will no longer quest.");
+                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " wants to extract and will no longer quest.");
                 return updatePreviousState(false);
             }
 
@@ -107,7 +107,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
             if (!wasAbleBodied)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is now able-bodied.");
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
             }
             wasAbleBodied = true;
 
@@ -119,7 +119,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     /*bool hasTarget = BotOwner.Memory.GoalTarget.HaveMainTarget();
                     if (hasTarget)
                     {
-                        string message = "Bot " + BotOwner.Profile.Nickname + " is in combat.";
+                        string message = "Bot " + BotOwner.GetText() + " is in combat.";
                         message += " Close danger: " + BotOwner.Memory.DangerData.HaveCloseDanger + ".";
                         message += " Last Time Hit: " + BotOwner.Memory.LastTimeHit + ".";
                         message += " Enemy Set Time: " + BotOwner.Memory.EnemySetTime + ".";
@@ -129,7 +129,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     }*/
 
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
-                    //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
+                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return updatePreviousState(pauseLayer());
@@ -144,7 +144,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
 
                 //IReadOnlyCollection<BotOwner> groupMembers = BotHiveMindMonitor.GetAllGroupMembers(BotOwner);
-                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.Profile.Nickname)));
+                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.GetText())));
 
                 return updatePreviousState(false);
             }
@@ -172,14 +172,14 @@ namespace SPTQuestingBots.BotLogic.Objective
                 string previousObjective = objectiveManager.ToString();
                 if (objectiveManager.TryChangeObjective())
                 {
-                    LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
+                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
                 }
             }*/
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
             if (objectiveManager.StuckCount >= ConfigController.Config.StuckBotDetection.MaxCount)
             {
-                LoggingController.LogWarning("Bot " + BotOwner.Profile.Nickname + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
+                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
                 objectiveManager.StopQuesting();
                 BotOwner.Mover.Stop();
                 return updatePreviousState(false);

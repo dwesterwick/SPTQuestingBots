@@ -234,7 +234,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return false;
             }
 
-            //LoggingController.LogInfo("Initial PMC's: " + string.Join(", ", initialPMCGroups.SelectMany(g => g.Owners.Select(o => o.Profile.Nickname))));
+            //LoggingController.LogInfo("Initial PMC's: " + string.Join(", ", initialPMCGroups.SelectMany(g => g.Owners.Select(o => o.GetText()))));
 
             return InitialPMCBotGroups.Any(b => b.Owners.Contains(bot));
         }
@@ -269,7 +269,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
             if (matchingSpawnGroups.Count() > 1)
             {
-                throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.Profile.Nickname);
+                throw new InvalidOperationException("There is more than one initial PMC spawn group with bot " + bot.GetText());
             }
 
             IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Profile.Id != bot.Profile.Id);
@@ -279,7 +279,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public int NumberOfBotsAllowedToSpawn()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            //LoggingController.LogInfo("Alive players: " + string.Join(", ", allPlayers.Select(p => p.Profile.Nickname + " (" + p.Id + ")")));
+            //LoggingController.LogInfo("Alive players: " + string.Join(", ", allPlayers.Select(p => p.GetText()));
 
             return maxTotalBots - allPlayers.Count;
         }
@@ -517,7 +517,7 @@ namespace SPTQuestingBots.Controllers.Bots
             // Definte the callback action that runs after the bot spawns. This is needed to get the BotOwner object for the bot. 
             Action<BotOwner> callback = new Action<BotOwner>((botOwner) =>
             {
-                LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " spawned in initial PMC group #" + initialPMCBot.GroupNumber);
+                LoggingController.LogInfo("Bot " + botOwner.GetText() + " spawned in initial PMC group #" + initialPMCBot.GroupNumber);
                 initialPMCBot.Owners.Add(botOwner);
                 initialPMCBot.HasSpawned = true;
             });

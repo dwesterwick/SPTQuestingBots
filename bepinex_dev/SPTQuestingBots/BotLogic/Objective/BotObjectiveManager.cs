@@ -117,13 +117,13 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
             if (IsQuestingAllowed && BotQuestBuilder.HaveQuestsBeenBuilt)
             {
-                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
+                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 assignment = botOwner.GetCurrentJobAssignment();
             }
 
             if (botType == BotType.Undetermined)
             {
-                LoggingController.LogError("Could not determine bot type for " + botOwner.Profile.Nickname + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                LoggingController.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if ((assignment.QuestObjectiveAssignment != null) && (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance))
             {
-                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " will stop running because it's too close to " + targetObjective.ToString());
+                //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + targetObjective.ToString());
                 return false;
             }
 
@@ -231,7 +231,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 && (assignment.QuestAssignment.TimeSinceLastAssignmentEndedForBot(botOwner) > 0)
             )
             {
-                //LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " can no longer run for quest " + targetQuest.Name);
+                //LoggingController.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);
                 return false;
             }
 

@@ -86,7 +86,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
             if (!wasAbleBodied)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is now able-bodied.");
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
             }
             wasAbleBodied = true;
 
@@ -96,7 +96,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
                 {
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
-                    //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
+                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return updatePreviousState(false);
@@ -110,7 +110,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                 //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
 
                 //IReadOnlyCollection<BotOwner> groupMembers = BotHiveMindMonitor.GetAllGroupMembers(BotOwner);
-                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.Profile.Nickname)));
+                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.GetText())));
 
                 return updatePreviousState(false);
             }

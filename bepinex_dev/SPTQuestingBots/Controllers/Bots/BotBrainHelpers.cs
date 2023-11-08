@@ -219,8 +219,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static bool WillBotBeAPMC(BotOwner botOwner)
         {
-            //LoggingController.LogInfo("Spawn type for bot " + botOwner.Profile.Nickname + ": " + botOwner.Profile.Info.Settings.Role.ToString());
-            
+            //LoggingController.LogInfo("Spawn type for bot " + botOwner.GetText() + ": " + botOwner.Profile.Info.Settings.Role.ToString());
+
             return pmcSpawnTypes
                 .Select(t => t.ToString())
                 .Contains(botOwner.Profile.Info.Settings.Role.ToString());

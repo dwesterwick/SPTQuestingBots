@@ -377,7 +377,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 quest = bot.GetRandomQuest();
 
-                if (timeoutMonitor.ElapsedMilliseconds > 3000)
+                if (timeoutMonitor.ElapsedMilliseconds > 2000)
                 {
                     throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long");
                 }

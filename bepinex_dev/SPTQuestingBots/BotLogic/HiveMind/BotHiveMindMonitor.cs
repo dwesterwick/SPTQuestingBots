@@ -218,7 +218,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             }
 
             ReadOnlyCollection<BotOwner> groupMembers = GetAllGroupMembers(bot);
-            //Controllers.LoggingController.LogInfo("Group members for " + bot.Profile.Nickname + ": " + string.Join(", ", groupMembers.Select(m => m.Profile.Nickname));
+            //Controllers.LoggingController.LogInfo("Group members for " + bot.GetText() + ": " + string.Join(", ", groupMembers.Select(m => m.GetText()));
 
             foreach (BotOwner member in groupMembers)
             {
@@ -232,7 +232,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     continue;
                 }
 
-                Controllers.LoggingController.LogInfo(member.Profile.Nickname + " informed " + bot.Profile.Nickname + " about spotted enemy " + bot.Memory.GoalEnemy.Owner.Profile.Nickname);
+                Controllers.LoggingController.LogInfo(member.GetText() + " informed " + bot.GetText() + " about spotted enemy " + bot.Memory.GoalEnemy.Owner.GetText());
 
                 PlaceForCheck enemyLocation = new PlaceForCheck(member.Memory.GoalEnemy.GetPositionForSearch(), PlaceForCheckType.danger);
                 bot.Memory.DangerData.SetTarget(enemyLocation, member.Memory.GoalEnemy.Owner);
@@ -254,14 +254,14 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
-            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.Profile.Nickname)));
+            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
 
             // TO DO: Is this loop actually needed?
             foreach (BotOwner player in allPlayersOutsideGroup)
             {
                 if (player.BotsGroup.Allies.Contains(bot))
                 {
-                    Controllers.LoggingController.LogInfo(player.Profile.Nickname + "'s group was initially friendly with " + bot.Profile.Nickname + ". Not anymore..");
+                    Controllers.LoggingController.LogInfo(player.GetText() + "'s group was initially friendly with " + bot.GetText() + ". Not anymore..");
 
                     player.BotsGroup.RemoveAlly(bot);
                     player.BotsGroup.AddEnemy(bot, EBotEnemyCause.initial);
@@ -269,7 +269,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (bot.BotsGroup.Allies.Contains(player))
                 {
-                    Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group was initially friendly with " + player.Profile.Nickname + ". Not anymore..");
+                    Controllers.LoggingController.LogInfo(bot.GetText() + "'s group was initially friendly with " + player.GetText() + ". Not anymore..");
 
                     bot.BotsGroup.RemoveAlly(player);
                     bot.BotsGroup.AddEnemy(player, EBotEnemyCause.initial);
@@ -279,13 +279,13 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             // Force PMC's to be hostile toward you
             if (Controllers.Bots.BotRegistrationManager.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
             {
-                Controllers.LoggingController.LogInfo(bot.Profile.Nickname + " doesn't like you anymore");
+                Controllers.LoggingController.LogInfo(bot.GetText() + " doesn't like you anymore");
 
                 bot.BotsGroup.AddEnemy(Singleton<GameWorld>.Instance.MainPlayer, EBotEnemyCause.initial);
             }
 
-            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group has the following allies: " + string.Join(",", bot.BotsGroup.Allies.Select(a => a.Profile.Nickname)));
-            //Controllers.LoggingController.LogInfo(bot.Profile.Nickname + "'s group has the following enemies: " + string.Join(",", bot.BotsGroup.Enemies.Keys.Select(a => a.Profile.Nickname)));
+            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group has the following allies: " + string.Join(",", bot.BotsGroup.Allies.Select(a => a.GetText())));
+            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group has the following enemies: " + string.Join(",", bot.BotsGroup.Enemies.Keys.Select(a => a.GetText())));
         }
 
         private static void throwIfSensorNotRegistred(BotHiveMindSensorType sensorType)
@@ -320,7 +320,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (botBosses[bot].IsDead)
                 {
-                    Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].Profile.Nickname + " is now dead.");
+                    Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].GetText() + " is now dead.");
 
                     if (botFollowers.ContainsKey(botBosses[bot]))
                     {
@@ -346,12 +346,12 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             if (!botFollowers.ContainsKey(boss))
             {
-                throw new InvalidOperationException("Boss " + boss.Profile.Nickname + " has not been added to the follower dictionary");
+                throw new InvalidOperationException("Boss " + boss.GetText() + " has not been added to the follower dictionary");
             }
 
             if (!botFollowers[boss].Contains(bot))
             {
-                Controllers.LoggingController.LogInfo("Bot " + bot.Profile.Nickname + " is now a follower for " + boss.Profile.Nickname);
+                Controllers.LoggingController.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
 
                 botFollowers[boss].Add(bot);
             }
@@ -371,7 +371,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 {
                     if ((follower == null) || follower.IsDead)
                     {
-                        Controllers.LoggingController.LogInfo("Follower " + follower.Profile.Nickname + " for " + boss.Profile.Nickname + " is now dead.");
+                        Controllers.LoggingController.LogInfo("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
 
                         botFollowers[boss].Remove(follower);
                     }

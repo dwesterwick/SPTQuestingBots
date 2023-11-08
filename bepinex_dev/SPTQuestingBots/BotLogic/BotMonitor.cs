@@ -112,7 +112,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to heal");
+                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to heal");
                 }
                 return false;
             }
@@ -122,7 +122,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to drink");
+                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to drink");
                 }
                 return false;
             }
@@ -132,7 +132,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " needs to eat");
+                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to eat");
                 }
                 return false;
             }
@@ -156,7 +156,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " cannot heal");
+                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " cannot heal");
                 }
                 return false;
             }
@@ -166,7 +166,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " is overweight");
+                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " is overweight");
                 }
                 return false;
             }
@@ -211,13 +211,13 @@ namespace SPTQuestingBots.BotLogic
                 && (isLooting || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
             )
             {
-                //LoggingController.LogInfo("Layer for bot " + BotOwner.Profile.Nickname + ": " + activeLayerName + ". Logic: " + activeLogicName);
+                //LoggingController.LogInfo("Layer for bot " + BotOwner.GetText() + ": " + activeLayerName + ". Logic: " + activeLogicName);
 
                 if (isLooting)
                 {
                     if (!hasFoundLoot)
                     {
-                        LoggingController.LogInfo("Bot " + botOwner.Profile.Nickname + " has found loot");
+                        LoggingController.LogInfo("Bot " + botOwner.GetText() + " has found loot");
                     }
 
                     NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
@@ -228,7 +228,7 @@ namespace SPTQuestingBots.BotLogic
                 {
                     if (!wasLooting)
                     {
-                        //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is searching for loot...");
+                        //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is searching for loot...");
                     }
 
                     lootSearchTimer.Start();
@@ -246,7 +246,7 @@ namespace SPTQuestingBots.BotLogic
             if (wasLooting || hasFoundLoot)
             {
                 lootingLayerMonitor.RestartCanUseTimer();
-                //LoggingController.LogInfo("Bot " + BotOwner.Profile.Nickname + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
+                //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
             }
 
             lootSearchTimer.Reset();

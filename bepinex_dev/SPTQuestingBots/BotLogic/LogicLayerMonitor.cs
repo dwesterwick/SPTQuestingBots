@@ -126,7 +126,7 @@ namespace SPTQuestingBots.BotLogic
             // This happens sometimes, and I don't know why
             if (botOwner?.Brain?.BaseBrain == null)
             {
-                LoggingController.LogError("Invalid base brain for bot " + botOwner.Profile.Nickname);
+                LoggingController.LogError("Invalid base brain for bot " + botOwner.GetText());
                 return emptyCollection;
             }
 
@@ -143,7 +143,7 @@ namespace SPTQuestingBots.BotLogic
             List<AICoreLayerClass<BotLogicDecision>> layerList = (List<AICoreLayerClass<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
             if (layerList == null)
             {
-                LoggingController.LogError("Could not retrieve brain layers for bot " + botOwner.Profile.Nickname);
+                LoggingController.LogError("Could not retrieve brain layers for bot " + botOwner.GetText());
                 return emptyCollection;
             }
 
