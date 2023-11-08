@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.Patches
 {
@@ -29,9 +29,18 @@ namespace SPTQuestingBots.Patches
             // Needed for compatibility with Refringe's CustomRaidTimes mod
             Controllers.LocationController.ClearEscapeTimes();
 
+            // Write all log files
+            if (BotQuestBuilder.HaveQuestsBeenBuilt)
+            {
+                long timestamp = DateTime.Now.ToFileTimeUtc();
+
+                BotJobAssignmentFactory.WriteQuestLogFile(timestamp);
+                BotJobAssignmentFactory.WriteBotJobAssignmentLogFile(timestamp);
+            }
+
             // Erase all bot and bot-assignment tracking data
-            Controllers.Bots.BotJobAssignmentFactory.Clear();
-            Controllers.Bots.BotRegistrationManager.Clear();
+            BotJobAssignmentFactory.Clear();
+            BotRegistrationManager.Clear();
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();

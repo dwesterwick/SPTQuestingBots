@@ -3,13 +3,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
         "name": "Chairman's House",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
                 "steps": [
@@ -28,13 +28,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
         "name": "Church",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -53,13 +53,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
         "name": "Village",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -74,7 +74,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -89,7 +88,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -104,7 +102,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -119,7 +116,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -134,7 +130,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -153,13 +148,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
         "name": "Cabins",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -174,7 +169,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -189,7 +183,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -204,7 +197,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 15,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -223,6 +215,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
         "canRunBetweenObjectives": false,
@@ -230,7 +223,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -256,13 +248,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Cottage Garage",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -281,6 +273,7 @@
         "repeatable": false,
         "minLevel": 15,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
         "canRunBetweenObjectives": false,
@@ -288,7 +281,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 2,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -314,13 +306,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
         "name": "Scav Island Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -335,7 +327,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -350,7 +341,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -369,13 +359,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "name": "Gas Station Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -390,7 +380,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -405,7 +394,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -424,13 +412,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Sniper Rock Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -445,7 +433,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -464,13 +451,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "House on the Hill",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -489,13 +476,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Radio Tower",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -514,6 +501,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -521,7 +509,6 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -536,7 +523,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -555,13 +541,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
         "name": "Weather Station Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 2,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -601,13 +587,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
         "name": "Weather Station Tower Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 2,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -647,13 +633,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Sunken House",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -672,13 +658,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Crane Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -693,7 +679,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -708,7 +693,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -723,7 +707,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -742,13 +725,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Crane",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -763,7 +746,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -782,13 +764,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "name": "Pier Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -803,7 +785,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -822,6 +803,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -829,7 +811,6 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -844,7 +825,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -859,7 +839,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -878,13 +857,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "name": "Gas Station Sniping 2",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -899,7 +878,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -918,13 +896,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Tank on Bridge",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -943,13 +921,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "name": "Power Station Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -964,7 +942,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -979,7 +956,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -998,13 +974,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
         "name": "Lighthouse Extract Sniper Area",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -1023,13 +999,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
         "name": "Lighthouse Extract Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -1044,7 +1020,6 @@
             },
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
                 "steps": [
@@ -1063,6 +1038,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1070,7 +1046,6 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1085,7 +1060,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1104,13 +1078,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Power Station Sniping 2",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1129,13 +1103,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 20,
         "name": "Resort Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1161,6 +1135,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1168,7 +1143,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1183,7 +1157,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1198,7 +1171,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
                 "steps": [
@@ -1217,13 +1189,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 20,
         "name": "Helicoperter Shack",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1242,13 +1214,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 19,
         "name": "Resort West Wing Basement",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1267,6 +1239,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1274,7 +1247,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1289,7 +1261,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1304,7 +1275,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1319,7 +1289,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1338,6 +1307,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1345,7 +1315,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1360,7 +1329,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1375,7 +1343,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1390,7 +1357,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1405,7 +1371,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1420,7 +1385,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1435,7 +1399,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1454,6 +1417,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1461,7 +1425,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1476,7 +1439,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1491,7 +1453,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1506,7 +1467,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1521,7 +1481,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1536,7 +1495,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1555,13 +1513,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 19,
         "name": "Resort Main Basement",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1580,13 +1538,13 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 19,
         "name": "Resort Main 1st Floor",
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1605,6 +1563,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1612,7 +1571,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1627,7 +1585,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1642,7 +1599,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1657,7 +1613,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1672,7 +1627,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1687,7 +1641,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1706,6 +1659,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1713,7 +1667,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1728,7 +1681,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1747,6 +1699,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1754,7 +1707,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1769,7 +1721,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1784,7 +1735,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1799,7 +1749,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1814,7 +1763,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1829,7 +1777,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1844,7 +1791,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1859,7 +1805,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1874,7 +1819,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1889,7 +1833,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1908,6 +1851,7 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 19,
         "canRunBetweenObjectives": false,
@@ -1915,7 +1859,6 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1930,7 +1873,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1945,7 +1887,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1960,7 +1901,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1975,7 +1915,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -1990,7 +1929,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -2005,7 +1943,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -2020,7 +1957,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -2035,7 +1971,6 @@
             },
             {
                 "repeatable": false,
-                "maxBots": 3,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [

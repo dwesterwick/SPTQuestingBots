@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Common.Http;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -263,6 +265,24 @@ namespace SPTQuestingBots.Controllers.Bots
             return false;
         }
 
+        public static bool CanBotRepeatQuestObjective(this QuestObjective objective, BotOwner bot)
+        {
+            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
+                .Where(a => a.QuestObjectiveAssignment == objective);
+
+            if (!matchingAssignments.Any())
+            {
+                return true;
+            }
+            
+            if (!objective.IsRepeatable && matchingAssignments.Any(a => a.Status == JobAssignmentStatus.Completed))
+            {
+                return false;
+            }
+
+            return matchingAssignments.All(a => a.Status == JobAssignmentStatus.Archived);
+        }
+
         public static bool HasBotBeingDoingQuestTooLong(this Quest quest, BotOwner bot, out double? time)
         {
             time = quest.TimeSinceFirstAssignmentEndedForBot(bot);
@@ -368,6 +388,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 objective = quest?
                     .RemainingObjectivesForBot(bot)?
                     .Where(o => o.CanAssignBot(bot))?
+                    .Where(o => o.CanBotRepeatQuestObjective(bot))?
                     .Nearest(bot);
                 
                 if (objective != null)
@@ -468,7 +489,7 @@ namespace SPTQuestingBots.Controllers.Bots
             return groupedQuests.First().Quests.Random();
         }
 
-        public static void WriteQuestLogFile()
+        public static void WriteQuestLogFile(long timestamp)
         {
             if (!ConfigController.Config.Debug.Enabled)
             {
@@ -476,6 +497,12 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             LoggingController.LogInfo("Writing quest log file...");
+
+            if (allQuests.Count == 0)
+            {
+                LoggingController.LogWarning("No quests to log.");
+                return;
+            }
 
             // Write the header row
             StringBuilder sb = new StringBuilder();
@@ -487,22 +514,25 @@ namespace SPTQuestingBots.Controllers.Bots
                 foreach (QuestObjective objective in quest.AllObjectives)
                 {
                     Vector3? firstPosition = objective.GetFirstStepPosition();
+                    if (!firstPosition.HasValue)
+                    {
+                        continue;
+                    }
 
-                    sb.Append(quest.Name + ",");
-                    sb.Append("\"" + objective.ToString() + "\",");
+                    sb.Append(quest.Name.Replace(",", "") + ",");
+                    sb.Append("\"" + objective.ToString().Replace(",", "") + "\",");
                     sb.Append(objective.StepCount + ",");
                     sb.Append(quest.MinLevel + ",");
                     sb.Append(quest.MaxLevel + ",");
-                    sb.Append((firstPosition.HasValue ? "\"" + firstPosition.Value.ToString() + "\"" : "N/A") + ",");
+                    sb.AppendLine((firstPosition.HasValue ? "\"" + firstPosition.Value.ToString() + "\"" : "N/A"));
                 }
             }
 
             string filename = ConfigController.GetLoggingPath()
-                + "quests_"
                 + BotQuestBuilder.PreviousLocationID.Replace(" ", "")
                 + "_"
-                + DateTime.Now.ToFileTimeUtc()
-                + ".csv";
+                + timestamp
+                + "_quests.csv";
 
             try
             {
@@ -519,6 +549,67 @@ namespace SPTQuestingBots.Controllers.Bots
             {
                 e.Data.Add("Filename", filename);
                 LoggingController.LogError("Writing quest log file...failed!");
+                LoggingController.LogError(e.ToString());
+            }
+        }
+
+        public static void WriteBotJobAssignmentLogFile(long timestamp)
+        {
+            if (!ConfigController.Config.Debug.Enabled)
+            {
+                return;
+            }
+
+            LoggingController.LogInfo("Writing bot job assignment log file...");
+
+            if (botJobAssignments.Count == 0)
+            {
+                LoggingController.LogWarning("No bot job assignments to log.");
+                return;
+            }
+
+            // Write the header row
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Bot Name,Bot Nickname,Bot Level,Assignment Status,Quest Name,Objective Name,Step Number,Start Time,End Time");
+
+            // Write a row for every quest, objective, and step that each bot was assigned to perform
+            foreach (string botID in botJobAssignments.Keys)
+            {
+                foreach (BotJobAssignment assignment in botJobAssignments[botID])
+                {
+                    sb.Append(assignment.BotName + ",");
+                    sb.Append("\"" + assignment.BotNickname.Replace(",", "") + "\",");
+                    sb.Append(assignment.BotLevel + ",");
+                    sb.Append(assignment.Status.ToString() + ",");
+                    sb.Append("\"" + (assignment.QuestAssignment?.ToString()?.Replace(",", "") ?? "N/A") + "\",");
+                    sb.Append("\"" + (assignment.QuestObjectiveAssignment?.ToString()?.Replace(",", "") ?? "N/A") + "\",");
+                    sb.Append("\"" + (assignment.QuestObjectiveStepAssignment?.ToString() ?? "N/A") + "\",");
+                    sb.Append("\"" + (assignment.StartTime?.ToLongTimeString() ?? "N/A") + "\",");
+                    sb.AppendLine("\"" + (assignment.EndTime?.ToLongTimeString() ?? "N/A") + "\",");
+                }
+            }
+
+            string filename = ConfigController.GetLoggingPath()
+                + BotQuestBuilder.PreviousLocationID.Replace(" ", "")
+                + "_"
+                + timestamp
+                + "_assignments.csv";
+
+            try
+            {
+                if (!Directory.Exists(ConfigController.LoggingPath))
+                {
+                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                }
+
+                File.WriteAllText(filename, sb.ToString());
+
+                LoggingController.LogInfo("Writing bot job assignment log file...done.");
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Filename", filename);
+                LoggingController.LogError("Writing bot job assignment log file...failed!");
                 LoggingController.LogError(e.ToString());
             }
         }

@@ -23,6 +23,9 @@ namespace SPTQuestingBots.Models
     {
         public JobAssignmentStatus Status { get; private set; } = JobAssignmentStatus.NotStarted;
         public BotOwner BotOwner { get; private set; }
+        public string BotName { get; private set; } = "???";
+        public string BotNickname { get; private set; } = "???";
+        public int BotLevel { get; private set; } = -1;
         public Quest QuestAssignment { get; private set; } = null;
         public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
@@ -36,6 +39,7 @@ namespace SPTQuestingBots.Models
         public BotJobAssignment(BotOwner bot)
         {
             BotOwner = bot;
+            updateBotInfo();
         }
 
         public BotJobAssignment(BotOwner bot, Quest quest, QuestObjective objective) : this(bot)
@@ -95,7 +99,7 @@ namespace SPTQuestingBots.Models
 
             EndTime = null;
             startJobAssingment();
-            
+
             return true;
         }
 
@@ -150,6 +154,18 @@ namespace SPTQuestingBots.Models
             {
                 EndTime = DateTime.Now;
             }
+        }
+
+        private void updateBotInfo()
+        {
+            if (BotOwner == null)
+            {
+                throw new InvalidOperationException("Cannot update info for a null bot");
+            }
+
+            BotName = BotOwner.name;
+            BotNickname = BotOwner.Profile.Nickname;
+            BotLevel = BotOwner.Profile.Info.Level;
         }
     }
 }

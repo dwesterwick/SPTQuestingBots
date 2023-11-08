@@ -56,12 +56,6 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (LocationController.CurrentLocation == null)
             {
-                // Write a log file containing all loaded quests, their objectives, and which bots have interacted with them. 
-                if (HaveQuestsBeenBuilt)
-                {
-                    BotJobAssignmentFactory.WriteQuestLogFile();
-                }
-
                 StartCoroutine(Clear());
                 return;
             }

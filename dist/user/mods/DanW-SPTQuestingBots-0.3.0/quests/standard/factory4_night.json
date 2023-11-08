@@ -3,6 +3,7 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 50,
         "priority": 18,
         "maxRaidET": 30,
@@ -10,7 +11,6 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 2,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "steps": [
@@ -29,13 +29,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "3rd Floor Office",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -54,13 +54,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "1st Floor Office",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -79,13 +79,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "3rd Floor Bridge",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -104,13 +104,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
         "name": "Med Tent",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 3,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
                 "steps": [
@@ -129,13 +129,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
         "name": "Forklift",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 2,
                 "minDistanceFromBot": 75,
                 "maxDistanceFromBot": 500,
                 "steps": [
@@ -154,13 +154,13 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 1,
         "chanceForSelecting": 15,
         "priority": 20,
         "name": "Boilers",
         "objectives" : [
             {
                 "repeatable": true,
-                "maxBots": 1,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 300,
                 "steps": [
