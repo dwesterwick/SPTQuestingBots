@@ -72,7 +72,7 @@
 		"eft_quests": {
 			"priority": 15,
 			"chance": 50,
-			"max_bots_per_quest": 3,
+			"max_bots_per_quest": 4,
 			"level_range": [
 				[0, 99],
 				[1, 8],
