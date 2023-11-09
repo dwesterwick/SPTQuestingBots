@@ -14,6 +14,7 @@ namespace SPTQuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {
+        public static bool IsScavRun { get; set; } = false;
         public static bool HasRaidStarted { get; set; } = false;
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
@@ -21,7 +22,7 @@ namespace SPTQuestingBots.Controllers
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        
+
         private static void Clear()
         {
             CurrentLocation = null;

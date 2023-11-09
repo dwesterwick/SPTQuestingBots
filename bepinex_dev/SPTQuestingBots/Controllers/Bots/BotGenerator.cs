@@ -158,8 +158,9 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 // Choose the number of initial PMC's to spawn
                 System.Random random = new System.Random();
-                int minPlayers = (int)Math.Floor((LocationController.CurrentLocation.MinPlayers * playerCountFactor) - 1);
-                int maxPlayers = (int)Math.Ceiling((LocationController.CurrentLocation.MaxPlayers * playerCountFactor) - 1);
+                int pmcOffset = LocationController.IsScavRun ? 0 : 1;
+                int minPlayers = (int)Math.Floor((LocationController.CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
+                int maxPlayers = (int)Math.Ceiling((LocationController.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
                 int maxPMCBots = random.Next(minPlayers, maxPlayers);
                 LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
 
@@ -178,7 +179,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     CanSpawnPMCs = false;
                 }
 
-                LoggingController.LogInfo("Generating initial PMC groups...done.");
+                //LoggingController.LogInfo("Generating initial PMC groups...done.");
                 return;
             }
 

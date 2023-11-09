@@ -67,6 +67,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot has a boss that's still alive
             if (BotHiveMindMonitor.HasBoss(BotOwner))
             {
+                Controllers.Bots.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
+
                 return updatePreviousState(false);
             }
 

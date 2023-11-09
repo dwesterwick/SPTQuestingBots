@@ -32,6 +32,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("minElapsedTime")]
         public double MinElapsedTime { get; set; } = 0;
 
+        [JsonIgnore]
+        public int? StepNumber { get; set; } = null;
+
         public QuestObjectiveStep()
         {
 

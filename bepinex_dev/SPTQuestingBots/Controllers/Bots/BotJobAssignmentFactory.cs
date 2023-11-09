@@ -25,8 +25,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static Quest[] FindQuestsWithZone(string zoneId) => allQuests.Where(q => q.GetObjectiveForZoneID(zoneId) != null).ToArray();
         public static bool CanMoreBotsDoQuest(Quest quest) => quest.NumberOfActiveBots() < quest.MaxBots;
-        public static void AddQuest(Quest quest) => allQuests.Add(quest);
-
+        
         public static void Clear()
         {
             // Only remove quests that are not based on an EFT quest template
@@ -41,6 +40,27 @@ namespace SPTQuestingBots.Controllers.Bots
             botJobAssignments.Clear();
         }
 
+        public static void AddQuest(Quest quest)
+        {
+            foreach(QuestObjective objective in quest.AllObjectives)
+            {
+                objective.UpdateQuestObjectiveStepNumbers();
+            }
+
+            allQuests.Add(quest);
+        }
+
+        public static Quest FindQuest(string questID)
+        {
+            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.TemplateId == questID);
+            if (matchingQuests.Count() == 0)
+            {
+                return null;
+            }
+
+            return matchingQuests.First();
+        }
+
         public static void CompleteJobAssingment(BotJobAssignment assignment)
         {
             assignment.CompleteJobAssingment();
@@ -49,6 +69,35 @@ namespace SPTQuestingBots.Controllers.Bots
         public static void FailJobAssingment(BotJobAssignment assignment)
         {
             assignment.FailJobAssingment();
+        }
+
+        public static void FailAllJobAssignmentsForBot(string botID)
+        {
+            if (!botJobAssignments.ContainsKey(botID))
+            {
+                return;
+            }
+
+            foreach (BotJobAssignment assignment in botJobAssignments[botID])
+            {
+                if ((assignment.Status == JobAssignmentStatus.Pending) || (assignment.Status == JobAssignmentStatus.Active))
+                {
+                    FailJobAssingment(assignment);
+                }
+            }
+        }
+
+        public static void InactivateAllJobAssignmentsForBot(string botID)
+        {
+            if (!botJobAssignments.ContainsKey(botID))
+            {
+                return;
+            }
+
+            foreach (BotJobAssignment assignment in botJobAssignments[botID])
+            {
+                assignment.InactivateJobAssignment();
+            }
         }
 
         public static int NumberOfConsecutiveFailedAssignments(this BotOwner bot)
@@ -71,7 +120,7 @@ namespace SPTQuestingBots.Controllers.Bots
             foreach (string id in botJobAssignments.Keys)
             {
                 num += botJobAssignments[id]
-                    .Where(a => a.Status == JobAssignmentStatus.Pending || a.Status == JobAssignmentStatus.Active)
+                    .Where(a => a.Status == JobAssignmentStatus.Active)
                     .Where(a => a.QuestAssignment == quest)
                     .Count();
             }
@@ -294,17 +343,6 @@ namespace SPTQuestingBots.Controllers.Bots
             return false;
         }
 
-        public static Quest FindQuest(string questID)
-        {
-            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.TemplateId == questID);
-            if (matchingQuests.Count() == 0)
-            {
-                return null;
-            }
-
-            return matchingQuests.First();
-        }
-
         public static BotJobAssignment GetCurrentJobAssignment(this BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
@@ -469,7 +507,9 @@ namespace SPTQuestingBots.Controllers.Bots
                 double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
                 int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.BotQuests.DistanceRandomness / 100.0);
 
-                //LoggingController.LogInfo("Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);
+                //string timestampText = "[" + DateTime.Now.ToLongTimeString() + "] ";
+                //LoggingController.LogInfo(timestampText + "Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);
+                //LoggingController.LogInfo(timestampText + "Possible quests for priority " + priorityGroup.Priority + ": " + string.Join(", ", questObjectiveDistances.Select(o => o.Key.Name)));
 
                 // Sort the quests in the group by their distance to you, with some randomness applied, in ascending order
                 System.Random random = new System.Random();
@@ -583,7 +623,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     sb.Append(assignment.Status.ToString() + ",");
                     sb.Append("\"" + (assignment.QuestAssignment?.ToString()?.Replace(",", "") ?? "N/A") + "\",");
                     sb.Append("\"" + (assignment.QuestObjectiveAssignment?.ToString()?.Replace(",", "") ?? "N/A") + "\",");
-                    sb.Append("\"" + (assignment.QuestObjectiveStepAssignment?.ToString() ?? "N/A") + "\",");
+                    sb.Append("\"" + (assignment.QuestObjectiveStepAssignment?.StepNumber?.ToString() ?? "N/A") + "\",");
                     sb.Append("\"" + (assignment.StartTime?.ToLongTimeString() ?? "N/A") + "\",");
                     sb.AppendLine("\"" + (assignment.EndTime?.ToLongTimeString() ?? "N/A") + "\",");
                 }

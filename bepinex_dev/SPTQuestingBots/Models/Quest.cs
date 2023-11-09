@@ -103,6 +103,8 @@ namespace SPTQuestingBots.Models
 
         public void AddObjective(QuestObjective objective)
         {
+            objective.UpdateQuestObjectiveStepNumbers();
+
             objectives = objectives.Append(objective).ToArray();
         }
 

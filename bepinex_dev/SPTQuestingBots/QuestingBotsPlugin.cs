@@ -35,12 +35,14 @@ namespace SPTQuestingBots
                 new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();
+                new Patches.OnBeenKilledByAggressorPatch().Enable();
 
                 if (ConfigController.Config.InitialPMCSpawns.Enabled)
                 {
                     new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.BotOwnerCreatePatch().Enable();
+                    new Patches.ReadyToPlayPatch().Enable();
 
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
@@ -52,9 +54,6 @@ namespace SPTQuestingBots
 
                 if (ConfigController.Config.Debug.Enabled)
                 {
-                    // This patch just writes a debug message saying which bot was killed and by whom
-                    new Patches.OnBeenKilledByAggressorPatch().Enable();
-
                     if (ConfigController.Config.Debug.ShowZoneOutlines || ConfigController.Config.Debug.ShowFailedPaths)
                     {
                         this.GetOrAddComponent<PathRender>();

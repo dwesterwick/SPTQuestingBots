@@ -155,17 +155,15 @@ namespace SPTQuestingBots.Models
             return true;
         }
 
-        public int GetObjectiveStepNumber(QuestObjectiveStep step)
+        public QuestObjectiveStep GetNextObjectiveStep(QuestObjectiveStep currentStep, bool allowReset = false)
         {
-            return questObjectiveSteps.IndexOf(step) + 1;
-        }
+            if (!allowReset && (currentStep == null))
+            {
+                return null;
+            }
 
-        public QuestObjectiveStep GetNextObjectiveStep(QuestObjectiveStep currentStep)
-        {
-            int currentIndex = questObjectiveSteps.IndexOf(currentStep);
-            IEnumerable<QuestObjectiveStep> nextStep = questObjectiveSteps
-                .Skip(currentIndex + 1)
-                .Take(1);
+            int currentStepNumber = currentStep?.StepNumber ?? 0;
+            IEnumerable<QuestObjectiveStep> nextStep = questObjectiveSteps.Where(s => s.StepNumber == currentStepNumber + 1);
 
             if (nextStep.Any())
             {
@@ -173,6 +171,14 @@ namespace SPTQuestingBots.Models
             }
 
             return null;
+        }
+
+        public void UpdateQuestObjectiveStepNumbers()
+        {
+            for (int i = 0; i < questObjectiveSteps.Length; i++)
+            {
+                questObjectiveSteps[i].StepNumber = i + 1;
+            }
         }
     }
 }

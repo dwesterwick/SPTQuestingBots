@@ -57,7 +57,7 @@ namespace SPTQuestingBots.Controllers.Bots
             return BotType.Undetermined;
         }
 
-        public static void RegisterBot(BotOwner botOwner)
+        public static void WriteMessageForNewBotSpawn(BotOwner botOwner)
         {
             SpawnedBotCount++;
             string message = "Spawned ";

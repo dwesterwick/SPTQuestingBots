@@ -254,7 +254,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
-            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
+            Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
 
             // TO DO: Is this loop actually needed?
             foreach (BotOwner player in allPlayersOutsideGroup)
@@ -407,9 +407,15 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     continue;
                 }
 
-                // If the bot is a member of a group, wait until it has at least one ally or enemy
+                // If the bot is a member of a group, wait until it has at least one ally or enemy. However, don't wait too long in case this never happens.
                 IReadOnlyCollection<BotOwner> groupMembers = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(bot);
-                if ((groupMembers.Count > 0) && (bot.BotsGroup.Allies.Count == 0) && (bot.BotsGroup.Enemies.Count == 0))
+                if 
+                (
+                    (objectiveManager.TimeSinceInitialization < 5)
+                    && (groupMembers.Count > 0)
+                    && (bot.BotsGroup.Allies.Count == 0)
+                    && (bot.BotsGroup.Enemies.Count == 0)
+                )
                 {
                     continue;
                 }

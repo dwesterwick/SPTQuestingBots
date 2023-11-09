@@ -19,6 +19,8 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
+            Controllers.Bots.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
+
             BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();
 
             string message = __instance.Profile.Nickname;

@@ -47,7 +47,7 @@ namespace SPTQuestingBots.Models
             QuestAssignment = quest;
             QuestObjectiveAssignment = objective;
 
-            if (!TrySetNextObjectiveStep())
+            if (!TrySetNextObjectiveStep(true))
             {
                 LoggingController.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
             }
@@ -55,8 +55,8 @@ namespace SPTQuestingBots.Models
 
         public override string ToString()
         {
-            int stepNumber = QuestObjectiveAssignment?.GetObjectiveStepNumber(QuestObjectiveStepAssignment) ?? 0;
-            return "Step #" + stepNumber + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
+            string stepNumberText = QuestObjectiveStepAssignment?.StepNumber?.ToString() ?? "???";
+            return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
         }
 
         public double? TimeSinceAssignment()
@@ -84,19 +84,20 @@ namespace SPTQuestingBots.Models
             return TimeSinceJobEnded() >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
         }
 
-        public bool TrySetNextObjectiveStep()
+        public bool TrySetNextObjectiveStep(bool allowReset = false)
         {
             if ((Status != JobAssignmentStatus.Completed) && (Status != JobAssignmentStatus.NotStarted))
             {
                 return false;
             }
 
-            QuestObjectiveStepAssignment = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment);
-            if (QuestObjectiveStepAssignment == null)
+            QuestObjectiveStep nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
+            if (nextStep == null)
             {
                 return false;
             }
 
+            QuestObjectiveStepAssignment = nextStep;
             EndTime = null;
             startJobAssingment();
 
@@ -130,6 +131,16 @@ namespace SPTQuestingBots.Models
         public void StartJobAssignment()
         {
             Status = JobAssignmentStatus.Active;
+        }
+
+        public void InactivateJobAssignment()
+        {
+            if (Status == JobAssignmentStatus.Active)
+            {
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
+
+                Status = JobAssignmentStatus.Pending;
+            }
         }
 
         public void ArchiveJobAssignment()

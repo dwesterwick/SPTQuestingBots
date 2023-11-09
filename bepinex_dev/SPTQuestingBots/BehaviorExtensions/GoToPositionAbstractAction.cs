@@ -11,7 +11,7 @@ using UnityEngine.AI;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
-    internal abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
+    public abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
     {
         protected bool CanSprint { get; set; } = true;
 

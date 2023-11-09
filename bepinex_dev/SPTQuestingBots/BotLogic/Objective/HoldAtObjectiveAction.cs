@@ -7,7 +7,7 @@ using EFT;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    public class HoldAtObjectiveAction : BehaviorExtensions.CustomLogicDelayedUpdate
+    public class HoldAtObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -37,6 +37,13 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 return;
             }
+
+            if (!ObjectiveManager.Position.HasValue)
+            {
+                throw new InvalidOperationException("Cannot go to a null position");
+            }
+
+            RecalculatePath(ObjectiveManager.Position.Value);
 
             ObjectiveManager.StartJobAssigment();
 
