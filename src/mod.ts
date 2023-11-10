@@ -119,9 +119,10 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 action: (url: string) => 
                 {
                     const urlParts = url.split("/");
-                    const factor = Number(urlParts[urlParts.length - 1]);
+                    const factor: number = Number(urlParts[urlParts.length - 2]);
+                    const verify: boolean = JSON.parse(urlParts[urlParts.length - 1].toLowerCase());
 
-                    this.adjustPmcConversionChance(factor);
+                    this.adjustPmcConversionChance(factor, verify);
                     return JSON.stringify({ resp: "OK" });
                 }
             }], "AdjustPMCConversionChances"
@@ -275,29 +276,49 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Reading default PMC spawn chances: ${logMessage}`);
     }
 
-    private adjustPmcConversionChance(scalingFactor: number): void
+    private adjustPmcConversionChance(scalingFactor: number, verify: boolean): void
     {
         // Adjust the chances for each applicable bot type
         let logMessage = "";
+        let verified = true;
         for (const pmcType in this.iPmcConfig.convertIntoPmcChance)
         {
-            // For now, we only want to convert assault bots due to the way the client mod forces spawns
-            if ((scalingFactor > 5) && (pmcType != "assault"))
-            {
-                continue;
-            }
-
             // Do not allow the chances to exceed 100%. Who knows what might happen...
             const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].min * scalingFactor));
             const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].max * scalingFactor));
 
-            this.iPmcConfig.convertIntoPmcChance[pmcType].min = min;
-            this.iPmcConfig.convertIntoPmcChance[pmcType].max = max;
+            if (verify)
+            {
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min != min)
+                {
+                    verified = false;
+                    break;
+                }
 
-            logMessage += `${pmcType}: ${min}-${max}%, `;
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max != max)
+                {
+                    verified = false;
+                    break;
+                }
+            }
+            else
+            {
+                this.iPmcConfig.convertIntoPmcChance[pmcType].min = min;
+                this.iPmcConfig.convertIntoPmcChance[pmcType].max = max;
+
+                logMessage += `${pmcType}: ${min}-${max}%, `;
+            }
         }
 
-        this.commonUtils.logInfo(`Adjusting PMC spawn chances (${scalingFactor}): ${logMessage}`);
+        if (!verify)
+        {
+            this.commonUtils.logInfo(`Adjusting PMC spawn chances (${scalingFactor}): ${logMessage}`);
+        }
+        
+        if (!verified)
+        {
+            this.commonUtils.logError("Another mod has changed the PMC conversion chances. This mod may not work properly!");
+        }
     }
 
     private disableCustomBossWaves(): void

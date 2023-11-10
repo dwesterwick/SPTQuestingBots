@@ -45,7 +45,7 @@ namespace SPTQuestingBots
                     new Patches.ReadyToPlayPatch().Enable();
 
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
-                    ConfigController.AdjustPMCConversionChances(ConfigController.Config.InitialPMCSpawns.ServerPMCConversionFactor);
+                    ConfigController.AdjustPMCConversionChances(0, false);
                 }
 
                 this.GetOrAddComponent<LocationController>();

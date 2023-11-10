@@ -308,6 +308,9 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 LoggingController.LogInfo("Generating PMC bots...");
 
+                // Ensure the PMC-conversion chances have remained at 0%
+                ConfigController.AdjustPMCConversionChances(0, true);
+
                 IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
                 System.Random random = new System.Random();

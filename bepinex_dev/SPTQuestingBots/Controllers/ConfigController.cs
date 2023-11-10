@@ -27,9 +27,9 @@ namespace SPTQuestingBots.Controllers
             return Config;
         }
 
-        public static void AdjustPMCConversionChances(float factor)
+        public static void AdjustPMCConversionChances(float factor, bool verify)
         {
-            RequestHandler.GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor);
+            RequestHandler.GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor + "/" + verify.ToString());
         }
 
         public static void ReportError(string errorMessage)
