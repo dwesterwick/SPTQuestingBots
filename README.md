@@ -144,6 +144,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **max_calc_time_per_frame_ms**: The maximum amount of time (in milliseconds) the mod is allowed to run quest-generation and PMC-spawning procedures per frame. By default this is set to **5** ms, and delays of <15 ms are basically imperceptible. 
 
 **Questing Options:**
+* **questing.enabled**: Completely enable or disable questing. 
 * **questing.bot_pathing_update_interval_ms**: The interval (in milliseconds) at which each bot will recalculate its path to its current objective. If this value is very low, performance will be impacted. If this value is very high, the bot will not react to obstacles changing as quickly (i.e. doors being unlocked). By default, this is **100** ms.
 * **questing.brain_layer_priority**: The priority number assigned to the questing "brain" layer. **Do not change this unless you know what you're doing!** By default, this is set to **26** which is higher than most EFT brain layers and higher than [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/)'s brain layers. If this is set much lower than 26, bots will prioritize other actions. If you're using [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) and you reduce this to be less than 23, bots will never quest. 
 * **questing.allowed_bot_types_for_questing.scav**: If Scavs are allowed to quest. This is **false** by default.
@@ -218,6 +219,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
+* Bots cannot open unlocked keycard doors (mostly an issue for rooms in Labs). This is an EFT limitation. 
 * Bots tend to get trapped in certain areas. Known areas:
     * Factory Gate 1 (should be fixed as of the Waypoints release for SPT-AKI 3.7.0; need to test again)
     * Customs between Warehouse 4 and New Gas
@@ -258,22 +260,23 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
 * **0.3.0** (ETA: Mid November)
+    * Rework quest data structures and logic layer to allow additional actions
+    * Emulation of bots planting items
+    * Refactoring terrible code
+* **0.4.0** (ETA: Late November)
+    * Add new quest-objective action: unlocking doors
+    * Add new quest-objective action: pulling levers
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
-    * Rework quest data structures and logic layer to allow additional actions. Initially planned:
-        * Patrol target area for a certain time
-        * Wait at specific location for a certain time (mimicing planting items)
-    * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
-    * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-    * Refactoring terrible code
-* **0.3.1** (ETA: Early December)
-    * Add new quest-objective actions: unlocking doors and pulling levers
+* **0.4.1** (ETA: Early December)
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add new quest type: air-drop chaser
+    * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
-* **0.3.2** (ETA: Mid December)
+    * Add configuration options to overwrite default settings for EFT-based quests and their objectives
+* **0.4.2** (ETA: Mid December)
     * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.

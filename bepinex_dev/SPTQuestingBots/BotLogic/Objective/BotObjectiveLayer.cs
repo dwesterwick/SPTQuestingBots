@@ -9,7 +9,6 @@ using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
-using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {

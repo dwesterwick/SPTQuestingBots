@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
 using SPTQuestingBots.Models;
@@ -160,6 +161,12 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Don't allow expensive parts of this behavior (selecting an objective) to run too often
             if (!canUpdate())
+            {
+                return;
+            }
+
+            // Don't monitor the bot's job assignment if it's a follower of a boss
+            if (BotHiveMindMonitor.HasBoss(botOwner))
             {
                 return;
             }

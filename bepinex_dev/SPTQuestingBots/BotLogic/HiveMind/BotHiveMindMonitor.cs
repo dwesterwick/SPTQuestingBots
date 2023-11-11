@@ -331,9 +331,9 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                         botFollowers.Remove(botBosses[bot]);
                     }
 
-                    botBosses[bot] = null;
                     deadBots.Add(botBosses[bot]);
-
+                    botBosses[bot] = null;
+                    
                     continue;
                 }
 
