@@ -74,6 +74,12 @@ namespace SPTQuestingBots.Models
 
         public void AddStep(QuestObjectiveStep step)
         {
+            // Immediately plant items after reaching objective locations
+            if ((step.ActionType == QuestAction.PlantItem) && (questObjectiveSteps.Length > 0))
+            {
+                questObjectiveSteps.Last().WaitTimeAfterCompleting = ConfigController.Config.Questing.WaitTimeBeforePlanting;
+            }
+
             questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();
 
             UpdateQuestObjectiveStepNumbers();

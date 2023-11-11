@@ -29,6 +29,7 @@
 			"follower_break_time": 10
 		},
 		"min_time_between_switching_objectives": 5,
+		"wait_time_before_planting": 1,
 		"quest_generation": {
 			"navmesh_search_distance_item": 2,
 			"navmesh_search_distance_zone": 2,

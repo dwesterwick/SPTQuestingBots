@@ -79,12 +79,13 @@ To accomodate the large initial PMC wave and still allow Scavs and bosses to spa
 To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
 The three major data structures are:
-* **Quests**: A quest is a collection of at least one quest objective, and objectives can be placed anywhere on the map.
+* **Quests**: A quest is a collection of at least one quest objective, and objectives can be placed anywhere on the map. Objectives can be completed in any order. 
 
     Quests have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests that are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
     * **minLevel**: Only bots that are at least this player level will be allowed to select the quest
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest
+    * **maxBots**: The maximum number of bots that can be performing the quest at the same time.
     * **chanceForSelecting**: The chance (in percent) that the bot will accept the quest if the quest-selection algorithm selects it for the bot
     * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
     * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
@@ -93,20 +94,22 @@ The three major data structures are:
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
-* **Objectives**: An objective is a collection of at least one step. An objective represents a list of actions that the bot must complete. Currently, objectives only contain a list of positions that the bot needs to reach. In the future, an example objective could contain multiple types of steps such as: 1) Go to a door, 2) Unlock the door, 3) Go inside the room.
+* **Objectives**: An objective is a collection of at least one step. An objective represents a list of actions that the bot must complete in the order you specify. 
 
     Quest objectives have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest objective later in the raid. This is typically used for quests are are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
-    * **maxBots**: The maximum number of bots that can be performing the objective at the same time.
     * **minDistanceFromBot**: The objective will only be selected if the bot is at least this many meters away from it.
     * **maxDistanceFromBot**: The objective will only be selected if the bot is no more than this many meters away from it.
     * **maxRunDistance**: If bots get within this radius (in meters) of the position for the first step in the objective, they will no longer be allowed to sprint. This is intended to be used in areas where stealth is more important (typically in buildings). This is **0** by default. 
     * **steps**: An array of the steps in the objective. Bots will complete the steps exactly in the order you specify.
 
-* **Steps**: A step is an individual component of an objective. Currently, the only type of objective step is going to a specified position. More will be added in the future. 
+* **Steps**: A step is an individual component of an objective. 
 
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
+    * **waitTimeAfterCompleting**: The time the bot must wait after completing the step before it will be allowed to quest again. This is **10** s by default. 
+    * **stepType**: The only valid options for this are "MoveToPosition" and "PlantItem" (case-sensitive). If omitted, "MoveToPosition" is used by default.
+    * **minElapsedTime**" If **stepType="PlantItem"**, this is the time the bot will spend "planting its item". If the bot is interrupted during this time, the timer restarts. This is **0** s by default, so it must be defined if you set **stepType="PlantItem"**.
 
 **Tips and Tricks**
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
@@ -156,6 +159,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.stuck_bot_detection.max_count**: The maximum number of times the bot can be stuck before questing is completely disabled for it. This counter is reset whenever the bot completes an objective. Whenever the bot is assumed to be stuck, a new objective will be selected for it to force it to generate a different path. This is **8** by default. 
 * **questing.stuck_bot_detection.follower_break_time**: If a boss follower is stuck while trying to follow it, it will take a break for this many seconds (**10** by default).
 * **questing.min_time_between_switching_objectives**: The minimum amount of time (in seconds) the bot must wait after completing an objective before a new objective is selected for it. This is to allow it to check its surroundings, search for loot, etc. This is **5** s by default. 
+* **questing.wait_time_before_planting**: If the bot needs to plant an item at a quest location, this is the time (in seconds) it will wait between reaching its target location and beginning to "plant" the required item. This is **1** s by default. If this is much lower than **1** s, there may be strange behavior when the bot transitions into planting its item.
 * **questing.quest_generation.navmesh_search_distance_item**: The radius (in meters) around quest items (i.e. the bronze pocket watch) to seach for a valid NavMesh position to use for a target location for creating a quest objective for it. If this value is too low, bots may not be able to generate a complete path to the item. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **2** m by default. 
 * **questing.quest_generation.navmesh_search_distance_zone**: The radius (in meters) around target positions in zones (i.e. trigger areas for placing markers) to seach for a valid NavMesh position to use for a target location for creating a quest objective for it. If this value is too low, bots may not be able to generate a complete path to the zone. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **2** m by default. The target position for a zone is the center-most valid NavMesh position in it. If the zone surrounds multiple floors in a building, the lowest floor is typically used. 
 * **questing.quest_generation.navmesh_search_distance_spawn**: The radius (in meters) around spawn points to seach for a valid NavMesh position to use for a target location for creating a quest objective for it. If this value is too low, bots may not be able to generate a complete path to the spawn point. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **2** m by default. 
