@@ -75,6 +75,8 @@ namespace SPTQuestingBots.Models
         public void AddStep(QuestObjectiveStep step)
         {
             questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();
+
+            UpdateQuestObjectiveStepNumbers();
         }
 
         public void SetName(string _name)

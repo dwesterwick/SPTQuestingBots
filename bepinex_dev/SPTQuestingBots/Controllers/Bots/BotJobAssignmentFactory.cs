@@ -384,16 +384,19 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (botJobAssignments[bot.Profile.Id].Count > 0)
             {
-                JobAssignmentStatus status = botJobAssignments[bot.Profile.Id].Last().Status;
-                if ((status == JobAssignmentStatus.Pending) || (status == JobAssignmentStatus.Active))
+                BotJobAssignment currentAssignment = botJobAssignments[bot.Profile.Id].Last();
+                
+                if (currentAssignment.IsActive)
                 {
                     return false;
                 }
 
-                if (botJobAssignments[bot.Profile.Id].Last().TrySetNextObjectiveStep())
+                if (currentAssignment.TrySetNextObjectiveStep(false))
                 {
                     return true;
                 }
+
+                LoggingController.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
             }
 
             bot.GetNewBotJobAssignment();
