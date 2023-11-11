@@ -69,14 +69,14 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             // Check if the bot has moved enough
             float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, BotOwner.Position);
-            if (distanceFromLastUpdate > ConfigController.Config.StuckBotDetection.Distance)
+            if (distanceFromLastUpdate > ConfigController.Config.Questing.StuckBotDetection.Distance)
             {
                 lastBotPosition = BotOwner.Position;
                 restartStuckTimer();
             }
 
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
-            if (StuckTime > ConfigController.Config.StuckBotDetection.Time)
+            if (StuckTime > ConfigController.Config.Questing.StuckBotDetection.Time)
             {
                 drawBotPath(Color.red);
 

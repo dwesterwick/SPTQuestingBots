@@ -36,7 +36,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
-        public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.BotSearchDistances.OjectiveReachedIdeal);
+        public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
 
         public void StartJobAssigment() => assignment.StartJobAssignment();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
@@ -100,16 +100,16 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotType botType = BotRegistrationManager.GetBotType(botOwner);
 
-            if ((botType == BotType.PMC) && ConfigController.Config.AllowedBotTypesForQuesting.PMC)
+            if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
                 CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
                 IsQuestingAllowed = true;
             }
-            if ((botType == BotType.Boss) && ConfigController.Config.AllowedBotTypesForQuesting.Boss)
+            if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)
             {
                 IsQuestingAllowed = true;
             }
-            if ((botType == BotType.Scav) && ConfigController.Config.AllowedBotTypesForQuesting.Scav)
+            if ((botType == BotType.Scav) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Scav)
             {
                 IsQuestingAllowed = true;
             }
@@ -167,7 +167,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             bool? hasWaitedLongEnough = assignment?.HasWaitedLongEnoughAfterEnding();
             if (hasWaitedLongEnough.HasValue && hasWaitedLongEnough.Value)
             {
-                if (botOwner.NumberOfConsecutiveFailedAssignments() >= ConfigController.Config.StuckBotDetection.MaxCount)
+                if (botOwner.NumberOfConsecutiveFailedAssignments() >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
                 {
                     LoggingController.LogWarning(botOwner.GetText() + " has failed too many consecutive assignments and is no longer allowed to quest.");
                     botOwner.Mover.Stop();
@@ -194,7 +194,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool TryChangeObjective()
         {
             double? timeSinceJobEnded = assignment?.TimeSinceJobEnded();
-            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < ConfigController.Config.MinTimeBetweenSwitchingObjectives))
+            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < ConfigController.Config.Questing.MinTimeBetweenSwitchingObjectives))
             {
                 return false;
             }

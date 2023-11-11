@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static bool HaveQuestsBeenBuilt { get; private set; } = false;
         public static string PreviousLocationID { get; private set; } = null;
 
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.Questing.MaxCalcTimePerFrame);
         private static List<string> zoneIDsInLocation = new List<string>();
         
         public IEnumerator Clear()
@@ -84,8 +84,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
-                        Quest quest = new Quest(ConfigController.Config.BotQuests.EFTQuests.Priority, questTemplate);
-                        quest.ChanceForSelecting = ConfigController.Config.BotQuests.EFTQuests.Chance;
+                        Quest quest = new Quest(ConfigController.Config.Questing.BotQuests.EFTQuests.Priority, questTemplate);
+                        quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.EFTQuests.Chance;
                         BotJobAssignmentFactory.AddQuest(quest);
                     }
                 }
@@ -237,7 +237,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     }
 
                     // Try to find the nearest NavMesh position next to the quest item.
-                    Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceItem);
+                    Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
                         LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
@@ -261,7 +261,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private void LoadQuest(Quest quest)
         {
-            quest.MaxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
+            quest.MaxBots = ConfigController.Config.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
 
             // Enumerate all zones used by the quest (in any of its objectives)
             IEnumerable<string> zoneIDs = getAllZoneIDsForQuest(quest);
@@ -283,7 +283,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
             // Calculate the minimum and maximum player levels allowed for selecting the quest
             quest.MinLevel = getMinLevelForQuest(quest);
-            double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
+            double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.Questing.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
             quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
 
             //LoggingController.LogInfo("Level range for quest \"" + quest.Name + "\": " + quest.MinLevel + "-" + quest.MaxLevel);
@@ -501,7 +501,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
             // Determine how far to search for a valid NavMesh position from the target location. If the collider (zone) is very large, expand the search range.
             // TO DO: This is kinda sloppy and should be fixed. 
-            float maxSearchDistance = ConfigController.Config.QuestGeneration.NavMeshSearchDistanceZone;
+            float maxSearchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceZone;
             maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
             Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
             if (!navMeshTargetPoint.HasValue)
@@ -528,7 +528,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 // If the zone is large, allow twice as many bots to do the objective at the same time
                 // TO DO: This is kinda sloppy and should be fixed. 
-                int maxBots = ConfigController.Config.BotQuests.EFTQuests.MaxBotsPerQuest;
+                int maxBots = ConfigController.Config.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
                 quest.MaxBots *= triggerCollider.bounds.Volume() > 5 ? maxBots * 2 : maxBots;
 
                 zoneIDsInLocation.Add(trigger.Id);
@@ -555,14 +555,14 @@ namespace SPTQuestingBots.Controllers.Bots
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnPointWander.Priority, "Spawn Points");
-            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnPointWander.Chance;
-            quest.MaxBots = ConfigController.Config.BotQuests.SpawnPointWander.MaxBotsPerQuest;
+            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnPointWander.Priority, "Spawn Points");
+            quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.SpawnPointWander.Chance;
+            quest.MaxBots = ConfigController.Config.Questing.BotQuests.SpawnPointWander.MaxBotsPerQuest;
 
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
                 // Ensure the spawn point has a valid nearby NavMesh position
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
                     LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
@@ -570,7 +570,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                objective.MinDistanceFromBot = ConfigController.Config.BotQuests.SpawnPointWander.MinDistance;
+                objective.MinDistanceFromBot = ConfigController.Config.Questing.BotQuests.SpawnPointWander.MinDistance;
                 quest.AddObjective(objective);
             }
 
@@ -587,7 +587,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             // Ensure there is a valid NavMesh position near your spawn point
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogWarning("Cannot find NavMesh position for player spawn point.");
@@ -597,13 +597,13 @@ namespace SPTQuestingBots.Controllers.Bots
             //Vector3? playerPosition = LocationController.GetPlayerPosition();
             //LoggingController.LogInfo("Creating spawn rush quest for " + playerSpawnPoint.Value.Id + " via " + navMeshPosition.Value.ToString() + " for player at " + playerPosition.Value.ToString() + "...");
 
-            Models.Quest quest = new Models.Quest(ConfigController.Config.BotQuests.SpawnRush.Priority, "Spawn Rush");
-            quest.ChanceForSelecting = ConfigController.Config.BotQuests.SpawnRush.Chance;
-            quest.MaxRaidET = ConfigController.Config.BotQuests.SpawnRush.MaxRaidET;
-            quest.MaxBots = ConfigController.Config.BotQuests.SpawnRush.MaxBotsPerQuest;
+            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnRush.Priority, "Spawn Rush");
+            quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.SpawnRush.Chance;
+            quest.MaxRaidET = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxRaidET;
+            quest.MaxBots = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxBotsPerQuest;
 
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
-            objective.MaxDistanceFromBot = ConfigController.Config.BotQuests.SpawnRush.MaxDistance;
+            objective.MaxDistanceFromBot = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxDistance;
             quest.AddObjective(objective);
 
             return quest;

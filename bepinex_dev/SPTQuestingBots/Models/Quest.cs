@@ -37,7 +37,7 @@ namespace SPTQuestingBots.Models
         public float MaxRaidET { get; set; } = float.MaxValue;
 
         [JsonProperty("maxTimeOnQuest")]
-        public float MaxTimeOnQuest { get; set; } = ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest;
+        public float MaxTimeOnQuest { get; set; } = ConfigController.Config.Questing.BotQuestingRequirements.MaxTimePerQuest;
 
         [JsonProperty("canRunBetweenObjectives")]
         public bool CanRunBetweenObjectives { get; set; } = true;
@@ -94,8 +94,8 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            bool canAssign = ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel)
-                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.BotQuestingRequirements.ExcludeBotsByLevel)
+            bool canAssign = ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
+                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && LocationController.GetElapsedRaidTime() < MaxRaidET;
 
             return canAssign;

@@ -89,7 +89,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), ConfigController.Config.QuestGeneration.NavMeshSearchDistanceSpawn);
+            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());

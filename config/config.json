@@ -8,92 +8,95 @@
 		"show_zone_outlines": false,
 		"show_failed_paths": false
 	},
-	"max_calc_time_per_frame_ms": 5,
-	"bot_pathing_update_interval_ms": 100,
-	"brain_layer_priority": 26,
-	"allowed_bot_types_for_questing": {
-		"scav": false,
-		"pmc": true,
-		"boss": false
-	},
-	"search_time_after_combat": {
-		"min": 10,
-		"max": 30
-	},
-	"stuck_bot_detection": {
-		"distance": 2,
-		"time": 20,
-		"max_count": 8
-	},
-	"min_time_between_switching_objectives": 5,
-	"quest_generation": {
-		"navmesh_search_distance_item": 2,
-		"navmesh_search_distance_zone": 2,
-		"navmesh_search_distance_spawn": 2
-	},
-	"bot_search_distances": {
-		"objective_reached_ideal": 0.5,
-		"objective_reached_navmesh_path_error": 20,
-		"max_navmesh_path_error": 10
-	},
-	"bot_questing_requirements": {
-		"exclude_bots_by_level": true,
-		"repeat_quest_delay": 300,
-		"max_time_per_quest": 300,
-		"min_hydration": 20,
-		"min_energy": 20,
-		"min_health_head": 50,
-		"min_health_chest": 50,
-		"min_health_stomach": 50,
-		"min_health_legs": 50,
-		"max_overweight_percentage": 100,
-		"break_for_looting": {
-			"enabled": true,
-			"min_time_between_looting_checks": 50,
-			"min_time_between_follower_looting_checks": 30,
-			"min_time_between_looting_events": 80,
-			"max_time_to_start_looting": 2,
-			"max_loot_scan_time": 4,
-			"max_distance_from_boss": 75
+	"questing": {
+		"enabled": true,
+		"max_calc_time_per_frame_ms": 5,
+		"bot_pathing_update_interval_ms": 100,
+		"brain_layer_priority": 26,
+		"allowed_bot_types_for_questing": {
+			"scav": false,
+			"pmc": true,
+			"boss": false
 		},
-		"max_follower_distance": {
-			"max_wait_time": 5,
-			"min_regroup_time": 1,
-			"target_range": {
-				"min": 10,
-				"max": 20
+		"search_time_after_combat": {
+			"min": 10,
+			"max": 30
+		},
+		"stuck_bot_detection": {
+			"distance": 2,
+			"time": 20,
+			"max_count": 8
+		},
+		"min_time_between_switching_objectives": 5,
+		"quest_generation": {
+			"navmesh_search_distance_item": 2,
+			"navmesh_search_distance_zone": 2,
+			"navmesh_search_distance_spawn": 2
+		},
+		"bot_search_distances": {
+			"objective_reached_ideal": 0.5,
+			"objective_reached_navmesh_path_error": 20,
+			"max_navmesh_path_error": 10
+		},
+		"bot_questing_requirements": {
+			"exclude_bots_by_level": true,
+			"repeat_quest_delay": 300,
+			"max_time_per_quest": 300,
+			"min_hydration": 20,
+			"min_energy": 20,
+			"min_health_head": 50,
+			"min_health_chest": 50,
+			"min_health_stomach": 50,
+			"min_health_legs": 50,
+			"max_overweight_percentage": 100,
+			"break_for_looting": {
+				"enabled": true,
+				"min_time_between_looting_checks": 50,
+				"min_time_between_follower_looting_checks": 30,
+				"min_time_between_looting_events": 80,
+				"max_time_to_start_looting": 2,
+				"max_loot_scan_time": 4,
+				"max_distance_from_boss": 75
 			},
-			"nearest": 25,
-			"furthest": 40
-		}
-	},
-	"bot_quests": {
-		"distance_randomness": 30,
-		"eft_quests": {
-			"priority": 15,
-			"chance": 50,
-			"max_bots_per_quest": 4,
-			"level_range": [
-				[0, 99],
-				[1, 8],
-				[10, 15],
-				[20, 25],
-				[30, 30],
-				[40, 40]
-			]
+			"max_follower_distance": {
+				"max_wait_time": 5,
+				"min_regroup_time": 1,
+				"target_range": {
+					"min": 10,
+					"max": 20
+				},
+				"nearest": 25,
+				"furthest": 40
+			}
 		},
-		"spawn_rush": {
-			"priority": 5,
-			"chance": 50,
-			"max_bots_per_quest": 1,
-			"max_distance": 75,
-			"max_raid_ET": 30
-		},
-		"spawn_point_wander": {
-			"priority": 25,
-			"chance": 1,
-			"min_distance": 75,
-			"max_bots_per_quest": 30
+		"bot_quests": {
+			"distance_randomness": 30,
+			"eft_quests": {
+				"priority": 15,
+				"chance": 50,
+				"max_bots_per_quest": 4,
+				"level_range": [
+					[0, 99],
+					[1, 8],
+					[10, 15],
+					[20, 25],
+					[30, 30],
+					[40, 40]
+				]
+			},
+			"spawn_rush": {
+				"priority": 5,
+				"chance": 50,
+				"max_bots_per_quest": 1,
+				"max_distance": 75,
+				"max_raid_ET": 30
+			},
+			"spawn_point_wander": {
+				"priority": 25,
+				"chance": 1,
+				"min_distance": 75,
+				"max_bots_per_quest": 30
+			}
 		}
 	},
 	"initial_PMC_spawns": {

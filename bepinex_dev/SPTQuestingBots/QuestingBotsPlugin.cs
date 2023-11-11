@@ -50,8 +50,12 @@ namespace SPTQuestingBots
                 }
 
                 this.GetOrAddComponent<LocationController>();
-                this.GetOrAddComponent<BotQuestBuilder>();
                 this.GetOrAddComponent<BotGenerator>();
+
+                if (!ConfigController.Config.Questing.Enabled)
+                {
+                    this.GetOrAddComponent<BotQuestBuilder>();
+                }
 
                 if (ConfigController.Config.Debug.Enabled)
                 {
@@ -75,14 +79,19 @@ namespace SPTQuestingBots
             IEnumerable<BotBrainType> allNonSniperBrains = BotBrainHelpers.GetAllNonSniperBrains();
             IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.BrainLayerPriority);
-
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.BrainLayerPriority + 1);
-
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), 99);
+
+            if (!ConfigController.Config.Questing.Enabled)
+            {
+                return;
+            }
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriority);
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriority + 1);
         }
     }
 }

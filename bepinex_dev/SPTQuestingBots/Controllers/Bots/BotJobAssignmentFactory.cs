@@ -17,7 +17,7 @@ namespace SPTQuestingBots.Controllers.Bots
 {
     public static class BotJobAssignmentFactory
     {
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.Questing.MaxCalcTimePerFrame);
         private static List<Quest> allQuests = new List<Quest>();
         private static Dictionary<string, List<BotJobAssignment>> botJobAssignments = new Dictionary<string, List<BotJobAssignment>>();
 
@@ -296,7 +296,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             double? timeSinceQuestEnded = quest.TimeSinceLastAssignmentEndedForBot(bot);
-            if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.BotQuestingRequirements.RepeatQuestDelay))
+            if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.Questing.BotQuestingRequirements.RepeatQuestDelay))
             {
                 LoggingController.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
 
@@ -335,7 +335,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static bool HasBotBeingDoingQuestTooLong(this Quest quest, BotOwner bot, out double? time)
         {
             time = quest.TimeSinceFirstAssignmentEndedForBot(bot);
-            if (time.HasValue && (time >= ConfigController.Config.BotQuestingRequirements.MaxTimePerQuest))
+            if (time.HasValue && (time >= ConfigController.Config.Questing.BotQuestingRequirements.MaxTimePerQuest))
             {
                 return true;
             }
@@ -505,7 +505,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 // Calculate the maximum amount of "randomness" to apply to each quest
                 double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
-                int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.BotQuests.DistanceRandomness / 100.0);
+                int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
 
                 //string timestampText = "[" + DateTime.Now.ToLongTimeString() + "] ";
                 //LoggingController.LogInfo(timestampText + "Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);

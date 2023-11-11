@@ -14,7 +14,7 @@ namespace SPTQuestingBots.BotLogic
 {
     public class BotMonitor
     {
-        public float NextLootCheckDelay { get; private set; } = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+        public float NextLootCheckDelay { get; private set; } = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
         private BotOwner botOwner;
         private LogicLayerMonitor lootingLayerMonitor;
@@ -53,7 +53,7 @@ namespace SPTQuestingBots.BotLogic
         public int UpdateSearchTimeAfterCombat()
         {
             System.Random random = new System.Random();
-            return random.Next((int)ConfigController.Config.SearchTimeAfterCombat.Min, (int)ConfigController.Config.SearchTimeAfterCombat.Max);
+            return random.Next((int)ConfigController.Config.Questing.SearchTimeAfterCombat.Min, (int)ConfigController.Config.Questing.SearchTimeAfterCombat.Max);
         }
 
         public bool WantsToUseStationaryWeapon()
@@ -95,8 +95,8 @@ namespace SPTQuestingBots.BotLogic
             IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
             if
             (
-                followerDistances.Any(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Furthest)
-                || followerDistances.All(d => d > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+                followerDistances.Any(d => d > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+                || followerDistances.All(d => d > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
             )
             {
                 return true;
@@ -118,7 +118,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the bot needs to drink something
-            if (100f * botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < ConfigController.Config.BotQuestingRequirements.MinHydration)
+            if (100f * botOwner.HealthController.Hydration.Current / botOwner.HealthController.Hydration.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHydration)
             {
                 if (writeToLog)
                 {
@@ -128,7 +128,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the bot needs to eat something
-            if (100f * botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < ConfigController.Config.BotQuestingRequirements.MinEnergy)
+            if (100f * botOwner.HealthController.Energy.Current / botOwner.HealthController.Energy.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinEnergy)
             {
                 if (writeToLog)
                 {
@@ -147,11 +147,11 @@ namespace SPTQuestingBots.BotLogic
             // Check if any of the bot's body parts need to be healed
             if
             (
-                (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthHead)
-                || (100f * healthChest.Current / healthChest.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthChest)
-                || (100f * healthStomach.Current / healthStomach.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthStomach)
-                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
-                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < ConfigController.Config.BotQuestingRequirements.MinHealthLegs)
+                (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthHead)
+                || (100f * healthChest.Current / healthChest.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthChest)
+                || (100f * healthStomach.Current / healthStomach.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthStomach)
+                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthLegs)
+                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthLegs)
             )
             {
                 if (writeToLog)
@@ -162,7 +162,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the bot is too overweight
-            if (100f * botOwner.GetPlayer.Physical.Overweight > ConfigController.Config.BotQuestingRequirements.MaxOverweightPercentage)
+            if (100f * botOwner.GetPlayer.Physical.Overweight > ConfigController.Config.Questing.BotQuestingRequirements.MaxOverweightPercentage)
             {
                 if (writeToLog)
                 {
@@ -182,7 +182,7 @@ namespace SPTQuestingBots.BotLogic
 
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
         {
-            if (!ConfigController.Config.BotQuestingRequirements.BreakForLooting.Enabled)
+            if (!ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.Enabled)
             {
                 return false;
             }
@@ -193,7 +193,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+            NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
             bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
@@ -207,7 +207,7 @@ namespace SPTQuestingBots.BotLogic
             //      - The minimum amount of time between loot checks depends on whether the bot successfully found loot during the previous check
             if
             (
-                (isLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
+                (isLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
                 && (isLooting || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
             )
             {
@@ -220,7 +220,7 @@ namespace SPTQuestingBots.BotLogic
                         LoggingController.LogInfo("Bot " + botOwner.GetText() + " has found loot");
                     }
 
-                    NextLootCheckDelay = ConfigController.Config.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
+                    NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
                     lootSearchTimer.Reset();
                     hasFoundLoot = true;
                 }

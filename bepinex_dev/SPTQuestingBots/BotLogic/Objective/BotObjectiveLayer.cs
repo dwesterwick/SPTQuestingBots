@@ -16,7 +16,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     internal class BotObjectiveLayer : CustomLayerDelayedUpdate
     {
         private BotObjectiveManager objectiveManager;
-        private double searchTimeAfterCombat = ConfigController.Config.SearchTimeAfterCombat.Min;
+        private double searchTimeAfterCombat = ConfigController.Config.Questing.SearchTimeAfterCombat.Min;
         private bool wasAbleBodied = true;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
@@ -88,7 +88,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
             {
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
-                return updatePreviousState(pauseLayer(ConfigController.Config.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
+                return updatePreviousState(pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
             }
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
@@ -162,7 +162,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // If the bot has wandered too far from its followers for long enough, regroup with them
-            if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
+            if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
             {
                 setNextAction(BotActionType.Regroup, "Regroup");
                 return updatePreviousState(true);
@@ -179,7 +179,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }*/
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
-            if (objectiveManager.StuckCount >= ConfigController.Config.StuckBotDetection.MaxCount)
+            if (objectiveManager.StuckCount >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
             {
                 LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
                 objectiveManager.StopQuesting();

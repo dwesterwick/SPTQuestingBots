@@ -121,9 +121,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
 
                 // Check if the bot is nearly at the end of its (incomplete) path
-                if (distanceToEndOfPath < ConfigController.Config.BotSearchDistances.MaxNavMeshPathError)
+                if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
                 {
-                    if (distanceToObjective < ConfigController.Config.BotSearchDistances.ObjectiveReachedNavMeshPathError)
+                    if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
                     {
                         LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
                         ObjectiveManager.CompleteObjective();
