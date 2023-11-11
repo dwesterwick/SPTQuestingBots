@@ -42,13 +42,13 @@ namespace SPTQuestingBots.Patches
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             // PMC groups are automatically converted to "assaultGroup" wildSpawnTypes by EFT, so they need to be changed back for the SPT PMC patch to work
-            if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
+            /*if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
-                if (TryConvertSpawnType(__instance))
+                if (WildSpawnTypeChangerPatch.TryConvertSpawnType(__instance))
                 {
                     roleName = __instance.Profile.Info.Settings.Role.ToString();
                 }
-            }
+            }*/
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
             if (Controllers.Bots.BotBrainHelpers.WillBotBeAPMC(__instance))
@@ -62,30 +62,6 @@ namespace SPTQuestingBots.Patches
             }
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
-        }
-
-        private static bool TryConvertSpawnType(BotOwner __instance)
-        {
-            if (!Controllers.Bots.BotGenerator.TryGetInitialPMCGroup(__instance, out Models.BotSpawnInfo groupData))
-            {
-                return false;
-            }
-
-            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(__instance);
-            if (originalSpawnType == null)
-            {
-                return false;
-            }
-
-            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
-
-            __instance.Profile.Info.Settings.Role = originalSpawnType.Value;
-
-            string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
-
-            LoggingController.LogInfo("Converted spawn type for bot " + __instance.GetText() + " from " + currentRoleName + " to " + actualRoleName);
-
-            return true;
         }
     }
 }

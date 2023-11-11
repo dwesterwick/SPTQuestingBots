@@ -311,6 +311,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 // Ensure the PMC-conversion chances have remained at 0%
                 ConfigController.AdjustPMCConversionChances(0, true);
 
+                // In SPT-AKI 3.7.1, this is GClass732
                 IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
                 System.Random random = new System.Random();
