@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static bool HaveQuestsBeenBuilt { get; private set; } = false;
         public static string PreviousLocationID { get; private set; } = null;
 
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.Questing.MaxCalcTimePerFrame);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
         private static List<string> zoneIDsInLocation = new List<string>();
         
         public IEnumerator Clear()

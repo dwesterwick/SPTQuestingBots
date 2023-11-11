@@ -52,7 +52,7 @@ namespace SPTQuestingBots
                 this.GetOrAddComponent<LocationController>();
                 this.GetOrAddComponent<BotGenerator>();
 
-                if (!ConfigController.Config.Questing.Enabled)
+                if (ConfigController.Config.Questing.Enabled)
                 {
                     this.GetOrAddComponent<BotQuestBuilder>();
                 }

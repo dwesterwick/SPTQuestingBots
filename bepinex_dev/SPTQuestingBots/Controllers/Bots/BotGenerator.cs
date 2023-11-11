@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static bool IsSpawningPMCs { get; private set; } = false;
         public static bool IsGeneratingPMCs { get; private set; } = false;
         
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.Questing.MaxCalcTimePerFrame);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
         private static int maxAlivePMCs = 6;
         private static int maxTotalBots = 15;
         private static Stopwatch retrySpawnTimer = Stopwatch.StartNew();

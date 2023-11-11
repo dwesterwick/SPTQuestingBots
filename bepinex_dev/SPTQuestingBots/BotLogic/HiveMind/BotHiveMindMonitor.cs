@@ -256,7 +256,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
 
-            Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
+            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
 
             // TO DO: Is this loop actually needed?
             foreach (BotOwner player in allPlayersOutsideGroup)

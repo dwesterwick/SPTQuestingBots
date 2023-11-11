@@ -12,9 +12,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
-        [JsonProperty("max_calc_time_per_frame_ms")]
-        public float MaxCalcTimePerFrame { get; set; } = 5;
-
         [JsonProperty("bot_pathing_update_interval_ms")]
         public float BotPathingUpdateInterval { get; set; } = 100;
 
