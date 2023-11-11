@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.Controllers;
 using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class FollowBossAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private bool wasStuck = false;
+
         public FollowBossAction(BotOwner _BotOwner) : base(_BotOwner)
         {
 
@@ -39,7 +42,23 @@ namespace SPTQuestingBots.BotLogic.Follow
             BotOwner boss = HiveMind.BotHiveMindMonitor.GetBoss(BotOwner);
             CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
 
-            NavMeshPathStatus? pathStatus = RecalculatePath(boss.Position);
+            RecalculatePath(boss.Position);
+
+            if (checkIfBotIsStuck())
+            {
+                if (!wasStuck)
+                {
+                    LoggingController.LogInfo("Follower " + BotOwner.GetText() + " is stuck and take a break from following.");
+                }
+                wasStuck = true;
+
+                ObjectiveManager.PauseRequest = ConfigController.Config.Questing.StuckBotDetection.FollowerBreakTime;
+                restartStuckTimer();
+            }
+            else
+            {
+                wasStuck = false;
+            }
         }
     }
 }

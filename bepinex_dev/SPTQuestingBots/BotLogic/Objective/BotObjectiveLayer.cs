@@ -42,6 +42,14 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override bool IsActive()
         {
+            if (objectiveManager.PauseRequest > 0)
+            {
+                float pauseTime = objectiveManager.PauseRequest;
+                objectiveManager.PauseRequest = 0;
+
+                return pauseLayer(pauseTime);
+            }
+
             if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
             {
                 return previousState;

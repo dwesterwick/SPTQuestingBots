@@ -19,6 +19,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsQuestingAllowed { get; private set; } = false;
         public bool CanRushPlayerSpawn { get; private set; } = false;
         public int StuckCount { get; set; } = 0;
+        public float PauseRequest { get; set; } = 0;
         public BotMonitor BotMonitor { get; private set; } = null;
 
         private BotOwner botOwner = null;

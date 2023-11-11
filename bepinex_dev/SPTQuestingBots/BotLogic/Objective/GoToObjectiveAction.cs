@@ -40,7 +40,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // This doesn't really need to be updated every frame
-            CanSprint = ObjectiveManager.CanSprintToObjective();
+            CanSprint = QuestingBotsPluginConfig.SprintingEnabled.Value && ObjectiveManager.CanSprintToObjective();
 
             if (!ObjectiveManager.IsQuestingAllowed || !ObjectiveManager.Position.HasValue)
             {

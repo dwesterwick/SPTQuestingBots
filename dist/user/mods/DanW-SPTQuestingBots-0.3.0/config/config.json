@@ -25,7 +25,8 @@
 		"stuck_bot_detection": {
 			"distance": 2,
 			"time": 20,
-			"max_count": 8
+			"max_count": 8,
+			"follower_break_time": 10
 		},
 		"min_time_between_switching_objectives": 5,
 		"quest_generation": {

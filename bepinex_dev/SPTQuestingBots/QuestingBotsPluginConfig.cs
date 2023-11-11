@@ -29,6 +29,7 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<bool> QuestingEnabled;
         public static ConfigEntry<bool> QuestingLogicTimeGatingEnabled;
+        public static ConfigEntry<bool> SprintingEnabled;
 
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
@@ -53,6 +54,8 @@ namespace SPTQuestingBots
                 true, "Allow bots to quest");
             QuestingLogicTimeGatingEnabled = Config.Bind("Main", "Enable Time-Gating for Questing Logic",
                 true, "Slow down decision-making for bot questing to improve performance");
+            SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
+                true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
                 false, "Improve FPS by minimizing CPU load for AI out of certain ranges");
@@ -60,9 +63,9 @@ namespace SPTQuestingBots
                 true, "Allow AI to be disabled for bots that are questing");
             MapsToAllowSleepingForQuestingBots = Config.Bind("AI Limiter", "Maps to Allow AI Limiting for Bots That Are Questing",
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
-            SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You",
+            SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You (m)",
                 200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
-            SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs",
+            SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
                 75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
         }
     }
