@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
+        "minRaidET": 300,
         "name": "Hermetic Door Switch",
         "objectives" : [
             {

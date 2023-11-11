@@ -86,6 +86,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     {
                         Quest quest = new Quest(ConfigController.Config.Questing.BotQuests.EFTQuests.Priority, questTemplate);
                         quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.EFTQuests.Chance;
+                        quest.PMCsOnly = true;
                         BotJobAssignmentFactory.AddQuest(quest);
                     }
                 }
@@ -601,6 +602,7 @@ namespace SPTQuestingBots.Controllers.Bots
             quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.SpawnRush.Chance;
             quest.MaxRaidET = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxRaidET;
             quest.MaxBots = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxBotsPerQuest;
+            quest.PMCsOnly = true;
 
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
             objective.MaxDistanceFromBot = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxDistance;

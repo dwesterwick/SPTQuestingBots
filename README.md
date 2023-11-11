@@ -83,12 +83,14 @@ The three major data structures are:
 
     Quests have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests that are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
+    * **pmcsOnly**: Only PMC's will be allowed to select the quest
     * **minLevel**: Only bots that are at least this player level will be allowed to select the quest
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest
     * **maxBots**: The maximum number of bots that can be performing the quest at the same time.
     * **chanceForSelecting**: The chance (in percent) that the bot will accept the quest if the quest-selection algorithm selects it for the bot
     * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
-    * **maxRaidET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
+    * **minRaidET**: The quest can only be selected if at least this many seconds have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
+    * **maxRaidET**: The quest can only be selected if more more than this many seconds have elapsed in the raid. See **minRaidET** for more information.
     * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.

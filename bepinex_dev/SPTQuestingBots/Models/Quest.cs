@@ -10,6 +10,7 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.Models
 {
@@ -17,6 +18,9 @@ namespace SPTQuestingBots.Models
     {
         [JsonProperty("repeatable")]
         public bool IsRepeatable { get; set; } = false;
+
+        [JsonProperty("pmcsOnly")]
+        public bool PMCsOnly { get; set; } = false;
 
         [JsonProperty("minLevel")]
         public int MinLevel { get; set; } = 0;
@@ -32,6 +36,9 @@ namespace SPTQuestingBots.Models
 
         [JsonProperty("priority")]
         public int Priority { get; set; } = 99;
+
+        [JsonProperty("minRaidET")]
+        public float MinRaidET { get; set; } = 0;
 
         [JsonProperty("maxRaidET")]
         public float MaxRaidET { get; set; } = float.MaxValue;
@@ -94,9 +101,17 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            bool canAssign = ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
+            float? raidTime = LocationController.GetElapsedRaidTime();
+            if (!raidTime.HasValue)
+            {
+                return false;
+            }
+
+            bool canAssign = (!PMCsOnly || BotRegistrationManager.IsBotAPMC(bot))
+                && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
-                && LocationController.GetElapsedRaidTime() < MaxRaidET;
+                && (raidTime.Value >= MinRaidET)
+                && (raidTime.Value <= MaxRaidET);
 
             return canAssign;
         }
