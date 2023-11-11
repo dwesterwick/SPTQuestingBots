@@ -24,6 +24,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
     public class BotHiveMindMonitor : MonoBehaviourDelayedUpdate
     {
+        internal static List<BotOwner> deadBots = new List<BotOwner>();
         internal static Dictionary<BotOwner, BotOwner> botBosses = new Dictionary<BotOwner, BotOwner>();
         internal static Dictionary<BotOwner, List<BotOwner>> botFollowers = new Dictionary<BotOwner, List<BotOwner>>();
         private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
@@ -42,6 +43,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
         public static void Clear()
         {
+            deadBots.Clear();
             botBosses.Clear();
             botFollowers.Clear();
             botFriendlinessUpdated.Clear();
@@ -309,12 +311,14 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 if (botBosses[bot] == null)
                 {
                     botBosses[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
+                }
+                if (botBosses[bot] == null)
+                {
+                    continue;
+                }
 
-                    if (botBosses[bot] != null)
-                    {
-                        addBossFollower(botBosses[bot], bot);
-                    }
-
+                if (deadBots.Contains(botBosses[bot]))
+                {
                     continue;
                 }
 
@@ -328,7 +332,12 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     }
 
                     botBosses[bot] = null;
+                    deadBots.Add(botBosses[bot]);
+
+                    continue;
                 }
+
+                addBossFollower(botBosses[bot], bot);
             }
         }
 
@@ -369,11 +378,26 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 foreach (BotOwner follower in botFollowers[boss].ToArray())
                 {
-                    if ((follower == null) || follower.IsDead)
+                    if (follower == null)
+                    {
+                        Controllers.LoggingController.LogInfo("Removing null follower for " + boss.GetText());
+
+                        botFollowers[boss].Remove(follower);
+
+                        continue;
+                    }
+
+                    if (deadBots.Contains(follower))
+                    {
+                        continue;
+                    }
+
+                    if (follower.IsDead)
                     {
                         Controllers.LoggingController.LogInfo("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
 
                         botFollowers[boss].Remove(follower);
+                        deadBots.Add(follower);
                     }
                 }
             }

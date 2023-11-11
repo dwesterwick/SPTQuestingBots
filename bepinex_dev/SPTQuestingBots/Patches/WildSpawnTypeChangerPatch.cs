@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -24,32 +23,8 @@ namespace SPTQuestingBots.Patches
             // PMC groups are automatically converted to "assaultGroup" wildSpawnTypes by EFT, so they need to be changed back for the SPT PMC patch to work
             if (bot.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
-                TryConvertSpawnType(bot);
+                //Controllers.Bots.BotBrainHelpers.TryConvertSpawnType(bot);
             }
-        }
-
-        public static bool TryConvertSpawnType(BotOwner __instance)
-        {
-            if (!Controllers.Bots.BotGenerator.TryGetInitialPMCGroup(__instance, out Models.BotSpawnInfo groupData))
-            {
-                return false;
-            }
-
-            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(__instance);
-            if (originalSpawnType == null)
-            {
-                return false;
-            }
-
-            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
-
-            __instance.Profile.Info.Settings.Role = originalSpawnType.Value;
-
-            string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
-
-            LoggingController.LogInfo("Converted spawn type for bot " + __instance.GetText() + " from " + currentRoleName + " to " + actualRoleName);
-
-            return true;
         }
     }
 }

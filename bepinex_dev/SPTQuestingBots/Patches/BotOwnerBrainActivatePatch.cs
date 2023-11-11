@@ -42,13 +42,13 @@ namespace SPTQuestingBots.Patches
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             // PMC groups are automatically converted to "assaultGroup" wildSpawnTypes by EFT, so they need to be changed back for the SPT PMC patch to work
-            /*if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
+            if (__instance.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
-                if (WildSpawnTypeChangerPatch.TryConvertSpawnType(__instance))
+                if (Controllers.Bots.BotBrainHelpers.TryConvertSpawnType(__instance))
                 {
                     roleName = __instance.Profile.Info.Settings.Role.ToString();
                 }
-            }*/
+            }
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
             if (Controllers.Bots.BotBrainHelpers.WillBotBeAPMC(__instance))

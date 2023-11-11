@@ -250,5 +250,29 @@ namespace SPTQuestingBots.Controllers.Bots
                 return EPlayerSide.Savage;
             }
         }
+
+        public static bool TryConvertSpawnType(BotOwner __instance)
+        {
+            if (!BotGenerator.TryGetInitialPMCGroup(__instance, out BotSpawnInfo groupData))
+            {
+                return false;
+            }
+
+            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(__instance);
+            if (originalSpawnType == null)
+            {
+                return false;
+            }
+
+            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
+
+            __instance.Profile.Info.Settings.Role = originalSpawnType.Value;
+
+            string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
+
+            LoggingController.LogInfo("Converted spawn type for bot " + __instance.GetText() + " from " + currentRoleName + " to " + actualRoleName);
+
+            return true;
+        }
     }
 }
