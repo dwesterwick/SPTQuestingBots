@@ -266,11 +266,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.3.0** (ETA: Mid November)
-    * Rework quest data structures and logic layer to allow additional actions
-    * Emulation of bots planting items
-    * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
-    * Refactoring terrible code
+* **0.3.1** (ETA: Late November)
+    * Improve PMC-group generation
 * **0.4.0** (ETA: Late November)
     * Add new quest-objective action: unlocking doors
     * Add new quest-objective action: pulling levers
