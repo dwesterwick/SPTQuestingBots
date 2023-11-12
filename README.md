@@ -269,6 +269,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **0.3.0** (ETA: Mid November)
     * Rework quest data structures and logic layer to allow additional actions
     * Emulation of bots planting items
+    * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Refactoring terrible code
 * **0.4.0** (ETA: Late November)
     * Add new quest-objective action: unlocking doors
@@ -280,7 +281,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add new quest type: air-drop chaser
-    * Implement quest-objective dependencies so certain objectives must be completed immediately before the next one (i.e. go to a specfic location and only then "plant" an item)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
 * **0.4.2** (ETA: Mid December)

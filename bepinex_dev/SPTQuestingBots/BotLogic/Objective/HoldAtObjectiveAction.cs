@@ -46,6 +46,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
+                RestartActionElapsedTime();
             }
 
             ObjectiveManager.StartJobAssigment();

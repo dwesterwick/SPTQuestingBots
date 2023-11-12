@@ -78,7 +78,10 @@ namespace SPTQuestingBots.BehaviorExtensions
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > ConfigController.Config.Questing.StuckBotDetection.Time)
             {
-                drawBotPath(Color.red);
+                if (ConfigController.Config.Debug.ShowFailedPaths)
+                {
+                    drawBotPath(Color.red);
+                }
 
                 return true;
             }
@@ -89,7 +92,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected void drawBotPath(Color color)
         {
             Vector3[] botPath = BotOwner.Mover?.CurPath;
-            if (!ConfigController.Config.Debug.ShowFailedPaths || (botPath == null))
+            if (botPath == null)
             {
                 return;
             }

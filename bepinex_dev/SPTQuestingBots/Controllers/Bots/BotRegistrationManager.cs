@@ -81,6 +81,7 @@ namespace SPTQuestingBots.Controllers.Bots
         {
             if (!registeredPMCs.Contains(botOwner))
             {
+                LoggingController.LogInfo(botOwner.GetText() + " is a PMC.");
                 registeredPMCs.Add(botOwner);
             }
         }

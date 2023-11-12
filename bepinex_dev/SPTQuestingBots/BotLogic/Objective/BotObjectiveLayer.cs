@@ -12,17 +12,13 @@ using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    internal class BotObjectiveLayer : CustomLayerDelayedUpdate
+    internal class BotObjectiveLayer : CustomLayerForQuesting
     {
-        private BotObjectiveManager objectiveManager;
-        private double searchTimeAfterCombat = ConfigController.Config.Questing.SearchTimeAfterCombat.Min;
-        private bool wasAbleBodied = true;
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
         public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
-            objectiveManager = BotOwner.GetPlayer.gameObject.AddComponent<BotObjectiveManager>();
-            objectiveManager.Init(BotOwner);
+            
         }
 
         public override string GetName()
@@ -42,12 +38,10 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override bool IsActive()
         {
-            if (objectiveManager.PauseRequest > 0)
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
             {
-                float pauseTime = objectiveManager.PauseRequest;
-                objectiveManager.PauseRequest = 0;
-
-                return pauseLayer(pauseTime);
+                return pauseLayer(pauseRequestTime);
             }
 
             if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
@@ -61,7 +55,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (BotOwner.BotState != EBotState.Active)
+            if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
             {
                 return updatePreviousState(false);
             }
@@ -71,17 +65,17 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
+            // Ensure all quests have been loaded and generated
+            if (!Controllers.Bots.BotQuestBuilder.HaveQuestsBeenBuilt)
+            {
+                return updatePreviousState(false);
+            }
+
             // Check if the bot has a boss that's still alive
             if (BotHiveMindMonitor.HasBoss(BotOwner))
             {
                 Controllers.Bots.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
-                return updatePreviousState(false);
-            }
-
-            // Ensure all quests have been loaded and generated
-            if (!Controllers.Bots.BotQuestBuilder.HaveQuestsBeenBuilt)
-            {
                 return updatePreviousState(false);
             }
 
@@ -108,42 +102,16 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            // Check if the bot needs to heal, eat, drink, etc. 
-            if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
+            // Prevent the bot from following its boss if it needs to heal, etc. 
+            if (!IsAbleBodied())
             {
-                wasAbleBodied = false;
+                return updatePreviousState(false);
+            }
+
+            if (IsInCombat())
+            {
                 return updatePreviousState(pauseLayer());
             }
-            if (!wasAbleBodied)
-            {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
-            }
-            wasAbleBodied = true;
-
-            // Check if the bot should be in combat
-            if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
-            {
-                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
-                {
-                    /*bool hasTarget = BotOwner.Memory.GoalTarget.HaveMainTarget();
-                    if (hasTarget)
-                    {
-                        string message = "Bot " + BotOwner.GetText() + " is in combat.";
-                        message += " Close danger: " + BotOwner.Memory.DangerData.HaveCloseDanger + ".";
-                        message += " Last Time Hit: " + BotOwner.Memory.LastTimeHit + ".";
-                        message += " Enemy Set Time: " + BotOwner.Memory.EnemySetTime + ".";
-                        message += " Last Enemy Seen Time: " + BotOwner.Memory.LastEnemyTimeSeen + ".";
-                        message += " Under Fire Time: " + BotOwner.Memory.UnderFireTime + ".";
-                        LoggingController.LogInfo(message);
-                    }*/
-
-                    searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
-                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
-                }
-                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
-                return updatePreviousState(pauseLayer());
-            }
-            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
 
             // Check if any of the bot's group members are in combat
             // NOTE: This check MUST be performed after updating this bot's combate state!
@@ -174,16 +142,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 setNextAction(BotActionType.Regroup, "Regroup");
                 return updatePreviousState(true);
             }
-
-            // Check if the bot has spent enough time at its objective and enough time has passed since it was selected
-            /*if (objectiveManager.TimeSpentAtObjective > objectiveManager.MinTimeAtObjective)
-            {
-                string previousObjective = objectiveManager.ToString();
-                if (objectiveManager.TryChangeObjective())
-                {
-                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " spent " + objectiveManager.TimeSpentAtObjective + "s at it's final position for " + previousObjective);
-                }
-            }*/
 
             // Check if the bot has been stuck too many times. The counter resets whenever the bot successfully completes an objective. 
             if (objectiveManager.StuckCount >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)

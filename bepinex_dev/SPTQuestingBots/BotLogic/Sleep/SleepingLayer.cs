@@ -48,6 +48,11 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 return useLayer;
             }
 
+            if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
+            {
+                return updatePreviousState(false);
+            }
+
             // Check if the bot was ever allowed to quest
             if (objectiveManager == null)
             {

@@ -10,16 +10,13 @@ using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
-    internal class BotFollowerLayer : CustomLayerDelayedUpdate
+    internal class BotFollowerLayer : CustomLayerForQuesting
     {
-        private Objective.BotObjectiveManager objectiveManager;
-        private double searchTimeAfterCombat = ConfigController.Config.Questing.SearchTimeAfterCombat.Min;
         private double maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
-        private bool wasAbleBodied = true;
 
         public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
-            objectiveManager = BotOwner.GetPlayer.gameObject.GetOrAddComponent<Objective.BotObjectiveManager>();
+            
         }
 
         public override string GetName()
@@ -39,12 +36,10 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public override bool IsActive()
         {
-            if (objectiveManager.PauseRequest > 0)
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
             {
-                float pauseTime = objectiveManager.PauseRequest;
-                objectiveManager.PauseRequest = 0;
-
-                return pauseLayer(pauseTime);
+                return pauseLayer(pauseRequestTime);
             }
 
             if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
@@ -58,7 +53,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
-            if (BotOwner.BotState != EBotState.Active)
+            if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
             {
                 return updatePreviousState(false);
             }
@@ -87,29 +82,15 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
 
             // Prevent the bot from following its boss if it needs to heal, etc. 
-            if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
+            if (!IsAbleBodied())
             {
-                wasAbleBodied = false;
                 return updatePreviousState(false);
             }
-            if (!wasAbleBodied)
-            {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
-            }
-            wasAbleBodied = true;
 
-            // Prevent the bot from following its boss if it's in combat
-            if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
+            if (IsInCombat())
             {
-                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
-                {
-                    searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
-                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
-                }
-                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
-                return updatePreviousState(false);
+                return updatePreviousState(pauseLayer());
             }
-            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
 
             // If any group members are in combat, the bot should also be in combat
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))

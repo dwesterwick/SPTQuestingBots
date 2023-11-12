@@ -19,6 +19,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
+            // Make sure the bot doesn't have any active quests if it's dead
             Controllers.Bots.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
 
             BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();

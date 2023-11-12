@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,27 @@ namespace SPTQuestingBots.Controllers
         {
             LogError(message);
             ConfigController.ReportError(message);
+        }
+
+        public static void CreateLogFile(string logName, string filename, string content)
+        {
+            try
+            {
+                if (!Directory.Exists(ConfigController.LoggingPath))
+                {
+                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                }
+
+                File.WriteAllText(filename, content);
+
+                LogInfo("Writing " + logName + " log file...done.");
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Filename", filename);
+                LogError("Writing " + logName + " log file...failed!");
+                LogError(e.ToString());
+            }
         }
 
         private static string GetMessagePrefix(char messageType)

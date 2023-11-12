@@ -100,6 +100,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
+            // Check if PMC's are allowed to spawn in the raid
             if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPMCs)
             {
                 return;
@@ -319,7 +320,6 @@ namespace SPTQuestingBots.Controllers.Bots
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                    //int botsInGroup = random.Next(1,1);
                     int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.BotsPerGroupDistribution, random.NextDouble()));
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 

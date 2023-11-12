@@ -59,7 +59,7 @@ namespace SPTQuestingBots.Models
             return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
         }
 
-        public double? TimeSinceAssignment()
+        public double? TimeSinceStarted()
         {
             if (!StartTime.HasValue)
             {
@@ -69,7 +69,7 @@ namespace SPTQuestingBots.Models
             return (DateTime.Now - StartTime.Value).TotalMilliseconds / 1000.0;
         }
 
-        public double? TimeSinceJobEnded()
+        public double? TimeSinceEnded()
         {
             if (!EndTime.HasValue)
             {
@@ -81,7 +81,7 @@ namespace SPTQuestingBots.Models
 
         public bool HasWaitedLongEnoughAfterEnding()
         {
-            return TimeSinceJobEnded() >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
+            return TimeSinceEnded() >= (QuestObjectiveStepAssignment?.WaitTimeAfterCompleting ?? 0);
         }
 
         public bool TrySetNextObjectiveStep(bool allowReset = false)
@@ -99,14 +99,14 @@ namespace SPTQuestingBots.Models
 
             QuestObjectiveStepAssignment = nextStep;
             EndTime = null;
-            startJobAssingment();
+            startInternal();
 
             return true;
         }
 
-        public void CompleteJobAssingment()
+        public void Complete()
         {
-            endJobAssingment();
+            endInternal();
 
             if (Status != JobAssignmentStatus.Completed)
             {
@@ -116,9 +116,9 @@ namespace SPTQuestingBots.Models
             Status = JobAssignmentStatus.Completed;
         }
 
-        public void FailJobAssingment()
+        public void Fail()
         {
-            endJobAssingment();
+            endInternal();
 
             if (Status != JobAssignmentStatus.Failed)
             {
@@ -128,12 +128,12 @@ namespace SPTQuestingBots.Models
             Status = JobAssignmentStatus.Failed;
         }
 
-        public void StartJobAssignment()
+        public void Start()
         {
             Status = JobAssignmentStatus.Active;
         }
 
-        public void InactivateJobAssignment()
+        public void Inactivate()
         {
             if (Status == JobAssignmentStatus.Active)
             {
@@ -143,12 +143,12 @@ namespace SPTQuestingBots.Models
             }
         }
 
-        public void ArchiveJobAssignment()
+        public void Archive()
         {
             Status = JobAssignmentStatus.Archived;
         }
 
-        private void startJobAssingment()
+        private void startInternal()
         {
             if (!StartTime.HasValue)
             {
@@ -159,7 +159,7 @@ namespace SPTQuestingBots.Models
             HasCompletePath = true;
         }
 
-        private void endJobAssingment()
+        private void endInternal()
         {
             if (!EndTime.HasValue)
             {

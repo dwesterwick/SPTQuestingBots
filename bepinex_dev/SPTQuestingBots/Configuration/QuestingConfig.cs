@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SPTQuestingBots.Configuration
 {
@@ -17,6 +17,9 @@ namespace SPTQuestingBots.Configuration
 
         [JsonProperty("brain_layer_priority")]
         public int BrainLayerPriority { get; set; } = 21;
+
+        [JsonProperty("quest_selection_timeout")]
+        public float QuestSelectionTimeout { get; set; } = 2000;
 
         [JsonProperty("allowed_bot_types_for_questing")]
         public AllowedBotTypesForQuestingConfig AllowedBotTypesForQuesting { get; set; } = new AllowedBotTypesForQuestingConfig();

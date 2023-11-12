@@ -40,7 +40,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
         public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
 
-        public void StartJobAssigment() => assignment.StartJobAssignment();
+        public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
 
         public static BotObjectiveManager GetObjectiveManagerForBot(BotOwner bot)
@@ -87,9 +87,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public void Init(BotOwner _botOwner)
         {
+            if (BotMonitor != null)
+            {
+                return;
+            }
+
             base.UpdateInterval = 200;
             botOwner = _botOwner;
-
             BotMonitor = new BotMonitor(botOwner);
         }
 
@@ -189,25 +193,25 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public void CompleteObjective()
         {
-            assignment.CompleteJobAssingment();
+            assignment.Complete();
 
             StuckCount = 0;
         }
 
         public void FailObjective()
         {
-            assignment.FailJobAssingment();
+            assignment.Fail();
         }
 
         public bool TryChangeObjective()
         {
-            double? timeSinceJobEnded = assignment?.TimeSinceJobEnded();
+            double? timeSinceJobEnded = assignment?.TimeSinceEnded();
             if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < ConfigController.Config.Questing.MinTimeBetweenSwitchingObjectives))
             {
                 return false;
             }
 
-            assignment?.InactivateJobAssignment();
+            assignment?.Inactivate();
 
             assignment = botOwner.GetNewBotJobAssignment();
             LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
@@ -238,7 +242,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             (
                 (assignment.QuestAssignment != null)
                 && !assignment.QuestAssignment.CanRunBetweenObjectives
-                && (assignment.QuestAssignment.TimeSinceLastAssignmentEndedForBot(botOwner) > 0)
+                && (assignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(botOwner) > 0)
             )
             {
                 //LoggingController.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);

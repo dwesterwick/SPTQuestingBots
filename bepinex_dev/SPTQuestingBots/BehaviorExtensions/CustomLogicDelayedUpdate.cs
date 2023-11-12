@@ -35,12 +35,17 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public override void Start()
         {
-            actionElapsedTime.Restart();
+            RestartActionElapsedTime();
         }
 
         public override void Stop()
         {
             actionElapsedTime.Stop();
+        }
+
+        public void RestartActionElapsedTime()
+        {
+            actionElapsedTime.Restart();
         }
 
         public void SetBaseAction(GClass114 _baseAction)

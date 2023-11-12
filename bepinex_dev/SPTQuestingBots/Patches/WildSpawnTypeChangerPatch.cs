@@ -20,6 +20,7 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotZone zone, BotOwner bot, Action<BotOwner> callback, Func<BotOwner, BotZone, BotsGroup> groupAction)
         {
+            // NOTE: This is a WIP
             // PMC groups are automatically converted to "assaultGroup" wildSpawnTypes by EFT, so they need to be changed back for the SPT PMC patch to work
             if (bot.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {

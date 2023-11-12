@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,12 +23,14 @@ namespace SPTQuestingBots.Controllers
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
+        private static Dictionary<string, Switch> switches = new Dictionary<string, Switch>();
 
         private static void Clear()
         {
             CurrentLocation = null;
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
+            switches.Clear();
         }
 
         private void Update()
@@ -58,6 +61,16 @@ namespace SPTQuestingBots.Controllers
                 {
                     return;
                 }
+            }
+        }
+
+        public static void FindSwitches()
+        {
+            Switch[] allSwitches = FindObjectsOfType<Switch>();
+            foreach (Switch s in allSwitches)
+            {
+                LoggingController.LogInfo("Found switch: " + s.Id);
+                switches.Add(s.Id, s);
             }
         }
 

@@ -251,26 +251,28 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        public static bool TryConvertSpawnType(BotOwner __instance)
+        public static bool TryConvertSpawnType(BotOwner bot)
         {
-            if (!BotGenerator.TryGetInitialPMCGroup(__instance, out BotSpawnInfo groupData))
+            // Check if the bot was a member of an initial PMC group. If not, it's wildSpawnType cannot be converted. 
+            if (!BotGenerator.TryGetInitialPMCGroup(bot, out BotSpawnInfo groupData))
             {
                 return false;
             }
 
-            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(__instance);
+            // Check if the original wildSpawnType was stored for the bot. If not, it cannot be converted. 
+            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(bot);
             if (originalSpawnType == null)
             {
                 return false;
             }
 
-            string currentRoleName = __instance.Profile.Info.Settings.Role.ToString();
+            string currentRoleName = bot.Profile.Info.Settings.Role.ToString();
 
-            __instance.Profile.Info.Settings.Role = originalSpawnType.Value;
+            bot.Profile.Info.Settings.Role = originalSpawnType.Value;
 
-            string actualRoleName = __instance.Profile.Info.Settings.Role.ToString();
+            string actualRoleName = bot.Profile.Info.Settings.Role.ToString();
 
-            LoggingController.LogInfo("Converted spawn type for bot " + __instance.GetText() + " from " + currentRoleName + " to " + actualRoleName);
+            LoggingController.LogInfo("Converted spawn type for bot " + bot.GetText() + " from " + currentRoleName + " to " + actualRoleName);
 
             return true;
         }

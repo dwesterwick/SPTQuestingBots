@@ -94,6 +94,12 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
+            // Don't complete or fail the objective step except for the action type "MoveToPosition"
+            if (ObjectiveManager.CurrentQuestAction != Models.QuestAction.MoveToPosition)
+            {
+                return true;
+            }
+
             // If the path is invalid, there's nowhere for the bot to move
             if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
             {

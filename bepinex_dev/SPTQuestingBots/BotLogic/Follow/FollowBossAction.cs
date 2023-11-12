@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
-using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
@@ -44,6 +43,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             RecalculatePath(boss.Position);
 
+            // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
             if (checkIfBotIsStuck())
             {
                 if (!wasStuck)

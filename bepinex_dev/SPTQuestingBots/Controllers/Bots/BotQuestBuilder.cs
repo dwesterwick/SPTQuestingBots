@@ -65,6 +65,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
+            LocationController.FindSwitches();
             StartCoroutine(LoadAllQuests());
 
             // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
