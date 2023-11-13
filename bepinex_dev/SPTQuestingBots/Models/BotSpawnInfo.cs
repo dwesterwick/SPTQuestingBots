@@ -33,6 +33,21 @@ namespace SPTQuestingBots.Models
             Data = data;
         }
 
+        public bool ShouldBotBeBoss(BotOwner bot)
+        {
+            if (Count <= 1)
+            {
+                return false;
+            }
+
+            if (Data.Profiles[0].Id == bot.Profile.Id)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public WildSpawnType? GetOriginalSpawnTypeForBot(BotOwner bot)
         {
             if (!OriginalBotSpawnTypes.ContainsKey(bot.Profile.Id))

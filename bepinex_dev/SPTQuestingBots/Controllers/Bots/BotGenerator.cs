@@ -569,7 +569,7 @@ namespace SPTQuestingBots.Controllers.Bots
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            GetGroupWrapper getGroupWrapper = new GetGroupWrapper(botSpawnerClass);
+            GetGroupWrapper getGroupWrapper = new GetGroupWrapper(botSpawnerClass, initialPMCBot);
             CreateBotCallbackWrapper createBotCallbackWrapper = new CreateBotCallbackWrapper(botSpawnerClass, initialPMCBot);
 
             ibotCreator.ActivateBot(initialPMCBot.Data, closestBotZone, false, new Func<BotOwner, BotZone, BotsGroup>(getGroupWrapper.GetGroupAndSetEnemies), new Action<BotOwner>(createBotCallbackWrapper.CreateBotCallback), botSpawnerClass.GetCancelToken());
@@ -580,10 +580,12 @@ namespace SPTQuestingBots.Controllers.Bots
     {
         private BotsGroup group = null;
         private BotSpawner botSpawnerClass = null;
+        private Models.BotSpawnInfo botData = null;
 
-        public GetGroupWrapper(BotSpawner _botSpawnerClass)
+        public GetGroupWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
         {
             botSpawnerClass = _botSpawnerClass;
+            botData = _botData;
         }
 
         public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
@@ -591,7 +593,7 @@ namespace SPTQuestingBots.Controllers.Bots
             if (group == null)
             {
                 group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-                group.Lock();
+                //group.Lock();
             }
 
             return group;
@@ -612,11 +614,18 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public void CreateBotCallback(BotOwner bot)
         {
+            bool shallBeGroup = botData.Count > 1111 ? true : false;
+
             // I have no idea why BSG passes a stopwatch into this call...
             stopWatch.Start();
 
             MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
-            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, false, stopWatch });
+            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, shallBeGroup, stopWatch });
+
+            if (botData.ShouldBotBeBoss(bot))
+            {
+                bot.Boss.SetBoss(botData.Count);
+            }
 
             LoggingController.LogInfo("Bot " + bot.GetText() + " spawned in initial PMC group #" + botData.GroupNumber);
             botData.Owners.Add(bot);
