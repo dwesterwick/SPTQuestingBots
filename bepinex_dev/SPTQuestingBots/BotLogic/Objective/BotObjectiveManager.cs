@@ -25,7 +25,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
-        private Stopwatch timeSinceInitializationTimer = new Stopwatch();
 
         public Vector3? Position => assignment?.Position;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
@@ -34,7 +33,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
-        public double TimeSinceInitialization => timeSinceInitializationTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
@@ -87,7 +85,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public void Init(BotOwner _botOwner)
         {
-            if (BotMonitor != null)
+            if (IsInitialized)
             {
                 return;
             }
@@ -133,7 +131,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            timeSinceInitializationTimer.Start();
             IsInitialized = true;
         }
 

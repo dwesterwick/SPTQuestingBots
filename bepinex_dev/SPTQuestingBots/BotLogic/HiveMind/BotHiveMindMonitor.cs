@@ -27,7 +27,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
         internal static List<BotOwner> deadBots = new List<BotOwner>();
         internal static Dictionary<BotOwner, BotOwner> botBosses = new Dictionary<BotOwner, BotOwner>();
         internal static Dictionary<BotOwner, List<BotOwner>> botFollowers = new Dictionary<BotOwner, List<BotOwner>>();
-        private static Dictionary<BotOwner, bool> botFriendlinessUpdated = new Dictionary<BotOwner, bool>();
 
         private static Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor> sensors = new Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor>();
 
@@ -46,7 +45,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             deadBots.Clear();
             botBosses.Clear();
             botFollowers.Clear();
-            botFriendlinessUpdated.Clear();
 
             sensors.Clear();
         }
@@ -66,7 +64,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             updateBosses();
             updateBossFollowers();
-            updateBotGroupFriendliness();
 
             foreach (BotHiveMindAbstractSensor sensor in sensors.Values)
             {
@@ -127,11 +124,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             if (!botFollowers.ContainsKey(bot))
             {
                 botFollowers.Add(bot, new List<BotOwner>());
-            }
-
-            if (!botFriendlinessUpdated.ContainsKey(bot))
-            {
-                botFriendlinessUpdated.Add(bot, false);
             }
 
             foreach (BotHiveMindAbstractSensor sensor in sensors.Values)
@@ -241,53 +233,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 return;
             }
-        }
-
-        public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot)
-        {
-            IReadOnlyCollection<BotOwner> groupMembers = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(bot);
-            MakeBotHateEveryoneOutsideOfItsGroup(bot, groupMembers);
-        }
-
-        public static void MakeBotHateEveryoneOutsideOfItsGroup(BotOwner bot, IEnumerable<BotOwner> allegedGroupMembers)
-        {
-            string[] actualGroupMemberIds = allegedGroupMembers.Select(m => m.Profile.Id).ToArray();
-            
-            IEnumerable<BotOwner> allPlayersOutsideGroup = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
-                .Where(p => !actualGroupMemberIds.Contains(p.Profile.Id));
-
-            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group contains: " + string.Join(",", allegedGroupMembers.Select(m => m.GetText())));
-
-            // TO DO: Is this loop actually needed?
-            foreach (BotOwner player in allPlayersOutsideGroup)
-            {
-                if (player.BotsGroup.Allies.Contains(bot))
-                {
-                    Controllers.LoggingController.LogInfo(player.GetText() + "'s group was initially friendly with " + bot.GetText() + ". Not anymore..");
-
-                    player.BotsGroup.RemoveAlly(bot);
-                    player.BotsGroup.AddEnemy(bot, EBotEnemyCause.initial);
-                }
-
-                if (bot.BotsGroup.Allies.Contains(player))
-                {
-                    Controllers.LoggingController.LogInfo(bot.GetText() + "'s group was initially friendly with " + player.GetText() + ". Not anymore..");
-
-                    bot.BotsGroup.RemoveAlly(player);
-                    bot.BotsGroup.AddEnemy(player, EBotEnemyCause.initial);
-                }
-            }
-
-            // Force PMC's to be hostile toward you
-            if (Controllers.Bots.BotRegistrationManager.IsBotAPMC(bot) && !bot.BotsGroup.IsPlayerEnemy(Singleton<GameWorld>.Instance.MainPlayer))
-            {
-                Controllers.LoggingController.LogInfo(bot.GetText() + " doesn't like you anymore");
-
-                bot.BotsGroup.AddEnemy(Singleton<GameWorld>.Instance.MainPlayer, EBotEnemyCause.initial);
-            }
-
-            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group has the following allies: " + string.Join(",", bot.BotsGroup.Allies.Select(a => a.GetText())));
-            //Controllers.LoggingController.LogInfo(bot.GetText() + "'s group has the following enemies: " + string.Join(",", bot.BotsGroup.Enemies.Keys.Select(a => a.GetText())));
         }
 
         private static void throwIfSensorNotRegistred(BotHiveMindSensorType sensorType)
@@ -400,52 +345,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                         deadBots.Add(follower);
                     }
                 }
-            }
-        }
-
-        private void updateBotGroupFriendliness()
-        {
-            foreach (BotOwner bot in botFriendlinessUpdated.Keys.ToArray())
-            {
-                // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (bot == null)
-                {
-                    continue;
-                }
-
-                // This only needs to be updated once
-                if (botFriendlinessUpdated[bot])
-                {
-                    continue;
-                }
-
-                Objective.BotObjectiveManager objectiveManager = Objective.BotObjectiveManager.GetObjectiveManagerForBot(bot);
-                if (objectiveManager == null)
-                {
-                    continue;
-                }
-
-                // Wait for a few seconds after the bot has been initialized so EFT can update group properties
-                if (objectiveManager.TimeSinceInitialization < 3)
-                {
-                    continue;
-                }
-
-                // If the bot is a member of a group, wait until it has at least one ally or enemy. However, don't wait too long in case this never happens.
-                IReadOnlyCollection<BotOwner> groupMembers = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(bot);
-                if 
-                (
-                    (objectiveManager.TimeSinceInitialization < 5)
-                    && (groupMembers.Count > 0)
-                    && (bot.BotsGroup.Allies.Count == 0)
-                    && (bot.BotsGroup.Enemies.Count == 0)
-                )
-                {
-                    continue;
-                }
-
-                MakeBotHateEveryoneOutsideOfItsGroup(bot, groupMembers);
-                botFriendlinessUpdated[bot] = true;
             }
         }
     }

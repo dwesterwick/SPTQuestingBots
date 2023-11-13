@@ -48,24 +48,6 @@ namespace SPTQuestingBots.Models
             return false;
         }
 
-        public WildSpawnType? GetOriginalSpawnTypeForBot(BotOwner bot)
-        {
-            if (!OriginalBotSpawnTypes.ContainsKey(bot.Profile.Id))
-            {
-                return null;
-            }
-
-            return OriginalBotSpawnTypes[bot.Profile.Id];
-        }
-
-        public void UpdateOriginalSpawnTypes()
-        {
-            foreach (Profile profile in Data.Profiles)
-            {
-                OriginalBotSpawnTypes.Add(profile.Id, profile.Info.Settings.Role);
-            }
-        }
-
         public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
         {
             // Enumerate all valid spawn points

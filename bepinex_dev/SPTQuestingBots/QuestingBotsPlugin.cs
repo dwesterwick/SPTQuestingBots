@@ -36,7 +36,6 @@ namespace SPTQuestingBots
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();
                 new Patches.OnBeenKilledByAggressorPatch().Enable();
-                new Patches.WildSpawnTypeChangerPatch().Enable();
 
                 if (ConfigController.Config.InitialPMCSpawns.Enabled)
                 {

@@ -340,7 +340,6 @@ namespace SPTQuestingBots.Controllers.Bots
                         GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, botsInGroup, botSpawnerClass);
 
                         Models.BotSpawnInfo botSpawnInfo = new Models.BotSpawnInfo(botGroup, botSpawnData);
-                        botSpawnInfo.UpdateOriginalSpawnTypes();
 
                         initialPMCGroups.Add(botSpawnInfo);
                     }
@@ -436,9 +435,9 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        private void spawnInitialPMCsAtSpawnPoint(Models.BotSpawnInfo initialPMCBot, ESpawnCategoryMask allowedSpawnPointTypes, float minDistanceFromPlayers)
+        private void spawnInitialPMCsAtSpawnPoint(Models.BotSpawnInfo initialPMCGroup, ESpawnCategoryMask allowedSpawnPointTypes, float minDistanceFromPlayers)
         {
-            if (initialPMCBot.HasSpawned)
+            if (initialPMCGroup.HasSpawned)
             {
                 //LoggingController.LogError("PMC group has already spawned.");
                 return;
@@ -462,76 +461,68 @@ namespace SPTQuestingBots.Controllers.Bots
 
             // Try to select a valid spawn point for the first bot in the group. If one hasn't already been assigned, choose the furthest spawn point
             // from all other bots in the map. 
-            if (!initialPMCBot.SpawnPoint.HasValue && (initialPMCBot.SpawnPositions.Length == 0))
+            if (!initialPMCGroup.SpawnPoint.HasValue && (initialPMCGroup.SpawnPositions.Length == 0))
             {
-                if (!initialPMCBot.TryAssignFurthestSpawnPoint(allowedSpawnPointTypes, blacklistedSpawnPointIDs.ToArray()))
+                if (!initialPMCGroup.TryAssignFurthestSpawnPoint(allowedSpawnPointTypes, blacklistedSpawnPointIDs.ToArray()))
                 {
-                    LoggingController.LogError("Could not find a valid spawn point for PMC group #" + initialPMCBot.GroupNumber);
+                    LoggingController.LogError("Could not find a valid spawn point for PMC group #" + initialPMCGroup.GroupNumber);
                     return;
                 }
             }
 
             // If spawn positions for each bot in the group haven't already been selected, choose them using the assigned spawn point
-            if (initialPMCBot.SpawnPositions.Length == 0)
+            if (initialPMCGroup.SpawnPositions.Length == 0)
             {
-                initialPMCBot.AssignSpawnPositionsFromSpawnPoint(initialPMCBot.Data.Count, pendingSpawnPoints.ToArray());
+                initialPMCGroup.AssignSpawnPositionsFromSpawnPoint(initialPMCGroup.Data.Count, pendingSpawnPoints.ToArray());
             }
-            if (initialPMCBot.SpawnPositions.Length == 0)
+            if (initialPMCGroup.SpawnPositions.Length == 0)
             {
-                if (initialPMCBot.SpawnPoint.HasValue)
+                if (initialPMCGroup.SpawnPoint.HasValue)
                 {
-                    LoggingController.LogError("No valid spawn positions found for spawn point " + initialPMCBot.SpawnPoint.Value.Position.ToUnityVector3().ToString());
-                    blacklistedSpawnPointIDs.Add(initialPMCBot.SpawnPoint.Value.Id);
-                    initialPMCBot.SpawnPoint = null;
+                    LoggingController.LogError("No valid spawn positions found for spawn point " + initialPMCGroup.SpawnPoint.Value.Position.ToUnityVector3().ToString());
+                    blacklistedSpawnPointIDs.Add(initialPMCGroup.SpawnPoint.Value.Id);
+                    initialPMCGroup.SpawnPoint = null;
                 }
 
-                LoggingController.LogError("No valid spawn positions found for PMC group #" + initialPMCBot.GroupNumber);
+                LoggingController.LogError("No valid spawn positions found for PMC group #" + initialPMCGroup.GroupNumber);
                 return;
             }
 
             // Ensure the selected spawn position for the first bot in the group is not too close to another bot
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-            BotOwner closestBot = botControllerClass.ClosestBotToPoint(initialPMCBot.SpawnPositions[0]);
-            if ((closestBot != null) && (Vector3.Distance(initialPMCBot.SpawnPositions[0], closestBot.Position) < minDistanceFromPlayers))
+            BotOwner closestBot = botControllerClass.ClosestBotToPoint(initialPMCGroup.SpawnPositions[0]);
+            if ((closestBot != null) && (Vector3.Distance(initialPMCGroup.SpawnPositions[0], closestBot.Position) < minDistanceFromPlayers))
             {
-                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCBot.GroupNumber + " at " + initialPMCBot.SpawnPositions[0].ToString() + ". Another bot is too close.");
-                initialPMCBot.SpawnPoint = null;
-                initialPMCBot.SpawnPositions = new Vector3[0];
+                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCGroup.GroupNumber + " at " + initialPMCGroup.SpawnPositions[0].ToString() + ". Another bot is too close.");
+                initialPMCGroup.SpawnPoint = null;
+                initialPMCGroup.SpawnPositions = new Vector3[0];
                 return;
             }
 
             // Ensure the selected spawn position for the first bot in the group is not too close to you
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (Vector3.Distance(initialPMCBot.SpawnPositions[0], mainPlayer.Position) < minDistanceFromPlayers)
+            if (Vector3.Distance(initialPMCGroup.SpawnPositions[0], mainPlayer.Position) < minDistanceFromPlayers)
             {
-                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCBot.GroupNumber + " at " + initialPMCBot.SpawnPositions[0].ToString() + ". Too close to the main player.");
-                initialPMCBot.SpawnPoint = null;
-                initialPMCBot.SpawnPositions = new Vector3[0];
+                LoggingController.LogWarning("Cannot spawn PMC group #" + initialPMCGroup.GroupNumber + " at " + initialPMCGroup.SpawnPositions[0].ToString() + ". Too close to the main player.");
+                initialPMCGroup.SpawnPoint = null;
+                initialPMCGroup.SpawnPositions = new Vector3[0];
                 return;
             }
 
-            // Definte the callback action that runs after the bot spawns. This is needed to get the BotOwner object for the bot. 
-            Action<BotOwner> callback = new Action<BotOwner>((botOwner) =>
-            {
-                LoggingController.LogInfo("Bot " + botOwner.GetText() + " spawned in initial PMC group #" + initialPMCBot.GroupNumber);
-                initialPMCBot.Owners.Add(botOwner);
-                initialPMCBot.HasSpawned = true;
-            });
+            string spawnPositionText = string.Join(", ", initialPMCGroup.SpawnPositions.Select(s => s.ToString()));
+            LoggingController.LogInfo("Spawning PMC group #" + initialPMCGroup.GroupNumber + " at " + spawnPositionText + "...");
 
-            string spawnPositionText = string.Join(", ", initialPMCBot.SpawnPositions.Select(s => s.ToString()));
-            LoggingController.LogInfo("Spawning PMC group #" + initialPMCBot.GroupNumber + " at " + spawnPositionText + "...");
-            //spawnBots(initialPMCBot.Data, initialPMCBot.SpawnPositions, callback);
-            spawnBots(initialPMCBot, initialPMCBot.SpawnPositions);
+            spawnBots(initialPMCGroup, initialPMCGroup.SpawnPositions);
 
             // Add the bot's spawn point to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each
             // other when multiple initial PMC groups are spawned at the same time. 
-            if (initialPMCBot.SpawnPoint.HasValue)
+            if (initialPMCGroup.SpawnPoint.HasValue)
             {
-                pendingSpawnPoints.Add(initialPMCBot.SpawnPoint.Value);
+                pendingSpawnPoints.Add(initialPMCGroup.SpawnPoint.Value);
             }
         }
 
-        private void spawnBots(GClass513 bots, Vector3[] positions, Action<BotOwner> callback)
+        private void spawnBots(Models.BotSpawnInfo initialPMCGroup, Vector3[] positions)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
@@ -539,32 +530,17 @@ namespace SPTQuestingBots.Controllers.Bots
             foreach (Vector3 position in positions)
             {
                 //LoggingController.LogInfo("Adding spawn position " + position.ToString() + " for PMC group...");
-                bots.AddPosition(position);
-            }
-
-            MethodInfo botSpawnMethod = typeof(BotSpawner).GetMethod("method_9", BindingFlags.Instance | BindingFlags.NonPublic);
-            botSpawnMethod.Invoke(botSpawnerClass, new object[] { closestBotZone, bots, callback, botSpawnerClass.GetCancelToken() });
-        }
-
-        private void spawnBots(Models.BotSpawnInfo initialPMCBot, Vector3[] positions)
-        {
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
-            foreach (Vector3 position in positions)
-            {
-                //LoggingController.LogInfo("Adding spawn position " + position.ToString() + " for PMC group...");
-                initialPMCBot.Data.AddPosition(position);
+                initialPMCGroup.Data.AddPosition(position);
             }
 
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, initialPMCBot);
+            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, initialPMCGroup);
             Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
             Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
 
-            ibotCreator.ActivateBot(initialPMCBot.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
+            ibotCreator.ActivateBot(initialPMCGroup.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }
     }
 
@@ -572,13 +548,13 @@ namespace SPTQuestingBots.Controllers.Bots
     {
         private BotsGroup group = null;
         private BotSpawner botSpawnerClass = null;
-        private Models.BotSpawnInfo botData = null;
+        private Models.BotSpawnInfo botGroup = null;
         private Stopwatch stopWatch = new Stopwatch();
 
-        public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
+        public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup)
         {
             botSpawnerClass = _botSpawnerClass;
-            botData = _botData;
+            botGroup = _botGroup;
         }
 
         public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
@@ -598,16 +574,16 @@ namespace SPTQuestingBots.Controllers.Bots
             stopWatch.Start();
 
             MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
-            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, false, stopWatch });
+            method.Invoke(botSpawnerClass, new object[] { bot, botGroup.Data, null, false, stopWatch });
 
-            if (botData.ShouldBotBeBoss(bot))
+            if (botGroup.ShouldBotBeBoss(bot))
             {
-                bot.Boss.SetBoss(botData.Count);
+                bot.Boss.SetBoss(botGroup.Count);
             }
 
-            LoggingController.LogInfo("Bot " + bot.GetText() + " spawned in initial PMC group #" + botData.GroupNumber);
-            botData.Owners.Add(bot);
-            botData.HasSpawned = true;
+            LoggingController.LogInfo("Bot " + bot.GetText() + " spawned in initial PMC group #" + botGroup.GroupNumber);
+            botGroup.Owners.Add(bot);
+            botGroup.HasSpawned = true;
         }
     }
 }

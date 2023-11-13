@@ -250,31 +250,5 @@ namespace SPTQuestingBots.Controllers.Bots
                 return EPlayerSide.Savage;
             }
         }
-
-        public static bool TryConvertSpawnType(BotOwner bot)
-        {
-            // Check if the bot was a member of an initial PMC group. If not, it's wildSpawnType cannot be converted. 
-            if (!BotGenerator.TryGetInitialPMCGroup(bot, out BotSpawnInfo groupData))
-            {
-                return false;
-            }
-
-            // Check if the original wildSpawnType was stored for the bot. If not, it cannot be converted. 
-            WildSpawnType? originalSpawnType = groupData.GetOriginalSpawnTypeForBot(bot);
-            if (originalSpawnType == null)
-            {
-                return false;
-            }
-
-            string currentRoleName = bot.Profile.Info.Settings.Role.ToString();
-
-            bot.Profile.Info.Settings.Role = originalSpawnType.Value;
-
-            string actualRoleName = bot.Profile.Info.Settings.Role.ToString();
-
-            LoggingController.LogInfo("Converted spawn type for bot " + bot.GetText() + " from " + currentRoleName + " to " + actualRoleName);
-
-            return true;
-        }
     }
 }
