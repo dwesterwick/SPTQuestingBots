@@ -345,7 +345,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     LoggingController.LogInfo("Generating PMC group spawn #" + botGroup + " (Number of bots: " + botsInGroup + ")...");
                     try
                     {
-                        GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, spawnParams);
+                        GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, null);
                         GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, botsInGroup, botSpawnerClass);
 
                         Models.BotSpawnInfo botSpawnInfo = new Models.BotSpawnInfo(botGroup, botSpawnData);
@@ -529,7 +529,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
             string spawnPositionText = string.Join(", ", initialPMCBot.SpawnPositions.Select(s => s.ToString()));
             LoggingController.LogInfo("Spawning PMC group #" + initialPMCBot.GroupNumber + " at " + spawnPositionText + "...");
-            spawnBots(initialPMCBot.Data, initialPMCBot.SpawnPositions, callback);
+            //spawnBots(initialPMCBot.Data, initialPMCBot.SpawnPositions, callback);
+            spawnBots(initialPMCBot, initialPMCBot.SpawnPositions);
 
             // Add the bot's spawn point to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each
             // other when multiple initial PMC groups are spawned at the same time. 
@@ -552,6 +553,74 @@ namespace SPTQuestingBots.Controllers.Bots
 
             MethodInfo botSpawnMethod = typeof(BotSpawner).GetMethod("method_9", BindingFlags.Instance | BindingFlags.NonPublic);
             botSpawnMethod.Invoke(botSpawnerClass, new object[] { closestBotZone, bots, callback, botSpawnerClass.GetCancelToken() });
+        }
+
+        private void spawnBots(Models.BotSpawnInfo initialPMCBot, Vector3[] positions)
+        {
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+
+            BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
+            foreach (Vector3 position in positions)
+            {
+                //LoggingController.LogInfo("Adding spawn position " + position.ToString() + " for PMC group...");
+                initialPMCBot.Data.AddPosition(position);
+            }
+
+            // In SPT-AKI 3.7.1, this is GClass732
+            IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
+
+            GetGroupWrapper getGroupWrapper = new GetGroupWrapper(botSpawnerClass);
+            CreateBotCallbackWrapper createBotCallbackWrapper = new CreateBotCallbackWrapper(botSpawnerClass, initialPMCBot);
+
+            ibotCreator.ActivateBot(initialPMCBot.Data, closestBotZone, false, new Func<BotOwner, BotZone, BotsGroup>(getGroupWrapper.GetGroupAndSetEnemies), new Action<BotOwner>(createBotCallbackWrapper.CreateBotCallback), botSpawnerClass.GetCancelToken());
+        }
+    }
+
+    internal class GetGroupWrapper
+    {
+        private BotsGroup group = null;
+        private BotSpawner botSpawnerClass = null;
+
+        public GetGroupWrapper(BotSpawner _botSpawnerClass)
+        {
+            botSpawnerClass = _botSpawnerClass;
+        }
+
+        public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
+        {
+            if (group == null)
+            {
+                group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
+                group.Lock();
+            }
+
+            return group;
+        }
+    }
+
+    internal class CreateBotCallbackWrapper
+    {
+        private BotSpawner botSpawnerClass = null;
+        private Models.BotSpawnInfo botData = null;
+        private Stopwatch stopWatch = new Stopwatch();
+
+        public CreateBotCallbackWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
+        {
+            botSpawnerClass = _botSpawnerClass;
+            botData = _botData;
+        }
+
+        public void CreateBotCallback(BotOwner bot)
+        {
+            // I have no idea why BSG passes a stopwatch into this call...
+            stopWatch.Start();
+
+            MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
+            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, false, stopWatch });
+
+            LoggingController.LogInfo("Bot " + bot.GetText() + " spawned in initial PMC group #" + botData.GroupNumber);
+            botData.Owners.Add(bot);
+            botData.HasSpawned = true;
         }
     }
 }
