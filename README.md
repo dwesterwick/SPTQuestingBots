@@ -267,8 +267,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.3.1** (ETA: Late November)
-    * Improve PMC-group generation
 * **0.4.0** (ETA: Late November)
     * Add new quest-objective action: unlocking doors
     * Add new quest-objective action: pulling levers
