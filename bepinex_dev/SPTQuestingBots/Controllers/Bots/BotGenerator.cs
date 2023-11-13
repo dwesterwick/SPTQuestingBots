@@ -327,15 +327,6 @@ namespace SPTQuestingBots.Controllers.Bots
                     WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
                     EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
-                    // TO DO: TriggerType and Id_spawn might not be required
-                    BotSpawnParams spawnParams = new BotSpawnParams();
-                    spawnParams.TriggerType = SpawnTriggerType.none;
-                    spawnParams.Id_spawn = "InitialPMCGroup_" + botGroup;
-                    if (botsInGroup > 1)
-                    {
-                        spawnParams.ShallBeGroup = new ShallBeGroupParams(true, true, botsInGroup);
-                    }
-
                     // This causes a deadlock for some reason
                     /*if (cancellationTokenSource.Token.IsCancellationRequested)
                     {
@@ -569,20 +560,22 @@ namespace SPTQuestingBots.Controllers.Bots
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            GetGroupWrapper getGroupWrapper = new GetGroupWrapper(botSpawnerClass, initialPMCBot);
-            CreateBotCallbackWrapper createBotCallbackWrapper = new CreateBotCallbackWrapper(botSpawnerClass, initialPMCBot);
+            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, initialPMCBot);
+            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
+            Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
 
-            ibotCreator.ActivateBot(initialPMCBot.Data, closestBotZone, false, new Func<BotOwner, BotZone, BotsGroup>(getGroupWrapper.GetGroupAndSetEnemies), new Action<BotOwner>(createBotCallbackWrapper.CreateBotCallback), botSpawnerClass.GetCancelToken());
+            ibotCreator.ActivateBot(initialPMCBot.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }
     }
 
-    internal class GetGroupWrapper
+    internal class GroupActionsWrapper
     {
         private BotsGroup group = null;
         private BotSpawner botSpawnerClass = null;
         private Models.BotSpawnInfo botData = null;
+        private Stopwatch stopWatch = new Stopwatch();
 
-        public GetGroupWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
+        public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
         {
             botSpawnerClass = _botSpawnerClass;
             botData = _botData;
@@ -593,34 +586,19 @@ namespace SPTQuestingBots.Controllers.Bots
             if (group == null)
             {
                 group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-                //group.Lock();
+                group.Lock();
             }
 
             return group;
         }
-    }
-
-    internal class CreateBotCallbackWrapper
-    {
-        private BotSpawner botSpawnerClass = null;
-        private Models.BotSpawnInfo botData = null;
-        private Stopwatch stopWatch = new Stopwatch();
-
-        public CreateBotCallbackWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botData)
-        {
-            botSpawnerClass = _botSpawnerClass;
-            botData = _botData;
-        }
 
         public void CreateBotCallback(BotOwner bot)
         {
-            bool shallBeGroup = botData.Count > 1111 ? true : false;
-
             // I have no idea why BSG passes a stopwatch into this call...
             stopWatch.Start();
 
             MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
-            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, shallBeGroup, stopWatch });
+            method.Invoke(botSpawnerClass, new object[] { bot, botData.Data, null, false, stopWatch });
 
             if (botData.ShouldBotBeBoss(bot))
             {
