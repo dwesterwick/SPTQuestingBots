@@ -48,6 +48,8 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override void Update()
         {
+            UpdateBotMovement(CanSprint);
+
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
             {
@@ -61,20 +63,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
-            if (!ObjectiveManager.IsCloseToObjective())
-            {
-                Vector3 interactionPosition = switchObject.GetInteractionPosition(BotOwner.Position);
-                Vector3? interactionNavMeshPosition = LocationController.FindNearestNavMeshPosition(interactionPosition, 1.5f);
-                if (!interactionNavMeshPosition.HasValue)
-                {
-                    LoggingController.LogError("Cannot find valid NavMesh position close to " + interactionPosition.ToString() + " for " + BotOwner.GetText() + " to interact with switch " + switchObject.Id);
-                    ObjectiveManager.FailObjective();
-                }
-
-                RecalculatePath(interactionNavMeshPosition.Value);
-                return;
-            }
-
             if (switchObject.DoorState == EDoorState.Open)
             {
                 LoggingController.LogWarning("Switch " + switchObject.Id + " is already open");
@@ -82,9 +70,30 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            Vector3 interactionPosition = switchObject.GetInteractionPosition(BotOwner.Position);
+            Vector3? interactionNavMeshPosition = LocationController.FindNearestNavMeshPosition(interactionPosition, 1.5f);
+            if (!interactionNavMeshPosition.HasValue)
+            {
+                LoggingController.LogError("Cannot find valid NavMesh position close to " + interactionPosition.ToString() + " for " + BotOwner.GetText() + " to interact with switch " + switchObject.Id);
+                ObjectiveManager.FailObjective();
+            }
+
+            if (Vector3.Distance(BotOwner.Position, interactionNavMeshPosition.Value) > 0.5f)
+            {
+                RecalculatePath(interactionNavMeshPosition.Value);
+                return;
+            }
+
             if ((switchObject.DoorState == EDoorState.Shut) && (switchObject.InteractingPlayer == null))
             {
-                player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), null, player);
+                Action callback = () =>
+                {
+                    LoggingController.LogInfo(BotOwner.GetText() + " toggled switch " + switchObject.Id);
+                };
+
+                player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
+                //player.CurrentManagedState.StartDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback);
+                //player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
 
                 ObjectiveManager.CompleteObjective();
             }
