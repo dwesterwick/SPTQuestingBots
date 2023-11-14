@@ -17,7 +17,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         HoldPosition,
         PlantItem,
         Regroup,
-        Sleep
+        Sleep,
+        ToggleSwitch
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -59,6 +60,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.PlantItem: return new Action(typeof(BotLogic.Objective.PlantItemAction), actionReason);
                 case BotActionType.Regroup: return new Action(typeof(BotLogic.Follow.RegroupAction), actionReason);
                 case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);
+                case BotActionType.ToggleSwitch: return new Action(typeof(BotLogic.Objective.ToggleSwitchAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

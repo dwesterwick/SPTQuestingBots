@@ -134,6 +134,22 @@ namespace SPTQuestingBots.Models
             return allSnapped;
         }
 
+        public bool TryFindAllInteractiveObjects()
+        {
+            bool allFound = true;
+
+            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            {
+                if (!step.TryFindSwitch())
+                {
+                    allFound = false;
+                    LoggingController.LogError("Unable to find switch \"" + step.SwitchID + "\" for quest objective " + ToString());
+                }
+            }
+            
+            return allFound;
+        }
+
         public bool CanAssignBot(BotOwner bot)
         {
             if (questObjectiveSteps.Length == 0)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SPTQuestingBots.Controllers;
@@ -15,6 +16,7 @@ namespace SPTQuestingBots.Models
         Undefined = 0,
         MoveToPosition = 1,
         PlantItem = 2,
+        ToggleSwitch = 3,
     }
 
     public class QuestObjectiveStep
@@ -32,8 +34,14 @@ namespace SPTQuestingBots.Models
         [JsonProperty("minElapsedTime")]
         public double MinElapsedTime { get; set; } = 0;
 
+        [JsonProperty("switchID")]
+        public string SwitchID { get; set; } = "";
+
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;
+
+        [JsonIgnore]
+        public Switch SwitchObject { get; set; } = null;
 
         public QuestObjectiveStep()
         {
@@ -98,6 +106,22 @@ namespace SPTQuestingBots.Models
 
             SerializablePosition = new SerializableVector3(navMeshPosition.Value);
             return true;
+        }
+
+        public bool TryFindSwitch()
+        {
+            if (ActionType != QuestAction.ToggleSwitch)
+            {
+                return true;
+            }
+
+            SwitchObject = LocationController.FindSwitch(SwitchID);
+            if (SwitchObject != null)
+            {
+                SerializablePosition = new SerializableVector3(SwitchObject.transform.position);
+            }
+
+            return SwitchObject != null;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,7 +24,8 @@ namespace SPTQuestingBots.Controllers
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private static Dictionary<string, Switch> switches = new Dictionary<string, Switch>();
+        private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
+        private static List<Door> lockedDoors = new List<Door>();
 
         private static void Clear()
         {
@@ -31,6 +33,7 @@ namespace SPTQuestingBots.Controllers
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
             switches.Clear();
+            lockedDoors.Clear();
         }
 
         private void Update()
@@ -64,14 +67,71 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static void FindSwitches()
+        public static void FindAllInteractiveObjects()
         {
-            Switch[] allSwitches = FindObjectsOfType<Switch>();
-            foreach (Switch s in allSwitches)
+            FindAllSwitches();
+            FindAllLockedDoors();
+        }
+
+        public static void FindAllSwitches()
+        {
+            switches.Clear();
+
+            EFT.Interactive.Switch[] allSwitches = FindObjectsOfType<EFT.Interactive.Switch>();
+            switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
+            
+            LoggingController.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
+        }
+
+        public static EFT.Interactive.Switch FindSwitch(string id)
+        {
+            if (switches.ContainsKey(id))
             {
-                LoggingController.LogInfo("Found switch: " + s.Id);
-                switches.Add(s.Id, s);
+                return switches[id];
             }
+
+            return null;
+        }
+
+        public static void FindAllLockedDoors()
+        {
+            lockedDoors.Clear();
+
+            Door[] allDoors = FindObjectsOfType<Door>();
+            foreach (Door door in allDoors)
+            {
+                if (door.DoorState != EDoorState.Locked)
+                {
+                    continue;
+                }
+
+                lockedDoors.Add(door);
+            }
+
+            LoggingController.LogInfo("Found locked doors: " + string.Join(", ", lockedDoors.Select(s => s.Id)));
+        }
+
+        public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance)
+        {
+            List<Door> applicableDoors = new List<Door>();
+            foreach (Door door in lockedDoors.ToArray())
+            {
+                if (door.DoorState != EDoorState.Locked)
+                {
+                    LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
+                    lockedDoors.Remove(door);
+                    continue;
+                }
+
+                if (Vector3.Distance(position, door.transform.position) > maxDistance)
+                {
+                    continue;
+                }
+
+                applicableDoors.Add(door);
+            }
+
+            return applicableDoors;
         }
 
         public static SpawnPointParams[] GetAllValidSpawnPointParams()

@@ -43,13 +43,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 throw new InvalidOperationException("Cannot go to a null position");
             }
 
+            ObjectiveManager.StartJobAssigment();
+
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 RestartActionElapsedTime();
             }
-
-            ObjectiveManager.StartJobAssigment();
 
             if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
             {

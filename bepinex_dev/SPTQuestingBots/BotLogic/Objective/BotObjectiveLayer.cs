@@ -164,17 +164,21 @@ namespace SPTQuestingBots.BotLogic.Objective
                 case QuestAction.MoveToPosition:
                     setNextAction(BotActionType.GoToObjective, "GoToObjective");
                     return updatePreviousState(true);
-                
+
                 case QuestAction.PlantItem:
-                    // Only plant items if the bot is close enough to them
-                    if (objectiveManager.IsCloseToObjective())
+                    if (!objectiveManager.IsCloseToObjective())
                     {
-                        setNextAction(BotActionType.PlantItem, "PlantItem (" + objectiveManager.MinElapsedActionTime + "s)");
+                        setNextAction(BotActionType.GoToObjective, "GoToPlantPosition");
+                        return updatePreviousState(true);
                     }
                     else
                     {
-                        setNextAction(BotActionType.GoToObjective, "GoToObjective");
+                        setNextAction(BotActionType.PlantItem, "PlantItem (" + objectiveManager.MinElapsedActionTime + "s)");
+                        return updatePreviousState(true);
                     }
+
+                case QuestAction.ToggleSwitch:
+                    setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
                     return updatePreviousState(true);
             }
 

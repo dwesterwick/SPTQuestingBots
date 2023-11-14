@@ -65,7 +65,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            LocationController.FindSwitches();
+            LocationController.FindAllInteractiveObjects();
             StartCoroutine(LoadAllQuests());
 
             // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
@@ -162,25 +162,31 @@ namespace SPTQuestingBots.Controllers.Bots
                 {
                     objectiveNum++;
                     objective.SetName(quest.Name + ": Objective #" + objectiveNum);
+                    bool removeObjective = false;
 
-                    if (!objective.TrySnapAllStepPositionsToNavMesh())
+                    if (!removeObjective && !objective.TryFindAllInteractiveObjects())
                     {
-                        LoggingController.LogError("Could not find valid NavMesh positions for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+                        removeObjective = true;
+                        LoggingController.LogError("Could not find required interactive objects for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+                    }
 
-                        // Try to remove any objectives that have any steps that don't have valid NavMesh positions. If this fails, don't allow any bots to
-                        // do that objective. 
-                        if (!quest.TryRemoveObjective(objective))
-                        {
-                            LoggingController.LogError("Could not remove objective " + objective.ToString());
-                            objective.DeleteAllSteps();
-                        }
+                    if (!removeObjective && !objective.TrySnapAllStepPositionsToNavMesh())
+                    {
+                        removeObjective = true;
+                        LoggingController.LogError("Could not find valid NavMesh positions for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+                    }
+
+                    if (removeObjective && !quest.TryRemoveObjective(objective))
+                    {
+                        LoggingController.LogError("Could not remove objective " + objective.ToString());
+                        objective.DeleteAllSteps();
                     }
                 }
 
                 // Do not use quests that don't have any valid objectives (using the check above)
                 if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.StepCount == 0))
                 {
-                    LoggingController.LogError("Could not find any objectives with valid NavMesh positions for quest " + quest.Name + ". Disabling quest.");
+                    LoggingController.LogError("Could not find any valid objectives for quest " + quest.Name + ". Disabling quest.");
                     continue;
                 }
 

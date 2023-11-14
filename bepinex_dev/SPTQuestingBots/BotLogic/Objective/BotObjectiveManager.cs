@@ -31,6 +31,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool HasCompletePath => assignment.HasCompletePath;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
+        public EFT.Interactive.Switch CurrentQuestSwitch => assignment?.QuestObjectiveStepAssignment?.SwitchObject;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
