@@ -257,6 +257,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
+            if (CurrentQuestAction == QuestAction.ToggleSwitch)
+            {
+                return false;
+            }
+
             return true;
         }
     }

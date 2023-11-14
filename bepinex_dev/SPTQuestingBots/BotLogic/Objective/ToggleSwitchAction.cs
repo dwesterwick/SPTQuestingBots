@@ -66,21 +66,25 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (switchObject.DoorState == EDoorState.Open)
             {
                 LoggingController.LogWarning("Switch " + switchObject.Id + " is already open");
+
                 ObjectiveManager.CompleteObjective();
                 return;
             }
 
             Vector3 interactionPosition = switchObject.GetInteractionPosition(BotOwner.Position);
-            Vector3? interactionNavMeshPosition = LocationController.FindNearestNavMeshPosition(interactionPosition, 1.5f);
+            /*Vector3? interactionNavMeshPosition = LocationController.FindNearestNavMeshPosition(interactionPosition, 1.5f);
             if (!interactionNavMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find valid NavMesh position close to " + interactionPosition.ToString() + " for " + BotOwner.GetText() + " to interact with switch " + switchObject.Id);
                 ObjectiveManager.FailObjective();
-            }
+            }*/
 
-            if (Vector3.Distance(BotOwner.Position, interactionNavMeshPosition.Value) > 0.5f)
+            float distanceFromInteractionPosition = Vector3.Distance(BotOwner.Position, interactionPosition);
+            if (distanceFromInteractionPosition > 0.75f)
             {
-                RecalculatePath(interactionNavMeshPosition.Value);
+                LoggingController.LogInfo(BotOwner.GetText() + " is " + Math.Round(distanceFromInteractionPosition, 2) + "m from interaction position for switch " + switchObject.Id);
+                
+                RecalculatePath(interactionPosition);
                 return;
             }
 
