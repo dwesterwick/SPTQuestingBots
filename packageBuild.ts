@@ -16,10 +16,10 @@ const path = require("path");
 // atypical, and you would never do this in a production environment, but this script is only used for development so
 // it's fine in this case. Some of these values are stored in environment variables, but those differ between node
 // versions; the 'author' value is not available after node v14.
-const { author, name:packageName, version } = require("./package.json");
+const { author, name:packageName } = require("./package.json");
 
 // Generate the name of the package, stripping out all non-alphanumeric characters in the 'author' and 'name'.
-const modName = `${author.replace(/[^a-z0-9]/gi, "")}-${packageName.replace(/[^a-z0-9]/gi, "")}-${version}`;
+const modName = `${author.replace(/[^a-z0-9]/gi, "")}-${packageName.replace(/[^a-z0-9]/gi, "")}`;
 console.log(`Generated package name: ${modName}`);
 
 // Delete the old build directory and compressed package file.
