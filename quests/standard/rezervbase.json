@@ -24,7 +24,12 @@
                     },
                     {
                         "stepType" : "ToggleSwitch",
-                        "switchID" : "autoId_00632_EXFIL"
+                        "switchID" : "autoId_00632_EXFIL",
+                        "position" : {
+                            "x": -60.28271,
+                            "y": -7.04171944,
+                            "z": 76.82604
+                        }
                     }
                 ]
             }
@@ -54,7 +59,12 @@
                     },
                     {
                         "stepType" : "ToggleSwitch",
-                        "switchID" : "autoId_00000_D2_LEVER"
+                        "switchID" : "autoId_00000_D2_LEVER",
+                        "position" : {
+                            "x": -116.461212,
+                            "y": -14.5357466,
+                            "z": 21.0227413
+                        }
                     }
                 ]
             }

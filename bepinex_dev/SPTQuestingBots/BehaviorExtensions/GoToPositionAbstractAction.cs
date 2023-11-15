@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,6 +34,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         public override void Start()
         {
             base.Start();
+
             botIsStuckTimer.Start();
             BotOwner.PatrollingData.Pause();
         }
@@ -40,6 +42,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         public override void Stop()
         {
             base.Stop();
+
             botIsStuckTimer.Stop();
             BotOwner.PatrollingData.Unpause();
         }
@@ -104,9 +107,29 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
-            PathRender.RemovePath(pathName);
+
             Models.PathVisualizationData botPathRendering = new Models.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
             PathRender.AddOrUpdatePath(botPathRendering);
+        }
+
+        protected void outlineTargetPosition(Color color)
+        {
+            if (!ObjectiveManager.Position.HasValue)
+            {
+                LoggingController.LogError("Cannot outline null position for bot " + BotOwner.GetText());
+                return;
+            }
+
+            outlinePosition(ObjectiveManager.Position.Value, color);
+        }
+
+        protected void outlinePosition(Vector3 position, Color color)
+        {
+            string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
+
+            Vector3[] positionOutlinePoints = PathRender.GetSpherePoints(position, 0.5f, 10);
+            PathVisualizationData positionOutline = new PathVisualizationData(pathName, positionOutlinePoints, color);
+            PathRender.AddOrUpdatePath(positionOutline);
         }
     }
 }

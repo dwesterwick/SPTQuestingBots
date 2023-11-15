@@ -7,6 +7,7 @@ using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -26,7 +27,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotOwner.PatrollingData.Pause();
 
-            Player player = BotOwner.GetPlayer;
+            player = BotOwner.GetPlayer;
             if (player == null)
             {
                 throw new InvalidOperationException("Cannot get Player object from " + BotOwner.GetText());
@@ -71,40 +72,62 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            Vector3 interactionPosition = switchObject.GetInteractionPosition(BotOwner.Position);
-            /*Vector3? interactionNavMeshPosition = LocationController.FindNearestNavMeshPosition(interactionPosition, 1.5f);
-            if (!interactionNavMeshPosition.HasValue)
+            if (checkIfBotIsStuck())
             {
-                LoggingController.LogError("Cannot find valid NavMesh position close to " + interactionPosition.ToString() + " for " + BotOwner.GetText() + " to interact with switch " + switchObject.Id);
+                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + switchObject.Id + ". Giving up.");
                 ObjectiveManager.FailObjective();
-            }*/
+                return;
+            }
 
-            float distanceFromInteractionPosition = Vector3.Distance(BotOwner.Position, interactionPosition);
-            if (distanceFromInteractionPosition > 0.75f)
+            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
+            if (distanceToTargetPosition > 0.75f)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " is " + Math.Round(distanceFromInteractionPosition, 2) + "m from interaction position for switch " + switchObject.Id);
-                
-                RecalculatePath(interactionPosition);
+                NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
+
+                if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
+                {
+                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + switchObject.Id);
+
+                    ObjectiveManager.FailObjective();
+
+                    if (ConfigController.Config.Debug.ShowFailedPaths)
+                    {
+                        drawBotPath(Color.yellow);
+                    }
+                }
+                else
+                {
+                    //LoggingController.LogInfo(BotOwner.GetText() + " is " + Math.Round(distanceToTargetPosition, 2) + "m from interaction position for switch " + switchObject.Id);
+                }
+
                 return;
             }
 
             if ((switchObject.DoorState == EDoorState.Shut) && (switchObject.InteractingPlayer == null))
             {
-                Action callback = () =>
+                try
                 {
-                    LoggingController.LogInfo(BotOwner.GetText() + " toggled switch " + switchObject.Id);
-                };
+                    Action callback = switchToggledAction(BotOwner, switchObject);
+                    player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
 
-                player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
-                //player.CurrentManagedState.StartDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback);
-                //player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
-
-                ObjectiveManager.CompleteObjective();
+                    ObjectiveManager.CompleteObjective();
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError(BotOwner.GetText() + " cannot toggle switch " + switchObject.Id + ": " + e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                    throw;
+                }
             }
             else
             {
                 LoggingController.LogWarning("Somebody is already interacting with switch " + switchObject.Id);
             }
+        }
+
+        public static Action switchToggledAction(BotOwner bot, Switch sw)
+        {
+            return () => { LoggingController.LogInfo(bot.GetText() + " toggled switch " + sw.Id); };
         }
     }
 }

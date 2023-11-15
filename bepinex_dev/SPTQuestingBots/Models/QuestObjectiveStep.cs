@@ -89,7 +89,7 @@ namespace SPTQuestingBots.Models
             SerializablePosition = new SerializableVector3(position.Value);
         }
 
-        public bool TrySnapToNavMesh()
+        public bool TrySnapToNavMesh(float maxDistance)
         {
             if (SerializablePosition == null)
             {
@@ -97,7 +97,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
@@ -116,11 +116,6 @@ namespace SPTQuestingBots.Models
             }
 
             SwitchObject = LocationController.FindSwitch(SwitchID);
-            if (SwitchObject != null)
-            {
-                SerializablePosition = new SerializableVector3(SwitchObject.transform.position);
-            }
-
             return SwitchObject != null;
         }
     }

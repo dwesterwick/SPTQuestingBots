@@ -48,7 +48,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             {
                 if (!wasStuck)
                 {
-                    LoggingController.LogInfo("Follower " + BotOwner.GetText() + " is stuck and take a break from following.");
+                    LoggingController.LogInfo("Follower " + BotOwner.GetText() + " is stuck and will take a break from following.");
                 }
                 wasStuck = true;
 

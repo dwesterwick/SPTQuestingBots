@@ -124,7 +124,8 @@ namespace SPTQuestingBots.Models
 
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
-                if (!step.TrySnapToNavMesh())
+                float maxNavMeshDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+                if (!step.TrySnapToNavMesh(maxNavMeshDistance))
                 {
                     allSnapped = false;
                     LoggingController.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
