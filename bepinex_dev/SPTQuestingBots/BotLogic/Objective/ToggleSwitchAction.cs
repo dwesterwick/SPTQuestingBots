@@ -103,12 +103,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if ((switchObject.DoorState == EDoorState.Shut) && (switchObject.InteractingPlayer == null))
+            if (switchObject.DoorState == EDoorState.Shut)
             {
                 try
                 {
                     Action callback = switchToggledAction(BotOwner, switchObject);
-                    player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
+                    //player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
+                    player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
 
                     ObjectiveManager.CompleteObjective();
                 }

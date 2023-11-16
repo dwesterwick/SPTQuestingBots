@@ -64,6 +64,8 @@ namespace SPTQuestingBots.Controllers
                 {
                     return;
                 }
+
+                LoggingController.LogInfo("Loading into " + CurrentLocation.Id + "...");
             }
         }
 

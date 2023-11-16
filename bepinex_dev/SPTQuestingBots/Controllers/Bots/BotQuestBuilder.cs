@@ -56,6 +56,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (LocationController.CurrentLocation == null)
             {
+                if (IsBuildingQuests || HaveQuestsBeenBuilt)
+                {
+                    LoggingController.LogInfo("Clearing quest data...");
+                }
+
                 StartCoroutine(Clear());
                 return;
             }

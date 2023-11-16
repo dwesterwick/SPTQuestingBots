@@ -21,7 +21,7 @@ namespace SPTQuestingBots.Controllers.Bots
         public static int QuestCount => allQuests.Count;
 
         public static Quest[] FindQuestsWithZone(string zoneId) => allQuests.Where(q => q.GetObjectiveForZoneID(zoneId) != null).ToArray();
-        public static bool CanMoreBotsDoQuest(Quest quest) => quest.NumberOfActiveBots() < quest.MaxBots;
+        public static bool CanMoreBotsDoQuest(this Quest quest) => quest.NumberOfActiveBots() < quest.MaxBots;
         
         public static void Clear()
         {
@@ -108,6 +108,8 @@ namespace SPTQuestingBots.Controllers.Bots
                     .Where(a => a.QuestAssignment == quest)
                     .Count();
             }
+
+            //LoggingController.LogInfo("Bots doing " + quest.ToString() + ": " + num);
 
             return num;
         }
@@ -477,6 +479,7 @@ namespace SPTQuestingBots.Controllers.Bots
             var groupedQuests = allQuests
                 .Where(q => !invalidQuests.Contains(q))
                 .Where(q => q.NumberOfValidObjectives > 0)
+                .Where(q => q.CanMoreBotsDoQuest())
                 .Where(q => q.CanAssignToBot(bot))
                 .GroupBy
                 (
@@ -520,12 +523,12 @@ namespace SPTQuestingBots.Controllers.Bots
                 // Sort the quests in the group by their distance to you, with some randomness applied, in ascending order
                 System.Random random = new System.Random();
                 IEnumerable<Quest> randomizedQuests = questObjectiveDistances
-                    .OrderBy(q => q.Value.Min + random.NextFloat(-1 * maxRandomDistance, maxRandomDistance))
+                    .OrderBy(q => q.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance))
                     .Select(q => q.Key);
 
                 // Use a random number to determine if the bot should be assigned to the first quest in the list
                 Quest firstRandomQuest = randomizedQuests.First();
-                if (random.NextFloat(1, 100) < firstRandomQuest.ChanceForSelecting)
+                if (random.Next(1, 100) <= firstRandomQuest.ChanceForSelecting)
                 {
                     return firstRandomQuest;
                 }
