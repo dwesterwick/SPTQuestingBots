@@ -69,13 +69,28 @@ namespace SPTQuestingBots.BotLogic.Objective
                 LoggingController.LogWarning("Switch " + switchObject.Id + " is already open");
 
                 ObjectiveManager.CompleteObjective();
+
+                return;
+            }
+
+            if (switchObject.DoorState == EDoorState.Locked)
+            {
+                LoggingController.LogWarning("Switch " + switchObject.Id + " is unavailable");
+
+                ObjectiveManager.TryChangeObjective();
+
                 return;
             }
 
             if (checkIfBotIsStuck())
             {
                 LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + switchObject.Id + ". Giving up.");
-                ObjectiveManager.FailObjective();
+
+                if (ObjectiveManager.TryChangeObjective())
+                {
+                    restartStuckTimer();
+                }
+
                 return;
             }
 
@@ -105,30 +120,14 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (switchObject.DoorState == EDoorState.Shut)
             {
-                try
-                {
-                    Action callback = switchToggledAction(BotOwner, switchObject);
-                    //player.CurrentManagedState.ExecuteDoorInteraction(switchObject, new InteractionResult(EInteractionType.Open), callback, player);
-                    player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
-
-                    ObjectiveManager.CompleteObjective();
-                }
-                catch (Exception e)
-                {
-                    LoggingController.LogError(BotOwner.GetText() + " cannot toggle switch " + switchObject.Id + ": " + e.Message);
-                    LoggingController.LogError(e.StackTrace);
-                    throw;
-                }
+                player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
             }
             else
             {
                 LoggingController.LogWarning("Somebody is already interacting with switch " + switchObject.Id);
             }
-        }
 
-        public static Action switchToggledAction(BotOwner bot, Switch sw)
-        {
-            return () => { LoggingController.LogInfo(bot.GetText() + " toggled switch " + sw.Id); };
+            ObjectiveManager.CompleteObjective();
         }
     }
 }

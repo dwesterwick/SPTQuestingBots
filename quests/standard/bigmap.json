@@ -4,7 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 50,
+        "chanceForSelecting": 30,
         "priority": 18,
         "name": "Power Switch",
         "objectives" : [
@@ -14,6 +14,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 352.194763,
+                            "y": 1.23055232,
+                            "z": -39.12735
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "custom_DesignStuff_00034",
                         "position" : {
                             "x": 352.194763,
                             "y": 1.23055232,

@@ -6,6 +6,41 @@
         "maxBots": 4,
         "chanceForSelecting": 10,
         "priority": 18,
+        "name": "Sewage Conduit Pump Switch",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -137.0,
+                            "y": -4.2,
+                            "z": -255.9
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00415",
+                        "position" : {
+                            "x": -137.0,
+                            "y": -4.2,
+                            "z": -255.9
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 4,
+        "chanceForSelecting": 10,
+        "priority": 18,
         "name": "Medical Block Elevator Power Switch",
         "objectives" : [
             {
@@ -14,6 +49,16 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -123.752342,
+                            "y": -4.05300045,
+                            "z": -314.403473
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00409",
                         "position" : {
                             "x": -123.752342,
                             "y": -4.05300045,
@@ -39,6 +84,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -122.649429,
+                            "y": -4.043658,
+                            "z": -353.8349
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "autoId_00007_EXFIL",
                         "position" : {
                             "x": -122.649429,
                             "y": -4.043658,
@@ -64,6 +119,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -272.8778,
+                            "y": -4.0509634,
+                            "z": -366.44696
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00404",
                         "position" : {
                             "x": -272.8778,
                             "y": -4.0509634,
@@ -89,6 +154,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -244.059341,
+                            "y": 4.10415459,
+                            "z": -380.751038
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "autoId_00014_EXFIL",
                         "position" : {
                             "x": -244.059341,
                             "y": 4.10415459,
@@ -114,6 +189,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -219.552612,
+                            "y": 4.104169,
+                            "z": -381.1039
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00418",
                         "position" : {
                             "x": -219.552612,
                             "y": 4.104169,
@@ -139,6 +224,16 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -171.800674,
+                            "y": 4.261299,
+                            "z": -283.171753
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "autoId_00632_EXFIL",
                         "position" : {
                             "x": -171.800674,
                             "y": 4.261299,

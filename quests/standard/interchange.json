@@ -14,10 +14,189 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -202.214783,
                             "y": 21.3331013,
                             "z": -357.127777
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Shopping_Mall_DesignStuff_00055",
+                        "position" : {
+                            "x": -202.214783,
+                            "y": 21.3331013,
+                            "z": -357.127777
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 15,
+        "priority": 18,
+        "name": "KIBA Alarm Panel 1",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -67.0,
+                            "y": 27.1,
+                            "z": 52.7
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Shopping_Mall_DesignStuff_00059",
+                        "position" : {
+                            "x": -67.0,
+                            "y": 27.1,
+                            "z": 52.7
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 15,
+        "priority": 18,
+        "name": "KIBA Alarm Panel 2",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -47.3,
+                            "y": 36.6,
+                            "z": -54.5
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Shopping_Mall_DesignStuff_00058",
+                        "position" : {
+                            "x": -47.3,
+                            "y": 36.6,
+                            "z": -54.5
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 19,
+        "name": "Hidden Panel",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -51.0397339,
+                            "y": 36.5914955,
+                            "z": -123.866776
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Shopping_Mall_DesignStuff_00064",
+                        "position" : {
+                            "x": -51.0397339,
+                            "y": 36.5914955,
+                            "z": -123.866776
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 5,
+        "priority": 18,
+        "canRunBetweenObjectives": false,
+        "name": "Safe Room Area",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -73.2995,
+                            "y": 21.3255272,
+                            "z": 56.2119751
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -51.2987022,
+                            "y": 21.3254528,
+                            "z": 56.0338058
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -47.7,
+                            "y": 22.9,
+                            "z": 42.6
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Shopping_Mall_DesignStuff_00061",
+                        "position" : {
+                            "x": -47.7,
+                            "y": 22.9,
+                            "z": 42.6
                         }
                     }
                 ]
@@ -211,71 +390,6 @@
                             "x": 138.426544,
                             "y": 23.9357662,
                             "z": 260.7697
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 19,
-        "name": "Hidden Panel",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -51.0397339,
-                            "y": 36.5914955,
-                            "z": -123.866776
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
-        "canRunBetweenObjectives": false,
-        "name": "Safe Room Area",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -73.2995,
-                            "y": 21.3255272,
-                            "z": 56.2119751
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -51.2987022,
-                            "y": 21.3254528,
-                            "z": 56.0338058
                         }
                     }
                 ]

@@ -83,6 +83,16 @@ namespace SPTQuestingBots.Controllers
             switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
             
             LoggingController.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
+
+            foreach (EFT.Interactive.Switch sw in allSwitches)
+            {
+                sw.OnDoorStateChanged += reportSwitchChange;
+            }
+        }
+
+        private static void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
+        {
+            LoggingController.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
         }
 
         public static EFT.Interactive.Switch FindSwitch(string id)

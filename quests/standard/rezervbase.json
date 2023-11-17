@@ -79,6 +79,112 @@
         ]
     },
     {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "canRunBetweenObjectives": false,
+        "name": "D2 Area",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -56.1238976,
+                            "y": -14.703867,
+                            "z": 140.437515
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -61.1976738,
+                            "y": -14.703866,
+                            "z": 132.523056
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -42.62611,
+                            "y": -14.7088652,
+                            "z": 131.680984
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -52.16976,
+                            "y": -18.612608,
+                            "z": 132.57843
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -103.348976,
+                            "y": -18.40645,
+                            "z": 158.996735
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -116.5,
+                            "y": -18.4,
+                            "z": 169.3
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00453",
+                        "position" : {
+                            "x": -116.5,
+                            "y": -18.4,
+                            "z": 169.3
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": false,
         "minLevel": 10,
         "maxLevel": 99,
@@ -3107,88 +3213,6 @@
                             "x": -34.2895775,
                             "y": -1.4396385,
                             "z": 4.118504
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "canRunBetweenObjectives": false,
-        "name": "D2 Area",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -56.1238976,
-                            "y": -14.703867,
-                            "z": 140.437515
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -61.1976738,
-                            "y": -14.703866,
-                            "z": 132.523056
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -42.62611,
-                            "y": -14.7088652,
-                            "z": 131.680984
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -52.16976,
-                            "y": -18.612608,
-                            "z": 132.57843
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -103.348976,
-                            "y": -18.40645,
-                            "z": 158.996735
                         }
                     }
                 ]
