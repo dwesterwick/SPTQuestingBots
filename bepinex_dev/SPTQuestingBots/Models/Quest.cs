@@ -110,18 +110,16 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            bool requiredSwithInCorrectPosition = true;
-            foreach (string switchID in RequiredSwitches.Keys)
+            if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
             {
-                requiredSwithInCorrectPosition &= isSwitchInCorrectPosition(switchID, RequiredSwitches[switchID]);
+                return false;
             }
 
             bool canAssign = (!PMCsOnly || BotRegistrationManager.IsBotAPMC(bot))
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime.Value >= MinRaidET)
-                && (raidTime.Value <= MaxRaidET)
-                && requiredSwithInCorrectPosition;
+                && (raidTime.Value <= MaxRaidET);
 
             return canAssign;
         }
@@ -191,21 +189,18 @@ namespace SPTQuestingBots.Models
 
         private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
         {
-            bool requiredSwithInCorrectPosition = true;
             EFT.Interactive.Switch requiredSwitch = LocationController.FindSwitch(switchID);
-            if (requiredSwitch != null)
+            if (requiredSwitch == null)
             {
-                if (mustBeOpen)
-                {
-                    requiredSwithInCorrectPosition &= (requiredSwitch.DoorState == EDoorState.Open);
-                }
-                else
-                {
-                    requiredSwithInCorrectPosition &= (requiredSwitch.DoorState != EDoorState.Open);
-                }
+                return true;
             }
 
-            return requiredSwithInCorrectPosition;
+            if (mustBeOpen)
+            {
+                return requiredSwitch.DoorState == EDoorState.Open;
+            }
+
+            return requiredSwitch.DoorState != EDoorState.Open;
         }
     }
 }

@@ -14,7 +14,6 @@ namespace SPTQuestingBots.BotLogic.Objective
     public class ToggleSwitchAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private EFT.Interactive.Switch switchObject = null;
-        private Player player = null;
 
         public ToggleSwitchAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -23,21 +22,15 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override void Start()
         {
-            base.Start();
-
-            BotOwner.PatrollingData.Pause();
-
-            player = BotOwner.GetPlayer;
-            if (player == null)
-            {
-                throw new InvalidOperationException("Cannot get Player object from " + BotOwner.GetText());
-            }
-
             switchObject = ObjectiveManager.CurrentQuestSwitch;
             if (switchObject == null)
             {
                 throw new InvalidOperationException("Cannot toggle a null switch");
             }
+
+            base.Start();
+
+            BotOwner.PatrollingData.Pause();
         }
 
         public override void Stop()
@@ -110,17 +103,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                         drawBotPath(Color.yellow);
                     }
                 }
-                else
-                {
-                    //LoggingController.LogInfo(BotOwner.GetText() + " is " + Math.Round(distanceToTargetPosition, 2) + "m from interaction position for switch " + switchObject.Id);
-                }
 
                 return;
             }
 
             if (switchObject.DoorState == EDoorState.Shut)
             {
-                player.MovementContext.ExecuteInteraction(switchObject, new InteractionResult(EInteractionType.Open));
+                toggleSwitch(switchObject, EInteractionType.Open);
             }
             else
             {
@@ -128,6 +117,34 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             ObjectiveManager.CompleteObjective();
+        }
+
+        private void toggleSwitch(EFT.Interactive.Switch sw, EInteractionType interactionType)
+        {
+            try
+            {
+                if (sw == null)
+                {
+                    throw new ArgumentNullException(nameof(sw));
+                }
+
+                Player player = BotOwner.GetPlayer;
+                if (player == null)
+                {
+                    throw new InvalidOperationException("Cannot get Player object from " + BotOwner.GetText());
+                }
+
+                player.MovementContext.ExecuteInteraction(sw, new InteractionResult(interactionType));
+            }
+            catch (Exception e)
+            {
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
+
+                ObjectiveManager.TryChangeObjective();
+
+                throw;
+            }
         }
     }
 }
