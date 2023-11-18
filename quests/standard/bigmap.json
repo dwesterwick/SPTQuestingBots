@@ -11,7 +11,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,

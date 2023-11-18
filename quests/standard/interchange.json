@@ -39,8 +39,9 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 15,
-        "priority": 18,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "minRaidET": 180,
         "name": "KIBA Alarm Panel 1",
         "objectives" : [
             {
@@ -74,8 +75,9 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 15,
-        "priority": 18,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "minRaidET": 180,
         "name": "KIBA Alarm Panel 2",
         "objectives" : [
             {
@@ -109,8 +111,9 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 19,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "minRaidET": 180,
         "name": "Hidden Panel",
         "objectives" : [
             {
@@ -146,6 +149,7 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
+        "minRaidET": 180,
         "canRunBetweenObjectives": false,
         "name": "Safe Room Area",
         "objectives" : [

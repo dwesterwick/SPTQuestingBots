@@ -83,7 +83,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 15,
         "priority": 20,
         "canRunBetweenObjectives": false,
         "name": "D2 Area",

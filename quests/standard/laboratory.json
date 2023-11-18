@@ -6,6 +6,7 @@
         "maxBots": 4,
         "chanceForSelecting": 10,
         "priority": 18,
+        "minRaidET": 420,
         "name": "Sewage Conduit Pump Switch",
         "objectives" : [
             {
@@ -74,7 +75,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 15,
+        "chanceForSelecting": 10,
         "priority": 18,
         "name": "Cargo Block Elevator Power Switch",
         "objectives" : [
@@ -146,6 +147,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
+        "minRaidET": 420,
         "name": "Parking Gate Controls",
         "objectives" : [
             {
@@ -179,8 +181,9 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 5,
-        "priority": 18,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "minRaidET": 480,
         "name": "Parking Gate Alarm Controls",
         "objectives" : [
             {
@@ -216,6 +219,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
+        "minRaidET": 420,
         "name": "Hangar Gate Controls",
         "objectives" : [
             {

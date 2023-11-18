@@ -110,8 +110,9 @@ The three major data structures are:
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
     * **waitTimeAfterCompleting**: The time the bot must wait after completing the step before it will be allowed to quest again. This is **10** s by default. 
-    * **stepType**: The only valid options for this are "MoveToPosition" and "PlantItem" (case-sensitive). If omitted, "MoveToPosition" is used by default.
-    * **minElapsedTime**" If **stepType="PlantItem"**, this is the time the bot will spend "planting its item". If the bot is interrupted during this time, the timer restarts. This is **0** s by default, so it must be defined if you set **stepType="PlantItem"**.
+    * **stepType**: The only valid options for this are "MoveToPosition", "PlantItem", and "ToggleSwitch" (case-sensitive). If omitted, "MoveToPosition" is used by default.
+    * **minElapsedTime**: If **stepType="PlantItem"**, this is the time the bot will spend "planting its item". If the bot is interrupted during this time, the timer restarts. This is **0** s by default, so it must be defined if you set **stepType="PlantItem"**.
+    * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
 
 **Tips and Tricks**
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
