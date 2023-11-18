@@ -183,7 +183,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         if (!modConfig.enabled)
         {
-            this.commonUtils.logInfo("Mod disabled in config.json");
+            this.commonUtils.logInfo("Mod disabled in config.json", true);
             return;
         }
         
