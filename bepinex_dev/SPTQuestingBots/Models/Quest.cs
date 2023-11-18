@@ -195,8 +195,14 @@ namespace SPTQuestingBots.Models
             EFT.Interactive.Switch requiredSwitch = LocationController.FindSwitch(switchID);
             if (requiredSwitch != null)
             {
-                requiredSwithInCorrectPosition &= (mustBeOpen && requiredSwitch.DoorState == EDoorState.Open);
-                requiredSwithInCorrectPosition &= (!mustBeOpen && requiredSwitch.DoorState != EDoorState.Open);
+                if (mustBeOpen)
+                {
+                    requiredSwithInCorrectPosition &= (requiredSwitch.DoorState == EDoorState.Open);
+                }
+                else
+                {
+                    requiredSwithInCorrectPosition &= (requiredSwitch.DoorState != EDoorState.Open);
+                }
             }
 
             return requiredSwithInCorrectPosition;
