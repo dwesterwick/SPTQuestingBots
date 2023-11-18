@@ -6,6 +6,9 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 18,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": false
+        },
         "name": "Power Station Switch",
         "objectives" : [
             {
@@ -42,6 +45,10 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "minRaidET": 180,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true,
+            "Shopping_Mall_DesignStuff_00059": false
+        },
         "name": "KIBA Alarm Panel 1",
         "objectives" : [
             {
@@ -78,6 +85,10 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "minRaidET": 180,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true,
+            "Shopping_Mall_DesignStuff_00058": false
+        },
         "name": "KIBA Alarm Panel 2",
         "objectives" : [
             {
@@ -114,6 +125,9 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "minRaidET": 180,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true
+        },
         "name": "Hidden Panel",
         "objectives" : [
             {
@@ -147,10 +161,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 5,
+        "chanceForSelecting": 10,
         "priority": 18,
         "minRaidET": 180,
         "canRunBetweenObjectives": false,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true,
+            "Shopping_Mall_DesignStuff_00064": true
+        },
         "name": "Safe Room Area",
         "objectives" : [
             {

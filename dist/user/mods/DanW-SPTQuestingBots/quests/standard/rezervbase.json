@@ -7,6 +7,9 @@
         "chanceForSelecting": 5,
         "priority": 18,
         "minRaidET": 300,
+        "requiredSwitches": {
+            "autoId_00632_EXFIL": false
+        },
         "name": "Hermetic Door Switch",
         "objectives" : [
             {

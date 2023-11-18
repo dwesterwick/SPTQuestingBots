@@ -4,7 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
-        "chanceForSelecting": 10,
+        "chanceForSelecting": 5,
         "priority": 18,
         "minRaidET": 420,
         "name": "Sewage Conduit Pump Switch",
@@ -40,7 +40,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
-        "chanceForSelecting": 10,
+        "chanceForSelecting": 5,
         "priority": 18,
         "name": "Medical Block Elevator Power Switch",
         "objectives" : [
@@ -75,7 +75,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 10,
+        "chanceForSelecting": 5,
         "priority": 18,
         "name": "Cargo Block Elevator Power Switch",
         "objectives" : [
@@ -110,7 +110,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 10,
+        "chanceForSelecting": 5,
         "priority": 18,
         "name": "Main Elevator Power Switch",
         "objectives" : [
@@ -148,6 +148,9 @@
         "chanceForSelecting": 10,
         "priority": 18,
         "minRaidET": 420,
+        "requiredSwitches": {
+            "autoId_00014_EXFIL": false
+        },
         "name": "Parking Gate Controls",
         "objectives" : [
             {
@@ -182,8 +185,12 @@
         "maxLevel": 99,
         "maxBots": 2,
         "chanceForSelecting": 10,
-        "priority": 20,
-        "minRaidET": 480,
+        "priority": 19,
+        "minRaidET": 420,
+        "requiredSwitches": {
+            "autoId_00014_EXFIL": true,
+            "00418": false
+        },
         "name": "Parking Gate Alarm Controls",
         "objectives" : [
             {
@@ -220,6 +227,9 @@
         "chanceForSelecting": 10,
         "priority": 18,
         "minRaidET": 420,
+        "requiredSwitches": {
+            "autoId_00632_EXFIL": false
+        },
         "name": "Hangar Gate Controls",
         "objectives" : [
             {

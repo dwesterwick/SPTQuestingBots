@@ -6,6 +6,9 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 18,
+        "requiredSwitches": {
+            "custom_DesignStuff_00034": false
+        },
         "name": "Power Switch",
         "objectives" : [
             {

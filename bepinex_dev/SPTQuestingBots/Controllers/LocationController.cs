@@ -82,7 +82,7 @@ namespace SPTQuestingBots.Controllers
             EFT.Interactive.Switch[] allSwitches = FindObjectsOfType<EFT.Interactive.Switch>();
             switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
             
-            LoggingController.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
+            //LoggingController.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
 
             foreach (EFT.Interactive.Switch sw in allSwitches)
             {
@@ -120,7 +120,7 @@ namespace SPTQuestingBots.Controllers
                 lockedDoors.Add(door);
             }
 
-            LoggingController.LogInfo("Found locked doors: " + string.Join(", ", lockedDoors.Select(s => s.Id)));
+            //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", lockedDoors.Select(s => s.Id)));
         }
 
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance)

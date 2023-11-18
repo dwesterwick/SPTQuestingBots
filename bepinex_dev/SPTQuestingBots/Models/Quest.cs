@@ -49,6 +49,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("canRunBetweenObjectives")]
         public bool CanRunBetweenObjectives { get; set; } = true;
 
+        [JsonProperty("requiredSwitches")]
+        public Dictionary<string, bool> RequiredSwitches = new Dictionary<string, bool>();
+
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
@@ -107,11 +110,18 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
+            bool requiredSwithInCorrectPosition = true;
+            foreach (string switchID in RequiredSwitches.Keys)
+            {
+                requiredSwithInCorrectPosition &= isSwitchInCorrectPosition(switchID, RequiredSwitches[switchID]);
+            }
+
             bool canAssign = (!PMCsOnly || BotRegistrationManager.IsBotAPMC(bot))
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime.Value >= MinRaidET)
-                && (raidTime.Value <= MaxRaidET);
+                && (raidTime.Value <= MaxRaidET)
+                && requiredSwithInCorrectPosition;
 
             return canAssign;
         }
@@ -177,6 +187,19 @@ namespace SPTQuestingBots.Models
             }
 
             return matchingObjectives.First();
+        }
+
+        private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
+        {
+            bool requiredSwithInCorrectPosition = true;
+            EFT.Interactive.Switch requiredSwitch = LocationController.FindSwitch(switchID);
+            if (requiredSwitch != null)
+            {
+                requiredSwithInCorrectPosition &= (mustBeOpen && requiredSwitch.DoorState == EDoorState.Open);
+                requiredSwithInCorrectPosition &= (!mustBeOpen && requiredSwitch.DoorState != EDoorState.Open);
+            }
+
+            return requiredSwithInCorrectPosition;
         }
     }
 }

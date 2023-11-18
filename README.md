@@ -93,6 +93,7 @@ The three major data structures are:
     * **maxRaidET**: The quest can only be selected if more more than this many seconds have elapsed in the raid. See **minRaidET** for more information.
     * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
+    * **requiredSwitches**: A dictionary of the switches that must be in a specific position bot bots to perform the quest. The dictionary key is the ID of the switch, and the value is a boolean indicating if the switch must be open (actuated). If the dictionary is empty, no switches will be checked. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
@@ -270,7 +271,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 * **0.4.0** (ETA: Late November)
     * Add new quest-objective action: unlocking doors
-    * Add new quest-objective action: pulling levers
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
