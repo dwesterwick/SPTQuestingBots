@@ -189,11 +189,16 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         
         this.removeBlacklistedBrainTypes();
 
-        // If we find SWAG, disable initial spawns
+        // If we find SWAG or MOAR, disable initial spawns
         const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
-        if (preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
         {
             this.commonUtils.logInfo("SWAG Detected; disabling initial PMC spawns");
+            modConfig.initial_PMC_spawns.enabled = false;
+        }
+        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
+        {
+            this.commonUtils.logInfo("MOAR Detected; disabling initial PMC spawns");
             modConfig.initial_PMC_spawns.enabled = false;
         }
 
