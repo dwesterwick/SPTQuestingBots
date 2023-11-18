@@ -153,6 +153,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            if ((botOwner.BotState != EBotState.Active) || botOwner.IsDead)
+            {
+                return;
+            }
+
             if (IsCloseToObjective())
             {
                 timeSpentAtObjectiveTimer.Start();

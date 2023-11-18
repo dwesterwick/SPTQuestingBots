@@ -40,6 +40,90 @@
     },
     {
         "repeatable": true,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 17,
+        "requiredSwitches": {
+            "autoId_00632_EXFIL": true
+        },
+        "name": "Hermetic Alarm Patrol",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 25,
+                "maxDistanceFromBot": 150,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -81.3760452,
+                            "y": -6.946467,
+                            "z": 22.4286537
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 25,
+                "maxDistanceFromBot": 150,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -63.6107635,
+                            "y": -6.94646835,
+                            "z": -10.7402258
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 25,
+                "maxDistanceFromBot": 150,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -28.246294,
+                            "y": -6.951963,
+                            "z": -24.6942272
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 25,
+                "maxDistanceFromBot": 150,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -23.83467,
+                            "y": -5.108245,
+                            "z": -120.502487
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 25,
+                "maxDistanceFromBot": 150,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.3197861,
+                            "y": -5.544286,
+                            "z": -147.147156
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
