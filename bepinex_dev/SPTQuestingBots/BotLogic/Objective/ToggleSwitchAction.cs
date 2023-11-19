@@ -13,8 +13,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     public class ToggleSwitchAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private EFT.Interactive.Switch switchObject = null;
-
         public ToggleSwitchAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             
@@ -22,12 +20,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override void Start()
         {
-            switchObject = ObjectiveManager.CurrentQuestSwitch;
-            if (switchObject == null)
-            {
-                throw new InvalidOperationException("Cannot toggle a null switch");
-            }
-
             base.Start();
 
             BotOwner.PatrollingData.Pause();
@@ -50,25 +42,38 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            if (ObjectiveManager.CurrentQuestSwitch == null)
+            {
+                LoggingController.LogError("Cannot toggle a null switch");
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
+
             if (!ObjectiveManager.Position.HasValue)
             {
-                throw new InvalidOperationException("Cannot go to a null position");
+                LoggingController.LogError("Cannot go to a null position");
+
+                ObjectiveManager.FailObjective();
+
+                return;
             }
 
             ObjectiveManager.StartJobAssigment();
 
-            if (switchObject.DoorState == EDoorState.Open)
+            if (ObjectiveManager.CurrentQuestSwitch.DoorState == EDoorState.Open)
             {
-                LoggingController.LogWarning("Switch " + switchObject.Id + " is already open");
+                LoggingController.LogWarning("Switch " + ObjectiveManager.CurrentQuestSwitch.Id + " is already open");
 
                 ObjectiveManager.CompleteObjective();
 
                 return;
             }
 
-            if (switchObject.DoorState == EDoorState.Locked)
+            if (ObjectiveManager.CurrentQuestSwitch.DoorState == EDoorState.Locked)
             {
-                LoggingController.LogWarning("Switch " + switchObject.Id + " is unavailable");
+                LoggingController.LogWarning("Switch " + ObjectiveManager.CurrentQuestSwitch.Id + " is unavailable");
 
                 ObjectiveManager.TryChangeObjective();
 
@@ -77,7 +82,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (checkIfBotIsStuck())
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + switchObject.Id + ". Giving up.");
+                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + ObjectiveManager.CurrentQuestSwitch.Id + ". Giving up.");
 
                 if (ObjectiveManager.TryChangeObjective())
                 {
@@ -87,6 +92,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
             if (distanceToTargetPosition > 0.75f)
             {
@@ -94,7 +100,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
                 {
-                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + switchObject.Id);
+                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + ObjectiveManager.CurrentQuestSwitch.Id);
 
                     ObjectiveManager.FailObjective();
 
@@ -107,13 +113,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (switchObject.DoorState == EDoorState.Shut)
+            if (ObjectiveManager.CurrentQuestSwitch.DoorState == EDoorState.Shut)
             {
-                toggleSwitch(switchObject, EInteractionType.Open);
+                toggleSwitch(ObjectiveManager.CurrentQuestSwitch, EInteractionType.Open);
             }
             else
             {
-                LoggingController.LogWarning("Somebody is already interacting with switch " + switchObject.Id);
+                LoggingController.LogWarning("Somebody is already interacting with switch " + ObjectiveManager.CurrentQuestSwitch.Id);
             }
 
             ObjectiveManager.CompleteObjective();
