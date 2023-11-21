@@ -29,10 +29,10 @@ namespace SPTQuestingBots.BotLogic.Objective
         public Vector3? Position => assignment?.Position;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
+        public bool MustUnlockDoor => assignment?.DoorToUnlock != null;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
-        public EFT.Interactive.Switch CurrentQuestSwitch => assignment?.QuestObjectiveStepAssignment?.SwitchObject;
-
+        
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
@@ -41,6 +41,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
+        public void RetryPath() => assignment.HasCompletePath = true;
 
         public static BotObjectiveManager GetObjectiveManagerForBot(BotOwner bot)
         {
@@ -222,6 +223,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
+        public void UnlockDoor(EFT.Interactive.Door door)
+        {
+            assignment.SetDoorToUnlock(door);
+        }
+
+        public void DoorIsUnlocked()
+        {
+            assignment.DoorIsUnlocked();
+        }
+
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
@@ -268,6 +279,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return true;
+        }
+
+        public EFT.Interactive.WorldInteractiveObject GetCurrentQuestInteractiveObject()
+        {
+            if (MustUnlockDoor)
+            {
+                return assignment?.DoorToUnlock;
+            }
+
+            return assignment?.QuestObjectiveStepAssignment?.InteractiveObject;
         }
     }
 }

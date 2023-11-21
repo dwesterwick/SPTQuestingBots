@@ -162,20 +162,26 @@ namespace SPTQuestingBots.BotLogic.Objective
             switch (objectiveManager.CurrentQuestAction)
             {
                 case QuestAction.MoveToPosition:
-                    setNextAction(BotActionType.GoToObjective, "GoToObjective");
+                    if (objectiveManager.MustUnlockDoor)
+                    {
+                        setNextAction(BotActionType.UnlockDoor, "UnlockDoor");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToObjective");
+                    }
                     return updatePreviousState(true);
 
                 case QuestAction.PlantItem:
                     if (!objectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToPlantPosition");
-                        return updatePreviousState(true);
                     }
                     else
                     {
                         setNextAction(BotActionType.PlantItem, "PlantItem (" + objectiveManager.MinElapsedActionTime + "s)");
-                        return updatePreviousState(true);
                     }
+                    return updatePreviousState(true);
 
                 case QuestAction.ToggleSwitch:
                     setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");

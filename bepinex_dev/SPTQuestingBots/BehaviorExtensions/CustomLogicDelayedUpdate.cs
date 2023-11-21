@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
@@ -64,10 +66,6 @@ namespace SPTQuestingBots.BehaviorExtensions
             // Stand up
             BotOwner.SetPose(1f);
 
-            // Look where the bot is moving
-            BotOwner.Steering.LookToMovingDirection();
-            baseSteeringLogic.Update(BotOwner);
-
             // Move as fast as possible
             BotOwner.SetTargetMoveSpeed(1f);
             
@@ -76,6 +74,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f))
             {
+                //Controllers.LoggingController.LogInfo(BotOwner.GetText() + " can sprint");
                 BotOwner.GetPlayer.EnableSprint(true);
             }
 
@@ -83,6 +82,18 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 BotOwner.GetPlayer.EnableSprint(false);
             }
+        }
+
+        public void UpdateBotSteering()
+        {
+            BotOwner.Steering.LookToMovingDirection();
+            baseSteeringLogic.Update(BotOwner);
+        }
+
+        public void UpdateBotSteering(Vector3 point)
+        {
+            BotOwner.Steering.LookToPoint(point);
+            baseSteeringLogic.Update(BotOwner);
         }
 
         protected bool canUpdate()

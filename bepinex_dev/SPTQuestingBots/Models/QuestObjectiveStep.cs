@@ -41,7 +41,7 @@ namespace SPTQuestingBots.Models
         public int? StepNumber { get; set; } = null;
 
         [JsonIgnore]
-        public Switch SwitchObject { get; set; } = null;
+        public WorldInteractiveObject InteractiveObject { get; set; } = null;
 
         public QuestObjectiveStep()
         {
@@ -115,8 +115,8 @@ namespace SPTQuestingBots.Models
                 return true;
             }
 
-            SwitchObject = LocationController.FindSwitch(SwitchID);
-            return SwitchObject != null;
+            InteractiveObject = LocationController.FindSwitch(SwitchID);
+            return InteractiveObject != null;
         }
     }
 }

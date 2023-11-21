@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,6 +33,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public override void Update()
         {
             UpdateBotMovement(CanSprint);
+            UpdateBotSteering();
 
             // Don't allow expensive parts of this behavior (calculating a path to an objective) to run too often
             if (!canUpdate())
@@ -129,6 +131,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // Check if the bot is nearly at the end of its (incomplete) path
                 if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
                 {
+                    if (ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen())
+                    {
+                        LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + "...");
+                        return true;
+                    }
+
                     if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
                     {
                         LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
@@ -149,6 +157,24 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
             }
 
+            return true;
+        }
+
+        private bool tryFindLockedDoorToOpen()
+        {
+            Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
+            if (!lastPathPoint.HasValue)
+            {
+                return false;
+            }
+
+            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(lastPathPoint.Value, 25f);
+            if (!lockedDoors.Any())
+            {
+                return false;
+            }
+
+            ObjectiveManager.UnlockDoor(lockedDoors.First());
             return true;
         }
     }

@@ -30,6 +30,7 @@ namespace SPTQuestingBots.BotLogic.Follow
         public override void Update()
         {
             UpdateBotMovement(CanSprint);
+            UpdateBotSteering();
 
             // Don't allow expensive parts of this behavior (calculating a path to an objective) to run too often
             if (!canUpdate())

@@ -102,6 +102,7 @@
     <Compile Include="BotLogic\Follow\RegroupAction.cs" />
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
+    <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />

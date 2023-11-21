@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace SPTQuestingBots.Models
         public Quest QuestAssignment { get; private set; } = null;
         public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
+        public Door DoorToUnlock { get; private set; } = null;
         public DateTime? StartTime { get; private set; } = null;
         public DateTime? EndTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
@@ -98,6 +100,7 @@ namespace SPTQuestingBots.Models
             }
 
             QuestObjectiveStepAssignment = nextStep;
+            DoorToUnlock = null;
             EndTime = null;
             startInternal();
 
@@ -146,6 +149,23 @@ namespace SPTQuestingBots.Models
         public void Archive()
         {
             Status = JobAssignmentStatus.Archived;
+        }
+
+        public void SetDoorToUnlock(Door door)
+        {
+            DoorToUnlock = door;
+            HasCompletePath = true;
+        }
+
+        public void DoorIsUnlocked()
+        {
+            if (DoorToUnlock == null)
+            {
+                return;
+            }
+
+            DoorToUnlock = null;
+            HasCompletePath = true;
         }
 
         private void startInternal()

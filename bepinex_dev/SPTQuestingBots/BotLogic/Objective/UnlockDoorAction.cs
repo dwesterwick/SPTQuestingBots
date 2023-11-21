@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 using EFT.Interactive;
+using EFT;
 using SPTQuestingBots.Controllers;
-using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    public class ToggleSwitchAction : BehaviorExtensions.GoToPositionAbstractAction
+    public class UnlockDoorAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        public ToggleSwitchAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            
+
         }
 
         public override void Start()
@@ -45,7 +45,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (ObjectiveManager.GetCurrentQuestInteractiveObject() == null)
             {
-                LoggingController.LogError("Cannot toggle a null switch");
+                LoggingController.LogError("Cannot unlock a null door");
 
                 ObjectiveManager.FailObjective();
 
@@ -63,20 +63,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
-            if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Open)
+            if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState != EDoorState.Locked)
             {
-                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already open");
-
-                ObjectiveManager.CompleteObjective();
-
-                return;
-            }
-
-            if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Locked)
-            {
-                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is unavailable");
-
-                ObjectiveManager.TryChangeObjective();
+                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
 
                 return;
             }
@@ -95,13 +84,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
-            if (distanceToTargetPosition > 0.75f)
+            if (distanceToTargetPosition >= 0.5f)
             {
                 NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
                 if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
                 {
-                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
+                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
                     ObjectiveManager.FailObjective();
 
@@ -114,34 +103,23 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Shut)
-            {
-                toggleSwitch(ObjectiveManager.GetCurrentQuestInteractiveObject(), EInteractionType.Open);
-            }
-            else
-            {
-                LoggingController.LogWarning("Somebody is already interacting with switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
-            }
+            unlockDoor((Door)ObjectiveManager.GetCurrentQuestInteractiveObject(), EInteractionType.Unlock);
+            ObjectiveManager.DoorIsUnlocked();
+            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
             ObjectiveManager.CompleteObjective();
         }
 
-        private void toggleSwitch(EFT.Interactive.WorldInteractiveObject sw, EInteractionType interactionType)
+        private void unlockDoor(Door door, EInteractionType interactionType)
         {
             try
             {
-                if (sw == null)
+                if (door == null)
                 {
-                    throw new ArgumentNullException(nameof(sw));
+                    throw new ArgumentNullException(nameof(door));
                 }
 
-                Player player = BotOwner.GetPlayer;
-                if (player == null)
-                {
-                    throw new InvalidOperationException("Cannot get Player object from " + BotOwner.GetText());
-                }
-
-                player.MovementContext.ExecuteInteraction(sw, new InteractionResult(interactionType));
+                BotOwner.DoorOpener.Interact(door, interactionType);
             }
             catch (Exception e)
             {
