@@ -164,7 +164,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 case QuestAction.MoveToPosition:
                     if (objectiveManager.MustUnlockDoor)
                     {
-                        setNextAction(BotActionType.UnlockDoor, "UnlockDoor");
+                        setNextAction(BotActionType.UnlockDoor, "UnlockDoor (" + objectiveManager.GetCurrentQuestInteractiveObject().Id + ")");
                     }
                     else
                     {

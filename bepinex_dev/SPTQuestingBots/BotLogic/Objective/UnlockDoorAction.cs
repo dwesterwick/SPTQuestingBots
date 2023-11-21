@@ -13,6 +13,8 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     public class UnlockDoorAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private Door door = null;
+
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
 
@@ -23,6 +25,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             base.Start();
 
             BotOwner.PatrollingData.Pause();
+
+            door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
+            if (door == null)
+            {
+                LoggingController.LogError("Cannot unlock a null door");
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
         }
 
         public override void Stop()
@@ -43,29 +55,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (ObjectiveManager.GetCurrentQuestInteractiveObject() == null)
-            {
-                LoggingController.LogError("Cannot unlock a null door");
-
-                ObjectiveManager.FailObjective();
-
-                return;
-            }
-
-            if (!ObjectiveManager.Position.HasValue)
-            {
-                LoggingController.LogError("Cannot go to a null position");
-
-                ObjectiveManager.FailObjective();
-
-                return;
-            }
-
             ObjectiveManager.StartJobAssigment();
 
-            if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState != EDoorState.Locked)
+            if (door.DoorState != EDoorState.Locked)
             {
                 LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
+
+                ObjectiveManager.FailObjective();
 
                 return;
             }
@@ -83,12 +79,12 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // TO DO: Can this distance be reduced?
-            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
+            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, door.transform.position);
             if (distanceToTargetPosition >= 0.5f)
             {
-                NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
+                NavMeshPathStatus? pathStatus = RecalculatePath(door.transform.position);
 
-                if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
+                if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
                 {
                     LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
@@ -103,9 +99,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            unlockDoor((Door)ObjectiveManager.GetCurrentQuestInteractiveObject(), EInteractionType.Unlock);
+            unlockDoor(door, EInteractionType.Unlock);
             ObjectiveManager.DoorIsUnlocked();
-            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
+            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
 
             ObjectiveManager.CompleteObjective();
         }

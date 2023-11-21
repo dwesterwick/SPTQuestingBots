@@ -168,13 +168,15 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(lastPathPoint.Value, 25f);
+            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, 25f);
             if (!lockedDoors.Any())
             {
                 return false;
             }
 
-            ObjectiveManager.UnlockDoor(lockedDoors.First());
+            IEnumerable<Door> sortedLockedDoors = lockedDoors.OrderBy(d => d.transform.position);
+
+            ObjectiveManager.UnlockDoor(sortedLockedDoors.First());
             return true;
         }
     }
