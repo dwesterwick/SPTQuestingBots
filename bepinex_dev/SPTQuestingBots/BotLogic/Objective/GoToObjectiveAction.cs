@@ -110,7 +110,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            if (pathStatus.HasValue && (pathStatus.Value == NavMeshPathStatus.PathPartial))
+            if (pathStatus.Value == NavMeshPathStatus.PathPartial)
             {
                 float distanceToEndOfPath = float.NaN;
                 float distanceToObjective = float.NaN;
@@ -174,9 +174,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            IEnumerable<Door> sortedLockedDoors = lockedDoors.OrderBy(d => d.transform.position);
-
-            ObjectiveManager.UnlockDoor(sortedLockedDoors.First());
+            ObjectiveManager.UnlockDoor(lockedDoors.First());
             return true;
         }
     }

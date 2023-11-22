@@ -14,6 +14,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     public class UnlockDoorAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private Door door = null;
+        private Vector3? interactionPosition = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -30,6 +31,16 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (door == null)
             {
                 LoggingController.LogError("Cannot unlock a null door");
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
+
+            interactionPosition = getInteractionPosition(door);
+            if (interactionPosition == null)
+            {
+                LoggingController.LogError("Cannot find the appropriate interaction position for door " + door.Id);
 
                 ObjectiveManager.FailObjective();
 
@@ -59,7 +70,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (door.DoorState != EDoorState.Locked)
             {
-                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
+                LoggingController.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
 
                 ObjectiveManager.FailObjective();
 
@@ -68,7 +79,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (checkIfBotIsStuck())
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
+                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
 
                 if (ObjectiveManager.TryChangeObjective())
                 {
@@ -79,10 +90,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // TO DO: Can this distance be reduced?
-            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, door.transform.position);
+            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);
             if (distanceToTargetPosition >= 0.5f)
             {
-                NavMeshPathStatus? pathStatus = RecalculatePath(door.transform.position);
+                NavMeshPathStatus? pathStatus = RecalculatePath(interactionPosition.Value);
 
                 if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
                 {
@@ -126,6 +137,39 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 throw;
             }
+        }
+
+        private Vector3? getInteractionPosition(Door door)
+        {
+            float searchDistance = 0.75f;
+            Vector3[] possibleInteractionPositions = new Vector3[4]
+            {
+                door.transform.position + new Vector3(searchDistance, 0, 0),
+                door.transform.position - new Vector3(searchDistance, 0, 0),
+                door.transform.position + new Vector3(0, 0, searchDistance),
+                door.transform.position - new Vector3(0, 0, searchDistance)
+            };
+
+            foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
+            {
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    continue;
+                }
+
+                LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
+
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(BotOwner.Position, navMeshPosition.Value, NavMesh.AllAreas, path);
+
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    return navMeshPosition;
+                }
+            }
+
+            return null;
         }
     }
 }

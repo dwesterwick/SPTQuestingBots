@@ -39,6 +39,32 @@
     },
     {
         "repeatable": false,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "maxRaidET": 90,
+        "name": "Marked Room Rush",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 185.217819,
+                            "y": 5.831592,
+                            "z": 183.20871
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,

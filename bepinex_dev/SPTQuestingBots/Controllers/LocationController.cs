@@ -125,25 +125,25 @@ namespace SPTQuestingBots.Controllers
 
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance)
         {
-            List<Door> applicableDoors = new List<Door>();
+            Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
             foreach (Door door in lockedDoors.ToArray())
             {
                 if (door.DoorState != EDoorState.Locked)
                 {
                     LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
                     lockedDoors.Remove(door);
-                    continue;
                 }
 
-                if (Vector3.Distance(position, door.transform.position) > maxDistance)
+                float distance = Vector3.Distance(position, door.transform.position);
+                if (distance > maxDistance)
                 {
                     continue;
                 }
 
-                applicableDoors.Add(door);
+                lockedDoorsAndDistance.Add(door, distance);
             }
 
-            return applicableDoors;
+            return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
         public static SpawnPointParams[] GetAllValidSpawnPointParams()
