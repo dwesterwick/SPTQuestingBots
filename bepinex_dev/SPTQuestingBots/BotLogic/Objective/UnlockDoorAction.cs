@@ -89,7 +89,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 LoggingController.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
 
-                ObjectiveManager.FailObjective();
+                ObjectiveManager.DoorIsUnlocked();
 
                 return;
             }
@@ -110,6 +110,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                     restartStuckTimer();
                 }
 
+                return;
+            }
+
+            if (!ObjectiveManager.MustUnlockDoor)
+            {
                 return;
             }
 
@@ -162,8 +167,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             unlockDoor(door, keyComponent, EInteractionType.Unlock);
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
-
-            ObjectiveManager.CompleteObjective();
         }
 
         private Vector3? getInteractionPosition(Door door)
@@ -288,6 +291,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
+            }
+
+            if (item.Prefab.path.Length == 0)
+            {
+                throw new InvalidOperationException("The prefab path for " + item.LocalizedName() + " is empty");
             }
 
             bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));

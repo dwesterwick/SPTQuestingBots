@@ -132,6 +132,7 @@ namespace SPTQuestingBots.Controllers
                 {
                     LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
                     lockedDoors.Remove(door);
+                    continue;
                 }
 
                 float distance = Vector3.Distance(position, door.transform.position);
