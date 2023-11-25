@@ -190,14 +190,21 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 Item keyItem = Singleton<ItemFactory>.Instance.CreateItem(IDGenerator, door.KeyId, null);
 
-                ItemAddress targetLocation = botInventoryController.FindGridToPickUp(keyItem, botInventoryController);
-                if (targetLocation == null)
+                ItemContainerClass secureContainer = botInventoryController.Inventory.Equipment.GetSlot(EquipmentSlot.SecuredContainer).ContainedItem as ItemContainerClass;
+                ItemAddress locationForItem = secureContainer?.Grids?.FindLocationForItem(keyItem);
+                if (locationForItem == null)
                 {
-                    LoggingController.LogError("Cannot find inventory location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
+                    LoggingController.LogWarning("Cannot find secure-container location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
+
+                    locationForItem = botInventoryController.FindGridToPickUp(keyItem, botInventoryController);
+                }
+                if (locationForItem == null)
+                {
+                    LoggingController.LogError("Cannot find any location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
                     return false;
                 }
 
-                GStruct375<GClass2597> moveResult = GClass2585.Move(keyItem, targetLocation, botInventoryController, true);
+                GStruct375<GClass2597> moveResult = GClass2585.Move(keyItem, locationForItem, botInventoryController, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + keyItem.LocalizedName() + " to inventory of " + BotOwner.GetText());

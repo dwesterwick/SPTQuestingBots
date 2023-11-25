@@ -174,5 +174,130 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 10,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Engineer's Office",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 31.1152,
+                            "y": 8.210876,
+                            "z": 39.4699364
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 10,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Gate 0",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.6667824,
+                            "y": 1.300873,
+                            "z": 55.5726776
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 10,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Med Tent Gate",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -18.3804874,
+                            "y": 0.210918948,
+                            "z": -54.71151
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 10,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Cellars",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 73.16466,
+                            "y": -4.6014514,
+                            "z": -28.6016216
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "name": "Gate 3",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 56.4280052,
+                            "y": 0.227544457,
+                            "z": 56.4638138
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
