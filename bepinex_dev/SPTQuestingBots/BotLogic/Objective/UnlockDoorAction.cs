@@ -14,6 +14,7 @@ using EFT.InventoryLogic;
 using Aki.Reflection.Utils;
 using HarmonyLib;
 using System.Collections;
+using System.Threading;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -22,6 +23,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Door door = null;
         private Vector3? interactionPosition = null;
         private IResult keyGenerationResult = null;
+        private KeyComponent keyComponent = null;
+        private DependencyGraph<IEasyBundle>.GClass3114 bundleLoader = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -136,7 +139,27 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            unlockDoor(door, EInteractionType.Unlock);
+            if (keyComponent == null)
+            {
+                keyComponent = getKeyComponent();
+            }
+
+            if (bundleLoader == null)
+            {
+                LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                loadBundle(keyComponent.Item);
+
+                return;
+            }
+
+            if (!bundleLoader.Finished)
+            {
+                LoggingController.LogInfo("Waiting for bundle to load...");
+
+                return;
+            }
+
+            unlockDoor(door, keyComponent, EInteractionType.Unlock);
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
 
@@ -180,18 +203,35 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             try
             {
-                Type doorOpenerType = typeof(BotDoorOpener);
+                Type playerType = typeof(Player);
 
-                FieldInfo inventoryControllerField = doorOpenerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
                 InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
 
                 // Not sure if this should use false
                 MongoID IDGenerator = new MongoID(false);
 
                 Item keyItem = Singleton<ItemFactory>.Instance.CreateItem(IDGenerator, door.KeyId, null);
+                if (keyItem == null)
+                {
+                    LoggingController.LogError("Cannot create key for door " + door.Id + " for " + BotOwner.GetText());
+                    return false;
+                }
 
                 ItemContainerClass secureContainer = botInventoryController.Inventory.Equipment.GetSlot(EquipmentSlot.SecuredContainer).ContainedItem as ItemContainerClass;
-                ItemAddress locationForItem = secureContainer?.Grids?.FindLocationForItem(keyItem);
+
+                ItemAddress locationForItem = null;
+                foreach (GClass2318 secureContainerGrid in (secureContainer?.Grids ?? (new GClass2318[0])))
+                {
+                    LocationInGrid locationInGrid = secureContainerGrid.FindFreeSpace(keyItem);
+                    if (locationInGrid == null)
+                    {
+                        continue;
+                    }
+
+                    locationForItem = new GClass2580(secureContainerGrid, locationInGrid);
+                }
+
                 if (locationForItem == null)
                 {
                     LoggingController.LogWarning("Cannot find secure-container location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
@@ -204,7 +244,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return false;
                 }
 
-                GStruct375<GClass2597> moveResult = GClass2585.Move(keyItem, locationForItem, botInventoryController, true);
+                //GStruct375<GClass2597> moveResult = GClass2585.Move(keyItem, locationForItem, botInventoryController, true);
+                GStruct375<GClass2593> moveResult = GClass2585.Add(keyItem, locationForItem, botInventoryController, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + keyItem.LocalizedName() + " to inventory of " + BotOwner.GetText());
@@ -242,7 +283,35 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
-        private void unlockDoor(Door door, EInteractionType interactionType)
+        private void loadBundle(Item item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));
+        }
+
+        private KeyComponent getKeyComponent()
+        {
+            Type playerType = typeof(Player);
+
+            FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
+            InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
+
+            IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
+                .GetItemComponentsInChildren<KeyComponent>(false);
+
+            if (!matchingKeys.Any())
+            {
+                throw new InvalidOperationException(BotOwner.GetText() + " does not have a key for door " + door.Id);
+            }
+
+            return matchingKeys.First();
+        }
+
+        private void unlockDoor(Door door, KeyComponent key, EInteractionType interactionType)
         {
             try
             {
@@ -251,37 +320,30 @@ namespace SPTQuestingBots.BotLogic.Objective
                     throw new ArgumentNullException(nameof(door));
                 }
 
+                if (key == null)
+                {
+                    throw new ArgumentNullException(nameof(key));
+                }
+
                 //BotOwner.DoorOpener.Interact(door, interactionType);
 
                 Type doorOpenerType = typeof(BotDoorOpener);
 
-                FieldInfo interactingField = doorOpenerType.GetField("Interacting", BindingFlags.NonPublic | BindingFlags.Instance);
-                interactingField.SetValue(BotOwner.DoorOpener, true);
+                PropertyInfo interactingProperty = doorOpenerType.GetProperty("Interacting", BindingFlags.Public | BindingFlags.Instance);
+                interactingProperty.SetValue(BotOwner.DoorOpener, true);
 
-                FieldInfo Single_0Field = doorOpenerType.GetField("Single_0", BindingFlags.NonPublic | BindingFlags.Instance);
-                float Single_0 = (float)Single_0Field.GetValue(BotOwner.DoorOpener);
+                float _traversingEnd = Time.time + BotOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 
                 FieldInfo traversingEndField = doorOpenerType.GetField("_traversingEnd", BindingFlags.NonPublic | BindingFlags.Instance);
-                traversingEndField.SetValue(BotOwner.DoorOpener, Time.time + Single_0);
+                traversingEndField.SetValue(BotOwner.DoorOpener, _traversingEnd);
 
-                if (!BotOwner.GetPlayer.HasGamePlayerOwner)
+                GClass2761 unlockDoorInteractionResult = new GClass2761(key, null, true);
+                if (unlockDoorInteractionResult == null)
                 {
-                    throw new InvalidOperationException("Bot " + BotOwner.GetText() + " does not have a GamePlayerOwner");
+                    throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
                 }
 
-                FieldInfo inventoryControllerField = doorOpenerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-                InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
-
-                IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
-                    .GetItemComponentsInChildren<KeyComponent>(false);
-
-                if (!matchingKeys.Any())
-                {
-                    throw new InvalidOperationException(BotOwner.GetText() + " does not have a key for door " + door.Id);
-                }
-
-                GClass2761 unlockDoorInteractionResult = new GClass2761(matchingKeys.First(), null, true);
-
+                LoggingController.LogInfo(BotOwner.GetText() + " is unlocking door " + door.Id + "...");
                 BotOwner.GetPlayer.CurrentManagedState.StartDoorInteraction(door, unlockDoorInteractionResult, null);
             }
             catch (Exception e)

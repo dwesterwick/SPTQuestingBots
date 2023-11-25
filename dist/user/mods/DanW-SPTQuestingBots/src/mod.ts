@@ -193,13 +193,18 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
         if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
         {
-            this.commonUtils.logWarning("SWAG Detected; disabling initial PMC spawns");
+            this.commonUtils.logWarning("SWAG Detected. Disabling initial PMC spawns.");
             modConfig.initial_PMC_spawns.enabled = false;
         }
         if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
-            this.commonUtils.logWarning("MOAR Detected; disabling initial PMC spawns");
+            this.commonUtils.logWarning("MOAR Detected. Disabling initial PMC spawns.");
             modConfig.initial_PMC_spawns.enabled = false;
+        }
+
+        if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
+        {
+            this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
         }
 
         if (!modConfig.initial_PMC_spawns.enabled)
