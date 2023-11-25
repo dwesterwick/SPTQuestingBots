@@ -36,12 +36,6 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public override bool IsActive()
         {
-            float pauseRequestTime = getPauseRequestTime();
-            if (pauseRequestTime > 0)
-            {
-                return pauseLayer(pauseRequestTime);
-            }
-
             if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
             {
                 return previousState;
@@ -72,6 +66,13 @@ namespace SPTQuestingBots.BotLogic.Follow
             if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner))
             {
                 return updatePreviousState(false);
+            }
+
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
+            {
+                LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                return pauseLayer(pauseRequestTime);
             }
 
             // Only enable the layer if the bot is too far from the boss

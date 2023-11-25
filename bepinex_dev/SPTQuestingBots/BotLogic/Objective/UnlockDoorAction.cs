@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Threading;
+using Comfort.Common;
 using EFT.Interactive;
+using EFT.InventoryLogic;
 using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine.AI;
 using UnityEngine;
-using System.Reflection;
-using Comfort.Common;
-using EFT.InventoryLogic;
-using Aki.Reflection.Utils;
-using HarmonyLib;
-using System.Collections;
-using System.Threading;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -40,7 +37,19 @@ namespace SPTQuestingBots.BotLogic.Objective
             door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
             if (door == null)
             {
-                LoggingController.LogError("Cannot unlock a null door");
+                if (ObjectiveManager.MustUnlockDoor)
+                {
+                    LoggingController.LogError(BotOwner.GetText() + " cannot unlock a null door. InteractiveObject=" + (ObjectiveManager.GetCurrentQuestInteractiveObject()?.Id ?? "???"));
+
+                    ObjectiveManager.FailObjective();
+                }
+
+                return;
+            }
+
+            if (door.KeyId == "")
+            {
+                LoggingController.LogError("No valid key for door " + door.Id);
 
                 ObjectiveManager.FailObjective();
 
@@ -50,7 +59,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             interactionPosition = getInteractionPosition(door);
             if (interactionPosition == null)
             {
-                LoggingController.LogError("Cannot find the appropriate interaction position for door " + door.Id);
+                LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
 
                 ObjectiveManager.FailObjective();
 
@@ -86,6 +95,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
+            {
+                return;
+            }
+
+            if ((door == null) || !interactionPosition.HasValue)
             {
                 return;
             }
@@ -146,11 +160,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            /*if ((keyComponent == null) && (keyGenerationResult?.Succeed != true))
-            {
-                return;
-            }*/
-
             if (keyComponent == null)
             {
                 keyComponent = tryGetKeyComponent();
@@ -168,14 +177,18 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (!bundleLoader.Finished)
             {
-                LoggingController.LogInfo("Waiting for bundle to load...");
+                LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
 
                 return;
             }
 
             unlockDoor(door, keyComponent, EInteractionType.Unlock);
+            ObjectiveManager.PauseRequest = 3;
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
+
+            //LoggingController.LogInfo(BotOwner.GetText() + " will open door " + door.Id + "...");
+            //BotOwner.DoorOpener.Interact(door, EInteractionType.Open);
         }
 
         private Vector3? getInteractionPosition(Door door)

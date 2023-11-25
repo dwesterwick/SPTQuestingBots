@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
@@ -51,6 +52,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public override Action GetNextAction()
         {
+            //LoggingController.LogInfo(BotOwner.GetText() + " is swtiching from " + previousAction.ToString() + " to " + nextAction.ToString());
+
             previousAction = nextAction;
 
             switch (nextAction)

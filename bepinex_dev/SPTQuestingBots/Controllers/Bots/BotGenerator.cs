@@ -317,6 +317,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 System.Random random = new System.Random();
                 int botGroup = 1;
+                //while (botsGenerated < 1)
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
@@ -325,7 +326,6 @@ namespace SPTQuestingBots.Controllers.Bots
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
                     WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
-                    //spawnType = BotBrainHelpers.pmcSpawnTypes.First();
                     EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
                     // This causes a deadlock for some reason

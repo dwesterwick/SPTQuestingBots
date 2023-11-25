@@ -112,8 +112,20 @@ namespace SPTQuestingBots.Controllers
             Door[] allDoors = FindObjectsOfType<Door>();
             foreach (Door door in allDoors)
             {
-                if (door.DoorState != EDoorState.Locked)
+                if ((door.DoorState != EDoorState.Locked) || door.CanBeBreached)
                 {
+                    continue;
+                }
+
+                if (!door.Operatable)
+                {
+                    LoggingController.LogInfo("Door " + door.Id + " is inoperable");
+                    continue;
+                }
+
+                if (door.KeyId == "")
+                {
+                    LoggingController.LogInfo("Door " + door.Id + " has no valid key");
                     continue;
                 }
 
@@ -126,7 +138,7 @@ namespace SPTQuestingBots.Controllers
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
         {
             Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
-            foreach (Door door in areLockedDoorsUnlocked.Keys)
+            foreach (Door door in areLockedDoorsUnlocked.Keys.ToArray())
             {
                 if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
                 {

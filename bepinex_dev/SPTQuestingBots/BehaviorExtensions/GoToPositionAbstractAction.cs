@@ -54,8 +54,18 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
+            //Vector3 previousLastPoint = BotOwner.Mover.CurPathLastPoint;
+
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
-            return BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
+            NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
+
+            /*Vector3 newLastPoint = BotOwner.Mover.CurPathLastPoint;
+            if (!previousLastPoint.Equals(newLastPoint))
+            {
+                LoggingController.LogInfo(BotOwner.GetText() + " changed its final path position from " + previousLastPoint.ToString() + " to " + newLastPoint.ToString() + " to reach " + position.ToString());
+            }*/
+
+            return pathStatus;
         }
 
         protected void restartStuckTimer()
@@ -65,7 +75,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool checkIfBotIsStuck()
         {
-            return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, false);
+            return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, true);
         }
 
         protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)

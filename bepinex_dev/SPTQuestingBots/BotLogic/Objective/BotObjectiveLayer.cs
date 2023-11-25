@@ -38,12 +38,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override bool IsActive()
         {
-            float pauseRequestTime = getPauseRequestTime();
-            if (pauseRequestTime > 0)
-            {
-                return pauseLayer(pauseRequestTime);
-            }
-
             if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
             {
                 return previousState;
@@ -77,6 +71,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 Controllers.Bots.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
                 return updatePreviousState(false);
+            }
+
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
+            {
+                LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                return pauseLayer(pauseRequestTime);
             }
 
             // Check if the bot wants to use a mounted weapon
