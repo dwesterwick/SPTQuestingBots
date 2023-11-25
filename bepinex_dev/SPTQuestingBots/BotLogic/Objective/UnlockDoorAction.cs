@@ -57,6 +57,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            keyComponent = tryGetKeyComponent();
+            if (keyComponent != null)
+            {
+                LoggingController.LogInfo(BotOwner.GetText() + " already has key " + keyComponent.Item.LocalizedName() + " for door " + door.Id + "...");
+                return;
+            }
+
             if (!tryTransferKeyToBot())
             {
                 ObjectiveManager.FailObjective();
@@ -139,14 +146,16 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (keyGenerationResult?.Succeed != true)
+            /*if ((keyComponent == null) && (keyGenerationResult?.Succeed != true))
             {
                 return;
-            }
+            }*/
 
             if (keyComponent == null)
             {
-                keyComponent = getKeyComponent();
+                keyComponent = tryGetKeyComponent();
+
+                return;
             }
 
             if (bundleLoader == null)
@@ -301,7 +310,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));
         }
 
-        private KeyComponent getKeyComponent()
+        private KeyComponent tryGetKeyComponent()
         {
             Type playerType = typeof(Player);
 
@@ -309,11 +318,12 @@ namespace SPTQuestingBots.BotLogic.Objective
             InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
 
             IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
-                .GetItemComponentsInChildren<KeyComponent>(false);
+                .GetItemComponentsInChildren<KeyComponent>(false)
+                .Where(k => k.Template.KeyId == door.KeyId);
 
             if (!matchingKeys.Any())
             {
-                throw new InvalidOperationException(BotOwner.GetText() + " does not have a key for door " + door.Id);
+                return null;
             }
 
             return matchingKeys.First();
@@ -332,8 +342,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 {
                     throw new ArgumentNullException(nameof(key));
                 }
-
-                //BotOwner.DoorOpener.Interact(door, interactionType);
 
                 Type doorOpenerType = typeof(BotDoorOpener);
 

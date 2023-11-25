@@ -72,6 +72,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             tryMoveToObjective();
 
+            if (checkIfBotIsStuck(1, false))
+            {
+                openUnlockedDoors();
+            }
+
             if (checkIfBotIsStuck())
             {
                 if (!wasStuck)
@@ -176,6 +181,21 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.UnlockDoor(lockedDoors.First());
             return true;
+        }
+
+        private void openUnlockedDoors()
+        {
+            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(BotOwner.Position, 2f, false)
+                .Where(d => d.DoorState == EDoorState.Shut);
+
+            if (!lockedDoors.Any())
+            {
+                return;
+            }
+
+            LoggingController.LogInfo(BotOwner.GetText() + " will open door " + lockedDoors.First().Id + "...");
+
+            BotOwner.DoorOpener.Interact(lockedDoors.First(), EInteractionType.Open);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Controllers
         private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
-        private static List<Door> lockedDoors = new List<Door>();
+        private static Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
 
         private static void Clear()
         {
@@ -33,7 +33,7 @@ namespace SPTQuestingBots.Controllers
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
             switches.Clear();
-            lockedDoors.Clear();
+            areLockedDoorsUnlocked.Clear();
         }
 
         private void Update()
@@ -107,7 +107,7 @@ namespace SPTQuestingBots.Controllers
 
         public static void FindAllLockedDoors()
         {
-            lockedDoors.Clear();
+            areLockedDoorsUnlocked.Clear();
 
             Door[] allDoors = FindObjectsOfType<Door>();
             foreach (Door door in allDoors)
@@ -117,22 +117,21 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                lockedDoors.Add(door);
+                areLockedDoorsUnlocked.Add(door, false);
             }
 
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", lockedDoors.Select(s => s.Id)));
         }
 
-        public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance)
+        public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
         {
             Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
-            foreach (Door door in lockedDoors.ToArray())
+            foreach (Door door in areLockedDoorsUnlocked.Keys)
             {
-                if (door.DoorState != EDoorState.Locked)
+                if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
                 {
                     LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
-                    lockedDoors.Remove(door);
-                    continue;
+                    areLockedDoorsUnlocked[door] = true;
                 }
 
                 float distance = Vector3.Distance(position, door.transform.position);
@@ -141,7 +140,15 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                lockedDoorsAndDistance.Add(door, distance);
+                if (stillLocked && !areLockedDoorsUnlocked[door])
+                {
+                    lockedDoorsAndDistance.Add(door, distance);
+                }
+
+                if (!stillLocked && areLockedDoorsUnlocked[door])
+                {
+                    lockedDoorsAndDistance.Add(door, distance);
+                }
             }
 
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);

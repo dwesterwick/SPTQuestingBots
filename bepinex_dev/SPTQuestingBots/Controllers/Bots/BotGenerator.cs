@@ -325,6 +325,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
                     WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
+                    //spawnType = BotBrainHelpers.pmcSpawnTypes.First();
                     EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
                     // This causes a deadlock for some reason

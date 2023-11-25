@@ -65,6 +65,11 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool checkIfBotIsStuck()
         {
+            return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, false);
+        }
+
+        protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)
+        {
             if (!lastBotPosition.HasValue)
             {
                 lastBotPosition = BotOwner.Position;
@@ -79,9 +84,9 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
-            if (StuckTime > ConfigController.Config.Questing.StuckBotDetection.Time)
+            if (StuckTime > stuckTime)
             {
-                if (ConfigController.Config.Debug.ShowFailedPaths)
+                if (drawPath && ConfigController.Config.Debug.ShowFailedPaths)
                 {
                     drawBotPath(Color.red);
                 }
