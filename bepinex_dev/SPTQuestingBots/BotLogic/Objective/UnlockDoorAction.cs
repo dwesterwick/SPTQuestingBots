@@ -47,15 +47,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (door.KeyId == "")
-            {
-                LoggingController.LogError("No valid key for door " + door.Id);
-
-                ObjectiveManager.FailObjective();
-
-                return;
-            }
-
             interactionPosition = getInteractionPosition(door);
             if (interactionPosition == null)
             {
@@ -63,6 +54,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 ObjectiveManager.FailObjective();
 
+                return;
+            }
+
+            if (door.CanBeBreached && (door.KeyId == ""))
+            {
                 return;
             }
 
@@ -160,35 +156,43 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (keyComponent == null)
+            if (door.KeyId != "")
             {
-                keyComponent = tryGetKeyComponent();
+                if (keyComponent == null)
+                {
+                    keyComponent = tryGetKeyComponent();
 
-                return;
+                    return;
+                }
+
+                if (bundleLoader == null)
+                {
+                    LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                    loadBundle(keyComponent.Item);
+
+                    return;
+                }
+
+                if (!bundleLoader.Finished)
+                {
+                    LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
+
+                    return;
+                }
             }
 
-            if (bundleLoader == null)
+
+            EInteractionType interactionType = EInteractionType.Unlock;
+            if (door.CanBeBreached && (door.KeyId == ""))
             {
-                LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
-                loadBundle(keyComponent.Item);
-
-                return;
+                interactionType = EInteractionType.Breach;
             }
+            InteractionResult interactionResult = getDoorInteractionResult(interactionType, keyComponent);
 
-            if (!bundleLoader.Finished)
-            {
-                LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
-
-                return;
-            }
-
-            unlockDoor(door, keyComponent, EInteractionType.Unlock);
+            unlockDoor(door, interactionResult);
             ObjectiveManager.PauseRequest = 5;
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
-
-            //LoggingController.LogInfo(BotOwner.GetText() + " will open door " + door.Id + "...");
-            //BotOwner.DoorOpener.Interact(door, EInteractionType.Open);
         }
 
         private Vector3? getInteractionPosition(Door door)
@@ -342,18 +346,34 @@ namespace SPTQuestingBots.BotLogic.Objective
             return matchingKeys.First();
         }
 
-        private void unlockDoor(Door door, KeyComponent key, EInteractionType interactionType)
+        private InteractionResult getDoorInteractionResult(EInteractionType interactionType, KeyComponent key)
+        {
+            if (interactionType != EInteractionType.Unlock)
+            {
+                return new InteractionResult(interactionType);
+            }
+
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            GClass2761 unlockDoorInteractionResult = new GClass2761(key, null, true);
+            if (unlockDoorInteractionResult == null)
+            {
+                throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
+            }
+
+            return unlockDoorInteractionResult;
+        }
+
+        private void unlockDoor(Door door, InteractionResult interactionResult)
         {
             try
             {
                 if (door == null)
                 {
                     throw new ArgumentNullException(nameof(door));
-                }
-
-                if (key == null)
-                {
-                    throw new ArgumentNullException(nameof(key));
                 }
 
                 Type doorOpenerType = typeof(BotDoorOpener);
@@ -366,14 +386,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 FieldInfo traversingEndField = doorOpenerType.GetField("_traversingEnd", BindingFlags.NonPublic | BindingFlags.Instance);
                 traversingEndField.SetValue(BotOwner.DoorOpener, _traversingEnd);
 
-                GClass2761 unlockDoorInteractionResult = new GClass2761(key, null, true);
-                if (unlockDoorInteractionResult == null)
-                {
-                    throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
-                }
-
                 LoggingController.LogInfo(BotOwner.GetText() + " is unlocking door " + door.Id + "...");
-                BotOwner.GetPlayer.CurrentManagedState.StartDoorInteraction(door, unlockDoorInteractionResult, null);
+                BotOwner.GetPlayer.CurrentManagedState.StartDoorInteraction(door, interactionResult, null);
             }
             catch (Exception e)
             {

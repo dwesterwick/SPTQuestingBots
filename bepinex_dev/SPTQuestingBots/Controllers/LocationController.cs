@@ -112,7 +112,7 @@ namespace SPTQuestingBots.Controllers
             Door[] allDoors = FindObjectsOfType<Door>();
             foreach (Door door in allDoors)
             {
-                if ((door.DoorState != EDoorState.Locked) || door.CanBeBreached)
+                if (door.DoorState != EDoorState.Locked)
                 {
                     continue;
                 }
@@ -123,9 +123,9 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                if (door.KeyId == "")
+                if (!door.CanBeBreached && (door.KeyId == ""))
                 {
-                    LoggingController.LogInfo("Door " + door.Id + " has no valid key");
+                    LoggingController.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
                     continue;
                 }
 
