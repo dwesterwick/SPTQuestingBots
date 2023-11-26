@@ -44,6 +44,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             // This doesn't really need to be updated every frame
             CanSprint = QuestingBotsPluginConfig.SprintingEnabled.Value && ObjectiveManager.CanSprintToObjective();
 
+            if (ObjectiveManager.MustUnlockDoor)
+            {
+                return;
+            }
+
             if (!ObjectiveManager.IsQuestingAllowed || !ObjectiveManager.Position.HasValue)
             {
                 return;

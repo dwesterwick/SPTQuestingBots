@@ -57,14 +57,13 @@ namespace SPTQuestingBots.BotLogic.Doors
             if (ObjectiveManager.DoorToOpen.DoorState == EDoorState.Shut)
             {
                 LoggingController.LogInfo(BotOwner.GetText() + " will open door " + ObjectiveManager.DoorToOpen.Id + "...");
+                BotOwner.DoorOpener.Interact(ObjectiveManager.DoorToOpen, EInteractionType.Open);
             }
             else
             {
                 //LoggingController.LogInfo("Forcing door " + ObjectiveManager.DoorToOpen.Id + " to open...");
-                //ObjectiveManager.DoorToOpen.Interact(new InteractionResult(EInteractionType.Open));
+                ObjectiveManager.DoorToOpen.Interact(new InteractionResult(EInteractionType.Open));
             }
-
-            BotOwner.DoorOpener.Interact(ObjectiveManager.DoorToOpen, EInteractionType.Open);
         }
     }
 }

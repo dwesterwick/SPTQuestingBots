@@ -183,7 +183,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             unlockDoor(door, keyComponent, EInteractionType.Unlock);
-            ObjectiveManager.PauseRequest = 3;
+            ObjectiveManager.PauseRequest = 5;
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
 
