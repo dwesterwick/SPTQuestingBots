@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SPTQuestingBots.Configuration
 {
-    public class AllowedBotTypesForQuestingConfig
+    public class BotTypeConfig
     {
         [JsonProperty("scav")]
         public bool Scav { get; set; } = false;
@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("boss")]
         public bool Boss { get; set; } = false;
 
-        public AllowedBotTypesForQuestingConfig()
+        public BotTypeConfig()
         {
 
         }

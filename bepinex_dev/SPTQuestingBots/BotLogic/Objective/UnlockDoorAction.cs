@@ -137,7 +137,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);
-            if (distanceToTargetPosition >= 0.5f)
+            if (distanceToTargetPosition >= ConfigController.Config.Questing.UnlockingDoors.MaxDistanceToUnlock)
             {
                 NavMeshPathStatus? pathStatus = RecalculatePath(interactionPosition.Value);
 
@@ -190,14 +190,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             InteractionResult interactionResult = getDoorInteractionResult(interactionType, keyComponent);
 
             unlockDoor(door, interactionResult);
-            ObjectiveManager.PauseRequest = 5;
+            ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
             ObjectiveManager.DoorIsUnlocked();
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
         }
 
         private Vector3? getInteractionPosition(Door door)
         {
-            float searchDistance = 0.75f;
+            float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
             Vector3[] possibleInteractionPositions = new Vector3[4]
             {
                 door.transform.position + new Vector3(searchDistance, 0, 0),

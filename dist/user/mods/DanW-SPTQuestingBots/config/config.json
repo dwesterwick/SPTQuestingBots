@@ -9,6 +9,10 @@
 		"show_failed_paths": false
 	},
 	"max_calc_time_per_frame_ms": 5,
+	"open_initially_locked_doors": {
+		"enabled": true,
+		"search_radius": 2
+	},
 	"questing": {
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
@@ -28,6 +32,17 @@
 			"time": 20,
 			"max_count": 8,
 			"follower_break_time": 10
+		},
+		"unlocking_doors" : {
+			"enabled": {
+				"scav": false,
+				"pmc": true,
+				"boss": false
+			},
+			"search_radius": 25,
+			"max_distance_to_unlock": 0.5,
+			"door_approach_position_search_radius": 0.75,
+			"pause_time_after_unlocking": 5
 		},
 		"min_time_between_switching_objectives": 5,
 		"wait_time_before_planting": 1,

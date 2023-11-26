@@ -149,6 +149,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.
 * **debug.show_failed_paths**: If **true**, whenever a bot gets stuck its target path will be drawn in red. 
 * **max_calc_time_per_frame_ms**: The maximum amount of time (in milliseconds) the mod is allowed to run quest-generation and PMC-spawning procedures per frame. By default this is set to **5** ms, and delays of <15 ms are basically imperceptible. 
+* **open_initially_locked_doors.enabled**: Detect when bots are next to closed doors that were initially locked. When this happens, instruct bots to open those doors. This is a band-aid fix for a limitation in BSG's map design; they never intended for bots to be able to open those doors. **Do not change this unless you know what you're doing!**
+* **open_initially_locked_doors.search_radius**: The distance (in meters) to search around the bot for applicable doors. This is **2**m by default. **Do not change this unless you know what you're doing!**
 
 **Questing Options:**
 * **questing.enabled**: Completely enable or disable questing. 
@@ -163,6 +165,13 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.stuck_bot_detection.time**: The maximum time (in seconds) the bot is allowed to move less than **questing.stuck_bot_detection.distance** meters while questing or the mod will assume it's stuck. This is **20** s by default.
 * **questing.stuck_bot_detection.max_count**: The maximum number of times the bot can be stuck before questing is completely disabled for it. This counter is reset whenever the bot completes an objective. Whenever the bot is assumed to be stuck, a new objective will be selected for it to force it to generate a different path. This is **8** by default. 
 * **questing.stuck_bot_detection.follower_break_time**: If a boss follower is stuck while trying to follow it, it will take a break for this many seconds (**10** by default).
+* **questing.unlocking_doors.enabled.scav**: If questing Scavs are allowed to open locked doors. This is **false** by default.
+* **questing.unlocking_doors.enabled.pmc**: If questing PMC's are allowed to open locked doors. This is **true** by default.
+* **questing.unlocking_doors.enabled.boss**: If questing bosses are allowed to open locked doors. This is **false** by default.
+* **questing.unlocking_doors.search_radius**: The distance (in meters) to search around the bot for locked doors. This is **25**m by default.
+* **questing.unlocking_doors.max_distance_to_unlock**: The maximum distance (in meters) that a bot is allowed to be from a door in order to unlock it. This is **0.5**m by default. **Do not change this unless you know what you're doing!** 
+* **questing.unlocking_doors.door_approach_position_search_radius**: The distance (in meters) to search around doors for positions that are on the NavMesh and have complete paths to the bot's current location. This is **0.75**m by default. **Do not change this unless you know what you're doing!** 
+* **questing.unlocking_doors.pause_time_after_unlocking**: The time (in seconds) bots must wait after unlocking doors before they're allowed to continue with their quests. If this is too low, their pathing will not be updated and they may fail the quest they're currently doing. **Do not change this unless you know what you're doing!** 
 * **questing.min_time_between_switching_objectives**: The minimum amount of time (in seconds) the bot must wait after completing an objective before a new objective is selected for it. This is to allow it to check its surroundings, search for loot, etc. This is **5** s by default. 
 * **questing.wait_time_before_planting**: If the bot needs to plant an item at a quest location, this is the time (in seconds) it will wait between reaching its target location and beginning to "plant" the required item. This is **1** s by default. If this is much lower than **1** s, there may be strange behavior when the bot transitions into planting its item.
 * **questing.quest_generation.navmesh_search_distance_item**: The radius (in meters) around quest items (i.e. the bronze pocket watch) to seach for a valid NavMesh position to use for a target location for creating a quest objective for it. If this value is too low, bots may not be able to generate a complete path to the item. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **2** m by default. 
@@ -269,18 +278,19 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.4.0** (ETA: Late November)
+* **0.3.3** (ETA: Late November)
     * Add new quest-objective action: unlocking doors
+* **0.4.0** (ETA: Mid December)
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
-* **0.4.1** (ETA: Early December)
+* **0.4.1** (ETA: Late December)
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add new quest type: air-drop chaser
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.4.2** (ETA: Mid December)
+* **0.4.2** (ETA: Early January)
     * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.

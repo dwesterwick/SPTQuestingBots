@@ -109,7 +109,9 @@
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
+    <Compile Include="Configuration\OpenInitiallyLockedDoorsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
+    <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="BotLogic\LogicLayerMonitor.cs" />
     <Compile Include="BotLogic\Sleep\SleepingAction.cs" />
     <Compile Include="BotLogic\Sleep\SleepingLayer.cs" />
-    <Compile Include="Configuration\AllowedBotTypesForQuestingConfig.cs" />
+    <Compile Include="Configuration\BotTypeConfig.cs" />
     <Compile Include="Configuration\BotQuestingRequirementsConfig.cs" />
     <Compile Include="Configuration\BreakForLootingConfig.cs" />
     <Compile Include="Configuration\LoggingPath.cs" />

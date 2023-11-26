@@ -22,13 +22,16 @@ namespace SPTQuestingBots.Configuration
         public float QuestSelectionTimeout { get; set; } = 2000;
 
         [JsonProperty("allowed_bot_types_for_questing")]
-        public AllowedBotTypesForQuestingConfig AllowedBotTypesForQuesting { get; set; } = new AllowedBotTypesForQuestingConfig();
+        public BotTypeConfig AllowedBotTypesForQuesting { get; set; } = new BotTypeConfig();
 
         [JsonProperty("search_time_after_combat")]
         public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
 
         [JsonProperty("stuck_bot_detection")]
         public StuckBotDetectionConfig StuckBotDetection { get; set; } = new StuckBotDetectionConfig();
+
+        [JsonProperty("unlocking_doors")]
+        public UnlockingDoorsConfig UnlockingDoors { get; set; } = new UnlockingDoorsConfig();
 
         [JsonProperty("min_time_between_switching_objectives")]
         public float MinTimeBetweenSwitchingObjectives { get; set; } = 5;

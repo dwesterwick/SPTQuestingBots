@@ -18,6 +18,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_calc_time_per_frame_ms")]
         public float MaxCalcTimePerFrame { get; set; } = 5;
 
+        [JsonProperty("open_initially_locked_doors")]
+        public OpenInitiallyLockedDoorsConfig OpenInitiallyLockedDoors { get; set; } = new OpenInitiallyLockedDoorsConfig();
+
         [JsonProperty("questing")]
         public QuestingConfig Questing { get; set; } = new QuestingConfig();
 

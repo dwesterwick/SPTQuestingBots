@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -142,17 +143,16 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // Check if the bot is nearly at the end of its (incomplete) path
                 if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
                 {
-                    if (ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen())
+
+                    if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
                     {
+                        bool foundDoor = tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
                         Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
-                        if (door != null)
+
+                        if (foundDoor && (door != null))
                         {
                             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
                             return true;
-                        }
-                        else
-                        {
-                            LoggingController.LogError("Door assigned for " + BotOwner.GetText() + " to unlock is null");
                         }
                     }
 
@@ -179,15 +179,31 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
-        private bool tryFindLockedDoorToOpen()
+        private bool isAllowedToUnlockDoors()
         {
-            Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
-            if (!lastPathPoint.HasValue)
+            BotType botType = BotRegistrationManager.GetBotType(BotOwner);
+
+            if ((botType == BotType.PMC) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PMC)
             {
-                return false;
+                return true;
             }
 
-            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, 25f);
+            if ((botType == BotType.Scav) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Scav)
+            {
+                return true;
+            }
+
+            if ((botType == BotType.Boss) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Boss)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool tryFindLockedDoorToOpen(float searchDistance)
+        {
+            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
             if (!lockedDoors.Any())
             {
                 return false;

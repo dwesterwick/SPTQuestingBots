@@ -63,7 +63,9 @@ namespace SPTQuestingBots.BotLogic.Doors
 
         private Door tryFindNearbyUnlockedDoor()
         {
-            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(BotOwner.Position, 2f, false)
+            float searchRadius = ConfigController.Config.OpenInitiallyLockedDoors.SearchRadius;
+
+            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(BotOwner.Position, searchRadius, false)
                 .Where(d => d.DoorState == EDoorState.Shut);
 
             if (!lockedDoors.Any())
