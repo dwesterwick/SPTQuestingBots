@@ -35,9 +35,9 @@
 		},
 		"unlocking_doors" : {
 			"enabled": {
-				"scav": false,
+				"scav": true,
 				"pmc": true,
-				"boss": false
+				"boss": true
 			},
 			"search_radius": 25,
 			"max_distance_to_unlock": 0.5,

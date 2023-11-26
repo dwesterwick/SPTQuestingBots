@@ -165,9 +165,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.stuck_bot_detection.time**: The maximum time (in seconds) the bot is allowed to move less than **questing.stuck_bot_detection.distance** meters while questing or the mod will assume it's stuck. This is **20** s by default.
 * **questing.stuck_bot_detection.max_count**: The maximum number of times the bot can be stuck before questing is completely disabled for it. This counter is reset whenever the bot completes an objective. Whenever the bot is assumed to be stuck, a new objective will be selected for it to force it to generate a different path. This is **8** by default. 
 * **questing.stuck_bot_detection.follower_break_time**: If a boss follower is stuck while trying to follow it, it will take a break for this many seconds (**10** by default).
-* **questing.unlocking_doors.enabled.scav**: If questing Scavs are allowed to open locked doors. This is **false** by default.
+* **questing.unlocking_doors.enabled.scav**: If questing Scavs are allowed to open locked doors. This is **true** by default.
 * **questing.unlocking_doors.enabled.pmc**: If questing PMC's are allowed to open locked doors. This is **true** by default.
-* **questing.unlocking_doors.enabled.boss**: If questing bosses are allowed to open locked doors. This is **false** by default.
+* **questing.unlocking_doors.enabled.boss**: If questing bosses are allowed to open locked doors. This is **true** by default.
 * **questing.unlocking_doors.search_radius**: The distance (in meters) to search around the bot for locked doors. This is **25**m by default.
 * **questing.unlocking_doors.max_distance_to_unlock**: The maximum distance (in meters) that a bot is allowed to be from a door in order to unlock it. This is **0.5**m by default. **Do not change this unless you know what you're doing!** 
 * **questing.unlocking_doors.door_approach_position_search_radius**: The distance (in meters) to search around doors for positions that are on the NavMesh and have complete paths to the bot's current location. This is **0.75**m by default. **Do not change this unless you know what you're doing!** 
