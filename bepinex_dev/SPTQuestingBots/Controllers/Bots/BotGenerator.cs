@@ -317,8 +317,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 System.Random random = new System.Random();
                 int botGroup = 1;
-                while (botsGenerated < 1)
-                //while (botsGenerated < totalCount)
+                //while (botsGenerated < 1)
+                while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
                     int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.BotsPerGroupDistribution, random.NextDouble()));

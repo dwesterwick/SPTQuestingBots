@@ -57,7 +57,7 @@ namespace SPTQuestingBots.BotLogic.Doors
                 return updatePreviousState(false);
             }
 
-            setNextAction(BehaviorExtensions.BotActionType.OpenDoor, "OpenDoor");
+            setNextAction(BehaviorExtensions.BotActionType.OpenDoor, "OpenDoor (" + objectiveManager.DoorToOpen.Id + ")");
             return updatePreviousState(true);
         }
 
