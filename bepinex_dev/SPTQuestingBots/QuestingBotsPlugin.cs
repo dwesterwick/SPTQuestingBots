@@ -81,6 +81,9 @@ namespace SPTQuestingBots
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), 99);
 
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for opening doors: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Doors.DoorOpenerLayer), allBrains.ToStringList(), 30);
+
             if (!ConfigController.Config.Questing.Enabled)
             {
                 return;

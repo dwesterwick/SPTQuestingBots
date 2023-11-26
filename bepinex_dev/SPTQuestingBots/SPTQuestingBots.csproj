@@ -94,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviorExtensions\CustomLayerForQuesting.cs" />
+    <Compile Include="BotLogic\Doors\DoorOpenerLayer.cs" />
+    <Compile Include="BotLogic\Doors\OpenDoorAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindAbstractSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanQuestSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanSprintToObjectiveSensor.cs" />

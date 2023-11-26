@@ -72,11 +72,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             tryMoveToObjective();
 
-            if (checkIfBotIsStuck(1, false))
-            {
-                openUnlockedDoors();
-            }
-
             if (checkIfBotIsStuck())
             {
                 if (!wasStuck)
@@ -103,6 +98,12 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Don't complete or fail the objective step except for the action type "MoveToPosition"
             if (ObjectiveManager.CurrentQuestAction != Models.QuestAction.MoveToPosition)
+            {
+                return true;
+            }
+
+            string layerName = BotOwner.Brain.ActiveLayerName() ?? "null";
+            if (layerName != "BotObjectiveLayer")
             {
                 return true;
             }
@@ -150,25 +151,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                         }
                     }
 
-                    if (ObjectiveManager.MustOpenDoor)
-                    {
-                        Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
-                        if (door != null)
-                        {
-                            if (door.DoorState == EDoorState.Open)
-                            {
-                                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has opened door " + door.Id);
-                                ObjectiveManager.DoorIsOpened();
-                            }
-
-                            return true;
-                        }
-                        else
-                        {
-                            LoggingController.LogError("Door assigned for " + BotOwner.GetText() + " to open is null");
-                        }
-                    }
-
                     if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
                     {
                         LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
@@ -208,30 +190,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.UnlockDoor(lockedDoors.First());
             return true;
-        }
-
-        private void openUnlockedDoors()
-        {
-            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(BotOwner.Position, 2f, false)
-                .Where(d => (d.DoorState == EDoorState.Shut) || (d.DoorState == EDoorState.Interacting));
-
-            if (!lockedDoors.Any())
-            {
-                return;
-            }
-
-            Door selectedDoor = lockedDoors.First();
-            if (selectedDoor.DoorState == EDoorState.Shut)
-            {
-                LoggingController.LogInfo(BotOwner.GetText() + " will open door " + selectedDoor.Id + "...");
-                BotOwner.DoorOpener.Interact(selectedDoor, EInteractionType.Open);
-                ObjectiveManager.PauseRequest = 2;
-            }
-            else
-            {
-                LoggingController.LogInfo("Forcing door " + selectedDoor.Id + " to open...");
-                selectedDoor.Interact(new InteractionResult(EInteractionType.Open));
-            }
         }
     }
 }

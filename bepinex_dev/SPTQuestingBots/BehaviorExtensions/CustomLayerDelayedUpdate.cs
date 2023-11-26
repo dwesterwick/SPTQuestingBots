@@ -20,7 +20,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         Regroup,
         Sleep,
         ToggleSwitch,
-        UnlockDoor
+        UnlockDoor,
+        OpenDoor
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -66,6 +67,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);
                 case BotActionType.ToggleSwitch: return new Action(typeof(BotLogic.Objective.ToggleSwitchAction), actionReason);
                 case BotActionType.UnlockDoor: return new Action(typeof(BotLogic.Objective.UnlockDoorAction), actionReason);
+                case BotActionType.OpenDoor: return new Action(typeof(BotLogic.Doors.OpenDoorAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

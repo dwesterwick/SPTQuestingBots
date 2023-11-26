@@ -31,7 +31,6 @@ namespace SPTQuestingBots.Models
         public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
         public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
         public Door DoorToUnlock { get; private set; } = null;
-        public Door DoorToOpen { get; private set; } = null;
         public DateTime? StartTime { get; private set; } = null;
         public DateTime? EndTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
@@ -102,7 +101,6 @@ namespace SPTQuestingBots.Models
 
             QuestObjectiveStepAssignment = nextStep;
             DoorToUnlock = null;
-            DoorToOpen = null;
             EndTime = null;
             startInternal();
 
@@ -156,7 +154,6 @@ namespace SPTQuestingBots.Models
         public void SetDoorToUnlock(Door door)
         {
             DoorToUnlock = door;
-            DoorToOpen = door;
             HasCompletePath = true;
         }
 
@@ -169,11 +166,6 @@ namespace SPTQuestingBots.Models
 
             DoorToUnlock = null;
             HasCompletePath = true;
-        }
-
-        public void DoorIsOpened()
-        {
-            DoorToOpen = null;
         }
 
         private void startInternal()

@@ -21,6 +21,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public int StuckCount { get; set; } = 0;
         public float PauseRequest { get; set; } = 0;
         public BotMonitor BotMonitor { get; private set; } = null;
+        public EFT.Interactive.Door DoorToOpen { get; set; } = null;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;
@@ -30,7 +31,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public bool MustUnlockDoor => assignment?.DoorToUnlock != null;
-        public bool MustOpenDoor => assignment?.DoorToOpen != null;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
         
@@ -234,11 +234,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             assignment.DoorIsUnlocked();
         }
 
-        public void DoorIsOpened()
-        {
-            assignment.DoorIsOpened();
-        }
-
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
@@ -274,11 +269,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsAllowedToTakeABreak()
         {
-            if (MustOpenDoor)
-            {
-                return false;
-            }
-
             if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
             {
                 return false;
@@ -297,11 +287,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (MustUnlockDoor)
             {
                 return assignment?.DoorToUnlock;
-            }
-
-            if (MustOpenDoor)
-            {
-                return assignment?.DoorToOpen;
             }
 
             return assignment?.QuestObjectiveStepAssignment?.InteractiveObject;
