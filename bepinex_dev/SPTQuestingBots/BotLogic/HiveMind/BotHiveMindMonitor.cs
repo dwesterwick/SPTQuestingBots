@@ -300,7 +300,8 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             if (!botFollowers.ContainsKey(boss))
             {
-                throw new InvalidOperationException("Boss " + boss.GetText() + " has not been added to the follower dictionary");
+                //throw new InvalidOperationException("Boss " + boss.GetText() + " has not been added to the follower dictionary");
+                botFollowers.Add(boss, new List<BotOwner>());
             }
 
             if (!botFollowers[boss].Contains(bot))

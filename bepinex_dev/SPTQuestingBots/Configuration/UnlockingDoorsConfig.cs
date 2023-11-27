@@ -21,8 +21,14 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("door_approach_position_search_radius")]
         public float DoorApproachPositionSearchRadius { get; set; } = 0.75f;
 
+        [JsonProperty("door_approach_position_search_offset")]
+        public float DoorApproachPositionSearchOffset { get; set; } = -0.5f;
+
         [JsonProperty("pause_time_after_unlocking")]
         public float PauseTimeAfterUnlocking { get; set; } = 5;
+
+        [JsonProperty("default_chance_of_bots_having_keys")]
+        public float DefaultChanceOfBotsHavingKeys { get; set; } = 25;
 
         public UnlockingDoorsConfig()
         {

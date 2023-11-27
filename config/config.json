@@ -6,7 +6,8 @@
 		"free_labs_access": false,
 		"always_spawn_pmcs": false,
 		"show_zone_outlines": false,
-		"show_failed_paths": false
+		"show_failed_paths": false,
+		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"open_initially_locked_doors": {
@@ -42,14 +43,17 @@
 			"search_radius": 25,
 			"max_distance_to_unlock": 0.5,
 			"door_approach_position_search_radius": 0.75,
-			"pause_time_after_unlocking": 5
+			"door_approach_position_search_offset": -0.5,
+			"pause_time_after_unlocking": 5,
+			"default_chance_of_bots_having_keys": 25
 		},
 		"min_time_between_switching_objectives": 5,
 		"wait_time_before_planting": 1,
 		"quest_generation": {
-			"navmesh_search_distance_item": 2,
-			"navmesh_search_distance_zone": 2,
-			"navmesh_search_distance_spawn": 2
+			"navmesh_search_distance_item": 1.5,
+			"navmesh_search_distance_zone": 1.5,
+			"navmesh_search_distance_spawn": 1.5,
+			"navmesh_search_distance_doors": 0.75
 		},
 		"bot_search_distances": {
 			"objective_reached_ideal": 0.5,
@@ -93,6 +97,7 @@
 				"priority": 15,
 				"chance": 50,
 				"max_bots_per_quest": 4,
+				"chanceOfHavingKeys": 50,
 				"level_range": [
 					[0, 99],
 					[1, 8],

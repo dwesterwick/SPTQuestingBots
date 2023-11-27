@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("show_failed_paths")]
         public bool ShowFailedPaths { get; set; } = false;
 
+        [JsonProperty("show_door_interaction_test_points")]
+        public bool ShowDoorInteractionTestPoints { get; set; } = false;
+
         public DebugConfig()
         {
 

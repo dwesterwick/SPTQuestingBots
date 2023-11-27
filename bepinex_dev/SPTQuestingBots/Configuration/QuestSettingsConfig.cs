@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace SPTQuestingBots.Configuration
 
         [JsonProperty("max_raid_ET")]
         public float MaxRaidET { get; set; } = 999;
+
+        [JsonProperty("chanceOfHavingKeys")]
+        public float ChanceOfHavingKeys { get; set; } = 25;
 
         [JsonProperty("level_range")]
         public double[][] LevelRange { get; set; } = new double[0][];

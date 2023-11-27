@@ -37,6 +37,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("switchID")]
         public string SwitchID { get; set; } = "";
 
+        [JsonProperty("chanceOfHavingKey")]
+        public float ChanceOfHavingKey { get; set; } = ConfigController.Config.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
+
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;
 

@@ -117,8 +117,11 @@ namespace SPTQuestingBots.Controllers.Bots
                 // Create quest objectives for all matching quest items found in the map
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
+                // Update the chance that bots will have keys for EFT quests
+                yield return BotJobAssignmentFactory.ProcessAllQuests(updateChancesOfBotsHavingKeys, ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys);
+
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
-                Quest spawnPointQuest = CreateSpawnPointQuest();
+                Quest spawnPointQuest = createSpawnPointQuest();
                 if (spawnPointQuest != null)
                 {
                     BotJobAssignmentFactory.AddQuest(spawnPointQuest);
@@ -129,7 +132,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 // Create a quest where initial PMC's can run to your spawn point (not directly to you). 
-                Quest spawnRushQuest = CreateSpawnRushQuest();
+                Quest spawnRushQuest = createSpawnRushQuest();
                 if (spawnRushQuest != null)
                 {
                     BotJobAssignmentFactory.AddQuest(spawnRushQuest);
@@ -559,7 +562,18 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        public static Models.Quest CreateSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        private static void updateChancesOfBotsHavingKeys(Models.Quest quest, float chance)
+        {
+            foreach (QuestObjective objective in quest.AllObjectives)
+            {
+                foreach (QuestObjectiveStep step in objective.AllSteps)
+                {
+                    step.ChanceOfHavingKey = chance;
+                }
+            }
+        }
+
+        private static Models.Quest createSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
             // Ensure the map has spawn points
             IEnumerable<SpawnPointParams> eligibleSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
@@ -590,7 +604,7 @@ namespace SPTQuestingBots.Controllers.Bots
             return quest;
         }
 
-        public static Models.Quest CreateSpawnRushQuest()
+        private static Models.Quest createSpawnRushQuest()
         {
             SpawnPointParams? playerSpawnPoint = LocationController.GetPlayerSpawnPoint();
             if (!playerSpawnPoint.HasValue)

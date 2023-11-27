@@ -140,9 +140,14 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected void outlinePosition(Vector3 position, Color color)
         {
+            outlinePosition(position, color, 0.5f);
+        }
+
+        protected void outlinePosition(Vector3 position, Color color, float radius)
+        {
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
 
-            Vector3[] positionOutlinePoints = PathRender.GetSpherePoints(position, 0.5f, 10);
+            Vector3[] positionOutlinePoints = PathRender.GetSpherePoints(position, radius, 10);
             PathVisualizationData positionOutline = new PathVisualizationData(pathName, positionOutlinePoints, color);
             PathRender.AddOrUpdatePath(positionOutline);
         }

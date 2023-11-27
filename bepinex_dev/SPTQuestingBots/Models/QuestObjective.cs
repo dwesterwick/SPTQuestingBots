@@ -31,6 +31,7 @@ namespace SPTQuestingBots.Models
         [JsonProperty("steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
 
+        public ReadOnlyCollection<QuestObjectiveStep> AllSteps => new ReadOnlyCollection<QuestObjectiveStep>(questObjectiveSteps);
         public int StepCount => questObjectiveSteps.Length;
 
         public QuestObjective()

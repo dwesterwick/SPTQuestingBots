@@ -69,8 +69,20 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            System.Random random = new System.Random();
+            if (random.Next(1, 100) <= ObjectiveManager.ChanceOfHavingKey)
+            {
+                LoggingController.LogInfo(BotOwner.GetText() + " does not have the key for door " + door.Id + ". Selecting another objective...");
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
+
             if (!tryTransferKeyToBot())
             {
+                LoggingController.LogError("Could not transfer key for door " + door.Id + " to " + BotOwner.GetText());
+
                 ObjectiveManager.FailObjective();
 
                 return;
@@ -198,19 +210,28 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? getInteractionPosition(Door door)
         {
             float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+            float searchOffset = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
+
             Vector3[] possibleInteractionPositions = new Vector3[4]
             {
-                door.transform.position + new Vector3(searchDistance, 0, 0),
-                door.transform.position - new Vector3(searchDistance, 0, 0),
-                door.transform.position + new Vector3(0, 0, searchDistance),
-                door.transform.position - new Vector3(0, 0, searchDistance)
+                door.transform.position + new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
+                door.transform.position - new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
+                door.transform.position + new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0),
+                door.transform.position - new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0)
             };
 
             foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
             {
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                 if (!navMeshPosition.HasValue)
                 {
+                    LoggingController.LogInfo(BotOwner.GetText() + " cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
+
+                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                    {
+                        outlinePosition(possibleInteractionPosition, Color.grey, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                    }
+
                     continue;
                 }
 
@@ -221,7 +242,17 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 if (path.status == NavMeshPathStatus.PathComplete)
                 {
+                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                    {
+                        outlinePosition(navMeshPosition.Value, Color.green);
+                    }
+
                     return navMeshPosition;
+                }
+
+                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                {
+                    outlinePosition(navMeshPosition.Value, Color.white);
                 }
             }
 

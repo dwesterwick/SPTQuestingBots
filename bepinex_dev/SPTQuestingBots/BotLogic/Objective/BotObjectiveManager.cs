@@ -33,7 +33,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool MustUnlockDoor => assignment?.DoorToUnlock != null;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.QuestObjectiveStepAssignment?.MinElapsedTime ?? 0;
-        
+        public float ChanceOfHavingKey => assignment?.QuestObjectiveStepAssignment?.ChanceOfHavingKey ?? 0;
+
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
