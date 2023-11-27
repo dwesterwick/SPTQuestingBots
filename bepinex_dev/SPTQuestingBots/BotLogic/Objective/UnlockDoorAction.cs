@@ -294,37 +294,42 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return false;
                 }
 
-                ItemContainerClass secureContainer = null;
+                List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
                 if (BotRegistrationManager.IsBotAPMC(BotOwner))
                 {
-                    secureContainer = botInventoryController.Inventory.Equipment.GetSlot(EquipmentSlot.SecuredContainer).ContainedItem as ItemContainerClass;
+                    possibleSlots.Add(EquipmentSlot.SecuredContainer);
                 }
+                possibleSlots.AddRange(new EquipmentSlot[] { EquipmentSlot.Backpack, EquipmentSlot.TacticalVest, EquipmentSlot.ArmorVest, EquipmentSlot.Pockets });
 
                 ItemAddress locationForItem = null;
-                foreach (GClass2318 secureContainerGrid in (secureContainer?.Grids ?? (new GClass2318[0])))
+                foreach (EquipmentSlot slot in possibleSlots)
                 {
-                    LocationInGrid locationInGrid = secureContainerGrid.FindFreeSpace(keyItem);
-                    if (locationInGrid == null)
+                    ItemContainerClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as ItemContainerClass;
+
+                    foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
                     {
-                        continue;
+                        LocationInGrid locationInGrid = grid.FindFreeSpace(keyItem);
+                        if (locationInGrid == null)
+                        {
+                            continue;
+                        }
+
+                        locationForItem = new GClass2580(grid, locationInGrid);
                     }
 
-                    locationForItem = new GClass2580(secureContainerGrid, locationInGrid);
+                    if (locationForItem != null)
+                    {
+                        LoggingController.LogInfo(BotOwner.GetText() + " will receive key " + keyItem.LocalizedName() + " in its " + slot.ToString() + "...");
+                        break;
+                    }
                 }
 
-                if (locationForItem == null)
-                {
-                    LoggingController.LogWarning("Cannot find secure-container location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
-
-                    locationForItem = botInventoryController.FindGridToPickUp(keyItem, botInventoryController);
-                }
                 if (locationForItem == null)
                 {
                     LoggingController.LogError("Cannot find any location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
                     return false;
                 }
 
-                //GStruct375<GClass2597> moveResult = GClass2585.Move(keyItem, locationForItem, botInventoryController, true);
                 GStruct375<GClass2593> moveResult = GClass2585.Add(keyItem, locationForItem, botInventoryController, true);
                 if (!moveResult.Succeeded)
                 {
