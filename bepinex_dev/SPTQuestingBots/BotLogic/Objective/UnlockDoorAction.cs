@@ -12,6 +12,7 @@ using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine.AI;
 using UnityEngine;
+using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -220,6 +221,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 door.transform.position - new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0)
             };
 
+            Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
+
             foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
             {
                 Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
@@ -229,7 +232,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                     if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                     {
-                        outlinePosition(possibleInteractionPosition, Color.grey, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                        outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                     }
 
                     continue;
@@ -242,18 +245,31 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 if (path.status == NavMeshPathStatus.PathComplete)
                 {
-                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
-                    {
-                        outlinePosition(navMeshPosition.Value, Color.green);
-                    }
-
-                    return navMeshPosition;
+                    validPositions.Add(navMeshPosition.Value, Vector3.Distance(navMeshPosition.Value, door.transform.position));
+                    continue;
                 }
 
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
-                    outlinePosition(navMeshPosition.Value, Color.white);
+                    outlinePosition(navMeshPosition.Value, Color.yellow);
                 }
+            }
+
+            if (validPositions.Count > 0)
+            {
+                IEnumerable<Vector3> orderedPostions = validPositions.OrderBy(p => p.Value).Select(p => p.Key);
+
+                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                {
+                    outlinePosition(orderedPostions.First(), Color.green);
+
+                    foreach(Vector3 alternatePosition in orderedPostions.Skip(1))
+                    {
+                        outlinePosition(alternatePosition, Color.magenta);
+                    }
+                }
+
+                return orderedPostions.First();
             }
 
             return null;
@@ -278,7 +294,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return false;
                 }
 
-                ItemContainerClass secureContainer = botInventoryController.Inventory.Equipment.GetSlot(EquipmentSlot.SecuredContainer).ContainedItem as ItemContainerClass;
+                ItemContainerClass secureContainer = null;
+                if (BotRegistrationManager.IsBotAPMC(BotOwner))
+                {
+                    secureContainer = botInventoryController.Inventory.Equipment.GetSlot(EquipmentSlot.SecuredContainer).ContainedItem as ItemContainerClass;
+                }
 
                 ItemAddress locationForItem = null;
                 foreach (GClass2318 secureContainerGrid in (secureContainer?.Grids ?? (new GClass2318[0])))

@@ -143,16 +143,18 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // Check if the bot is nearly at the end of its (incomplete) path
                 if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
                 {
-
-                    if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
+                    if (missingDistance <= ConfigController.Config.Questing.UnlockingDoors.SearchRadius)
                     {
-                        bool foundDoor = tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
-                        Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
-
-                        if (foundDoor && (door != null))
+                        if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
                         {
-                            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
-                            return true;
+                            bool foundDoor = tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
+                            Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
+
+                            if (foundDoor && (door != null))
+                            {
+                                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
+                                return true;
+                            }
                         }
                     }
 
