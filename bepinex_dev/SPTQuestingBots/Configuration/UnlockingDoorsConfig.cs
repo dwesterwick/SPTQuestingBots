@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("pause_time_after_unlocking")]
         public float PauseTimeAfterUnlocking { get; set; } = 5;
 
+        [JsonProperty("debounce_time")]
+        public float DebounceTime { get; set; } = 1;
+
         [JsonProperty("default_chance_of_bots_having_keys")]
         public float DefaultChanceOfBotsHavingKeys { get; set; } = 25;
 

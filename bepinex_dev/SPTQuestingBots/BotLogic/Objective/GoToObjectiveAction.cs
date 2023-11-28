@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ namespace SPTQuestingBots.BotLogic.Objective
     internal class GoToObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private bool wasStuck = false;
+        private Stopwatch unlockDebounceTimer = Stopwatch.StartNew();
+
+        private double unlockDebounceTime => unlockDebounceTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -158,6 +162,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                             if (foundDoor && (door != null))
                             {
                                 LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
+
+                                unlockDebounceTimer.Restart();
                                 return true;
                             }
                         }
@@ -188,6 +194,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private bool isAllowedToUnlockDoors()
         {
+            if (unlockDebounceTime < ConfigController.Config.Questing.UnlockingDoors.DebounceTime)
+            {
+                return false;
+            }
+
             BotType botType = BotRegistrationManager.GetBotType(BotOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PMC)

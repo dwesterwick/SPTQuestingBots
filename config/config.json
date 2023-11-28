@@ -41,6 +41,7 @@
 			"door_approach_position_search_radius": 0.75,
 			"door_approach_position_search_offset": -0.5,
 			"pause_time_after_unlocking": 5,
+			"debounce_time": 1,
 			"default_chance_of_bots_having_keys": 25
 		},
 		"min_time_between_switching_objectives": 5,
