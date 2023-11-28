@@ -10,10 +10,6 @@
 		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
-	"open_initially_locked_doors": {
-		"enabled": true,
-		"search_radius": 2
-	},
 	"questing": {
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,

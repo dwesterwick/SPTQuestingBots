@@ -94,8 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviorExtensions\CustomLayerForQuesting.cs" />
-    <Compile Include="BotLogic\Doors\DoorOpenerLayer.cs" />
-    <Compile Include="BotLogic\Doors\OpenDoorAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindAbstractSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanQuestSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanSprintToObjectiveSensor.cs" />
@@ -109,7 +107,6 @@
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
-    <Compile Include="Configuration\OpenInitiallyLockedDoorsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
