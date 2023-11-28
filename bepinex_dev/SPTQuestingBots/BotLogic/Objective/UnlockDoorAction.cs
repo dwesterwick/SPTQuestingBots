@@ -371,57 +371,98 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void loadBundle(Item item)
         {
-            if (item == null)
+            try
             {
-                throw new ArgumentNullException(nameof(item));
-            }
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
 
-            if (item.Prefab.path.Length == 0)
+                if (item.Prefab.path.Length == 0)
+                {
+                    throw new InvalidOperationException("The prefab path for " + item.LocalizedName() + " is empty");
+                }
+
+                bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));
+            }
+            catch (Exception e)
             {
-                throw new InvalidOperationException("The prefab path for " + item.LocalizedName() + " is empty");
-            }
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
 
-            bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));
+                ObjectiveManager.TryChangeObjective();
+
+                throw;
+            }
         }
 
         private KeyComponent tryGetKeyComponent()
         {
-            Type playerType = typeof(Player);
-
-            FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-            InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
-
-            IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
-                .GetItemComponentsInChildren<KeyComponent>(false)
-                .Where(k => k.Template.KeyId == door.KeyId);
-
-            if (!matchingKeys.Any())
+            try
             {
-                return null;
-            }
+                Type playerType = typeof(Player);
 
-            return matchingKeys.First();
+                FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
+                InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
+
+                IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
+                    .GetItemComponentsInChildren<KeyComponent>(false)
+                    .Where(k => k.Template.KeyId == door.KeyId);
+
+                if (!matchingKeys.Any())
+                {
+                    return null;
+                }
+
+                return matchingKeys.First();
+            }
+            catch (Exception e)
+            {
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
+
+                ObjectiveManager.TryChangeObjective();
+
+                throw;
+            }
         }
 
         private InteractionResult getDoorInteractionResult(EInteractionType interactionType, KeyComponent key)
         {
-            if (interactionType != EInteractionType.Unlock)
+            try
             {
-                return new InteractionResult(interactionType);
-            }
+                if (interactionType != EInteractionType.Unlock)
+                {
+                    return new InteractionResult(interactionType);
+                }
 
-            if (key == null)
+                if (key == null)
+                {
+                    throw new ArgumentNullException(nameof(key));
+                }
+
+                GClass2761 unlockDoorInteractionResult = new GClass2761(key, null, true);
+                if (unlockDoorInteractionResult == null)
+                {
+                    throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
+                }
+
+                if ((key.Template.MaximumNumberOfUsage > 0) && (key.NumberOfUsages < key.Template.MaximumNumberOfUsage - 1))
+                {
+                    key.NumberOfUsages++;
+                }
+
+                return unlockDoorInteractionResult;
+            }
+            catch (Exception e)
             {
-                throw new ArgumentNullException(nameof(key));
-            }
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
 
-            GClass2761 unlockDoorInteractionResult = new GClass2761(key, null, true);
-            if (unlockDoorInteractionResult == null)
-            {
-                throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
-            }
+                ObjectiveManager.TryChangeObjective();
 
-            return unlockDoorInteractionResult;
+                throw;
+            }
         }
 
         private void unlockDoor(Door door, InteractionResult interactionResult)
