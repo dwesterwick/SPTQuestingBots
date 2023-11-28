@@ -32,14 +32,14 @@
 		},
 		"unlocking_doors" : {
 			"enabled": {
-				"scav": true,
+				"scav": false,
 				"pmc": true,
-				"boss": true
+				"boss": false
 			},
 			"search_radius": 25,
 			"max_distance_to_unlock": 0.5,
 			"door_approach_position_search_radius": 0.75,
-			"door_approach_position_search_offset": -0.5,
+			"door_approach_position_search_offset": -0.75,
 			"pause_time_after_unlocking": 5,
 			"debounce_time": 1,
 			"default_chance_of_bots_having_keys": 25
