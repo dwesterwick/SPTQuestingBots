@@ -185,6 +185,8 @@ namespace SPTQuestingBots.Models
             {
                 EndTime = DateTime.Now;
             }
+
+            DoorToUnlock = null;
         }
 
         private void updateBotInfo()

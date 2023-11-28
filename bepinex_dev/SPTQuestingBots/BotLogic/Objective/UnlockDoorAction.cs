@@ -71,7 +71,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             System.Random random = new System.Random();
-            if (random.Next(1, 100) <= ObjectiveManager.ChanceOfHavingKey)
+            if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
                 LoggingController.LogInfo(BotOwner.GetText() + " does not have the key for door " + door.Id + ". Selecting another objective...");
 
