@@ -49,7 +49,7 @@
 		"quest_generation": {
 			"navmesh_search_distance_item": 1.5,
 			"navmesh_search_distance_zone": 1.5,
-			"navmesh_search_distance_spawn": 1.5,
+			"navmesh_search_distance_spawn": 2,
 			"navmesh_search_distance_doors": 0.75
 		},
 		"bot_search_distances": {
