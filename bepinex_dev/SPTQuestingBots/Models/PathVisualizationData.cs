@@ -111,5 +111,10 @@ namespace SPTQuestingBots.Models
             LineColor = other.LineColor;
             LineThickness = other.LineThickness;
         }
+
+        public void ChangeName (string newName)
+        {
+            PathName = newName;
+        }
     }
 }

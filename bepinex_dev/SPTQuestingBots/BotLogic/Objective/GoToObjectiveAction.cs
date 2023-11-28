@@ -102,6 +102,11 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
+            if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return true;
+            }
+
             // Don't complete or fail the objective step except for the action type "MoveToPosition"
             if (ObjectiveManager.CurrentQuestAction != Models.QuestAction.MoveToPosition)
             {

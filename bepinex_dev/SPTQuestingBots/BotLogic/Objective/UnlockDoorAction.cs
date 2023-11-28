@@ -304,17 +304,19 @@ namespace SPTQuestingBots.BotLogic.Objective
                 ItemAddress locationForItem = null;
                 foreach (EquipmentSlot slot in possibleSlots)
                 {
+                    LoggingController.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
+
                     ItemContainerClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as ItemContainerClass;
 
                     foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
                     {
-                        LocationInGrid locationInGrid = grid.FindFreeSpace(keyItem);
-                        if (locationInGrid == null)
-                        {
-                            continue;
-                        }
+                        LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
-                        locationForItem = new GClass2580(grid, locationInGrid);
+                        LocationInGrid locationInGrid = grid.FindFreeSpace(keyItem);
+                        if (locationInGrid != null)
+                        {
+                            locationForItem = new GClass2580(grid, locationInGrid);
+                        }
                     }
 
                     if (locationForItem != null)

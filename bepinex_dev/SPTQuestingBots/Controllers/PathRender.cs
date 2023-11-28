@@ -51,7 +51,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static bool AddOrUpdatePath(Models.PathVisualizationData data)
+        public static bool AddOrUpdatePath(Models.PathVisualizationData data, bool autoIncrementPathName = true)
         {
             if (data == null)
             {
@@ -60,6 +60,11 @@ namespace SPTQuestingBots.Controllers
 
             lock (pathDictLock)
             {
+                while (autoIncrementPathName && paths.ContainsKey(data.PathName) && data.PathName.Length < 253)
+                {
+                    data.ChangeName(data.PathName + "_2");
+                }
+
                 if (paths.ContainsKey(data.PathName))
                 {
                     // Need to erase the existing path before replacing it
