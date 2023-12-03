@@ -11,6 +11,7 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using UnityEngine;
 using UnityEngine.AI;
+using GameTimerHelpers = GClass1368;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -338,7 +339,7 @@ namespace SPTQuestingBots.Controllers
                 return null;
             }
 
-            float remainingTimeFromGame = GClass1368.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
+            float remainingTimeFromGame = GameTimerHelpers.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
 
             // Until the raid starts, remainingTimeFromGame is a very high number, so it needs to be reduced to the actual starting raid time
             return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);

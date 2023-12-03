@@ -34,6 +34,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\Libraries\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="aki-singleplayer">
+      <HintPath>..\Libraries\BepInEx\plugins\spt\aki-singleplayer.dll</HintPath>
+    </Reference>
     <Reference Include="Aki.Common">
       <HintPath>..\Libraries\Managed\Aki.Common.dll</HintPath>
     </Reference>

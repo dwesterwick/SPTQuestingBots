@@ -144,6 +144,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 LoadCustomQuests();
 
+                BotJobAssignmentFactory.RemoveBlacklistedQuestObjectives(LocationController.CurrentLocation.Id);
+
                 HaveQuestsBeenBuilt = true;
                 LoggingController.LogInfo("Finished loading quest data.");
             }

@@ -141,7 +141,7 @@ namespace SPTQuestingBots.Models
             int startingLength = objectives.Length;
             objectives = objectives.Where(o => !o.Equals(objective)).ToArray();
 
-            return startingLength == objectives.Length - 1;
+            return startingLength == objectives.Length + 1;
         }
 
         public QuestObjective GetObjectiveForZoneID(string zoneId)

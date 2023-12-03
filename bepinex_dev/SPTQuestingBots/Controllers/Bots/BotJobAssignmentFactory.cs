@@ -58,6 +58,40 @@ namespace SPTQuestingBots.Controllers.Bots
             return matchingQuests.First();
         }
 
+        public static void RemoveBlacklistedQuestObjectives(string locationId)
+        {
+            foreach (Quest quest in allQuests.ToArray())
+            {
+                foreach (QuestObjective objective in quest.AllObjectives)
+                {
+                    Vector3? firstPosition = objective.GetFirstStepPosition();
+                    if (!firstPosition.HasValue)
+                    {
+                        continue;
+                    }
+
+                    // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live. 
+                    if ((locationId == "Lighthouse") && (firstPosition.Value.x > 120) && (firstPosition.Value.z > 325))
+                    {
+                        if (quest.TryRemoveObjective(objective))
+                        {
+                            LoggingController.LogInfo("Removing quest objective on Lightkeeper island: " + objective.ToString() + " for quest " + quest.ToString());
+                        }
+                        else
+                        {
+                            LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective.ToString() + " for quest " + quest.ToString());
+                        }
+
+                        if (quest.NumberOfObjectives == 0)
+                        {
+                            LoggingController.LogInfo("Removing quest on Lightkeeper island: " + quest.ToString() + "...");
+                            allQuests.Remove(quest);
+                        }
+                    }
+                }
+            }
+        }
+
         public static void FailAllJobAssignmentsForBot(string botID)
         {
             if (!botJobAssignments.ContainsKey(botID))
