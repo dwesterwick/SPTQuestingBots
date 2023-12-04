@@ -10,8 +10,8 @@ using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
 using SPTQuestingBots.Controllers;
-using UnityEngine.AI;
 using UnityEngine;
+using UnityEngine.AI;
 using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -20,6 +20,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     {
         private Door door = null;
         private Vector3? interactionPosition = null;
+        private InventoryControllerClass inventoryControllerClass = null;
         private IResult keyGenerationResult = null;
         private KeyComponent keyComponent = null;
         private DependencyGraph<IEasyBundle>.GClass3114 bundleLoader = null;
@@ -35,6 +36,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotOwner.PatrollingData.Pause();
 
+            // Ensure a door has been selected for the bot to unlock
             door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
             if (door == null)
             {
@@ -48,6 +50,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // Determine the location to which the bot should go in order to unlock the door
             interactionPosition = getInteractionPosition(door);
             if (interactionPosition == null)
             {
@@ -58,18 +61,24 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // Check if the door can be breached and can't be unlocked by a key
             if (door.CanBeBreached && (door.KeyId == ""))
             {
                 return;
             }
 
-            keyComponent = tryGetKeyComponent();
+            // If the door requires a key to open, get the InventoryControllerClass for the bot
+            inventoryControllerClass = getInventoryControllerClassForBot(BotOwner);
+
+            // Determine what key is needed to unlock the door, and check if the bot has it
+            keyComponent = tryGetKeyComponentForDoor();
             if (keyComponent != null)
             {
                 LoggingController.LogInfo(BotOwner.GetText() + " already has key " + keyComponent.Item.LocalizedName() + " for door " + door.Id + "...");
                 return;
             }
 
+            // If the bot does not have the key, roll the dice to see if it should be given the key
             System.Random random = new System.Random();
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
@@ -80,6 +89,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // If the bot is lucky enough to get the key, try to transfer it to the bot
             if (!tryTransferKeyToBot())
             {
                 LoggingController.LogError("Could not transfer key for door " + door.Id + " to " + BotOwner.GetText());
@@ -115,6 +125,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
+            // Check if the door is already unlocked
             if (door.DoorState != EDoorState.Locked)
             {
                 LoggingController.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
@@ -124,6 +135,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // Check if EFT was unable to generate the key for the bot
             if (keyGenerationResult?.Failed == true)
             {
                 ObjectiveManager.FailObjective();
@@ -143,11 +155,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // Make sure the bot still needs to unlock a door
             if (!ObjectiveManager.MustUnlockDoor)
             {
                 return;
             }
 
+            // Go to the interaction location selected when the action was created
             // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);
             if (distanceToTargetPosition >= ConfigController.Config.Questing.UnlockingDoors.MaxDistanceToUnlock)
@@ -169,15 +183,18 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // Check if the door requires a key
             if (door.KeyId != "")
             {
+                // Create the key if the bot does not already have it
                 if (keyComponent == null)
                 {
-                    keyComponent = tryGetKeyComponent();
+                    keyComponent = tryGetKeyComponentForDoor();
 
                     return;
                 }
 
+                // Load the bundle for the key. Otherwise, the unlock animation will fail. 
                 if (bundleLoader == null)
                 {
                     LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
@@ -186,6 +203,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return;
                 }
 
+                // Wait for the the bundle to finish loading. If the bundle has not finished loading at this point, something is likely wrong...
                 if (!bundleLoader.Finished)
                 {
                     LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
@@ -194,7 +212,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
             }
 
-
+            // Create the interaction result for the door
             EInteractionType interactionType = EInteractionType.Unlock;
             if (door.CanBeBreached && (door.KeyId == ""))
             {
@@ -202,17 +220,24 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
             InteractionResult interactionResult = getDoorInteractionResult(interactionType, keyComponent);
 
+            // Instruct the bot to unlock the door
             unlockDoor(door, interactionResult);
-            ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
+
+            // Report that the door has been unlocked, and wait a few seconds before allowing the bot to recalculate its path to its quest objective.
+            // If the questing layer is not paused, there will not be enough time for the NavMesh to update, and the bot will fail its objective. 
             ObjectiveManager.DoorIsUnlocked();
+            ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
+            
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
         }
 
         private Vector3? getInteractionPosition(Door door)
         {
+            Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
+
+            // Determine positions around the door to test
             float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
             float searchOffset = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
-
             Vector3[] possibleInteractionPositions = new Vector3[4]
             {
                 door.transform.position + new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
@@ -221,10 +246,10 @@ namespace SPTQuestingBots.BotLogic.Objective
                 door.transform.position - new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0)
             };
 
-            Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
-
+            // Test each position
             foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
             {
+                // Determine if a valid NavMesh location can be found for the position
                 Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                 if (!navMeshPosition.HasValue)
                 {
@@ -240,9 +265,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
 
+                // Try to calculate a path from the bot to the NavMesh location identified for the position
                 NavMeshPath path = new NavMeshPath();
                 NavMesh.CalculatePath(BotOwner.Position, navMeshPosition.Value, NavMesh.AllAreas, path);
 
+                // Check if the bot is able to reach the NavMesh location identified for the position
                 if (path.status == NavMeshPathStatus.PathComplete)
                 {
                     validPositions.Add(navMeshPosition.Value, Vector3.Distance(navMeshPosition.Value, door.transform.position));
@@ -255,10 +282,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
             }
 
+            // Check if there are any positions around the door that the bot is able to reach
             if (validPositions.Count > 0)
             {
+                // Sort the positions based on their poximity to the door
                 IEnumerable<Vector3> orderedPostions = validPositions.OrderBy(p => p.Value).Select(p => p.Key);
 
+                // If applicable, draw the positions in the world
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
                     outlinePosition(orderedPostions.First(), Color.green);
@@ -269,24 +299,30 @@ namespace SPTQuestingBots.BotLogic.Objective
                     }
                 }
 
+                // Select the position closest to the door
                 return orderedPostions.First();
             }
 
             return null;
         }
 
+        private static InventoryControllerClass getInventoryControllerClassForBot(BotOwner bot)
+        {
+            Type playerType = typeof(Player);
+
+            FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
+            return (InventoryControllerClass)inventoryControllerField.GetValue(bot.GetPlayer);
+        }
+
         private bool tryTransferKeyToBot()
         {
             try
             {
-                Type playerType = typeof(Player);
-
-                FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-                InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
-
-                // Not sure if this should use false
+                // Create an instance of the class used to generate new ID's for items
+                // TO DO: Not sure if this should use false
                 MongoID IDGenerator = new MongoID(false);
 
+                // Create a new item for the key needed to unlock the door
                 Item keyItem = Singleton<ItemFactory>.Instance.CreateItem(IDGenerator, door.KeyId, null);
                 if (keyItem == null)
                 {
@@ -294,6 +330,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return false;
                 }
 
+                // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
                 if (BotRegistrationManager.IsBotAPMC(BotOwner))
                 {
@@ -301,45 +338,25 @@ namespace SPTQuestingBots.BotLogic.Objective
                 }
                 possibleSlots.AddRange(new EquipmentSlot[] { EquipmentSlot.Backpack, EquipmentSlot.TacticalVest, EquipmentSlot.ArmorVest, EquipmentSlot.Pockets });
 
-                ItemAddress locationForItem = null;
-                foreach (EquipmentSlot slot in possibleSlots)
-                {
-                    //LoggingController.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
-
-                    SearchableItemClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as SearchableItemClass;
-                    foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
-                    {
-                        //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
-
-                        LocationInGrid locationInGrid = grid.FindFreeSpace(keyItem);
-                        if (locationInGrid != null)
-                        {
-                            locationForItem = new GClass2580(grid, locationInGrid);
-                        }
-                    }
-
-                    if (locationForItem != null)
-                    {
-                        LoggingController.LogInfo(BotOwner.GetText() + " will receive key " + keyItem.LocalizedName() + " in its " + slot.ToString() + "...");
-                        break;
-                    }
-                }
-
+                // Try to find an available grid in the equipment slots to which the key can be transferred
+                ItemAddress locationForItem = findLocationForItem(keyItem, possibleSlots, inventoryControllerClass);
                 if (locationForItem == null)
                 {
                     LoggingController.LogError("Cannot find any location to put key " + keyItem.LocalizedName() + " for " + BotOwner.GetText());
                     return false;
                 }
 
-                GStruct375<GClass2593> moveResult = GClass2585.Add(keyItem, locationForItem, botInventoryController, true);
+                // Initialize the transation to transfer the key to the bot
+                GStruct375<GClass2593> moveResult = GClass2585.Add(keyItem, locationForItem, inventoryControllerClass, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + keyItem.LocalizedName() + " to inventory of " + BotOwner.GetText());
                     return false;
                 }
 
+                // Execute the transation to transfer the key to the bot
                 Callback callback = new Callback(transferredKeyCallback);
-                botInventoryController.TryRunNetworkTransaction(moveResult, callback);
+                inventoryControllerClass.TryRunNetworkTransaction(moveResult, callback);
 
                 return true;
             }
@@ -352,6 +369,32 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 throw;
             }
+        }
+
+        private ItemAddress findLocationForItem(Item item, IEnumerable<EquipmentSlot> possibleSlots, InventoryControllerClass botInventoryController)
+        {
+            foreach (EquipmentSlot slot in possibleSlots)
+            {
+                //LoggingController.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
+
+                // Search through all grids in the equipment slot
+                SearchableItemClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as SearchableItemClass;
+                foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
+                {
+                    //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
+
+                    // Check if the grid has enough free space to fit the item
+                    LocationInGrid locationInGrid = grid.FindFreeSpace(item);
+                    if (locationInGrid != null)
+                    {
+                        LoggingController.LogInfo(BotOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
+
+                        return new GClass2580(grid, locationInGrid);
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void transferredKeyCallback(IResult result)
@@ -383,7 +426,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     throw new InvalidOperationException("The prefab path for " + item.LocalizedName() + " is empty");
                 }
 
-                bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default(CancellationToken));
+                bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default);
             }
             catch (Exception e)
             {
@@ -396,16 +439,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
-        private KeyComponent tryGetKeyComponent()
+        private KeyComponent tryGetKeyComponentForDoor()
         {
             try
             {
-                Type playerType = typeof(Player);
-
-                FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-                InventoryControllerClass botInventoryController = (InventoryControllerClass)inventoryControllerField.GetValue(BotOwner.GetPlayer);
-
-                IEnumerable<KeyComponent> matchingKeys = botInventoryController.Inventory.Equipment
+                IEnumerable<KeyComponent> matchingKeys = inventoryControllerClass.Inventory.Equipment
                     .GetItemComponentsInChildren<KeyComponent>(false)
                     .Where(k => k.Template.KeyId == door.KeyId);
 
@@ -447,6 +485,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     throw new InvalidOperationException(BotOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
                 }
 
+                // Reduce the remaining usages for the key after the bot unlocks the door
                 if ((key.Template.MaximumNumberOfUsage > 0) && (key.NumberOfUsages < key.Template.MaximumNumberOfUsage - 1))
                 {
                     key.NumberOfUsages++;
@@ -473,6 +512,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 {
                     throw new ArgumentNullException(nameof(door));
                 }
+
+                // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that uses an InteractionResult with a key component
 
                 Type doorOpenerType = typeof(BotDoorOpener);
 

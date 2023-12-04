@@ -1291,7 +1291,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
+        "chanceForSelecting": 10,
         "priority": 20,
         "name": "Scav Camp Area",
         "objectives" : [
@@ -1939,7 +1939,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
+        "chanceForSelecting": 15,
         "priority": 20,
         "name": "Goshan Interior Tents",
         "objectives" : [
@@ -1964,7 +1964,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
+        "chanceForSelecting": 15,
         "priority": 20,
         "canRunBetweenObjectives": false,
         "name": "Goshan Lockers",

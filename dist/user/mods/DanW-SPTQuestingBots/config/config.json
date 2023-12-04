@@ -93,7 +93,7 @@
 			"eft_quests": {
 				"priority": 15,
 				"chance": 50,
-				"max_bots_per_quest": 4,
+				"max_bots_per_quest": 3,
 				"chanceOfHavingKeys": 50,
 				"level_range": [
 					[0, 99],

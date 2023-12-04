@@ -82,6 +82,7 @@ namespace SPTQuestingBots.Controllers.Bots
                             LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective.ToString() + " for quest " + quest.ToString());
                         }
 
+                        // If there are no remaining objectives, remove the quest too
                         if (quest.NumberOfObjectives == 0)
                         {
                             LoggingController.LogInfo("Removing quest on Lightkeeper island: " + quest.ToString() + "...");

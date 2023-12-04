@@ -106,17 +106,13 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
-            if (!ObjectiveManager.IsJobAssignmentActive)
-            {
-                return true;
-            }
-
             // Don't complete or fail the objective step except for the action type "MoveToPosition"
             if (ObjectiveManager.CurrentQuestAction != Models.QuestAction.MoveToPosition)
             {
                 return true;
             }
 
+            // Don't complete or fail the objective step if another brain layer is active
             string layerName = BotOwner.Brain.ActiveLayerName() ?? "null";
             if (layerName != "BotObjectiveLayer")
             {
@@ -152,11 +148,14 @@ namespace SPTQuestingBots.BotLogic.Objective
                 // Check if the bot is nearly at the end of its (incomplete) path
                 if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
                 {
+                    // Check if it's possible that a locked door is blocking the bot's path
                     if (missingDistance <= ConfigController.Config.Questing.UnlockingDoors.SearchRadius)
                     {
+                        // Check if the bot is allowed to unlock doors
                         if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
                         {
-                            bool foundDoor = tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
+                            // Find a door for the bot to unlock
+                            bool foundDoor = ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
                             Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
 
                             if (foundDoor && (door != null))
@@ -194,6 +193,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private bool isAllowedToUnlockDoors()
         {
+            // Don't search for doors every cycle or too many may be selected in a short time
             if (unlockDebounceTime < ConfigController.Config.Questing.UnlockingDoors.DebounceTime)
             {
                 return false;

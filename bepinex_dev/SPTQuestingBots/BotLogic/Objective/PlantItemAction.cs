@@ -61,6 +61,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
+            {
+                ObjectiveManager.CompleteObjective();
+            }
+
+            // Find the location where bots are most likely to be
             if (!dangerPoint.HasValue)
             {
                 dangerPoint = findDangerPoint();
@@ -72,26 +78,22 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             UpdateBotSteering(dangerPoint.Value);
-
-            if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
-            {
-                ObjectiveManager.CompleteObjective();
-            }
         }
 
         private Vector3? findDangerPoint()
         {
+            // Enumerate all alive bots on the map
             IEnumerable<BotOwner> aliveBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(b => b.BotState == EBotState.Active)
                 .Where(b => !b.IsDead);
 
             int botCount = aliveBots.Count();
-
             if (botCount == 0)
             {
                 return null;
             }
 
+            // Combine the positions of all bots on the map into one average position
             Vector3 dangerPoint = Vector3.zero;
             foreach (BotOwner bot in aliveBots)
             {

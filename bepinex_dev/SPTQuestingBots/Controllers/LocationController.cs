@@ -139,31 +139,37 @@ namespace SPTQuestingBots.Controllers
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
         {
             Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
+
             foreach (Door door in areLockedDoorsUnlocked.Keys.ToArray())
             {
+                // Check if the door has been unlocked since this method was previously called
                 if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
                 {
                     LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
                     areLockedDoorsUnlocked[door] = true;
                 }
 
+                // Check if the door is within the desired distance
                 float distance = Vector3.Distance(position, door.transform.position);
                 if (distance > maxDistance)
                 {
                     continue;
                 }
 
+                // Check if the door is locked
                 if (stillLocked && !areLockedDoorsUnlocked[door])
                 {
                     lockedDoorsAndDistance.Add(door, distance);
                 }
 
+                // Check if the door is unlocked
                 if (!stillLocked && areLockedDoorsUnlocked[door])
                 {
                     lockedDoorsAndDistance.Add(door, distance);
                 }
             }
 
+            // Sort the matching doors based on distance to the position
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
