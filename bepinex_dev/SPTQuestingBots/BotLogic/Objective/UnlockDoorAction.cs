@@ -263,7 +263,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     continue;
                 }
 
-                LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
+                //LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
 
                 // Try to calculate a path from the bot to the NavMesh location identified for the position
                 NavMeshPath path = new NavMeshPath();
