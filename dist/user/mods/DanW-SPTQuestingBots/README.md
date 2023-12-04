@@ -270,6 +270,10 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * The 21WS Container for Provocation in Interchange
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
+* Bots have trouble accessing locked doors behind other locked doors. Examples include Big Red in Customs and Red Room in Labs.
+* Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations. Examples include marking the tanker at New Gas in Customs; bots will fail to find a position to mark the tanker and then nearby unlock rooms in New Gas for no reason.
+* Bots will frequently unlock doors, go into the room, and not loot anything.
+* A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 
 **PMC Spawning System:**
 * If one of the members of a PMC group is a straggler, the whole group will wait around for him
@@ -282,19 +286,17 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.3.3** (ETA: Late November)
-    * Add new quest-objective action: unlocking doors
-* **0.4.0** (ETA: Mid December)
+* **0.4.0** (ETA: Late December)
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
-* **0.4.1** (ETA: Late December)
+* **0.4.1** (ETA: Early January)
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add new quest type: air-drop chaser
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.4.2** (ETA: Early January)
+* **0.4.2** (ETA: Late January)
     * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
