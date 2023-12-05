@@ -1,17 +1,17 @@
-import { HandbookHelper } from "../helpers/HandbookHelper";
-import { InventoryHelper } from "../helpers/InventoryHelper";
-import { ItemHelper } from "../helpers/ItemHelper";
-import { PaymentHelper } from "../helpers/PaymentHelper";
-import { TraderHelper } from "../helpers/TraderHelper";
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { Item } from "../models/eft/common/tables/IItem";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { IProcessBuyTradeRequestData } from "../models/eft/trade/IProcessBuyTradeRequestData";
-import { IProcessSellTradeRequestData } from "../models/eft/trade/IProcessSellTradeRequestData";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
-import { LocalisationService } from "./LocalisationService";
+import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
+import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { IProcessBuyTradeRequestData } from "@spt-aki/models/eft/trade/IProcessBuyTradeRequestData";
+import { IProcessSellTradeRequestData } from "@spt-aki/models/eft/trade/IProcessSellTradeRequestData";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 export declare class PaymentService {
     protected logger: ILogger;
     protected httpResponse: HttpResponseUtil;
@@ -49,13 +49,13 @@ export declare class PaymentService {
      */
     getMoney(pmcData: IPmcData, amount: number, body: IProcessSellTradeRequestData, output: IItemEventRouterResponse, sessionID: string): IItemEventRouterResponse;
     /**
-   * Recursively checks if the given item is
-   * inside the stash, that is it has the stash as
-   * ancestor with slotId=hideout
-   */
+     * Recursively checks if the given item is
+     * inside the stash, that is it has the stash as
+     * ancestor with slotId=hideout
+     */
     protected isItemInStash(pmcData: IPmcData, item: Item): boolean;
     /**
-     * Remove currency from player stash/inventory
+     * Remove currency from player stash/inventory and update client object with changes
      * @param pmcData Player profile to find and remove currency from
      * @param currencyTpl Type of currency to pay
      * @param amountToPay money value to pay

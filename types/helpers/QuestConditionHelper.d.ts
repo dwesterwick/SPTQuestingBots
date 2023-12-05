@@ -1,4 +1,4 @@
-import { AvailableForConditions } from "../models/eft/common/tables/IQuest";
+import { AvailableForConditions } from "@spt-aki/models/eft/common/tables/IQuest";
 export declare class QuestConditionHelper {
     getQuestConditions(q: AvailableForConditions[], furtherFilter?: (a: AvailableForConditions) => AvailableForConditions[]): AvailableForConditions[];
     getLevelConditions(q: AvailableForConditions[], furtherFilter?: (a: AvailableForConditions) => AvailableForConditions[]): AvailableForConditions[];

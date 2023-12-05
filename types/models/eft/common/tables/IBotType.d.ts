@@ -1,5 +1,5 @@
-import { MinMax } from "../../../common/MinMax";
-import { Skills } from "./IBotBase";
+import { MinMax } from "@spt-aki/models/common/MinMax";
+import { Skills } from "@spt-aki/models/eft/common/tables/IBotBase";
 export interface IBotType {
     appearance: Appearance;
     chances: Chances;
@@ -71,6 +71,7 @@ export interface ModsChances {
     mod_tactical_001: number;
     mod_tactical_002: number;
     mod_tactical_003: number;
+    mod_handguard: number;
 }
 export interface Difficulties {
     easy: Difficulty;

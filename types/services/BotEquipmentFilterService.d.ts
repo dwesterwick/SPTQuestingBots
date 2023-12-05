@@ -1,10 +1,10 @@
-import { BotHelper } from "../helpers/BotHelper";
-import { ProfileHelper } from "../helpers/ProfileHelper";
-import { EquipmentChances, Generation, GenerationData, IBotType, ModsChances } from "../models/eft/common/tables/IBotType";
-import { BotGenerationDetails } from "../models/spt/bots/BotGenerationDetails";
-import { AdjustmentDetails, EquipmentFilterDetails, EquipmentFilters, IBotConfig, WeightingAdjustmentDetails } from "../models/spt/config/IBotConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
+import { BotHelper } from "@spt-aki/helpers/BotHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { EquipmentChances, Generation, GenerationData, IBotType, ModsChances } from "@spt-aki/models/eft/common/tables/IBotType";
+import { BotGenerationDetails } from "@spt-aki/models/spt/bots/BotGenerationDetails";
+import { AdjustmentDetails, EquipmentFilterDetails, EquipmentFilters, IBotConfig, WeightingAdjustmentDetails } from "@spt-aki/models/spt/config/IBotConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 export declare class BotEquipmentFilterService {
     protected logger: ILogger;
     protected botHelper: BotHelper;

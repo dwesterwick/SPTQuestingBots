@@ -1,17 +1,17 @@
-import { BotHelper } from "../helpers/BotHelper";
-import { ProfileHelper } from "../helpers/ProfileHelper";
-import { IConfig } from "../models/eft/common/IGlobals";
-import { Inventory } from "../models/eft/common/tables/IBotType";
-import { SeasonalEventType } from "../models/enums/SeasonalEventType";
-import { IHttpConfig } from "../models/spt/config/IHttpConfig";
-import { IQuestConfig } from "../models/spt/config/IQuestConfig";
-import { ISeasonalEvent, ISeasonalEventConfig } from "../models/spt/config/ISeasonalEventConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { DatabaseImporter } from "../utils/DatabaseImporter";
-import { GiftService } from "./GiftService";
-import { LocalisationService } from "./LocalisationService";
+import { BotHelper } from "@spt-aki/helpers/BotHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { IConfig } from "@spt-aki/models/eft/common/IGlobals";
+import { Inventory } from "@spt-aki/models/eft/common/tables/IBotType";
+import { SeasonalEventType } from "@spt-aki/models/enums/SeasonalEventType";
+import { IHttpConfig } from "@spt-aki/models/spt/config/IHttpConfig";
+import { IQuestConfig } from "@spt-aki/models/spt/config/IQuestConfig";
+import { ISeasonalEvent, ISeasonalEventConfig } from "@spt-aki/models/spt/config/ISeasonalEventConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { GiftService } from "@spt-aki/services/GiftService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { DatabaseImporter } from "@spt-aki/utils/DatabaseImporter";
 export declare class SeasonalEventService {
     protected logger: ILogger;
     protected databaseServer: DatabaseServer;
@@ -24,6 +24,8 @@ export declare class SeasonalEventService {
     protected seasonalEventConfig: ISeasonalEventConfig;
     protected questConfig: IQuestConfig;
     protected httpConfig: IHttpConfig;
+    protected halloweenEventActive: any;
+    protected christmasEventActive: any;
     constructor(logger: ILogger, databaseServer: DatabaseServer, databaseImporter: DatabaseImporter, giftService: GiftService, localisationService: LocalisationService, botHelper: BotHelper, profileHelper: ProfileHelper, configServer: ConfigServer);
     protected get christmasEventItems(): string[];
     protected get halloweenEventItems(): string[];
@@ -52,22 +54,17 @@ export declare class SeasonalEventService {
      */
     getAllSeasonalEventItems(): string[];
     /**
-     * Get an array of seasonal items that should be blocked as season is not currently active
-     * @returns Array of tpl strings
-     */
-    getSeasonalEventItemsToBlock(): string[];
-    /**
      * Is a seasonal event currently active
      * @returns true if event is active
      */
     seasonalEventEnabled(): boolean;
     /**
-     * Is christmas event active (Globals eventtype array contains even name)
+     * Is christmas event active
      * @returns true if active
      */
     christmasEventEnabled(): boolean;
     /**
-     * is halloween event active (Globals eventtype array contains even name)
+     * is halloween event active
      * @returns true if active
      */
     halloweenEventEnabled(): boolean;
@@ -95,10 +92,11 @@ export declare class SeasonalEventService {
      */
     isQuestRelatedToEvent(questId: string, event: SeasonalEventType): boolean;
     /**
-     * Check if current date falls inside any of the seasons events pased in, if so, handle them
+     * Handle seasonal events
      * @param sessionId Players id
      */
-    checkForAndEnableSeasonalEvents(sessionId: string): void;
+    enableSeasonalEvents(sessionId: string): void;
+    protected cacheActiveEvents(): void;
     /**
      * Iterate through bots inventory and loot to find and remove christmas items (as defined in SeasonalEventService)
      * @param nodeInventory Bots inventory to iterate over

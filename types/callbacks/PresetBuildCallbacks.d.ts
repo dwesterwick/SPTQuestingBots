@@ -1,12 +1,12 @@
-import { PresetBuildController } from "../controllers/PresetBuildController";
-import { IEmptyRequestData } from "../models/eft/common/IEmptyRequestData";
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { IGetBodyResponseData } from "../models/eft/httpResponse/IGetBodyResponseData";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { IPresetBuildActionRequestData } from "../models/eft/presetBuild/IPresetBuildActionRequestData";
-import { IRemoveBuildRequestData } from "../models/eft/presetBuild/IRemoveBuildRequestData";
-import { IUserBuilds } from "../models/eft/profile/IAkiProfile";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
+import { PresetBuildController } from "@spt-aki/controllers/PresetBuildController";
+import { IEmptyRequestData } from "@spt-aki/models/eft/common/IEmptyRequestData";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { IGetBodyResponseData } from "@spt-aki/models/eft/httpResponse/IGetBodyResponseData";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { IPresetBuildActionRequestData } from "@spt-aki/models/eft/presetBuild/IPresetBuildActionRequestData";
+import { IRemoveBuildRequestData } from "@spt-aki/models/eft/presetBuild/IRemoveBuildRequestData";
+import { IUserBuilds } from "@spt-aki/models/eft/profile/IAkiProfile";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 export declare class PresetBuildCallbacks {
     protected httpResponse: HttpResponseUtil;
     protected presetBuildController: PresetBuildController;

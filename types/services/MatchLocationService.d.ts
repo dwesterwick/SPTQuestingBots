@@ -1,5 +1,5 @@
-import { ICreateGroupRequestData } from "../models/eft/match/ICreateGroupRequestData";
-import { TimeUtil } from "../utils/TimeUtil";
+import { ICreateGroupRequestData } from "@spt-aki/models/eft/match/ICreateGroupRequestData";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 export declare class MatchLocationService {
     protected timeUtil: TimeUtil;
     protected locations: {};

@@ -1,39 +1,39 @@
-import { LootGenerator } from "../generators/LootGenerator";
-import { InventoryHelper } from "../helpers/InventoryHelper";
-import { ItemHelper } from "../helpers/ItemHelper";
-import { PaymentHelper } from "../helpers/PaymentHelper";
-import { PresetHelper } from "../helpers/PresetHelper";
-import { ProfileHelper } from "../helpers/ProfileHelper";
-import { QuestHelper } from "../helpers/QuestHelper";
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { IInventoryBindRequestData } from "../models/eft/inventory/IInventoryBindRequestData";
-import { IInventoryCreateMarkerRequestData } from "../models/eft/inventory/IInventoryCreateMarkerRequestData";
-import { IInventoryDeleteMarkerRequestData } from "../models/eft/inventory/IInventoryDeleteMarkerRequestData";
-import { IInventoryEditMarkerRequestData } from "../models/eft/inventory/IInventoryEditMarkerRequestData";
-import { IInventoryExamineRequestData } from "../models/eft/inventory/IInventoryExamineRequestData";
-import { IInventoryFoldRequestData } from "../models/eft/inventory/IInventoryFoldRequestData";
-import { IInventoryMergeRequestData } from "../models/eft/inventory/IInventoryMergeRequestData";
-import { IInventoryMoveRequestData } from "../models/eft/inventory/IInventoryMoveRequestData";
-import { IInventoryReadEncyclopediaRequestData } from "../models/eft/inventory/IInventoryReadEncyclopediaRequestData";
-import { IInventoryRemoveRequestData } from "../models/eft/inventory/IInventoryRemoveRequestData";
-import { IInventorySortRequestData } from "../models/eft/inventory/IInventorySortRequestData";
-import { IInventorySplitRequestData } from "../models/eft/inventory/IInventorySplitRequestData";
-import { IInventorySwapRequestData } from "../models/eft/inventory/IInventorySwapRequestData";
-import { IInventoryTagRequestData } from "../models/eft/inventory/IInventoryTagRequestData";
-import { IInventoryToggleRequestData } from "../models/eft/inventory/IInventoryToggleRequestData";
-import { IInventoryTransferRequestData } from "../models/eft/inventory/IInventoryTransferRequestData";
-import { IOpenRandomLootContainerRequestData } from "../models/eft/inventory/IOpenRandomLootContainerRequestData";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { EventOutputHolder } from "../routers/EventOutputHolder";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { FenceService } from "../services/FenceService";
-import { LocalisationService } from "../services/LocalisationService";
-import { RagfairOfferService } from "../services/RagfairOfferService";
-import { HashUtil } from "../utils/HashUtil";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { RandomUtil } from "../utils/RandomUtil";
+import { LootGenerator } from "@spt-aki/generators/LootGenerator";
+import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
+import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { IInventoryBindRequestData } from "@spt-aki/models/eft/inventory/IInventoryBindRequestData";
+import { IInventoryCreateMarkerRequestData } from "@spt-aki/models/eft/inventory/IInventoryCreateMarkerRequestData";
+import { IInventoryDeleteMarkerRequestData } from "@spt-aki/models/eft/inventory/IInventoryDeleteMarkerRequestData";
+import { IInventoryEditMarkerRequestData } from "@spt-aki/models/eft/inventory/IInventoryEditMarkerRequestData";
+import { IInventoryExamineRequestData } from "@spt-aki/models/eft/inventory/IInventoryExamineRequestData";
+import { IInventoryFoldRequestData } from "@spt-aki/models/eft/inventory/IInventoryFoldRequestData";
+import { IInventoryMergeRequestData } from "@spt-aki/models/eft/inventory/IInventoryMergeRequestData";
+import { IInventoryMoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryMoveRequestData";
+import { IInventoryReadEncyclopediaRequestData } from "@spt-aki/models/eft/inventory/IInventoryReadEncyclopediaRequestData";
+import { IInventoryRemoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryRemoveRequestData";
+import { IInventorySortRequestData } from "@spt-aki/models/eft/inventory/IInventorySortRequestData";
+import { IInventorySplitRequestData } from "@spt-aki/models/eft/inventory/IInventorySplitRequestData";
+import { IInventorySwapRequestData } from "@spt-aki/models/eft/inventory/IInventorySwapRequestData";
+import { IInventoryTagRequestData } from "@spt-aki/models/eft/inventory/IInventoryTagRequestData";
+import { IInventoryToggleRequestData } from "@spt-aki/models/eft/inventory/IInventoryToggleRequestData";
+import { IInventoryTransferRequestData } from "@spt-aki/models/eft/inventory/IInventoryTransferRequestData";
+import { IOpenRandomLootContainerRequestData } from "@spt-aki/models/eft/inventory/IOpenRandomLootContainerRequestData";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { EventOutputHolder } from "@spt-aki/routers/EventOutputHolder";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { FenceService } from "@spt-aki/services/FenceService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { RagfairOfferService } from "@spt-aki/services/RagfairOfferService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 export declare class InventoryController {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -54,10 +54,10 @@ export declare class InventoryController {
     protected httpResponseUtil: HttpResponseUtil;
     constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, itemHelper: ItemHelper, randomUtil: RandomUtil, databaseServer: DatabaseServer, fenceService: FenceService, presetHelper: PresetHelper, inventoryHelper: InventoryHelper, questHelper: QuestHelper, ragfairOfferService: RagfairOfferService, profileHelper: ProfileHelper, paymentHelper: PaymentHelper, localisationService: LocalisationService, lootGenerator: LootGenerator, eventOutputHolder: EventOutputHolder, httpResponseUtil: HttpResponseUtil);
     /**
-    * Move Item
-    * change location of item with parentId and slotId
-    * transfers items from one profile to another if fromOwner/toOwner is set in the body.
-    * otherwise, move is contained within the same profile_f.
+     * Move Item
+     * change location of item with parentId and slotId
+     * transfers items from one profile to another if fromOwner/toOwner is set in the body.
+     * otherwise, move is contained within the same profile_f.
      * @param pmcData Profile
      * @param moveRequest Move request data
      * @param sessionID Session id
@@ -71,9 +71,9 @@ export declare class InventoryController {
      */
     protected getTraderExploitErrorResponse(output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
-    * Remove Item from Profile
-    * Deep tree item deletion, also removes items from insurance list
-    */
+     * Remove Item from Profile
+     * Deep tree item deletion, also removes items from insurance list
+     */
     removeItem(pmcData: IPmcData, itemId: string, sessionID: string, output?: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Handle Remove event
@@ -111,10 +111,10 @@ export declare class InventoryController {
      */
     transferItem(pmcData: IPmcData, body: IInventoryTransferRequestData, sessionID: string): IItemEventRouterResponse;
     /**
-    * Swap Item
-    * its used for "reload" if you have weapon in hands and magazine is somewhere else in rig or backpack in equipment
-    * Also used to swap items using quick selection on character screen
-    */
+     * Swap Item
+     * its used for "reload" if you have weapon in hands and magazine is somewhere else in rig or backpack in equipment
+     * Also used to swap items using quick selection on character screen
+     */
     swapItem(pmcData: IPmcData, request: IInventorySwapRequestData, sessionID: string): IItemEventRouterResponse;
     /**
      * Handles folding of Weapons
@@ -138,12 +138,22 @@ export declare class InventoryController {
     tagItem(pmcData: IPmcData, body: IInventoryTagRequestData, sessionID: string): IItemEventRouterResponse;
     /**
      * Bind an inventory item to the quick access menu at bottom of player screen
+     * Handle bind event
      * @param pmcData Player profile
      * @param bindRequest Reqeust object
      * @param sessionID Session id
      * @returns IItemEventRouterResponse
      */
     bindItem(pmcData: IPmcData, bindRequest: IInventoryBindRequestData, sessionID: string): IItemEventRouterResponse;
+    /**
+     * Unbind an inventory item from quick access menu at bottom of player screen
+     * Handle unbind event
+     * @param pmcData Player profile
+     * @param bindRequest Request object
+     * @param sessionID Session id
+     * @returns IItemEventRouterResponse
+     */
+    unbindItem(pmcData: IPmcData, request: IInventoryBindRequestData, sessionID: string): IItemEventRouterResponse;
     /**
      * Handles examining an item
      * @param pmcData player profile

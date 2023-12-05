@@ -1,23 +1,23 @@
-import { BotGeneratorHelper } from "../helpers/BotGeneratorHelper";
-import { BotWeaponGeneratorHelper } from "../helpers/BotWeaponGeneratorHelper";
-import { HandbookHelper } from "../helpers/HandbookHelper";
-import { ItemHelper } from "../helpers/ItemHelper";
-import { WeightedRandomHelper } from "../helpers/WeightedRandomHelper";
-import { Inventory as PmcInventory } from "../models/eft/common/tables/IBotBase";
-import { IBotType, Inventory, ModsChances } from "../models/eft/common/tables/IBotType";
-import { Item } from "../models/eft/common/tables/IItem";
-import { ITemplateItem } from "../models/eft/common/tables/ITemplateItem";
-import { EquipmentSlots } from "../models/enums/EquipmentSlots";
-import { IBotConfig } from "../models/spt/config/IBotConfig";
-import { IPmcConfig } from "../models/spt/config/IPmcConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { BotLootCacheService } from "../services/BotLootCacheService";
-import { LocalisationService } from "../services/LocalisationService";
-import { HashUtil } from "../utils/HashUtil";
-import { RandomUtil } from "../utils/RandomUtil";
-import { BotWeaponGenerator } from "./BotWeaponGenerator";
+import { BotWeaponGenerator } from "@spt-aki/generators/BotWeaponGenerator";
+import { BotGeneratorHelper } from "@spt-aki/helpers/BotGeneratorHelper";
+import { BotWeaponGeneratorHelper } from "@spt-aki/helpers/BotWeaponGeneratorHelper";
+import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
+import { Inventory as PmcInventory } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { IBotType, Inventory, ModsChances } from "@spt-aki/models/eft/common/tables/IBotType";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
+import { EquipmentSlots } from "@spt-aki/models/enums/EquipmentSlots";
+import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
+import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { BotLootCacheService } from "@spt-aki/services/BotLootCacheService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 export declare class BotLootGenerator {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -83,7 +83,7 @@ export declare class BotLootGenerator {
      * @param equipmentSlot slot to place the preset in (backpack)
      * @param templateInventory bots template, assault.json
      * @param modChances chances for mods to spawn on weapon
-     * @param botRole bots role, .e.g. pmcBot
+     * @param botRole bots role .e.g. pmcBot
      * @param isPmc are we generating for a pmc
      */
     protected addLooseWeaponsToInventorySlot(sessionId: string, botInventory: PmcInventory, equipmentSlot: string, templateInventory: Inventory, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number): void;
@@ -120,16 +120,16 @@ export declare class BotLootGenerator {
     protected itemHasReachedSpawnLimit(itemTemplate: ITemplateItem, botRole: string, isPmc: boolean, limitCount: Record<string, number>, itemSpawnLimits: Record<string, number>): boolean;
     /**
      * Randomise the stack size of a money object, uses different values for pmc or scavs
-     * @param isPmc is this a PMC
-     * @param itemTemplate item details
-     * @param moneyItem Money stack to randomise
+     * @param isPmc Is money on a PMC bot
+     * @param itemTemplate item details from db
+     * @param moneyItem Money item to randomise
      */
     protected randomiseMoneyStackSize(isPmc: boolean, itemTemplate: ITemplateItem, moneyItem: Item): void;
     /**
      * Randomise the size of an ammo stack
-     * @param isPmc is this a PMC
-     * @param itemTemplate item details
-     * @param ammoItem Ammo stack to randomise
+     * @param isPmc Is ammo on a PMC bot
+     * @param itemTemplate item details from db
+     * @param ammoItem Ammo item to randomise
      */
     protected randomiseAmmoStackSize(isPmc: boolean, itemTemplate: ITemplateItem, ammoItem: Item): void;
     /**

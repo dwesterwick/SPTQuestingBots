@@ -1,7 +1,7 @@
-import { ILogger } from "../models/spt/utils/ILogger";
-import { HashUtil } from "../utils/HashUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { VFS } from "../utils/VFS";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { VFS } from "@spt-aki/utils/VFS";
 export declare class HashCacheService {
     protected vfs: VFS;
     protected hashUtil: HashUtil;

@@ -1,15 +1,13 @@
-import { ICoreConfig } from "../models/spt/config/ICoreConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { LocalisationService } from "../services/LocalisationService";
+import { ICoreConfig } from "@spt-aki/models/spt/config/ICoreConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
 export declare class WatermarkLocale {
     protected localisationService: LocalisationService;
+    protected description: string[];
+    protected warning: string[];
+    protected modding: string[];
     constructor(localisationService: LocalisationService);
-    protected watermark: {
-        description: string[];
-        warning: string[];
-        modding: string[];
-    };
     getDescription(): string[];
     getWarning(): string[];
     getModding(): string[];

@@ -1,19 +1,20 @@
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { InsuredItem } from "../models/eft/common/tables/IBotBase";
-import { Item, Repairable } from "../models/eft/common/tables/IItem";
-import { IStaticAmmoDetails } from "../models/eft/common/tables/ILootBase";
-import { ITemplateItem } from "../models/eft/common/tables/ITemplateItem";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { ItemBaseClassService } from "../services/ItemBaseClassService";
-import { LocaleService } from "../services/LocaleService";
-import { LocalisationService } from "../services/LocalisationService";
-import { HashUtil } from "../utils/HashUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { MathUtil } from "../utils/MathUtil";
-import { ObjectId } from "../utils/ObjectId";
-import { RandomUtil } from "../utils/RandomUtil";
-import { HandbookHelper } from "./HandbookHelper";
+import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { InsuredItem } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { Item, Repairable } from "@spt-aki/models/eft/common/tables/IItem";
+import { IStaticAmmoDetails } from "@spt-aki/models/eft/common/tables/ILootBase";
+import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { ItemBaseClassService } from "@spt-aki/services/ItemBaseClassService";
+import { ItemFilterService } from "@spt-aki/services/ItemFilterService";
+import { LocaleService } from "@spt-aki/services/LocaleService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { MathUtil } from "@spt-aki/utils/MathUtil";
+import { ObjectId } from "@spt-aki/utils/ObjectId";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 declare class ItemHelper {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -24,10 +25,11 @@ declare class ItemHelper {
     protected databaseServer: DatabaseServer;
     protected handbookHelper: HandbookHelper;
     protected itemBaseClassService: ItemBaseClassService;
+    protected itemFilterService: ItemFilterService;
     protected localisationService: LocalisationService;
     protected localeService: LocaleService;
     protected readonly defaultInvalidBaseTypes: string[];
-    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, randomUtil: RandomUtil, objectId: ObjectId, mathUtil: MathUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, itemBaseClassService: ItemBaseClassService, localisationService: LocalisationService, localeService: LocaleService);
+    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, randomUtil: RandomUtil, objectId: ObjectId, mathUtil: MathUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, itemBaseClassService: ItemBaseClassService, itemFilterService: ItemFilterService, localisationService: LocalisationService, localeService: LocaleService);
     /**
      * Checks if an id is a valid item. Valid meaning that it's an item that be stored in stash
      * @param       {string}    tpl       the template id / tpl
@@ -226,6 +228,48 @@ declare class ItemHelper {
      */
     isQuestItem(tpl: string): boolean;
     /**
+     * Checks to see if the item is *actually* moddable in-raid. Checks include the items existence in the database, the
+     * parent items existence in the database, the existence (and value) of the items RaidModdable property, and that
+     * the parents slot-required property exists, matches that of the item, and it's value.
+     *
+     * Note: this function does not preform any checks to see if the item and parent are *actually* related.
+     *
+     * @param item The item to be checked
+     * @param parent The parent of the item to be checked
+     * @returns True if the item is actually moddable, false if it is not, and null if the check cannot be performed.
+     */
+    isRaidModdable(item: Item, parent: Item): boolean | null;
+    /**
+     * Retrieves the main parent item for a given attachment item.
+     *
+     * This method traverses up the hierarchy of items starting from a given `itemId`, until it finds the main parent
+     * item that is not an attached attachment itself. In other words, if you pass it an item id of a suppressor, it
+     * will traverse up the muzzle brake, barrel, upper receiver, and return the gun that the suppressor is ultimately
+     * attached to, even if that gun is located within multiple containers.
+     *
+     * It's important to note that traversal is expensive, so this method requires that you pass it a Map of the items
+     * to traverse, where the keys are the item IDs and the values are the corresponding Item objects. This alleviates
+     * some of the performance concerns, as it allows for quick lookups of items by ID.
+     *
+     * To generate the map:
+     * ```
+     * const itemsMap = new Map<string, Item>();
+     * items.forEach(item => itemsMap.set(item._id, item));
+     * ```
+     *
+     * @param itemId - The unique identifier of the item for which to find the main parent.
+     * @param itemsMap - A Map containing item IDs mapped to their corresponding Item objects for quick lookup.
+     * @returns The Item object representing the top-most parent of the given item, or `null` if no such parent exists.
+     */
+    getAttachmentMainParent(itemId: string, itemsMap: Map<string, Item>): Item | null;
+    /**
+     * Determines if an item is an attachment that is currently attached to it's parent item.
+     *
+     * @param item The item to check.
+     * @returns true if the item is attached attachment, otherwise false.
+     */
+    isAttachmentAttached(item: Item): boolean;
+    /**
      * Get the inventory size of an item
      * @param items Item with children
      * @param rootItemId
@@ -279,7 +323,7 @@ declare class ItemHelper {
      * Chose a randomly weighted cartridge that fits
      * @param caliber Desired caliber
      * @param staticAmmoDist Cartridges and thier weights
-     * @returns Tpl of cartrdige
+     * @returns Tpl of cartridge
      */
     protected drawAmmoTpl(caliber: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>): string;
     /**
@@ -303,6 +347,7 @@ declare class ItemHelper {
      * @returns Name of item
      */
     getItemName(itemTpl: string): string;
+    getItemTplsOfBaseType(desiredBaseType: string): string[];
 }
 declare namespace ItemHelper {
     interface ItemSize {

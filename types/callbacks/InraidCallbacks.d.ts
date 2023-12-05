@@ -1,8 +1,8 @@
-import { InraidController } from "../controllers/InraidController";
-import { INullResponseData } from "../models/eft/httpResponse/INullResponseData";
-import { IRegisterPlayerRequestData } from "../models/eft/inRaid/IRegisterPlayerRequestData";
-import { ISaveProgressRequestData } from "../models/eft/inRaid/ISaveProgressRequestData";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
+import { InraidController } from "@spt-aki/controllers/InraidController";
+import { INullResponseData } from "@spt-aki/models/eft/httpResponse/INullResponseData";
+import { IRegisterPlayerRequestData } from "@spt-aki/models/eft/inRaid/IRegisterPlayerRequestData";
+import { ISaveProgressRequestData } from "@spt-aki/models/eft/inRaid/ISaveProgressRequestData";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 /**
  * Handle client requests
  */

@@ -1,9 +1,9 @@
 import { DependencyContainer } from "tsyringe";
-import { OnLoad } from "../di/OnLoad";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { LocalisationService } from "../services/LocalisationService";
-import { ModTypeCheck } from "./ModTypeCheck";
-import { PreAkiModLoader } from "./PreAkiModLoader";
+import { OnLoad } from "@spt-aki/di/OnLoad";
+import { ModTypeCheck } from "@spt-aki/loaders/ModTypeCheck";
+import { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
 export declare class PostDBModLoader implements OnLoad {
     protected logger: ILogger;
     protected preAkiModLoader: PreAkiModLoader;

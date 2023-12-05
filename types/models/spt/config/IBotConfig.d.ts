@@ -1,7 +1,7 @@
-import { GenerationData } from "../../../models/eft/common/tables/IBotType";
-import { MinMax } from "../../common/MinMax";
-import { IBaseConfig } from "./IBaseConfig";
-import { IBotDurability } from "./IBotDurability";
+import { MinMax } from "@spt-aki/models/common/MinMax";
+import { GenerationData } from "@spt-aki/models/eft/common/tables/IBotType";
+import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
+import { IBotDurability } from "@spt-aki/models/spt/config/IBotDurability";
 export interface IBotConfig extends IBaseConfig {
     kind: "aki-bot";
     /** How many variants of each bot should be generated on raid start */
@@ -25,6 +25,8 @@ export interface IBotConfig extends IBaseConfig {
     showTypeInNickname: boolean;
     /** What ai brain should a normal scav use per map */
     assaultBrainType: Record<string, Record<string, number>>;
+    /** What ai brain should a player scav use per map */
+    playerScavBrainType: Record<string, Record<string, number>>;
     /** Max number of bots that can be spawned in a raid at any one time */
     maxBotCap: Record<string, number>;
     /** Chance scav has fake pscav name e.g. Scav name (player name) */
@@ -102,6 +104,8 @@ export interface EquipmentFilters {
     weightingAdjustmentsByBotLevel: WeightingAdjustmentDetails[];
     /** Same as weightingAdjustments but based on player level instead of bot level */
     weightingAdjustmentsByPlayerLevel?: WeightingAdjustmentDetails[];
+    /** Should the stock mod be forced to spawn on bot */
+    forceStock: boolean;
 }
 export interface ModLimits {
     /** How many scopes are allowed on a weapon - hard coded to work with OPTIC_SCOPE, ASSAULT_SCOPE, COLLIMATOR, COMPACT_COLLIMATOR */

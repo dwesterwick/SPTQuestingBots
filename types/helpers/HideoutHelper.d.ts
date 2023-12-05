@@ -1,25 +1,25 @@
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { Common, HideoutArea, IHideoutImprovement, Production, Productive } from "../models/eft/common/tables/IBotBase";
-import { Upd } from "../models/eft/common/tables/IItem";
-import { StageBonus } from "../models/eft/hideout/IHideoutArea";
-import { IHideoutContinuousProductionStartRequestData } from "../models/eft/hideout/IHideoutContinuousProductionStartRequestData";
-import { IHideoutProduction } from "../models/eft/hideout/IHideoutProduction";
-import { IHideoutSingleProductionStartRequestData } from "../models/eft/hideout/IHideoutSingleProductionStartRequestData";
-import { IHideoutTakeProductionRequestData } from "../models/eft/hideout/IHideoutTakeProductionRequestData";
-import { IAddItemRequestData } from "../models/eft/inventory/IAddItemRequestData";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { IHideoutConfig } from "../models/spt/config/IHideoutConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { EventOutputHolder } from "../routers/EventOutputHolder";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { LocalisationService } from "../services/LocalisationService";
-import { PlayerService } from "../services/PlayerService";
-import { HashUtil } from "../utils/HashUtil";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
-import { TimeUtil } from "../utils/TimeUtil";
-import { InventoryHelper } from "./InventoryHelper";
-import { ProfileHelper } from "./ProfileHelper";
+import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { HideoutArea, IHideoutImprovement, Production, Productive } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { Upd } from "@spt-aki/models/eft/common/tables/IItem";
+import { StageBonus } from "@spt-aki/models/eft/hideout/IHideoutArea";
+import { IHideoutContinuousProductionStartRequestData } from "@spt-aki/models/eft/hideout/IHideoutContinuousProductionStartRequestData";
+import { IHideoutProduction } from "@spt-aki/models/eft/hideout/IHideoutProduction";
+import { IHideoutSingleProductionStartRequestData } from "@spt-aki/models/eft/hideout/IHideoutSingleProductionStartRequestData";
+import { IHideoutTakeProductionRequestData } from "@spt-aki/models/eft/hideout/IHideoutTakeProductionRequestData";
+import { IAddItemRequestData } from "@spt-aki/models/eft/inventory/IAddItemRequestData";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { IHideoutConfig } from "@spt-aki/models/spt/config/IHideoutConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { EventOutputHolder } from "@spt-aki/routers/EventOutputHolder";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { PlayerService } from "@spt-aki/services/PlayerService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 export declare class HideoutHelper {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -202,21 +202,9 @@ export declare class HideoutHelper {
      */
     protected getBTCSlots(pmcData: IPmcData): number;
     /**
-     * Does profile have elite hideout management skill
-     * @param pmcData Profile to look at
-     * @returns True if profile has skill
-     */
-    protected hasEliteHideoutManagementSkill(pmcData: IPmcData): boolean;
-    /**
      * Get a count of bitcoins player miner can hold
      */
     protected getBitcoinMinerContainerSlotSize(): number;
-    /**
-     * Get the hideout management skill from player profile
-     * @param pmcData Profile to look at
-     * @returns Hideout management skill object
-     */
-    protected getHideoutManagementSkill(pmcData: IPmcData): Common;
     /**
      * HideoutManagement skill gives a consumption bonus the higher the level
      * 0.5% per level per 1-51, (25.5% at max)

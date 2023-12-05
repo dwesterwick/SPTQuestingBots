@@ -1,4 +1,4 @@
-import { Item } from "./IItem";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
 export interface IReward {
     index: number;
     type: string;
@@ -35,9 +35,9 @@ export interface IChangeCost {
     count: number;
 }
 export interface IRepeatableQuest {
-    _id: any;
+    _id: string;
     traderId: string;
-    location: any;
+    location: string;
     image: string;
     type: string;
     isKey: boolean;
@@ -48,6 +48,7 @@ export interface IRepeatableQuest {
     rewards: IRewards;
     conditions: IConditions;
     side: string;
+    questStatus: any;
     name: string;
     note: string;
     description: string;
@@ -55,9 +56,13 @@ export interface IRepeatableQuest {
     failMessageText: string;
     startedMessageText: string;
     changeQuestMessageText: string;
+    acceptPlayerMessage: string;
+    declinePlayerMessage: string;
+    completePlayerMessage: string;
     templateId: string;
     changeCost: IChangeCost[];
     changeStandingCost: number;
+    sptRepatableGroupName?: string;
 }
 export interface IRewards {
     Started: IReward[];
@@ -93,7 +98,7 @@ export interface IAvailableForPropsCounter extends IAvailableForProps {
     type: string;
     oneSessionOnly: boolean;
     doNotResetIfCounterCompleted: boolean;
-    counter: ICounter;
+    counter?: ICounter;
 }
 export interface ICounter {
     id: string;
@@ -143,6 +148,25 @@ export interface IExplorationCounter extends ICounter {
 export interface IExplorationCondition extends ICondition {
     _props: ILocationConditionProps | IExitStatusConditionProps | IExitNameConditionProps;
 }
+export interface IPickup extends IRepeatableQuest {
+    conditions: IPickupConditions;
+}
+export interface IPickupConditions extends IConditions {
+    AvailableForFinish: IPickupAvailableFor[];
+}
+export interface IPickupAvailableFor extends IAvailableFor {
+    _props: IPickupAvailableForProps;
+}
+export interface IPickupAvailableForProps extends IAvailableForPropsCounter {
+    target: string[];
+    counter?: IPickupCounter;
+}
+export interface IPickupCounter extends ICounter {
+    conditions: IPickupCondition[];
+}
+export interface IPickupCondition extends ICondition {
+    _props: IEquipmentConditionProps | ILocationConditionProps | IExitStatusConditionProps;
+}
 export interface ICompletion extends IRepeatableQuest {
     conditions: ICompletionConditions;
 }
@@ -161,6 +185,12 @@ export interface ICompletionAvailableForProps extends IAvailableForProps {
 }
 export interface ILocationConditionProps extends IConditionProps {
     target: string[];
+    weapon?: string[];
+    weaponCategories?: string[];
+}
+export interface IEquipmentConditionProps extends IConditionProps {
+    equipmentInclusive: [string[]];
+    IncludeNotEquippedItems: boolean;
 }
 export interface IKillConditionProps extends IConditionProps {
     target: string;
@@ -168,6 +198,8 @@ export interface IKillConditionProps extends IConditionProps {
     savageRole?: string[];
     bodyPart?: string[];
     distance?: IDistanceCheck;
+    weapon?: string[];
+    weaponCategories?: string[];
 }
 export interface IDistanceCheck {
     compareMethod: string;

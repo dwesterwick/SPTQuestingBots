@@ -1,6 +1,6 @@
-import { HttpServerHelper } from "../helpers/HttpServerHelper";
-import { JsonUtil } from "../utils/JsonUtil";
-import { VFS } from "../utils/VFS";
+import { HttpServerHelper } from "@spt-aki/helpers/HttpServerHelper";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { VFS } from "@spt-aki/utils/VFS";
 declare class BundleInfo {
     modPath: string;
     key: string;

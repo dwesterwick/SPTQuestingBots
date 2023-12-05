@@ -1,11 +1,11 @@
 import { DependencyContainer } from "tsyringe";
-import { IModLoader } from "../models/spt/mod/IModLoader";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { LocalisationService } from "../services/LocalisationService";
-import { VFS } from "../utils/VFS";
-import { BundleLoader } from "./BundleLoader";
-import { ModTypeCheck } from "./ModTypeCheck";
-import { PreAkiModLoader } from "./PreAkiModLoader";
+import { BundleLoader } from "@spt-aki/loaders/BundleLoader";
+import { ModTypeCheck } from "@spt-aki/loaders/ModTypeCheck";
+import { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
+import { IModLoader } from "@spt-aki/models/spt/mod/IModLoader";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { VFS } from "@spt-aki/utils/VFS";
 export declare class PostAkiModLoader implements IModLoader {
     protected logger: ILogger;
     protected bundleLoader: BundleLoader;

@@ -1,6 +1,6 @@
-import { IAsyncQueue } from "../../models/spt/utils/IAsyncQueue";
-import { IUUidGenerator } from "../../models/spt/utils/IUuidGenerator";
-import { AbstractWinstonLogger } from "./AbstractWinstonLogger";
+import { IAsyncQueue } from "@spt-aki/models/spt/utils/IAsyncQueue";
+import { IUUidGenerator } from "@spt-aki/models/spt/utils/IUuidGenerator";
+import { AbstractWinstonLogger } from "@spt-aki/utils/logging/AbstractWinstonLogger";
 export declare class WinstonRequestLogger extends AbstractWinstonLogger {
     protected asyncQueue: IAsyncQueue;
     protected uuidGenerator: IUUidGenerator;

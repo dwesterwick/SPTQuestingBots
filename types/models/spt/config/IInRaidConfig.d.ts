@@ -1,4 +1,4 @@
-import { IBaseConfig } from "./IBaseConfig";
+import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
 export interface IInRaidConfig extends IBaseConfig {
     kind: "aki-inraid";
     MIAOnRaidEnd: boolean;
@@ -8,8 +8,12 @@ export interface IInRaidConfig extends IBaseConfig {
     save: Save;
     /** Names of car extracts */
     carExtracts: string[];
-    /** Fene rep gain from a single car extract */
+    /** Names of coop extracts */
+    coopExtracts: string[];
+    /** Fence rep gain from a single car extract */
     carExtractBaseStandingGain: number;
+    /** Fence rep gain from a single coop extract */
+    coopExtractBaseStandingGain: number;
     /** Fence rep gain when successfully extracting as pscav */
     scavExtractGain: number;
     /** On death should items in your secure keep their Find in raid status regardless of how you finished the raid */

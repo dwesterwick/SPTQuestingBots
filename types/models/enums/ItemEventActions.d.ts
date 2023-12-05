@@ -9,6 +9,7 @@ export declare enum ItemEventActions {
     TOGGLE = "Toggle",
     TAG = "Tag",
     BIND = "Bind",
+    UNBIND = "Unbind",
     EXAMINE = "Examine",
     READ_ENCYCLOPEDIA = "ReadEncyclopedia",
     APPLY_INVENTORY_CHANGES = "ApplyInventoryChanges",

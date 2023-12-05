@@ -1,14 +1,14 @@
-import { NotificationSendHelper } from "../helpers/NotificationSendHelper";
-import { WeightedRandomHelper } from "../helpers/WeightedRandomHelper";
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { Aggressor, Victim } from "../models/eft/common/tables/IBotBase";
-import { IUserDialogInfo } from "../models/eft/profile/IAkiProfile";
-import { IPmcChatResponse } from "../models/spt/config/IPmChatResponse";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { RandomUtil } from "../utils/RandomUtil";
-import { LocalisationService } from "./LocalisationService";
-import { MatchBotDetailsCacheService } from "./MatchBotDetailsCacheService";
+import { NotificationSendHelper } from "@spt-aki/helpers/NotificationSendHelper";
+import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { Aggressor, Victim } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { IUserDialogInfo } from "@spt-aki/models/eft/profile/IAkiProfile";
+import { IPmcChatResponse } from "@spt-aki/models/spt/config/IPmChatResponse";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { MatchBotDetailsCacheService } from "@spt-aki/services/MatchBotDetailsCacheService";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 export declare class PmcChatResponseService {
     protected logger: ILogger;
     protected randomUtil: RandomUtil;

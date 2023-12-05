@@ -1,4 +1,4 @@
-import { IRagfairOffer } from "../models/eft/ragfair/IRagfairOffer";
+import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
 export declare class RagfairOfferHolder {
     protected offersById: Map<string, IRagfairOffer>;
     protected offersByTemplate: Map<string, Map<string, IRagfairOffer>>;

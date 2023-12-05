@@ -1,4 +1,4 @@
-import { IBaseConfig } from "./IBaseConfig";
+import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
 export interface ILostOnDeathConfig extends IBaseConfig {
     kind: "aki-lostondeath";
     /** What equipment in each slot should be lost on death */

@@ -1,4 +1,4 @@
-import { Item } from "./IItem";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
 export interface ITrader {
     assort: ITraderAssort;
     base: ITraderBase;

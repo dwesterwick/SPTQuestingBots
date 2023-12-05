@@ -1,28 +1,28 @@
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { Inventory } from "../models/eft/common/tables/IBotBase";
-import { Item } from "../models/eft/common/tables/IItem";
-import { AddItem, IAddItemRequestData } from "../models/eft/inventory/IAddItemRequestData";
-import { IAddItemTempObject } from "../models/eft/inventory/IAddItemTempObject";
-import { IInventoryMergeRequestData } from "../models/eft/inventory/IInventoryMergeRequestData";
-import { IInventoryMoveRequestData } from "../models/eft/inventory/IInventoryMoveRequestData";
-import { IInventoryRemoveRequestData } from "../models/eft/inventory/IInventoryRemoveRequestData";
-import { IInventorySplitRequestData } from "../models/eft/inventory/IInventorySplitRequestData";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { IInventoryConfig, RewardDetails } from "../models/spt/config/IInventoryConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { FenceService } from "../services/FenceService";
-import { LocalisationService } from "../services/LocalisationService";
-import { HashUtil } from "../utils/HashUtil";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { ContainerHelper } from "./ContainerHelper";
-import { DialogueHelper } from "./DialogueHelper";
-import { ItemHelper } from "./ItemHelper";
-import { PaymentHelper } from "./PaymentHelper";
-import { ProfileHelper } from "./ProfileHelper";
-import { TraderAssortHelper } from "./TraderAssortHelper";
+import { ContainerHelper } from "@spt-aki/helpers/ContainerHelper";
+import { DialogueHelper } from "@spt-aki/helpers/DialogueHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { TraderAssortHelper } from "@spt-aki/helpers/TraderAssortHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { Inventory } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { AddItem, IAddItemRequestData } from "@spt-aki/models/eft/inventory/IAddItemRequestData";
+import { IAddItemTempObject } from "@spt-aki/models/eft/inventory/IAddItemTempObject";
+import { IInventoryMergeRequestData } from "@spt-aki/models/eft/inventory/IInventoryMergeRequestData";
+import { IInventoryMoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryMoveRequestData";
+import { IInventoryRemoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryRemoveRequestData";
+import { IInventorySplitRequestData } from "@spt-aki/models/eft/inventory/IInventorySplitRequestData";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { IInventoryConfig, RewardDetails } from "@spt-aki/models/spt/config/IInventoryConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { FenceService } from "@spt-aki/services/FenceService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
 export interface OwnerInventoryItems {
     /** Inventory items from source */
     from: Item[];
@@ -86,7 +86,6 @@ export declare class InventoryHelper {
      */
     protected hydrateAmmoBoxWithAmmo(pmcData: IPmcData, itemToAdd: IAddItemTempObject, parentId: string, sessionID: string, output: IItemEventRouterResponse, foundInRaid: boolean): void;
     /**
-     *
      * @param assortItems Items to add to inventory
      * @param requestItem Details of purchased item to add to inventory
      * @param result Array split stacks are added to
@@ -163,8 +162,8 @@ export declare class InventoryHelper {
      */
     protected updateFastPanelBinding(pmcData: IPmcData, itemBeingMoved: Item): void;
     /**
-    * Internal helper function to handle cartridges in inventory if any of them exist.
-    */
+     * Internal helper function to handle cartridges in inventory if any of them exist.
+     */
     protected handleCartridges(items: Item[], body: IInventoryMoveRequestData): void;
     /**
      * Get details for how a random loot container should be handled, max rewards, possible reward tpls

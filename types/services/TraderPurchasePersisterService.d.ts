@@ -1,10 +1,10 @@
-import { ProfileHelper } from "../helpers/ProfileHelper";
-import { TraderPurchaseData } from "../models/eft/profile/IAkiProfile";
-import { ITraderConfig } from "../models/spt/config/ITraderConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { TimeUtil } from "../utils/TimeUtil";
-import { LocalisationService } from "./LocalisationService";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { TraderPurchaseData } from "@spt-aki/models/eft/profile/IAkiProfile";
+import { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 /**
  * Help with storing limited item purchases from traders in profile to persist them over server restarts
  */

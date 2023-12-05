@@ -1,9 +1,9 @@
-import { HideoutAreas } from "../../../enums/HideoutAreas";
-import { MemberCategory } from "../../../enums/MemberCategory";
-import { QuestStatus } from "../../../enums/QuestStatus";
-import { IRagfairOffer } from "../../ragfair/IRagfairOffer";
-import { Item, Upd } from "./IItem";
-import { IPmcDataRepeatableQuest } from "./IRepeatableQuests";
+import { Item, Upd } from "@spt-aki/models/eft/common/tables/IItem";
+import { IPmcDataRepeatableQuest } from "@spt-aki/models/eft/common/tables/IRepeatableQuests";
+import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
+import { HideoutAreas } from "@spt-aki/models/enums/HideoutAreas";
+import { MemberCategory } from "@spt-aki/models/enums/MemberCategory";
+import { QuestStatus } from "@spt-aki/models/enums/QuestStatus";
 export interface IBotBase {
     _id: string;
     aid: number;
@@ -28,7 +28,8 @@ export interface IBotBase {
     RepeatableQuests: IPmcDataRepeatableQuest[];
     Bonuses: Bonus[];
     Notes: Notes;
-    CarExtractCounts: CarExtractCounts;
+    CarExtractCounts: Record<string, number>;
+    CoopExtractCounts: Record<string, number>;
     SurvivorClass: SurvivorClass;
     WishList: string[];
     /** SPT specific property used during bot generation in raid */
@@ -301,11 +302,15 @@ export interface Productive {
     ProductionTime?: number;
     GivenItemsInStart?: string[];
     Interrupted?: boolean;
-    /** Used in hideout prodiction.json */
+    /** Used in hideout production.json */
     needFuelForAllProductionTime?: boolean;
     /** Used when sending data to client */
     NeedFuelForAllProductionTime?: boolean;
     sptIsScavCase?: boolean;
+    /** Some crafts are always inProgress, but need to be reset, e.g. water collector */
+    sptIsComplete?: boolean;
+    /** Is the craft a Continuous, e.g bitcoins/water collector */
+    sptIsContinuous?: boolean;
 }
 export interface Production extends Productive {
     RecipeId: string;
@@ -346,8 +351,6 @@ export interface LastCompleted {
 export interface Notes {
     Notes: Note[];
 }
-export interface CarExtractCounts {
-}
 export declare enum SurvivorClass {
     UNKNOWN = 0,
     NEUTRALIZER = 1,
@@ -360,7 +363,7 @@ export interface IQuestStatus {
     startTime: number;
     status: QuestStatus;
     statusTimers?: Record<string, number>;
-    /** SPT specific property */
+    /** Property does not exist in live profile data, but is used by ProfileChanges.questsStatus when sent to client*/
     completedConditions?: string[];
     availableAfter?: number;
 }
@@ -369,14 +372,6 @@ export interface TraderInfo {
     salesSum: number;
     standing: number;
     nextResupply: number;
-    unlocked: boolean;
-    disabled: boolean;
-}
-/** This object is sent to the client as part of traderRelations */
-export interface TraderData {
-    salesSum: number;
-    standing: number;
-    loyalty: number;
     unlocked: boolean;
     disabled: boolean;
 }

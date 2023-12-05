@@ -1,9 +1,9 @@
 import { I18n } from "i18n";
-import { ILocaleConfig } from "../models/spt/config/ILocaleConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { RandomUtil } from "../utils/RandomUtil";
-import { LocaleService } from "./LocaleService";
+import { ILocaleConfig } from "@spt-aki/models/spt/config/ILocaleConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { LocaleService } from "@spt-aki/services/LocaleService";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 /**
  * Handles translating server text into different langauges
  */

@@ -54,6 +54,7 @@ export declare enum BaseClasses {
     GRENADE_LAUNCHER = "5447bedf4bdc2d87278b4568",
     SPECIAL_WEAPON = "5447bee84bdc2dc3278b4569",
     SPEC_ITEM = "5447e0e74bdc2d3c308b4567",
+    SPRING_DRIVEN_CYLINDER = "627a137bf21bc425b06ab944",
     KNIFE = "5447e1d04bdc2dff2f8b4567",
     AMMO = "5485a8684bdc2da71d8b4567",
     AMMO_BOX = "543be5cb4bdc2deb348b4568",

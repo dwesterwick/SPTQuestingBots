@@ -1,5 +1,5 @@
-import { MinMax } from "../../common/MinMax";
-import { IBaseConfig } from "./IBaseConfig";
+import { MinMax } from "@spt-aki/models/common/MinMax";
+import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
 export interface IRagfairConfig extends IBaseConfig {
     kind: "aki-ragfair";
     /** How many seconds should pass before expired offers and procesed + player offers checked if sold */

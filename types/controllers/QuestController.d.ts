@@ -1,31 +1,31 @@
-import { DialogueHelper } from "../helpers/DialogueHelper";
-import { ItemHelper } from "../helpers/ItemHelper";
-import { ProfileHelper } from "../helpers/ProfileHelper";
-import { QuestConditionHelper } from "../helpers/QuestConditionHelper";
-import { QuestHelper } from "../helpers/QuestHelper";
-import { TraderHelper } from "../helpers/TraderHelper";
-import { IPmcData } from "../models/eft/common/IPmcData";
-import { IQuestStatus } from "../models/eft/common/tables/IBotBase";
-import { Item } from "../models/eft/common/tables/IItem";
-import { AvailableForConditions, IQuest, Reward } from "../models/eft/common/tables/IQuest";
-import { IRepeatableQuest } from "../models/eft/common/tables/IRepeatableQuests";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { IAcceptQuestRequestData } from "../models/eft/quests/IAcceptQuestRequestData";
-import { ICompleteQuestRequestData } from "../models/eft/quests/ICompleteQuestRequestData";
-import { IHandoverQuestRequestData } from "../models/eft/quests/IHandoverQuestRequestData";
-import { IQuestConfig } from "../models/spt/config/IQuestConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { EventOutputHolder } from "../routers/EventOutputHolder";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { LocaleService } from "../services/LocaleService";
-import { LocalisationService } from "../services/LocalisationService";
-import { MailSendService } from "../services/MailSendService";
-import { PlayerService } from "../services/PlayerService";
-import { SeasonalEventService } from "../services/SeasonalEventService";
-import { HttpResponseUtil } from "../utils/HttpResponseUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { TimeUtil } from "../utils/TimeUtil";
+import { DialogueHelper } from "@spt-aki/helpers/DialogueHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import { QuestConditionHelper } from "@spt-aki/helpers/QuestConditionHelper";
+import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
+import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
+import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
+import { IQuestStatus } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { AvailableForConditions, IQuest, Reward } from "@spt-aki/models/eft/common/tables/IQuest";
+import { IRepeatableQuest } from "@spt-aki/models/eft/common/tables/IRepeatableQuests";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { IAcceptQuestRequestData } from "@spt-aki/models/eft/quests/IAcceptQuestRequestData";
+import { ICompleteQuestRequestData } from "@spt-aki/models/eft/quests/ICompleteQuestRequestData";
+import { IHandoverQuestRequestData } from "@spt-aki/models/eft/quests/IHandoverQuestRequestData";
+import { IQuestConfig } from "@spt-aki/models/spt/config/IQuestConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { EventOutputHolder } from "@spt-aki/routers/EventOutputHolder";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { LocaleService } from "@spt-aki/services/LocaleService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { MailSendService } from "@spt-aki/services/MailSendService";
+import { PlayerService } from "@spt-aki/services/PlayerService";
+import { SeasonalEventService } from "@spt-aki/services/SeasonalEventService";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 export declare class QuestController {
     protected logger: ILogger;
     protected timeUtil: TimeUtil;
@@ -82,7 +82,7 @@ export declare class QuestController {
      * @param pmcData Profile to update
      * @param acceptedQuest Quest accepted
      * @param sessionID Session id
-     * @returns client response
+     * @returns Client response
      */
     acceptQuest(pmcData: IPmcData, acceptedQuest: IAcceptQuestRequestData, sessionID: string): IItemEventRouterResponse;
     /**
@@ -113,6 +113,12 @@ export declare class QuestController {
      * @returns ItemEvent client response
      */
     completeQuest(pmcData: IPmcData, body: ICompleteQuestRequestData, sessionID: string): IItemEventRouterResponse;
+    /**
+     * Remove a quest entirely from a profile
+     * @param sessionId Player id
+     * @param questIdToRemove Qid of quest to remove
+     */
+    protected removeQuestFromScavProfile(sessionId: string, questIdToRemove: string): void;
     /**
      * Return quests that have different statuses
      * @param preQuestStatusus Quests before

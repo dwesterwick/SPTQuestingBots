@@ -1,9 +1,9 @@
-import { IGetBodyResponseData } from "../models/eft/httpResponse/IGetBodyResponseData";
-import { INullResponseData } from "../models/eft/httpResponse/INullResponseData";
-import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
-import { BackendErrorCodes } from "../models/enums/BackendErrorCodes";
-import { LocalisationService } from "../services/LocalisationService";
-import { JsonUtil } from "./JsonUtil";
+import { IGetBodyResponseData } from "@spt-aki/models/eft/httpResponse/IGetBodyResponseData";
+import { INullResponseData } from "@spt-aki/models/eft/httpResponse/INullResponseData";
+import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
+import { BackendErrorCodes } from "@spt-aki/models/enums/BackendErrorCodes";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
 export declare class HttpResponseUtil {
     protected jsonUtil: JsonUtil;
     protected localisationService: LocalisationService;
@@ -15,6 +15,13 @@ export declare class HttpResponseUtil {
      * @returns
      */
     noBody(data: any): any;
+    /**
+     * Game client needs server responses in a particular format
+     * @param data
+     * @param err
+     * @param errmsg
+     * @returns
+     */
     getBody<T>(data: T, err?: number, errmsg?: any): IGetBodyResponseData<T>;
     getUnclearedBody(data: any, err?: number, errmsg?: any): string;
     emptyResponse(): IGetBodyResponseData<string>;

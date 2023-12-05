@@ -1,5 +1,5 @@
-import { Item } from "../models/eft/common/tables/IItem";
-import { ItemHelper } from "./ItemHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
 export interface OwnerInventoryItems {
     from: Item[];
     to: Item[];

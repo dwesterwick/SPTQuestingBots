@@ -1,6 +1,6 @@
-import { IPreset } from "../models/eft/common/IGlobals";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { JsonUtil } from "../utils/JsonUtil";
+import { IPreset } from "@spt-aki/models/eft/common/IGlobals";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
 export declare class PresetHelper {
     protected jsonUtil: JsonUtil;
     protected databaseServer: DatabaseServer;

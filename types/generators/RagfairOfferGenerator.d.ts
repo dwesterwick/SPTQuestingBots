@@ -1,27 +1,27 @@
-import { HandbookHelper } from "../helpers/HandbookHelper";
-import { ItemHelper } from "../helpers/ItemHelper";
-import { PaymentHelper } from "../helpers/PaymentHelper";
-import { PresetHelper } from "../helpers/PresetHelper";
-import { RagfairServerHelper } from "../helpers/RagfairServerHelper";
-import { Item } from "../models/eft/common/tables/IItem";
-import { ITemplateItem } from "../models/eft/common/tables/ITemplateItem";
-import { IBarterScheme } from "../models/eft/common/tables/ITrader";
-import { IRagfairOffer, OfferRequirement } from "../models/eft/ragfair/IRagfairOffer";
-import { Dynamic, IRagfairConfig } from "../models/spt/config/IRagfairConfig";
-import { ILogger } from "../models/spt/utils/ILogger";
-import { ConfigServer } from "../servers/ConfigServer";
-import { DatabaseServer } from "../servers/DatabaseServer";
-import { SaveServer } from "../servers/SaveServer";
-import { FenceService } from "../services/FenceService";
-import { LocalisationService } from "../services/LocalisationService";
-import { RagfairCategoriesService } from "../services/RagfairCategoriesService";
-import { RagfairOfferService } from "../services/RagfairOfferService";
-import { RagfairPriceService } from "../services/RagfairPriceService";
-import { HashUtil } from "../utils/HashUtil";
-import { JsonUtil } from "../utils/JsonUtil";
-import { RandomUtil } from "../utils/RandomUtil";
-import { TimeUtil } from "../utils/TimeUtil";
-import { RagfairAssortGenerator } from "./RagfairAssortGenerator";
+import { RagfairAssortGenerator } from "@spt-aki/generators/RagfairAssortGenerator";
+import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
+import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
+import { RagfairServerHelper } from "@spt-aki/helpers/RagfairServerHelper";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
+import { IBarterScheme } from "@spt-aki/models/eft/common/tables/ITrader";
+import { IRagfairOffer, OfferRequirement } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
+import { Dynamic, IRagfairConfig } from "@spt-aki/models/spt/config/IRagfairConfig";
+import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { SaveServer } from "@spt-aki/servers/SaveServer";
+import { FenceService } from "@spt-aki/services/FenceService";
+import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { RagfairCategoriesService } from "@spt-aki/services/RagfairCategoriesService";
+import { RagfairOfferService } from "@spt-aki/services/RagfairOfferService";
+import { RagfairPriceService } from "@spt-aki/services/RagfairPriceService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 export declare class RagfairOfferGenerator {
     protected logger: ILogger;
     protected jsonUtil: JsonUtil;
@@ -121,7 +121,6 @@ export declare class RagfairOfferGenerator {
      */
     generateDynamicOffers(expiredOffers?: Item[]): Promise<void>;
     /**
-     *
      * @param assortItemIndex Index of assort item
      * @param assortItemsToProcess Item array containing index
      * @param expiredOffers Currently expired offers on flea

@@ -25,7 +25,7 @@ export declare class WeightedRandomHelper {
      * @param {number[]} weights
      * @returns {{item: any, index: number}}
      */
-    weightedRandom(items: string | any[], weights: string | any[]): {
+    weightedRandom(items: any[], weights: any[]): {
         item: any;
         index: number;
     };
