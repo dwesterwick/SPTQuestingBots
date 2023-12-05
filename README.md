@@ -241,10 +241,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
-* Bots can't tell if a locked door is blocking their path and will give up instead of unlocking it
-* Bots cannot open unlocked keycard doors (mostly an issue for rooms in Labs). This is an EFT limitation. 
 * Bots tend to get trapped in certain areas. Known areas:
-    * Factory Gate 1 (should be fixed as of the Waypoints release for SPT-AKI 3.7.0; need to test again)
     * Customs between Warehouse 4 and New Gas
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
