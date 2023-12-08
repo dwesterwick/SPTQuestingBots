@@ -144,6 +144,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **enabled**: Completely enable or disable all featues of this mod. 
 * **debug.enabled**: Enable debug mode.
 * **debug.scav_cooldown_time**: Cooldown timer (in seconds) after a Scav raid ends before you're allowed to start another one. This is **1500** by default, which is the same as the base game.
+* **debug.full_length_scav_raids**: If **true**, Scav raids will always be full-length. 
 * **debug.free_labs_access**: If **true**, Labs cards are no longer required to enter Labs, and you're also allowed to do Scav runs in Labs. 
 * **debug.always_spawn_pmcs**: If **true**, PMC's will spawn even when you select "None" for the amount of bots when starting a raid. 
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.

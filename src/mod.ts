@@ -176,6 +176,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 this.databaseTables.locations.laboratory.base.AccessKeys = [];
                 this.databaseTables.locations.laboratory.base.DisabledForScav = false;
             }
+
+            if (modConfig.debug.full_length_scav_raids)
+            {
+                this.forceFullLengthScavRaids();
+            }
         }
     }
 	
@@ -392,6 +397,16 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
 
         this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's...done. Removed entries: ${removedBrains}`);
+    }
+
+    private forceFullLengthScavRaids(): void
+    {
+        this.commonUtils.logInfo("Forcing full-length Scav raids...");
+
+        for (const map in this.iLocationConfig.scavRaidTimeSettings.maps)
+        {
+            this.iLocationConfig.scavRaidTimeSettings.maps[map].reducedChancePercent = 0;
+        }
     }
 }
 

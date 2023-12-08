@@ -3,6 +3,7 @@
 	"debug": {
 		"enabled": true,
 		"scav_cooldown_time": 1500,
+		"full_length_scav_raids": false,
 		"free_labs_access": false,
 		"always_spawn_pmcs": false,
 		"show_zone_outlines": false,
