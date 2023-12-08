@@ -194,19 +194,19 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return;
                 }
 
-                // Load the bundle for the key. Otherwise, the unlock animation will fail. 
-                if (bundleLoader == null)
+                // Wait for the the bundle to finish loading. If the bundle has not finished loading at this point, something is likely wrong...
+                if ((bundleLoader != null) && (!bundleLoader.Finished))
                 {
-                    LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
-                    loadBundle(keyComponent.Item);
+                    LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
 
                     return;
                 }
 
-                // Wait for the the bundle to finish loading. If the bundle has not finished loading at this point, something is likely wrong...
-                if (!bundleLoader.Finished)
+                // Load the bundle for the key if it hasn't been already. Otherwise, the unlock animation will fail. 
+                if (!isBundleLoaded(keyComponent.Item))
                 {
-                    LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
+                    LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                    loadBundle(keyComponent.Item);
 
                     return;
                 }
@@ -412,6 +412,30 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
+        private bool isBundleLoaded(Item item)
+        {
+            try
+            {
+                IEasyBundle data = Singleton<IEasyAssets>.Instance.System.GetNode(item.Prefab.path).Data;
+
+                if (data.LoadState.Value == Diz.DependencyManager.ELoadState.Loaded)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
+
+                ObjectiveManager.TryChangeObjective();
+
+                throw;
+            }
+
+            return false;
+        }
+
         private void loadBundle(Item item)
         {
             try
@@ -424,6 +448,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 if (item.Prefab.path.Length == 0)
                 {
                     throw new InvalidOperationException("The prefab path for " + item.LocalizedName() + " is empty");
+                }
+
+                if (bundleLoader != null)
+                {
+                    LoggingController.LogInfo("Releasing bundle loader...");
+                    bundleLoader.Release();
                 }
 
                 bundleLoader = Singleton<IEasyAssets>.Instance.Retain(new string[] { item.Prefab.path }, null, default);
