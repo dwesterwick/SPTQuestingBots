@@ -104,11 +104,12 @@ namespace SPTQuestingBots.Models
 
         public bool CanAssignBot(BotOwner bot)
         {
-            float? raidTime = LocationController.GetElapsedRaidTime();
-            if (!raidTime.HasValue)
+            if (!Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
                 return false;
             }
+
+            float raidTime = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
 
             if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
             {
@@ -118,8 +119,8 @@ namespace SPTQuestingBots.Models
             bool canAssign = (!PMCsOnly || BotRegistrationManager.IsBotAPMC(bot))
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
-                && (raidTime.Value >= MinRaidET)
-                && (raidTime.Value <= MaxRaidET);
+                && (raidTime >= MinRaidET)
+                && (raidTime <= MaxRaidET);
 
             return canAssign;
         }

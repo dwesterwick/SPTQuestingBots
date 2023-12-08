@@ -23,7 +23,6 @@ namespace SPTQuestingBots.Controllers
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
         
         private static TarkovApplication tarkovApplication = null;
-        private static Dictionary<string, int> originalEscapeTimes = new Dictionary<string, int>();
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private static Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
@@ -120,20 +119,21 @@ namespace SPTQuestingBots.Controllers
 
                 if (!door.Operatable)
                 {
-                    LoggingController.LogInfo("Door " + door.Id + " is inoperable");
+                    //LoggingController.LogInfo("Door " + door.Id + " is inoperable");
                     continue;
                 }
 
                 if (!door.CanBeBreached && (door.KeyId == ""))
                 {
-                    LoggingController.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
+                    //LoggingController.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
                     continue;
                 }
 
                 areLockedDoorsUnlocked.Add(door, false);
             }
 
-            //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", lockedDoors.Select(s => s.Id)));
+            LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors");
+            //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
@@ -194,49 +194,6 @@ namespace SPTQuestingBots.Controllers
             }
 
             return CurrentLocation.SpawnPointParams;
-        }
-
-        public static void ClearEscapeTimes()
-        {
-            LoggingController.LogInfo("Clearing cached escape times...");
-            originalEscapeTimes.Clear();
-            HasRaidStarted = false;
-        }
-
-        public static void CacheEscapeTimes()
-        {
-            // Check if escape-time data has already been cached
-            if (originalEscapeTimes.Count > 0)
-            {
-                return;
-            }
-
-            if (tarkovApplication == null)
-            {
-                throw new InvalidOperationException("Location settings cannot be retrieved.");
-            }
-
-            LocationSettingsClass locationSettings = getLocationSettings(tarkovApplication);
-            if (locationSettings == null)
-            {
-                throw new InvalidOperationException("Location settings could not be retrieved.");
-            }
-
-            LoggingController.LogInfo("Caching escape times...");
-
-            foreach (string location in locationSettings.locations.Keys)
-            {
-                originalEscapeTimes.Add(locationSettings.locations[location].Id, locationSettings.locations[location].EscapeTimeLimit);
-
-                if (originalEscapeTimes.Last().Value > 0)
-                {
-                    LoggingController.LogInfo("Caching escape times..." + originalEscapeTimes.Last().Key + ": " + originalEscapeTimes.Last().Value);
-                }
-            }
-
-            LoggingController.LogInfo("Caching escape times...done.");
-
-            HasRaidStarted = false;
         }
 
         // This isn't actually used anywhere in this mod, but I left it in here because it's a pretty nifty algorithm
@@ -308,99 +265,6 @@ namespace SPTQuestingBots.Controllers
             }
 
             return GetNearestSpawnPoint(playerPosition.Value);
-        }
-
-        public static float? GetOriginalEscapeTime()
-        {
-            return GetOriginalEscapeTime(CurrentLocation?.Id);
-        }
-
-        public static float? GetOriginalEscapeTime(string locationID)
-        {
-            if (!originalEscapeTimes.ContainsKey(locationID))
-            {
-                LoggingController.LogError("Could not get original escape time for location " + locationID);
-                return null;
-            }
-
-            return originalEscapeTimes[locationID];
-        }
-
-        public static float? GetCurrentEscapeTime()
-        {
-            return CurrentLocation?.EscapeTimeLimit;
-        }
-
-        public static float? GetRemainingRaidTime()
-        {
-            if (Singleton<AbstractGame>.Instance == null)
-            {
-                return null;
-            }
-
-            float? escapeTime = GetCurrentEscapeTime();
-            if (!escapeTime.HasValue)
-            {
-                LoggingController.LogError("Could not determine remaining raid time");
-                return null;
-            }
-
-            float remainingTimeFromGame = GameTimerHelpers.EscapeTimeSeconds(Singleton<AbstractGame>.Instance.GameTimer);
-
-            // Until the raid starts, remainingTimeFromGame is a very high number, so it needs to be reduced to the actual starting raid time
-            return Math.Min(remainingTimeFromGame, escapeTime.Value * 60f);
-        }
-
-        public static float? GetTimeSinceSpawning()
-        {
-            float? remainingTime = GetRemainingRaidTime();
-            int? escapeTime = CurrentLocation?.EscapeTimeLimit;
-
-            if (!remainingTime.HasValue || !escapeTime.HasValue)
-            {
-                LoggingController.LogError("Could not calculate time since spawning");
-                return null;
-            }
-
-            return (escapeTime.Value * 60f) - remainingTime.Value;
-        }
-
-        public static float? GetElapsedRaidTime()
-        {
-            return GetElapsedRaidTime(CurrentLocation?.Id);
-        }
-
-        public static float? GetElapsedRaidTime(string locationID)
-        {
-            float? remainingTime = GetRemainingRaidTime();
-            float? originalEscapeTime = GetOriginalEscapeTime(locationID);
-
-            if (!remainingTime.HasValue || !originalEscapeTime.HasValue)
-            {
-                LoggingController.LogError("Could not calculate elapsed raid time");
-                return null;
-            }
-
-            return (originalEscapeTime.Value * 60f) - remainingTime.Value;
-        }
-
-        public static float? GetRaidTimeRemainingFraction()
-        {
-            return GetRaidTimeRemainingFraction(CurrentLocation?.Id);
-        }
-
-        public static float? GetRaidTimeRemainingFraction(string locationID)
-        {
-            float? remainingTime = GetRemainingRaidTime();
-            float? originalEscapeTime = GetOriginalEscapeTime(locationID);
-
-            if (!remainingTime.HasValue || !originalEscapeTime.HasValue)
-            {
-                LoggingController.LogError("Could not calculate elapsed raid time");
-                return null;
-            }
-
-            return remainingTime.Value / (originalEscapeTime * 60f);
         }
 
         public static Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)

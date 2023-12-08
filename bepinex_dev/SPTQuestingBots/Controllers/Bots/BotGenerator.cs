@@ -126,20 +126,23 @@ namespace SPTQuestingBots.Controllers.Bots
                 return;
             }
 
-            float? raidET = LocationController.GetElapsedRaidTime();
-            float? raidTimeRemainingFraction = LocationController.GetRaidTimeRemainingFraction();
-            if (!raidET.HasValue || !raidTimeRemainingFraction.HasValue)
+            float raidTimeRemainingFraction;
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
-                return;
+                raidTimeRemainingFraction = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
+            }
+            else
+            {
+                raidTimeRemainingFraction = (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
             }
 
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs in Late to the Party)
-            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction.Value);
+            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction);
             
             // Check if initial PMC groups can be spawned and if they have been generated yet
             if (CanSpawnPMCs && (initialPMCGroups.Count == 0))
             {
-                LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction.Value, 3) + ")...");
+                LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction, 3) + ")...");
 
                 // Get the number of alive PMC's allowed on the map
                 if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(LocationController.CurrentLocation.Id.ToLower()))
@@ -191,8 +194,8 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             // Ensure the raid is progressing before running anything
-            float? timeSinceSpawning = LocationController.GetTimeSinceSpawning();
-            if ((!timeSinceSpawning.HasValue) || (timeSinceSpawning < 1))
+            float timeSinceSpawning = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            if (timeSinceSpawning < 1)
             {
                 return;
             }

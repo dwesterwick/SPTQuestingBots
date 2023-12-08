@@ -26,9 +26,6 @@ namespace SPTQuestingBots.Patches
                 return;
             }
 
-            // Needed for compatibility with Refringe's CustomRaidTimes mod
-            Controllers.LocationController.ClearEscapeTimes();
-
             // Write all log files
             if (BotQuestBuilder.HaveQuestsBeenBuilt)
             {
