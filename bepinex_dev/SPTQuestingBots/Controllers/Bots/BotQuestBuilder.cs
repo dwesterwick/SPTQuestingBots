@@ -310,10 +310,10 @@ namespace SPTQuestingBots.Controllers.Bots
         private int getMinLevelForQuest(Quest quest)
         {
             // Be default, use the minimum level set for the quest template
-            int minLevel = quest.Template.Level;
+            int minLevel = quest.Template?.Level ?? 0;
 
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForStart;
-            if (quest.Template.Conditions.ContainsKey(eQuestStatus))
+            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
             {
                 foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
                 {
@@ -362,7 +362,7 @@ namespace SPTQuestingBots.Controllers.Bots
         {
             List<string> zoneIDs = new List<string>();
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
-            if (quest.Template.Conditions.ContainsKey(eQuestStatus))
+            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
             {
                 foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
                 {
@@ -433,7 +433,7 @@ namespace SPTQuestingBots.Controllers.Bots
         private float? findPlantTimeForQuest(Quest quest, string zoneID)
         {
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
-            if (quest.Template.Conditions.ContainsKey(eQuestStatus))
+            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
             {
                 foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
                 {
