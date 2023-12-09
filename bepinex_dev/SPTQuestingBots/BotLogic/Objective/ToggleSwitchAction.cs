@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -116,7 +118,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Shut)
             {
-                toggleSwitch(ObjectiveManager.GetCurrentQuestInteractiveObject(), EInteractionType.Open);
+                BotOwner.ToggleSwitch(ObjectiveManager.GetCurrentQuestInteractiveObject(), EInteractionType.Open);
             }
             else
             {
@@ -124,34 +126,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             ObjectiveManager.CompleteObjective();
-        }
-
-        private void toggleSwitch(EFT.Interactive.WorldInteractiveObject sw, EInteractionType interactionType)
-        {
-            try
-            {
-                if (sw == null)
-                {
-                    throw new ArgumentNullException(nameof(sw));
-                }
-
-                Player player = BotOwner.GetPlayer;
-                if (player == null)
-                {
-                    throw new InvalidOperationException("Cannot get Player object from " + BotOwner.GetText());
-                }
-
-                player.MovementContext.ExecuteInteraction(sw, new InteractionResult(interactionType));
-            }
-            catch (Exception e)
-            {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
-
-                ObjectiveManager.TryChangeObjective();
-
-                throw;
-            }
         }
     }
 }

@@ -80,7 +80,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             UpdateBotSteering(dangerPoint.Value);
         }
 
-        private Vector3? findDangerPoint()
+        private static Vector3? findDangerPoint()
         {
             // Enumerate all alive bots on the map
             IEnumerable<BotOwner> aliveBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners

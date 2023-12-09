@@ -116,6 +116,8 @@
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
     <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
+    <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
+    <Compile Include="Helpers\ItemHelpers.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />

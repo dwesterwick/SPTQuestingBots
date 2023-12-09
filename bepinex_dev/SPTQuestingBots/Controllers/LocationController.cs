@@ -378,7 +378,7 @@ namespace SPTQuestingBots.Controllers
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }
 
-        public static Vector3? getDoorInteractionPosition(Door door, Vector3 startingPosition)
+        public static Vector3? GetDoorInteractionPosition(Door door, Vector3 startingPosition)
         {
             // If a cached position exists, return it
             if (doorInteractionPositions.ContainsKey(door))
@@ -463,11 +463,11 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static Door firstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
+        public static Door FindFirstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
         {
             foreach (Door door in doors)
             {
-                Vector3? interactionPosition = getDoorInteractionPosition(door, startingPosition);
+                Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)
                 {
                     return door;

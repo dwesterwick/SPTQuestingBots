@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -19,22 +20,24 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(Player __instance, Player aggressor)
         {
-            // Make sure the bot doesn't have any active quests if it's dead
-            Controllers.Bots.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
-
-            BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();
-
-            string message = __instance.Profile.Nickname;
+            string message = __instance.GetText();
             message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
             message += " was killed by ";
 
-            message += aggressor.Profile.Nickname;
+            message += aggressor.GetText();
             message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
-            message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
+            if (Controllers.Bots.BotGenerator.CanSpawnPMCs)
+            {
+                BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();
+                message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
+            }
 
-            Controllers.LoggingController.LogInfo(message);
+            LoggingController.LogInfo(message);
+
+            // Make sure the bot doesn't have any active quests if it's dead
+            Controllers.Bots.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
         }
     }
 }

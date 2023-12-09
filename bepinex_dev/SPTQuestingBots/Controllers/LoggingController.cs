@@ -12,7 +12,9 @@ namespace SPTQuestingBots.Controllers
     {
         public static BepInEx.Logging.ManualLogSource Logger { get; set; } = null;
 
-        public static string GetText(this BotOwner bot) => bot.Profile.Nickname + " (Name: " + bot.name + ", Level: " + bot.Profile.Info.Level + ")";
+        public static string GetText(this Player player) => player.Profile.Nickname + " (Name: " + player.name + ", Level: " + player.Profile.Info.Level + ")";
+        public static string GetText(this BotOwner bot) => bot.GetPlayer.GetText();
+        public static string GetText(this IEnumerable<Player> players) => string.Join(",", players.Select(b => b.GetText()));
         public static string GetText(this IEnumerable<BotOwner> bots) => string.Join(",", bots.Select(b => b.GetText()));
 
         public static void LogInfo(string message)
