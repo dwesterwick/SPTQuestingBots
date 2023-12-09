@@ -51,7 +51,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Determine the location to which the bot should go in order to unlock the door
-            interactionPosition = getInteractionPosition(door);
+            interactionPosition = LocationController.getDoorInteractionPosition(door, BotOwner.Position);
             if (interactionPosition == null)
             {
                 LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
@@ -229,81 +229,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
             
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
-        }
-
-        private Vector3? getInteractionPosition(Door door)
-        {
-            Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
-
-            // Determine positions around the door to test
-            float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
-            float searchOffset = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
-            Vector3[] possibleInteractionPositions = new Vector3[4]
-            {
-                door.transform.position + new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
-                door.transform.position - new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
-                door.transform.position + new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0),
-                door.transform.position - new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0)
-            };
-
-            // Test each position
-            foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
-            {
-                // Determine if a valid NavMesh location can be found for the position
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
-                if (!navMeshPosition.HasValue)
-                {
-                    LoggingController.LogInfo(BotOwner.GetText() + " cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
-
-                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
-                    {
-                        outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
-                    }
-
-                    continue;
-                }
-
-                //LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
-
-                // Try to calculate a path from the bot to the NavMesh location identified for the position
-                NavMeshPath path = new NavMeshPath();
-                NavMesh.CalculatePath(BotOwner.Position, navMeshPosition.Value, NavMesh.AllAreas, path);
-
-                // Check if the bot is able to reach the NavMesh location identified for the position
-                if (path.status == NavMeshPathStatus.PathComplete)
-                {
-                    validPositions.Add(navMeshPosition.Value, Vector3.Distance(navMeshPosition.Value, door.transform.position));
-                    continue;
-                }
-
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
-                {
-                    outlinePosition(navMeshPosition.Value, Color.yellow);
-                }
-            }
-
-            // Check if there are any positions around the door that the bot is able to reach
-            if (validPositions.Count > 0)
-            {
-                // Sort the positions based on their poximity to the door
-                IEnumerable<Vector3> orderedPostions = validPositions.OrderBy(p => p.Value).Select(p => p.Key);
-
-                // If applicable, draw the positions in the world
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
-                {
-                    outlinePosition(orderedPostions.First(), Color.green);
-
-                    foreach(Vector3 alternatePosition in orderedPostions.Skip(1))
-                    {
-                        outlinePosition(alternatePosition, Color.magenta);
-                    }
-                }
-
-                // Select the position closest to the door
-                return orderedPostions.First();
-            }
-
-            return null;
         }
 
         private static InventoryControllerClass getInventoryControllerClassForBot(BotOwner bot)

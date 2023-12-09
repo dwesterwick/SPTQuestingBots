@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Controllers
@@ -182,6 +183,20 @@ namespace SPTQuestingBots.Controllers
                 new Vector3(bounds.max.x, bounds.max.y, bounds.min.z),
                 new Vector3(bounds.min.x, bounds.max.y, bounds.min.z)
             };
+        }
+
+        public static void outlinePosition(Vector3 position, Color color)
+        {
+            outlinePosition(position, color, 0.5f);
+        }
+
+        public static void outlinePosition(Vector3 position, Color color, float radius)
+        {
+            string pathName = "Postion_" + "_" + DateTime.Now.ToFileTime();
+
+            Vector3[] positionOutlinePoints = PathRender.GetSpherePoints(position, radius, 10);
+            PathVisualizationData positionOutline = new PathVisualizationData(pathName, positionOutlinePoints, color);
+            PathRender.AddOrUpdatePath(positionOutline);
         }
     }
 }

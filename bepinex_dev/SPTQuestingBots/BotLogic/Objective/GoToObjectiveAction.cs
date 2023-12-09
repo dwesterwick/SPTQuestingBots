@@ -227,7 +227,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            ObjectiveManager.UnlockDoor(lockedDoors.First());
+            Door nearestAccessibleDoor = LocationController.firstAccessibleDoor(lockedDoors, BotOwner.Position);
+            if (nearestAccessibleDoor == null)
+            {
+                return false;
+            }
+
+            ObjectiveManager.UnlockDoor(nearestAccessibleDoor);
             return true;
         }
     }

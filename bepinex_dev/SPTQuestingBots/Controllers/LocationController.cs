@@ -9,6 +9,8 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 using GameTimerHelpers = GClass1368;
@@ -26,6 +28,7 @@ namespace SPTQuestingBots.Controllers
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private static Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
+        private static Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
 
         private static void Clear()
         {
@@ -34,6 +37,7 @@ namespace SPTQuestingBots.Controllers
             nearestNavMeshPoint.Clear();
             switches.Clear();
             areLockedDoorsUnlocked.Clear();
+            doorInteractionPositions.Clear();
         }
 
         private void Update()
@@ -372,6 +376,105 @@ namespace SPTQuestingBots.Controllers
         public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
+        }
+
+        public static Vector3? getDoorInteractionPosition(Door door, Vector3 startingPosition)
+        {
+            // If a cached position exists, return it
+            if (doorInteractionPositions.ContainsKey(door))
+            {
+                return doorInteractionPositions[door];
+            }
+
+            Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
+
+            // Determine positions around the door to test
+            float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+            float searchOffset = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
+            Vector3[] possibleInteractionPositions = new Vector3[4]
+            {
+                door.transform.position + new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
+                door.transform.position - new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
+                door.transform.position + new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0),
+                door.transform.position - new Vector3(0, 0, searchDistance) + new Vector3(0, searchOffset, 0)
+            };
+
+            // Test each position
+            foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
+            {
+                // Determine if a valid NavMesh location can be found for the position
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                if (!navMeshPosition.HasValue)
+                {
+                    LoggingController.LogInfo("Cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
+
+                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                    {
+                        PathRender.outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                    }
+
+                    continue;
+                }
+
+                //LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
+
+                // Try to calculate a path from the bot to the NavMesh location identified for the position
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(startingPosition, navMeshPosition.Value, NavMesh.AllAreas, path);
+
+                // Check if the bot is able to reach the NavMesh location identified for the position
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    validPositions.Add(navMeshPosition.Value, Vector3.Distance(navMeshPosition.Value, door.transform.position));
+                    continue;
+                }
+
+                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                {
+                    PathRender.outlinePosition(navMeshPosition.Value, Color.yellow);
+                }
+            }
+
+            // Check if there are any positions around the door that the bot is able to reach
+            if (validPositions.Count > 0)
+            {
+                // Sort the positions based on their poximity to the door
+                IEnumerable<Vector3> orderedPostions = validPositions.OrderBy(p => p.Value).Select(p => p.Key);
+
+                // If applicable, draw the positions in the world
+                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                {
+                    PathRender.outlinePosition(orderedPostions.First(), Color.green);
+
+                    foreach (Vector3 alternatePosition in orderedPostions.Skip(1))
+                    {
+                        PathRender.outlinePosition(alternatePosition, Color.magenta);
+                    }
+                }
+
+                // Select the position closest to the door
+                Vector3 interactionPosition = orderedPostions.First();
+
+                // Cache the position and return it
+                doorInteractionPositions.Add(door, interactionPosition);
+                return interactionPosition;
+            }
+
+            return null;
+        }
+
+        public static Door firstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
+        {
+            foreach (Door door in doors)
+            {
+                Vector3? interactionPosition = getDoorInteractionPosition(door, startingPosition);
+                if (interactionPosition.HasValue)
+                {
+                    return door;
+                }
+            }
+
+            return null;
         }
 
         private static LocationSettingsClass getLocationSettings(TarkovApplication app)
