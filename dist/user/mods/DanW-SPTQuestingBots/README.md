@@ -268,7 +268,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * The 21WS Container for Provocation in Interchange
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
-* Bots have trouble accessing locked doors behind other locked doors. Examples include Big Red in Customs and Red Room in Labs.
 * Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations. Examples include marking the tanker at New Gas in Customs; bots will fail to find a position to mark the tanker and then nearby unlock rooms in New Gas for no reason.
 * Bots will frequently unlock doors, go into the room, and not loot anything.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
