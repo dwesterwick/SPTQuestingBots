@@ -23,6 +23,7 @@ namespace SPTQuestingBots.BotLogic
         private Stopwatch lootSearchTimer = new Stopwatch();
         private bool wasLooting = false;
         private bool hasFoundLoot = false;
+        private bool canUseSAINInterop = false;
 
         public BotMonitor(BotOwner _botOwner)
         {
@@ -36,6 +37,30 @@ namespace SPTQuestingBots.BotLogic
 
             stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
+
+            if (SAIN.Plugin.SAINInterop.Init())
+            {
+                canUseSAINInterop = true;
+                //LoggingController.LogWarning("SAIN Interop detected");
+            }
+        }
+
+        public void InstructBotToExtract()
+        {
+            if (!canUseSAINInterop)
+            {
+                //LoggingController.LogWarning("SAIN Interop not detected");
+                return;
+            }
+
+            if (SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
+            {
+                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
+            }
+            else
+            {
+                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
+            }
         }
 
         public bool ShouldSearchForEnemy(double maxTimeSinceCombatEnded)

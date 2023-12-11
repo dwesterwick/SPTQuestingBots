@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -435,6 +436,14 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
         {
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() > 20)
+            {
+                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                botObjectiveManager?.BotMonitor?.InstructBotToExtract();
+
+                return null;
+            }
+
             // Get the bot's most recent assingment if applicable
             Quest quest = null;
             QuestObjective objective = null;
