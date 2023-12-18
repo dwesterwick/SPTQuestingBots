@@ -95,7 +95,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             // Check if the bot is currently extracting or wants to extract via SAIN
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.WantsToExtract())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.IsTryingToExtract())
             {
                 objectiveManager.StopQuesting();
 

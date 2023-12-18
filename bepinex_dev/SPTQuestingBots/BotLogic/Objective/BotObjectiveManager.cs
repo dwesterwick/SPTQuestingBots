@@ -292,5 +292,21 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             return assignment?.QuestObjectiveStepAssignment?.InteractiveObject;
         }
+
+        public bool DoesBotWantToExtract()
+        {
+            if (BotMonitor.IsTryingToExtract())
+            {
+                return true;
+            }
+
+            if (BotMonitor.IsBotReadyToExtract() && BotMonitor.TryInstructBotToExtract())
+            {
+                StopQuesting();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -45,24 +45,6 @@ namespace SPTQuestingBots.BotLogic
             }
         }
 
-        public void InstructBotToExtract()
-        {
-            if (!canUseSAINInterop)
-            {
-                //LoggingController.LogWarning("SAIN Interop not detected");
-                return;
-            }
-
-            if (SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
-            {
-                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
-            }
-            else
-            {
-                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
-            }
-        }
-
         public bool ShouldSearchForEnemy(double maxTimeSinceCombatEnded)
         {
             bool hasCloseDanger = botOwner.Memory.DangerData.HaveCloseDanger;
@@ -91,7 +73,7 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        public bool WantsToExtract()
+        public bool IsTryingToExtract()
         {
             if (!extractLayerMonitor.CanLayerBeUsed)
             {
@@ -100,6 +82,42 @@ namespace SPTQuestingBots.BotLogic
 
             string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
             if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryInstructBotToExtract()
+        {
+            if (!canUseSAINInterop)
+            {
+                //LoggingController.LogWarning("SAIN Interop not detected");
+                return false;
+            }
+
+            if (SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
+            {
+                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
+                return true;
+            }
+            else
+            {
+                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
+            }
+
+            return false;
+        }
+
+        public bool IsBotReadyToExtract()
+        {
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (420 - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
+            {
+                return false;
+            }
+
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds() < 300)
             {
                 return true;
             }

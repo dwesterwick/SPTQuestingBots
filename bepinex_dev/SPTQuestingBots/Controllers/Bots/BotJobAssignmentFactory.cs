@@ -436,11 +436,9 @@ namespace SPTQuestingBots.Controllers.Bots
 
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
         {
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() > 20)
+            // Do not select another quest objective if the bot wants to extract
+            if (BotObjectiveManager.GetObjectiveManagerForBot(bot)?.DoesBotWantToExtract() == true)
             {
-                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
-                botObjectiveManager?.BotMonitor?.InstructBotToExtract();
-
                 return null;
             }
 

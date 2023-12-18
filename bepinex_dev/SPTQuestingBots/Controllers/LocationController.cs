@@ -177,6 +177,14 @@ namespace SPTQuestingBots.Controllers
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
+        public static void ReportUnlockedDoor(Door door)
+        {
+            if (areLockedDoorsUnlocked.ContainsKey(door))
+            {
+                areLockedDoorsUnlocked[door] = true;
+            }
+        }
+
         public static SpawnPointParams[] GetAllValidSpawnPointParams()
         {
             if (CurrentLocation == null)

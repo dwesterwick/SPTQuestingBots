@@ -233,6 +233,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
             
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
+
+            // Assume the door has been unlocked because bots will constantly try breaching some doors otherwise
+            LocationController.ReportUnlockedDoor(door);
         }
     }
 }

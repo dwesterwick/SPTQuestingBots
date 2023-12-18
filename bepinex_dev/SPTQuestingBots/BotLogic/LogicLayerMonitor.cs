@@ -60,12 +60,6 @@ namespace SPTQuestingBots.BotLogic
             if ((layer == null) && (maxLayerSearchTimer.ElapsedMilliseconds < maxLayerSearchTime))
             {
                 layer = GetBrainLayerForBot(botOwner, LayerName);
-                
-                /*CustomLayer customLayer = GetExternalCustomLayer(layer);
-                if (customLayer != null)
-                {
-                    LoggingController.LogWarning("Custom Layer name: " + customLayer.GetName());
-                }*/
             }
         }
 
