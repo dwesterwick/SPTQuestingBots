@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("distance_randomness")]
         public float DistanceRandomness { get; set; } = 50;
 
+        [JsonProperty("blacklisted_boss_hunter_bosses")]
+        public string[] BlacklistedBossHunterBosses { get; set; } = new string[0];
+
         [JsonProperty("eft_quests")]
         public QuestSettingsConfig EFTQuests { get; set; } = new QuestSettingsConfig();
 

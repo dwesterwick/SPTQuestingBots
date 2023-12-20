@@ -28,7 +28,7 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_raid_ET")]
         public float MaxRaidET { get; set; } = 999;
 
-        [JsonProperty("chanceOfHavingKeys")]
+        [JsonProperty("chance_of_having_keys")]
         public float ChanceOfHavingKeys { get; set; } = 25;
 
         [JsonProperty("min_level")]

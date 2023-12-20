@@ -685,12 +685,10 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private static IEnumerable<string> getBossSpawnZones()
         {
-            string[] ignoredBossNames = new string[] { "gifter", "arenaFighterEvent" };
-
             List<string> bossZones = new List<string>();
             foreach (BossLocationSpawn bossLocationSpawn in LocationController.CurrentLocation.BossLocationSpawn)
             {
-                if (ignoredBossNames.Contains(bossLocationSpawn.BossName))
+                if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(bossLocationSpawn.BossName))
                 {
                     continue;
                 }
