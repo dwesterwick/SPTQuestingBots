@@ -9,11 +9,8 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
-using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
-using GameTimerHelpers = GClass1368;
 
 namespace SPTQuestingBots.Controllers
 {

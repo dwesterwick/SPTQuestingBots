@@ -47,6 +47,7 @@ Otherwise, they will only temporarily stop questing for the following reasons:
 There are currently several types of quests available to each bot:
 * **EFT Quests:** Bots will go to locations specified in EFT quests for placing markers, collecting/placing items, killing other bots, etc. Bots can also use quests added by other mods. 
 * **Spawn Rush:** At the beginning of the raid, bots that are within a certain distance of you will run to your spawn point. Only a certain number of bots are allowed to perform this quest, and they won't always select it. This makes Factory even more challenging. 
+* **Boss Hunter:** Bots will search zones in which bosses are known to spawn. They will only be allowed to select this quest at the beginning of the raid (within the first 5 minutes by default).
 * **Spawn Point Wandering:** Bots will wander to different spawn points around the map. This is used as a last resort in case the bot doesn't select any other quests. 
 * **"Standard" Quests:** Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are closer to them. 
 * **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests.
@@ -209,7 +210,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_quests.distance_randomness**: The amount of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest objective available to it. By default, this is **30%**. 
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
 * **questing.bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
-* **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest. 
+* **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest.
+* **questing.bot_quests.boss_hunter.xxx**: The settings to apply to the "Boss Hunter" quest. 
 
 **Options for Each Section in *bot_quests*:**
 * **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
@@ -219,6 +221,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.
 * **max_raid_ET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid.
 * **chanceOfHavingKeys**: The chance that bots will have keys for the locations specified in the quests.
+* **min_level**: The absolute minimum player level allowed for bots to select the quest. 
+* **max_level**: The absolute maximum player level allowed for bots to select the quest. 
 * **level_range**: An array of [minimum player level for the quest, level range] pairs to determine the maximum player level for each quest of that type. This value is added to the minimum player level for the quest. For example, if a quest is only available at level 15, the level range for it will be 20 (as determined via interpolation of this array using its default values). As a result, only bots between levels 15 and 35 will be allowed select that quest. 
 
 **PMC Spawning Options:**
@@ -283,22 +287,21 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.4.0** (ETA: Late December)
+* **0.4.0** (ETA: Early January)
+    * Invoke SAIN's logic for having bots extract from the map
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
-* **0.4.1** (ETA: Early January)
+* **0.4.1** (ETA: Late January)
     * Add new quest type: hidden-stash running
     * Add new quest type: boss hunter
     * Add new quest type: air-drop chaser
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.4.2** (ETA: Late January)
+* **0.4.2** (ETA: Early February)
     * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
-* **Backlog**
-    * Invoke SAIN's logic for having bots extract from the map
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 

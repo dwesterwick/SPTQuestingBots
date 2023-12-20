@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +9,7 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using EFT.Quests;
+using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -140,6 +139,17 @@ namespace SPTQuestingBots.Controllers.Bots
                 else
                 {
                     LoggingController.LogError("Could not add quest for rushing your spawn point");
+                }
+
+                // Create a quest where initial PMC's can run to your spawn point (not directly to you). 
+                Quest bossHunterQuest = createBossHunterQuest();
+                if (bossHunterQuest != null)
+                {
+                    BotJobAssignmentFactory.AddQuest(bossHunterQuest);
+                }
+                else
+                {
+                    LoggingController.LogWarning("Could not add quest for hunting bosses. This is normal if bosses do not spawn on this map.");
                 }
 
                 LoadCustomQuests();
@@ -575,6 +585,8 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
+        
+
         private static Models.Quest createSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
             // Ensure the map has spawn points
@@ -585,8 +597,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnPointWander.Priority, "Spawn Points");
-            quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.SpawnPointWander.Chance;
-            quest.MaxBots = ConfigController.Config.Questing.BotQuests.SpawnPointWander.MaxBotsPerQuest;
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.SpawnPointWander);
 
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
@@ -599,7 +610,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                objective.MinDistanceFromBot = ConfigController.Config.Questing.BotQuests.SpawnPointWander.MinDistance;
+                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.SpawnPointWander);
                 quest.AddObjective(objective);
             }
 
@@ -627,16 +638,67 @@ namespace SPTQuestingBots.Controllers.Bots
             //LoggingController.LogInfo("Creating spawn rush quest for " + playerSpawnPoint.Value.Id + " via " + navMeshPosition.Value.ToString() + " for player at " + playerPosition.Value.ToString() + "...");
 
             Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnRush.Priority, "Spawn Rush");
-            quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.SpawnRush.Chance;
-            quest.MaxRaidET = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxRaidET;
-            quest.MaxBots = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxBotsPerQuest;
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.SpawnRush);
             quest.PMCsOnly = true;
 
             Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
-            objective.MaxDistanceFromBot = ConfigController.Config.Questing.BotQuests.SpawnRush.MaxDistance;
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.SpawnRush);
             quest.AddObjective(objective);
 
             return quest;
+        }
+
+        private static Models.Quest createBossHunterQuest()
+        {
+            // Get all zones in which bosses can spawn and ensure that at least one exists
+            IEnumerable<string> bossZones = getBossSpawnZones();
+            if (!bossZones.Any())
+            {
+                return null;
+            }
+
+            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.BossHunter.Priority, "Boss Hunter");
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.BossHunter);
+
+            foreach (SpawnPointParams spawnPoint in LocationController.CurrentLocation.SpawnPointParams)
+            {
+                if (!bossZones.Contains(spawnPoint.BotZoneName))
+                {
+                    continue;
+                }
+
+                // Ensure the spawn point has a valid nearby NavMesh position
+                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
+                    continue;
+                }
+
+                Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
+                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.BossHunter);
+                quest.AddObjective(objective);
+            }
+
+            return quest;
+        }
+
+        private static IEnumerable<string> getBossSpawnZones()
+        {
+            string[] ignoredBossNames = new string[] { "gifter", "arenaFighterEvent" };
+
+            List<string> bossZones = new List<string>();
+            foreach (BossLocationSpawn bossLocationSpawn in LocationController.CurrentLocation.BossLocationSpawn)
+            {
+                if (ignoredBossNames.Contains(bossLocationSpawn.BossName))
+                {
+                    continue;
+                }
+
+                bossZones.AddRange(bossLocationSpawn.BossZone.Split(','));
+            }
+
+            return bossZones.Distinct();
         }
     }
 }

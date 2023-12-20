@@ -21,6 +21,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("spawn_point_wander")]
         public QuestSettingsConfig SpawnPointWander { get; set; } = new QuestSettingsConfig();
 
+        [JsonProperty("boss_hunter")]
+        public QuestSettingsConfig BossHunter { get; set; } = new QuestSettingsConfig();
+
         public BotQuestsConfig()
         {
 

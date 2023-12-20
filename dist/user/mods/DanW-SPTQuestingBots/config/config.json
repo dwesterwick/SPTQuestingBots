@@ -117,6 +117,14 @@
 				"chance": 1,
 				"min_distance": 75,
 				"max_bots_per_quest": 30
+			},
+			"boss_hunter": {
+				"priority": 15,
+				"chance": 10,
+				"min_level": 15,
+				"max_raid_ET": 300,
+				"min_distance": 25,
+				"max_bots_per_quest": 2
 			}
 		}
 	},
