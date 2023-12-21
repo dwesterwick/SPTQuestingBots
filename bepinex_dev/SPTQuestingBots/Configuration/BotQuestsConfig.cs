@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("blacklisted_boss_hunter_bosses")]
         public string[] BlacklistedBossHunterBosses { get; set; } = new string[0];
 
+        [JsonProperty("airdrop_bot_interest_time")]
+        public float AirdropBotInterestTime { get; set; } = 1800;
+
         [JsonProperty("eft_quests")]
         public QuestSettingsConfig EFTQuests { get; set; } = new QuestSettingsConfig();
 

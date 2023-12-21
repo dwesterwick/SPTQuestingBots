@@ -6,6 +6,7 @@
 		"full_length_scav_raids": false,
 		"free_labs_access": false,
 		"always_spawn_pmcs": false,
+		"always_have_airdrops": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
 		"show_door_interaction_test_points": false
@@ -92,6 +93,7 @@
 		"bot_quests": {
 			"distance_randomness": 30,
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
+			"airdrop_bot_interest_time": 420,
 			"eft_quests": {
 				"priority": 15,
 				"chance": 50,

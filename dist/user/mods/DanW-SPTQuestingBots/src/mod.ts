@@ -23,6 +23,7 @@ import { VFS } from "@spt-aki/utils/VFS";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
+import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
 
 const modName = "SPTQuestingBots";
 
@@ -42,6 +43,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
+    private iAirdropConfig: IAirdropConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
 	
@@ -153,16 +155,38 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
         this.iLocationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
+        this.iAirdropConfig = this.configServer.getConfig(ConfigTypes.AIRDROP);
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
+        if (!modConfig.enabled)
+        {
+            return;
+        }
+
         // Ensure all of the custom quests are valid JSON files
         this.questManager.validateCustomQuests();
 
+        if (modConfig.debug.always_have_airdrops)
+        {
+            this.commonUtils.logInfo("Forcing airdrops to occur at the beginning of every raid...");
+
+            this.iAirdropConfig.airdropChancePercent.bigmap = 100;
+            this.iAirdropConfig.airdropChancePercent.woods = 100;
+            this.iAirdropConfig.airdropChancePercent.lighthouse = 100;
+            this.iAirdropConfig.airdropChancePercent.shoreline = 100;
+            this.iAirdropConfig.airdropChancePercent.interchange = 100;
+            this.iAirdropConfig.airdropChancePercent.reserve = 100;
+            this.iAirdropConfig.airdropChancePercent.tarkovStreets = 100;
+
+            this.iAirdropConfig.airdropMinStartTimeSeconds = 5;
+            this.iAirdropConfig.airdropMaxStartTimeSeconds = 10;
+        }
+
         // Adjust parameters to make debugging easier
-        if (modConfig.enabled && modConfig.debug.enabled)
+        if (modConfig.debug.enabled)
         {
             this.commonUtils.logInfo("Applying debug options...");
 
