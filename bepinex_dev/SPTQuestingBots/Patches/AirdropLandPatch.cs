@@ -9,11 +9,11 @@ using Aki.Reflection.Patching;
 
 namespace SPTQuestingBots.Patches
 {
-    internal class OnBoxLandPatch : ModulePatch
+    internal class AirdropLandPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(AirdropBox).GetMethod("OnBoxLand", BindingFlags.NonPublic | BindingFlags.Instance);
+            return typeof(AirdropBox).GetMethod("ReleaseAudioSource", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         [PatchPostfix]
