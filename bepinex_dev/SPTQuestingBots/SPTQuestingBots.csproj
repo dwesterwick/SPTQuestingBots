@@ -34,6 +34,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\Libraries\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="aki-custom">
+      <HintPath>..\Libraries\BepInEx\plugins\spt\aki-custom.dll</HintPath>
+    </Reference>
     <Reference Include="aki-singleplayer">
       <HintPath>..\Libraries\BepInEx\plugins\spt\aki-singleplayer.dll</HintPath>
     </Reference>
@@ -170,6 +173,7 @@
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
+    <Compile Include="Patches\OnBoxLandPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ReadyToPlayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

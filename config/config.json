@@ -120,12 +120,18 @@
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"priority": 15,
+				"priority": 14,
 				"chance": 10,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 25,
 				"max_bots_per_quest": 2
+			},
+			"airdrop_chaser": {
+				"priority": 10,
+				"chance": 30,
+				"max_bots_per_quest": 3,
+				"max_distance": 300
 			}
 		}
 	},

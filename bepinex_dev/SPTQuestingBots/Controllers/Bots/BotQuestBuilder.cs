@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
@@ -76,6 +77,19 @@ namespace SPTQuestingBots.Controllers.Bots
             PreviousLocationID = LocationController.CurrentLocation.Id;
         }
 
+        public static void AddAirdropChaserQuest(Vector3 airdropPosition)
+        {
+            Models.Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", ConfigController.Config.Questing.BotQuests.AirdropChaser);
+            if (airdopChaserQuest != null)
+            {
+                BotJobAssignmentFactory.AddQuest(airdopChaserQuest);
+            }
+            else
+            {
+                LoggingController.LogError("Could not add quest for the most recent airdop");
+            }
+        }
+
         private IEnumerator LoadAllQuests()
         {
             IsBuildingQuests = true;
@@ -120,7 +134,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 yield return BotJobAssignmentFactory.ProcessAllQuests(updateChancesOfBotsHavingKeys, ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
-                Quest spawnPointQuest = createSpawnPointQuest();
+                Quest spawnPointQuest = createSpawnPointQuest(LocationController.CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
                 if (spawnPointQuest != null)
                 {
                     BotJobAssignmentFactory.AddQuest(spawnPointQuest);
@@ -130,8 +144,19 @@ namespace SPTQuestingBots.Controllers.Bots
                     LoggingController.LogError("Could not add quest for going to random spawn points");
                 }
 
-                // Create a quest where initial PMC's can run to your spawn point (not directly to you). 
-                Quest spawnRushQuest = createSpawnRushQuest();
+                // Create a quest where initial PMC's can run to your spawn point (not directly to you).
+                Models.Quest spawnRushQuest = null;
+                SpawnPointParams? playerSpawnPoint = LocationController.GetPlayerSpawnPoint();
+                if (playerSpawnPoint.HasValue)
+                {
+                    spawnRushQuest = createGoToPositionQuest(playerSpawnPoint.Value.Position, "Spawn Rush", ConfigController.Config.Questing.BotQuests.SpawnRush);
+                    spawnRushQuest.PMCsOnly = true;
+                }
+                else
+                {
+                    LoggingController.LogWarning("Cannot find player spawn point.");
+                }
+
                 if (spawnRushQuest != null)
                 {
                     BotJobAssignmentFactory.AddQuest(spawnRushQuest);
@@ -141,8 +166,17 @@ namespace SPTQuestingBots.Controllers.Bots
                     LoggingController.LogError("Could not add quest for rushing your spawn point");
                 }
 
-                // Create a quest where initial PMC's can run to your spawn point (not directly to you). 
-                Quest bossHunterQuest = createBossHunterQuest();
+                // Create a quest where initial PMC's can run to your spawn point (not directly to you).
+                Quest bossHunterQuest = null;
+                IEnumerable<string> bossZones = getBossSpawnZones();
+
+                IEnumerable<SpawnPointParams> possibleBossSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName));
+                if (bossZones.Any())
+                {
+                    bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter", ConfigController.Config.Questing.BotQuests.BossHunter);
+                    bossHunterQuest.PMCsOnly = true;
+                }
+
                 if (bossHunterQuest != null)
                 {
                     BotJobAssignmentFactory.AddQuest(bossHunterQuest);
@@ -585,19 +619,67 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        
-
-        private static Models.Quest createSpawnPointQuest(ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        private static Models.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
         {
-            // Ensure the map has spawn points
-            IEnumerable<SpawnPointParams> eligibleSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => s.Categories.Any(spawnTypes));
+            if (position == null)
+            {
+                throw new ArgumentNullException(nameof(position));
+            }
+
+            if (questName == null)
+            {
+                throw new ArgumentNullException(nameof(questName));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            // Ensure there is a valid NavMesh position nearby
+            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+            if (!navMeshPosition.HasValue)
+            {
+                LoggingController.LogWarning("Cannot find NavMesh position near " + position.ToString());
+                return null;
+            }
+
+            Models.Quest quest = new Models.Quest(settings.Priority, questName);
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
+
+            Models.QuestObjective objective = new Models.QuestObjective(navMeshPosition.Value);
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
+            quest.AddObjective(objective);
+
+            return quest;
+        }
+
+        private static Models.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        {
+            if (spawnPoints == null)
+            {
+                throw new ArgumentNullException(nameof(spawnPoints));
+            }
+
+            if (questName == null)
+            {
+                throw new ArgumentNullException(nameof(questName));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            // Ensure the map has spawn points matching the specified criteria
+            IEnumerable<SpawnPointParams> eligibleSpawnPoints = spawnPoints.Where(s => s.Categories.Any(spawnTypes));
             if (eligibleSpawnPoints.IsNullOrEmpty())
             {
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnPointWander.Priority, "Spawn Points");
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.SpawnPointWander);
+            Models.Quest quest = new Models.Quest(settings.Priority, questName);
+            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
@@ -610,73 +692,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.SpawnPointWander);
-                quest.AddObjective(objective);
-            }
-
-            return quest;
-        }
-
-        private static Models.Quest createSpawnRushQuest()
-        {
-            SpawnPointParams? playerSpawnPoint = LocationController.GetPlayerSpawnPoint();
-            if (!playerSpawnPoint.HasValue)
-            {
-                LoggingController.LogWarning("Cannot find player spawn point.");
-                return null;
-            }
-
-            // Ensure there is a valid NavMesh position near your spawn point
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(playerSpawnPoint.Value.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-            if (!navMeshPosition.HasValue)
-            {
-                LoggingController.LogWarning("Cannot find NavMesh position for player spawn point.");
-                return null;
-            }
-
-            //Vector3? playerPosition = LocationController.GetPlayerPosition();
-            //LoggingController.LogInfo("Creating spawn rush quest for " + playerSpawnPoint.Value.Id + " via " + navMeshPosition.Value.ToString() + " for player at " + playerPosition.Value.ToString() + "...");
-
-            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.SpawnRush.Priority, "Spawn Rush");
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.SpawnRush);
-            quest.PMCsOnly = true;
-
-            Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(playerSpawnPoint.Value, navMeshPosition.Value);
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.SpawnRush);
-            quest.AddObjective(objective);
-
-            return quest;
-        }
-
-        private static Models.Quest createBossHunterQuest()
-        {
-            // Get all zones in which bosses can spawn and ensure that at least one exists
-            IEnumerable<string> bossZones = getBossSpawnZones();
-            if (!bossZones.Any())
-            {
-                return null;
-            }
-
-            Models.Quest quest = new Models.Quest(ConfigController.Config.Questing.BotQuests.BossHunter.Priority, "Boss Hunter");
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.BossHunter);
-
-            foreach (SpawnPointParams spawnPoint in LocationController.CurrentLocation.SpawnPointParams)
-            {
-                if (!bossZones.Contains(spawnPoint.BotZoneName))
-                {
-                    continue;
-                }
-
-                // Ensure the spawn point has a valid nearby NavMesh position
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
-                {
-                    LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
-                    continue;
-                }
-
-                Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, ConfigController.Config.Questing.BotQuests.BossHunter);
+                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
                 quest.AddObjective(objective);
             }
 

@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("boss_hunter")]
         public QuestSettingsConfig BossHunter { get; set; } = new QuestSettingsConfig();
 
+        [JsonProperty("airdrop_chaser")]
+        public QuestSettingsConfig AirdropChaser { get; set; } = new QuestSettingsConfig();
+
         public BotQuestsConfig()
         {
 
