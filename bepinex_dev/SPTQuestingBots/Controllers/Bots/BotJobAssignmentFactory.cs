@@ -430,8 +430,12 @@ namespace SPTQuestingBots.Controllers.Bots
                 //LoggingController.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
             }
 
-            bot.GetNewBotJobAssignment();
-            return true;
+            if (bot.GetNewBotJobAssignment() != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
