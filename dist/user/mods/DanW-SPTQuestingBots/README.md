@@ -289,18 +289,22 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
+* **0.3.5** (ETA: Late December)
+    * Add new quest type: boss hunter
+    * Add new quest type: air-drop chaser
+    * Invoke SAIN's logic for having bots extract from the map (simple system based on raid time and number of quests completed)
 * **0.4.0** (ETA: Early January)
-    * Invoke SAIN's logic for having bots extract from the map
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
     * Another quest-selection algorithm overhaul to replace the "priority" system with a "desirability" score for each quest
-* **0.4.1** (ETA: Late January)
+* **0.5.0** (ETA: Mid January)
+    * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
+    * Invoke SAIN's logic for having bots extract from the map (advanced system based on the properties of quests that have been completed)
+* **0.5.1** (ETA: Late January)
     * Add new quest type: hidden-stash running
-    * Add new quest type: boss hunter
-    * Add new quest type: air-drop chaser
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.4.2** (ETA: Early February)
+* **0.5.2** (ETA: Early February)
     * Allow player Scavs to quest (without allowing all Scavs to quest)
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.

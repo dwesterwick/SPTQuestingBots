@@ -584,6 +584,35 @@ namespace SPTQuestingBots.Controllers.Bots
             return groupedQuests.First().Quests.Random();
         }
 
+        public static IEnumerable<BotJobAssignment> GetCompletedOrAchivedQuests(this BotOwner bot)
+        {
+            if (!botJobAssignments.ContainsKey(bot.Profile.Id))
+            {
+                return Enumerable.Empty<BotJobAssignment>();
+            }
+
+            return botJobAssignments[bot.Profile.Id].Where(a => a.IsCompletedOrArchived);
+        }
+
+        public static int NumberOfCompletedOrAchivedQuests(this BotOwner bot)
+        {
+            IEnumerable<BotJobAssignment> assignments = bot.GetCompletedOrAchivedQuests();
+            
+            return assignments
+                .Distinct(a => a.QuestAssignment)
+                .Count();
+        }
+
+        public static int NumberOfCompletedOrAchivedEFTQuests(this BotOwner bot)
+        {
+            IEnumerable<BotJobAssignment> assignments = bot.GetCompletedOrAchivedQuests();
+            
+            return assignments
+                .Distinct(a => a.QuestAssignment)
+                .Where(a => a.QuestAssignment.IsEFTQuest)
+                .Count();
+        }
+
         public static void WriteQuestLogFile(long timestamp)
         {
             if (!ConfigController.Config.Debug.Enabled)

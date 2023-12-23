@@ -63,6 +63,7 @@ namespace SPTQuestingBots.Models
 
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
+        public bool IsEFTQuest => Template != null;
         
         // Return all objectives in the quest
         public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);

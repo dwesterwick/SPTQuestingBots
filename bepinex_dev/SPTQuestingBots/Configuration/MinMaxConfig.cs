@@ -25,5 +25,45 @@ namespace SPTQuestingBots.Configuration
             Min = min;
             Max = max;
         }
+
+        public static MinMaxConfig operator +(MinMaxConfig a, MinMaxConfig b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min + b.Min), Math.Round(a.Max + b.Max));
+        }
+
+        public static MinMaxConfig operator -(MinMaxConfig a, MinMaxConfig b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min - b.Min), Math.Round(a.Max - b.Max));
+        }
+
+        public static MinMaxConfig operator *(MinMaxConfig a, MinMaxConfig b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min * b.Min), Math.Round(a.Max * b.Max));
+        }
+
+        public static MinMaxConfig operator /(MinMaxConfig a, MinMaxConfig b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min / b.Min), Math.Round(a.Max / b.Max));
+        }
+
+        public static MinMaxConfig operator +(MinMaxConfig a, double b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min + b), Math.Round(a.Max + b));
+        }
+
+        public static MinMaxConfig operator -(MinMaxConfig a, double b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min - b), Math.Round(a.Max - b));
+        }
+
+        public static MinMaxConfig operator *(MinMaxConfig a, double b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min * b), Math.Round(a.Max * b));
+        }
+
+        public static MinMaxConfig operator /(MinMaxConfig a, double b)
+        {
+            return new MinMaxConfig(Math.Round(a.Min / b), Math.Round(a.Max / b));
+        }
     }
 }

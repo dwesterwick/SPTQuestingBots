@@ -114,6 +114,7 @@
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />

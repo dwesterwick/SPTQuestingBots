@@ -135,6 +135,16 @@
 				"max_bots_per_quest": 3,
 				"max_distance": 300
 			}
+		},
+		"extraction_requirements": {
+			"total_quests": {
+				"min": 5,
+				"max": 12
+			},
+			"EFT_quests": {
+				"min": 1,
+				"max": 4
+			}
 		}
 	},
 	"initial_PMC_spawns": {

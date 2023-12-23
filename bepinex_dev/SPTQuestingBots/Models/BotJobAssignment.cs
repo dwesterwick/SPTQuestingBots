@@ -17,7 +17,7 @@ namespace SPTQuestingBots.Models
         Active,
         Completed,
         Failed,
-        Archived
+        Archived,
     }
 
     public class BotJobAssignment
@@ -36,6 +36,7 @@ namespace SPTQuestingBots.Models
         public bool HasCompletePath { get; set; } = true;
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
+        public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
         public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition() ?? null;
 
         public BotJobAssignment(BotOwner bot)

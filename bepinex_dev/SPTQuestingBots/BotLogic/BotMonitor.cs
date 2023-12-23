@@ -9,6 +9,7 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
@@ -25,6 +26,8 @@ namespace SPTQuestingBots.BotLogic
         private bool wasLooting = false;
         private bool hasFoundLoot = false;
         private bool canUseSAINInterop = false;
+        private int minTotalQuestsForExtract = int.MaxValue;
+        private int minEFTQuestsForExtract = int.MaxValue;
 
         public BotMonitor(BotOwner _botOwner)
         {
@@ -124,6 +127,37 @@ namespace SPTQuestingBots.BotLogic
             {
                 return true;
             }
+
+            System.Random random = new System.Random();
+            float initialRaidTimeFraction = (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
+
+            if (minTotalQuestsForExtract == int.MaxValue)
+            {
+                Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.TotalQuests * initialRaidTimeFraction;
+                minTotalQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
+            }
+
+            int totalQuestsCompleted = botOwner.NumberOfCompletedOrAchivedQuests();
+            if (totalQuestsCompleted >= minTotalQuestsForExtract)
+            {
+                LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extact.");
+                return true;
+            }
+            LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
+
+            if (minEFTQuestsForExtract == int.MaxValue)
+            {
+                Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.EFTQuests * initialRaidTimeFraction;
+                minEFTQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
+            }
+
+            int EFTQuestsCompleted = botOwner.NumberOfCompletedOrAchivedEFTQuests();
+            if (EFTQuestsCompleted >= minEFTQuestsForExtract)
+            {
+                LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extact.");
+                return true;
+            }
+            LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");
 
             return false;
         }
