@@ -153,6 +153,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 Quest spawnPointQuest = createSpawnPointQuest(LocationController.CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
                 if (spawnPointQuest != null)
                 {
+                    //LoggingController.LogInfo("Adding quest for going to random spawn points...");
                     BotJobAssignmentFactory.AddQuest(spawnPointQuest);
                 }
                 else
@@ -166,7 +167,6 @@ namespace SPTQuestingBots.Controllers.Bots
                 if (playerSpawnPoint.HasValue)
                 {
                     spawnRushQuest = createGoToPositionQuest(playerSpawnPoint.Value.Position, "Spawn Rush", ConfigController.Config.Questing.BotQuests.SpawnRush);
-                    spawnRushQuest.PMCsOnly = true;
                 }
                 else
                 {
@@ -175,6 +175,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 if (spawnRushQuest != null)
                 {
+                    //LoggingController.LogInfo("Adding quest for rushing your spawn point...");
+                    spawnRushQuest.PMCsOnly = true;
                     BotJobAssignmentFactory.AddQuest(spawnRushQuest);
                 }
                 else
@@ -185,16 +187,16 @@ namespace SPTQuestingBots.Controllers.Bots
                 // Create a quest where initial PMC's can run to your spawn point (not directly to you).
                 Quest bossHunterQuest = null;
                 IEnumerable<string> bossZones = getBossSpawnZones();
-
-                IEnumerable<SpawnPointParams> possibleBossSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName));
                 if (bossZones.Any())
                 {
+                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
                     bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter", ConfigController.Config.Questing.BotQuests.BossHunter);
-                    bossHunterQuest.PMCsOnly = true;
                 }
 
                 if (bossHunterQuest != null)
                 {
+                    LoggingController.LogInfo("Adding quest for hunting bosses...");
+                    bossHunterQuest.PMCsOnly = true;
                     BotJobAssignmentFactory.AddQuest(bossHunterQuest);
                 }
                 else
@@ -268,7 +270,7 @@ namespace SPTQuestingBots.Controllers.Bots
         private void LocateQuestItems(Quest quest, IEnumerable<LootItem> allLoot)
         {
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
-            if (quest.Template.Conditions.ContainsKey(eQuestStatus))
+            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
             {
                 foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
                 {
