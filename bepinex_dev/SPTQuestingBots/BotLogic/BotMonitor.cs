@@ -116,6 +116,11 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsBotReadyToExtract()
         {
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning() > 120)
+            {
+                return true;
+            }
+
             int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
 
             if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
@@ -123,7 +128,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds() < 300)
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds() < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
                 return true;
             }

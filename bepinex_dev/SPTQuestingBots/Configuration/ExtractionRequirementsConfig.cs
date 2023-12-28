@@ -9,6 +9,9 @@ namespace SPTQuestingBots.Configuration
 {
     public class ExtractionRequirementsConfig
     {
+        [JsonProperty("must_extract_time_remaining")]
+        public float MustExtractTimeRemaining { get; set; } = 300;
+
         [JsonProperty("total_quests")]
         public MinMaxConfig TotalQuests { get; set; } = new MinMaxConfig();
 

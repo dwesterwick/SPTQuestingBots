@@ -123,6 +123,7 @@
     <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
     <Compile Include="Helpers\ItemHelpers.cs" />
+    <Compile Include="Helpers\VersionCheckHelper.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerCreatePatch.cs" />
+    <Compile Include="Patches\CheckSPTVersionPatch.cs" />
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
