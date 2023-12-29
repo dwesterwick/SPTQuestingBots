@@ -104,6 +104,19 @@ namespace SPTQuestingBots.BotLogic
             if (SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
+
+                foreach(BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
+                {
+                    if (SAIN.Plugin.SAINInterop.TryExtractBot(follower))
+                    {
+                        LoggingController.LogInfo("Instructing follower " + follower.GetText() + " to extract now");
+                    }
+                    else
+                    {
+                        LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now");
+                    }
+                }
+
                 return true;
             }
             else
@@ -116,11 +129,6 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsBotReadyToExtract()
         {
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning() > 120)
-            {
-                return true;
-            }
-
             int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
 
             if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))

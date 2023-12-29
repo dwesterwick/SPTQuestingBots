@@ -219,8 +219,8 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             assignment?.Inactivate();
 
-            assignment = botOwner.GetNewBotJobAssignment();
-            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
+            assignment = botOwner?.GetNewBotJobAssignment();
+            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + (assignment?.ToString() ?? "[NULL]"));
 
             return true;
         }

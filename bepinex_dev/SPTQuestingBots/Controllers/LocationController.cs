@@ -357,7 +357,7 @@ namespace SPTQuestingBots.Controllers
 
                 // Check if the spawn point is closer than the previous one selected
                 float distance = Vector3.Distance(postition, allSpawnPoints[s].Position.ToUnityVector3());
-                if (distance < nearestDistance)
+                if ((distance < nearestDistance) || excludedSpawnPoints.Contains(nearestSpawnPoint))
                 {
                     nearestSpawnPoint = allSpawnPoints[s];
                     nearestDistance = distance;
@@ -367,7 +367,7 @@ namespace SPTQuestingBots.Controllers
             // Ensure at least one possible spawn point hasn't also been excluded
             if (excludedSpawnPoints.Contains(nearestSpawnPoint))
             {
-                throw new InvalidOperationException("All possible spawn points are excluded.");
+                throw new InvalidOperationException("All possible spawn points (" + allSpawnPoints.Length + ") are in the blacklist (" + excludedSpawnPoints.Length + ")");
             }
 
             return nearestSpawnPoint;

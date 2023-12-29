@@ -137,6 +137,7 @@
 			}
 		},
 		"extraction_requirements": {
+			"must_extract_time_remaining": 300,
 			"total_quests": {
 				"min": 5,
 				"max": 12
