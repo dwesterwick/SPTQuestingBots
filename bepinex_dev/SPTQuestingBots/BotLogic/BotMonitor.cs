@@ -45,7 +45,10 @@ namespace SPTQuestingBots.BotLogic
             if (SAIN.Plugin.SAINInterop.Init())
             {
                 canUseSAINInterop = true;
-                //LoggingController.LogWarning("SAIN Interop detected");
+            }
+            else
+            {
+                LoggingController.LogWarning("SAIN Interop not detected. Cannot instruct " + botOwner.GetText() + " to extract.");
             }
         }
 
@@ -136,8 +139,10 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds() < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
+            float remainingRaidTime = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds();
+            if (remainingRaidTime < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
+                LoggingController.LogInfo(botOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
                 return true;
             }
 
@@ -156,7 +161,7 @@ namespace SPTQuestingBots.BotLogic
                 LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extact.");
                 return true;
             }
-            LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
+            //LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
 
             if (minEFTQuestsForExtract == int.MaxValue)
             {
@@ -170,7 +175,7 @@ namespace SPTQuestingBots.BotLogic
                 LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extact.");
                 return true;
             }
-            LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");
+            //LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");
 
             return false;
         }

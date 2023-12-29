@@ -90,6 +90,17 @@
 				"furthest": 40
 			}
 		},
+		"extraction_requirements": {
+			"must_extract_time_remaining": 300,
+			"total_quests": {
+				"min": 6,
+				"max": 12
+			},
+			"EFT_quests": {
+				"min": 2,
+				"max": 5
+			}
+		},
 		"bot_quests": {
 			"distance_randomness": 30,
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
@@ -131,20 +142,9 @@
 			},
 			"airdrop_chaser": {
 				"priority": 10,
-				"chance": 30,
+				"chance": 20,
 				"max_bots_per_quest": 3,
-				"max_distance": 300
-			}
-		},
-		"extraction_requirements": {
-			"must_extract_time_remaining": 300,
-			"total_quests": {
-				"min": 5,
-				"max": 12
-			},
-			"EFT_quests": {
-				"min": 1,
-				"max": 4
+				"max_distance": 500
 			}
 		}
 	},

@@ -96,6 +96,12 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             base.UpdateInterval = 200;
             botOwner = _botOwner;
+
+            if (BotMonitor != null)
+            {
+                return;
+            }
+
             BotMonitor = new BotMonitor(botOwner);
         }
 
