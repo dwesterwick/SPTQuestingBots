@@ -165,7 +165,8 @@ namespace SPTQuestingBots.BotLogic.Objective
                 case QuestAction.MoveToPosition:
                     if (objectiveManager.MustUnlockDoor)
                     {
-                        setNextAction(BotActionType.UnlockDoor, "UnlockDoor (" + objectiveManager.GetCurrentQuestInteractiveObject().Id + ")");
+                        string interactiveObjectShortID = objectiveManager.GetCurrentQuestInteractiveObject().Id.Abbreviate();
+                        setNextAction(BotActionType.UnlockDoor, "UnlockDoor (" + interactiveObjectShortID + ")");
                     }
                     else
                     {
@@ -186,6 +187,14 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 case QuestAction.ToggleSwitch:
                     setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
+                    return updatePreviousState(true);
+                
+                case QuestAction.RequestExtract:
+                    if (objectiveManager.BotMonitor.TryInstructBotToExtract())
+                    {
+                        objectiveManager.StopQuesting();
+                    }
+                    objectiveManager.CompleteObjective();
                     return updatePreviousState(true);
             }
 

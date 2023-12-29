@@ -17,6 +17,16 @@ namespace SPTQuestingBots.Controllers
         public static string GetText(this IEnumerable<Player> players) => string.Join(",", players.Select(b => b?.GetText()));
         public static string GetText(this IEnumerable<BotOwner> bots) => string.Join(",", bots.Select(b => b?.GetText()));
 
+        public static string Abbreviate(this string fullID, int startChars = 5, int endChars = 5)
+        {
+            if (fullID.Length <= startChars + endChars + 3)
+            {
+                return fullID;
+            }
+
+            return fullID.Substring(0, startChars) + "..." + fullID.Substring(fullID.Length - endChars, endChars);
+        }
+
         public static void LogInfo(string message)
         {
             if (!ConfigController.Config.Debug.Enabled)

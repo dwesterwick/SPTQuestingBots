@@ -14,15 +14,19 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
-* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. 
+* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) (if **initial_PMC_spawns.enabled=false** in this mod)
 * [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **initial_PMC_spawns.enabled=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
 
-**Previously compatible with (but not confirmed in SPT-AKI 3.7.0+):**
-* [Custom Raid Times](https://hub.sp-tarkov.com/files/file/771-custom-raid-times/)
-* [Immersive Raids](https://hub.sp-tarkov.com/files/file/876-immersive-raids/)
+**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many PMC's on the map.**
+
+**The PMC-spawning system in this quest will be automatically disabled** if any of the following mods are detected:
+* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
+* [MOAR](https://hub.sp-tarkov.com/files/file/1059-moar-bots-spawning-difficulty/)
+
+**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
 
 **---------- Overview ----------**
 
@@ -48,6 +52,7 @@ There are currently several types of quests available to each bot:
 * **EFT Quests:** Bots will go to locations specified in EFT quests for placing markers, collecting/placing items, killing other bots, etc. Bots can also use quests added by other mods. 
 * **Spawn Rush:** At the beginning of the raid, bots that are within a certain distance of you will run to your spawn point. Only a certain number of bots are allowed to perform this quest, and they won't always select it. This makes Factory even more challenging. 
 * **Boss Hunter:** Bots will search zones in which bosses are known to spawn. They will only be allowed to select this quest at the beginning of the raid (within the first 5 minutes by default).
+* **Airdrop Chaser:** Bots will run to the most recent airdrop if it's close to them (within 500m by default). They will be allowed to select this quest within **questing.bot_quests.airdrop_bot_interest_time** seconds (420s by default) of the airdrop crate landing.
 * **Spawn Point Wandering:** Bots will wander to different spawn points around the map. This is used as a last resort in case the bot doesn't select any other quests. 
 * **"Standard" Quests:** Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are closer to them. 
 * **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests.
@@ -112,7 +117,7 @@ The three major data structures are:
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
     * **waitTimeAfterCompleting**: The time the bot must wait after completing the step before it will be allowed to quest again. This is **10** s by default. 
-    * **stepType**: The only valid options for this are "MoveToPosition", "PlantItem", and "ToggleSwitch" (case-sensitive). If omitted, "MoveToPosition" is used by default.
+    * **stepType**: The only valid options for this are "MoveToPosition", "PlantItem", "ToggleSwitch" (case-sensitive), and "RequestExtract". If omitted, "MoveToPosition" is used by default.
     * **minElapsedTime**: If **stepType="PlantItem"**, this is the time the bot will spend "planting its item". If the bot is interrupted during this time, the timer restarts. This is **0** s by default, so it must be defined if you set **stepType="PlantItem"**.
     * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
 
@@ -207,6 +212,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_questing_requirements.max_follower_distance.target_range.min/max**: The allowed range of distances (in meters) that followers will try to be from their boss while questing. If a follower needs to get closer to its boss, it will try to get within the **min** distance (**10** m by default) of it. After that, it will be allowed to wander up to the **max** distance (**20** m by default) from it.
 * **questing.bot_questing_requirements.max_follower_distance.nearest**: If the bot has any followers, it will not be allowed to quest if its nearest follower is more than this distance (in meters) from it. This is **25** m by default. 
 * **questing.bot_questing_requirements.max_follower_distance.furthest**: If the bot has any followers, it will not be allowed to quest if its furthest follower is more than this distance (in meters) from it. This is **40** m by default. 
+* **questing.extraction_requirements.must_extract_time_remaining**: The time remaining in the raid (in seconds) after which bots will be unable to select new quest objectives and must extract instead. Requires [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) 2.1.7 or later. By default, this is **300** s. 
+* **questing.extraction_requirements.total_quests.min/max**: The minimum and maximum quests that a bot must complete before being instructed to extract. The actual number is randomly selected between this range. Requires [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) 2.1.7 or later. Bots can still be instructed to extract if they satisfy their **questing.extraction_requirements.EFT_quests.min/max** requirement. 
+* **questing.extraction_requirements.EFT_quests.min/max**: The minimum and maximum EFT quests that a bot must complete before being instructed to extract. The actual number is randomly selected between this range. Requires [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) 2.1.7 or later. Bots can still be instructed to extract if they satisfy their **questing.extraction_requirements.total_quests.min/max** requirement. 
 * **questing.bot_quests.distance_randomness**: The amount of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest objective available to it. By default, this is **30%**. 
 * **questing.bot_quests.blacklisted_boss_hunter_bosses**: An array containing the names of bosses that bots doing the "Boss Hunter" quest will not be allowed to hunt.
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
@@ -289,10 +297,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.3.5** (ETA: Late December)
-    * Add new quest type: boss hunter
-    * Add new quest type: air-drop chaser
-    * Invoke SAIN's logic for having bots extract from the map (simple system based on raid time and number of quests completed)
 * **0.4.0** (ETA: Early January)
     * New standard quests for Streets expansion areas
     * Prevent bots from sprinting in more areas
@@ -304,8 +308,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Add new quest type: hidden-stash running
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.5.2** (ETA: Early February)
-    * Allow player Scavs to quest (without allowing all Scavs to quest)
+* **Backlog (No ETA)**
+    * Control spawning of player Scavs. Requires SPT changes.
+    * Allow player Scavs to quest (without allowing all Scavs to quest).
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 * **Not Planned**
