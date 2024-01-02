@@ -1105,6 +1105,20 @@
                         }
                     }
                 ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 50.254055,
+                            "y": 0.5484985,
+                            "z": 34.2604256
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -2716,6 +2730,20 @@
                             "x": -225.23909,
                             "y": 5.213499,
                             "z": 275.453064
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -203.265121,
+                            "y": 2.19421458,
+                            "z": 290.872864
                         }
                     }
                 ]

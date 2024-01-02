@@ -37,6 +37,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("priority")]
         public int Priority { get; set; } = 99;
 
+        [JsonProperty("desirability")]
+        public float Desirability { get; set; } = -1;
+
         [JsonProperty("minRaidET")]
         public float MinRaidET { get; set; } = 0;
 

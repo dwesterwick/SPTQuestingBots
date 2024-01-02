@@ -314,9 +314,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Control spawning of player Scavs. Requires SPT changes.
     * Allow player Scavs to quest (without allowing all Scavs to quest).
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
-    * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
+    * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 
 **---------- Credits ----------**
 
