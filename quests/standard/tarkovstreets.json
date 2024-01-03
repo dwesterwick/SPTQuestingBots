@@ -1567,6 +1567,59 @@
         ]
     },
     {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 19,
+        "name": "Underpass Stores",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 11.6137333,
+                            "y": -3.73700023,
+                            "z": -16.3762531
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 5.042418,
+                            "y": -3.7265923,
+                            "z": -0.799274
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 11.4650326,
+                            "y": -3.726597,
+                            "z": -9.159293
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
@@ -3334,6 +3387,546 @@
         ]
     },
     {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Crash Site Warehouse",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 143.317337,
+                            "y": 3.06238532,
+                            "z": 454.573334
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 140.6442,
+                            "y": 3.190387,
+                            "z": 443.765625
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 143.628662,
+                            "y": 6.173671,
+                            "z": 454.5801
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "School",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 208.30722,
+                            "y": 0.332341164,
+                            "z": 139.277084
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 202.807709,
+                            "y": 0.332339168,
+                            "z": 113.455948
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 212.954071,
+                            "y": 3.7872,
+                            "z": 115.296028
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 217.717178,
+                            "y": 3.7872,
+                            "z": 107.028122
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 213.8071,
+                            "y": 3.787199,
+                            "z": 122.16214
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 210.567062,
+                            "y": 3.78719258,
+                            "z": 132.533112
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Building across from Brodian Pub",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 138.508072,
+                            "y": -1.37988329,
+                            "z": 78.6828842
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 135.400665,
+                            "y": -1.37987971,
+                            "z": 97.25723
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Terragroup Building",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 62.5269,
+                            "y": 0.24274838,
+                            "z": -78.1427
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 44.6521,
+                            "y": 0.242748514,
+                            "z": -75.06181
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 45.1506424,
+                            "y": 0.242749974,
+                            "z": -54.7859077
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Terragroup Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -33.83076,
+                            "y": 6.60802555,
+                            "z": -111.549194
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -28.671175,
+                            "y": 6.60802555,
+                            "z": -111.118248
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -38.37327,
+                            "y": 6.608024,
+                            "z": -118.506042
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -27.8757477,
+                            "y": 6.608024,
+                            "z": -118.210564
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Mall Storage and Construction",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -104.601,
+                            "y": 0.583438158,
+                            "z": -42.01645
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -114.051857,
+                            "y": 0.6860739,
+                            "z": -64.76171
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -117.623489,
+                            "y": 0.607983947,
+                            "z": -69.0031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "name": "Mall Storage and Construction Rear",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -147.374527,
+                            "y": 0.607990742,
+                            "z": -69.8537445
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -107.369766,
+                            "y": 0.607988834,
+                            "z": -71.28318
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "name": "Beluga",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -38.4692955,
+                            "y": 0.599966645,
+                            "z": -45.16779
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -45.33511,
+                            "y": 0.6216386,
+                            "z": -36.7298355
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -29.8334522,
+                            "y": 0.6120954,
+                            "z": -44.8534851
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -27.93754,
+                            "y": 5.130017,
+                            "z": -33.9282265
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -46.3925819,
+                            "y": 5.099983,
+                            "z": -30.2969856
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -60.28956,
+                            "y": 5.09998035,
+                            "z": -28.0160255
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -47.5578041,
+                            "y": 9.604668,
+                            "z": -71.95512
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -36.7101936,
+                            "y": 9.60098648,
+                            "z": -73.1345749
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -23.3563824,
+                            "y": 9.600991,
+                            "z": -54.4971542
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -18.2722073,
+                            "y": 9.600991,
+                            "z": -57.1945953
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 21,
+        "name": "Beluga Rear Storage",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -41.64874,
+                            "y": 0.6011204,
+                            "z": -67.74534
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -61.9752274,
+                            "y": 0.599967,
+                            "z": -69.28857
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
@@ -3838,67 +4431,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "Crash Site Warehouse",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 143.317337,
-                            "y": 3.06238532,
-                            "z": 454.573334
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 140.6442,
-                            "y": 3.190387,
-                            "z": 443.765625
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 143.628662,
-                            "y": 6.173671,
-                            "z": 454.5801
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
         "chanceForSelecting": 20,
-        "priority": 20,
+        "priority": 21,
         "name": "Crash SW Apartment",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -3922,8 +4462,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -3936,8 +4476,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -3961,8 +4501,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -3975,8 +4515,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4000,8 +4540,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4025,8 +4565,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4057,8 +4597,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4071,8 +4611,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4096,8 +4636,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4121,8 +4661,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4161,7 +4701,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -4180,101 +4720,13 @@
         "maxLevel": 99,
         "maxBots": 2,
         "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "School",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 208.30722,
-                            "y": 0.332341164,
-                            "z": 139.277084
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 202.807709,
-                            "y": 0.332339168,
-                            "z": 113.455948
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 212.954071,
-                            "y": 3.7872,
-                            "z": 115.296028
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 217.717178,
-                            "y": 3.7872,
-                            "z": 107.028122
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 213.8071,
-                            "y": 3.787199,
-                            "z": 122.16214
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": 210.567062,
-                            "y": 3.78719258,
-                            "z": 132.533112
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
-        "chanceForSelecting": 10,
         "priority": 21,
         "name": "Children's Polyclinic No. 69",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4287,8 +4739,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4301,8 +4753,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4326,8 +4778,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4351,8 +4803,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -4372,8 +4824,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -4393,8 +4845,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -4412,53 +4864,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
-        "name": "Building across from Brodian Pub",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 138.508072,
-                            "y": -1.37988329,
-                            "z": 78.6828842
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 135.400665,
-                            "y": -1.37987971,
-                            "z": 97.25723
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
         "name": "Expo Building",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4482,8 +4895,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4507,8 +4920,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4521,8 +4934,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4535,8 +4948,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4567,8 +4980,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4581,8 +4994,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4600,67 +5013,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "name": "Terragroup Building",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 62.5269,
-                            "y": 0.24274838,
-                            "z": -78.1427
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 44.6521,
-                            "y": 0.242748514,
-                            "z": -75.06181
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 45.1506424,
-                            "y": 0.242749974,
-                            "z": -54.7859077
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
+        "chanceForSelecting": 15,
+        "priority": 21,
         "name": "Apartments near Tonni Hellfinger",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4673,8 +5033,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -4692,48 +5052,91 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "name": "Terragroup Office",
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "Figaro",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
-                            "x": -33.83076,
-                            "y": 6.60802555,
-                            "z": -111.549194
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -28.671175,
-                            "y": 6.60802555,
-                            "z": -111.118248
+                            "x": -120.2999,
+                            "y": 0.607997954,
+                            "z": -24.6931572
                         }
                     }
                 ]
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
-                            "x": -38.37327,
-                            "y": 6.608024,
-                            "z": -118.506042
+                            "x": -128.566162,
+                            "y": 0.607997537,
+                            "z": -27.2031841
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "Bear Hunting and Fishing Shop",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -155.261749,
+                            "y": 0.6079909,
+                            "z": -47.5635071
                         }
                     },
                     {
                         "position" : {
-                            "x": -27.8757477,
-                            "y": 6.608024,
-                            "z": -118.210564
+                            "x": -147.0653,
+                            "y": 0.607995033,
+                            "z": -42.8350639
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "G Phone",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -136.343155,
+                            "y": 0.6079899,
+                            "z": -45.9589729
                         }
                     }
                 ]
@@ -4744,49 +5147,113 @@
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
-        "maxBots": 3,
-        "chanceForSelecting": 20,
-        "priority": 19,
-        "name": "Underpass Stores",
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 21,
+        "name": "Mall Second Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
-                            "x": 11.6137333,
-                            "y": -3.73700023,
-                            "z": -16.3762531
+                            "x": -132.727127,
+                            "y": 5.10298967,
+                            "z": -7.13410759
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 21,
+        "name": "Mall Third Floor Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -123.361588,
+                            "y": 9.675658,
+                            "z": -7.740727
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -111.714615,
+                            "y": 9.599993,
+                            "z": -9.486496
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -145.898621,
+                            "y": 9.599993,
+                            "z": -4.03885031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "name": "World of Childhood Sniping",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -111.5978,
+                            "y": 0.603415132,
+                            "z": -28.4304562
                         }
                     }
                 ]
             },
             {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
-                            "x": 5.042418,
-                            "y": -3.7265923,
-                            "z": -0.799274
+                            "x": -84.46308,
+                            "y": 5.09000063,
+                            "z": -24.3518181
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
-                "steps": [
+                    },
                     {
                         "position" : {
-                            "x": 11.4650326,
-                            "y": -3.726597,
-                            "z": -9.159293
+                            "x": -94.2130356,
+                            "y": 5.090004,
+                            "z": -16.8490162
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -108.345856,
+                            "y": 5.090003,
+                            "z": -14.8044291
                         }
                     }
                 ]
