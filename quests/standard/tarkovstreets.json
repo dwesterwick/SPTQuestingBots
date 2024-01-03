@@ -544,20 +544,6 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 102.693428,
-                            "y": 2.76356578,
-                            "z": 360.190735
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
                             "x": 87.6478,
                             "y": 2.55628467,
                             "z": 353.529358

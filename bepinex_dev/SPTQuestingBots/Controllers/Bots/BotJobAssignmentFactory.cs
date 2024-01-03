@@ -568,7 +568,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 .OrderBy(o => Math.Max(1, o.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance * distanceWeighting * o.Key.Desirability / 100)
                 .Select(o => o.Key);
 
-            return sortedQuests.First();
+            return sortedQuests.Last();
         }
 
         public static Quest GetRandomQuest_OLD(this BotOwner bot, IEnumerable<Quest> invalidQuests)

@@ -225,8 +225,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_quests.airdrop_chaser.xxx**: The settings to apply to the "Airdrop Chaser" quest. 
 
 **Options for Each Section in *bot_quests*:**
-* **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
-* **chance**: The chance (in percent) that the bot will accept the quest if the quest-selection algorithm selects it for the bot.
+* **desirability**: The desirability rating (in percent) of the quest. Bots will be more likely to select quests with higher desirability ratings. 
 * **max_bots_per_quest**: The maximum number of bots that can actively be performing each quest of that type.
 * **min_distance**: Each objective in the quest will only be selected if the bot is at least this many meters away from it.
 * **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.

@@ -86,6 +86,16 @@ namespace SPTQuestingBots.Models
             Priority = priority;
         }
 
+        public Quest(string _name) : this()
+        {
+            name = _name;
+        }
+
+        public Quest(RawQuestClass template) : this()
+        {
+            Template = template;
+        }
+
         public Quest(int priority, string _name): this(priority)
         {
             name = _name;

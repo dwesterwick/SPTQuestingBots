@@ -16,6 +16,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("chance")]
         public float Chance { get; set; } = 50;
 
+        [JsonProperty("desirability")]
+        public float Desirability { get; set; } = 50;
+
         [JsonProperty("max_bots_per_quest")]
         public int MaxBotsPerQuest { get; set; } = 10;
 
@@ -47,7 +50,9 @@ namespace SPTQuestingBots.Configuration
 
         public static void ApplyQuestSettingsFromConfig(Models.Quest quest, QuestSettingsConfig settings)
         {
+            quest.Priority = settings.Priority;
             quest.ChanceForSelecting = settings.Chance;
+            quest.Desirability = settings.Desirability;
             quest.MaxBots = settings.MaxBotsPerQuest;
             quest.MaxRaidET = settings.MaxRaidET;
             quest.MinLevel = settings.MinLevel;

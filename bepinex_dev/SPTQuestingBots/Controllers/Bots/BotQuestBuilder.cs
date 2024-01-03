@@ -662,7 +662,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(settings.Priority, questName);
+            Models.Quest quest = new Models.Quest(questName);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
             Models.QuestObjective objective = new Models.QuestObjective(navMeshPosition.Value);
@@ -696,7 +696,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(settings.Priority, questName);
+            Models.Quest quest = new Models.Quest(questName);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
