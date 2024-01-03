@@ -62,12 +62,12 @@ namespace LootingBots
         /**
          * Force a bot to search for loot immediately if Looting Bots is loaded. Return true if successful.
          */
-        public static bool TryForceBotToLootNow(BotOwner botOwner)
+        public static bool TryForceBotToLootNow(BotOwner botOwner, float duration)
         {
             if (!Init()) return false;
             if (_ForceBotToLootNowMethod == null) return false;
 
-            return (bool)_ForceBotToLootNowMethod.Invoke(null, new object[] { botOwner });
+            return (bool)_ForceBotToLootNowMethod.Invoke(null, new object[] { botOwner, duration });
         }
     }
 }

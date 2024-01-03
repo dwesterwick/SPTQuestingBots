@@ -114,7 +114,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner))
+            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner, 5))
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
 
