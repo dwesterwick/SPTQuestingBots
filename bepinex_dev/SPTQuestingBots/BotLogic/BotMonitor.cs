@@ -26,6 +26,7 @@ namespace SPTQuestingBots.BotLogic
         private bool wasLooting = false;
         private bool hasFoundLoot = false;
         private bool canUseSAINInterop = false;
+        private bool canUseLootingBotsInterop = false;
         private int minTotalQuestsForExtract = int.MaxValue;
         private int minEFTQuestsForExtract = int.MaxValue;
 
@@ -49,6 +50,15 @@ namespace SPTQuestingBots.BotLogic
             else
             {
                 LoggingController.LogWarning("SAIN Interop not detected. Cannot instruct " + botOwner.GetText() + " to extract.");
+            }
+
+            if (LootingBots.LootingBotsInterop.Init())
+            {
+                canUseLootingBotsInterop = true;
+            }
+            else
+            {
+                LoggingController.LogWarning("Looting Bots Interop not detected. Cannot instruct " + botOwner.GetText() + " to loot.");
             }
         }
 
@@ -91,6 +101,28 @@ namespace SPTQuestingBots.BotLogic
             if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
             {
                 return true;
+            }
+
+            return false;
+        }
+
+        public bool TryForceBotToLootNow()
+        {
+            if (!canUseLootingBotsInterop)
+            {
+                //LoggingController.LogWarning("Looting Bots Interop not detected");
+                return false;
+            }
+
+            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner))
+            {
+                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
+
+                return true;
+            }
+            else
+            {
+                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to loot. Looting Bots Interop not initialized properly.");
             }
 
             return false;

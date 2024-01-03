@@ -208,6 +208,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             assignment.Complete();
 
             StuckCount = 0;
+
+            BotMonitor.TryForceBotToLootNow();
         }
 
         public void FailObjective()
