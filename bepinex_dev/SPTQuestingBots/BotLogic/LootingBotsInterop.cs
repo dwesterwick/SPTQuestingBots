@@ -18,6 +18,7 @@ namespace LootingBots
         private static bool _IsLootingBotsLoaded;
         private static Type _LootingBotsExternalType;
         private static MethodInfo _ForceBotToLootNowMethod;
+        private static MethodInfo _PreventBotFromLootingMethod;
 
         /**
          * Return true if Looting Bots is loaded in the client
@@ -52,6 +53,7 @@ namespace LootingBots
                 if (_LootingBotsExternalType != null)
                 {
                     _ForceBotToLootNowMethod = AccessTools.Method(_LootingBotsExternalType, "ForceBotToLootNow");
+                    _PreventBotFromLootingMethod = AccessTools.Method(_LootingBotsExternalType, "PreventBotFromLooting");
                 }
             }
 
@@ -68,6 +70,17 @@ namespace LootingBots
             if (_ForceBotToLootNowMethod == null) return false;
 
             return (bool)_ForceBotToLootNowMethod.Invoke(null, new object[] { botOwner, duration });
+        }
+
+        /**
+         * Prevent a bot from searching for loot (until the scan timer expires) if Looting Bots is loaded. Return true if successful.
+         */
+        public static bool TryPreventBotFromLooting(BotOwner botOwner, float duration)
+        {
+            if (!Init()) return false;
+            if (_PreventBotFromLootingMethod == null) return false;
+
+            return (bool)_PreventBotFromLootingMethod.Invoke(null, new object[] { botOwner, duration });
         }
     }
 }

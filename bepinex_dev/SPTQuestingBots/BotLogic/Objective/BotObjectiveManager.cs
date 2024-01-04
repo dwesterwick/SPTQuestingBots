@@ -209,7 +209,14 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             StuckCount = 0;
 
-            BotMonitor.TryForceBotToLootNow();
+            if (assignment.QuestAssignment?.IsEFTQuest == true)
+            {
+                BotMonitor.TryPreventBotFromLooting(10);
+            }
+            else
+            {
+                BotMonitor.TryForceBotToLootNow(5);
+            }
         }
 
         public void FailObjective()

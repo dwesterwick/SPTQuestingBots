@@ -106,7 +106,29 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        public bool TryForceBotToLootNow()
+        public bool TryPreventBotFromLooting(float duration)
+        {
+            if (!canUseLootingBotsInterop)
+            {
+                //LoggingController.LogWarning("Looting Bots Interop not detected");
+                return false;
+            }
+
+            if (LootingBots.LootingBotsInterop.TryPreventBotFromLooting(botOwner, duration))
+            {
+                LoggingController.LogInfo("Preventing " + botOwner.GetText() + " from looting");
+
+                return true;
+            }
+            else
+            {
+                LoggingController.LogError("Cannot prevent " + botOwner.GetText() + " from looting. Looting Bots Interop not initialized properly.");
+            }
+
+            return false;
+        }
+
+        public bool TryForceBotToLootNow(float duration)
         {
             if (!canUseLootingBotsInterop)
             {
@@ -119,7 +141,7 @@ namespace SPTQuestingBots.BotLogic
                 LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly.");
             }
 
-            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner, 5))
+            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner, duration))
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
 
