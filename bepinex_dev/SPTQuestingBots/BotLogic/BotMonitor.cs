@@ -114,6 +114,11 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            if (canUseSAINInterop && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
+            {
+                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly.");
+            }
+
             if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner, 5))
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");

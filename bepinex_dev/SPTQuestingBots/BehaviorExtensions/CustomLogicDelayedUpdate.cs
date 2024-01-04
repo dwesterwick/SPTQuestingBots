@@ -72,6 +72,12 @@ namespace SPTQuestingBots.BehaviorExtensions
             // Open doors blocking the bot's path
             BotOwner.DoorOpener.Update();
 
+            // Disable sprinting if the bot is very close to its current destination point to prevent it from sliding into staircase corners, etc.
+            if (Vector3.Distance(BotOwner.Position, BotOwner.Mover.RealDestPoint) < 1)
+            {
+                canSprint = false;
+            }
+
             if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f))
             {
                 //Controllers.LoggingController.LogInfo(BotOwner.GetText() + " can sprint");

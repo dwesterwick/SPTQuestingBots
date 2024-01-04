@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -83,11 +84,13 @@ namespace SPTQuestingBots.BotLogic.Objective
         private static Vector3? findDangerPoint()
         {
             // Enumerate all alive bots on the map
-            IEnumerable<BotOwner> aliveBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+            IEnumerable<Vector3> alivePlayerPositions = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(b => b.BotState == EBotState.Active)
-                .Where(b => !b.IsDead);
+                .Where(b => !b.IsDead)
+                .Select(b => b.Position)
+                .AddItem(Singleton<GameWorld>.Instance.MainPlayer.Position);
 
-            int botCount = aliveBots.Count();
+            int botCount = alivePlayerPositions.Count();
             if (botCount == 0)
             {
                 return null;
@@ -95,9 +98,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Combine the positions of all bots on the map into one average position
             Vector3 dangerPoint = Vector3.zero;
-            foreach (BotOwner bot in aliveBots)
+            foreach (Vector3 alivePlayerPosition in alivePlayerPositions)
             {
-                dangerPoint += bot.Position;
+                dangerPoint += alivePlayerPosition;
             }
             dangerPoint /= botCount;
 
