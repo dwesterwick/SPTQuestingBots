@@ -24,6 +24,7 @@ namespace SPTQuestingBots.Controllers
         private static TarkovApplication tarkovApplication = null;
         private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
+        private static List<Door> allOperableDoors = new List<Door>();
         private static Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
         private static Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
 
@@ -33,6 +34,7 @@ namespace SPTQuestingBots.Controllers
             CurrentRaidSettings = null;
             nearestNavMeshPoint.Clear();
             switches.Clear();
+            allOperableDoors.Clear();
             areLockedDoorsUnlocked.Clear();
             doorInteractionPositions.Clear();
         }
@@ -73,7 +75,7 @@ namespace SPTQuestingBots.Controllers
         public static void FindAllInteractiveObjects()
         {
             FindAllSwitches();
-            FindAllLockedDoors();
+            FindAllDoors();
         }
 
         public static void FindAllSwitches()
@@ -106,18 +108,14 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static void FindAllLockedDoors()
+        public static void FindAllDoors()
         {
+            allOperableDoors.Clear();
             areLockedDoorsUnlocked.Clear();
 
             Door[] allDoors = FindObjectsOfType<Door>();
             foreach (Door door in allDoors)
             {
-                if (door.DoorState != EDoorState.Locked)
-                {
-                    continue;
-                }
-
                 if (!door.Operatable)
                 {
                     //LoggingController.LogInfo("Door " + door.Id + " is inoperable");
@@ -130,11 +128,25 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
+                allOperableDoors.Add(door);
+
+                if (door.DoorState != EDoorState.Locked)
+                {
+                    continue;
+                }
+
                 areLockedDoorsUnlocked.Add(door, false);
             }
 
-            LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors");
+            LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors of " + allOperableDoors.Count + " total doors");
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+        }
+
+        public static IEnumerable<Door> FindClosedDoorsNearPosition(Vector3 position, float maxDistance)
+        {
+            return allOperableDoors
+                .Where(d => d.DoorState != EDoorState.Open)
+                .Where(d => Vector3.Distance(position, d.transform.position) < maxDistance);
         }
 
         public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)

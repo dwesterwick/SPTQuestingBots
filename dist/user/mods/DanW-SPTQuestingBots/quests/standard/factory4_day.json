@@ -6,6 +6,7 @@
         "maxBots": 2,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 30,
         "name": "3rd Floor Office Rush",
         "objectives" : [
@@ -32,6 +33,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 35,
         "name": "3rd Floor Office",
         "objectives" : [
             {
@@ -57,6 +59,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 35,
         "name": "1st Floor Office",
         "objectives" : [
             {
@@ -82,6 +85,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 35,
         "name": "3rd Floor Bridge",
         "objectives" : [
             {
@@ -107,6 +111,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 35,
         "name": "Med Tent",
         "objectives" : [
             {
@@ -132,6 +137,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 30,
         "name": "Forklift",
         "objectives" : [
             {
@@ -157,6 +163,7 @@
         "maxBots": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 25,
         "name": "Boilers",
         "objectives" : [
             {
@@ -182,6 +189,7 @@
         "maxBots": 1,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 10,
         "name": "Engineer's Office",
         "objectives" : [
             {
@@ -207,6 +215,7 @@
         "maxBots": 1,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 10,
         "name": "Gate 0",
         "objectives" : [
             {
@@ -232,6 +241,7 @@
         "maxBots": 1,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 10,
         "name": "Med Tent Gate",
         "objectives" : [
             {
@@ -257,6 +267,7 @@
         "maxBots": 1,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 10,
         "name": "Cellars",
         "objectives" : [
             {
@@ -282,6 +293,7 @@
         "maxBots": 2,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 10,
         "name": "Gate 3",
         "objectives" : [
             {

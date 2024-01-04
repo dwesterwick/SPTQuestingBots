@@ -217,14 +217,15 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.extraction_requirements.EFT_quests.min/max**: The minimum and maximum EFT quests that a bot must complete before being instructed to extract. The actual number is randomly selected between this range. Requires [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) 2.1.7 or later. Bots can still be instructed to extract if they satisfy their **questing.extraction_requirements.total_quests.min/max** requirement. 
 * **questing.bot_quests.distance_randomness**: The amount of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest objective available to it. By default, this is **30%**. 
 * **questing.bot_quests.blacklisted_boss_hunter_bosses**: An array containing the names of bosses that bots doing the "Boss Hunter" quest will not be allowed to hunt.
+* **questing.bot_quests.airdrop_bot_interest_time**: The time (in seconds) after an airdop lands during which bots can go to it via an "Airdrop Chaser" quest. This is **420** s by default. 
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
 * **questing.bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
 * **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest.
 * **questing.bot_quests.boss_hunter.xxx**: The settings to apply to the "Boss Hunter" quest. 
+* **questing.bot_quests.airdrop_chaser.xxx**: The settings to apply to the "Airdrop Chaser" quest. 
 
 **Options for Each Section in *bot_quests*:**
-* **priority**: An integer indicating how the quest will be prioritized in the quest-selection algorithm. Quests that have a lower priority number are more likely to be selected.
-* **chance**: The chance (in percent) that the bot will accept the quest if the quest-selection algorithm selects it for the bot.
+* **desirability**: The desirability rating (in percent) of the quest. Bots will be more likely to select quests with higher desirability ratings. 
 * **max_bots_per_quest**: The maximum number of bots that can actively be performing each quest of that type.
 * **min_distance**: Each objective in the quest will only be selected if the bot is at least this many meters away from it.
 * **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.
@@ -312,9 +313,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Control spawning of player Scavs. Requires SPT changes.
     * Allow player Scavs to quest (without allowing all Scavs to quest).
     * Improve bot-spawn scheduling with initial PMC spawns to prevent them from getting "stuck in the queue" and not spawning until most of the Scavs die
-    * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
+    * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
 
 **---------- Credits ----------**
 

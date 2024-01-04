@@ -145,6 +145,11 @@ namespace SPTQuestingBots.BotLogic
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
 
+                // Need to reset these or bots may crouch-walk for a long distance
+                // TODO: This doesn't seem to work. Maybe Looting Bots is forcing this behavior?
+                botOwner.SetPose(1f);
+                botOwner.SetTargetMoveSpeed(1f);
+
                 return true;
             }
             else

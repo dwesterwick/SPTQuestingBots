@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -100,6 +101,28 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             BotOwner.Steering.LookToPoint(point);
             baseSteeringLogic.Update(BotOwner);
+        }
+
+        public bool IsNearAndMovingTowardClosedDoor()
+        {
+            return IsNearAndMovingTowardClosedDoor(2, 30);
+        }
+
+        public bool IsNearAndMovingTowardClosedDoor(float distance, float angle)
+        {
+            Vector3 botMovingDirection = BotOwner.Mover.RealDestPoint - BotOwner.Position;
+            IEnumerable<Door> nearbyClosedDoors = LocationController.FindClosedDoorsNearPosition(BotOwner.Position, distance);
+            foreach (Door door in nearbyClosedDoors)
+            {
+                Vector3 doorDirection = door.transform.position - BotOwner.Position;
+                if (Vector3.Angle(botMovingDirection, doorDirection) < angle)
+                {
+                    LoggingController.LogInfo(BotOwner.GetText() + " is approaching a closed door");
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         protected bool canUpdate()

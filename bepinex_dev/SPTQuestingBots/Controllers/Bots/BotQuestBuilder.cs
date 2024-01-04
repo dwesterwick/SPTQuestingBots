@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
@@ -119,8 +118,8 @@ namespace SPTQuestingBots.Controllers.Bots
 
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
-                        Quest quest = new Quest(ConfigController.Config.Questing.BotQuests.EFTQuests.Priority, questTemplate);
-                        quest.ChanceForSelecting = ConfigController.Config.Questing.BotQuests.EFTQuests.Chance;
+                        Quest quest = new Quest(questTemplate);
+                        QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.EFTQuests);
                         quest.PMCsOnly = true;
                         BotJobAssignmentFactory.AddQuest(quest);
                     }
