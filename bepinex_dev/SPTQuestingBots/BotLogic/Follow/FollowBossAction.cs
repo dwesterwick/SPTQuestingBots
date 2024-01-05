@@ -40,7 +40,9 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             // Only allow the bot to sprint if its boss is allowed to sprint
             BotOwner boss = HiveMind.BotHiveMindMonitor.GetBoss(BotOwner);
+
             CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
+            CanSprint &= IsAllowedToSprint();
 
             RecalculatePath(boss.Position);
 

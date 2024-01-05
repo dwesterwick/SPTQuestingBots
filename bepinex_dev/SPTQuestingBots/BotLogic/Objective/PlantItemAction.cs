@@ -51,6 +51,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
+            // This doesn't really need to be updated every frame
+            CanSprint = IsAllowedToSprint();
+
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 dangerPoint = null;
@@ -62,10 +65,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
-            {
-                ObjectiveManager.CompleteObjective();
-            }
+            CheckMinElapsedActionTime();
 
             // Find the location where bots are most likely to be
             if (!dangerPoint.HasValue)

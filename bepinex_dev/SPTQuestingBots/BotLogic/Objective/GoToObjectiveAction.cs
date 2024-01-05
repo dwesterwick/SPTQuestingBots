@@ -47,10 +47,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // This doesn't really need to be updated every frame
-            CanSprint = QuestingBotsPluginConfig.SprintingEnabled.Value && ObjectiveManager.CanSprintToObjective();
-
-            // Prevent bots from sliding into doors
-            CanSprint &= !IsNearAndMovingTowardClosedDoor();
+            CanSprint = IsAllowedToSprint();
 
             if (ObjectiveManager.MustUnlockDoor)
             {

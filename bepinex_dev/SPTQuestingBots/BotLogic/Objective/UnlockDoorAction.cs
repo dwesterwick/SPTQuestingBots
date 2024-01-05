@@ -159,6 +159,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
+            // This doesn't really need to be updated every frame
+            CanSprint = IsAllowedToSprint();
+
             // Go to the interaction location selected when the action was created
             // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);

@@ -45,16 +45,16 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
+            // This doesn't really need to be updated every frame
+            CanSprint = IsAllowedToSprint();
+
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 RestartActionElapsedTime();
             }
 
-            if (ActionElpasedTime >= ObjectiveManager.MinElapsedActionTime)
-            {
-                ObjectiveManager.CompleteObjective();
-            }
+            CheckMinElapsedActionTime();
         }
     }
 }
