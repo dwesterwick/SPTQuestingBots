@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.Interactive;
@@ -196,6 +197,52 @@ namespace SPTQuestingBots.BehaviorExtensions
             return BotOwner.CellData.CurrentDoorLinks()
                 .Select(d => d.Door)
                 .Where(d => Vector3.Distance(BotOwner.Position, d.transform.position) <= distance);
+        }
+
+        public Vector3? FindDangerPoint()
+        {
+            // Enumerate all alive bots on the map
+            IEnumerable<Vector3> alivePlayerPositions = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.Id != BotOwner.Id)
+                .Where(b => b.BotState == EBotState.Active)
+                .Where(b => !b.IsDead)
+                .Select(b => b.Position)
+                .AddItem(Singleton<GameWorld>.Instance.MainPlayer.Position);
+
+            int botCount = alivePlayerPositions.Count();
+            if (botCount == 0)
+            {
+                return null;
+            }
+
+            // Combine the positions of all bots on the map into one average position
+            Vector3 dangerPoint = Vector3.zero;
+            foreach (Vector3 alivePlayerPosition in alivePlayerPositions)
+            {
+                dangerPoint += alivePlayerPosition;
+            }
+            dangerPoint /= botCount;
+
+            return dangerPoint;
+        }
+
+        public Vector3? FindNearestDangerPoint()
+        {
+            // Enumerate all alive bots on the map
+            IEnumerable<Vector3> alivePlayerPositions = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.Id != BotOwner.Id)
+                .Where(b => b.BotState == EBotState.Active)
+                .Where(b => !b.IsDead)
+                .Select(b => b.Position)
+                .AddItem(Singleton<GameWorld>.Instance.MainPlayer.Position);
+
+            int botCount = alivePlayerPositions.Count();
+            if (botCount == 0)
+            {
+                return null;
+            }
+
+            return alivePlayerPositions.First();
         }
 
         protected bool canUpdate()

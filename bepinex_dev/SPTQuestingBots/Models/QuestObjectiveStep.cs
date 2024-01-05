@@ -15,9 +15,10 @@ namespace SPTQuestingBots.Models
     {
         Undefined = 0,
         MoveToPosition = 1,
-        PlantItem = 2,
-        ToggleSwitch = 3,
-        RequestExtract = 4,
+        HoldAtPosition = 2,
+        PlantItem = 3,
+        ToggleSwitch = 4,
+        RequestExtract = 5,
     }
 
     public class QuestObjectiveStep

@@ -174,6 +174,17 @@ namespace SPTQuestingBots.BotLogic.Objective
                     }
                     return updatePreviousState(true);
 
+                case QuestAction.HoldAtPosition:
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToWaitPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.HoldPosition, "Wait (" + objectiveManager.MinElapsedActionTime + "s)");
+                    }
+                    return updatePreviousState(true);
+
                 case QuestAction.PlantItem:
                     if (!objectiveManager.IsCloseToObjective())
                     {

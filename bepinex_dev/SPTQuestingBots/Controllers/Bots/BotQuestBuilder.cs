@@ -629,7 +629,7 @@ namespace SPTQuestingBots.Controllers.Bots
         {
             foreach (QuestObjective objective in quest.AllObjectives)
             {
-                objective.LootAfterCompleting = LootAfterCompleting.Inhibit;
+                objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
 
                 foreach (QuestObjectiveStep step in objective.AllSteps)
                 {

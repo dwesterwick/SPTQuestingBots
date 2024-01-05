@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -52,9 +53,20 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 RestartActionElapsedTime();
+
+                return;
             }
 
+            restartStuckTimer();
             CheckMinElapsedActionTime();
+
+            Vector3? dangerPoint = FindNearestDangerPoint();
+            if (!dangerPoint.HasValue)
+            {
+                return;
+            }
+
+            UpdateBotSteering(dangerPoint.Value);
         }
     }
 }

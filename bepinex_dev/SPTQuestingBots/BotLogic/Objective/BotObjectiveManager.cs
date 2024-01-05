@@ -206,7 +206,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void CompleteObjective()
         {
             assignment.Complete();
-            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompleting);
+            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting);
 
             StuckCount = 0;
         }
@@ -277,6 +277,11 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsAllowedToTakeABreak()
         {
+            if ((CurrentQuestAction == QuestAction.HoldAtPosition) && IsCloseToObjective())
+            {
+                return false;
+            }
+
             if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
             {
                 return false;
