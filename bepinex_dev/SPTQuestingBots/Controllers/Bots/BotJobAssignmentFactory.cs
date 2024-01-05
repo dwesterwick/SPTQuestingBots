@@ -528,6 +528,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 .Where(q => q.NumberOfValidObjectives > 0)
                 .Where(q => q.CanMoreBotsDoQuest())
                 .Where(q => q.CanAssignToBot(bot))
+                .Where(q => q.Desirability != 0)
                 .ToArray();
 
             foreach (Quest quest in assignableQuests)
@@ -545,30 +546,40 @@ namespace SPTQuestingBots.Controllers.Bots
                 return null;
             }
 
-            Dictionary<Quest, Configuration.MinMaxConfig> questObjectiveDistances = new Dictionary<Quest, Configuration.MinMaxConfig>();
+            Dictionary<Quest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<Quest, Configuration.MinMaxConfig>();
             foreach (Quest quest in assignableQuests)
             {
                 IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
                 IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p.Value);
                 IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot.Position, p));
 
-                questObjectiveDistances.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
+                questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
             }
 
             // Calculate the maximum amount of "randomness" to apply to each quest
-            double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
-            int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
+            //double distanceRange = questDistanceRanges.Max(q => q.Value.Max) - questDistanceRanges.Min(q => q.Value.Min);
+            double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
+            int maxRandomDistance = (int)Math.Ceiling(maxDistance * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
+            int desirabilityRandomness = ConfigController.Config.Questing.BotQuests.DesirabilityRandomness;
 
-            double maxDistance = questObjectiveDistances.Max(o => o.Value.Max);
             float distanceRandomness = ConfigController.Config.Questing.BotQuests.DistanceRandomness;
             float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
 
             System.Random random = new System.Random();
-            IEnumerable<Quest> sortedQuests = questObjectiveDistances
-                .OrderBy(o => Math.Max(1, o.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance * distanceWeighting * o.Key.Desirability / 100)
+            Dictionary<Quest, double> questDistanceFractions = questDistanceRanges
+                .ToDictionary(o => o.Key, o => 1 - (o.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance);
+            Dictionary<Quest, float> questDesirabilityFractions = questDistanceRanges
+                .ToDictionary(o => o.Key, o => (o.Key.Desirability + random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100);
+
+            IEnumerable<Quest> sortedQuests = questDistanceRanges
+                .OrderBy(o => (questDistanceFractions[o.Key] * distanceWeighting) + questDesirabilityFractions[o.Key])
                 .Select(o => o.Key);
 
-            return sortedQuests.Last();
+            Quest selectedQuest = sortedQuests.Last();
+
+            LoggingController.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest]);
+
+            return selectedQuest;
         }
 
         public static Quest GetRandomQuest_OLD(this BotOwner bot, IEnumerable<Quest> invalidQuests)

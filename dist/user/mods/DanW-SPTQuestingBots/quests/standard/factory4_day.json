@@ -86,6 +86,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 35,
+        "lootAfterCompleting": "Inhibit",
         "name": "3rd Floor Bridge",
         "objectives" : [
             {
@@ -164,6 +165,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 25,
+        "lootAfterCompleting": "Inhibit",
         "name": "Boilers",
         "objectives" : [
             {
@@ -216,6 +218,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "lootAfterCompleting": "Inhibit",
         "name": "Gate 0",
         "objectives" : [
             {
@@ -242,6 +245,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "lootAfterCompleting": "Inhibit",
         "name": "Med Tent Gate",
         "objectives" : [
             {
@@ -268,6 +272,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "lootAfterCompleting": "Inhibit",
         "name": "Cellars",
         "objectives" : [
             {
@@ -294,6 +299,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "lootAfterCompleting": "Inhibit",
         "name": "Gate 3",
         "objectives" : [
             {

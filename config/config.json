@@ -103,6 +103,7 @@
 		},
 		"bot_quests": {
 			"distance_randomness": 30,
+			"desirability_randomness": 20,
 			"distance_weighting": 1,
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
 			"airdrop_bot_interest_time": 420,

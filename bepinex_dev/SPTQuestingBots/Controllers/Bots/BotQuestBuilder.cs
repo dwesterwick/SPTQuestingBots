@@ -145,8 +145,8 @@ namespace SPTQuestingBots.Controllers.Bots
                 // Create quest objectives for all matching quest items found in the map
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
-                // Update the chance that bots will have keys for EFT quests
-                yield return BotJobAssignmentFactory.ProcessAllQuests(updateChancesOfBotsHavingKeys, ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys);
+                // Update all other settings for EFT quests
+                yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 Quest spawnPointQuest = createSpawnPointQuest(LocationController.CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
@@ -625,13 +625,15 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        private static void updateChancesOfBotsHavingKeys(Models.Quest quest, float chance)
+        private static void updateEFTQuestObjectives(Models.Quest quest)
         {
             foreach (QuestObjective objective in quest.AllObjectives)
             {
+                objective.LootAfterCompleting = LootAfterCompleting.Inhibit;
+
                 foreach (QuestObjectiveStep step in objective.AllSteps)
                 {
-                    step.ChanceOfHavingKey = chance;
+                    step.ChanceOfHavingKey = ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys;
                 }
             }
         }

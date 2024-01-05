@@ -11,6 +11,13 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
+    public enum LootAfterCompleting
+    {
+        Default = 0,
+        Force = 1,
+        Inhibit = 2
+    }
+
     public class QuestObjective
     {
         [JsonProperty("repeatable")]
@@ -24,6 +31,9 @@ namespace SPTQuestingBots.Models
 
         [JsonProperty("maxRunDistance")]
         public float MaxRunDistance { get; set; } = 0f;
+
+        [JsonProperty("lootAfterCompleting")]
+        public LootAfterCompleting LootAfterCompleting { get; set; } = LootAfterCompleting.Force;
 
         [JsonProperty("name")]
         private string name = "Unnamed Quest Objective";

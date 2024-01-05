@@ -206,17 +206,9 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void CompleteObjective()
         {
             assignment.Complete();
+            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompleting);
 
             StuckCount = 0;
-
-            if (assignment.QuestAssignment?.IsEFTQuest == true)
-            {
-                BotMonitor.TryPreventBotFromLooting(10);
-            }
-            else
-            {
-                BotMonitor.TryForceBotToLootNow(5);
-            }
         }
 
         public void FailObjective()
@@ -322,6 +314,19 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return false;
+        }
+
+        public void UpdateLootingBehavior(LootAfterCompleting behavior)
+        {
+            switch (behavior)
+            {
+                case LootAfterCompleting.Force:
+                    BotMonitor.TryForceBotToLootNow(5);
+                    break;
+                case LootAfterCompleting.Inhibit:
+                    BotMonitor.TryPreventBotFromLooting(10);
+                    break;
+            }
         }
     }
 }
