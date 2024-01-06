@@ -16,9 +16,10 @@ namespace SPTQuestingBots.Models
         Undefined = 0,
         MoveToPosition = 1,
         HoldAtPosition = 2,
-        PlantItem = 3,
-        ToggleSwitch = 4,
-        RequestExtract = 5,
+        Ambush = 3,
+        PlantItem = 4,
+        ToggleSwitch = 5,
+        RequestExtract = 6,
     }
 
     public class QuestObjectiveStep
@@ -38,6 +39,9 @@ namespace SPTQuestingBots.Models
 
         [JsonProperty("switchID")]
         public string SwitchID { get; set; } = "";
+
+        [JsonProperty("maxWanderDistance")]
+        public float MaxWanderDistance { get; set; } = 5;
 
         [JsonProperty("chanceOfHavingKey")]
         public float ChanceOfHavingKey { get; set; } = ConfigController.Config.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;

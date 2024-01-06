@@ -111,6 +111,7 @@
     <Compile Include="BotLogic\HiveMind\BotHiveMindWantsToLootSensor.cs" />
     <Compile Include="BotLogic\Follow\RegroupAction.cs" />
     <Compile Include="BotLogic\LootingBotsInterop.cs" />
+    <Compile Include="BotLogic\Objective\AmbushAction.cs" />
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />

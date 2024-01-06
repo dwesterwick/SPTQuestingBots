@@ -16,7 +16,17 @@
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
-                        "waitTimeAfterCompleting": 30,
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxWanderDistance": 3,
+                        "minElapsedTime": 45,
                         "position" : {
                             "x": 19.6659336,
                             "y": 8.210877,
@@ -184,7 +194,8 @@
                     },
                     {
                         "stepType" : "HoldAtPosition",
-                        "minElapsedTime": 5,
+                        "maxWanderDistance": 5,
+                        "minElapsedTime": 30,
                         "position" : {
                             "x": 51.1654968,
                             "y": 4.309441,
@@ -247,8 +258,8 @@
                         }
                     },
                     {
-                        "stepType" : "HoldAtPosition",
-                        "minElapsedTime": 45,
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": -59.6667824,
                             "y": 1.300873,
@@ -285,8 +296,8 @@
                         }
                     },
                     {
-                        "stepType" : "HoldAtPosition",
-                        "minElapsedTime": 45,
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": -18.3804874,
                             "y": 0.210918948,
@@ -323,8 +334,8 @@
                         }
                     },
                     {
-                        "stepType" : "HoldAtPosition",
-                        "minElapsedTime": 45,
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": 73.16466,
                             "y": -4.6014514,
@@ -361,8 +372,8 @@
                         }
                     },
                     {
-                        "stepType" : "HoldAtPosition",
-                        "minElapsedTime": 45,
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": 56.4280052,
                             "y": 0.227544457,

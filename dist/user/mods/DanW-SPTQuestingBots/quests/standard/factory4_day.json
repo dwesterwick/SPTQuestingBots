@@ -16,6 +16,17 @@
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxWanderDistance": 3,
+                        "minElapsedTime": 45,
                         "position" : {
                             "x": 19.6659336,
                             "y": 8.210877,
@@ -86,13 +97,13 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 35,
-        "lootAfterCompleting": "Inhibit",
         "name": "3rd Floor Bridge",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
@@ -165,15 +176,26 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 25,
-        "lootAfterCompleting": "Inhibit",
         "name": "Boilers",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 51.1654968,
+                            "y": 4.309441,
+                            "z": 10.63328
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxWanderDistance": 5,
+                        "minElapsedTime": 30,
                         "position" : {
                             "x": 51.1654968,
                             "y": 4.309441,
@@ -215,18 +237,29 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
-        "lootAfterCompleting": "Inhibit",
         "name": "Gate 0",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -59.6667824,
+                            "y": 1.300873,
+                            "z": 55.5726776
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": -59.6667824,
                             "y": 1.300873,
@@ -242,18 +275,29 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
-        "lootAfterCompleting": "Inhibit",
         "name": "Med Tent Gate",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -18.3804874,
+                            "y": 0.210918948,
+                            "z": -54.71151
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": -18.3804874,
                             "y": 0.210918948,
@@ -269,18 +313,29 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
-        "lootAfterCompleting": "Inhibit",
         "name": "Cellars",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 73.16466,
+                            "y": -4.6014514,
+                            "z": -28.6016216
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": 73.16466,
                             "y": -4.6014514,
@@ -296,18 +351,29 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
-        "lootAfterCompleting": "Inhibit",
         "name": "Gate 3",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 56.4280052,
+                            "y": 0.227544457,
+                            "z": 56.4638138
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": 120,
                         "position" : {
                             "x": 56.4280052,
                             "y": 0.227544457,

@@ -16,11 +16,12 @@ namespace SPTQuestingBots.BehaviorExtensions
         GoToObjective,
         FollowBoss,
         HoldPosition,
+        Ambush,
         PlantItem,
         Regroup,
         Sleep,
         ToggleSwitch,
-        UnlockDoor
+        UnlockDoor,
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -61,6 +62,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.GoToObjective: return new Action(typeof(BotLogic.Objective.GoToObjectiveAction), actionReason);
                 case BotActionType.FollowBoss: return new Action(typeof(BotLogic.Follow.FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(BotLogic.Objective.HoldAtObjectiveAction), actionReason);
+                case BotActionType.Ambush: return new Action(typeof(BotLogic.Objective.AmbushAction), actionReason);
                 case BotActionType.PlantItem: return new Action(typeof(BotLogic.Objective.PlantItemAction), actionReason);
                 case BotActionType.Regroup: return new Action(typeof(BotLogic.Follow.RegroupAction), actionReason);
                 case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);

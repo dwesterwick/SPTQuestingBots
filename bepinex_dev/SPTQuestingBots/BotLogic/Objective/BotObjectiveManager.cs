@@ -278,7 +278,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsAllowedToTakeABreak()
         {
-            if ((CurrentQuestAction == QuestAction.HoldAtPosition) && IsCloseToObjective())
+            if ((CurrentQuestAction == QuestAction.HoldAtPosition) || (CurrentQuestAction == QuestAction.Ambush))
             {
                 return false;
             }

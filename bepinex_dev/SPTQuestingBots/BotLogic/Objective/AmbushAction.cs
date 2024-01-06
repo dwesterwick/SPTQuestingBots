@@ -4,18 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
-using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
-    public class HoldAtObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
+    public class AmbushAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private bool wasStuck = false;
-        private float maxWanderDistance = 5;
-
-        public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass394.CreateNode(BotLogicDecision.search, BotOwner));
+            SetBaseAction(GClass394.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public override void Start()
@@ -24,7 +21,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotOwner.PatrollingData.Pause();
 
-            BotOwner.Mover.Stop();
             RestartActionElapsedTime();
         }
 
@@ -55,34 +51,17 @@ namespace SPTQuestingBots.BotLogic.Objective
             // This doesn't really need to be updated every frame
             CanSprint = IsAllowedToSprint();
 
-            if (checkIfBotIsStuck())
-            {
-                if (!wasStuck)
-                {
-                    ObjectiveManager.StuckCount++;
-                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
-                }
-                wasStuck = true;
-
-                if (ObjectiveManager.TryChangeObjective())
-                {
-                    restartStuckTimer();
-                }
-            }
-            else
-            {
-                wasStuck = false;
-            }
-
             CheckMinElapsedActionTime();
 
-            if (!ObjectiveManager.IsCloseToObjective(maxWanderDistance))
+            if (!ObjectiveManager.IsCloseToObjective())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 return;
             }
 
             restartStuckTimer();
+            
+            TryLookToLastCorner();
         }
     }
 }
