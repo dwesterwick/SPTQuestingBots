@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
 using EFT;
-using HarmonyLib;
-using SPTQuestingBots.Controllers;
-using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
     public class PlantItemAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private Vector3? dangerPoint;
-
         public PlantItemAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             SetBaseAction(GClass394.CreateNode(BotLogicDecision.lay, BotOwner));
@@ -56,8 +50,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (!ObjectiveManager.IsCloseToObjective())
             {
-                dangerPoint = null;
-
                 RecalculatePath(ObjectiveManager.Position.Value);
                 UpdateBotSteering();
                 RestartActionElapsedTime();
@@ -68,18 +60,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             restartStuckTimer();
             CheckMinElapsedActionTime();
 
-            // Find the location where bots are most likely to be
-            if (!dangerPoint.HasValue)
-            {
-                dangerPoint = FindDangerPoint();
-            }
-            if (!dangerPoint.HasValue)
-            {
-                LoggingController.LogError("Cannot instruct bot to look at a null point");
-                return;
-            }
-
-            UpdateBotSteering(dangerPoint.Value);
+            TryLookToLastCorner();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public float PauseRequest { get; set; } = 0;
         public BotMonitor BotMonitor { get; private set; } = null;
         public EFT.Interactive.Door DoorToOpen { get; set; } = null;
+        public Vector3? LastCorner { get; set; } = null;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;

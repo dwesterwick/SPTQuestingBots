@@ -155,6 +155,8 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return false;
             }
 
+            ObjectiveManager.LastCorner = BotOwner.Mover.CurPath[currentCornerIndex];
+
             Vector3 currentSegment = BotOwner.Mover.CurPath[currentCornerIndex] - BotOwner.Mover.CurPath[currentCornerIndex - 1];
             Vector3 nextSegment = BotOwner.Mover.CurPath[currentCornerIndex + 1] - BotOwner.Mover.CurPath[currentCornerIndex];
             float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
@@ -197,6 +199,17 @@ namespace SPTQuestingBots.BehaviorExtensions
             return BotOwner.CellData.CurrentDoorLinks()
                 .Select(d => d.Door)
                 .Where(d => Vector3.Distance(BotOwner.Position, d.transform.position) <= distance);
+        }
+
+        public bool TryLookToLastCorner()
+        {
+            if (ObjectiveManager.LastCorner.HasValue)
+            {
+                UpdateBotSteering(ObjectiveManager.LastCorner.Value + new Vector3(0, 1, 0));
+                return true;
+            }
+
+            return false;
         }
 
         public Vector3? FindDangerPoint()

@@ -60,13 +60,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             restartStuckTimer();
             CheckMinElapsedActionTime();
 
-            Vector3? dangerPoint = FindNearestDangerPoint();
-            if (!dangerPoint.HasValue)
-            {
-                return;
-            }
-
-            UpdateBotSteering(dangerPoint.Value);
+            TryLookToLastCorner();
         }
     }
 }
