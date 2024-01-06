@@ -34,6 +34,7 @@ namespace SPTQuestingBots.Models
         public DateTime? StartTime { get; private set; } = null;
         public DateTime? EndTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
+        public double MinElapsedTime { get; private set; } = 0;
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
@@ -101,6 +102,7 @@ namespace SPTQuestingBots.Models
             }
 
             QuestObjectiveStepAssignment = nextStep;
+            MinElapsedTime = nextStep.GetRandomMinElapsedTime();
             DoorToUnlock = null;
             EndTime = null;
             startInternal();

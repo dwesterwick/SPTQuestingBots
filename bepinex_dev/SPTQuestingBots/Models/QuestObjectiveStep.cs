@@ -35,7 +35,7 @@ namespace SPTQuestingBots.Models
         public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
 
         [JsonProperty("minElapsedTime")]
-        public double MinElapsedTime { get; set; } = 0;
+        public Configuration.MinMaxConfig MinElapsedTime { get; set; } = new Configuration.MinMaxConfig(5, 5);
 
         [JsonProperty("switchID")]
         public string SwitchID { get; set; } = "";
@@ -72,7 +72,7 @@ namespace SPTQuestingBots.Models
             ActionType = actionType;
         }
 
-        public QuestObjectiveStep(Vector3 position, QuestAction actionType, double minElapsedTime) : this(position, actionType)
+        public QuestObjectiveStep(Vector3 position, QuestAction actionType, Configuration.MinMaxConfig minElapsedTime) : this(position, actionType)
         {
             MinElapsedTime = minElapsedTime;
         }
@@ -126,6 +126,12 @@ namespace SPTQuestingBots.Models
 
             InteractiveObject = LocationController.FindSwitch(SwitchID);
             return InteractiveObject != null;
+        }
+
+        public double GetRandomMinElapsedTime()
+        {
+            System.Random random = new System.Random();
+            return MinElapsedTime.Min + ((MinElapsedTime.Max - MinElapsedTime.Min) * random.NextDouble());
         }
     }
 }
