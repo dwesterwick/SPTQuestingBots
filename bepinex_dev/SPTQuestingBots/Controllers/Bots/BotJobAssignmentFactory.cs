@@ -448,7 +448,8 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             float? distanceToExfilPoint = botObjectiveManager?.DistanceToInitialExfiltrationPoint();
-            if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < LocationController.GetMaxExfilPointDistance() * 0.1))
+            float minDistanceToSwitchExfil = LocationController.GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+            if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
             {
                 botObjectiveManager?.SetExfiliationPoint();
             }
@@ -488,6 +489,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
                 if (quest != null)
                 {
+                    LoggingController.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
                     invalidQuests.Add(quest);
                 }
 
@@ -530,6 +532,8 @@ namespace SPTQuestingBots.Controllers.Bots
         {
             //return GetRandomQuest_OLD(bot, invalidQuests);
 
+            Stopwatch questSelectionTimer = Stopwatch.StartNew();
+
             Quest[] assignableQuests = allQuests
                 .Where(q => !invalidQuests.Contains(q))
                 .Where(q => q.NumberOfValidObjectives > 0)
@@ -546,6 +550,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
 
                 quest.Desirability = 100 * (1f - quest.Priority / 25f) * (quest.ChanceForSelecting / 100);
+                LoggingController.LogWarning("Quest " + quest.ToString() + " Desirability set to " + quest.Desirability + ". Priority=" + quest.Priority + ", ChanceForSelecting=" + quest.ChanceForSelecting);
             }
 
             if (!assignableQuests.Any())
@@ -569,7 +574,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 if (vectorToExfil.HasValue)
                 {
                     IEnumerable<Vector3> vectorsToObjectivePositions = validObjectivePositions.Select(p => p - bot.Position);
-                    IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(bot.Position, p));
+                    IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(p - bot.Position, vectorToExfil.Value));
 
                     questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(anglesToObjectives.Min(), anglesToObjectives.Max()));
                 }
@@ -583,11 +588,18 @@ namespace SPTQuestingBots.Controllers.Bots
             //double distanceRange = questDistanceRanges.Max(q => q.Value.Max) - questDistanceRanges.Min(q => q.Value.Min);
             double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
             int maxRandomDistance = (int)Math.Ceiling(maxDistance * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
+            float maxExfilAngle = ConfigController.Config.Questing.BotQuests.ExfilDirectionMaxAngle;
+
+            int distanceRandomness = ConfigController.Config.Questing.BotQuests.DistanceRandomness;
             int desirabilityRandomness = ConfigController.Config.Questing.BotQuests.DesirabilityRandomness;
 
-            float distanceRandomness = ConfigController.Config.Questing.BotQuests.DistanceRandomness;
             float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
-            float maxExfilAngle = 90;
+            float desirabilityWeighting = ConfigController.Config.Questing.BotQuests.DesirabilityWeighting;
+            float exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
+            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(LocationController.CurrentLocation.Id))
+            {
+                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[LocationController.CurrentLocation.Id];
+            }
 
             System.Random random = new System.Random();
             Dictionary<Quest, double> questDistanceFractions = questDistanceRanges
@@ -598,12 +610,18 @@ namespace SPTQuestingBots.Controllers.Bots
                 .ToDictionary(o => o.Key, o => Math.Max(0, o.Value.Min - maxExfilAngle) / (180 - maxExfilAngle));
 
             IEnumerable<Quest> sortedQuests = questDistanceRanges
-                .OrderBy(o => (questDistanceFractions[o.Key] * distanceWeighting) + questDesirabilityFractions[o.Key] - (questExfilAngleFactor[o.Key] * 0.5))
+                .OrderBy
+                (o =>
+                    (questDistanceFractions[o.Key] * distanceWeighting)
+                    + (questDesirabilityFractions[o.Key] * desirabilityWeighting)
+                    - (questExfilAngleFactor[o.Key] * exfilDirectionWeighting)
+                )
                 .Select(o => o.Key);
 
             Quest selectedQuest = sortedQuests.Last();
 
             LoggingController.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
+            //LoggingController.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
 
             return selectedQuest;
         }

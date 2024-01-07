@@ -51,6 +51,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("extraction_requirements")]
         public ExtractionRequirementsConfig ExtractionRequirements { get; set; } = new ExtractionRequirementsConfig();
 
+        [JsonProperty("sprinting_limitations")]
+        public SprintingLimitationsConfig SprintingLimitations { get; set; } = new SprintingLimitationsConfig();
+
         [JsonProperty("bot_quests")]
         public BotQuestsConfig BotQuests { get; set; } = new BotQuestsConfig();
 

@@ -10,6 +10,7 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.Interactive;
 using HarmonyLib;
+using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -86,13 +87,12 @@ namespace SPTQuestingBots.BehaviorExtensions
             // Open doors blocking the bot's path
             BotOwner.DoorOpener.Update();
 
-            if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > 0.5f))
+            Configuration.MinMaxConfig staminaLimits = ConfigController.Config.Questing.SprintingLimitations.Stamina;
+            if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > staminaLimits.Max))
             {
-                //Controllers.LoggingController.LogInfo(BotOwner.GetText() + " can sprint");
                 BotOwner.GetPlayer.EnableSprint(true);
             }
-
-            if (!canSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < 0.1f))
+            if (!canSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < staminaLimits.Min))
             {
                 BotOwner.GetPlayer.EnableSprint(false);
             }
@@ -123,13 +123,13 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             // Disable sprinting if the bot is very close to its current destination point to prevent it from sliding into staircase corners, etc.
-            if (IsNearPathCorner(45, 2))
+            if (IsNearPathCorner(ConfigController.Config.Questing.SprintingLimitations.SharpPathCorners))
             {
                 return false;
             }
 
             // Prevent bots from sliding into doors
-            if (IsNearAndMovingTowardClosedDoor(3, 60))
+            if (IsNearAndMovingTowardClosedDoor(ConfigController.Config.Questing.SprintingLimitations.ApproachingClosedDoors))
             {
                 return false;
             }
@@ -137,14 +137,14 @@ namespace SPTQuestingBots.BehaviorExtensions
             return true;
         }
 
-        public bool IsNearPathCorner(float minCornerAngle, float maxDistance)
+        public bool IsNearPathCorner(Configuration.DistanceAngleConfig maxDistanceMinAngle)
         {
             if (BotOwner?.Mover?.CurPath == null)
             {
                 return false;
             }
 
-            if (Vector3.Distance(BotOwner.Position, BotOwner.Mover.RealDestPoint) > maxDistance)
+            if (Vector3.Distance(BotOwner.Position, BotOwner.Mover.RealDestPoint) > maxDistanceMinAngle.Distance)
             {
                 return false;
             }
@@ -161,7 +161,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             Vector3 nextSegment = BotOwner.Mover.CurPath[currentCornerIndex + 1] - BotOwner.Mover.CurPath[currentCornerIndex];
             float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
 
-            if (cornerAngle >= minCornerAngle)
+            if (cornerAngle >= maxDistanceMinAngle.Angle)
             {
                 //LoggingController.LogInfo("Angle of corner for " + BotOwner.GetText() + ": " + cornerAngle);
                 return true;
@@ -170,10 +170,10 @@ namespace SPTQuestingBots.BehaviorExtensions
             return false;
         }
 
-        public bool IsNearAndMovingTowardClosedDoor(float distance, float angle)
+        public bool IsNearAndMovingTowardClosedDoor(Configuration.DistanceAngleConfig maxDistanceMaxAngle)
         {
             Vector3 botMovingDirection = BotOwner.GetPlayer.MovementContext.TransformForwardVector;
-            foreach (Door door in FindNearbyDoors(distance))
+            foreach (Door door in FindNearbyDoors(maxDistanceMaxAngle.Distance))
             {
                 if (door.DoorState == EDoorState.Open)
                 { 
@@ -182,7 +182,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
                 Vector3 doorDirection = door.transform.position - BotOwner.Position;
                 float doorAngle = Vector3.Angle(botMovingDirection, doorDirection);
-                if (doorAngle < angle)
+                if (doorAngle < maxDistanceMaxAngle.Angle)
                 {
                     //LoggingController.LogInfo(BotOwner.GetText() + " is approaching a closed door");
                     return true;

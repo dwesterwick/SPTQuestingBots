@@ -101,10 +101,40 @@
 				"max": 5
 			}
 		},
+		"sprinting_limitations": {
+			"stamina": {
+				"min": 0.1,
+				"max": 0.5
+			},
+			"sharp_path_corners" : {
+				"distance": 2,
+				"angle": 45
+			},
+			"approaching_closed_doors" : {
+				"distance": 3,
+				"angle": 60
+			}
+		},
 		"bot_quests": {
 			"distance_randomness": 30,
 			"desirability_randomness": 20,
 			"distance_weighting": 1,
+			"desirability_weighting": 1,
+			"exfil_direction_weighting": {
+				"default": 0,
+				"factory4_day": 0.2,
+				"factory4_night": 0.2,
+				"bigmap": 0.7,
+				"woods": 0.7,
+				"shoreline": 0.7,
+				"lighthouse": 0.5,
+				"rezervbase": 0.4,
+				"interchange": 0.7,
+				"laboratory": 0.3,
+				"tarkovstreets": 0.7
+			},
+			"exfil_direction_max_angle": 90,
+			"exfil_reached_min_fraction": 0.2,
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
 			"airdrop_bot_interest_time": 420,
 			"eft_quests": {

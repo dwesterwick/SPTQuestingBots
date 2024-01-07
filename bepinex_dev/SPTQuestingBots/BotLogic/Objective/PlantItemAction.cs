@@ -31,7 +31,16 @@ namespace SPTQuestingBots.BotLogic.Objective
         public override void Update()
         {
             UpdateBaseAction();
-            
+
+            if (!ObjectiveManager.IsCloseToObjective())
+            {
+                UpdateBotSteering();
+            }
+            else
+            {
+                TryLookToLastCorner();
+            }
+
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
             {
@@ -51,7 +60,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
-                UpdateBotSteering();
                 RestartActionElapsedTime();
 
                 return;
@@ -59,8 +67,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             restartStuckTimer();
             CheckMinElapsedActionTime();
-
-            TryLookToLastCorner();
         }
     }
 }

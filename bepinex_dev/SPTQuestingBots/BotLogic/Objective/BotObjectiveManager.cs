@@ -44,7 +44,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
         public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
-        
+        public bool IsWithinMaxWanderDistance() => IsCloseToObjective(assignment.QuestObjectiveStepAssignment.MaxWanderDistance);
+
+
         public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
         public void RetryPath() => assignment.HasCompletePath = true;
@@ -213,7 +215,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void CompleteObjective()
         {
             assignment.Complete();
-            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting);
+            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 1);
 
             StuckCount = 0;
         }
@@ -328,15 +330,15 @@ namespace SPTQuestingBots.BotLogic.Objective
             return false;
         }
 
-        public void UpdateLootingBehavior(LootAfterCompleting behavior)
+        public void UpdateLootingBehavior(LootAfterCompleting behavior, float duration)
         {
             switch (behavior)
             {
                 case LootAfterCompleting.Force:
-                    BotMonitor.TryForceBotToLootNow(5);
+                    BotMonitor.TryForceBotToLootNow(duration);
                     break;
                 case LootAfterCompleting.Inhibit:
-                    BotMonitor.TryPreventBotFromLooting(10);
+                    BotMonitor.TryPreventBotFromLooting(duration);
                     break;
             }
         }

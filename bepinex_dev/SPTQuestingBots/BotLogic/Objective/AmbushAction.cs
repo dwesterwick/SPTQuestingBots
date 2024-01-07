@@ -35,6 +35,15 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             UpdateBaseAction();
 
+            if (!ObjectiveManager.IsCloseToObjective())
+            {
+                UpdateBotSteering();
+            }
+            else
+            {
+                TryLookToLastCorner();
+            }
+
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
             {
@@ -60,8 +69,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             restartStuckTimer();
-            
-            TryLookToLastCorner();
         }
     }
 }

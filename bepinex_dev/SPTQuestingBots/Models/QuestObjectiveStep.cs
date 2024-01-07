@@ -131,7 +131,8 @@ namespace SPTQuestingBots.Models
         public double GetRandomMinElapsedTime()
         {
             System.Random random = new System.Random();
-            return MinElapsedTime.Min + ((MinElapsedTime.Max - MinElapsedTime.Min) * random.NextDouble());
+            double selectedTime = MinElapsedTime.Min + ((MinElapsedTime.Max - MinElapsedTime.Min) * random.NextDouble());
+            return Math.Round(selectedTime, 1);
         }
     }
 }

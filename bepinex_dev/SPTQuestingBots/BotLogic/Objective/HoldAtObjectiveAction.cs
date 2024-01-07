@@ -11,7 +11,6 @@ namespace SPTQuestingBots.BotLogic.Objective
     public class HoldAtObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private bool wasStuck = false;
-        private float maxWanderDistance = 5;
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -76,7 +75,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             CheckMinElapsedActionTime();
 
-            if (!ObjectiveManager.IsCloseToObjective(maxWanderDistance))
+            if (!ObjectiveManager.IsWithinMaxWanderDistance())
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 return;
