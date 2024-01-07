@@ -203,7 +203,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                 case QuestAction.ToggleSwitch:
                     setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
                     return updatePreviousState(true);
-                
+
+                case QuestAction.CloseNearbyDoors:
+                    setNextAction(BotActionType.CloseNearbyDoors, "CloseNearbyDoors");
+                    return updatePreviousState(true);
+
                 case QuestAction.RequestExtract:
                     if (objectiveManager.BotMonitor.TryInstructBotToExtract())
                     {

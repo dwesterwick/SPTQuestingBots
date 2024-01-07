@@ -10,6 +10,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     public class HoldAtObjectiveAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private float? maxWanderDistance = null;
         private bool wasStuck = false;
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
@@ -25,6 +26,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotOwner.Mover.Stop();
             RestartActionElapsedTime();
+            maxWanderDistance = ObjectiveManager.MaxDistanceForCurrentStep;
         }
 
         public override void Stop()
@@ -44,7 +46,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (!ObjectiveManager.Position.HasValue)
+            if (!ObjectiveManager.Position.HasValue || !maxWanderDistance.HasValue)
             {
                 throw new InvalidOperationException("Cannot go to a null position");
             }
@@ -75,7 +77,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             CheckMinElapsedActionTime();
 
-            if (!ObjectiveManager.IsWithinMaxWanderDistance())
+            if (!ObjectiveManager.IsCloseToObjective(maxWanderDistance.Value))
             {
                 RecalculatePath(ObjectiveManager.Position.Value);
                 return;

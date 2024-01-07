@@ -11,26 +11,64 @@
         "name": "3rd Floor Office Rush",
         "objectives" : [
             {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
+                "repeatable": false,
+                "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
-                        "waitTimeAfterCompleting": 2,
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 19.6659336,
                             "y": 8.210877,
                             "z": 39.32507
                         }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 0,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
+                        }
                     },
                     {
-                        "stepType" : "HoldAtPosition",
-                        "maxWanderDistance": 3,
-                        "minElapsedTime": 45,
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 6,
                         "position" : {
-                            "x": 19.6659336,
-                            "y": 8.210877,
-                            "z": 39.32507
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 4,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
                         }
                     }
                 ]
@@ -194,8 +232,11 @@
                     },
                     {
                         "stepType" : "HoldAtPosition",
-                        "maxWanderDistance": 5,
-                        "minElapsedTime": 30,
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 5,
+                            "max": 45
+                        },
                         "position" : {
                             "x": 51.1654968,
                             "y": 4.309441,
@@ -259,7 +300,10 @@
                     },
                     {
                         "stepType" : "Ambush",
-                        "minElapsedTime": 120,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
                             "x": -59.6667824,
                             "y": 1.300873,
@@ -297,7 +341,10 @@
                     },
                     {
                         "stepType" : "Ambush",
-                        "minElapsedTime": 120,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
                             "x": -18.3804874,
                             "y": 0.210918948,
@@ -335,7 +382,10 @@
                     },
                     {
                         "stepType" : "Ambush",
-                        "minElapsedTime": 120,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
                             "x": 73.16466,
                             "y": -4.6014514,
@@ -373,7 +423,10 @@
                     },
                     {
                         "stepType" : "Ambush",
-                        "minElapsedTime": 120,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
                             "x": 56.4280052,
                             "y": 0.227544457,

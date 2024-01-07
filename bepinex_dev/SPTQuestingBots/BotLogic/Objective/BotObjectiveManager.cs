@@ -38,14 +38,13 @@ namespace SPTQuestingBots.BotLogic.Objective
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.MinElapsedTime ?? 0;
         public float ChanceOfHavingKey => assignment?.QuestObjectiveStepAssignment?.ChanceOfHavingKey ?? 0;
+        public float? MaxDistanceForCurrentStep => assignment?.QuestObjectiveStepAssignment?.MaxDistance;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
         public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
-        public bool IsWithinMaxWanderDistance() => IsCloseToObjective(assignment.QuestObjectiveStepAssignment.MaxWanderDistance);
-
 
         public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
@@ -215,7 +214,9 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void CompleteObjective()
         {
             assignment.Complete();
-            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 1);
+
+            float duration = (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 5;
+            UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, duration);
 
             StuckCount = 0;
         }
@@ -286,17 +287,27 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsAllowedToTakeABreak()
         {
-            if ((CurrentQuestAction == QuestAction.HoldAtPosition) || (CurrentQuestAction == QuestAction.Ambush))
+            if (CurrentQuestAction == QuestAction.HoldAtPosition)
             {
                 return false;
             }
 
-            if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
+            if (CurrentQuestAction == QuestAction.Ambush)
+            {
+                return false;
+            }
+
+            if (CurrentQuestAction == QuestAction.CloseNearbyDoors)
             {
                 return false;
             }
 
             if (CurrentQuestAction == QuestAction.ToggleSwitch)
+            {
+                return false;
+            }
+
+            if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
             {
                 return false;
             }

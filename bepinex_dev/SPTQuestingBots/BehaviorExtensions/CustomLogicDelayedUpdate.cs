@@ -50,6 +50,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         public override void Stop()
         {
             actionElapsedTime.Stop();
+
+            BotOwner.Mover.Sprint(false);
         }
 
         public void RestartActionElapsedTime()
@@ -152,7 +154,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             int currentCornerIndex = (int)cornerIndexField.GetValue(BotOwner.Mover);
             if (currentCornerIndex == BotOwner.Mover.CurPath.Length - 1)
             {
-                return false;
+                return true;
             }
 
             ObjectiveManager.LastCorner = BotOwner.Mover.CurPath[currentCornerIndex];

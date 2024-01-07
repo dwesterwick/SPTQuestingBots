@@ -11,12 +11,28 @@
         "name": "3rd Floor Office Rush",
         "objectives" : [
             {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
+                "repeatable": false,
+                "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
-                        "waitTimeAfterCompleting": 2,
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 19.6659336,
+                            "y": 8.210877,
+                            "z": 39.32507
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 0,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
                         "position" : {
                             "x": 16.8211918,
                             "y": 8.210876,
@@ -24,8 +40,27 @@
                         }
                     },
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 6,
+                        "position" : {
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 16.8211918,
+                            "y": 8.210876,
+                            "z": 40.7296944
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "stepType" : "HoldAtPosition",
-                        "maxWanderDistance": 3,
+                        "maxDistance": 4,
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120
@@ -197,7 +232,7 @@
                     },
                     {
                         "stepType" : "HoldAtPosition",
-                        "maxWanderDistance": 5,
+                        "maxDistance": 5,
                         "minElapsedTime": {
                             "min": 5,
                             "max": 45

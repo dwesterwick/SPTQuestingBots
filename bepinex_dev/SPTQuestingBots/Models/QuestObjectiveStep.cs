@@ -13,13 +13,14 @@ namespace SPTQuestingBots.Models
 {
     public enum QuestAction
     {
-        Undefined = 0,
-        MoveToPosition = 1,
-        HoldAtPosition = 2,
-        Ambush = 3,
-        PlantItem = 4,
-        ToggleSwitch = 5,
-        RequestExtract = 6,
+        Undefined,
+        MoveToPosition,
+        HoldAtPosition,
+        Ambush,
+        PlantItem,
+        ToggleSwitch,
+        RequestExtract,
+        CloseNearbyDoors
     }
 
     public class QuestObjectiveStep
@@ -40,8 +41,8 @@ namespace SPTQuestingBots.Models
         [JsonProperty("switchID")]
         public string SwitchID { get; set; } = "";
 
-        [JsonProperty("maxWanderDistance")]
-        public float MaxWanderDistance { get; set; } = 5;
+        [JsonProperty("maxDistance")]
+        public float MaxDistance { get; set; } = 5;
 
         [JsonProperty("chanceOfHavingKey")]
         public float ChanceOfHavingKey { get; set; } = ConfigController.Config.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
