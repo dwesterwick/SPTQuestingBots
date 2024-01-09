@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 18,
+        "desirability": 45,
         "requiredSwitches": {
             "custom_DesignStuff_00034": false
         },
@@ -15,6 +16,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -44,6 +46,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 18,
+        "desirability": 35,
         "maxRaidET": 90,
         "name": "Marked Room Rush",
         "objectives" : [
@@ -53,6 +56,7 @@
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 20,
                         "position" : {
                             "x": 185.217819,
                             "y": 5.831592,
@@ -78,6 +82,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Crackhouse Rush",
         "objectives" : [
@@ -104,6 +109,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Dorms 2 Story Rush",
         "objectives" : [
@@ -130,6 +136,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Dorms 3 Story Rush",
         "objectives" : [
@@ -156,6 +163,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Big Red Rush",
         "objectives" : [
@@ -182,6 +190,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "name": "Flash-Drive Van",
         "objectives" : [
             {
@@ -207,6 +216,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Crackhouse",
         "objectives" : [
@@ -303,6 +313,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Dorms 2 Story",
         "objectives" : [

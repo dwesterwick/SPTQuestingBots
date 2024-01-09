@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
-using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
@@ -20,16 +19,13 @@ namespace SPTQuestingBots.Models
         Archived,
     }
 
-    public class BotJobAssignment
+    public class BotJobAssignment : JobAssignment
     {
         public JobAssignmentStatus Status { get; private set; } = JobAssignmentStatus.NotStarted;
         public BotOwner BotOwner { get; private set; }
         public string BotName { get; private set; } = "???";
         public string BotNickname { get; private set; } = "???";
         public int BotLevel { get; private set; } = -1;
-        public Quest QuestAssignment { get; private set; } = null;
-        public QuestObjective QuestObjectiveAssignment { get; private set; } = null;
-        public QuestObjectiveStep QuestObjectiveStepAssignment { get; private set; } = null;
         public Door DoorToUnlock { get; private set; } = null;
         public DateTime? StartTime { get; private set; } = null;
         public DateTime? EndTime { get; private set; } = null;
@@ -38,8 +34,7 @@ namespace SPTQuestingBots.Models
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
-        public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition() ?? null;
-
+        
         public BotJobAssignment(BotOwner bot)
         {
             BotOwner = bot;
@@ -55,12 +50,6 @@ namespace SPTQuestingBots.Models
             {
                 LoggingController.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
             }
-        }
-
-        public override string ToString()
-        {
-            string stepNumberText = QuestObjectiveStepAssignment?.StepNumber?.ToString() ?? "???";
-            return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
         }
 
         public double? TimeSinceStarted()

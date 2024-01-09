@@ -7,7 +7,7 @@
         "chanceForSelecting": 50,
         "priority": 18,
         "desirability": 50,
-        "maxRaidET": 30,
+        "maxRaidET": 300,
         "name": "3rd Floor Office Rush",
         "objectives" : [
             {
@@ -144,6 +144,20 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 34.9922,
+                            "y": 7.80017853,
+                            "z": 31.46494
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 5,
+                            "max": 30
+                        },
                         "position" : {
                             "x": 34.9922,
                             "y": 7.80017853,

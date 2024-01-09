@@ -85,6 +85,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Postprocessing.Runtime, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Libraries\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -94,8 +98,16 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Libraries\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\Libraries\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +138,7 @@
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
     <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
+    <Compile Include="Controllers\DebugController.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
     <Compile Include="Helpers\ItemHelpers.cs" />
     <Compile Include="Helpers\VersionCheckHelper.cs" />
@@ -167,6 +180,7 @@
     <Compile Include="Models\BotSpawnInfo.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />
+    <Compile Include="Models\JobAssignment.cs" />
     <Compile Include="Models\QuestItemObjective.cs" />
     <Compile Include="Models\QuestObjective.cs" />
     <Compile Include="Models\QuestObjectiveStep.cs" />

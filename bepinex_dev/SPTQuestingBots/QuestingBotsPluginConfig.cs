@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
+using Comfort.Common;
 
 namespace SPTQuestingBots
 {
@@ -37,6 +38,11 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
 
+        public static ConfigEntry<bool> ShowQuestInfoOverlays;
+        public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
+        public static ConfigEntry<int> QuestOverlayFontSize;
+        public static ConfigEntry<int> QuestOverlayMaxDistance;
+
         public static void BuildConfigOptions(ConfigFile Config)
         {
             TarkovMapIDToEnum.Add("bigmap", TarkovMaps.Customs);
@@ -67,6 +73,15 @@ namespace SPTQuestingBots
                 200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
                 75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
+
+            ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
+                false, "Show information about every nearby quest objective location");
+            ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",
+                false, "Include quest markers and information for spawn-search quests like 'Spawn Point Wander' and 'Boss Hunter' quests");
+            QuestOverlayMaxDistance = Config.Bind("Debug", "Max Distance (m) to Show Quest Info",
+                100, new ConfigDescription("Quest markers and info overlays will only be shown if the objective location is within this distance from you", new AcceptableValueRange<int>(10, 300)));
+            QuestOverlayFontSize = Config.Bind("Debug", "Font Size for Quest Info",
+                16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36)));
         }
     }
 }

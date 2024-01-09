@@ -812,5 +812,24 @@ namespace SPTQuestingBots.Controllers.Bots
 
             LoggingController.CreateLogFile("bot job assignment", filename, sb.ToString());
         }
+
+        public static IEnumerable<JobAssignment> CreateAllPossibleJobAssignments()
+        {
+            List<JobAssignment> allAssignments = new List<JobAssignment>();
+
+            foreach (Quest quest in allQuests)
+            {
+                foreach (QuestObjective objective in quest.ValidObjectives)
+                {
+                    foreach (QuestObjectiveStep step in objective.AllSteps)
+                    {
+                        JobAssignment assignment = new JobAssignment(quest, objective, step);
+                        allAssignments.Add(assignment);
+                    }
+                }
+            }
+
+            return allAssignments;
+        }
     }
 }

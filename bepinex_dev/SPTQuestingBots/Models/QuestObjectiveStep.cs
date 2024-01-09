@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -76,6 +77,11 @@ namespace SPTQuestingBots.Models
         public QuestObjectiveStep(Vector3 position, QuestAction actionType, Configuration.MinMaxConfig minElapsedTime) : this(position, actionType)
         {
             MinElapsedTime = minElapsedTime;
+        }
+
+        public override string ToString()
+        {
+            return "Step " + (StepNumber.HasValue ? ("#" + StepNumber.Value.ToString()) : "???");
         }
 
         public Vector3? GetPosition()
