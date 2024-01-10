@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
+using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
@@ -23,12 +24,16 @@ namespace SPTQuestingBots
         private void Awake()
         {
             Logger.LogInfo("Loading QuestingBots...");
-
-            Logger.LogInfo("Loading QuestingBots...getting configuration data...");
-            ConfigController.GetConfig();
             LoggingController.Logger = Logger;
             ModName = Info.Metadata.Name;
 
+            Logger.LogInfo("Loading QuestingBots...getting configuration data...");
+            if (ConfigController.GetConfig() == null)
+            {
+                Chainloader.DependencyErrors.Add("Could not load " + ModName + " because it cannot communicate with the server. Please ensure the mod has been installed correctly.");
+                return;
+            }
+            
             if (ConfigController.Config.Enabled)
             {
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");

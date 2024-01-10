@@ -14,6 +14,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -29,6 +30,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -89,6 +91,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -115,6 +118,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -275,6 +279,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -302,6 +307,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -343,6 +349,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -384,6 +391,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -425,6 +433,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {

@@ -132,6 +132,7 @@
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
+    <Compile Include="Configuration\ServerResponseError.cs" />
     <Compile Include="Configuration\SprintingLimitationsConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />

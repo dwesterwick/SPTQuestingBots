@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Common.Http;
 using Newtonsoft.Json;
+using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Controllers
@@ -21,7 +23,10 @@ namespace SPTQuestingBots.Controllers
             string errorMessage = "!!!!! Cannot retrieve config.json data from the server. The mod will not work properly! !!!!!";
             string json = RequestHandler.GetJson("/QuestingBots/GetConfig");
 
-            TryDeserializeObject(json, errorMessage, out Configuration.ModConfig _config);
+            if (!TryDeserializeObject(json, errorMessage, out Configuration.ModConfig _config))
+            {
+                return null;
+            }
             Config = _config;
 
             return Config;
@@ -117,6 +122,17 @@ namespace SPTQuestingBots.Controllers
                 {
                     throw new InvalidCastException("Could deserialize an empty string to an object of type " + typeof(T).FullName);
                 }
+
+                try
+                {
+                    ServerResponseError serverResponse = JsonConvert.DeserializeObject<ServerResponseError>(json);
+                    if (serverResponse?.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        throw new System.Net.WebException("Could not retrieve configuration settings from the server. Response: " + serverResponse.StatusCode.ToString());
+                    }
+                }
+                catch (Newtonsoft.Json.JsonException) { }
+                catch (WebException) { throw; }
 
                 obj = JsonConvert.DeserializeObject<T>(json, GClass1340.SerializerSettings);
 
