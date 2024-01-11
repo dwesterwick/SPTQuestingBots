@@ -123,7 +123,7 @@ namespace SPTQuestingBots.Controllers
                     throw new InvalidCastException("Could deserialize an empty string to an object of type " + typeof(T).FullName);
                 }
 
-                try
+                if (!json.StartsWith("["))
                 {
                     ServerResponseError serverResponse = JsonConvert.DeserializeObject<ServerResponseError>(json);
                     if (serverResponse?.StatusCode != System.Net.HttpStatusCode.OK)
@@ -131,8 +131,6 @@ namespace SPTQuestingBots.Controllers
                         throw new System.Net.WebException("Could not retrieve configuration settings from the server. Response: " + serverResponse.StatusCode.ToString());
                     }
                 }
-                catch (Newtonsoft.Json.JsonException) { }
-                catch (WebException) { throw; }
 
                 obj = JsonConvert.DeserializeObject<T>(json, GClass1340.SerializerSettings);
 
