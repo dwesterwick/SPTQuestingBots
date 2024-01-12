@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
@@ -135,7 +136,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
-            PathRender.outlinePosition(ObjectiveManager.Position.Value, color);
+            DebugHelpers.outlinePosition(ObjectiveManager.Position.Value, color);
         }
     }
 }

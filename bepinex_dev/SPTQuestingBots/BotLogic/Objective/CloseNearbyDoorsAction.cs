@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -210,14 +211,14 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
-                    PathRender.outlinePosition(possibleInteractionPosition, Color.yellow, searchRadius);
+                    DebugHelpers.outlinePosition(possibleInteractionPosition, Color.yellow, searchRadius);
                 }
             }
             else
             {
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
-                    PathRender.outlinePosition(navMeshPosition.Value, Color.green);
+                    DebugHelpers.outlinePosition(navMeshPosition.Value, Color.green);
                 }
             }
 

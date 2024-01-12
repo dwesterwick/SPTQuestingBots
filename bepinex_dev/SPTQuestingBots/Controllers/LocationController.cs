@@ -9,6 +9,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -421,7 +422,7 @@ namespace SPTQuestingBots.Controllers
 
                     if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                     {
-                        PathRender.outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                        DebugHelpers.outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                     }
 
                     continue;
@@ -442,7 +443,7 @@ namespace SPTQuestingBots.Controllers
 
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
-                    PathRender.outlinePosition(navMeshPosition.Value, Color.yellow);
+                    DebugHelpers.outlinePosition(navMeshPosition.Value, Color.yellow);
                 }
             }
 
@@ -455,11 +456,11 @@ namespace SPTQuestingBots.Controllers
                 // If applicable, draw the positions in the world
                 if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                 {
-                    PathRender.outlinePosition(orderedPostions.First(), Color.green);
+                    DebugHelpers.outlinePosition(orderedPostions.First(), Color.green);
 
                     foreach (Vector3 alternatePosition in orderedPostions.Skip(1))
                     {
-                        PathRender.outlinePosition(alternatePosition, Color.magenta);
+                        DebugHelpers.outlinePosition(alternatePosition, Color.magenta);
                     }
                 }
 

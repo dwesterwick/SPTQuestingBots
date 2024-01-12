@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace SPTQuestingBots.Controllers
 
         private void Awake()
         {
-            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { createGuiStyle(); };
+            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { guiStyle = DebugHelpers.CreateGuiStyle(); };
         }
 
         private void Update()
@@ -66,7 +67,7 @@ namespace SPTQuestingBots.Controllers
 
             if (guiStyle == null)
             {
-                createGuiStyle();
+                guiStyle = DebugHelpers.CreateGuiStyle();
             }
 
             updateJobAssignmentDistances();
@@ -122,26 +123,6 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        private void createGuiStyle()
-        {
-            guiStyle = new GUIStyle(GUI.skin.box);
-            guiStyle.alignment = TextAnchor.MiddleLeft;
-            guiStyle.fontSize = QuestingBotsPluginConfig.QuestOverlayFontSize.Value;
-            guiStyle.margin = new RectOffset(3, 3, 3, 3);
-            guiStyle.richText = true;
-        }
-
-        private static GameObject createSphere(Vector3 position, float size, Color color)
-        {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.GetComponent<Renderer>().material.color = color;
-            sphere.GetComponent<Collider>().enabled = false;
-            sphere.transform.position = position;
-            sphere.transform.localScale = new Vector3(size, size, size);
-
-            return sphere;
-        }
-
         private void loadAllPossibleJobAssignments()
         {
             // If DLSS or FSR are enabled, set a screen scale value
@@ -174,7 +155,7 @@ namespace SPTQuestingBots.Controllers
                 QuestOverlayData overlayData = new QuestOverlayData(overlayPosition, questText);
 
                 jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
-                jobAssignmentMarkers.Add(jobAssignment, createSphere(stepPosition.Value, markerRadius * 2, Color.red));
+                jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(stepPosition.Value, markerRadius * 2, Color.red));
                 jobAssignmentInfo.Add(jobAssignment, overlayData);
 
                 lastPosition = stepPosition.Value;

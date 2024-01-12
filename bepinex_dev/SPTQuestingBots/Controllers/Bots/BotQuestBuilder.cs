@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using EFT.Quests;
 using SPTQuestingBots.Configuration;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -23,6 +25,9 @@ namespace SPTQuestingBots.Controllers.Bots
         public static string PreviousLocationID { get; private set; } = null;
 
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
+        private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
+        private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
         private static List<string> zoneIDsInLocation = new List<string>();
         
         public IEnumerator Clear()
@@ -40,6 +45,9 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             HaveQuestsBeenBuilt = false;
+            minLevelForQuest.Clear();
+            allZoneIDsForCondition.Clear();
+            plantTimeForCondition.Clear();
             zoneIDsInLocation.Clear();
 
             IsClearing = false;
@@ -323,7 +331,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                         if (ConfigController.Config.Debug.ShowZoneOutlines)
                         {
-                            Vector3[] itemPositionOutline = PathRender.GetSpherePoints(item.transform.position, 0.5f, 10);
+                            Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
                             PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
                             PathRender.AddOrUpdatePath(itemPositionSphere);
                         }
@@ -370,6 +378,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private int getMinLevelForQuest(Quest quest)
         {
+            if (minLevelForQuest.ContainsKey(quest.Template?.Id))
+            {
+                return minLevelForQuest[quest.Template.Id];
+            }
+
             // Be default, use the minimum level set for the quest template
             int minLevel = quest.Template?.Level ?? 0;
 
@@ -416,6 +429,11 @@ namespace SPTQuestingBots.Controllers.Bots
                 }
             }
 
+            if (quest.Template != null)
+            {
+                minLevelForQuest.Add(quest.Template.Id, minLevel);
+            }
+
             return minLevel;
         }
 
@@ -436,6 +454,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private IEnumerable<string> getAllZoneIDsForQuestCondition(Condition condition)
         {
+            if (allZoneIDsForCondition.ContainsKey(condition))
+            {
+                return allZoneIDsForCondition[condition];
+            }
+
             List<string> zoneIDs = new List<string>();
 
             ConditionZone conditionZone = condition as ConditionZone;
@@ -488,7 +511,11 @@ namespace SPTQuestingBots.Controllers.Bots
                 zoneIDs.AddRange(getAllZoneIDsForQuestCondition(childCondition));
             }
 
-            return zoneIDs.Distinct();
+            IEnumerable<string> zoneIDsDistinct = zoneIDs.Distinct();
+
+            allZoneIDsForCondition.Add(condition, zoneIDsDistinct);
+
+            return zoneIDsDistinct;
         }
 
         private float? findPlantTimeForQuest(Quest quest, string zoneID)
@@ -511,11 +538,17 @@ namespace SPTQuestingBots.Controllers.Bots
 
         private float? findPlantTimeForQuestCondition(Condition condition, string zoneID)
         {
+            if (plantTimeForCondition.ContainsKey(condition))
+            {
+                return plantTimeForCondition[condition];
+            }
+
             ConditionLeaveItemAtLocation conditionLeaveItemAtLocation = condition as ConditionLeaveItemAtLocation;
             if (conditionLeaveItemAtLocation?.zoneId == zoneID)
             {
                 if (conditionLeaveItemAtLocation.plantTime > 0)
                 {
+                    plantTimeForCondition.Add(condition, conditionLeaveItemAtLocation.plantTime);
                     return conditionLeaveItemAtLocation.plantTime;
                 }
             }
@@ -528,6 +561,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     float? plantTime = findPlantTimeForQuestCondition(childCondition, zoneID);
                     if (plantTime.HasValue)
                     {
+                        plantTimeForCondition.Add(condition, plantTime.Value);
                         return plantTime.Value;
                     }
                 }
@@ -538,10 +572,12 @@ namespace SPTQuestingBots.Controllers.Bots
                 float? plantTime = findPlantTimeForQuestCondition(childCondition, zoneID);
                 if (plantTime.HasValue)
                 {
+                    plantTimeForCondition.Add(condition, plantTime.Value);
                     return plantTime.Value;
                 }
             }
 
+            plantTimeForCondition.Add(condition, null);
             return null;
         }
 
@@ -616,11 +652,11 @@ namespace SPTQuestingBots.Controllers.Bots
 
             if (ConfigController.Config.Debug.ShowZoneOutlines)
             {
-                Vector3[] triggerColliderBounds = PathRender.GetBoundingBoxPoints(triggerCollider.bounds);
+                Vector3[] triggerColliderBounds = DebugHelpers.GetBoundingBoxPoints(triggerCollider.bounds);
                 PathVisualizationData triggerBoundingBox = new PathVisualizationData("Trigger_" + trigger.Id, triggerColliderBounds, Color.cyan);
                 PathRender.AddOrUpdatePath(triggerBoundingBox);
 
-                Vector3[] triggerTargetPoint = PathRender.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
+                Vector3[] triggerTargetPoint = DebugHelpers.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
                 PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
                 PathRender.AddOrUpdatePath(triggerTargetPosSphere);
             }

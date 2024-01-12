@@ -140,6 +140,7 @@
     <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
     <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
     <Compile Include="Controllers\DebugController.cs" />
+    <Compile Include="Helpers\DebugHelpers.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
     <Compile Include="Helpers\ItemHelpers.cs" />
     <Compile Include="Helpers\VersionCheckHelper.cs" />
