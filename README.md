@@ -14,6 +14,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
+* [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/) (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage PMC spawning when using this mod. Otherwise, PMC's will spawn right in front of you.) 
 * Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 
 **Compatible with:**
