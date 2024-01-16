@@ -205,12 +205,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 return true;
             }
-
             if ((botType == BotType.Scav) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Scav)
             {
                 return true;
             }
-
+            if ((botType == BotType.PScav) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PScav)
+            {
+                return true;
+            }
             if ((botType == BotType.Boss) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Boss)
             {
                 return true;

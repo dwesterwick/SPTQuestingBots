@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("scav")]
         public bool Scav { get; set; } = false;
 
+        [JsonProperty("pscav")]
+        public bool PScav { get; set; } = false;
+
         [JsonProperty("pmc")]
         public bool PMC { get; set; } = true;
 

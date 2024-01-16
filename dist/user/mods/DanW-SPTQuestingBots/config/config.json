@@ -19,6 +19,7 @@
 		"quest_selection_timeout": 250,
 		"allowed_bot_types_for_questing": {
 			"scav": false,
+			"pscav": true,
 			"pmc": true,
 			"boss": false
 		},
@@ -35,6 +36,7 @@
 		"unlocking_doors" : {
 			"enabled": {
 				"scav": false,
+				"pscav": false,
 				"pmc": true,
 				"boss": false
 			},

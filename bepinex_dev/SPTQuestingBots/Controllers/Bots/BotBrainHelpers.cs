@@ -11,6 +11,7 @@ namespace SPTQuestingBots.Controllers.Bots
     {
         Undetermined,
         Scav,
+        PScav,
         PMC,
         Boss
     }

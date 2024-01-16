@@ -7,13 +7,14 @@
         "chanceForSelecting": 50,
         "priority": 18,
         "desirability": 50,
-        "maxRaidET": 30,
+        "maxRaidET": 300,
         "name": "3rd Floor Office Rush",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -29,6 +30,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 0,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -89,6 +91,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -115,6 +118,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -144,6 +148,20 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 34.9922,
+                            "y": 7.80017853,
+                            "z": 31.46494
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 5,
+                            "max": 30
+                        },
                         "position" : {
                             "x": 34.9922,
                             "y": 7.80017853,
@@ -261,6 +279,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -288,6 +307,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -329,6 +349,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -370,6 +391,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -411,6 +433,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {

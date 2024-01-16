@@ -135,6 +135,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 IsQuestingAllowed = true;
             }
+            if ((botType == BotType.PScav) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PScav)
+            {
+                IsQuestingAllowed = true;
+            }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
             if (IsQuestingAllowed && BotQuestBuilder.HaveQuestsBeenBuilt)

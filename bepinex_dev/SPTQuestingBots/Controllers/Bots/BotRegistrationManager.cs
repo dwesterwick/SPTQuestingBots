@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EFT;
 
@@ -51,6 +52,14 @@ namespace SPTQuestingBots.Controllers.Bots
             }
             if (botOwner.Profile.Side == EPlayerSide.Savage)
             {
+                // Pattern: xxx (xxx)
+                string pattern = "\\w+.[(]\\w+[)]";
+                Regex regex = new Regex(pattern);
+                if (regex.Matches(botOwner.Profile.Nickname).Count > 0)
+                {
+                    return BotType.PScav;
+                }
+
                 return BotType.Scav;
             }
 

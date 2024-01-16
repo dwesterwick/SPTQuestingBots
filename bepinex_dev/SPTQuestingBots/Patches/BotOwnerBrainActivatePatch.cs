@@ -39,6 +39,8 @@ namespace SPTQuestingBots.Patches
             }
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
+
+            Controllers.DebugController.RegisterBot(__instance);
         }
     }
 }

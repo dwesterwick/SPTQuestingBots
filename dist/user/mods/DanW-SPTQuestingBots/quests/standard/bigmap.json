@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 18,
+        "desirability": 45,
         "requiredSwitches": {
             "custom_DesignStuff_00034": false
         },
@@ -15,6 +16,8 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -44,6 +47,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 18,
+        "desirability": 35,
         "maxRaidET": 90,
         "name": "Marked Room Rush",
         "objectives" : [
@@ -51,12 +55,48 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 5,
                         "position" : {
                             "x": 185.217819,
                             "y": 5.831592,
                             "z": 183.20871
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 15,
+                            "max": 30
+                        },
+                        "position" : {
+                            "x": 185.217819,
+                            "y": 5.831592,
+                            "z": 183.20871
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 173.069275,
+                            "y": 5.831357,
+                            "z": 184.16655
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 180,
+                            "max": 420
+                        },
+                        "position" : {
+                            "x": 173.069275,
+                            "y": 5.831357,
+                            "z": 184.16655
                         }
                     },
                     {
@@ -78,6 +118,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Crackhouse Rush",
         "objectives" : [
@@ -85,6 +126,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -104,6 +146,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Dorms 2 Story Rush",
         "objectives" : [
@@ -111,6 +154,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -130,6 +174,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Dorms 3 Story Rush",
         "objectives" : [
@@ -137,6 +182,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -156,6 +202,7 @@
         "maxBots": 3,
         "chanceForSelecting": 50,
         "priority": 18,
+        "desirability": 50,
         "maxRaidET": 90,
         "name": "Big Red Rush",
         "objectives" : [
@@ -163,6 +210,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -182,6 +230,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "name": "Flash-Drive Van",
         "objectives" : [
             {
@@ -207,6 +256,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Crackhouse",
         "objectives" : [
@@ -214,6 +264,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -228,6 +279,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -242,6 +294,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -256,6 +309,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -270,6 +324,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -284,6 +339,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -303,6 +359,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Dorms 2 Story",
         "objectives" : [
@@ -310,6 +367,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -324,6 +382,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -338,6 +397,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -352,6 +412,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -366,6 +427,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -380,6 +442,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -394,6 +457,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -408,6 +472,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -422,6 +487,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -436,6 +502,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -455,6 +522,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Dorms 3 Story",
         "objectives" : [
@@ -462,6 +530,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -476,6 +545,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -490,6 +560,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -504,6 +575,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -518,6 +590,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -532,6 +605,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -546,20 +620,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 173.069275,
-                            "y": 5.831357,
-                            "z": 184.16655
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -574,6 +635,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -588,6 +650,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -602,6 +665,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -616,6 +680,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -630,6 +695,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -644,6 +710,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -663,6 +730,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Big Red",
         "objectives" : [
@@ -670,6 +738,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -684,6 +753,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -698,6 +768,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -712,6 +783,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -726,6 +798,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -745,6 +818,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Fortress",
         "objectives" : [
@@ -752,6 +826,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -766,6 +841,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -780,6 +856,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -794,6 +871,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -808,6 +886,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 1,
                 "steps": [
                     {
                         "position" : {
@@ -822,6 +901,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -836,6 +916,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -855,6 +936,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Storage Building",
         "objectives" : [
@@ -862,6 +944,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -876,6 +959,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -895,6 +979,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Warehouse 4",
         "objectives" : [
@@ -902,6 +987,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -916,6 +1002,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -930,6 +1017,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -949,6 +1037,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 30,
         "name": "Short Cut",
         "objectives" : [
             {
@@ -974,6 +1063,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Container Building",
         "objectives" : [
@@ -981,6 +1071,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -995,6 +1086,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1014,6 +1106,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Repair Shop",
         "objectives" : [
@@ -1021,6 +1114,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1035,6 +1129,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1049,6 +1144,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1063,6 +1159,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1077,6 +1174,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1091,6 +1189,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1105,6 +1204,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1119,6 +1219,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1133,6 +1234,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1152,6 +1254,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "name": "Admin Gate",
         "objectives" : [
             {
@@ -1177,6 +1280,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 15,
         "name": "Factory Far Corner",
         "objectives" : [
             {
@@ -1202,6 +1306,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Glass Building",
         "objectives" : [
@@ -1209,6 +1314,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1223,6 +1329,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -1237,6 +1344,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1258,6 +1366,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -1277,6 +1386,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Smokestack",
         "objectives" : [
@@ -1284,6 +1394,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1298,6 +1409,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -1312,6 +1424,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -1331,6 +1444,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Scav Checkpoint",
         "objectives" : [
             {
@@ -1370,6 +1484,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Checkpoint",
         "objectives" : [
             {
@@ -1409,6 +1524,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Military Base CP",
         "objectives" : [
             {
@@ -1434,6 +1550,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Passage between Rocks",
         "objectives" : [
             {
@@ -1459,7 +1576,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
-        "canRunBetweenObjectives": false,
+        "desirability": 30,
         "name": "Substation",
         "objectives" : [
             {
@@ -1555,6 +1672,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Train Car",
         "objectives" : [
             {
@@ -1580,6 +1698,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Antenna",
         "objectives" : [
             {
@@ -1605,6 +1724,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "Dorms Camp 1",
         "objectives" : [
             {
@@ -1630,6 +1750,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "Dorms Camp 2",
         "objectives" : [
             {
@@ -1655,6 +1776,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "North Shack by Big Red",
         "objectives" : [
             {
@@ -1680,6 +1802,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "South Shack by Big Red",
         "objectives" : [
             {
@@ -1705,6 +1828,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "Storage",
         "objectives" : [
             {
@@ -1814,6 +1938,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "name": "Trailer Park Cabin",
         "objectives" : [
             {
@@ -1839,6 +1964,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "RUAF Checkpoint",
         "objectives" : [
             {
@@ -1864,6 +1990,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "name": "Warehouse 17",
         "objectives" : [
             {
@@ -1889,6 +2016,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Garage",
         "objectives" : [
@@ -1896,6 +2024,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1910,6 +2039,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1924,6 +2054,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1943,6 +2074,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "name": "Porta Potty",
         "objectives" : [
             {
@@ -1968,6 +2100,7 @@
         "maxBots": 2,
         "chanceForSelecting": 50,
         "priority": 20,
+        "desirability": 40,
         "name": "Giving Tree",
         "objectives" : [
             {
@@ -1993,6 +2126,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "Old Gas",
         "objectives" : [
             {
@@ -2032,6 +2166,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "name": "Construction",
         "objectives" : [
             {
@@ -2040,6 +2175,21 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 70.8177643,
+                            "y": 6.69176674,
+                            "z": -13.096755
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 6,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 70.8177643,
                             "y": 6.69176674,
@@ -2057,6 +2207,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "name": "Construction 2",
         "objectives" : [
             {
@@ -2096,6 +2247,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "Factory Shacks",
         "objectives" : [
             {
@@ -2121,12 +2273,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 25,
         "name": "Bus Terminal",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2146,6 +2300,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "name": "Container near Dorms",
         "objectives" : [
             {
@@ -2171,6 +2326,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "name": "Ice Cream",
         "objectives" : [
             {
@@ -2196,6 +2352,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "New Gas",
         "objectives" : [
@@ -2203,6 +2360,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2217,6 +2375,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2231,6 +2390,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {

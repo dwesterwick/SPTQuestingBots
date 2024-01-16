@@ -38,6 +38,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
 
+        public static ConfigEntry<bool> ShowBotInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
         public static ConfigEntry<int> QuestOverlayFontSize;
@@ -74,6 +75,8 @@ namespace SPTQuestingBots
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
                 75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
 
+            ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
+                false, "Show information about what each bot is doing");
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
                 false, "Show information about every nearby quest objective location");
             ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",
