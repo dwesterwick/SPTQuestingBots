@@ -120,11 +120,11 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            BotType botType = BotRegistrationManager.GetBotType(botOwner);
+            BotType botType = Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(botOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
-                CanRushPlayerSpawn = BotGenerator.IsBotFromInitialPMCSpawns(botOwner);
+                CanRushPlayerSpawn = Controllers.Bots.Spawning.PMCGenerator.IsBotFromInitialPMCSpawns(botOwner);
                 IsQuestingAllowed = true;
             }
             if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)

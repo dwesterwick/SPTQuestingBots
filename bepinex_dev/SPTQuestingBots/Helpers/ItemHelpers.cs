@@ -30,7 +30,7 @@ namespace SPTQuestingBots.Helpers
 
                 // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
-                if (Controllers.Bots.BotRegistrationManager.IsBotAPMC(botOwner))
+                if (Controllers.Bots.Spawning.BotRegistrationManager.IsBotAPMC(botOwner))
                 {
                     possibleSlots.Add(EquipmentSlot.SecuredContainer);
                 }

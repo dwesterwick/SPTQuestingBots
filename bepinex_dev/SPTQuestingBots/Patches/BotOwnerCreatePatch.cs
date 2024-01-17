@@ -20,10 +20,10 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(BotOwner __result)
         {
-            Controllers.Bots.BotRegistrationManager.WriteMessageForNewBotSpawn(__result);
+            Controllers.Bots.Spawning.BotRegistrationManager.WriteMessageForNewBotSpawn(__result);
 
             // TO DO: Is the code below even needed?
-            IReadOnlyCollection<BotOwner> friends = Controllers.Bots.BotGenerator.GetSpawnGroupMembers(__result);
+            IReadOnlyCollection<BotOwner> friends = Controllers.Bots.Spawning.PMCGenerator.GetSpawnGroupMembers(__result);
             foreach (BotOwner friend in friends)
             {
                 Player player = friend.GetPlayer;

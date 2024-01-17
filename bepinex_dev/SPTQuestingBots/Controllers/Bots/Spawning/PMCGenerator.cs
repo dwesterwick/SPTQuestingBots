@@ -15,9 +15,9 @@ using HarmonyLib;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers.Bots
+namespace SPTQuestingBots.Controllers.Bots.Spawning
 {
-    public class BotGenerator : MonoBehaviour
+    public class PMCGenerator : BotGenerator
     {
         public static bool IsClearing { get; private set; } = false;
         public static bool CanSpawnPMCs { get; private set; } = true;
@@ -343,7 +343,7 @@ namespace SPTQuestingBots.Controllers.Bots
                         GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, null);
                         GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, botsInGroup, botSpawnerClass);
 
-                        Models.BotSpawnInfo botSpawnInfo = new Models.BotSpawnInfo(botGroup, botSpawnData);
+                        Models.BotSpawnInfo botSpawnInfo = new Models.BotSpawnInfo("Initial PMC", botGroup, botSpawnData);
 
                         initialPMCGroups.Add(botSpawnInfo);
                     }
@@ -516,7 +516,7 @@ namespace SPTQuestingBots.Controllers.Bots
             string spawnPositionText = string.Join(", ", initialPMCGroup.SpawnPositions.Select(s => s.ToString()));
             LoggingController.LogInfo("Spawning PMC group #" + initialPMCGroup.GroupNumber + " at " + spawnPositionText + "...");
 
-            spawnBots(initialPMCGroup, initialPMCGroup.SpawnPositions);
+            SpawnBots(initialPMCGroup, initialPMCGroup.SpawnPositions);
 
             // Add the bot's spawn point to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each
             // other when multiple initial PMC groups are spawned at the same time. 
@@ -524,70 +524,6 @@ namespace SPTQuestingBots.Controllers.Bots
             {
                 pendingSpawnPoints.Add(initialPMCGroup.SpawnPoint.Value);
             }
-        }
-
-        private void spawnBots(Models.BotSpawnInfo initialPMCGroup, Vector3[] positions)
-        {
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
-            foreach (Vector3 position in positions)
-            {
-                //LoggingController.LogInfo("Adding spawn position " + position.ToString() + " for PMC group...");
-                initialPMCGroup.Data.AddPosition(position);
-            }
-
-            // In SPT-AKI 3.7.1, this is GClass732
-            IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
-
-            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, initialPMCGroup);
-            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
-            Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
-
-            ibotCreator.ActivateBot(initialPMCGroup.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
-        }
-    }
-
-    internal class GroupActionsWrapper
-    {
-        private BotsGroup group = null;
-        private BotSpawner botSpawnerClass = null;
-        private Models.BotSpawnInfo botGroup = null;
-        private Stopwatch stopWatch = new Stopwatch();
-
-        public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup)
-        {
-            botSpawnerClass = _botSpawnerClass;
-            botGroup = _botGroup;
-        }
-
-        public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
-        {
-            if (group == null)
-            {
-                group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-                group.Lock();
-            }
-
-            return group;
-        }
-
-        public void CreateBotCallback(BotOwner bot)
-        {
-            // I have no idea why BSG passes a stopwatch into this call...
-            stopWatch.Start();
-
-            MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
-            method.Invoke(botSpawnerClass, new object[] { bot, botGroup.Data, null, false, stopWatch });
-
-            if (botGroup.ShouldBotBeBoss(bot))
-            {
-                bot.Boss.SetBoss(botGroup.Count);
-            }
-
-            LoggingController.LogInfo("Bot " + bot.GetText() + " spawned in initial PMC group #" + botGroup.GroupNumber);
-            botGroup.Owners.Add(bot);
-            botGroup.HasSpawned = true;
         }
     }
 }

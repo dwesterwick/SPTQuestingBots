@@ -28,9 +28,9 @@ namespace SPTQuestingBots.Patches
             message += aggressor.GetText();
             message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
-            if (Controllers.Bots.BotGenerator.CanSpawnPMCs)
+            if (Controllers.Bots.Spawning.PMCGenerator.CanSpawnPMCs)
             {
-                BotOwner[] aliveInitialPMCs = Controllers.Bots.BotGenerator.RemainingAliveInitialPMCs().ToArray();
+                BotOwner[] aliveInitialPMCs = Controllers.Bots.Spawning.PMCGenerator.RemainingAliveInitialPMCs().ToArray();
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
             }
 

@@ -37,7 +37,7 @@ namespace SPTQuestingBots.Patches
 
             // Erase all bot and bot-assignment tracking data
             BotJobAssignmentFactory.Clear();
-            BotRegistrationManager.Clear();
+            Controllers.Bots.Spawning.BotRegistrationManager.Clear();
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();

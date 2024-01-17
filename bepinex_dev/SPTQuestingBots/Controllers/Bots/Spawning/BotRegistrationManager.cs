@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EFT;
 
-namespace SPTQuestingBots.Controllers.Bots
+namespace SPTQuestingBots.Controllers.Bots.Spawning
 {
     public static class BotRegistrationManager
     {
@@ -72,7 +72,7 @@ namespace SPTQuestingBots.Controllers.Bots
             string message = "Spawned ";
 
             // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
-            if (BotGenerator.CanSpawnPMCs && (BotGenerator.SpawnedInitialPMCCount == 0) && !BotGenerator.IsSpawningPMCs)
+            if (PMCGenerator.CanSpawnPMCs && (PMCGenerator.SpawnedInitialPMCCount == 0) && !PMCGenerator.IsSpawningPMCs)
             {
                 message += "boss " + botOwner.GetText() + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
             }

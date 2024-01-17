@@ -63,7 +63,7 @@ namespace SPTQuestingBots
                 }
 
                 this.GetOrAddComponent<LocationController>();
-                this.GetOrAddComponent<BotGenerator>();
+                this.GetOrAddComponent<Controllers.Bots.Spawning.PMCGenerator>();
 
                 if (ConfigController.Config.Questing.Enabled)
                 {

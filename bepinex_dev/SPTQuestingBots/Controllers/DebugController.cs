@@ -104,7 +104,7 @@ namespace SPTQuestingBots.Controllers
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLabeledValue(BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
+                sb.AppendLabeledValue(Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
                 sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.yellow, Color.yellow);
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 

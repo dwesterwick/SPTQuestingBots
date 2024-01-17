@@ -139,7 +139,8 @@
     <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
-    <Compile Include="Controllers\Bots\BotRegistrationManager.cs" />
+    <Compile Include="Controllers\Bots\Spawning\BotRegistrationManager.cs" />
+    <Compile Include="Controllers\Bots\Spawning\BotGenerator.cs" />
     <Compile Include="Controllers\DebugController.cs" />
     <Compile Include="Helpers\DebugHelpers.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
@@ -171,7 +172,7 @@
     <Compile Include="Configuration\QuestGenerationConfig.cs" />
     <Compile Include="Configuration\QuestSettingsConfig.cs" />
     <Compile Include="Configuration\QuestDataConfig.cs" />
-    <Compile Include="Controllers\Bots\BotGenerator.cs" />
+    <Compile Include="Controllers\Bots\Spawning\PMCGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />

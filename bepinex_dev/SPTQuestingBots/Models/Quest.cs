@@ -130,7 +130,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            bool canAssign = (!PMCsOnly || BotRegistrationManager.IsBotAPMC(bot))
+            bool canAssign = (!PMCsOnly || Controllers.Bots.Spawning.BotRegistrationManager.IsBotAPMC(bot))
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime >= MinRaidET)

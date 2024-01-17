@@ -199,7 +199,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            BotType botType = BotRegistrationManager.GetBotType(BotOwner);
+            BotType botType = Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(BotOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PMC)
             {
