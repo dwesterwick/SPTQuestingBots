@@ -33,7 +33,7 @@ export class CommonUtils
 
     public getItemName(itemID: string): string
     {
-        const translationKey = itemID + " Name";
+        const translationKey = `${itemID} Name`;
         if (translationKey in this.translations)
             return this.translations[translationKey];
 		

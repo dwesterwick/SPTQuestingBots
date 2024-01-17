@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("initial_PMC_spawns")]
         public InitialPMCSpawnsConfig InitialPMCSpawns { get; set; } = new InitialPMCSpawnsConfig();
 
+        [JsonProperty("adjust_pscav_chance")]
+        public AdjustPScavChanceConfig AdjustPScavChance { get; set; } = new AdjustPScavChanceConfig();
+
         public ModConfig()
         {
 

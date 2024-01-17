@@ -229,5 +229,17 @@
 		"add_max_players_to_bot_cap": true,
 		"max_additional_bots": 5,
 		"max_total_bots": 26
+	},
+	"adjust_pscav_chance" : {
+		"enabled": true,
+		"disable_for_groups": true,
+		"chance_vs_time_remaining_fraction" : [
+			[0, 5],
+			[0.3, 5],
+			[0.5, 2],
+			[0.8, 1],
+			[0.9, 0],
+			[1, 0]
+		]
 	}
 }

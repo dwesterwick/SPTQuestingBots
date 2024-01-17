@@ -46,17 +46,17 @@ export class QuestManager
 
     public validateCustomQuests() : void
     {
-        const path = __dirname + "/../quests";
+        const path = `${__dirname}/../quests`;
         let totalStandardQuestsAdded = 0;
         let totalCustomQuestsAdded = 0;
 
         // Ensure the directory for standard quests exists
-        if (this.vfs.exists(path + "/standard/"))
+        if (this.vfs.exists(`${path}/standard/`))
         {
-            const standardQuests = this.vfs.getFiles(path + "/standard/");
+            const standardQuests = this.vfs.getFiles(`${path}/standard/`);
             for (const i in standardQuests)
             {
-                const questFileText = this.vfs.readFile(path + "/standard/" + standardQuests[i]);
+                const questFileText = this.vfs.readFile(`${path}/standard/${standardQuests[i]}`);
 
                 // If the JSON file can be parsed into a Quest array, assume it's fine
                 const quests : Quest[] = JSON.parse(questFileText);
@@ -65,7 +65,7 @@ export class QuestManager
                 this.commonUtils.logInfo(`Found ${quests.length} standard quest(s) in "/standard/${standardQuests[i]}"`);
             }
 
-            if (totalStandardQuestsAdded == 0)
+            if (totalStandardQuestsAdded === 0)
             {
                 this.commonUtils.logError("No standard quests have been added. Mod files may have been corrupted. Please try reinstalling.");
             }
@@ -76,12 +76,12 @@ export class QuestManager
         }
 
         // Check if the directory for custom quests exists
-        if (this.vfs.exists(path + "/custom/"))
+        if (this.vfs.exists(`${path}/custom/`))
         {
-            const customQuests = this.vfs.getFiles(path + "/custom/");
+            const customQuests = this.vfs.getFiles(`${path}/custom/`);
             for (const i in customQuests)
             {
-                const questFileText = this.vfs.readFile(path + "/custom/" + customQuests[i]);
+                const questFileText = this.vfs.readFile(`${path}/custom/${customQuests[i]}`);
 
                 // If the JSON file can be parsed into a Quest array, assume it's fine
                 const quests : Quest[] = JSON.parse(questFileText);
@@ -90,7 +90,7 @@ export class QuestManager
                 this.commonUtils.logInfo(`Found ${quests.length} custom quest(s) in "/custom/${customQuests[i]}"`);
             }
 
-            if (totalCustomQuestsAdded == 0)
+            if (totalCustomQuestsAdded === 0)
             {
                 this.commonUtils.logWarning("No custom quests found.");
             }

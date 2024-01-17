@@ -129,6 +129,7 @@
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
+    <Compile Include="Patches\LoadBotsPatch.cs" />
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\AirdropLandPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />

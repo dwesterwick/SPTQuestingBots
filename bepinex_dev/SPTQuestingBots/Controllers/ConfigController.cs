@@ -37,6 +37,13 @@ namespace SPTQuestingBots.Controllers
             RequestHandler.GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor + "/" + verify.ToString());
         }
 
+        public static void AdjustPScavChance(float timeRemainingFactor, bool preventPScav)
+        {
+            double factor = preventPScav ? 0 : InterpolateForFirstCol(Config.AdjustPScavChance.ChanceVsTimeRemainingFraction, timeRemainingFactor);
+
+            RequestHandler.GetJson("/QuestingBots/AdjustPScavChance/" + factor);
+        }
+
         public static void ReportError(string errorMessage)
         {
             RequestHandler.GetJson("/QuestingBots/ReportError/" + errorMessage);

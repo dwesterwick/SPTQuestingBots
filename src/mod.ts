@@ -46,6 +46,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private iAirdropConfig: IAirdropConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
+    private basePScavConversionChance: number;
 	
     public preAkiLoad(container: DependencyContainer): void 
     {
@@ -87,7 +88,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 url: "/QuestingBots/GetLoggingPath",
                 action: () => 
                 {
-                    return JSON.stringify({ path: __dirname + "/../log/" });
+                    return JSON.stringify({ path: `${__dirname}/../log/` });
                 }
             }], "GetLoggingPath"
         );
@@ -102,6 +103,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         staticRouterModService.registerStaticRouter(`StaticAkiGameStart${modName}`,
             [{
                 url: "/client/game/start",
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 action: (url: string, info: any, sessionId: string, output: string) => 
                 {
                     if (modConfig.debug.enabled)
@@ -128,6 +130,23 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     return JSON.stringify({ resp: "OK" });
                 }
             }], "AdjustPMCConversionChances"
+        );
+
+        // Apply a scalar factor to the SPT-AKI PScav conversion chance
+        dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPScavChance${modName}`,
+            [{
+                url: "/QuestingBots/AdjustPScavChance/",
+                action: (url: string) => 
+                {
+                    const urlParts = url.split("/");
+                    const factor: number = Number(urlParts[urlParts.length - 1]);
+
+                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = this.basePScavConversionChance * factor;
+                    this.commonUtils.logInfo(`Adjusted PScav spawn chance to ${this.iBotConfig.chanceAssaultScavHasPlayerScavName}%`);
+
+                    return JSON.stringify({ resp: "OK" });
+                }
+            }], "AdjustPScavChance"
         );
         
         // Get all EFT quest templates
@@ -158,6 +177,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.iAirdropConfig = this.configServer.getConfig(ConfigTypes.AIRDROP);
 
         this.databaseTables = this.databaseServer.getTables();
+        this.basePScavConversionChance = this.iBotConfig.chanceAssaultScavHasPlayerScavName;
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
@@ -328,13 +348,13 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
             if (verify)
             {
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min != min)
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min !== min)
                 {
                     verified = false;
                     break;
                 }
 
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max != max)
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max !== max)
                 {
                     verified = false;
                     break;
@@ -376,17 +396,17 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         const maxAddtlBots = modConfig.initial_PMC_spawns.max_additional_bots;
         const maxTotalBots = modConfig.initial_PMC_spawns.max_total_bots;
 
-        this.iBotConfig.maxBotCap["factory4_day"] = Math.min(this.iBotConfig.maxBotCap["factory4_day"] + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["factory4_night"] = Math.min(this.iBotConfig.maxBotCap["factory4_night"] + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["bigmap"] = Math.min(this.iBotConfig.maxBotCap["bigmap"] + Math.min(this.databaseTables.locations.bigmap.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["woods"] = Math.min(this.iBotConfig.maxBotCap["woods"] + Math.min(this.databaseTables.locations.woods.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["shoreline"] = Math.min(this.iBotConfig.maxBotCap["shoreline"] + Math.min(this.databaseTables.locations.shoreline.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["lighthouse"] = Math.min(this.iBotConfig.maxBotCap["lighthouse"] + Math.min(this.databaseTables.locations.lighthouse.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["rezervbase"] = Math.min(this.iBotConfig.maxBotCap["rezervbase"] + Math.min(this.databaseTables.locations.rezervbase.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["interchange"] = Math.min(this.iBotConfig.maxBotCap["interchange"] + Math.min(this.databaseTables.locations.interchange.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["laboratory"] = Math.min(this.iBotConfig.maxBotCap["laboratory"] + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["tarkovstreets"] = Math.min(this.iBotConfig.maxBotCap["tarkovstreets"] + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["default"] = Math.min(this.iBotConfig.maxBotCap["default"] + maxAddtlBots, maxTotalBots);
+        this.iBotConfig.maxBotCap.factory4_day = Math.min(this.iBotConfig.maxBotCap.factory4_day + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.factory4_night = Math.min(this.iBotConfig.maxBotCap.factory4_night + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.bigmap = Math.min(this.iBotConfig.maxBotCap.bigmap + Math.min(this.databaseTables.locations.bigmap.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.woods = Math.min(this.iBotConfig.maxBotCap.woods + Math.min(this.databaseTables.locations.woods.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.shoreline = Math.min(this.iBotConfig.maxBotCap.shoreline + Math.min(this.databaseTables.locations.shoreline.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.lighthouse = Math.min(this.iBotConfig.maxBotCap.lighthouse + Math.min(this.databaseTables.locations.lighthouse.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.rezervbase = Math.min(this.iBotConfig.maxBotCap.rezervbase + Math.min(this.databaseTables.locations.rezervbase.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.interchange = Math.min(this.iBotConfig.maxBotCap.interchange + Math.min(this.databaseTables.locations.interchange.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.laboratory = Math.min(this.iBotConfig.maxBotCap.laboratory + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.tarkovstreets = Math.min(this.iBotConfig.maxBotCap.tarkovstreets + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.default = Math.min(this.iBotConfig.maxBotCap.default + maxAddtlBots, maxTotalBots);
 
         for (const location in this.iBotConfig.maxBotCap)
         {
