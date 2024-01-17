@@ -62,7 +62,7 @@
                     {
                         "waitTimeAfterCompleting": 1,
                         "stepType" : "HoldAtPosition",
-                        "maxDistance": 4,
+                        "maxDistance": 3,
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120

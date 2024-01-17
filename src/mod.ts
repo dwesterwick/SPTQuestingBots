@@ -141,7 +141,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     const urlParts = url.split("/");
                     const factor: number = Number(urlParts[urlParts.length - 1]);
 
-                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = this.basePScavConversionChance * factor;
+                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = Math.round(this.basePScavConversionChance * factor);
                     this.commonUtils.logInfo(`Adjusted PScav spawn chance to ${this.iBotConfig.chanceAssaultScavHasPlayerScavName}%`);
 
                     return JSON.stringify({ resp: "OK" });
@@ -269,6 +269,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
         this.disableCustomBossWaves();
 
+        // Disable all of the extra Scavs that spawn into Factory
+        this.disableCustomScavWaves();
+
         // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
         this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
 
@@ -384,6 +387,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     {
         this.commonUtils.logInfo("Disabling custom boss waves...");
         this.iLocationConfig.customWaves.boss = {};
+    }
+
+    private disableCustomScavWaves(): void
+    {
+        this.commonUtils.logInfo("Disabling custom Scav waves...");
+        this.iLocationConfig.customWaves.normal = {};
     }
 
     private increaseBotCaps(): void
