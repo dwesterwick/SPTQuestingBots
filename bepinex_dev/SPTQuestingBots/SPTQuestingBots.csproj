@@ -195,6 +195,7 @@
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerCreatePatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
+    <Compile Include="Patches\GameWorldCreatePatch.cs" />
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />

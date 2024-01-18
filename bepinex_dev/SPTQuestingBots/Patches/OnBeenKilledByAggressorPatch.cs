@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
 
@@ -30,7 +31,7 @@ namespace SPTQuestingBots.Patches
 
             if (Controllers.Bots.Spawning.PMCGenerator.CanSpawnPMCs)
             {
-                BotOwner[] aliveInitialPMCs = Controllers.Bots.Spawning.PMCGenerator.RemainingAliveInitialPMCs().ToArray();
+                BotOwner[] aliveInitialPMCs = Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.AliveBots().ToArray();
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
             }
 

@@ -10,6 +10,7 @@ using EFT.Interactive;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Controllers.Bots.Spawning;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -124,7 +125,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
-                CanRushPlayerSpawn = Controllers.Bots.Spawning.PMCGenerator.IsBotFromInitialPMCSpawns(botOwner);
+                CanRushPlayerSpawn = Singleton<PMCGenerator>.Instance.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo);
                 IsQuestingAllowed = true;
             }
             if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)

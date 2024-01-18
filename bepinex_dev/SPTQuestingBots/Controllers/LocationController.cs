@@ -9,6 +9,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using HarmonyLib;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,6 +20,7 @@ namespace SPTQuestingBots.Controllers
     {
         public static bool IsScavRun { get; set; } = false;
         public static bool HasRaidStarted { get; set; } = false;
+        public static int MaxTotalBots { get; private set; } = 15;
         public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public static RaidSettings CurrentRaidSettings { get; private set; } = null;
         
@@ -38,6 +40,7 @@ namespace SPTQuestingBots.Controllers
             areLockedDoorsUnlocked.Clear();
             doorInteractionPositions.Clear();
             maxExfilPointDistance = 0;
+            MaxTotalBots = 15;
         }
 
         private void Update()
@@ -70,7 +73,19 @@ namespace SPTQuestingBots.Controllers
                 }
 
                 LoggingController.LogInfo("Loading into " + CurrentLocation.Id + "...");
+                UpdateMaxTotalBots();
             }
+        }
+
+        public static void UpdateMaxTotalBots()
+        {
+            BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
+            int botmax = (int)AccessTools.Field(typeof(BotsController), "_maxCount").GetValue(botControllerClass);
+            if (botmax > 0)
+            {
+                MaxTotalBots = botmax;
+            }
+            LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
         }
 
         public static void FindAllInteractiveObjects()

@@ -135,7 +135,12 @@ namespace SPTQuestingBots.Controllers
             Color botTypeColor = Color.green;
 
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (bot.EnemiesController.EnemyInfos.Any(i => i.Value.ProfileId == mainPlayer.ProfileId))
+            if (mainPlayer == null)
+            {
+                return botTypeColor;
+            }
+
+            if (bot.EnemiesController?.EnemyInfos?.Any(i => i.Value.ProfileId == mainPlayer.ProfileId) == true)
             {
                 botTypeColor = Color.red;
             }

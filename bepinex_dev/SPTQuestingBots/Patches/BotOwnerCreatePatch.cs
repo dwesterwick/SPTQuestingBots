@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
 
@@ -23,7 +24,7 @@ namespace SPTQuestingBots.Patches
             Controllers.Bots.Spawning.BotRegistrationManager.WriteMessageForNewBotSpawn(__result);
 
             // TO DO: Is the code below even needed?
-            IReadOnlyCollection<BotOwner> friends = Controllers.Bots.Spawning.PMCGenerator.GetSpawnGroupMembers(__result);
+            IReadOnlyCollection<BotOwner> friends = Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.GetSpawnGroupMembers(__result);
             foreach (BotOwner friend in friends)
             {
                 Player player = friend.GetPlayer;

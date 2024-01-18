@@ -5,8 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Controllers.Bots.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -20,6 +22,10 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(GameWorld __instance)
         {
+            PMCGenerator pmcGenerator = Singleton<PMCGenerator>.Instance;
+            Singleton<PMCGenerator>.Release(pmcGenerator);
+            pmcGenerator.Dispose();
+
             // Don't do anything if this is for the hideout
             if (!Controllers.LocationController.HasRaidStarted)
             {

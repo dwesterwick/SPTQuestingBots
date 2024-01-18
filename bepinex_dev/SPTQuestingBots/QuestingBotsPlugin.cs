@@ -39,6 +39,7 @@ namespace SPTQuestingBots
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");
 
                 new Patches.CheckSPTVersionPatch().Enable();
+                new Patches.GameWorldCreatePatch().Enable();
                 new Patches.GameWorldOnDestroyPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
@@ -63,7 +64,6 @@ namespace SPTQuestingBots
                 }
 
                 this.GetOrAddComponent<LocationController>();
-                this.GetOrAddComponent<Controllers.Bots.Spawning.PMCGenerator>();
 
                 if (ConfigController.Config.Questing.Enabled)
                 {

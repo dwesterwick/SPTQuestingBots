@@ -14,24 +14,17 @@ namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {
-        public bool HasSpawned { get; set; } = false;
-
-        public string SpawnType { get; private set; }
-        public int GroupNumber { get; private set; }
         public GClass513 Data { get; private set; }
         public List<BotOwner> Owners { get; set; } = new List<BotOwner>();
         public SpawnPointParams? SpawnPoint { get; set; }
         public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
+        public Configuration.MinMaxConfig RaidETRangeToSpawn = new Configuration.MinMaxConfig(0, double.MaxValue);
 
-        // The key should be Profile.Id for each bot that's generated
-        private Dictionary<string, WildSpawnType> OriginalBotSpawnTypes = new Dictionary<string, WildSpawnType>();
-
+        public bool HasSpawned => Owners.Count == Count;
         public int Count => Data?.Profiles?.Count ?? 0;
 
-        public BotSpawnInfo(string spawnType, int groupNum, GClass513 data)
+        public BotSpawnInfo(GClass513 data)
         {
-            SpawnType = spawnType;
-            GroupNumber = groupNum;
             Data = data;
         }
 
@@ -76,10 +69,6 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            //LoggingController.LogInfo("Valid spawn points: " + validSpawnPoints.Length);
-            //LoggingController.LogInfo("Main player position: " + Singleton<GameWorld>.Instance.MainPlayer.Position.ToString());
-            //LoggingController.LogInfo("Existing player positions: " + string.Join(", ", playerPositions.Select(p => p.ToString())));
-            
             return true;
         }
 
