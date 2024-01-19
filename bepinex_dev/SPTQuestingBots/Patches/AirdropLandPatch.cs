@@ -8,7 +8,6 @@ using Aki.Custom.Airdrops;
 using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
-using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.Patches
 {
@@ -22,7 +21,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(AirdropBox __instance)
         {
-            Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().AddAirdropChaserQuest(__instance.transform.position);
+            Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(__instance.transform.position);
         }
     }
 }

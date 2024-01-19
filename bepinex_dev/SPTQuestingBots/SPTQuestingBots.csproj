@@ -136,12 +136,12 @@
     <Compile Include="Configuration\ServerResponseError.cs" />
     <Compile Include="Configuration\SprintingLimitationsConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
-    <Compile Include="Controllers\Bots\BotBrainHelpers.cs" />
+    <Compile Include="Helpers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
-    <Compile Include="Controllers\Bots\BotJobAssignmentFactory.cs" />
-    <Compile Include="Controllers\Bots\Spawning\BotRegistrationManager.cs" />
-    <Compile Include="Controllers\Bots\Spawning\BotGenerator.cs" />
-    <Compile Include="Controllers\DebugController.cs" />
+    <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
+    <Compile Include="Controllers\BotRegistrationManager.cs" />
+    <Compile Include="Components\Spawning\BotGenerator.cs" />
+    <Compile Include="Components\DebugData.cs" />
     <Compile Include="Helpers\DebugHelpers.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
     <Compile Include="Helpers\ItemHelpers.cs" />
@@ -160,7 +160,7 @@
     <Compile Include="Configuration\MaxFollowerDistanceConfig.cs" />
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
-    <Compile Include="Controllers\Bots\BotQuestBuilder.cs" />
+    <Compile Include="Components\BotQuestBuilder.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveManager.cs" />
     <Compile Include="BotLogic\Objective\GoToObjectiveAction.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveLayer.cs" />
@@ -172,9 +172,9 @@
     <Compile Include="Configuration\QuestGenerationConfig.cs" />
     <Compile Include="Configuration\QuestSettingsConfig.cs" />
     <Compile Include="Configuration\QuestDataConfig.cs" />
-    <Compile Include="Controllers\Bots\Spawning\PMCGenerator.cs" />
+    <Compile Include="Components\Spawning\PMCGenerator.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
-    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Components\LocationData.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
     <Compile Include="BehaviorExtensions\MonoBehaviourDelayedUpdate.cs" />
     <Compile Include="Controllers\PathRender.cs" />
@@ -193,7 +193,6 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
-    <Compile Include="Patches\BotOwnerCreatePatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
     <Compile Include="Patches\GameWorldCreatePatch.cs" />
     <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />

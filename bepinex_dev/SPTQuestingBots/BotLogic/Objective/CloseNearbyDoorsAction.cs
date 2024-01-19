@@ -203,7 +203,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Determine the location to which the bot should go in order to unlock the door
             float searchRadius = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
-            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
             if (navMeshPosition == null)
             {
                 LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);

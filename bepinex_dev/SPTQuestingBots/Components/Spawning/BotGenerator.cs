@@ -11,14 +11,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Controllers.Bots.Spawning
+namespace SPTQuestingBots.Components.Spawning
 {
     public abstract class BotGenerator : MonoBehaviour
     {
         public bool IsDisposed { get; private set; } = false;
         public bool IsSpawningBots { get; protected set; } = false;
         public bool IsGeneratingBots { get; protected set; } = false;
+        public bool HasGeneratedBots { get; protected set; } = false;
         public string BotTypeName { get; protected set; } = "???";
 
         internal CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
@@ -27,7 +29,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
-        public bool HasRemainingSpawns => (BotGroups.Count == 0) || BotGroups.Any(g => !g.HasSpawned);
+        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HasSpawned);
 
         public BotGenerator(string _botTypeName)
         {
@@ -38,7 +40,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
 
         public static bool PlayerWantsBotsInRaid()
         {
-            RaidSettings raidSettings = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentRaidSettings;
+            RaidSettings raidSettings = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings;
             if (raidSettings == null)
             {
                 return false;
@@ -87,7 +89,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
         public int NumberOfBotsAllowedToSpawn()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            return Singleton<GameWorld>.Instance.GetComponent<LocationController>().MaxTotalBots - allPlayers.Count;
+            return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
         }
 
         public IEnumerable<BotOwner> AliveBots()
@@ -102,7 +104,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            EPlayerSide spawnSide = BotBrainHelpers.GetSideForWildSpawnType(spawnType);
+            EPlayerSide spawnSide = Helpers.BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
             LoggingController.LogInfo("Generating " + BotTypeName + " group (Number of bots: " + bots + ")...");
 

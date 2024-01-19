@@ -50,7 +50,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Determine the location to which the bot should go in order to unlock the door
-            interactionPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetDoorInteractionPosition(door, BotOwner.Position);
+            interactionPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetDoorInteractionPosition(door, BotOwner.Position);
             if (interactionPosition == null)
             {
                 LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
@@ -238,7 +238,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + door.Id);
 
             // Assume the door has been unlocked because bots will constantly try breaching some doors otherwise
-            Singleton<GameWorld>.Instance.GetComponent<LocationController>().ReportUnlockedDoor(door);
+            Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().ReportUnlockedDoor(door);
         }
     }
 }

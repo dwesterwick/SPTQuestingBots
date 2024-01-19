@@ -12,15 +12,14 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using HarmonyLib;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers.Bots.Spawning
+namespace SPTQuestingBots.Components.Spawning
 {
     public class PMCGenerator : BotGenerator
     {
-        public static bool CanSpawnPMCs { get; private set; } = true;
-        
         private static int maxAlivePMCs = 6;
         private static Stopwatch retrySpawnTimer = Stopwatch.StartNew();
         
@@ -48,7 +47,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
 
         private void Update()
         {
-            if (!CanSpawnPMCs || IsSpawningBots || IsGeneratingBots || !HasRemainingSpawns)
+            if (!HasGeneratedBots || IsSpawningBots || !HasRemainingSpawns)
             {
                 return;
             }
@@ -64,12 +63,6 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
 
             // Ensure the total number of bots isn't too close to the bot cap for the map
             if (NumberOfBotsAllowedToSpawn() < ConfigController.Config.InitialPMCSpawns.MinOtherBotsAllowedToSpawn)
-            {
-                return;
-            }
-
-            // Check if initial PMC groups can be spawned and if they have been generated yet
-            if (CanSpawnPMCs && (BotGroups.Count == 0))
             {
                 return;
             }
@@ -91,8 +84,8 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             if 
             (
                 PlayerWantsBotsInRaid()
-                && (BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
-                && !Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Name.ToLower().Contains("factory")
+                && (Controllers.BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
+                && !Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory")
             )
             {
                 return;
@@ -112,12 +105,12 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction);
 
             // Determine how far newly spawned bots need to be from other bots and where they're allowed to spawn
-            float minDistanceDuringRaid = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
+            float minDistanceDuringRaid = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
             float minDistanceFromPlayers = playerCountFactor >= 0.98 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : minDistanceDuringRaid;
             ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 0.98 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             
             // Spawn PMC's
-            StartCoroutine(SpawnInitialPMCs(BotGroups.ToArray(), Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
+            StartCoroutine(SpawnInitialPMCs(BotGroups.ToArray(), Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
         private void generateBots()
@@ -138,17 +131,17 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction, 3) + ")...");
 
             // Get the number of alive PMC's allowed on the map
-            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id.ToLower()))
+            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id.ToLower()))
             {
-                maxAlivePMCs = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id.ToLower()];
+                maxAlivePMCs = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id.ToLower()];
             }
-            LoggingController.LogInfo("Max PMC's on the map (" + Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id + ") at the same time: " + maxAlivePMCs);
+            LoggingController.LogInfo("Max PMC's on the map (" + Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id + ") at the same time: " + maxAlivePMCs);
 
             // Choose the number of initial PMC's to spawn
             System.Random random = new System.Random();
-            int pmcOffset = Singleton<GameWorld>.Instance.GetComponent<LocationController>().IsScavRun ? 0 : 1;
-            int minPlayers = (int)Math.Floor((Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
-            int maxPlayers = (int)Math.Ceiling((Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
+            int pmcOffset = Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsScavRun ? 0 : 1;
+            int minPlayers = (int)Math.Floor((Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
+            int maxPlayers = (int)Math.Ceiling((Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
             int maxPMCBots = random.Next(minPlayers, maxPlayers);
 
             LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
@@ -157,15 +150,12 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             {
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBotGroups(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                generateBotGroups(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            }
-            else
-            {
-                CanSpawnPMCs = false;
             }
 
             //LoggingController.LogInfo("Generating initial PMC groups...done.");
+            HasGeneratedBots = true;
         }
 
         private async Task generateBotGroups(BotDifficulty botdifficulty, int totalCount)
@@ -191,7 +181,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
-                    WildSpawnType spawnType = BotBrainHelpers.pmcSpawnTypes.Random();
+                    WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
 
                     Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botdifficulty, botsInGroup);
                     BotGroups.Add(group);

@@ -9,8 +9,6 @@ using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
-using SPTQuestingBots.Controllers.Bots.Spawning;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -121,12 +119,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            BotType botType = Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(botOwner);
+            BotType botType = Controllers.BotRegistrationManager.GetBotType(botOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
-                Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
-                CanRushPlayerSpawn = pmcGenerator?.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo) == true;
+                Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+                CanRushPlayerSpawn = (pmcGenerator == null) || pmcGenerator.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo);
 
                 IsQuestingAllowed = true;
             }
@@ -144,7 +142,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 assignment = botOwner.GetCurrentJobAssignment();
@@ -161,7 +159,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void Update()
         {
-            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (!Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return;
             }

@@ -7,7 +7,7 @@ using BepInEx;
 using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots
@@ -51,7 +51,6 @@ namespace SPTQuestingBots
                 {
                     new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
-                    new Patches.BotOwnerCreatePatch().Enable();
                     
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);

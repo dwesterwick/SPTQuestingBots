@@ -8,7 +8,6 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -200,7 +199,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            BotType botType = Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(BotOwner);
+            BotType botType = Controllers.BotRegistrationManager.GetBotType(BotOwner);
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PMC)
             {
@@ -224,13 +223,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private bool tryFindLockedDoorToOpen(float searchDistance)
         {
-            IEnumerable<Door> lockedDoors = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
+            IEnumerable<Door> lockedDoors = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
             if (!lockedDoors.Any())
             {
                 return false;
             }
 
-            Door nearestAccessibleDoor = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
+            Door nearestAccessibleDoor = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
             if (nearestAccessibleDoor == null)
             {
                 return false;

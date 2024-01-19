@@ -29,19 +29,21 @@ namespace SPTQuestingBots.Patches
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
-            if (Controllers.Bots.BotBrainHelpers.WillBotBeAPMC(__instance))
+            if (Helpers.BotBrainHelpers.WillBotBeAPMC(__instance))
             {
-                Controllers.Bots.Spawning.BotRegistrationManager.RegisterPMC(__instance);
+                Controllers.BotRegistrationManager.RegisterPMC(__instance);
             }
 
-            if (Controllers.Bots.BotBrainHelpers.WillBotBeABoss(__instance))
+            if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
             {
-                Controllers.Bots.Spawning.BotRegistrationManager.RegisterBoss(__instance);
+                Controllers.BotRegistrationManager.RegisterBoss(__instance);
             }
+
+            Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(__instance);
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
 
-            Singleton<GameWorld>.Instance.GetComponent<DebugController>().RegisterBot(__instance);
+            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
         }
     }
 }

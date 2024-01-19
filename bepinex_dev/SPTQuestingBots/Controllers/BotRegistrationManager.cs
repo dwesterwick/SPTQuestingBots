@@ -7,8 +7,17 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 
-namespace SPTQuestingBots.Controllers.Bots.Spawning
+namespace SPTQuestingBots.Controllers
 {
+    public enum BotType
+    {
+        Undetermined,
+        Scav,
+        PScav,
+        PMC,
+        Boss
+    }
+
     public static class BotRegistrationManager
     {
         public static int SpawnedBotCount { get; set; } = 0;
@@ -73,8 +82,8 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             string message = "Spawned ";
 
             // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
-            Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
-            if (PMCGenerator.CanSpawnPMCs && (pmcGenerator?.SpawnedGroupCount == 0) && !(pmcGenerator?.IsSpawningBots == true))
+            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+            if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots && !pmcGenerator.IsSpawningBots && (pmcGenerator.SpawnedGroupCount == 0))
             {
                 message += "boss " + botOwner.GetText() + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
             }

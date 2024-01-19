@@ -9,7 +9,6 @@ using EFT;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -62,7 +61,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Ensure all quests have been loaded and generated
-            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (!Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return updatePreviousState(false);
             }
@@ -70,7 +69,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot has a boss that's still alive
             if (BotHiveMindMonitor.HasBoss(BotOwner))
             {
-                Controllers.Bots.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
+                Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
                 return updatePreviousState(false);
             }

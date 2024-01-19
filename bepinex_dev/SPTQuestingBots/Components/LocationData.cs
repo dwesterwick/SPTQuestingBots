@@ -10,15 +10,14 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using HarmonyLib;
-using SPTQuestingBots.Controllers.Bots;
-using SPTQuestingBots.Controllers.Bots.Spawning;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Components
 {
-    public class LocationController : MonoBehaviour
+    public class LocationData : MonoBehaviour
     {
         public bool HasRaidStarted { get; set; } = false;
         public int MaxTotalBots { get; private set; } = 15;
@@ -45,12 +44,12 @@ namespace SPTQuestingBots.Controllers
             if (ConfigController.Config.Questing.Enabled)
             {
                 Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugController>();
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugData>();
             }
 
             if (ConfigController.Config.InitialPMCSpawns.Enabled)
             {
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<PMCGenerator>();
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PMCGenerator>();
             }
         }
 

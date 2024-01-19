@@ -70,7 +70,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 }
 
                 // If the bot can quest and is allowed to sleep, ensure it's allowed to sleep on the current map
-                if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id, out TarkovMaps map))
+                if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id, out TarkovMaps map))
                 {
                     if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(map))
                     {

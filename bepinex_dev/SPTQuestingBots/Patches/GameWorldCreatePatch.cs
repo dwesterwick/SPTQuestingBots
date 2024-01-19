@@ -1,8 +1,6 @@
 ﻿using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
-using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots.Spawning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +20,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix()
         {
-            Singleton<GameWorld>.Instance.gameObject.AddComponent<LocationController>();
+            Singleton<GameWorld>.Instance.gameObject.AddComponent<Components.LocationData>();
         }
     }
 }

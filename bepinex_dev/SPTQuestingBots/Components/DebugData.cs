@@ -2,7 +2,7 @@
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
-using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using System;
@@ -13,9 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Components
 {
-    public class DebugController : MonoBehaviour
+    public class DebugData : MonoBehaviour
     {
         private Dictionary<JobAssignment, double> jobAssignmentDistances = new Dictionary<JobAssignment, double>();
         private Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
@@ -90,7 +90,7 @@ namespace SPTQuestingBots.Controllers
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLabeledValue(Controllers.Bots.Spawning.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
+                sb.AppendLabeledValue(Controllers.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
                 sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.yellow, Color.yellow);
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 

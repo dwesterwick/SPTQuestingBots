@@ -8,7 +8,6 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -30,17 +29,17 @@ namespace SPTQuestingBots.Patches
             message += aggressor.GetText();
             message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
-            if (Controllers.Bots.Spawning.PMCGenerator.CanSpawnPMCs)
+            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+            if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots)
             {
-                Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
-                BotOwner[] aliveInitialPMCs = (pmcGenerator?.AliveBots()?.ToArray() ?? (new BotOwner[0]));
+                BotOwner[] aliveInitialPMCs = pmcGenerator.AliveBots()?.ToArray();
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
             }
 
             LoggingController.LogInfo(message);
 
             // Make sure the bot doesn't have any active quests if it's dead
-            Controllers.Bots.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
+            Controllers.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
         }
     }
 }

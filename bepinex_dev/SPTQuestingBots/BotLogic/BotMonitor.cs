@@ -9,7 +9,6 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic

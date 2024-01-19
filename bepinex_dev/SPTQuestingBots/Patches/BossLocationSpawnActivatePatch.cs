@@ -8,7 +8,6 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -46,8 +45,8 @@ namespace SPTQuestingBots.Patches
             }
 
             // Prevent too many bosses from spawning, or they will prevent other bots from spawning
-            Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
-            if ((pmcGenerator?.SpawnedGroupCount == 0) && (BotRegistrationManager.SpawnedBossCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialBosses))
+            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+            if ((pmcGenerator != null) && (pmcGenerator.SpawnedGroupCount == 0) && (BotRegistrationManager.SpawnedBossCount + botCount > ConfigController.Config.InitialPMCSpawns.MaxInitialBosses))
             {
                 BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
 

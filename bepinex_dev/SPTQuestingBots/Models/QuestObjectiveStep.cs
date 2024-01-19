@@ -115,7 +115,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
@@ -133,7 +133,7 @@ namespace SPTQuestingBots.Models
                 return true;
             }
 
-            InteractiveObject = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindSwitch(SwitchID);
+            InteractiveObject = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(SwitchID);
             return InteractiveObject != null;
         }
 

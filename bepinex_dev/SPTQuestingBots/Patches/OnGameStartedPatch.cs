@@ -21,7 +21,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(GameWorld __instance)
         {
-            Singleton<GameWorld>.Instance.GetComponent<LocationController>().HasRaidStarted = true;
+            Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().HasRaidStarted = true;
 
             __instance.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
         }

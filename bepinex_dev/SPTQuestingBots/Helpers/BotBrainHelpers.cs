@@ -5,17 +5,8 @@ using System.Reflection;
 using EFT;
 using SPTQuestingBots.Models;
 
-namespace SPTQuestingBots.Controllers.Bots
+namespace SPTQuestingBots.Helpers
 {
-    public enum BotType
-    {
-        Undetermined,
-        Scav,
-        PScav,
-        PMC,
-        Boss
-    }
-
     public static class BotBrainHelpers
     {
         //FollowerGluharAssault and FollowerGluharProtect max layer = 43

@@ -11,7 +11,6 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Controllers.Bots;
 
 namespace SPTQuestingBots.Models
 {
@@ -131,7 +130,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            bool canAssign = (!PMCsOnly || Controllers.Bots.Spawning.BotRegistrationManager.IsBotAPMC(bot))
+            bool canAssign = (!PMCsOnly || Controllers.BotRegistrationManager.IsBotAPMC(bot))
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime >= MinRaidET)
@@ -205,7 +204,7 @@ namespace SPTQuestingBots.Models
 
         private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
         {
-            EFT.Interactive.Switch requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindSwitch(switchID);
+            EFT.Interactive.Switch requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(switchID);
             if (requiredSwitch == null)
             {
                 return true;

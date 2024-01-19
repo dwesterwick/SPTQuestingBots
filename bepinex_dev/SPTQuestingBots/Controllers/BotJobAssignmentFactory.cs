@@ -12,7 +12,7 @@ using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers.Bots
+namespace SPTQuestingBots.Controllers
 {
     public static class BotJobAssignmentFactory
     {
@@ -449,7 +449,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             float? distanceToExfilPoint = botObjectiveManager?.DistanceToInitialExfiltrationPoint();
-            float minDistanceToSwitchExfil = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+            float minDistanceToSwitchExfil = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
             if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
             {
                 botObjectiveManager?.SetExfiliationPoint();
@@ -597,9 +597,9 @@ namespace SPTQuestingBots.Controllers.Bots
             float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
             float desirabilityWeighting = ConfigController.Config.Questing.BotQuests.DesirabilityWeighting;
             float exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
-            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id))
+            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id))
             {
-                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id];
+                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id];
             }
 
             System.Random random = new System.Random();
@@ -761,7 +761,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             string filename = ConfigController.GetLoggingPath()
-                + BotQuestBuilder.PreviousLocationID.Replace(" ", "")
+                + Components.BotQuestBuilder.PreviousLocationID.Replace(" ", "")
                 + "_"
                 + timestamp
                 + "_quests.csv";
@@ -806,7 +806,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             string filename = ConfigController.GetLoggingPath()
-                + BotQuestBuilder.PreviousLocationID.Replace(" ", "")
+                + Components.BotQuestBuilder.PreviousLocationID.Replace(" ", "")
                 + "_"
                 + timestamp
                 + "_assignments.csv";
