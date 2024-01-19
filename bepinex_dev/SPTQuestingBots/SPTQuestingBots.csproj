@@ -203,7 +203,6 @@
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\AirdropLandPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />
-    <Compile Include="Patches\ReadyToPlayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsPlugin.cs" />
     <Compile Include="QuestingBotsPluginConfig.cs" />

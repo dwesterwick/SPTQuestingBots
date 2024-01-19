@@ -23,8 +23,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
         
         private static int maxAlivePMCs = 6;
         private static Stopwatch retrySpawnTimer = Stopwatch.StartNew();
-        private static List<Models.BotSpawnInfo> initialPMCGroups = new List<Models.BotSpawnInfo>();
-
+        
         // Stores spawn points that don't have valid NavMesh positions near them
         private static List<string> blacklistedSpawnPointIDs = new List<string>();
 
@@ -70,7 +69,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             }
 
             // Check if initial PMC groups can be spawned and if they have been generated yet
-            if (CanSpawnPMCs && (initialPMCGroups.Count == 0))
+            if (CanSpawnPMCs && (BotGroups.Count == 0))
             {
                 return;
             }
@@ -93,7 +92,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             (
                 PlayerWantsBotsInRaid()
                 && (BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
-                && !LocationController.CurrentLocation.Name.ToLower().Contains("factory")
+                && !Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Name.ToLower().Contains("factory")
             )
             {
                 return;
@@ -113,12 +112,12 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, raidTimeRemainingFraction);
 
             // Determine how far newly spawned bots need to be from other bots and where they're allowed to spawn
-            float minDistanceDuringRaid = LocationController.CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
+            float minDistanceDuringRaid = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Name.ToLower().Contains("factory") ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaidFactory : ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersDuringRaid;
             float minDistanceFromPlayers = playerCountFactor >= 0.98 ? ConfigController.Config.InitialPMCSpawns.MinDistanceFromPlayersInitial : minDistanceDuringRaid;
             ESpawnCategoryMask allowedSpawnPointTypes = playerCountFactor >= 0.98 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
             
             // Spawn PMC's
-            StartCoroutine(SpawnInitialPMCs(initialPMCGroups.ToArray(), LocationController.CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
+            StartCoroutine(SpawnInitialPMCs(BotGroups.ToArray(), Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.SpawnPointParams, allowedSpawnPointTypes, minDistanceFromPlayers));
         }
 
         private void generateBots()
@@ -139,17 +138,17 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             LoggingController.LogInfo("Generating initial PMC groups (Raid time remaining factor: " + Math.Round(raidTimeRemainingFraction, 3) + ")...");
 
             // Get the number of alive PMC's allowed on the map
-            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(LocationController.CurrentLocation.Id.ToLower()))
+            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id.ToLower()))
             {
-                maxAlivePMCs = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[LocationController.CurrentLocation.Id.ToLower()];
+                maxAlivePMCs = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id.ToLower()];
             }
-            LoggingController.LogInfo("Max PMC's on the map (" + LocationController.CurrentLocation.Id + ") at the same time: " + maxAlivePMCs);
+            LoggingController.LogInfo("Max PMC's on the map (" + Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id + ") at the same time: " + maxAlivePMCs);
 
             // Choose the number of initial PMC's to spawn
             System.Random random = new System.Random();
-            int pmcOffset = LocationController.IsScavRun ? 0 : 1;
-            int minPlayers = (int)Math.Floor((LocationController.CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
-            int maxPlayers = (int)Math.Ceiling((LocationController.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
+            int pmcOffset = Singleton<GameWorld>.Instance.GetComponent<LocationController>().IsScavRun ? 0 : 1;
+            int minPlayers = (int)Math.Floor((Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
+            int maxPlayers = (int)Math.Ceiling((Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
             int maxPMCBots = random.Next(minPlayers, maxPlayers);
 
             LoggingController.LogInfo("Generating initial PMC groups...Generating " + maxPMCBots + " PMC's (Min: " + minPlayers + ", Max: " + maxPlayers + ")");
@@ -158,7 +157,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             {
                 // Create bot data from the server
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBotGroups(LocationController.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
+                generateBotGroups(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty(), maxPMCBots);
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             else

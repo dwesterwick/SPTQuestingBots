@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Controllers.Bots;
 using SPTQuestingBots.Controllers.Bots.Spawning;
 
@@ -19,21 +20,17 @@ namespace SPTQuestingBots.Patches
             return typeof(GameWorld).GetMethod("OnDestroy", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
-        [PatchPostfix]
-        private static void PatchPostfix(GameWorld __instance)
+        [PatchPrefix]
+        private static void PatchPrefix(GameWorld __instance)
         {
-            PMCGenerator pmcGenerator = Singleton<PMCGenerator>.Instance;
-            Singleton<PMCGenerator>.Release(pmcGenerator);
-            pmcGenerator.Dispose();
-
             // Don't do anything if this is for the hideout
-            if (!Controllers.LocationController.HasRaidStarted)
+            if (!Singleton<GameWorld>.Instance.GetComponent<LocationController>().HasRaidStarted)
             {
                 return;
             }
 
             // Write all log files
-            if (BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 long timestamp = DateTime.Now.ToFileTimeUtc();
 

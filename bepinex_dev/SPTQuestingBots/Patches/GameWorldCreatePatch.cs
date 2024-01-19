@@ -16,17 +16,13 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(LocalPlayer).GetMethod("Create", BindingFlags.Public | BindingFlags.Static);
+            return typeof(BotsController).GetMethod("AddActivePLayer", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
         private static void PatchPostfix()
         {
-            if (ConfigController.Config.InitialPMCSpawns.Enabled)
-            {
-                PMCGenerator pmcGenerator = Singleton<GameWorld>.Instance.gameObject.AddComponent<PMCGenerator>();
-                Singleton<PMCGenerator>.Create(pmcGenerator);
-            }
+            Singleton<GameWorld>.Instance.gameObject.AddComponent<LocationController>();
         }
     }
 }

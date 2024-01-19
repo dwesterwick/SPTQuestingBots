@@ -142,7 +142,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsQuestingAllowed && BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 assignment = botOwner.GetCurrentJobAssignment();
@@ -159,7 +159,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void Update()
         {
-            if (!BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return;
             }

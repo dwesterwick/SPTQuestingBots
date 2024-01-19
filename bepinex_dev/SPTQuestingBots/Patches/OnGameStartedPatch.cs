@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -19,7 +21,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(GameWorld __instance)
         {
-            Controllers.LocationController.HasRaidStarted = true;
+            Singleton<GameWorld>.Instance.GetComponent<LocationController>().HasRaidStarted = true;
 
             __instance.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
         }

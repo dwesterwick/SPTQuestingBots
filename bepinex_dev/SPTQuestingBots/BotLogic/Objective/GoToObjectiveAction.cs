@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
@@ -223,13 +224,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private bool tryFindLockedDoorToOpen(float searchDistance)
         {
-            IEnumerable<Door> lockedDoors = LocationController.FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
+            IEnumerable<Door> lockedDoors = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
             if (!lockedDoors.Any())
             {
                 return false;
             }
 
-            Door nearestAccessibleDoor = LocationController.FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
+            Door nearestAccessibleDoor = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
             if (nearestAccessibleDoor == null)
             {
                 return false;

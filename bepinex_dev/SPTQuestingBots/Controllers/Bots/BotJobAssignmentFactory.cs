@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Models;
@@ -448,7 +449,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             float? distanceToExfilPoint = botObjectiveManager?.DistanceToInitialExfiltrationPoint();
-            float minDistanceToSwitchExfil = LocationController.GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+            float minDistanceToSwitchExfil = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
             if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
             {
                 botObjectiveManager?.SetExfiliationPoint();
@@ -596,9 +597,9 @@ namespace SPTQuestingBots.Controllers.Bots
             float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
             float desirabilityWeighting = ConfigController.Config.Questing.BotQuests.DesirabilityWeighting;
             float exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
-            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(LocationController.CurrentLocation.Id))
+            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id))
             {
-                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[LocationController.CurrentLocation.Id];
+                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id];
             }
 
             System.Random random = new System.Random();

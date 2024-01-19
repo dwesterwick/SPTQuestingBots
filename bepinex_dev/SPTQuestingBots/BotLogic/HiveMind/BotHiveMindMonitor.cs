@@ -56,7 +56,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 return;
             }
 
-            if (LocationController.CurrentLocation == null)
+            if (Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation == null)
             {
                 Clear();
                 return;

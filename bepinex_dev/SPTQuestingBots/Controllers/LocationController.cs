@@ -10,6 +10,8 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using HarmonyLib;
+using SPTQuestingBots.Controllers.Bots;
+using SPTQuestingBots.Controllers.Bots.Spawning;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,66 +20,45 @@ namespace SPTQuestingBots.Controllers
 {
     public class LocationController : MonoBehaviour
     {
-        public static bool IsScavRun { get; set; } = false;
-        public static bool HasRaidStarted { get; set; } = false;
-        public static int MaxTotalBots { get; private set; } = 15;
-        public static LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
-        public static RaidSettings CurrentRaidSettings { get; private set; } = null;
+        public bool HasRaidStarted { get; set; } = false;
+        public int MaxTotalBots { get; private set; } = 15;
+        public LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
+        public RaidSettings CurrentRaidSettings { get; private set; } = null;
         
-        private static TarkovApplication tarkovApplication = null;
-        private static Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private static Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
-        private static Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
-        private static Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
-        private static float maxExfilPointDistance = 0;
+        private TarkovApplication tarkovApplication = null;
+        private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
+        private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
+        private Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
+        private Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
+        private float maxExfilPointDistance = 0;
 
-        private static void Clear()
+        public bool IsScavRun => Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid;
+
+        private void Awake()
         {
-            CurrentLocation = null;
-            CurrentRaidSettings = null;
-            nearestNavMeshPoint.Clear();
-            switches.Clear();
-            areLockedDoorsUnlocked.Clear();
-            doorInteractionPositions.Clear();
-            maxExfilPointDistance = 0;
-            MaxTotalBots = 15;
+            tarkovApplication = FindObjectOfType<TarkovApplication>();
+            CurrentRaidSettings = getCurrentRaidSettings();
+            CurrentLocation = CurrentRaidSettings.SelectedLocation;
+
+            UpdateMaxTotalBots();
+
+            if (ConfigController.Config.Questing.Enabled)
+            {
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
+            }
+
+            if (ConfigController.Config.InitialPMCSpawns.Enabled)
+            {
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<PMCGenerator>();
+            }
         }
 
         private void Update()
         {
-            if (tarkovApplication == null)
-            {
-                tarkovApplication = FindObjectOfType<TarkovApplication>();
-                return;
-            }
-
-            if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
-            {
-                if (CurrentLocation != null)
-                {
-                    LoggingController.LogInfo("Clearing location data...");
-                    Clear();
-                }
-
-                return;
-            }
-
-            if (CurrentLocation == null)
-            {
-                CurrentRaidSettings = getCurrentRaidSettings();
-
-                CurrentLocation = CurrentRaidSettings?.SelectedLocation;
-                if (CurrentLocation == null)
-                {
-                    return;
-                }
-
-                LoggingController.LogInfo("Loading into " + CurrentLocation.Id + "...");
-                UpdateMaxTotalBots();
-            }
+            
         }
 
-        public static void UpdateMaxTotalBots()
+        public void UpdateMaxTotalBots()
         {
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
             int botmax = (int)AccessTools.Field(typeof(BotsController), "_maxCount").GetValue(botControllerClass);
@@ -88,13 +69,13 @@ namespace SPTQuestingBots.Controllers
             LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
         }
 
-        public static void FindAllInteractiveObjects()
+        public void FindAllInteractiveObjects()
         {
             FindAllSwitches();
             FindAllLockedDoors();
         }
 
-        public static void FindAllSwitches()
+        public void FindAllSwitches()
         {
             switches.Clear();
 
@@ -109,12 +90,12 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        private static void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
+        private void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
             LoggingController.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
         }
 
-        public static EFT.Interactive.Switch FindSwitch(string id)
+        public EFT.Interactive.Switch FindSwitch(string id)
         {
             if (switches.ContainsKey(id))
             {
@@ -124,7 +105,7 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static void FindAllLockedDoors()
+        public void FindAllLockedDoors()
         {
             areLockedDoorsUnlocked.Clear();
 
@@ -155,7 +136,7 @@ namespace SPTQuestingBots.Controllers
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 
-        public static IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
+        public IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
         {
             Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
 
@@ -192,7 +173,7 @@ namespace SPTQuestingBots.Controllers
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
-        public static void ReportUnlockedDoor(Door door)
+        public void ReportUnlockedDoor(Door door)
         {
             if (areLockedDoorsUnlocked.ContainsKey(door))
             {
@@ -200,7 +181,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static SpawnPointParams[] GetAllValidSpawnPointParams()
+        public SpawnPointParams[] GetAllValidSpawnPointParams()
         {
             if (CurrentLocation == null)
             {
@@ -224,7 +205,7 @@ namespace SPTQuestingBots.Controllers
         }
 
         // This isn't actually used anywhere in this mod, but I left it in here because it's a pretty nifty algorithm
-        public static bool TryGetObjectNearPosition<T>(Vector3 position, float maxDistance, bool onlyVisible, out T obj) where T: Behaviour
+        public bool TryGetObjectNearPosition<T>(Vector3 position, float maxDistance, bool onlyVisible, out T obj) where T: Behaviour
         {
             obj = null;
 
@@ -273,7 +254,7 @@ namespace SPTQuestingBots.Controllers
             return false;
         }
 
-        public static Vector3? GetPlayerPosition()
+        public Vector3? GetPlayerPosition()
         {
             if (Singleton<GameWorld>.Instance == null)
             {
@@ -283,7 +264,7 @@ namespace SPTQuestingBots.Controllers
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
         }
 
-        public static SpawnPointParams? GetPlayerSpawnPoint()
+        public SpawnPointParams? GetPlayerSpawnPoint()
         {
             Vector3? playerPosition = GetPlayerPosition();
             if (!playerPosition.HasValue)
@@ -294,7 +275,7 @@ namespace SPTQuestingBots.Controllers
             return GetNearestSpawnPoint(playerPosition.Value);
         }
 
-        public static Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)
+        public Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)
         {
             // Check if there is a cached value for the position, and if so return it
             if (nearestNavMeshPoint.ContainsKey(position))
@@ -313,7 +294,7 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
         {
             if (referencePositions.Length == 0)
             {
@@ -353,12 +334,12 @@ namespace SPTQuestingBots.Controllers
             return selectedPoint.Key;
         }
 
-        public static SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             return GetFurthestSpawnPoint(referenceSpawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray(), allSpawnPoints);
         }
 
-        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             if (allSpawnPoints.Length == 0)
             {
@@ -395,17 +376,17 @@ namespace SPTQuestingBots.Controllers
             return nearestSpawnPoint;
         }
 
-        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
+        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
         {
             return GetNearestSpawnPoint(postition, new SpawnPointParams[0], GetAllValidSpawnPointParams());
         }
 
-        public static SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
+        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }
 
-        public static Vector3? GetDoorInteractionPosition(Door door, Vector3 startingPosition)
+        public Vector3? GetDoorInteractionPosition(Door door, Vector3 startingPosition)
         {
             // If a cached position exists, return it
             if (doorInteractionPositions.ContainsKey(door))
@@ -430,7 +411,7 @@ namespace SPTQuestingBots.Controllers
             foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
             {
                 // Determine if a valid NavMesh location can be found for the position
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                 if (!navMeshPosition.HasValue)
                 {
                     LoggingController.LogInfo("Cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
@@ -490,7 +471,7 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static Door FindFirstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
+        public Door FindFirstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
         {
             foreach (Door door in doors)
             {
@@ -504,7 +485,7 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        public static float GetMaxExfilPointDistance()
+        public float GetMaxExfilPointDistance()
         {
             if (maxExfilPointDistance > 0)
             {
@@ -528,7 +509,7 @@ namespace SPTQuestingBots.Controllers
             return maxExfilPointDistance;
         }
 
-        private static LocationSettingsClass getLocationSettings(TarkovApplication app)
+        private LocationSettingsClass getLocationSettings(TarkovApplication app)
         {
             if (app == null)
             {
@@ -545,7 +526,7 @@ namespace SPTQuestingBots.Controllers
             return session.LocationSettings;
         }
 
-        private static RaidSettings getCurrentRaidSettings()
+        private RaidSettings getCurrentRaidSettings()
         {
             if (tarkovApplication == null)
             {

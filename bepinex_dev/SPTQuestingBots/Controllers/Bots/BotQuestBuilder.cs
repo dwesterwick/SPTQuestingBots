@@ -19,72 +19,31 @@ namespace SPTQuestingBots.Controllers.Bots
 {
     public class BotQuestBuilder : MonoBehaviour
     {
-        public static bool IsClearing { get; private set; } = false;
-        public static bool IsBuildingQuests { get; private set; } = false;
-        public static bool HaveQuestsBeenBuilt { get; private set; } = false;
+        public bool IsBuildingQuests { get; private set; } = false;
+        public bool HaveQuestsBeenBuilt { get; private set; } = false;
         public static string PreviousLocationID { get; private set; } = null;
 
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
-        private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
-        private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
-        private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
-        private static List<string> zoneIDsInLocation = new List<string>();
+        private CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
+        private Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
+        private Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
+        private List<string> zoneIDsInLocation = new List<string>();
         
-        public IEnumerator Clear()
+        private void Awake()
         {
-            IsClearing = true;
+            Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindAllInteractiveObjects();
+            StartCoroutine(LoadAllQuests());
 
-            if (IsBuildingQuests)
-            {
-                enumeratorWithTimeLimit.Abort();
-
-                CoroutineExtensions.EnumeratorWithTimeLimit conditionWaiter = new CoroutineExtensions.EnumeratorWithTimeLimit(1);
-                yield return conditionWaiter.WaitForCondition(() => !IsBuildingQuests, nameof(IsBuildingQuests), 3000);
-
-                IsBuildingQuests = false;
-            }
-
-            HaveQuestsBeenBuilt = false;
-            minLevelForQuest.Clear();
-            allZoneIDsForCondition.Clear();
-            plantTimeForCondition.Clear();
-            zoneIDsInLocation.Clear();
-
-            IsClearing = false;
+            // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
+            PreviousLocationID = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id;
         }
 
         private void Update()
         {
-            // Wait until data from the previous raid has been erased
-            if (IsClearing)
-            {
-                return;
-            }
-
-            if (LocationController.CurrentLocation == null)
-            {
-                if (IsBuildingQuests || HaveQuestsBeenBuilt)
-                {
-                    LoggingController.LogInfo("Clearing quest data...");
-                }
-
-                StartCoroutine(Clear());
-                return;
-            }
-
-            if (IsBuildingQuests || HaveQuestsBeenBuilt)
-            {
-                return;
-            }
-
-            LocationController.FindAllInteractiveObjects();
-            StartCoroutine(LoadAllQuests());
-
-            // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
-            PreviousLocationID = LocationController.CurrentLocation.Id;
+            
         }
 
-        public static void AddAirdropChaserQuest(Vector3 airdropPosition)
+        public void AddAirdropChaserQuest(Vector3 airdropPosition)
         {
             if (airdropPosition == null)
             {
@@ -157,7 +116,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
-                Quest spawnPointQuest = createSpawnPointQuest(LocationController.CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
+                Quest spawnPointQuest = createSpawnPointQuest(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
                 if (spawnPointQuest != null)
                 {
                     //LoggingController.LogInfo("Adding quest for going to random spawn points...");
@@ -170,7 +129,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 // Create a quest where initial PMC's can run to your spawn point (not directly to you).
                 Models.Quest spawnRushQuest = null;
-                SpawnPointParams? playerSpawnPoint = LocationController.GetPlayerSpawnPoint();
+                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetPlayerSpawnPoint();
                 if (playerSpawnPoint.HasValue)
                 {
                     spawnRushQuest = createGoToPositionQuest(playerSpawnPoint.Value.Position, "Spawn Rush", ConfigController.Config.Questing.BotQuests.SpawnRush);
@@ -196,7 +155,7 @@ namespace SPTQuestingBots.Controllers.Bots
                 IEnumerable<string> bossZones = getBossSpawnZones();
                 if (bossZones.Any())
                 {
-                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = LocationController.CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
+                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
                     bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter", ConfigController.Config.Questing.BotQuests.BossHunter);
                 }
 
@@ -213,7 +172,7 @@ namespace SPTQuestingBots.Controllers.Bots
 
                 LoadCustomQuests();
 
-                BotJobAssignmentFactory.RemoveBlacklistedQuestObjectives(LocationController.CurrentLocation.Id);
+                BotJobAssignmentFactory.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id);
 
                 HaveQuestsBeenBuilt = true;
                 LoggingController.LogInfo("Finished loading quest data.");
@@ -227,7 +186,7 @@ namespace SPTQuestingBots.Controllers.Bots
         private void LoadCustomQuests()
         {
             // Load all JSON files for custom quests
-            IEnumerable<Quest> customQuests = ConfigController.GetCustomQuests(LocationController.CurrentLocation.Id);
+            IEnumerable<Quest> customQuests = ConfigController.GetCustomQuests(Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.Id);
             if (!customQuests.Any())
             {
                 return;
@@ -324,7 +283,7 @@ namespace SPTQuestingBots.Controllers.Bots
                     }
 
                     // Try to find the nearest NavMesh position next to the quest item.
-                    Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
+                    Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
                         LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
@@ -618,7 +577,7 @@ namespace SPTQuestingBots.Controllers.Bots
             // TO DO: This is kinda sloppy and should be fixed. 
             float maxSearchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceZone;
             maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
-            Vector3? navMeshTargetPoint = LocationController.FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
+            Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
             if (!navMeshTargetPoint.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh point for trigger " + trigger.Id);
@@ -662,7 +621,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        private static void updateEFTQuestObjectives(Models.Quest quest)
+        private void updateEFTQuestObjectives(Models.Quest quest)
         {
             foreach (QuestObjective objective in quest.AllObjectives)
             {
@@ -675,7 +634,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
         }
 
-        private static Models.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
+        private Models.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
         {
             if (position == null)
             {
@@ -693,7 +652,7 @@ namespace SPTQuestingBots.Controllers.Bots
             }
 
             // Ensure there is a valid NavMesh position nearby
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogWarning("Cannot find NavMesh position near " + position.ToString());
@@ -710,7 +669,7 @@ namespace SPTQuestingBots.Controllers.Bots
             return quest;
         }
 
-        private static Models.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        private Models.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
             if (spawnPoints == null)
             {
@@ -740,7 +699,7 @@ namespace SPTQuestingBots.Controllers.Bots
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
                 // Ensure the spawn point has a valid nearby NavMesh position
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(spawnPoint.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
                     LoggingController.LogWarning("Cannot find NavMesh position for spawn point " + spawnPoint.Position.ToUnityVector3().ToString());
@@ -755,10 +714,10 @@ namespace SPTQuestingBots.Controllers.Bots
             return quest;
         }
 
-        private static IEnumerable<string> getBossSpawnZones()
+        private IEnumerable<string> getBossSpawnZones()
         {
             List<string> bossZones = new List<string>();
-            foreach (BossLocationSpawn bossLocationSpawn in LocationController.CurrentLocation.BossLocationSpawn)
+            foreach (BossLocationSpawn bossLocationSpawn in Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentLocation.BossLocationSpawn)
             {
                 if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(bossLocationSpawn.BossName))
                 {

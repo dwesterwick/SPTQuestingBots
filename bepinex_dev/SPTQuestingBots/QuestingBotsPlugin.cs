@@ -52,7 +52,6 @@ namespace SPTQuestingBots
                     new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.BotOwnerCreatePatch().Enable();
-                    new Patches.ReadyToPlayPatch().Enable();
                     
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);
@@ -61,13 +60,6 @@ namespace SPTQuestingBots
                 if (ConfigController.Config.AdjustPScavChance.Enabled)
                 {
                     new Patches.LoadBotsPatch().Enable();
-                }
-
-                this.GetOrAddComponent<LocationController>();
-
-                if (ConfigController.Config.Questing.Enabled)
-                {
-                    this.GetOrAddComponent<BotQuestBuilder>();
                 }
 
                 if (ConfigController.Config.Debug.Enabled)

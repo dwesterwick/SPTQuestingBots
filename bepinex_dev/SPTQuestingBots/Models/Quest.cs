@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
@@ -204,7 +205,7 @@ namespace SPTQuestingBots.Models
 
         private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
         {
-            EFT.Interactive.Switch requiredSwitch = LocationController.FindSwitch(switchID);
+            EFT.Interactive.Switch requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindSwitch(switchID);
             if (requiredSwitch == null)
             {
                 return true;

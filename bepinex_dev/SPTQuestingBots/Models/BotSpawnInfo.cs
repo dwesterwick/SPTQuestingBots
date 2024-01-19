@@ -46,7 +46,7 @@ namespace SPTQuestingBots.Models
         public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
         {
             // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = LocationController.GetAllValidSpawnPointParams()
+            SpawnPointParams[] validSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetAllValidSpawnPointParams()
                     .Where(s => !blacklistedSpawnPointIDs.Contains(s.Id))
                     .Where(s => s.Categories.Any(allowedSpawnPointTypes))
                     .ToArray();
@@ -63,7 +63,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            SpawnPoint = LocationController.GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
+            SpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
             if (SpawnPoint == null)
             {
                 return false;
@@ -95,9 +95,9 @@ namespace SPTQuestingBots.Models
             // If there are multiple bots that will spawn, select nearby spawn points for each of them
             while (spawnPoints.Count < botCount)
             {
-                SpawnPointParams nextPosition = LocationController.GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+                SpawnPointParams nextPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
 
-                Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
                     excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();

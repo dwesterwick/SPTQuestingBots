@@ -53,7 +53,7 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            if (!BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return;
             }

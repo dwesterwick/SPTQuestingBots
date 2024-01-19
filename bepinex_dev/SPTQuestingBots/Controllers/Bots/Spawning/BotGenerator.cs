@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Controllers.Bots.Spawning
 {
-    public abstract class BotGenerator : MonoBehaviour, IDisposable
+    public abstract class BotGenerator : MonoBehaviour
     {
         public bool IsDisposed { get; private set; } = false;
         public bool IsSpawningBots { get; protected set; } = false;
@@ -36,15 +36,9 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             LoggingController.LogInfo("Started " + BotTypeName + " generator");
         }
 
-        public void Dispose()
-        {
-            BotGroups.Clear();
-            IsDisposed = true;
-        }
-
         public static bool PlayerWantsBotsInRaid()
         {
-            RaidSettings raidSettings = LocationController.CurrentRaidSettings;
+            RaidSettings raidSettings = Singleton<GameWorld>.Instance.GetComponent<LocationController>().CurrentRaidSettings;
             if (raidSettings == null)
             {
                 return false;
@@ -93,7 +87,7 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
         public int NumberOfBotsAllowedToSpawn()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            return LocationController.MaxTotalBots - allPlayers.Count;
+            return Singleton<GameWorld>.Instance.GetComponent<LocationController>().MaxTotalBots - allPlayers.Count;
         }
 
         public IEnumerable<BotOwner> AliveBots()
@@ -156,6 +150,8 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, botSpawnInfo);
             Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
             Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
+
+            LoggingController.LogInfo("Trying to spawn bots...");
 
             ibotCreator.ActivateBot(botSpawnInfo.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }

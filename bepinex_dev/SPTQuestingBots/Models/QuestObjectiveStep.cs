@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Comfort.Common;
+using EFT;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -113,7 +115,7 @@ namespace SPTQuestingBots.Models
                 return false;
             }
 
-            Vector3? navMeshPosition = LocationController.FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
             if (!navMeshPosition.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
@@ -131,7 +133,7 @@ namespace SPTQuestingBots.Models
                 return true;
             }
 
-            InteractiveObject = LocationController.FindSwitch(SwitchID);
+            InteractiveObject = Singleton<GameWorld>.Instance.GetComponent<LocationController>().FindSwitch(SwitchID);
             return InteractiveObject != null;
         }
 

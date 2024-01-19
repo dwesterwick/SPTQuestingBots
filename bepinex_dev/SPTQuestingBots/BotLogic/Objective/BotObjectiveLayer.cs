@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -60,7 +62,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Ensure all quests have been loaded and generated
-            if (!Controllers.Bots.BotQuestBuilder.HaveQuestsBeenBuilt)
+            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return updatePreviousState(false);
             }
