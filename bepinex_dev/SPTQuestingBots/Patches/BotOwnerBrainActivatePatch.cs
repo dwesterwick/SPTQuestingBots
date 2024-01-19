@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
 
@@ -40,7 +41,7 @@ namespace SPTQuestingBots.Patches
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
 
-            Controllers.DebugController.RegisterBot(__instance);
+            Singleton<GameWorld>.Instance.GetComponent<DebugController>().RegisterBot(__instance);
         }
     }
 }

@@ -17,12 +17,17 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GameWorld).GetMethod("OnDestroy", BindingFlags.NonPublic | BindingFlags.Instance);
+            return typeof(BotsController).GetMethod("Stop", BindingFlags.Public | BindingFlags.Instance);
         }
 
-        [PatchPrefix]
-        private static void PatchPrefix(GameWorld __instance)
+        [PatchPostfix]
+        private static void PatchPostfix()
         {
+            if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out DebugController debugController))
+            {
+                debugController.enabled = false;
+            }
+
             // Don't do anything if this is for the hideout
             if (!Singleton<GameWorld>.Instance.GetComponent<LocationController>().HasRaidStarted)
             {

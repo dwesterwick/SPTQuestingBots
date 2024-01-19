@@ -17,27 +17,19 @@ namespace SPTQuestingBots.Controllers
 {
     public class DebugController : MonoBehaviour
     {
-        private static Dictionary<JobAssignment, double> jobAssignmentDistances = new Dictionary<JobAssignment, double>();
-        private static Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
-        private static Dictionary<JobAssignment, OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, OverlayData>();
-        private static Dictionary<BotOwner, OverlayData> botInfo = new Dictionary<BotOwner, OverlayData>();
+        private Dictionary<JobAssignment, double> jobAssignmentDistances = new Dictionary<JobAssignment, double>();
+        private Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
+        private Dictionary<JobAssignment, OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, OverlayData>();
+        private Dictionary<BotOwner, OverlayData> botInfo = new Dictionary<BotOwner, OverlayData>();
 
         private readonly float markerRadius = 0.5f;
         private float screenScale = 1.0f;
         private GUIStyle guiStyle;
 
-        public static void RegisterBot(BotOwner bot)
+        public void RegisterBot(BotOwner bot)
         {
             OverlayData overlayData = new OverlayData();
             botInfo.Add(bot, overlayData);
-        }
-
-        private void clear()
-        {
-            jobAssignmentMarkers.ExecuteForEach(m => Destroy(m.Value));
-            jobAssignmentMarkers.Clear();
-            jobAssignmentDistances.Clear();
-            botInfo.Clear();
         }
 
         private void Awake()
@@ -47,12 +39,6 @@ namespace SPTQuestingBots.Controllers
 
         private void Update()
         {
-            if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
-            {
-                clear();
-                return;
-            }
-
             if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
                 return;

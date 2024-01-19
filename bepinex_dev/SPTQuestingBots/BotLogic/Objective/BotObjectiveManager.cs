@@ -125,7 +125,9 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
-                CanRushPlayerSpawn = Singleton<PMCGenerator>.Instance.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo);
+                Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
+                CanRushPlayerSpawn = pmcGenerator?.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo) == true;
+
                 IsQuestingAllowed = true;
             }
             if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)

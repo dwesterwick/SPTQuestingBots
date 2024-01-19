@@ -8,6 +8,7 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -31,7 +32,8 @@ namespace SPTQuestingBots.Patches
 
             if (Controllers.Bots.Spawning.PMCGenerator.CanSpawnPMCs)
             {
-                BotOwner[] aliveInitialPMCs = Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.AliveBots().ToArray();
+                Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
+                BotOwner[] aliveInitialPMCs = (pmcGenerator?.AliveBots()?.ToArray() ?? (new BotOwner[0]));
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
             }
 

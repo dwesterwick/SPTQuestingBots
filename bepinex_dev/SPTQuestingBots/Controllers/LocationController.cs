@@ -45,6 +45,7 @@ namespace SPTQuestingBots.Controllers
             if (ConfigController.Config.Questing.Enabled)
             {
                 Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugController>();
             }
 
             if (ConfigController.Config.InitialPMCSpawns.Enabled)

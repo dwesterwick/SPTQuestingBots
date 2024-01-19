@@ -73,7 +73,8 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             string message = "Spawned ";
 
             // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
-            if (PMCGenerator.CanSpawnPMCs && (Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.SpawnedGroupCount == 0) && !Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.IsSpawningBots)
+            Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
+            if (PMCGenerator.CanSpawnPMCs && (pmcGenerator?.SpawnedGroupCount == 0) && !(pmcGenerator?.IsSpawningBots == true))
             {
                 message += "boss " + botOwner.GetText() + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
             }

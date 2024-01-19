@@ -151,8 +151,6 @@ namespace SPTQuestingBots.Controllers.Bots.Spawning
             Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
             Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
 
-            LoggingController.LogInfo("Trying to spawn bots...");
-
             ibotCreator.ActivateBot(botSpawnInfo.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }
 

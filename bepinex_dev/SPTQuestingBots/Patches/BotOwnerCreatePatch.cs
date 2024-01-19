@@ -8,6 +8,7 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Controllers.Bots.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -24,7 +25,8 @@ namespace SPTQuestingBots.Patches
             Controllers.Bots.Spawning.BotRegistrationManager.WriteMessageForNewBotSpawn(__result);
 
             // TO DO: Is the code below even needed?
-            IReadOnlyCollection<BotOwner> friends = Singleton<Controllers.Bots.Spawning.PMCGenerator>.Instance.GetSpawnGroupMembers(__result);
+            Singleton<GameWorld>.Instance.TryGetComponent(out PMCGenerator pmcGenerator);
+            IReadOnlyCollection<BotOwner> friends = pmcGenerator?.GetSpawnGroupMembers(__result) ?? (new BotOwner[0]);
             foreach (BotOwner friend in friends)
             {
                 Player player = friend.GetPlayer;
