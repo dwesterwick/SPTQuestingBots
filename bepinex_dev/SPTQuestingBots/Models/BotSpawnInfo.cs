@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
 using EFT;
-using EFT.Game.Spawning;
-using HarmonyLib;
-using SPTQuestingBots.Controllers;
-using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {
         public GClass513 Data { get; private set; }
-        public List<BotOwner> Owners { get; set; } = new List<BotOwner>();
-        public SpawnPointParams? SpawnPoint { get; set; }
-        public Vector3[] SpawnPositions { get; set; } = new Vector3[0];
-        public Configuration.MinMaxConfig RaidETRangeToSpawn = new Configuration.MinMaxConfig(0, double.MaxValue);
+        public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
-        public bool HasSpawned => Owners.Count == Count;
+        private List<BotOwner> bots = new List<BotOwner>();
+
+        public bool HasSpawned => bots.Count == Count;
         public int Count => Data?.Profiles?.Count ?? 0;
+        public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
 
         public BotSpawnInfo(GClass513 data)
         {
             Data = data;
+        }
+
+        public BotSpawnInfo(GClass513 data, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data)
+        {
+            RaidETRangeToSpawn = raidETRangeToSpawn;
         }
 
         public bool ShouldBotBeBoss(BotOwner bot)
@@ -43,71 +43,14 @@ namespace SPTQuestingBots.Models
             return false;
         }
 
-        public bool TryAssignFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, string[] blacklistedSpawnPointIDs)
+        public void AddBotOwner(BotOwner bot)
         {
-            // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetAllValidSpawnPointParams()
-                    .Where(s => !blacklistedSpawnPointIDs.Contains(s.Id))
-                    .Where(s => s.Categories.Any(allowedSpawnPointTypes))
-                    .ToArray();
-            
-            if (validSpawnPoints.Length == 0)
+            if (HasSpawned)
             {
-                return false;
+                throw new InvalidOperationException("All BotOwners have already been assigned to the group");
             }
 
-            // Get the locations of all alive bots/players on the map. If the count is 0, you're dead so there's no reason to spawn more bots.
-            Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
-            if (playerPositions.Length == 0)
-            {
-                return false;
-            }
-
-            SpawnPoint = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
-            if (SpawnPoint == null)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public void AssignSpawnPositionsFromSpawnPoint(int botCount)
-        {
-            AssignSpawnPositionsFromSpawnPoint(botCount, new SpawnPointParams[0]);
-        }
-
-        public void AssignSpawnPositionsFromSpawnPoint(int botCount, SpawnPointParams[] excludedSpawnPoints)
-        {
-            if (botCount < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(botCount), "Bot count must be at least 1.");
-            }
-
-            if (!SpawnPoint.HasValue)
-            {
-                throw new InvalidOperationException("A spawn point has not been assigned to the bot group.");
-            }
-            Vector3 mainSpawnPosition = SpawnPoint.Value.Position.ToUnityVector3();
-
-            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>() { SpawnPoint.Value };
-
-            // If there are multiple bots that will spawn, select nearby spawn points for each of them
-            while (spawnPoints.Count < botCount)
-            {
-                SpawnPointParams nextPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetNearestSpawnPoint(mainSpawnPosition, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
-
-                Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
-                {
-                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
-                    continue;
-                }
-
-                spawnPoints.Add(nextPosition);
-            }
-
-            SpawnPositions = spawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray();
+            bots.Add(bot);
         }
     }
 }

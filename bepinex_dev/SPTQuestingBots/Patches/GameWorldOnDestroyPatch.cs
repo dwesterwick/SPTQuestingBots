@@ -23,13 +23,13 @@ namespace SPTQuestingBots.Patches
         {
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.DebugData debugController))
             {
-                LoggingController.LogInfo("Disabling " + nameof(debugController) + "...");
+                LoggingController.LogInfo("Disabling " + debugController.GetType().FullName + "...");
                 debugController.enabled = false;
             }
 
             foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
             {
-                LoggingController.LogInfo("Disabling " + nameof(botGenerator) + "...");
+                LoggingController.LogInfo("Disabling " + botGenerator.GetType().FullName + "...");
                 botGenerator.enabled = false;
             }
 

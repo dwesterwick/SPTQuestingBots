@@ -1,41 +1,68 @@
 ﻿using Comfort.Common;
 using EFT;
+using EFT.Game.Spawning;
 using HarmonyLib;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Components.Spawning
 {
     public abstract class BotGenerator : MonoBehaviour
     {
-        public bool IsDisposed { get; private set; } = false;
-        public bool IsSpawningBots { get; protected set; } = false;
-        public bool IsGeneratingBots { get; protected set; } = false;
-        public bool HasGeneratedBots { get; protected set; } = false;
-        public string BotTypeName { get; protected set; } = "???";
+        public bool IsSpawningBots { get; private set; } = false;
+        public string BotTypeName { get; private set; } = "???";
 
-        internal CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        public bool WaitForInitialBossesToSpawn { get; protected set; } = true;
+        public int MaxAliveBots { get; protected set; } = 20;
+        public int MinOtherBotsAllowedToSpawn { get; protected set; } = 1;
+        public float RetryTimeSeconds { get; protected set; } = 10;
 
-        protected List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
+        protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
+        private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
-        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HasSpawned);
+        public bool HasRemainingSpawns => !HasGeneratedBotGroups() || BotGroups.Any(g => !g.HasSpawned);
 
         public BotGenerator(string _botTypeName)
         {
             BotTypeName = _botTypeName;
 
             LoggingController.LogInfo("Started " + BotTypeName + " generator");
+        }
+
+        public abstract bool HasGeneratedBotGroups();
+        protected abstract void GenerateBotGroups();
+        protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
+        
+        protected virtual void Awake()
+        {
+            GenerateBotGroups();
+        }
+
+        protected virtual void Update()
+        {
+            // If the previous attempt to spawn a bot failed, wait a minimum amount of time before trying again
+            if (retrySpawnTimer.ElapsedMilliseconds < RetryTimeSeconds * 1000)
+            {
+                return;
+            }
+
+            if (!CanSpawnBots())
+            {
+                return;
+            }
+
+            StartCoroutine(spawnBotGroups(BotGroups.ToArray()));
         }
 
         public static bool PlayerWantsBotsInRaid()
@@ -72,7 +99,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
         {
-            IEnumerable<BotSpawnInfo> matchingSpawnGroups = BotGroups.Where(g => g.Owners.Contains(bot));
+            IEnumerable<BotSpawnInfo> matchingSpawnGroups = BotGroups.Where(g => g.SpawnedBots.Contains(bot));
             if (matchingSpawnGroups.Count() == 0)
             {
                 return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
@@ -82,7 +109,7 @@ namespace SPTQuestingBots.Components.Spawning
                 throw new InvalidOperationException("There is more than one " + BotTypeName + " group with bot " + bot.GetText());
             }
 
-            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().Owners.Where(i => i.Profile.Id != bot.Profile.Id);
+            IEnumerable<BotOwner> botFriends = matchingSpawnGroups.First().SpawnedBots.Where(i => i.Profile.Id != bot.Profile.Id);
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
@@ -92,9 +119,164 @@ namespace SPTQuestingBots.Components.Spawning
             return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
         }
 
+        public bool CanSpawnBots()
+        {
+            if (!HasGeneratedBotGroups() || IsSpawningBots || !HasRemainingSpawns)
+            {
+                return false;
+            }
+
+            if (!CanSpawnAdditionalBots())
+            {
+                return false;
+            }
+
+            if (WaitForInitialBossesToSpawn && !HaveBossesSpawned())
+            {
+                return false;
+            }
+
+            // Ensure the raid is progressing before running anything
+            float timeSinceSpawning = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            if (timeSinceSpawning < 0.01)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CanSpawnAdditionalBots()
+        {
+            // Don't allow too many alive PMC's to be on the map for performance and difficulty reasons
+            if (AliveBots().Count() >= MaxAliveBots)
+            {
+                return false;
+            }
+
+            // Ensure the total number of bots isn't too close to the bot cap for the map
+            if (NumberOfBotsAllowedToSpawn() < MinOtherBotsAllowedToSpawn)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool HaveBossesSpawned()
+        {
+            if (!PlayerWantsBotsInRaid())
+            {
+                return true;
+            }
+
+            if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
+            {
+                return true;
+            }
+
+            if (Controllers.BotRegistrationManager.SpawnedBotCount < BotRegistrationManager.ZeroWaveTotalBotCount)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool AreAnyPositionsToCloseToOtherPlayers(IEnumerable<Vector3> positions, float minDistanceFromPlayers)
+        {
+            if (positions.Any(p => IsPositionTooCloseToOtherPlayers(p, minDistanceFromPlayers)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsPositionTooCloseToOtherPlayers(Vector3 position, float minDistanceFromPlayers)
+        {
+            // Ensure the selected spawn position for the first bot in the group is not too close to another bot
+            BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
+            BotOwner closestBot = botControllerClass.ClosestBotToPoint(position);
+            if ((closestBot != null) && (Vector3.Distance(position, closestBot.Position) < minDistanceFromPlayers))
+            {
+                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + position.ToString() + ". Another bot is too close.");
+                return true;
+            }
+
+            // Ensure the selected spawn position for the first bot in the group is not too close to you
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (Vector3.Distance(position, mainPlayer.Position) < minDistanceFromPlayers)
+            {
+                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + position.ToString() + ". Too close to the main player.");
+                return true;
+            }
+
+            return false;
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes)
+        {
+            return TryGetFurthestSpawnPoint(allowedSpawnPointTypes, new SpawnPointParams[0]);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, SpawnPointParams[] excludedSpawnPoints)
+        {
+            // Enumerate all valid spawn points
+            SpawnPointParams[] validSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetAllValidSpawnPointParams()
+                    .Where(s => !excludedSpawnPoints.Contains(s))
+                    .Where(s => s.Categories.Any(allowedSpawnPointTypes))
+                    .ToArray();
+
+            if (validSpawnPoints.Length == 0)
+            {
+                return null;
+            }
+
+            // Get the locations of all alive bots/players on the map. If the count is 0, you're dead so there's no reason to spawn more bots.
+            Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
+            if (playerPositions.Length == 0)
+            {
+                return null;
+            }
+
+            return Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count)
+        {
+            return GetNearestSpawnPoints(position, count, new SpawnPointParams[0]);
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count, SpawnPointParams[] excludedSpawnPoints)
+        {
+            if (count < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), "At least 1 spawn point must be requested");
+            }
+
+            // If there are multiple bots that will spawn, select nearby spawn points for each of them
+            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
+            while (spawnPoints.Count < count)
+            {
+                SpawnPointParams nextPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+
+                Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
+                    continue;
+                }
+
+                spawnPoints.Add(nextPosition);
+            }
+
+            return spawnPoints;
+        }
+
         public IEnumerable<BotOwner> AliveBots()
         {
-            return BotGroups.SelectMany(g => g.Owners.Where(b => (b.BotState == EBotState.Active) && !b.IsDead));
+            return BotGroups.SelectMany(g => g.SpawnedBots.Where(b => (b.BotState == EBotState.Active) && !b.IsDead));
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
@@ -134,6 +316,86 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return botSpawnInfo;
+        }
+
+        private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)
+        {
+            try
+            {
+                IsSpawningBots = true;
+
+                // Determine how many PMC's are allowed to spawn
+                int allowedSpawns = MaxAliveBots - AliveBots().Count();
+                List<Models.BotSpawnInfo> botGroupsToSpawn = new List<BotSpawnInfo>();
+                for (int i = 0; i < botGroups.Length; i++)
+                {
+                    if (botGroups[i].HasSpawned)
+                    {
+                        continue;
+                    }
+
+                    float raidET = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
+                    if ((raidET < botGroups[i].RaidETRangeToSpawn.Min) || (raidET > botGroups[i].RaidETRangeToSpawn.Max))
+                    {
+                        continue;
+                    }
+
+                    if (botGroupsToSpawn.Sum(g => g.Count) + botGroups[i].Count > allowedSpawns)
+                    {
+                        break;
+                    }
+
+                    botGroupsToSpawn.Add(botGroups[i]);
+                }
+
+                if (botGroupsToSpawn.Count == 0)
+                {
+                    yield break;
+                }
+
+                LoggingController.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...");
+                foreach (Models.BotSpawnInfo botGroup in botGroupsToSpawn)
+                {
+                    yield return spawnBotGroup(botGroup);
+                }
+
+                //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Count + " initial PMC groups...done.");
+
+            }
+            finally
+            {
+                retrySpawnTimer.Restart();
+                IsSpawningBots = false;
+            }
+        }
+
+        private IEnumerator spawnBotGroup(Models.BotSpawnInfo botGroup)
+        {
+            if (botGroup.HasSpawned)
+            {
+                //LoggingController.LogError("PMC group has already spawned.");
+                yield break;
+            }
+
+            if (!CanSpawnAdditionalBots())
+            {
+                retrySpawnTimer.Restart();
+                LoggingController.LogWarning("Cannot spawn more bots or EFT will not be able to spawn any.");
+                yield break;
+            }
+
+            Vector3[] spawnPositions = GetSpawnPositionsForBotGroup(botGroup).ToArray();
+            if (spawnPositions.Length != botGroup.Count)
+            {
+                yield break;
+            }
+
+            string spawnPositionText = string.Join(", ", spawnPositions.Select(s => s.ToString()));
+            LoggingController.LogInfo("Spawning " + BotTypeName + " group at " + spawnPositionText + "...");
+
+            SpawnBots(botGroup, spawnPositions);
+
+            yield return null;
         }
 
         protected void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
@@ -194,7 +456,7 @@ namespace SPTQuestingBots.Components.Spawning
                 }
 
                 LoggingController.LogInfo("Spawned bot " + bot.GetText());
-                botSpawnInfo.Owners.Add(bot);
+                botSpawnInfo.AddBotOwner(bot);
             }
         }
     }

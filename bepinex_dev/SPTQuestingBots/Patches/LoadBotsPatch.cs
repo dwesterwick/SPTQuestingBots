@@ -47,7 +47,7 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(List<WaveInfo> conditions)
         {
-            LoggingController.LogInfo("Loading bots (" + conditions.Count + ")...");
+            LoggingController.LogInfo("Loading bots (Role: " + conditions[0].Role.ToString() + ", Limit: " + conditions[0].Limit + ")...");
 
             float raidTimeRemainingFraction;
             if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
