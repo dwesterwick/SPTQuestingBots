@@ -129,10 +129,14 @@
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="Components\Spawning\PScavGenerator.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
+    <Compile Include="Configuration\BotSpawnTypeConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
+    <Compile Include="Configuration\ScavRaidSettingsConfig.cs" />
+    <Compile Include="Configuration\ScavRaidSettingsResponse.cs" />
     <Compile Include="Configuration\ServerResponseError.cs" />
     <Compile Include="Configuration\SprintingLimitationsConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
@@ -167,7 +171,7 @@
     <Compile Include="Configuration\BotQuestsConfig.cs" />
     <Compile Include="Configuration\BotSearchDistanceConfig.cs" />
     <Compile Include="Configuration\DebugConfig.cs" />
-    <Compile Include="Configuration\InitialPMCSpawnsConfig.cs" />
+    <Compile Include="Configuration\BotSpawnsConfig.cs" />
     <Compile Include="Configuration\ModConfig.cs" />
     <Compile Include="Configuration\QuestGenerationConfig.cs" />
     <Compile Include="Configuration\QuestSettingsConfig.cs" />
@@ -194,8 +198,8 @@
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
-    <Compile Include="Patches\GameWorldCreatePatch.cs" />
-    <Compile Include="Patches\GameWorldOnDestroyPatch.cs" />
+    <Compile Include="Patches\AddActivePlayerPatch.cs" />
+    <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
     <Compile Include="Patches\LoadBotsPatch.cs" />

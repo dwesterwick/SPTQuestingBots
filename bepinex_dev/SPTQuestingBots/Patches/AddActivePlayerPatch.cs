@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SPTQuestingBots.Patches
 {
-    public class GameWorldCreatePatch : ModulePatch
+    public class AddActivePlayerPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {

@@ -11,7 +11,7 @@ using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
-    public class GameWorldOnDestroyPatch : ModulePatch
+    public class BotsControllerStopPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {

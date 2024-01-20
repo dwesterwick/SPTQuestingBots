@@ -41,12 +41,13 @@ namespace SPTQuestingBots.Components.Spawning
         }
 
         public abstract bool HasGeneratedBotGroups();
-        protected abstract void GenerateBotGroups();
+        protected abstract bool CanSpawnBots();
+        protected abstract void GenerateInitialBotGroups();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
         
         protected virtual void Awake()
         {
-            GenerateBotGroups();
+            GenerateInitialBotGroups();
         }
 
         protected virtual void Update()
@@ -57,7 +58,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return;
             }
 
-            if (!CanSpawnBots())
+            if (!CanSpawnBots() || !AllowedToSpawnBots())
             {
                 return;
             }
@@ -119,7 +120,7 @@ namespace SPTQuestingBots.Components.Spawning
             return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
         }
 
-        public bool CanSpawnBots()
+        public bool AllowedToSpawnBots()
         {
             if (!HasGeneratedBotGroups() || IsSpawningBots || !HasRemainingSpawns)
             {

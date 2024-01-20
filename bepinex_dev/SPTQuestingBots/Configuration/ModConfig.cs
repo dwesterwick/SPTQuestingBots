@@ -21,8 +21,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("questing")]
         public QuestingConfig Questing { get; set; } = new QuestingConfig();
 
-        [JsonProperty("initial_PMC_spawns")]
-        public InitialPMCSpawnsConfig InitialPMCSpawns { get; set; } = new InitialPMCSpawnsConfig();
+        [JsonProperty("bot_spawns")]
+        public BotSpawnsConfig BotSpawns { get; set; } = new BotSpawnsConfig();
 
         [JsonProperty("adjust_pscav_chance")]
         public AdjustPScavChanceConfig AdjustPScavChance { get; set; } = new AdjustPScavChanceConfig();

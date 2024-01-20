@@ -18,7 +18,6 @@ namespace SPTQuestingBots.BotLogic.Objective
     {
         public bool IsInitialized { get; private set; } = false;
         public bool IsQuestingAllowed { get; private set; } = false;
-        public bool CanRushPlayerSpawn { get; private set; } = false;
         public int StuckCount { get; set; } = 0;
         public float PauseRequest { get; set; } = 0;
         public BotMonitor BotMonitor { get; private set; } = null;
@@ -123,9 +122,6 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
             {
-                Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
-                CanRushPlayerSpawn = (pmcGenerator == null) || pmcGenerator.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo);
-
                 IsQuestingAllowed = true;
             }
             if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)

@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("always_spawn_pmcs")]
         public bool AlwaysSpawnPMCs { get; set; } = false;
 
+        [JsonProperty("always_spawn_pscavs")]
+        public bool AlwaysSpawnPScavs { get; set; } = false;
+
         [JsonProperty("always_have_airdrops")]
         public bool AlwaysHaveAirdrops { get; set; } = false;
 

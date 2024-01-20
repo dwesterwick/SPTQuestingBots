@@ -39,15 +39,16 @@ namespace SPTQuestingBots
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");
 
                 new Patches.CheckSPTVersionPatch().Enable();
-                new Patches.GameWorldCreatePatch().Enable();
-                new Patches.GameWorldOnDestroyPatch().Enable();
+                new Patches.AddActivePlayerPatch().Enable();
+                new Patches.BotsControllerStopPatch().Enable();
                 new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();
                 new Patches.OnBeenKilledByAggressorPatch().Enable();
                 new Patches.AirdropLandPatch().Enable();
+                new Patches.ServerRequestPatch().Enable();
 
-                if (ConfigController.Config.InitialPMCSpawns.Enabled)
+                if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
@@ -55,13 +56,7 @@ namespace SPTQuestingBots
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);
                 }
-
-                if (ConfigController.Config.AdjustPScavChance.Enabled)
-                {
-                    //new Patches.LoadBotsPatch().Enable();
-                    new Patches.ServerRequestPatch().Enable();
-                }
-
+                
                 if (ConfigController.Config.Debug.Enabled)
                 {
                     if (ConfigController.Config.Debug.ShowZoneOutlines || ConfigController.Config.Debug.ShowFailedPaths)

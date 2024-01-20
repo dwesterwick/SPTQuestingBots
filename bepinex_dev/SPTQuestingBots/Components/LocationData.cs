@@ -47,9 +47,17 @@ namespace SPTQuestingBots.Components
                 Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugData>();
             }
 
-            if (ConfigController.Config.InitialPMCSpawns.Enabled)
+            if (ConfigController.Config.BotSpawns.Enabled)
             {
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PMCGenerator>();
+                if (ConfigController.Config.BotSpawns.PMCs.Enabled)
+                {
+                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PMCGenerator>();
+                }
+
+                if (ConfigController.Config.BotSpawns.PScavs.Enabled)
+                {
+                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PScavGenerator>();
+                }
             }
         }
 
@@ -346,6 +354,8 @@ namespace SPTQuestingBots.Components
             {
                 return null;
             }
+
+            //LoggingController.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
 
             return GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
         }

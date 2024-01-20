@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SPTQuestingBots.Configuration
 {
-    public class InitialPMCSpawnsConfig
+    public class BotSpawnsConfig
     {
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
@@ -23,15 +23,6 @@ namespace SPTQuestingBots.Configuration
 
         [JsonProperty("min_distance_from_players_during_raid_factory")]
         public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
-
-        [JsonProperty("max_alive_initial_pmcs")]
-        public Dictionary<string, int> MaxAliveInitialPMCs { get; set; } = new Dictionary<string, int>();
-
-        [JsonProperty("initial_pmcs_vs_raidET")]
-        public double[][] InitialPMCsVsRaidET { get; set; } = new double[0][];
-
-        [JsonProperty("bots_per_group_distribution")]
-        public double[][] BotsPerGroupDistribution { get; set; } = new double[0][];
 
         [JsonProperty("spawn_retry_time")]
         public float SpawnRetryTime { get; set; } = 10;
@@ -54,7 +45,16 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_total_bots")]
         public int MaxTotalBots { get; set; } = 40;
 
-        public InitialPMCSpawnsConfig()
+        [JsonProperty("max_alive_initial_pmcs")]
+        public Dictionary<string, int> MaxAliveInitialPMCs { get; set; } = new Dictionary<string, int>();
+
+        [JsonProperty("pmcs")]
+        public BotSpawnTypeConfig PMCs { get; set; } = new BotSpawnTypeConfig();
+
+        [JsonProperty("player_scavs")]
+        public BotSpawnTypeConfig PScavs { get; set; } = new BotSpawnTypeConfig();
+
+        public BotSpawnsConfig()
         {
 
         }

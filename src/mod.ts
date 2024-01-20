@@ -167,7 +167,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "GetAllQuestTemplates"
         );
 
-        // Override bot generation
+        // Override bot generation to include PScav conversion chance
         dynamicRouterModService.registerDynamicRouter(`DynamicGenerateBot${modName}`,
             [{
                 url: "/QuestingBots/GenerateBot",
@@ -177,11 +177,21 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
 
                     this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
-                    this.commonUtils.logInfo(`Adjusted PScav spawn chance to ${this.iBotConfig.chanceAssaultScavHasPlayerScavName}%`);
                     
                     return this.httpResponseUtil.getBody(this.botController.generate(sessionID, info));
                 }
             }], "GenerateBot"
+        );
+
+        // Get Scav-raid settings to determine PScav conversion chances
+        staticRouterModService.registerStaticRouter(`GetScavRaidSettings${modName}`,
+            [{
+                url: "/QuestingBots/GetScavRaidSettings",
+                action: () => 
+                {
+                    return JSON.stringify({ maps: this.iLocationConfig.scavRaidTimeSettings.maps });
+                }
+            }], "GetScavRaidSettings"
         );
     }
 	
@@ -265,15 +275,15 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         // If we find SWAG or MOAR, disable initial spawns
         const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
-        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
         {
             this.commonUtils.logWarning("SWAG Detected. Disabling initial PMC spawns.");
-            modConfig.initial_PMC_spawns.enabled = false;
+            modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
+        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
             this.commonUtils.logWarning("MOAR Detected. Disabling initial PMC spawns.");
-            modConfig.initial_PMC_spawns.enabled = false;
+            modConfig.bot_spawns.enabled = false;
         }
 
         if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
@@ -281,7 +291,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
         }
 
-        if (!modConfig.initial_PMC_spawns.enabled)
+        if (!modConfig.bot_spawns.enabled)
         {
             return;
         }
@@ -422,13 +432,13 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
     private increaseBotCaps(): void
     {
-        if (!modConfig.initial_PMC_spawns.add_max_players_to_bot_cap)
+        if (!modConfig.bot_spawns.add_max_players_to_bot_cap)
         {
             return;
         }
 
-        const maxAddtlBots = modConfig.initial_PMC_spawns.max_additional_bots;
-        const maxTotalBots = modConfig.initial_PMC_spawns.max_total_bots;
+        const maxAddtlBots = modConfig.bot_spawns.max_additional_bots;
+        const maxTotalBots = modConfig.bot_spawns.max_total_bots;
 
         this.iBotConfig.maxBotCap.factory4_day = Math.min(this.iBotConfig.maxBotCap.factory4_day + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.factory4_night = Math.min(this.iBotConfig.maxBotCap.factory4_night + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
@@ -450,7 +460,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
     private removeBlacklistedBrainTypes(): void
     {
-        const badBrains = modConfig.initial_PMC_spawns.blacklisted_pmc_bot_brains;
+        const badBrains = modConfig.bot_spawns.blacklisted_pmc_bot_brains;
         this.commonUtils.logInfo("Removing blacklisted brain types from being used for PMC's...");
 
         let removedBrains = 0;

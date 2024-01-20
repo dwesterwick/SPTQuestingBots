@@ -16,6 +16,7 @@ namespace SPTQuestingBots.Controllers
     public static class ConfigController
     {
         public static Configuration.ModConfig Config { get; private set; } = null;
+        public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings = null;
         public static string LoggingPath { get; private set; } = null;
 
         public static Configuration.ModConfig GetConfig()
@@ -69,6 +70,22 @@ namespace SPTQuestingBots.Controllers
             }
 
             return LoggingPath;
+        }
+
+        public static Dictionary<string, Configuration.ScavRaidSettingsConfig> GetScavRaidSettings()
+        {
+            if (ScavRaidSettings != null)
+            {
+                return ScavRaidSettings;
+            }
+
+            string errorMessage = "Cannot read scav-raid settings.";
+            string json = RequestHandler.GetJson("/QuestingBots/GetScavRaidSettings");
+
+            TryDeserializeObject(json, errorMessage, out Configuration.ScavRaidSettingsResponse _response);
+            ScavRaidSettings = _response.Maps;
+
+            return ScavRaidSettings;
         }
 
         public static RawQuestClass[] GetAllQuestTemplates()
