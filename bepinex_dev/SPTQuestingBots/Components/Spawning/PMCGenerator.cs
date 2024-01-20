@@ -71,14 +71,16 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
         {
-            SpawnPointParams? spawnPoint = TryGetFurthestSpawnPoint(getSpawnCategoryMask(), pendingSpawnPoints.ToArray());
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(getSpawnCategoryMask(), pendingSpawnPoints.ToArray());
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogError("Could not find a valid spawn point for PMC group");
                 return null;
             }
 
-            IEnumerable<Vector3> spawnPositions = GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, pendingSpawnPoints.ToArray())
+            IEnumerable<Vector3> spawnPositions = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, pendingSpawnPoints.ToArray())
                 .Select(p => p.Position.ToUnityVector3());
 
             if (!spawnPositions.Any())
@@ -87,8 +89,9 @@ namespace SPTQuestingBots.Components.Spawning
                 return null;
             }
 
-            if (AreAnyPositionsToCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers()))
+            if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers()))
             {
+                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToString() + ". Other players are too close.");
                 return null;
             }
 
@@ -104,22 +107,26 @@ namespace SPTQuestingBots.Components.Spawning
 
         private void setMaxAliveBots()
         {
-            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id.ToLower()))
+            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
+
+            if (ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs.ContainsKey(locationID))
             {
-                MaxAliveBots = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id.ToLower()];
+                MaxAliveBots = ConfigController.Config.InitialPMCSpawns.MaxAliveInitialPMCs[locationID];
             }
-            LoggingController.LogInfo("Max PMC's on the map (" + Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id + ") at the same time: " + MaxAliveBots);
+            LoggingController.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
 
         private Configuration.MinMaxConfig getPMCCount()
         {
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs in Late to the Party)
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.InitialPMCSpawns.InitialPMCsVsRaidET, getRaidTimeRemainingFraction());
 
             // Choose the number of initial PMC's to spawn
-            int pmcOffset = Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsScavRun ? 0 : 1;
-            int minPlayers = (int)Math.Floor((Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
-            int maxPlayers = (int)Math.Ceiling((Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
+            int pmcOffset = locationData.IsScavRun ? 0 : 1;
+            int minPlayers = (int)Math.Floor((locationData.CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
+            int maxPlayers = (int)Math.Ceiling((locationData.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
             
             return new Configuration.MinMaxConfig(minPlayers, maxPlayers);
         }

@@ -20,10 +20,14 @@ import { LocaleService } from "@spt-aki/services/LocaleService";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { VFS } from "@spt-aki/utils/VFS";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { BotController } from "@spt-aki/controllers/BotController";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
+
+import { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
 
 const modName = "SPTQuestingBots";
 
@@ -40,6 +44,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
     private vfs: VFS;
+    private httpResponseUtil: HttpResponseUtil;
+    private botController: BotController;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -160,6 +166,23 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 }
             }], "GetAllQuestTemplates"
         );
+
+        // Override bot generation
+        dynamicRouterModService.registerDynamicRouter(`DynamicGenerateBot${modName}`,
+            [{
+                url: "/QuestingBots/GenerateBot",
+                action: (url: string, info: IGenerateBotsRequestData, sessionID: string) => 
+                {
+                    const urlParts = url.split("/");
+                    const pScavChance: number = Number(urlParts[urlParts.length - 1]);
+
+                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
+                    this.commonUtils.logInfo(`Adjusted PScav spawn chance to ${this.iBotConfig.chanceAssaultScavHasPlayerScavName}%`);
+                    
+                    return this.httpResponseUtil.getBody(this.botController.generate(sessionID, info));
+                }
+            }], "GenerateBot"
+        );
     }
 	
     public postDBLoad(container: DependencyContainer): void
@@ -170,6 +193,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
         this.vfs = container.resolve<VFS>("VFS");
+        this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
+        this.botController = container.resolve<BotController>("BotController");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);

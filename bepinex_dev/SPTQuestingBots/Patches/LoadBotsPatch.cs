@@ -17,37 +17,16 @@ namespace SPTQuestingBots.Patches
             string methodName = "LoadBots";
             string paramName = "conditions";
 
-            List<Type> targetTypeOptions = Aki.Reflection.Utils.PatchConstants.EftTypes
-                .Where(t => t.GetMethods().Any(m => m.Name.Contains(methodName) && m.GetParameters().Any(p => p.Name == paramName)))
-                .ToList();
+            Type targetType = FindTargetType(methodName, paramName).BaseType;
+            LoggingController.LogInfo("Found type for LoadBotsPatch: " + targetType.FullName);
 
-            if (targetTypeOptions.Count == 0)
-            {
-                throw new TypeLoadException("Cannot find any type containing method " + methodName);
-            }
-
-            foreach(Type targetTypeOption in targetTypeOptions.ToArray())
-            {
-                if (targetTypeOptions.Any(t => t.IsSubclassOf(targetTypeOption)))
-                {
-                    targetTypeOptions.Remove(targetTypeOption);
-                }
-            }
-
-            if (targetTypeOptions.Count > 1)
-            {
-                throw new TypeLoadException("Found " + targetTypeOptions.Count + " types containing method " + methodName + ": " + string.Join(", ", targetTypeOptions.Select(t => t.FullName)));
-            }
-
-            LoggingController.LogInfo("Found class for LoadBotsPatch: " + targetTypeOptions[0].FullName);
-
-            return targetTypeOptions[0].GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
+            return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
         private static void PatchPrefix(List<WaveInfo> conditions)
         {
-            LoggingController.LogInfo("Loading bots (Role: " + conditions[0].Role.ToString() + ", Limit: " + conditions[0].Limit + ")...");
+            LoggingController.LogInfo("Loading bots (Role: " + conditions[0].Role.ToString() + ", Waves: " + conditions.Count + ")...");
 
             float raidTimeRemainingFraction;
             if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
@@ -62,6 +41,33 @@ namespace SPTQuestingBots.Patches
             bool preventPScav = ConfigController.Config.AdjustPScavChance.DisableForGroups && (conditions.Count > 1);
 
             ConfigController.AdjustPScavChance(raidTimeRemainingFraction, preventPScav);
+        }
+
+        public static Type FindTargetType(string methodName, string paramName)
+        {
+            List<Type> targetTypeOptions = Aki.Reflection.Utils.PatchConstants.EftTypes
+                .Where(t => t.GetMethods().Any(m => m.Name.Contains(methodName) && m.GetParameters().Any(p => p.Name == paramName)))
+                .ToList();
+
+            if (targetTypeOptions.Count == 0)
+            {
+                throw new TypeLoadException("Cannot find any type containing method " + methodName);
+            }
+
+            foreach (Type targetTypeOption in targetTypeOptions.ToArray())
+            {
+                if (targetTypeOptions.Any(t => t.IsSubclassOf(targetTypeOption)))
+                {
+                    targetTypeOptions.Remove(targetTypeOption);
+                }
+            }
+
+            if (targetTypeOptions.Count > 1)
+            {
+                throw new TypeLoadException("Found " + targetTypeOptions.Count + " types containing method " + methodName + ": " + string.Join(", ", targetTypeOptions.Select(t => t.FullName)));
+            }
+
+            return targetTypeOptions[0];
         }
     }
 }

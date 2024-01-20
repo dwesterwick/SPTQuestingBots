@@ -131,7 +131,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return false;
             }
 
-            if (WaitForInitialBossesToSpawn && !HaveBossesSpawned())
+            if (WaitForInitialBossesToSpawn && !HaveInitialBossWavesSpawned())
             {
                 return false;
             }
@@ -163,7 +163,7 @@ namespace SPTQuestingBots.Components.Spawning
             return true;
         }
 
-        public bool HaveBossesSpawned()
+        public bool HaveInitialBossWavesSpawned()
         {
             if (!PlayerWantsBotsInRaid())
             {
@@ -181,97 +181,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return true;
-        }
-
-        public bool AreAnyPositionsToCloseToOtherPlayers(IEnumerable<Vector3> positions, float minDistanceFromPlayers)
-        {
-            if (positions.Any(p => IsPositionTooCloseToOtherPlayers(p, minDistanceFromPlayers)))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool IsPositionTooCloseToOtherPlayers(Vector3 position, float minDistanceFromPlayers)
-        {
-            // Ensure the selected spawn position for the first bot in the group is not too close to another bot
-            BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-            BotOwner closestBot = botControllerClass.ClosestBotToPoint(position);
-            if ((closestBot != null) && (Vector3.Distance(position, closestBot.Position) < minDistanceFromPlayers))
-            {
-                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + position.ToString() + ". Another bot is too close.");
-                return true;
-            }
-
-            // Ensure the selected spawn position for the first bot in the group is not too close to you
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (Vector3.Distance(position, mainPlayer.Position) < minDistanceFromPlayers)
-            {
-                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + position.ToString() + ". Too close to the main player.");
-                return true;
-            }
-
-            return false;
-        }
-
-        public SpawnPointParams? TryGetFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes)
-        {
-            return TryGetFurthestSpawnPoint(allowedSpawnPointTypes, new SpawnPointParams[0]);
-        }
-
-        public SpawnPointParams? TryGetFurthestSpawnPoint(ESpawnCategoryMask allowedSpawnPointTypes, SpawnPointParams[] excludedSpawnPoints)
-        {
-            // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetAllValidSpawnPointParams()
-                    .Where(s => !excludedSpawnPoints.Contains(s))
-                    .Where(s => s.Categories.Any(allowedSpawnPointTypes))
-                    .ToArray();
-
-            if (validSpawnPoints.Length == 0)
-            {
-                return null;
-            }
-
-            // Get the locations of all alive bots/players on the map. If the count is 0, you're dead so there's no reason to spawn more bots.
-            Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
-            if (playerPositions.Length == 0)
-            {
-                return null;
-            }
-
-            return Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
-        }
-
-        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count)
-        {
-            return GetNearestSpawnPoints(position, count, new SpawnPointParams[0]);
-        }
-
-        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count, SpawnPointParams[] excludedSpawnPoints)
-        {
-            if (count < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count), "At least 1 spawn point must be requested");
-            }
-
-            // If there are multiple bots that will spawn, select nearby spawn points for each of them
-            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
-            while (spawnPoints.Count < count)
-            {
-                SpawnPointParams nextPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
-
-                Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
-                {
-                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
-                    continue;
-                }
-
-                spawnPoints.Add(nextPosition);
-            }
-
-            return spawnPoints;
         }
 
         public IEnumerable<BotOwner> AliveBots()
@@ -398,7 +307,7 @@ namespace SPTQuestingBots.Components.Spawning
             yield return null;
         }
 
-        protected void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
+        private void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 

@@ -58,7 +58,8 @@ namespace SPTQuestingBots
 
                 if (ConfigController.Config.AdjustPScavChance.Enabled)
                 {
-                    new Patches.LoadBotsPatch().Enable();
+                    //new Patches.LoadBotsPatch().Enable();
+                    new Patches.ServerRequestPatch().Enable();
                 }
 
                 if (ConfigController.Config.Debug.Enabled)

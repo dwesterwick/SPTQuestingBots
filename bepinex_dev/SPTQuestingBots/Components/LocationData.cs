@@ -294,6 +294,62 @@ namespace SPTQuestingBots.Components
             return null;
         }
 
+        public bool AreAnyPositionsCloseToOtherPlayers(IEnumerable<Vector3> positions, float distanceFromPlayers)
+        {
+            if (positions.Any(p => IsPositionCloseToOtherPlayers(p, distanceFromPlayers)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsPositionCloseToOtherPlayers(Vector3 position, float distanceFromPlayers)
+        {
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (Vector3.Distance(position, mainPlayer.Position) < distanceFromPlayers)
+            {
+                return true;
+            }
+
+            BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
+            BotOwner closestBot = botControllerClass.ClosestBotToPoint(position);
+            if ((closestBot != null) && (Vector3.Distance(position, closestBot.Position) < distanceFromPlayers))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedSpawnPointTypes)
+        {
+            return TryGetFurthestSpawnPointFromAllPlayers(allowedSpawnPointTypes, new SpawnPointParams[0]);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedSpawnPointTypes, SpawnPointParams[] excludedSpawnPoints)
+        {
+            // Enumerate all valid spawn points
+            SpawnPointParams[] validSpawnPoints = GetAllValidSpawnPointParams()
+                    .Where(s => !excludedSpawnPoints.Contains(s))
+                    .Where(s => s.Categories.Any(allowedSpawnPointTypes))
+                    .ToArray();
+
+            if (validSpawnPoints.Length == 0)
+            {
+                return null;
+            }
+
+            // Get the locations of all alive bots/players on the map.
+            Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
+            if (playerPositions.Length == 0)
+            {
+                return null;
+            }
+
+            return GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
+        }
+
         public SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
         {
             if (referencePositions.Length == 0)
@@ -337,6 +393,37 @@ namespace SPTQuestingBots.Components
         public SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             return GetFurthestSpawnPoint(referenceSpawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray(), allSpawnPoints);
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count)
+        {
+            return GetNearestSpawnPoints(position, count, new SpawnPointParams[0]);
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count, SpawnPointParams[] excludedSpawnPoints)
+        {
+            if (count < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), "At least 1 spawn point must be requested");
+            }
+
+            // If there are multiple bots that will spawn, select nearby spawn points for each of them
+            List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
+            while (spawnPoints.Count < count)
+            {
+                SpawnPointParams nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
+                    continue;
+                }
+
+                spawnPoints.Add(nextPosition);
+            }
+
+            return spawnPoints;
         }
 
         public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
