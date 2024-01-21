@@ -500,7 +500,8 @@ namespace SPTQuestingBots.Controllers
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if (timeoutMonitor.ElapsedMilliseconds > ConfigController.Config.Questing.QuestSelectionTimeout)
                 {
-                    throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long");
+                    botObjectiveManager?.StopQuesting();
+                    throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long. Questing disabled.");
                 }
 
             } while (objective == null);

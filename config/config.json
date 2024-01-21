@@ -235,7 +235,7 @@
 		},
 		"player_scavs": {
 			"enabled": true,
-			"fraction_of_max_players": 1,
+			"fraction_of_max_players": 1.5,
 			"bots_per_group_distribution" : [
 				[0.40, 1],
 				[0.75, 1],

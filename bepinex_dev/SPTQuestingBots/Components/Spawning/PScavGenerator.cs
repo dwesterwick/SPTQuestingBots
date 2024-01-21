@@ -216,7 +216,7 @@ namespace SPTQuestingBots.Components.Spawning
             int totalBots = 0;
             foreach (float raidET in spawnWeights.Keys)
             {
-                int bots = (int)Math.Ceiling(spawnWeights[raidET] / totalWeight * pScavs);
+                int bots = (int)Math.Round(spawnWeights[raidET] / totalWeight * pScavs);
 
                 for (int bot = 0; bot < bots; bot++)
                 {
