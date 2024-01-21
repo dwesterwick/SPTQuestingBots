@@ -144,6 +144,19 @@ namespace SPTQuestingBots.Components.Spawning
             }
         }
 
+        protected override int NumberOfBotsAllowedToSpawn()
+        {
+            int botsAllowedToSpawn = BotsAllowedToSpawnForGeneratorType();
+
+            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+            if (pmcGenerator != null)
+            {
+                botsAllowedToSpawn -= pmcGenerator.BotsAllowedToSpawnForGeneratorType();
+            }
+
+            return botsAllowedToSpawn;
+        }
+
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();

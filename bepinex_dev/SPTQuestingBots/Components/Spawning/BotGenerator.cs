@@ -44,6 +44,7 @@ namespace SPTQuestingBots.Components.Spawning
         public abstract bool HasGeneratedBotGroups();
         protected abstract bool CanSpawnBots();
         protected abstract void GenerateInitialBotGroups();
+        protected abstract int NumberOfBotsAllowedToSpawn();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
         
         protected virtual void Awake()
@@ -115,7 +116,7 @@ namespace SPTQuestingBots.Components.Spawning
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
-        public int NumberOfBotsAllowedToSpawn()
+        public int NumberOfTotalBotsAllowedToSpawn()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
             return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
@@ -150,19 +151,19 @@ namespace SPTQuestingBots.Components.Spawning
 
         public bool CanSpawnAdditionalBots()
         {
-            // Don't allow too many alive PMC's to be on the map for performance and difficulty reasons
-            if (AliveBots().Count() >= MaxAliveBots)
-            {
-                return false;
-            }
-
             // Ensure the total number of bots isn't too close to the bot cap for the map
-            if (NumberOfBotsAllowedToSpawn() < MinOtherBotsAllowedToSpawn)
+            if (NumberOfTotalBotsAllowedToSpawn() < MinOtherBotsAllowedToSpawn)
             {
                 return false;
             }
 
-            return true;
+            // Don't allow too many alive bots to be on the map for performance and difficulty reasons
+            if (BotsAllowedToSpawnForGeneratorType() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public bool HaveInitialBossWavesSpawned()
@@ -188,6 +189,11 @@ namespace SPTQuestingBots.Components.Spawning
         public IEnumerable<BotOwner> AliveBots()
         {
             return BotGroups.SelectMany(g => g.SpawnedBots.Where(b => (b.BotState == EBotState.Active) && !b.IsDead));
+        }
+
+        public int BotsAllowedToSpawnForGeneratorType()
+        {
+            return MaxAliveBots - AliveBots().Count();
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
@@ -236,7 +242,7 @@ namespace SPTQuestingBots.Components.Spawning
                 IsSpawningBots = true;
 
                 // Determine how many PMC's are allowed to spawn
-                int allowedSpawns = MaxAliveBots - AliveBots().Count();
+                int allowedSpawns = NumberOfBotsAllowedToSpawn();
                 List<Models.BotSpawnInfo> botGroupsToSpawn = new List<BotSpawnInfo>();
                 for (int i = 0; i < botGroups.Length; i++)
                 {

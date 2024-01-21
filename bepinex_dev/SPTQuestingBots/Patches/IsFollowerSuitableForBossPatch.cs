@@ -37,6 +37,7 @@ namespace SPTQuestingBots.Patches
                 if ((botGenerator != null) && botGenerator.TryGetBotGroup(offer, out Models.BotSpawnInfo botSpawnInfo))
                 {
                     groupMembers = botGenerator.GetSpawnGroupMembers(__instance.Owner);
+                    break;
                 }
             }
 

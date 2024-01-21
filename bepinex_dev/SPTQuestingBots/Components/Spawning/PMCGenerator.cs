@@ -41,6 +41,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public override bool HasGeneratedBotGroups() => hasGeneratedBotGroups;
         protected override bool CanSpawnBots() => true;
+        protected override int NumberOfBotsAllowedToSpawn() => BotsAllowedToSpawnForGeneratorType();
 
         protected override void GenerateInitialBotGroups()
         {

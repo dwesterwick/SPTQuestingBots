@@ -264,6 +264,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (deadBots.Contains(botBosses[bot]))
                 {
+                    botBosses[bot] = null;
                     continue;
                 }
 
@@ -277,8 +278,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     }
 
                     deadBots.Add(botBosses[bot]);
-                    botBosses[bot] = null;
-                    
                     continue;
                 }
 
