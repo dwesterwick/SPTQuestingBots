@@ -123,6 +123,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs in Late to the Party)
             double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+            playerCountFactor *= ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayers;
 
             // Choose the number of initial PMC's to spawn
             int pmcOffset = locationData.IsScavRun ? 0 : 1;
@@ -143,7 +144,6 @@ namespace SPTQuestingBots.Components.Spawning
 
                 System.Random random = new System.Random();
                 int botGroup = 1;
-                //while (botsGenerated < 1)
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn

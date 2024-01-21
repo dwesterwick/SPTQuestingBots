@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonProperty("fraction_of_max_players")]
+        public float FractionOfMaxPlayers { get; set; } = 1;
+
         [JsonProperty("fraction_of_max_players_vs_raidET")]
         public double[][] FractionOfMaxPlayersVsRaidET { get; set; } = new double[0][];
 
