@@ -116,7 +116,7 @@ namespace SPTQuestingBots.Components.Spawning
                     int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
-                    ServerRequestPatch.ForcePScavCount++;
+                    ServerRequestPatch.ForcePScavCount += botsInGroup;
                     Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botdifficulty, botsInGroup);
                     group.RaidETRangeToSpawn.Min = botSpawnSchedule[botsGenerated];
                     BotGroups.Add(group);

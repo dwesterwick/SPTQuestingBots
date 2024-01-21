@@ -317,8 +317,18 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
                 // Need to check if the reference is for a null object, meaning the bot was despawned and disposed
-                if (boss == null)
+                if ((boss == null) || boss.IsDead)
                 {
+                    if (deadBots.Contains(boss))
+                    {
+                        continue;
+                    }
+
+                    Controllers.LoggingController.LogInfo("Boss " + boss.GetText() + " is now dead.");
+
+                    botFollowers.Remove(boss);
+                    deadBots.Add(boss);
+
                     continue;
                 }
 

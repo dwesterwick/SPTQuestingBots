@@ -19,7 +19,6 @@ namespace SPTQuestingBots.Components
 {
     public class LocationData : MonoBehaviour
     {
-        public bool HasRaidStarted { get; set; } = false;
         public int MaxTotalBots { get; private set; } = 15;
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public RaidSettings CurrentRaidSettings { get; private set; } = null;

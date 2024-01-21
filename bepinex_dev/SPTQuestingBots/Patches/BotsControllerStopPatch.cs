@@ -33,12 +33,6 @@ namespace SPTQuestingBots.Patches
                 botGenerator.enabled = false;
             }
 
-            // Don't do anything if this is for the hideout
-            if (!Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().HasRaidStarted)
-            {
-                return;
-            }
-
             // Write all log files
             if (Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
