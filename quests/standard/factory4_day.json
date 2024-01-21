@@ -90,7 +90,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 2,
                 "steps": [
@@ -117,7 +117,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 5,
                 "steps": [
@@ -145,7 +145,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -186,8 +186,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
                 "steps": [
                     {
                         "position" : {
@@ -212,8 +212,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 125,
                 "steps": [
                     {
                         "position" : {
@@ -240,7 +240,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 300,
+                "maxDistanceFromBot": 150,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -289,6 +289,183 @@
                             "x": 31.1152,
                             "y": 8.210876,
                             "z": 39.4699364
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 35,
+        "name": "Crates Outside of Stairwell",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 34.7748528,
+                            "y": 0.102185175,
+                            "z": 21.2204361
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 35,
+        "name": "Crates Near Lower Platform",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -2.50868034,
+                            "y": 3.749667,
+                            "z": 36.24401
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -3.35411382,
+                            "y": 1.07015216,
+                            "z": 48.2082138
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 25,
+        "priority": 20,
+        "desirability": 30,
+        "name": "Basement Crates",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -11.9070759,
+                            "y": -3.91493654,
+                            "z": -10.6573162
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -3.843347,
+                            "y": -3.9149344,
+                            "z": -32.3034821
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 25,
+        "name": "NE Crates in Workshop",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 15.7125025,
+                            "y": -0.009169428,
+                            "z": -29.56323
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 35,
+        "name": "Crates Outside of Gate 3",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 59.4847832,
+                            "y": 0.0442806259,
+                            "z": 23.12022
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "desirability": 30,
+        "name": "Crates Outside of Scav Bunker",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -19.5395241,
+                            "y": 0.124587663,
+                            "z": 18.2060833
                         }
                     }
                 ]
