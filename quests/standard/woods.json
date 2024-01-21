@@ -243,6 +243,7 @@
         "chanceForSelecting": 10,
         "priority": 22,
         "desirability": 10,
+        "pmcsOnly": true,
         "name": "Sawmill Common Fund Stash",
         "objectives" : [
             {
@@ -389,6 +390,7 @@
         "chanceForSelecting": 10,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Sawmill Checkpoint Sniping",
         "objectives" : [
             {
@@ -482,6 +484,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 30,
+        "pmcsOnly": true,
         "name": "Scav House Sniping",
         "objectives" : [
             {
@@ -638,6 +641,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 25,
+        "pmcsOnly": true,
         "name": "Scav Town Sniping",
         "objectives" : [
             {
@@ -1118,6 +1122,7 @@
         "chanceForSelecting": 10,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Sawmill Sniping",
         "objectives" : [
             {

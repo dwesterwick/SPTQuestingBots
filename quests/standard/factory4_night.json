@@ -8,6 +8,7 @@
         "priority": 18,
         "desirability": 50,
         "maxRaidET": 300,
+        "pmcsOnly": true,
         "name": "3rd Floor Office Rush",
         "objectives" : [
             {
@@ -139,6 +140,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 35,
+        "pmcsOnly": true,
         "name": "3rd Floor Bridge",
         "objectives" : [
             {
@@ -232,6 +234,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 25,
+        "pmcsOnly": true,
         "name": "Boilers",
         "objectives" : [
             {
@@ -301,6 +304,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "pmcsOnly": true,
         "name": "Gate 0",
         "objectives" : [
             {
@@ -343,6 +347,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "pmcsOnly": true,
         "name": "Med Tent Gate",
         "objectives" : [
             {
@@ -385,6 +390,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "pmcsOnly": true,
         "name": "Cellars",
         "objectives" : [
             {
@@ -427,6 +433,7 @@
         "chanceForSelecting": 5,
         "priority": 21,
         "desirability": 10,
+        "pmcsOnly": true,
         "name": "Gate 3",
         "objectives" : [
             {

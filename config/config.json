@@ -158,7 +158,7 @@
 			"spawn_rush": {
 				"priority": 5,
 				"chance": 50,
-				"desirability": 100,
+				"desirability": 200,
 				"max_bots_per_quest": 1,
 				"max_distance": 75,
 				"max_raid_ET": 30
@@ -237,11 +237,11 @@
 			"enabled": true,
 			"fraction_of_max_players": 1.5,
 			"bots_per_group_distribution" : [
-				[0.40, 1],
-				[0.75, 1],
-				[0.90, 1],
-				[0.95, 1],
-				[1.00, 1]
+				[0.80, 1],
+				[0.85, 2],
+				[0.90, 3],
+				[0.95, 4],
+				[1.00, 5]
 			]
 		}
 	},

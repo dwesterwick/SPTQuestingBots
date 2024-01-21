@@ -1,6 +1,7 @@
 ﻿using ChatShared;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -95,7 +96,13 @@ namespace SPTQuestingBots.Components
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 
                 BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
-                if (botObjectiveManager?.IsQuestingAllowed == true)
+
+                BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
+                if (boss != null)
+                {
+                    sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, Color.white);
+                }
+                else if (botObjectiveManager?.IsQuestingAllowed == true)
                 {
                     BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot);
 

@@ -118,7 +118,7 @@ namespace SPTQuestingBots.Components.Spawning
 
                     ServerRequestPatch.ForcePScavCount++;
                     Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botdifficulty, botsInGroup);
-                    group.RaidETRangeToSpawn.Min = botSpawnSchedule[botGroup];
+                    group.RaidETRangeToSpawn.Min = botSpawnSchedule[botsGenerated];
                     BotGroups.Add(group);
 
                     botsGenerated += botsInGroup;
@@ -226,7 +226,8 @@ namespace SPTQuestingBots.Components.Spawning
                 }
             }
 
-            LoggingController.LogInfo("PScav spawn times for " + totalBots + " bots: " + string.Join(", ", botSpawnSchedule.Values));
+            IEnumerable<string> spawnTimes = botSpawnSchedule.Values.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
+            LoggingController.LogInfo("PScav spawn times for " + totalBots + " bots: " + string.Join(", ", spawnTimes));
         }
 
         private void setMaxAliveBots()
