@@ -195,6 +195,7 @@
     <Compile Include="Models\QuestSpawnPointObjective.cs" />
     <Compile Include="Models\QuestZoneObjective.cs" />
     <Compile Include="Models\SerializableVector3.cs" />
+    <Compile Include="Patches\AddEnemyPatch.cs" />
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />

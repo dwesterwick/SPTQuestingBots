@@ -20,10 +20,15 @@ import { LocaleService } from "@spt-aki/services/LocaleService";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { VFS } from "@spt-aki/utils/VFS";
+import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { BotController } from "@spt-aki/controllers/BotController";
+import { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
+
+import { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
 
 const modName = "SPTQuestingBots";
 
@@ -40,12 +45,16 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
     private vfs: VFS;
+    private httpResponseUtil: HttpResponseUtil;
+    private botController: BotController;
+    private botGenerationCacheService: BotGenerationCacheService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
     private iAirdropConfig: IAirdropConfig;
 
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
+    private basePScavConversionChance: number;
 	
     public preAkiLoad(container: DependencyContainer): void 
     {
@@ -87,7 +96,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 url: "/QuestingBots/GetLoggingPath",
                 action: () => 
                 {
-                    return JSON.stringify({ path: __dirname + "/../log/" });
+                    return JSON.stringify({ path: `${__dirname}/../log/` });
                 }
             }], "GetLoggingPath"
         );
@@ -102,6 +111,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         staticRouterModService.registerStaticRouter(`StaticAkiGameStart${modName}`,
             [{
                 url: "/client/game/start",
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 action: (url: string, info: any, sessionId: string, output: string) => 
                 {
                     if (modConfig.debug.enabled)
@@ -129,6 +139,23 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 }
             }], "AdjustPMCConversionChances"
         );
+
+        // Apply a scalar factor to the SPT-AKI PScav conversion chance
+        dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPScavChance${modName}`,
+            [{
+                url: "/QuestingBots/AdjustPScavChance/",
+                action: (url: string) => 
+                {
+                    const urlParts = url.split("/");
+                    const factor: number = Number(urlParts[urlParts.length - 1]);
+
+                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = Math.round(this.basePScavConversionChance * factor);
+                    this.commonUtils.logInfo(`Adjusted PScav spawn chance to ${this.iBotConfig.chanceAssaultScavHasPlayerScavName}%`);
+
+                    return JSON.stringify({ resp: "OK" });
+                }
+            }], "AdjustPScavChance"
+        );
         
         // Get all EFT quest templates
         // NOTE: This includes custom quests added by mods
@@ -141,6 +168,36 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 }
             }], "GetAllQuestTemplates"
         );
+
+        // Override bot generation to include PScav conversion chance
+        dynamicRouterModService.registerDynamicRouter(`DynamicGenerateBot${modName}`,
+            [{
+                url: "/QuestingBots/GenerateBot",
+                action: (url: string, info: IGenerateBotsRequestData, sessionID: string) => 
+                {
+                    const urlParts = url.split("/");
+                    const pScavChance: number = Number(urlParts[urlParts.length - 1]);
+
+                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
+
+                    this.botGenerationCacheService.clearStoredBots();
+                    const bots = this.botController.generate(sessionID, info);
+                    
+                    return this.httpResponseUtil.getBody(bots);
+                }
+            }], "GenerateBot"
+        );
+
+        // Get Scav-raid settings to determine PScav conversion chances
+        staticRouterModService.registerStaticRouter(`GetScavRaidSettings${modName}`,
+            [{
+                url: "/QuestingBots/GetScavRaidSettings",
+                action: () => 
+                {
+                    return JSON.stringify({ maps: this.iLocationConfig.scavRaidTimeSettings.maps });
+                }
+            }], "GetScavRaidSettings"
+        );
     }
 	
     public postDBLoad(container: DependencyContainer): void
@@ -151,6 +208,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
         this.vfs = container.resolve<VFS>("VFS");
+        this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
+        this.botController = container.resolve<BotController>("BotController");
+        this.botGenerationCacheService = container.resolve<BotGenerationCacheService>("BotGenerationCacheService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -158,6 +218,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.iAirdropConfig = this.configServer.getConfig(ConfigTypes.AIRDROP);
 
         this.databaseTables = this.databaseServer.getTables();
+        this.basePScavConversionChance = this.iBotConfig.chanceAssaultScavHasPlayerScavName;
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
@@ -220,15 +281,15 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         // If we find SWAG or MOAR, disable initial spawns
         const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
-        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
         {
             this.commonUtils.logWarning("SWAG Detected. Disabling initial PMC spawns.");
-            modConfig.initial_PMC_spawns.enabled = false;
+            modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.initial_PMC_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
+        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
             this.commonUtils.logWarning("MOAR Detected. Disabling initial PMC spawns.");
-            modConfig.initial_PMC_spawns.enabled = false;
+            modConfig.bot_spawns.enabled = false;
         }
 
         if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
@@ -236,7 +297,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
         }
 
-        if (!modConfig.initial_PMC_spawns.enabled)
+        if (!modConfig.bot_spawns.enabled)
         {
             return;
         }
@@ -248,6 +309,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
         this.disableCustomBossWaves();
+
+        // Disable all of the extra Scavs that spawn into Factory
+        this.disableCustomScavWaves();
 
         // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
         this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
@@ -328,13 +392,13 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
             if (verify)
             {
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min != min)
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min !== min)
                 {
                     verified = false;
                     break;
                 }
 
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max != max)
+                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max !== max)
                 {
                     verified = false;
                     break;
@@ -366,27 +430,33 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.iLocationConfig.customWaves.boss = {};
     }
 
+    private disableCustomScavWaves(): void
+    {
+        this.commonUtils.logInfo("Disabling custom Scav waves...");
+        this.iLocationConfig.customWaves.normal = {};
+    }
+
     private increaseBotCaps(): void
     {
-        if (!modConfig.initial_PMC_spawns.add_max_players_to_bot_cap)
+        if (!modConfig.bot_spawns.add_max_players_to_bot_cap)
         {
             return;
         }
 
-        const maxAddtlBots = modConfig.initial_PMC_spawns.max_additional_bots;
-        const maxTotalBots = modConfig.initial_PMC_spawns.max_total_bots;
+        const maxAddtlBots = modConfig.bot_spawns.max_additional_bots;
+        const maxTotalBots = modConfig.bot_spawns.max_total_bots;
 
-        this.iBotConfig.maxBotCap["factory4_day"] = Math.min(this.iBotConfig.maxBotCap["factory4_day"] + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["factory4_night"] = Math.min(this.iBotConfig.maxBotCap["factory4_night"] + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["bigmap"] = Math.min(this.iBotConfig.maxBotCap["bigmap"] + Math.min(this.databaseTables.locations.bigmap.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["woods"] = Math.min(this.iBotConfig.maxBotCap["woods"] + Math.min(this.databaseTables.locations.woods.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["shoreline"] = Math.min(this.iBotConfig.maxBotCap["shoreline"] + Math.min(this.databaseTables.locations.shoreline.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["lighthouse"] = Math.min(this.iBotConfig.maxBotCap["lighthouse"] + Math.min(this.databaseTables.locations.lighthouse.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["rezervbase"] = Math.min(this.iBotConfig.maxBotCap["rezervbase"] + Math.min(this.databaseTables.locations.rezervbase.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["interchange"] = Math.min(this.iBotConfig.maxBotCap["interchange"] + Math.min(this.databaseTables.locations.interchange.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["laboratory"] = Math.min(this.iBotConfig.maxBotCap["laboratory"] + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["tarkovstreets"] = Math.min(this.iBotConfig.maxBotCap["tarkovstreets"] + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
-        this.iBotConfig.maxBotCap["default"] = Math.min(this.iBotConfig.maxBotCap["default"] + maxAddtlBots, maxTotalBots);
+        this.iBotConfig.maxBotCap.factory4_day = Math.min(this.iBotConfig.maxBotCap.factory4_day + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.factory4_night = Math.min(this.iBotConfig.maxBotCap.factory4_night + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.bigmap = Math.min(this.iBotConfig.maxBotCap.bigmap + Math.min(this.databaseTables.locations.bigmap.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.woods = Math.min(this.iBotConfig.maxBotCap.woods + Math.min(this.databaseTables.locations.woods.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.shoreline = Math.min(this.iBotConfig.maxBotCap.shoreline + Math.min(this.databaseTables.locations.shoreline.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.lighthouse = Math.min(this.iBotConfig.maxBotCap.lighthouse + Math.min(this.databaseTables.locations.lighthouse.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.rezervbase = Math.min(this.iBotConfig.maxBotCap.rezervbase + Math.min(this.databaseTables.locations.rezervbase.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.interchange = Math.min(this.iBotConfig.maxBotCap.interchange + Math.min(this.databaseTables.locations.interchange.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.laboratory = Math.min(this.iBotConfig.maxBotCap.laboratory + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.tarkovstreets = Math.min(this.iBotConfig.maxBotCap.tarkovstreets + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.default = Math.min(this.iBotConfig.maxBotCap.default + maxAddtlBots, maxTotalBots);
 
         for (const location in this.iBotConfig.maxBotCap)
         {
@@ -396,7 +466,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
     private removeBlacklistedBrainTypes(): void
     {
-        const badBrains = modConfig.initial_PMC_spawns.blacklisted_pmc_bot_brains;
+        const badBrains = modConfig.bot_spawns.blacklisted_pmc_bot_brains;
         this.commonUtils.logInfo("Removing blacklisted brain types from being used for PMC's...");
 
         let removedBrains = 0;

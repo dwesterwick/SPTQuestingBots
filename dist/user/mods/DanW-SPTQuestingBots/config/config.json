@@ -6,6 +6,7 @@
 		"full_length_scav_raids": false,
 		"free_labs_access": false,
 		"always_spawn_pmcs": false,
+		"always_spawn_pscavs": false,
 		"always_have_airdrops": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
@@ -157,7 +158,7 @@
 			"spawn_rush": {
 				"priority": 5,
 				"chance": 50,
-				"desirability": 100,
+				"desirability": 200,
 				"max_bots_per_quest": 1,
 				"max_distance": 75,
 				"max_raid_ET": 30
@@ -187,13 +188,20 @@
 			}
 		}
 	},
-	"initial_PMC_spawns": {
+	"bot_spawns": {
 		"enabled": true,
 		"blacklisted_pmc_bot_brains": [ "bossKilla", "bossTagilla", "exUsec", "followerGluharAssault", "followerGluharProtect", "crazyAssaultEvent", "bossKnight" ],
 		"min_distance_from_players_initial": 25,
 		"min_distance_from_players_during_raid": 100,
 		"min_distance_from_players_during_raid_factory": 50,
-		"max_alive_initial_pmcs": {
+		"spawn_retry_time": 10,
+		"min_other_bots_allowed_to_spawn": 4,
+		"max_initial_bosses": 10,
+		"max_initial_rogues": 6,
+		"add_max_players_to_bot_cap": true,
+		"max_additional_bots": 5,
+		"max_total_bots": 26,
+		"max_alive_bots": {
 			"default": 6,
 			"factory4_day": 5,
 			"factory4_night": 5,
@@ -206,28 +214,47 @@
 			"laboratory": 7,
 			"tarkovstreets": 8
 		},
-		"initial_pmcs_vs_raidET": [
-			[0, 0.2],
-			[0.2, 0.2],
-			[0.6, 0.5],
-			[0.8, 0.7],
-			[0.9, 0.9],
-			[0.95, 1],
-			[1, 1]
-		],
-		"bots_per_group_distribution" : [
-			[0.40, 1],
-			[0.75, 2],
-			[0.90, 3],
-			[0.95, 4],
-			[1.00, 5]
-		],
-		"spawn_retry_time": 10,
-		"min_other_bots_allowed_to_spawn": 4,
-		"max_initial_bosses": 10,
-		"max_initial_rogues": 6,
-		"add_max_players_to_bot_cap": true,
-		"max_additional_bots": 5,
-		"max_total_bots": 26
+		"pmcs" : {
+			"enabled": true,
+			"fraction_of_max_players_vs_raidET": [
+				[0, 0.2],
+				[0.2, 0.2],
+				[0.6, 0.5],
+				[0.8, 0.7],
+				[0.9, 0.9],
+				[0.95, 1],
+				[1, 1]
+			],
+			"bots_per_group_distribution" : [
+				[0.40, 1],
+				[0.75, 2],
+				[0.90, 3],
+				[0.95, 4],
+				[1.00, 5]
+			]
+		},
+		"player_scavs": {
+			"enabled": true,
+			"fraction_of_max_players": 1.5,
+			"bots_per_group_distribution" : [
+				[0.80, 1],
+				[0.85, 2],
+				[0.90, 3],
+				[0.95, 4],
+				[1.00, 5]
+			]
+		}
+	},
+	"adjust_pscav_chance" : {
+		"enabled": true,
+		"disable_for_groups": true,
+		"chance_vs_time_remaining_fraction" : [
+			[0, 50],
+			[0.3, 50],
+			[0.5, 20],
+			[0.8, 10],
+			[0.9, 0],
+			[1, 0]
+		]
 	}
 }

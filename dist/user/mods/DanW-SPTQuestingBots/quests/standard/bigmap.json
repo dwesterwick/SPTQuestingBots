@@ -49,6 +49,7 @@
         "priority": 18,
         "desirability": 35,
         "maxRaidET": 90,
+        "pmcsOnly": true,
         "name": "Marked Room Rush",
         "objectives" : [
             {
@@ -120,6 +121,7 @@
         "priority": 18,
         "desirability": 50,
         "maxRaidET": 90,
+        "pmcsOnly": true,
         "name": "Crackhouse Rush",
         "objectives" : [
             {
@@ -148,6 +150,7 @@
         "priority": 18,
         "desirability": 50,
         "maxRaidET": 90,
+        "pmcsOnly": true,
         "name": "Dorms 2 Story Rush",
         "objectives" : [
             {
@@ -176,6 +179,7 @@
         "priority": 18,
         "desirability": 50,
         "maxRaidET": 90,
+        "pmcsOnly": true,
         "name": "Dorms 3 Story Rush",
         "objectives" : [
             {
@@ -204,6 +208,7 @@
         "priority": 18,
         "desirability": 50,
         "maxRaidET": 90,
+        "pmcsOnly": true,
         "name": "Big Red Rush",
         "objectives" : [
             {
@@ -2167,6 +2172,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 15,
+        "pmcsOnly": true,
         "name": "Construction",
         "objectives" : [
             {

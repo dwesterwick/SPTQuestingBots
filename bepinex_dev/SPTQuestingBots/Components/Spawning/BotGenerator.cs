@@ -32,6 +32,7 @@ namespace SPTQuestingBots.Components.Spawning
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
         public bool HasRemainingSpawns => !HasGeneratedBotGroups() || BotGroups.Any(g => !g.HasSpawned);
+        public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
 
         public BotGenerator(string _botTypeName)
         {
