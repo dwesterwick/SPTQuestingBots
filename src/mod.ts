@@ -22,6 +22,7 @@ import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { VFS } from "@spt-aki/utils/VFS";
 import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import { BotController } from "@spt-aki/controllers/BotController";
+import { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
@@ -46,6 +47,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private vfs: VFS;
     private httpResponseUtil: HttpResponseUtil;
     private botController: BotController;
+    private botGenerationCacheService: BotGenerationCacheService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -177,8 +179,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
 
                     this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
+
+                    this.botGenerationCacheService.clearStoredBots();
+                    const bots = this.botController.generate(sessionID, info);
                     
-                    return this.httpResponseUtil.getBody(this.botController.generate(sessionID, info));
+                    return this.httpResponseUtil.getBody(bots);
                 }
             }], "GenerateBot"
         );
@@ -205,6 +210,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.vfs = container.resolve<VFS>("VFS");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.botController = container.resolve<BotController>("BotController");
+        this.botGenerationCacheService = container.resolve<BotGenerationCacheService>("BotGenerationCacheService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);

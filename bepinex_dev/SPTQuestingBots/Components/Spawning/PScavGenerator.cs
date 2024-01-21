@@ -101,7 +101,6 @@ namespace SPTQuestingBots.Components.Spawning
 
             try
             {
-                LoggingController.LogInfo("Generating PScavs...");
                 isGeneratingBotGroups = true;
 
                 // Ensure the PMC-conversion chances have remained at 0%

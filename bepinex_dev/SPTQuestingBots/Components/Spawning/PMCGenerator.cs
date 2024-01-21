@@ -138,8 +138,6 @@ namespace SPTQuestingBots.Components.Spawning
 
             try
             {
-                LoggingController.LogInfo("Generating PMC bots...");
-
                 // Ensure the PMC-conversion chances have remained at 0%
                 ConfigController.AdjustPMCConversionChances(0, true);
 
