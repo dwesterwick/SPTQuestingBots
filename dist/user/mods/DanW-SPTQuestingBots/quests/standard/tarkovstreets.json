@@ -2126,6 +2126,175 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "S Cinema Store",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -178.710571,
+                            "y": 2.31757069,
+                            "z": 412.0464
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "name": "Cinema",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -168.861176,
+                            "y": 8.614478,
+                            "z": 405.7023
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -166.438843,
+                            "y": 8.61448,
+                            "z": 390.6081
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -193.103851,
+                            "y": 9.551875,
+                            "z": 405.726257
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -193.557251,
+                            "y": 9.551881,
+                            "z": 389.635529
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -173.323563,
+                            "y": 11.1345778,
+                            "z": 392.1654
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -172.515259,
+                            "y": 11.134572,
+                            "z": 407.519562
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -167.437363,
+                            "y": 11.1744576,
+                            "z": 413.976837
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -169.744537,
+                            "y": 11.1744585,
+                            "z": 396.928
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -163.623611,
+                            "y": 14.190794,
+                            "z": 401.748169
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -167.929749,
+                            "y": 15.4731655,
+                            "z": 396.964355
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -167.01358,
+                            "y": 15.5375414,
+                            "z": 404.997772
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -192.799683,
+                            "y": 8.61448,
+                            "z": 418.259827
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -186.274765,
+                            "y": 8.614479,
+                            "z": 382.1313
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
         "name": "Cinema Hideout",
