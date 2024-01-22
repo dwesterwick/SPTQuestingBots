@@ -15,15 +15,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("blacklisted_pmc_bot_brains")]
         public string[] BlacklistedPMCBotBrains { get; set; } = new string[0];
 
-        [JsonProperty("min_distance_from_players_initial")]
-        public float MinDistanceFromPlayersInitial { get; set; } = 25;
-
-        [JsonProperty("min_distance_from_players_during_raid")]
-        public float MinDistanceFromPlayersDuringRaid { get; set; } = 100;
-
-        [JsonProperty("min_distance_from_players_during_raid_factory")]
-        public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
-
         [JsonProperty("spawn_retry_time")]
         public float SpawnRetryTime { get; set; } = 10;
 
@@ -45,8 +36,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_total_bots")]
         public int MaxTotalBots { get; set; } = 40;
 
-        [JsonProperty("max_alive_initial_pmcs")]
-        public Dictionary<string, int> MaxAliveInitialPMCs { get; set; } = new Dictionary<string, int>();
+        [JsonProperty("max_alive_bots")]
+        public Dictionary<string, int> MaxAliveBots { get; set; } = new Dictionary<string, int>();
 
         [JsonProperty("pmcs")]
         public BotSpawnTypeConfig PMCs { get; set; } = new BotSpawnTypeConfig();

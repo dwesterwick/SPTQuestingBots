@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Components.Spawning
         public string BotTypeName { get; private set; } = "???";
 
         public bool WaitForInitialBossesToSpawn { get; protected set; } = true;
-        public int MaxAliveBots { get; protected set; } = 20;
+        public int MaxAliveBots { get; protected set; } = 10;
         public int MinOtherBotsAllowedToSpawn { get; protected set; } = 1;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
@@ -188,12 +188,29 @@ namespace SPTQuestingBots.Components.Spawning
 
         public IEnumerable<BotOwner> AliveBots()
         {
-            return BotGroups.SelectMany(g => g.SpawnedBots.Where(b => (b.BotState == EBotState.Active) && !b.IsDead));
+            List<BotOwner> aliveBots = new List<BotOwner>();
+            foreach (Models.BotSpawnInfo botSpawnInfo in BotGroups)
+            {
+                aliveBots.AddRange(botSpawnInfo.SpawnedBots.Where(b => (b != null) && !b.IsDead));
+            }
+
+            return aliveBots;
         }
 
         public int BotsAllowedToSpawnForGeneratorType()
         {
             return MaxAliveBots - AliveBots().Count();
+        }
+
+        public int RemainingBotsToSpawn()
+        {
+            int remainingBots = 0;
+            foreach (Models.BotSpawnInfo botSpawnInfo in BotGroups)
+            {
+                remainingBots += botSpawnInfo.RemainingBotsToSpawn;
+            }
+
+            return remainingBots;
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)

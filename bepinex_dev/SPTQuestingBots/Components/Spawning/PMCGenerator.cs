@@ -111,9 +111,9 @@ namespace SPTQuestingBots.Components.Spawning
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (ConfigController.Config.BotSpawns.MaxAliveInitialPMCs.ContainsKey(locationID))
+            if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey(locationID))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveInitialPMCs[locationID];
+                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots[locationID];
             }
             LoggingController.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
@@ -183,15 +183,15 @@ namespace SPTQuestingBots.Components.Spawning
         {
             if (getRaidTimeRemainingFraction() > 0.98)
             {
-                return ConfigController.Config.BotSpawns.MinDistanceFromPlayersInitial;
+                return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersInitial;
             }
 
             if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
             {
-                return ConfigController.Config.BotSpawns.MinDistanceFromPlayersDuringRaidFactory;
+                return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidFactory;
             }
 
-            return ConfigController.Config.BotSpawns.MinDistanceFromPlayersDuringRaid;
+            return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
         }
 
         private ESpawnCategoryMask getSpawnCategoryMask()

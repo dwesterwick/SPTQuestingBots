@@ -151,7 +151,8 @@ namespace SPTQuestingBots.Components.Spawning
             Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
             if (pmcGenerator != null)
             {
-                botsAllowedToSpawn -= pmcGenerator.BotsAllowedToSpawnForGeneratorType();
+                botsAllowedToSpawn -= pmcGenerator.AliveBots().Count();
+                botsAllowedToSpawn -= pmcGenerator.RemainingBotsToSpawn();
             }
 
             return botsAllowedToSpawn;
@@ -196,11 +197,12 @@ namespace SPTQuestingBots.Components.Spawning
         private void createBotSpawnSchedule()
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            string locationID = locationData.CurrentLocation.Id.ToLower();
             int pScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
 
-            if (!ConfigController.ScavRaidSettings.ContainsKey(locationData.CurrentLocation.Id))
+            if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
             {
-                throw new InvalidOperationException(locationData.CurrentLocation.Id + " not found in Scav-raid settings data from server.");
+                throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
             }
 
             float originalEscapeTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
@@ -208,12 +210,12 @@ namespace SPTQuestingBots.Components.Spawning
 
             Dictionary<float, int> spawnWeights = new Dictionary<float, int>();
             float totalWeight = 0;
-            foreach (string fractionString in ConfigController.ScavRaidSettings[locationData.CurrentLocation.Id].ReductionPercentWeights.Keys)
+            foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
                 try
                 {
                     float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
-                    int weight = ConfigController.ScavRaidSettings[locationData.CurrentLocation.Id].ReductionPercentWeights[fractionString];
+                    int weight = ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
 
                     spawnWeights.Add(raidTime, weight);
 
@@ -221,7 +223,7 @@ namespace SPTQuestingBots.Components.Spawning
                 }
                 catch (FormatException)
                 {
-                    LoggingController.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationData.CurrentLocation.Id);
+                    LoggingController.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationID);
                 }
             }
 
@@ -247,10 +249,11 @@ namespace SPTQuestingBots.Components.Spawning
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (ConfigController.Config.BotSpawns.MaxAliveInitialPMCs.ContainsKey(locationID))
+            if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey(locationID))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveInitialPMCs[locationID];
+                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots[locationID];
             }
+
             LoggingController.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
 
@@ -258,15 +261,15 @@ namespace SPTQuestingBots.Components.Spawning
         {
             if (getRaidTimeRemainingFraction() > 0.98)
             {
-                return ConfigController.Config.BotSpawns.MinDistanceFromPlayersInitial;
+                return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersInitial;
             }
 
             if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
             {
-                return ConfigController.Config.BotSpawns.MinDistanceFromPlayersDuringRaidFactory;
+                return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory;
             }
 
-            return ConfigController.Config.BotSpawns.MinDistanceFromPlayersDuringRaid;
+            return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaid;
         }
 
         private float getRaidTimeRemainingFraction()

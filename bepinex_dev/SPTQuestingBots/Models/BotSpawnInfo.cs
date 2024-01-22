@@ -17,6 +17,7 @@ namespace SPTQuestingBots.Models
         public bool HasSpawned => bots.Count == Count;
         public int Count => Data?.Profiles?.Count ?? 0;
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
+        public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
 
         public BotSpawnInfo(GClass513 data)
         {
