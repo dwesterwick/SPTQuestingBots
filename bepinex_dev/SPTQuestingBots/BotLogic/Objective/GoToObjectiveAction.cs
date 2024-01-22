@@ -177,6 +177,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                     LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
                     ObjectiveManager.FailObjective();
+                    ObjectiveManager.StuckCount++;
                     return false;
                 }
 
