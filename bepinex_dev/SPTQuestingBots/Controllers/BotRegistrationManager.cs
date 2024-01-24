@@ -63,7 +63,7 @@ namespace SPTQuestingBots.Controllers
             if (botOwner.Profile.Side == EPlayerSide.Savage)
             {
                 // Pattern: xxx (xxx)
-                string pattern = "\\w+.[(]\\w+[)]";
+                string pattern = ".+[(].+[)]";
                 Regex regex = new Regex(pattern);
                 if (regex.Matches(botOwner.Profile.Nickname).Count > 0)
                 {
