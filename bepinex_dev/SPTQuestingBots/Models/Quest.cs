@@ -31,6 +31,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxBots")]
         public int MaxBots { get; set; } = 2;
 
+        [JsonProperty("maxBotsInGroup")]
+        public int MaxBotsInGroup { get; set; } = 99;
+
         [JsonProperty("chanceForSelecting")]
         public float ChanceForSelecting { get; set; } = 50;
 

@@ -45,6 +45,7 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 10,
         "priority": 18,
         "desirability": 35,

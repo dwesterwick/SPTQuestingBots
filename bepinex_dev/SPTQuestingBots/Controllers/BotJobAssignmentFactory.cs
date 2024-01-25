@@ -536,9 +536,12 @@ namespace SPTQuestingBots.Controllers
 
             Stopwatch questSelectionTimer = Stopwatch.StartNew();
 
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+
             Quest[] assignableQuests = allQuests
                 .Where(q => !invalidQuests.Contains(q))
                 .Where(q => q.NumberOfValidObjectives > 0)
+                .Where(q => q.MaxBotsInGroup >= botGroupSize)
                 .Where(q => q.CanMoreBotsDoQuest())
                 .Where(q => q.CanAssignToBot(bot))
                 .Where(q => q.Desirability != 0)
