@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
@@ -500,7 +501,11 @@ namespace SPTQuestingBots.Controllers
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if (timeoutMonitor.ElapsedMilliseconds > ConfigController.Config.Questing.QuestSelectionTimeout)
                 {
+                    LoggingController.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
+
                     botObjectiveManager?.StopQuesting();
+                    botObjectiveManager?.BotMonitor.TryInstructBotToExtract();
+                    
                     throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long. Questing disabled.");
                 }
 
@@ -530,21 +535,27 @@ namespace SPTQuestingBots.Controllers
             yield return enumeratorWithTimeLimit.Run(allQuests, action, param1, param2);
         }
 
+        public static IEnumerable<Quest> GetAllPossibleQuests(this BotOwner bot)
+        {
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+
+            return allQuests
+                .Where(q => q.NumberOfValidObjectives > 0)
+                .Where(q => q.MaxBotsInGroup >= botGroupSize)
+                .Where(q => q.CanMoreBotsDoQuest())
+                .Where(q => q.CanAssignToBot(bot))
+                .Where(q => q.Desirability != 0)
+                .ToArray();
+        }
+
         public static Quest GetRandomQuest(this BotOwner bot, IEnumerable<Quest> invalidQuests)
         {
             //return GetRandomQuest_OLD(bot, invalidQuests);
 
             Stopwatch questSelectionTimer = Stopwatch.StartNew();
 
-            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
-
-            Quest[] assignableQuests = allQuests
+            Quest[] assignableQuests = bot.GetAllPossibleQuests()
                 .Where(q => !invalidQuests.Contains(q))
-                .Where(q => q.NumberOfValidObjectives > 0)
-                .Where(q => q.MaxBotsInGroup >= botGroupSize)
-                .Where(q => q.CanMoreBotsDoQuest())
-                .Where(q => q.CanAssignToBot(bot))
-                .Where(q => q.Desirability != 0)
                 .ToArray();
 
             foreach (Quest quest in assignableQuests)

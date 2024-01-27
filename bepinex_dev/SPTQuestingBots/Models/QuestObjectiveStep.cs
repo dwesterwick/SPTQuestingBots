@@ -34,6 +34,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("position")]
         public SerializableVector3 SerializablePosition { get; set; } = null;
 
+        [JsonProperty("lookToPosition")]
+        public SerializableVector3 SerializableLookToPosition { get; set; } = null;
+
         [JsonProperty("stepType")]
         [JsonConverter(typeof(StringEnumConverter))]
         public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
@@ -94,6 +97,16 @@ namespace SPTQuestingBots.Models
             }
 
             return SerializablePosition.ToUnityVector3();
+        }
+
+        public Vector3? GetLookToPosition()
+        {
+            if ((SerializableLookToPosition == null) || SerializableLookToPosition.Any(float.NaN))
+            {
+                return null;
+            }
+
+            return SerializableLookToPosition.ToUnityVector3();
         }
 
         public void SetPosition(Vector3? position)

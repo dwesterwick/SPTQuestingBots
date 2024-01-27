@@ -41,7 +41,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
             else
             {
-                TryLookToLastCorner();
+                if (ObjectiveManager.LookToPosition.HasValue)
+                {
+                    UpdateBotSteering(ObjectiveManager.LookToPosition.Value);
+                }
+                else
+                {
+                    TryLookToLastCorner();
+                }
             }
 
             // Don't allow expensive parts of this behavior to run too often

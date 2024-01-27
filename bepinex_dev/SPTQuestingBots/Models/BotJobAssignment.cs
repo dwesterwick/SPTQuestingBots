@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
@@ -34,7 +35,8 @@ namespace SPTQuestingBots.Models
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
-        
+        public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
+
         public BotJobAssignment(BotOwner bot)
         {
             BotOwner = bot;

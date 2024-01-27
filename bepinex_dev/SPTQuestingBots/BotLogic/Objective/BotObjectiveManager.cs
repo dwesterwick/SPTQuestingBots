@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
+using EFT.UI.Ragfair;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
@@ -30,6 +31,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
 
         public Vector3? Position => assignment?.Position;
+        public Vector3? LookToPosition => assignment?.LookToPosition;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public bool MustUnlockDoor => assignment?.DoorToUnlock != null;
@@ -115,7 +117,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             if (!HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
             {
-                return;
+                LoggingController.LogError(botOwner.GetText() + " has not been registered in BotHiveMindMonitor");
             }
 
             BotType botType = Controllers.BotRegistrationManager.GetBotType(botOwner);
@@ -137,17 +139,13 @@ namespace SPTQuestingBots.BotLogic.Objective
                 IsQuestingAllowed = true;
             }
 
-            // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
-            {
-                LoggingController.LogInfo("Setting objective for " + botType.ToString() + " " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
-                assignment = botOwner.GetCurrentJobAssignment();
-            }
-
             if (botType == BotType.Undetermined)
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
-                return;
+            }
+            else
+            {
+                LoggingController.LogInfo(botOwner.GetText() + " is a " + botType.ToString());
             }
 
             IsInitialized = true;
@@ -163,6 +161,15 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (!IsInitialized)
             {
                 updateBotType();
+
+                Models.BotSpawnInfo botGroup = tryFindSpawnGroup();
+                bool isInGroup = botGroup?.Count > 1;
+
+                if (!isInGroup)
+                {
+                    setInitialObjective();
+                }
+
                 return;
             }
 
@@ -390,6 +397,37 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return exfiltrationPoint.transform.position - botOwner.Position;
+        }
+
+        private Models.BotSpawnInfo tryFindSpawnGroup()
+        {
+            IEnumerable<BotOwner> groupMembers = Enumerable.Empty<BotOwner>();
+            foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
+            {
+                if ((botGenerator != null) && botGenerator.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo))
+                {
+                    return botSpawnInfo;
+                }
+            }
+
+            return null;
+        }
+
+        private void setInitialObjective()
+        {
+            // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
+            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
+            {
+                LoggingController.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
+                try
+                {
+                    assignment = botOwner.GetCurrentJobAssignment();
+                }
+                catch (TimeoutException)
+                {
+                    LoggingController.LogError("Timed out when trying to select an initial objective for " + botOwner.GetText());
+                }
+            }
         }
     }
 }

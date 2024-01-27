@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 18,
+        "desirability": 30,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": false
         },
@@ -15,6 +16,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -44,9 +46,9 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "minRaidET": 180,
         "requiredSwitches": {
-            "Shopping_Mall_DesignStuff_00055": true,
             "Shopping_Mall_DesignStuff_00059": false
         },
         "name": "KIBA Alarm Panel 1",
@@ -54,7 +56,9 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 12,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -84,9 +88,9 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "minRaidET": 180,
         "requiredSwitches": {
-            "Shopping_Mall_DesignStuff_00055": true,
             "Shopping_Mall_DesignStuff_00058": false
         },
         "name": "KIBA Alarm Panel 2",
@@ -94,7 +98,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -124,6 +129,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 20,
         "minRaidET": 180,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": true
@@ -134,6 +140,8 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 25,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -163,12 +171,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
-        "minRaidET": 180,
-        "canRunBetweenObjectives": false,
-        "requiredSwitches": {
-            "Shopping_Mall_DesignStuff_00055": true,
-            "Shopping_Mall_DesignStuff_00064": true
-        },
+        "desirability": 25,
         "name": "Safe Room Area",
         "objectives" : [
             {
@@ -198,11 +201,30 @@
                         }
                     }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 15,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 18,
+        "desirability": 25,
+        "minRaidET": 180,
+        "canRunBetweenObjectives": false,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true,
+            "Shopping_Mall_DesignStuff_00064": true
+        },
+        "name": "Safe Room",
+        "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -232,12 +254,14 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 18,
+        "desirability": 30,
         "name": "Pharmacy",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -257,13 +281,15 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 18,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Techlight",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -290,8 +316,9 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -320,23 +347,25 @@
     },
     {
         "repeatable": false,
-        "minLevel": 0,
+        "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 18,
+        "desirability": 35,
         "name": "ULTRA Medical Storage",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
-                            "x": 68.7952957,
-                            "y": 36.5800056,
-                            "z": 40.85216
+                            "x": 65.516,
+                            "y": 36.58001,
+                            "z": 39.4608
                         }
                     }
                 ]
@@ -350,6 +379,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 18,
+        "desirability": 35,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": true,
             "Shopping_Mall_DesignStuff_00057": true
@@ -360,8 +390,25 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "maxRunDistance": 4,
+                        "position" : {
+                            "x": -13.079545,
+                            "y": 27.08647,
+                            "z": -31.6366539
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": -13.079545,
                             "y": 27.08647,
@@ -379,12 +426,14 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 18,
+        "desirability": 30,
         "name": "KIBA",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -432,12 +481,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 19,
+        "desirability": 15,
         "name": "Killa's Stash",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -457,6 +508,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 19,
+        "desirability": 15,
         "name": "21WS Container",
         "objectives" : [
             {
@@ -482,6 +534,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Power Station",
         "objectives" : [
@@ -489,6 +542,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -517,6 +571,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -543,6 +598,7 @@
         "maxBots": 4,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Goshan Food Spawns",
         "objectives" : [
@@ -550,6 +606,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -585,6 +642,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -620,6 +678,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -660,7 +719,8 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
-        "canRunBetweenObjectives": false,
+        "desirability": 30,
+        "canRunBetweenObjectives": true,
         "name": "OLI Logistics Area",
         "objectives" : [
             {
@@ -681,6 +741,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -695,6 +756,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -709,6 +771,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 20,
                 "steps": [
                     {
                         "position" : {
@@ -723,6 +786,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -737,6 +801,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -756,6 +821,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "IDEA Office",
         "objectives" : [
@@ -763,6 +829,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -784,6 +851,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -812,6 +880,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -831,13 +900,15 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Emercom",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -850,8 +921,9 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -864,8 +936,9 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -885,6 +958,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Mantis",
         "objectives" : [
@@ -892,6 +966,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -906,6 +981,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -920,6 +996,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -934,6 +1011,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -953,6 +1031,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Generic",
         "objectives" : [
@@ -960,6 +1039,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -974,6 +1054,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -988,6 +1069,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1007,6 +1089,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 30,
         "name": "East Wall Container",
         "objectives" : [
             {
@@ -1032,12 +1115,14 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Power Station Stashes",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1052,6 +1137,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -1066,6 +1152,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1080,12 +1167,13 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
-                            "x": -221.856,
+                            "x": -221.476974,
                             "y": 21.6761723,
-                            "z": -270.7438
+                            "z": -271.477448
                         }
                     }
                 ]
@@ -1099,12 +1187,14 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Power Station West Shack",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 400,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -1124,6 +1214,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "IDEA North Bus",
         "objectives" : [
             {
@@ -1149,6 +1240,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "North Construction Site",
         "objectives" : [
             {
@@ -1202,6 +1294,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "Railway Area",
         "objectives" : [
             {
@@ -1269,6 +1362,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Railway Stashes",
         "objectives" : [
             {
@@ -1350,6 +1444,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "Scav Camp Area",
         "objectives" : [
             {
@@ -1398,6 +1493,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1431,18 +1527,39 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Emercom Camping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -328.105774,
                             "y": 21.3254375,
                             "z": 259.336426
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -328.105774,
+                            "y": 21.3254375,
+                            "z": 259.336426
+                        },
+                        "lookToPosition" : {
+                            "x": -317.337341,
+                            "y": 21.3254356,
+                            "z": 267.088
                         }
                     }
                 ]
@@ -1456,6 +1573,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "Emercom Tank",
         "objectives" : [
             {
@@ -1481,12 +1599,13 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "Emercom Extract North Entry",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1500,7 +1619,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1520,12 +1639,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Collapsed Floor Underside",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1545,12 +1666,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Parking Main Stairs",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1565,6 +1688,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1584,12 +1708,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Parking Tents",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1604,6 +1730,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1623,12 +1750,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "IDEA Escalator Vestibules",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1643,6 +1772,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -1662,6 +1792,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "OLI Loading Dock",
         "objectives" : [
             {
@@ -1682,6 +1813,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1757,6 +1889,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Loading Dock Stashes",
         "objectives" : [
@@ -1778,6 +1911,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1792,6 +1926,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1806,6 +1941,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1820,6 +1956,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1839,6 +1976,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Goshan Loading Corridor",
         "objectives" : [
             {
@@ -1948,18 +2086,20 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "Goshan Loading Corridor Stairs Top",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
-                            "x": -133.942871,
-                            "y": 35.63311,
-                            "z": 93.55811
+                            "x": -191.973282,
+                            "y": 27.1816559,
+                            "z": -53.12898
                         }
                     }
                 ]
@@ -1973,12 +2113,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "Goshan Loading Corridor Stairs Bottom",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1998,12 +2140,14 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Goshan Interior Tents",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2023,6 +2167,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Goshan Lockers",
         "objectives" : [
@@ -2030,6 +2175,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2056,6 +2202,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Goshan South Office",
         "objectives" : [
@@ -2063,6 +2210,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2091,6 +2239,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -2110,6 +2259,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Goshan North Office",
         "objectives" : [
@@ -2117,6 +2267,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -2145,6 +2296,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2164,6 +2316,7 @@
         "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "name": "IDEA Escalator Top Room",
         "objectives" : [
             {
@@ -2189,6 +2342,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "IDEA Lockers",
         "objectives" : [
             {
@@ -2214,12 +2368,15 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
+        "canRunBetweenObjectives": false,
         "name": "OLI Loading Area",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2234,6 +2391,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2248,6 +2406,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2262,6 +2421,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2276,6 +2436,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2295,6 +2456,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Back Storage",
         "objectives" : [
@@ -2302,6 +2464,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2316,6 +2479,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2335,6 +2499,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI SE Office",
         "objectives" : [
@@ -2342,6 +2507,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2382,6 +2548,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI NE Office",
         "objectives" : [
@@ -2389,6 +2556,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -2422,6 +2590,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI NW Office",
         "objectives" : [
@@ -2429,6 +2598,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2462,12 +2632,14 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 20,
         "name": "OLI East Bathrooms",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
@@ -2487,6 +2659,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom East",
         "objectives" : [
@@ -2555,6 +2728,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom Center",
         "objectives" : [
@@ -2637,6 +2811,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom West",
         "objectives" : [
@@ -2831,6 +3006,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Logistics Back Offices",
         "objectives" : [
@@ -2838,6 +3014,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -2852,6 +3029,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -2866,6 +3044,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -2880,6 +3059,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -2899,6 +3079,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "OLI North Lockers",
         "objectives" : [
             {
@@ -2924,7 +3105,8 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
-        "canRunBetweenObjectives": false,
+        "desirability": 25,
+        "canRunBetweenObjectives": true,
         "name": "OLI Mall Entrance",
         "objectives" : [
             {
@@ -2978,6 +3160,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "DOM",
         "objectives" : [
@@ -2985,6 +3168,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3013,6 +3197,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3027,6 +3212,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3041,6 +3227,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3060,6 +3247,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "TEXHO",
         "objectives" : [
@@ -3067,6 +3255,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3081,6 +3270,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3100,6 +3290,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pharma",
         "objectives" : [
@@ -3107,6 +3298,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3121,6 +3313,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3140,12 +3333,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "MK",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3165,6 +3360,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "IDEA Showroom",
         "objectives" : [
@@ -3172,6 +3368,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3186,6 +3383,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3200,6 +3398,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3214,6 +3413,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3228,6 +3428,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3242,6 +3443,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3261,6 +3463,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "TTS",
         "objectives" : [
@@ -3268,6 +3471,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3282,6 +3486,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3296,6 +3501,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -3310,6 +3516,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 20,
                 "steps": [
                     {
                         "position" : {
@@ -3329,12 +3536,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "German",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3354,6 +3563,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "ADIK",
         "objectives" : [
@@ -3361,6 +3571,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3375,6 +3586,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 25,
                 "steps": [
                     {
                         "position" : {
@@ -3394,6 +3606,7 @@
         "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "The National",
         "objectives" : [
@@ -3401,6 +3614,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3422,6 +3636,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3441,6 +3656,7 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Rasmussen",
         "objectives" : [
@@ -3448,6 +3664,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3462,6 +3679,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3476,6 +3694,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -3490,6 +3709,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3509,12 +3729,14 @@
         "maxBots": 2,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 5,
         "name": "Power Station Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
@@ -3529,6 +3751,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
@@ -3543,6 +3766,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
@@ -3560,35 +3784,43 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
+        "pmcsOnly": true,
         "name": "2nd Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
                         "position" : {
                             "x": 105.367462,
                             "y": 36.5697479,
                             "z": -46.3224068
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
-                "steps": [
+                    },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
-                            "x": 106.787888,
-                            "y": 36.54494,
-                            "z": -56.30941
+                            "x": 105.367462,
+                            "y": 36.5697479,
+                            "z": -46.3224068
+                        },
+                        "lookToPosition" : {
+                            "x": 188.427948,
+                            "y": 21.3254375,
+                            "z": -9.714791
                         }
                     }
                 ]
@@ -3597,12 +3829,64 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 106.787888,
+                            "y": 36.54494,
+                            "z": -56.30941
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 106.787888,
+                            "y": 36.54494,
+                            "z": -56.30941
+                        },
+                        "lookToPosition" : {
+                            "x": 257.034515,
+                            "y": 21.3254375,
+                            "z": -50.74417
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
                         "position" : {
                             "x": 105.244492,
                             "y": 36.5697479,
                             "z": -63.89896
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 105.244492,
+                            "y": 36.5697479,
+                            "z": -63.89896
+                        },
+                        "lookToPosition" : {
+                            "x": 187.9247,
+                            "y": 21.3254414,
+                            "z": -99.28289
                         }
                     }
                 ]
@@ -3615,16 +3899,34 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 5,
         "priority": 21,
+        "desirability": 5,
+        "pmcsOnly": true,
         "name": "OLI Loading Dock Sniping Spot",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
                         "position" : {
                             "x": -133.942871,
                             "y": 35.63311,
@@ -3641,20 +3943,38 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
+        "pmcsOnly": true,
         "name": "SW Sniping Tower",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 207.219925,
                             "y": 31.4509182,
                             "z": 215.5884
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
                         }
                     }
                 ]
@@ -3666,20 +3986,38 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
+        "pmcsOnly": true,
         "name": "IDEA North Sniping Tower",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 48.796154,
                             "y": 37.3335075,
                             "z": -371.58255
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -133.942871,
+                            "y": 35.63311,
+                            "z": 93.55811
                         }
                     }
                 ]
@@ -3691,21 +4029,44 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "canRunBetweenObjectives": false,
+        "pmcsOnly": true,
         "name": "IDEA 2nd Floor",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 61.186306,
                             "y": 32.1979,
                             "z": -286.7073
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 61.186306,
+                            "y": 32.1979,
+                            "z": -286.7073
+                        },
+                        "lookToPosition" : {
+                            "x": 47.4138451,
+                            "y": 27.0676785,
+                            "z": -267.19
                         }
                     }
                 ]
@@ -3714,12 +4075,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 25,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 77.39655,
                             "y": 32.1979,
                             "z": -286.4888
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 77.39655,
+                            "y": 32.1979,
+                            "z": -286.4888
+                        },
+                        "lookToPosition" : {
+                            "x": 73.42521,
+                            "y": 21.4291649,
+                            "z": -260.075043
                         }
                     }
                 ]
@@ -3733,12 +4114,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "OLI Utility Room",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3759,12 +4142,13 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "IDEA Registers",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
