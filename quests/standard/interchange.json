@@ -345,6 +345,35 @@
     },
     {
         "repeatable": false,
+        "minLevel": 5,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 18,
+        "requiredSwitches": {
+            "Shopping_Mall_DesignStuff_00055": true,
+            "Shopping_Mall_DesignStuff_00057": true
+        },
+        "name": "KIBA Investigate",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -13.079545,
+                            "y": 27.08647,
+                            "z": -31.6366539
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
@@ -359,9 +388,37 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -8.25845,
+                            "x": -13.079545,
+                            "y": 27.08647,
+                            "z": -31.6366539
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -22.0525932,
+                            "y": 27.0864754,
+                            "z": -36.247757
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -21.9208755,
                             "y": 27.0864735,
-                            "z": -34.96444
+                            "z": -27.8881016
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -21.2479839,
+                            "y": 27.0864716,
+                            "z": -18.4728146
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -15.2464447,
+                            "y": 27.08647,
+                            "z": -17.08684
                         }
                     }
                 ]
