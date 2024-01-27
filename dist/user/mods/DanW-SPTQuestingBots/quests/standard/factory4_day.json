@@ -4,6 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 50,
         "priority": 18,
         "desirability": 50,
@@ -477,6 +478,7 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "maxBotsInGroup": 1,
         "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
@@ -509,6 +511,11 @@
                             "x": -59.6667824,
                             "y": 1.300873,
                             "z": 55.5726776
+                        },
+                        "lookToPosition" : {
+                            "x": -54.0442734,
+                            "y": 2.26530969,
+                            "z": 58.4518356
                         }
                     }
                 ]
@@ -520,6 +527,7 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "maxBotsInGroup": 1,
         "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
@@ -552,6 +560,11 @@
                             "x": -18.3804874,
                             "y": 0.210918948,
                             "z": -54.71151
+                        },
+                        "lookToPosition" : {
+                            "x": -19.6342278,
+                            "y": 1.191838,
+                            "z": -48.1690445
                         }
                     }
                 ]
@@ -563,6 +576,7 @@
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
+        "maxBotsInGroup": 1,
         "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
@@ -595,6 +609,11 @@
                             "x": 73.16466,
                             "y": -4.6014514,
                             "z": -28.6016216
+                        },
+                        "lookToPosition" : {
+                            "x": 65.4564362,
+                            "y": -1.63205576,
+                            "z": -29.097847
                         }
                     }
                 ]
@@ -606,6 +625,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "minRaidET": 300,
         "chanceForSelecting": 5,
         "priority": 21,
@@ -638,6 +658,11 @@
                             "x": 56.4280052,
                             "y": 0.227544457,
                             "z": 56.4638138
+                        },
+                        "lookToPosition" : {
+                            "x": 61.16576,
+                            "y": 1.230174035,
+                            "z": 56.8760529
                         }
                     }
                 ]

@@ -96,7 +96,10 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 url: "/QuestingBots/GetLoggingPath",
                 action: () => 
                 {
-                    return JSON.stringify({ path: `${__dirname}/../log/` });
+                    const loggingPath = `${__dirname}\\..\\log\\`;
+                    this.commonUtils.logInfo(`Logging path: ${loggingPath}`);
+
+                    return JSON.stringify({ path: loggingPath });
                 }
             }], "GetLoggingPath"
         );

@@ -131,6 +131,7 @@
         "priority": 20,
         "desirability": 20,
         "minRaidET": 180,
+        "pmcsOnly": true,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": true
         },

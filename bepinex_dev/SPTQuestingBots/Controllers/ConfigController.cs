@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Aki.Common.Http;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ namespace SPTQuestingBots.Controllers
         public static Configuration.ModConfig GetConfig()
         {
             string errorMessage = "!!!!! Cannot retrieve config.json data from the server. The mod will not work properly! !!!!!";
-            string json = RequestHandler.GetJson("/QuestingBots/GetConfig");
+            string json = GetJson("/QuestingBots/GetConfig", errorMessage);
 
             if (!TryDeserializeObject(json, errorMessage, out Configuration.ModConfig _config))
             {
@@ -35,19 +36,19 @@ namespace SPTQuestingBots.Controllers
 
         public static void AdjustPMCConversionChances(float factor, bool verify)
         {
-            RequestHandler.GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor + "/" + verify.ToString());
+            GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor + "/" + verify.ToString(), "Could not adjust PMC conversion chances");
         }
 
         public static void AdjustPScavChance(float timeRemainingFactor, bool preventPScav)
         {
             double factor = preventPScav ? 0 : InterpolateForFirstCol(Config.AdjustPScavChance.ChanceVsTimeRemainingFraction, timeRemainingFactor);
 
-            RequestHandler.GetJson("/QuestingBots/AdjustPScavChance/" + factor);
+            GetJson("/QuestingBots/AdjustPScavChance/" + factor, "Could not adjust PScav conversion chance");
         }
 
         public static void ReportError(string errorMessage)
         {
-            RequestHandler.GetJson("/QuestingBots/ReportError/" + errorMessage);
+            GetJson("/QuestingBots/ReportError/" + errorMessage, "Could not report an error message to the server");
         }
 
         public static string GetLoggingPath()
@@ -58,7 +59,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             string errorMessage = "Cannot retrieve logging path from the server. Falling back to using the current directory.";
-            string json = RequestHandler.GetJson("/QuestingBots/GetLoggingPath");
+            string json = GetJson("/QuestingBots/GetLoggingPath", errorMessage);
 
             if (TryDeserializeObject(json, errorMessage, out Configuration.LoggingPath _path))
             {
@@ -80,7 +81,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             string errorMessage = "Cannot read scav-raid settings.";
-            string json = RequestHandler.GetJson("/QuestingBots/GetScavRaidSettings");
+            string json = GetJson("/QuestingBots/GetScavRaidSettings", errorMessage);
 
             TryDeserializeObject(json, errorMessage, out Configuration.ScavRaidSettingsResponse _response);
             ScavRaidSettings = _response.Maps;
@@ -91,7 +92,7 @@ namespace SPTQuestingBots.Controllers
         public static RawQuestClass[] GetAllQuestTemplates()
         {
             string errorMessage = "Cannot read quest templates.";
-            string json = RequestHandler.GetJson("/QuestingBots/GetAllQuestTemplates");
+            string json = GetJson("/QuestingBots/GetAllQuestTemplates", errorMessage);
 
             TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
             return _templates.Templates;
@@ -136,6 +137,42 @@ namespace SPTQuestingBots.Controllers
             }
 
             return standardQuests.Concat(customQuests);
+        }
+
+        public static string GetJson(string endpoint, string errorMessage)
+        {
+            string json = null;
+            Exception lastException = null;
+
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    json = RequestHandler.GetJson(endpoint);
+                }
+                catch (Exception e)
+                {
+                    lastException = e;
+
+                    LoggingController.LogWarning("Could not get data for " + endpoint);
+                }
+
+                if (json != null)
+                {
+                    break;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            if (json == null)
+            {
+                LoggingController.LogError(lastException.Message);
+                LoggingController.LogError(lastException.StackTrace);
+                LoggingController.LogErrorToServerConsole(errorMessage);
+            }
+
+            return json;
         }
 
         public static bool TryDeserializeObject<T>(string json, string errorMessage, out T obj)

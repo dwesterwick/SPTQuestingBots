@@ -40,6 +40,24 @@ namespace SPTQuestingBots.Controllers
             botJobAssignments.Clear();
         }
 
+        public static IEnumerator ProcessAllQuests(Action<Quest> action)
+        {
+            enumeratorWithTimeLimit.Reset();
+            yield return enumeratorWithTimeLimit.Run(allQuests, action);
+        }
+
+        public static IEnumerator ProcessAllQuests<T1>(Action<Quest, T1> action, T1 param1)
+        {
+            enumeratorWithTimeLimit.Reset();
+            yield return enumeratorWithTimeLimit.Run(allQuests, action, param1);
+        }
+
+        public static IEnumerator ProcessAllQuests<T1, T2>(Action<Quest, T1, T2> action, T1 param1, T2 param2)
+        {
+            enumeratorWithTimeLimit.Reset();
+            yield return enumeratorWithTimeLimit.Run(allQuests, action, param1, param2);
+        }
+
         public static void AddQuest(Quest quest)
         {
             foreach(QuestObjective objective in quest.AllObjectives)
@@ -515,24 +533,6 @@ namespace SPTQuestingBots.Controllers
             BotJobAssignment assignment = new BotJobAssignment(bot, quest, objective);
             botJobAssignments[bot.Profile.Id].Add(assignment);
             return assignment;
-        }
-
-        public static IEnumerator ProcessAllQuests(Action<Quest> action)
-        {
-            enumeratorWithTimeLimit.Reset();
-            yield return enumeratorWithTimeLimit.Run(allQuests, action);
-        }
-
-        public static IEnumerator ProcessAllQuests<T1>(Action<Quest, T1> action, T1 param1)
-        {
-            enumeratorWithTimeLimit.Reset();
-            yield return enumeratorWithTimeLimit.Run(allQuests, action, param1);
-        }
-
-        public static IEnumerator ProcessAllQuests<T1, T2>(Action<Quest, T1, T2> action, T1 param1, T2 param2)
-        {
-            enumeratorWithTimeLimit.Reset();
-            yield return enumeratorWithTimeLimit.Run(allQuests, action, param1, param2);
         }
 
         public static IEnumerable<Quest> GetAllPossibleQuests(this BotOwner bot)

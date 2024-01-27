@@ -161,14 +161,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (!IsInitialized)
             {
                 updateBotType();
-
-                Models.BotSpawnInfo botGroup = tryFindSpawnGroup();
-                bool isInGroup = botGroup?.Count > 1;
-
-                if (!isInGroup)
-                {
-                    setInitialObjective();
-                }
+                setInitialObjective();
 
                 return;
             }
