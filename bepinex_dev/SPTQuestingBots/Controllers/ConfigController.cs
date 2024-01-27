@@ -144,7 +144,7 @@ namespace SPTQuestingBots.Controllers
             string json = null;
             Exception lastException = null;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 try
                 {
