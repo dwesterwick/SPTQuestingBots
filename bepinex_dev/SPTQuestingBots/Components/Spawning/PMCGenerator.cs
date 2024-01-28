@@ -143,12 +143,16 @@ namespace SPTQuestingBots.Components.Spawning
                 // Ensure the PMC-conversion chances have remained at 0%
                 ConfigController.AdjustPMCConversionChances(0, true);
 
+                // Spawn smaller PMC groups later in raids
+                double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+
                 System.Random random = new System.Random();
                 int botGroup = 1;
                 while (botsGenerated < totalCount)
                 {
                     // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
                     int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
+                    botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
                     botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                     // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group

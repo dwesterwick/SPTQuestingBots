@@ -208,39 +208,6 @@ namespace SPTQuestingBots.Components.Spawning
             float originalEscapeTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
             int randomAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
 
-            /*Dictionary<float, int> spawnWeights = new Dictionary<float, int>();
-            float totalWeight = 0;
-            foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
-            {
-                try
-                {
-                    float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
-                    int weight = ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
-
-                    spawnWeights.Add(raidTime, weight);
-
-                    totalWeight += weight;
-                }
-                catch (FormatException)
-                {
-                    LoggingController.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationID);
-                }
-            }
-
-            System.Random random = new System.Random();
-            int totalBots = 0;
-            foreach (float raidET in spawnWeights.Keys)
-            {
-                int bots = (int)Math.Round(spawnWeights[raidET] / totalWeight * pScavs);
-
-                for (int bot = 0; bot < bots; bot++)
-                {
-                    float spawnTime = Math.Min(spawnWeights.Keys.Max(), Math.Max(spawnWeights.Keys.Min(), raidET + random.Next(-1 * randomAdjustment, randomAdjustment)));
-                    botSpawnSchedule.Add(totalBots, spawnTime);
-                    totalBots++;
-                }
-            }*/
-
             List<float> possibleSpawnTimes = new List<float>();
             foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
