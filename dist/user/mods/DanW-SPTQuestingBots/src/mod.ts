@@ -311,19 +311,17 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.setOriginalPMCConversionChances();
 
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
-        if (modConfig.bot_spawns.pmcs.enabled)
-        {
-            this.disableCustomBossWaves();
-        }
+        this.disableCustomBossWaves();
 
         // Disable all of the extra Scavs that spawn into Factory
-        if (modConfig.bot_spawns.player_scavs.enabled)
-        {
-            this.disableCustomScavWaves();
-        }
+        this.disableCustomScavWaves();
 
         // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
-        this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
+        if (modConfig.bot_spawns.limit_initial_boss_spawns.disable_rogue_delay)
+        {
+            this.commonUtils.logInfo("Removing SPT Rogue spawn delay...");
+            this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
+        }
 
         if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
         {

@@ -135,6 +135,7 @@
     <Compile Include="Configuration\BotSpawnTypeConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
+    <Compile Include="Configuration\LimitInitialBossSpawnsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsResponse.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Patches\AirdropLandPatch.cs" />
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ServerRequestPatch.cs" />
+    <Compile Include="Patches\TryToSpawnInZoneAndDelayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsPlugin.cs" />
     <Compile Include="QuestingBotsPluginConfig.cs" />

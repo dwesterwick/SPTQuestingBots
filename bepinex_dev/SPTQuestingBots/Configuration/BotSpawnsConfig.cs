@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("bot_cap_adjustments")]
         public BotCapAdjustmentsConfig BotCapAdjustments { get; set; } = new BotCapAdjustmentsConfig();
 
+        [JsonProperty("limit_initial_boss_spawns")]
+        public LimitInitialBossSpawnsConfig LimitInitialBossSpawns { get; set; } = new LimitInitialBossSpawnsConfig();
+
         [JsonProperty("max_alive_bots")]
         public Dictionary<string, int> MaxAliveBots { get; set; } = new Dictionary<string, int>();
 

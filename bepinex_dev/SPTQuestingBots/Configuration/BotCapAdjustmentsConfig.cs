@@ -12,12 +12,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
-        [JsonProperty("max_initial_bosses")]
-        public int MaxInitialBosses { get; set; } = 10;
-
-        [JsonProperty("max_initial_rogues")]
-        public int MaxInitialRogues { get; set; } = 6;
-
         [JsonProperty("min_other_bots_allowed_to_spawn")]
         public int MinOtherBotsAllowedToSpawn { get; set; } = 4;
 

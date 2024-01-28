@@ -196,12 +196,16 @@
 		"advanced_eft_bot_count_management": false,
 		"bot_cap_adjustments" : {
 			"enabled": true,
-			"max_initial_bosses": 10,
-			"max_initial_rogues": 6,
 			"min_other_bots_allowed_to_spawn": 4,
 			"add_max_players_to_bot_cap": true,
 			"max_additional_bots": 5,
 			"max_total_bots": 26
+		},
+		"limit_initial_boss_spawns" : {
+			"enabled": true,
+			"disable_rogue_delay": true,
+			"max_initial_bosses": 10,
+			"max_initial_rogues": 6
 		},
 		"max_alive_bots": {
 			"default": 6,

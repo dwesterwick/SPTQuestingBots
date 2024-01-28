@@ -54,7 +54,7 @@ namespace SPTQuestingBots
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
 
-                    if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
+                    if (ConfigController.Config.BotSpawns.LimitInitialBossSpawns.Enabled)
                     {
                         new Patches.BossLocationSpawnActivatePatch().Enable();
                     }
@@ -66,6 +66,7 @@ namespace SPTQuestingBots
                         new Patches.ExceptAIPatch().Enable();
                         new Patches.BotDiedPatch().Enable();
                         new Patches.CheckOnMaxPatch().Enable();
+                        new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
                     }
 
                     Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");
