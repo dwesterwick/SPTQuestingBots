@@ -54,6 +54,9 @@ namespace SPTQuestingBots
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
 
+                    // TODO: This seems like only part of the puzzle to allow more Scavs to spawn on Lighthouse. Let's deal with it later.
+                    //new Patches.GetListByZonePatch().Enable();
+
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);
                 }

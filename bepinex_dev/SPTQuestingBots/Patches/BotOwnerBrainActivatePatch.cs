@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
+using HarmonyLib;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
@@ -32,9 +33,11 @@ namespace SPTQuestingBots.Patches
             if (Helpers.BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
-            }
 
-            if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
+                // TODO: This seems like only part of the puzzle to allow more Scavs to spawn on Lighthouse. Let's deal with it later.
+                //reduceBotCounts(__instance);
+            }
+            else if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
             {
                 Controllers.BotRegistrationManager.RegisterBoss(__instance);
             }
@@ -44,6 +47,29 @@ namespace SPTQuestingBots.Patches
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
 
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
+        }
+
+        private static void reduceBotCounts(BotOwner bot)
+        {
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+
+            FieldInfo allBotsCountField = AccessTools.Field(typeof(BotSpawner), "_allBotsCount");
+            FieldInfo followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
+            FieldInfo bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
+
+            if (bot.Profile.Info.Settings.IsFollower())
+            {
+                int followersCount = (int)followersCountField.GetValue(botSpawnerClass);
+                followersCountField.SetValue(botSpawnerClass, followersCount--);
+            }
+            else if (bot.Profile.Info.Settings.IsBoss())
+            {
+                int bossesCount = (int)bossesCountField.GetValue(botSpawnerClass);
+                bossesCountField.SetValue(botSpawnerClass, bossesCount--);
+            }
+
+            int allBotsCount = (int)allBotsCountField.GetValue(botSpawnerClass);
+            allBotsCountField.SetValue(botSpawnerClass, allBotsCount--);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
@@ -359,6 +360,18 @@ namespace SPTQuestingBots.Controllers
             return false;
         }
 
+        public static int TryArchiveRepeatableAssignments(this BotOwner bot)
+        {
+            BotJobAssignment[] matchingAssignments = botJobAssignments[bot.Profile.Id]
+                    .Where(a => a.QuestAssignment.IsRepeatable)
+                    .Where(a => a.Status == JobAssignmentStatus.Completed)
+                    .ToArray();
+
+            matchingAssignments.ExecuteForEach(a => a.Archive());
+
+            return matchingAssignments.Length;
+        }
+
         public static bool CanBotRepeatQuestObjective(this QuestObjective objective, BotOwner bot)
         {
             IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
@@ -519,11 +532,21 @@ namespace SPTQuestingBots.Controllers
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if (timeoutMonitor.ElapsedMilliseconds > ConfigController.Config.Questing.QuestSelectionTimeout)
                 {
-                    LoggingController.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
+                    if (bot.TryArchiveRepeatableAssignments() > 0)
+                    {
+                        LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Trying to select a repeatable quest early instead...");
+                        continue;
+                    }
 
+                    LoggingController.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
                     botObjectiveManager?.StopQuesting();
-                    botObjectiveManager?.BotMonitor.TryInstructBotToExtract();
-                    
+
+                    if (botObjectiveManager?.BotMonitor?.TryInstructBotToExtract() == true)
+                    {
+                        LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
+                        return null;
+                    }
+
                     throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long. Questing disabled.");
                 }
 
