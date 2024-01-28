@@ -79,6 +79,30 @@ namespace SPTQuestingBots.Components.Spawning
             return raidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
         }
 
+        public static IEnumerable<string> GetAllGeneratedBotProfileIDs()
+        {
+            return GetAllGeneratedBotProfiles().Select(b => b.Id);
+        }
+
+        public static IEnumerable<Profile> GetAllGeneratedBotProfiles()
+        {
+            List<Profile> generatedBotProfiles = new List<Profile>();
+            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
+            {
+                if (botGenerator == null)
+                {
+                    continue;
+                }
+
+                foreach (Models.BotSpawnInfo botGroup in botGenerator.GetBotGroups())
+                {
+                    generatedBotProfiles.AddRange(botGroup.Data.Profiles);
+                }
+            }
+
+            return generatedBotProfiles;
+        }
+
         public bool TryGetBotGroup(BotOwner bot, out BotSpawnInfo matchingGroupData)
         {
             matchingGroupData = null;

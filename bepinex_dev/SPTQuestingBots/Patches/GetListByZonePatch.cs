@@ -2,6 +2,7 @@
 using Comfort.Common;
 using EFT;
 using EFT.UI.Ragfair;
+using SPTQuestingBots.Components.Spawning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,21 +22,8 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref List<BotOwner> __result, BotZone zone)
         {
-            List<string> generatedBotIDs = new List<string>();
-            foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
-            {
-                if (botGenerator == null)
-                {
-                    continue;
-                }
-
-                foreach (Models.BotSpawnInfo botGroup in botGenerator.GetBotGroups())
-                {
-                    generatedBotIDs.AddRange(botGroup.SpawnedBots.Select(b => b.Profile.Id));
-                }
-            }
-
-            List<BotOwner> remainingBots = __result
+            string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
+            List <BotOwner> remainingBots = __result
                 .Where(b => !generatedBotIDs.Contains(b.Profile.Id))
                 .ToList();
 

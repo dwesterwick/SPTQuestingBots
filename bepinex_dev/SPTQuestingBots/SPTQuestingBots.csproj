@@ -201,7 +201,9 @@
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
+    <Compile Include="Patches\ExceptAIPatch.cs" />
     <Compile Include="Patches\GetListByZonePatch.cs" />
+    <Compile Include="Patches\GetSpawnSystemPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
     <Compile Include="Patches\LoadBotsPatch.cs" />

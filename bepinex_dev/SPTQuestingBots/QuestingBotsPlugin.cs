@@ -9,6 +9,7 @@ using DrakiaXYZ.BigBrain.Brains;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
+using SPTQuestingBots.Patches;
 
 namespace SPTQuestingBots
 {
@@ -55,7 +56,10 @@ namespace SPTQuestingBots
                     new Patches.AddEnemyPatch().Enable();
 
                     // TODO: This seems like only part of the puzzle to allow more Scavs to spawn on Lighthouse. Let's deal with it later.
-                    //new Patches.GetListByZonePatch().Enable();
+                    BotOwnerBrainActivatePatch.AdjustBotCounts = true;
+                    new Patches.GetListByZonePatch().Enable();
+                    new Patches.GetSpawnSystemPatch().Enable();
+                    new Patches.ExceptAIPatch().Enable();
 
                     Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);

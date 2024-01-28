@@ -8,12 +8,15 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
     public class BotOwnerBrainActivatePatch : ModulePatch
     {
+        public static bool AdjustBotCounts { get; set; } = false;
+
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -33,9 +36,6 @@ namespace SPTQuestingBots.Patches
             if (Helpers.BotBrainHelpers.WillBotBeAPMC(__instance))
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
-
-                // TODO: This seems like only part of the puzzle to allow more Scavs to spawn on Lighthouse. Let's deal with it later.
-                //reduceBotCounts(__instance);
             }
             else if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
             {
@@ -47,6 +47,12 @@ namespace SPTQuestingBots.Patches
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
 
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
+
+            if (AdjustBotCounts && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            {
+                LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
+                reduceBotCounts(__instance);
+            }
         }
 
         private static void reduceBotCounts(BotOwner bot)

@@ -35,12 +35,6 @@ namespace SPTQuestingBots.Patches
                 return true;
             }*/
 
-            // We only care about one enemy cause
-            if (cause != EBotEnemyCause.pmcBossKill)
-            {
-                return true;
-            }
-
             // Get the ID's of all group members
             List<BotOwner> groupMemberList = new List<BotOwner>();
             for (int m = 0; m < __instance.MembersCount; m++)
@@ -48,6 +42,14 @@ namespace SPTQuestingBots.Patches
                 groupMemberList.Add(__instance.Member(m));
             }
             string[] groupMemberIDs = groupMemberList.Select(m => m.Profile.Id).ToArray();
+
+            //LoggingController.LogInfo("You are now an enemy of " + string.Join(", ", groupMemberIDs) + " due to reason: " + cause.ToString());
+
+            // We only care about one enemy cause
+            if (cause != EBotEnemyCause.pmcBossKill)
+            {
+                return true;
+            }
 
             // Check if the the bot group was created by this mod
             bool isGroupFromBotGenerator = false;
