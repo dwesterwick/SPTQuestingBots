@@ -131,6 +131,7 @@
     <Compile Include="BotLogic\SAINInterop.cs" />
     <Compile Include="Components\Spawning\PScavGenerator.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
+    <Compile Include="Configuration\BotCapAdjustmentsConfig.cs" />
     <Compile Include="Configuration\BotSpawnTypeConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
@@ -197,7 +198,9 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Patches\AddEnemyPatch.cs" />
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
+    <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
+    <Compile Include="Patches\CheckOnMaxPatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />

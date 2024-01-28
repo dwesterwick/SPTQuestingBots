@@ -27,12 +27,12 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static bool PatchPrefix(ref IEnumerable<IPlayer>  __result, IEnumerable<IPlayer> persons)
         {
-            LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
+            //LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
 
             string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
             __result = persons.Where(p => !p.IsAI || generatedBotIDs.Contains(p.Profile.Id));
 
-            LoggingController.LogInfo("Non-AI Players: " + string.Join(", ", __result.Select(x => x.Profile.Nickname)));
+            //LoggingController.LogInfo("Non-AI Players: " + string.Join(", ", __result.Select(x => x.Profile.Nickname)));
 
             return false;
         }

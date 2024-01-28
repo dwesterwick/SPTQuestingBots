@@ -23,7 +23,11 @@ namespace SPTQuestingBots.Components.Spawning
 
         public PScavGenerator() : base("PScav")
         {
-            MinOtherBotsAllowedToSpawn = ConfigController.Config.BotSpawns.MinOtherBotsAllowedToSpawn;
+            if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
+            {
+                MinOtherBotsAllowedToSpawn = ConfigController.Config.BotSpawns.BotCapAdjustments.MinOtherBotsAllowedToSpawn;
+            }
+
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
 
             setMaxAliveBots();

@@ -18,23 +18,11 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("spawn_retry_time")]
         public float SpawnRetryTime { get; set; } = 10;
 
-        [JsonProperty("min_other_bots_allowed_to_spawn")]
-        public int MinOtherBotsAllowedToSpawn { get; set; } = 4;
+        [JsonProperty("advanced_eft_bot_count_management")]
+        public bool AdvancedEFTBotCountManagement { get; set; } = false;
 
-        [JsonProperty("max_initial_bosses")]
-        public int MaxInitialBosses { get; set; } = 10;
-
-        [JsonProperty("max_initial_rogues")]
-        public int MaxInitialRogues { get; set; } = 6;
-
-        [JsonProperty("add_max_players_to_bot_cap")]
-        public bool AddMaxPlayersToBotCap { get; set; } = false;
-
-        [JsonProperty("max_additional_bots")]
-        public int MaxAdditionalBots { get; set; } = 10;
-
-        [JsonProperty("max_total_bots")]
-        public int MaxTotalBots { get; set; } = 40;
+        [JsonProperty("bot_cap_adjustments")]
+        public BotCapAdjustmentsConfig BotCapAdjustments { get; set; } = new BotCapAdjustmentsConfig();
 
         [JsonProperty("max_alive_bots")]
         public Dictionary<string, int> MaxAliveBots { get; set; } = new Dictionary<string, int>();

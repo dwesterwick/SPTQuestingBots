@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public bool WaitForInitialBossesToSpawn { get; protected set; } = true;
         public int MaxAliveBots { get; protected set; } = 10;
-        public int MinOtherBotsAllowedToSpawn { get; protected set; } = 1;
+        public int MinOtherBotsAllowedToSpawn { get; protected set; } = -99;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();

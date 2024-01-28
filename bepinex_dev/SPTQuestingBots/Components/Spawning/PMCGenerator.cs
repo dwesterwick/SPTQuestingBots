@@ -23,7 +23,11 @@ namespace SPTQuestingBots.Components.Spawning
 
         public PMCGenerator() : base("PMC")
         {
-            MinOtherBotsAllowedToSpawn = ConfigController.Config.BotSpawns.MinOtherBotsAllowedToSpawn;
+            if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
+            {
+                MinOtherBotsAllowedToSpawn = ConfigController.Config.BotSpawns.BotCapAdjustments.MinOtherBotsAllowedToSpawn;
+            }
+
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
 
             setMaxAliveBots();

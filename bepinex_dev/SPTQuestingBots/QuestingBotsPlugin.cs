@@ -51,17 +51,24 @@ namespace SPTQuestingBots
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
-                    new Patches.BossLocationSpawnActivatePatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
 
-                    // TODO: This seems like only part of the puzzle to allow more Scavs to spawn on Lighthouse. Let's deal with it later.
-                    BotOwnerBrainActivatePatch.AdjustBotCounts = true;
-                    new Patches.GetListByZonePatch().Enable();
-                    new Patches.GetSpawnSystemPatch().Enable();
-                    new Patches.ExceptAIPatch().Enable();
+                    if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
+                    {
+                        new Patches.BossLocationSpawnActivatePatch().Enable();
+                    }
 
-                    Logger.LogInfo("Initial PMC spawning is enabled. Adjusting PMC conversion chances...");
+                    if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement)
+                    {
+                        new Patches.GetListByZonePatch().Enable();
+                        new Patches.GetSpawnSystemPatch().Enable();
+                        new Patches.ExceptAIPatch().Enable();
+                        new Patches.BotDiedPatch().Enable();
+                        new Patches.CheckOnMaxPatch().Enable();
+                    }
+
+                    Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);
                 }
                 

@@ -15,8 +15,6 @@ namespace SPTQuestingBots.Patches
 {
     public class BotOwnerBrainActivatePatch : ModulePatch
     {
-        public static bool AdjustBotCounts { get; set; } = false;
-
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -48,7 +46,7 @@ namespace SPTQuestingBots.Patches
 
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
 
-            if (AdjustBotCounts && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
                 LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
                 reduceBotCounts(__instance);
@@ -66,16 +64,16 @@ namespace SPTQuestingBots.Patches
             if (bot.Profile.Info.Settings.IsFollower())
             {
                 int followersCount = (int)followersCountField.GetValue(botSpawnerClass);
-                followersCountField.SetValue(botSpawnerClass, followersCount--);
+                followersCountField.SetValue(botSpawnerClass, followersCount - 1);
             }
             else if (bot.Profile.Info.Settings.IsBoss())
             {
                 int bossesCount = (int)bossesCountField.GetValue(botSpawnerClass);
-                bossesCountField.SetValue(botSpawnerClass, bossesCount--);
+                bossesCountField.SetValue(botSpawnerClass, bossesCount - 1);
             }
 
             int allBotsCount = (int)allBotsCountField.GetValue(botSpawnerClass);
-            allBotsCountField.SetValue(botSpawnerClass, allBotsCount--);
+            allBotsCountField.SetValue(botSpawnerClass, allBotsCount - 1);
         }
     }
 }

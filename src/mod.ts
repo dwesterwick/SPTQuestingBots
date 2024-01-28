@@ -286,12 +286,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
         if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
         {
-            this.commonUtils.logWarning("SWAG Detected. Disabling initial PMC spawns.");
+            this.commonUtils.logWarning("SWAG Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
         if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
-            this.commonUtils.logWarning("MOAR Detected. Disabling initial PMC spawns.");
+            this.commonUtils.logWarning("MOAR Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
 
@@ -305,23 +305,37 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             return;
         }
 
-        this.commonUtils.logInfo("Configuring game for initial PMC spawns...");
+        this.commonUtils.logInfo("Configuring game for bot spawning...");
 
         // Store the current PMC-conversion chances in case they need to be restored later
         this.setOriginalPMCConversionChances();
 
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
-        this.disableCustomBossWaves();
+        if (modConfig.bot_spawns.pmcs.enabled)
+        {
+            this.disableCustomBossWaves();
+        }
 
         // Disable all of the extra Scavs that spawn into Factory
-        this.disableCustomScavWaves();
+        if (modConfig.bot_spawns.player_scavs.enabled)
+        {
+            this.disableCustomScavWaves();
+        }
 
         // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
         this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
 
-        this.increaseBotCaps();
+        if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
+        {
+            this.increaseBotCaps();
+        }
 
-        this.commonUtils.logInfo("Configuring game for initial PMC spawns...done.");
+        if (modConfig.bot_spawns.advanced_eft_bot_count_management)
+        {
+            this.commonUtils.logWarning("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
+        }
+
+        this.commonUtils.logInfo("Configuring game for bot spawning...done.");
     }
 
     private updateScavTimer(sessionId: string): void
@@ -441,13 +455,13 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
     private increaseBotCaps(): void
     {
-        if (!modConfig.bot_spawns.add_max_players_to_bot_cap)
+        if (!modConfig.bot_spawns.bot_cap_adjustments.add_max_players_to_bot_cap)
         {
             return;
         }
 
-        const maxAddtlBots = modConfig.bot_spawns.max_additional_bots;
-        const maxTotalBots = modConfig.bot_spawns.max_total_bots;
+        const maxAddtlBots = modConfig.bot_spawns.bot_cap_adjustments.max_additional_bots;
+        const maxTotalBots = modConfig.bot_spawns.bot_cap_adjustments.max_total_bots;
 
         this.iBotConfig.maxBotCap.factory4_day = Math.min(this.iBotConfig.maxBotCap.factory4_day + Math.min(this.databaseTables.locations.factory4_day.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.factory4_night = Math.min(this.iBotConfig.maxBotCap.factory4_night + Math.min(this.databaseTables.locations.factory4_night.base.MaxPlayers, maxAddtlBots), maxTotalBots);
