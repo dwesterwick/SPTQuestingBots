@@ -50,6 +50,7 @@
 			"default_chance_of_bots_having_keys": 25
 		},
 		"min_time_between_switching_objectives": 5,
+		"default_wait_time_after_objective_completion": 5,
 		"wait_time_before_planting": 1,
 		"quest_generation": {
 			"navmesh_search_distance_item": 1.5,
@@ -239,6 +240,7 @@
 			"min_distance_from_players_during_raid": 75,
 			"min_distance_from_players_during_raid_factory": 35,
 			"fraction_of_max_players": 1.5,
+			"time_randomness": 10,
 			"bots_per_group_distribution" : [
 				[0.80, 1],
 				[0.85, 2],

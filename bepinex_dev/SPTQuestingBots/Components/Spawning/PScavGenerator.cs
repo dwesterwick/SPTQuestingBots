@@ -206,9 +206,9 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             float originalEscapeTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
-            int randomAdjustment = (int)Math.Round(originalEscapeTime * 0.1);
+            int randomAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
 
-            Dictionary<float, int> spawnWeights = new Dictionary<float, int>();
+            /*Dictionary<float, int> spawnWeights = new Dictionary<float, int>();
             float totalWeight = 0;
             foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
@@ -239,10 +239,42 @@ namespace SPTQuestingBots.Components.Spawning
                     botSpawnSchedule.Add(totalBots, spawnTime);
                     totalBots++;
                 }
+            }*/
+
+            List<float> possibleSpawnTimes = new List<float>();
+            foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
+            {
+                try
+                {
+                    float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
+                    int weight = ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
+
+                    for (int i = 0; i < weight; i++)
+                    {
+                        possibleSpawnTimes.Add(raidTime);
+                    }
+                }
+                catch (FormatException)
+                {
+                    LoggingController.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationID);
+                }
             }
 
-            IEnumerable<string> spawnTimes = botSpawnSchedule.Values.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
-            LoggingController.LogInfo("PScav spawn times for " + totalBots + " bots: " + string.Join(", ", spawnTimes));
+            System.Random random = new System.Random();
+            int totalBots = 0;
+            for (int wave = 0; wave < pScavs; wave++)
+            {
+                float selectedSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
+                float adjustedSpawnTime = Math.Min(possibleSpawnTimes.Max(), Math.Max(possibleSpawnTimes.Min(), selectedSpawnTime + random.Next(-1 * randomAdjustment, randomAdjustment)));
+                
+                botSpawnSchedule.Add(totalBots, adjustedSpawnTime);
+                totalBots++;
+            }
+
+            IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
+            IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
+
+            LoggingController.LogInfo("PScav spawn times for " + totalBots + " bots: " + string.Join(", ", spawnTimeTexts));
         }
 
         private void setMaxAliveBots()

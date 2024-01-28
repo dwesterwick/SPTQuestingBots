@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("fraction_of_max_players")]
         public float FractionOfMaxPlayers { get; set; } = 1;
 
+        [JsonProperty("time_randomness")]
+        public float TimeRandomness { get; set; } = 0;
+
         [JsonProperty("fraction_of_max_players_vs_raidET")]
         public double[][] FractionOfMaxPlayersVsRaidET { get; set; } = new double[0][];
 

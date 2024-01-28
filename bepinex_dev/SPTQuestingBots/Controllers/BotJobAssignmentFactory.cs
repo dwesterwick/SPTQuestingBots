@@ -402,14 +402,14 @@ namespace SPTQuestingBots.Controllers
             return false;
         }
 
-        public static BotJobAssignment GetCurrentJobAssignment(this BotOwner bot)
+        public static BotJobAssignment GetCurrentJobAssignment(this BotOwner bot, bool allowUpdate = true)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
                 botJobAssignments.Add(bot.Profile.Id, new List<BotJobAssignment>());
             }
 
-            if (DoesBotHaveNewJobAssignment(bot))
+            if (allowUpdate && DoesBotHaveNewJobAssignment(bot))
             {
                 LoggingController.LogInfo("Bot " + bot.GetText() + " is now doing " + botJobAssignments[bot.Profile.Id].Last().ToString());
 
@@ -433,7 +433,11 @@ namespace SPTQuestingBots.Controllers
                 return botJobAssignments[bot.Profile.Id].Last();
             }
 
-            LoggingController.LogWarning("Could not get a job assignment for bot " + bot.GetText());
+            if (allowUpdate)
+            {
+                LoggingController.LogWarning("Could not get a job assignment for bot " + bot.GetText());
+            }
+
             return null;
         }
 

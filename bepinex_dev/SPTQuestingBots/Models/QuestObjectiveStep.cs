@@ -29,7 +29,7 @@ namespace SPTQuestingBots.Models
     public class QuestObjectiveStep
     {
         [JsonProperty("waitTimeAfterCompleting")]
-        public double WaitTimeAfterCompleting { get; set; } = 10;
+        public double WaitTimeAfterCompleting { get; set; } = ConfigController.Config.Questing.DefaultWaitTimeAfterObjectiveCompletion;
 
         [JsonProperty("position")]
         public SerializableVector3 SerializablePosition { get; set; } = null;

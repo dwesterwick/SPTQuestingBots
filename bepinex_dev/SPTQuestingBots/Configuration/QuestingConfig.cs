@@ -36,6 +36,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("min_time_between_switching_objectives")]
         public float MinTimeBetweenSwitchingObjectives { get; set; } = 5;
 
+        [JsonProperty("default_wait_time_after_objective_completion")]
+        public float DefaultWaitTimeAfterObjectiveCompletion { get; set; } = 10;
+
         [JsonProperty("wait_time_before_planting")]
         public float WaitTimeBeforePlanting { get; set; } = 1;
 

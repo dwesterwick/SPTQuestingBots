@@ -196,6 +196,13 @@
                             "y": 0.259162873,
                             "z": -25.7997437
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": -16.4820213,
+                            "y": 0.2587055,
+                            "z": -30.8747845
+                        }
                     }
                 ]
             }
@@ -467,6 +474,209 @@
                             "x": -19.5395241,
                             "y": 0.124587663,
                             "z": 18.2060833
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -19.2387371,
+                            "y": 2.80248833,
+                            "z": 25.4677982
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "desirability": 30,
+        "name": "Weapon Crate in Workshop",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -1.93162012,
+                            "y": 0.0285317674,
+                            "z": -7.28332
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 15,
+        "name": "Holding Area Patrol",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -24.77775,
+                            "y": 1.04092336,
+                            "z": 54.6349144
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 15,
+        "name": "Bathroom Key Spawns",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 17.3941059,
+                            "y": 4.53283548,
+                            "z": 40.3690834
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 31.1609535,
+                            "y": 4.532834,
+                            "z": 48.15273
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 15,
+        "name": "3rd Floor Hallway",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 23.0656872,
+                            "y": 8.210877,
+                            "z": 35.2329865
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 15,
+        "name": "Weapon Create Outside of Forklift",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 40.1797028,
+                            "y": 0.0500259921,
+                            "z": -27.2378216
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "desirability": 20,
+        "name": "Break Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 44.3356667,
+                            "y": 4.41316557,
+                            "z": 40.4929771
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Silos",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 18.1133633,
+                            "y": 0.0688911751,
+                            "z": 1.38644886
                         }
                     }
                 ]
