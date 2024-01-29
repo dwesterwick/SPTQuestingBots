@@ -13,6 +13,7 @@
 		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
+	"chance_of_players_being_hostile_toward_all_bosses": 100,
 	"questing": {
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,

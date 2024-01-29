@@ -46,6 +46,16 @@ namespace SPTQuestingBots.Patches
 
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
 
+            BotType botType = Controllers.BotRegistrationManager.GetBotType(__instance);
+            if ((botType == BotType.PMC) || (botType == BotType.PScav))
+            {
+                System.Random random = new System.Random();
+                if (random.Next(1, 100) <= ConfigController.Config.ChanceOfPlayersBeingHostileTowardAllBosses)
+                {
+                    Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
+                }
+            }
+
             if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
                 LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
