@@ -19,8 +19,6 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public abstract class BotGenerator : MonoBehaviour
     {
-        public static Task BotGenerationTask { get; private set; } = null;
-
         public bool IsSpawningBots { get; private set; } = false;
         public string BotTypeName { get; private set; } = "???";
 
@@ -32,10 +30,17 @@ namespace SPTQuestingBots.Components.Spawning
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
 
+        private static Task botGenerationMonitorTask = null;
+        private static readonly List<Task> botGeneratorTaskList = new List<Task>();
+        private static readonly List<Func<Task>> botGeneratorCreatorList = new List<Func<Task>>();
+
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
         public bool HasRemainingSpawns => !HasGeneratedBotGroups() || BotGroups.Any(g => !g.HasSpawned);
         public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
+
+        public static int RemainingBotGenerators => botGeneratorCreatorList.Count - botGeneratorTaskList.Count + (botGenerationMonitorTask.IsCompleted ? 0 : 1);
+        public static IReadOnlyCollection<Task> GetBotGeneratorTasks() => botGeneratorTaskList.AsReadOnly();
 
         public BotGenerator(string _botTypeName)
         {
@@ -242,15 +247,24 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected void AddBotGenerationTask(Func<Task> botGenerationTask)
         {
-            if ((BotGenerationTask == null) || BotGenerationTask.IsCompleted)
+            botGeneratorCreatorList.Add(botGenerationTask);
+
+            if ((botGenerationMonitorTask == null) || botGenerationMonitorTask.IsCompleted)
             {
-                BotGenerationTask = botGenerationTask();
+                Task task = botGenerationTask();
+                botGeneratorTaskList.Add(task);
+
+                botGenerationMonitorTask = task;
             }
             else
             {
-                BotGenerationTask.ContinueWith((_) =>
+                botGenerationMonitorTask = botGenerationMonitorTask.ContinueWith(async (_) =>
                 {
-                    botGenerationTask(); 
+                    Task task = botGenerationTask();
+                    botGeneratorTaskList.Add(task);
+
+                    await task;
+                    LoggingController.LogInfo("Finished additional task");
                 }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
             }
         }

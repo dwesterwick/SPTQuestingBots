@@ -62,7 +62,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             if (pmcCount > 0)
             {
-                LoggingController.LogInfo(pmcCount + "initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
+                LoggingController.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
 
                 BotDifficulty botDifficulty = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using UnityEngine;
 using Aki.Reflection.Utils;
+using SPTQuestingBots.Components.Spawning;
 
 namespace SPTQuestingBots.Patches
 {
@@ -24,13 +25,6 @@ namespace SPTQuestingBots.Patches
         {
             Type baseLocalGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType.BaseType;
             return baseLocalGameType.GetMethod("method_5", BindingFlags.NonPublic | BindingFlags.Instance);
-        }
-
-        [PatchPrefix]
-        private static void PatchPrefix(BotControllerSettings botsSettings, ISpawnSystem spawnSystem, Callback runCallback)
-        {
-            string message = "Generating bots...";
-            NotificationManagerClass.DisplayMessageNotification(message, ENotificationDurationType.Default, ENotificationIconType.Default, Color.white);
         }
 
         [PatchPostfix]

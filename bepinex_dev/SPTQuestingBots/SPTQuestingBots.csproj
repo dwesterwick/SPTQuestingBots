@@ -216,6 +216,7 @@
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ServerRequestPatch.cs" />
     <Compile Include="Patches\TryToSpawnInZoneAndDelayPatch.cs" />
+    <Compile Include="Patches\WaitForBotGenPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsPlugin.cs" />
     <Compile Include="QuestingBotsPluginConfig.cs" />
