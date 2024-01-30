@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.UI;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -61,12 +62,13 @@ namespace SPTQuestingBots.Components.Spawning
 
             if (pmcCount > 0)
             {
-                LoggingController.LogInfo("Generating initial PMC groups...Generating " + pmcCount + " PMC's (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
+                LoggingController.LogInfo(pmcCount + "initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
 
                 BotDifficulty botDifficulty = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
                 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                generateBotGroupsTask(botDifficulty, pmcCount);
+                //generateBotGroupsTask(botDifficulty, pmcCount);
+                AddBotGenerationTask(generateBotGroupsTask(botDifficulty, pmcCount));
                 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             else
@@ -138,53 +140,58 @@ namespace SPTQuestingBots.Components.Spawning
             return new Configuration.MinMaxConfig(minPlayers, maxPlayers);
         }
 
-        private async Task generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
+        private Func<Task> generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
         {
-            int botsGenerated = 0;
-
-            try
+            return async () =>
             {
-                // Ensure the PMC-conversion chances have remained at 0%
-                ConfigController.AdjustPMCConversionChances(0, true);
+                int botsGenerated = 0;
 
-                // Spawn smaller PMC groups later in raids
-                double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
-
-                System.Random random = new System.Random();
-                int botGroup = 1;
-                while (botsGenerated < totalCount)
+                try
                 {
-                    // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                    int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
-                    botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
-                    botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
+                    // Ensure the PMC-conversion chances have remained at 0%
+                    ConfigController.AdjustPMCConversionChances(0, true);
 
-                    // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
-                    WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
+                    LoggingController.LogInfo("Generating " + totalCount + " PMC's...");
 
-                    Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botdifficulty, botsInGroup);
-                    BotGroups.Add(group);
+                    // Spawn smaller PMC groups later in raids
+                    double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
 
-                    botsGenerated += botsInGroup;
-                    botGroup++;
+                    System.Random random = new System.Random();
+                    int botGroup = 1;
+                    while (botsGenerated < totalCount)
+                    {
+                        // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
+                        int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
+                        botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
+                        botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
+
+                        // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
+                        WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
+
+                        Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botdifficulty, botsInGroup);
+                        BotGroups.Add(group);
+
+                        botsGenerated += botsInGroup;
+                        botGroup++;
+                    }
+
+                    LoggingController.LogInfo("Generating " + totalCount + " PMC's...done.");
                 }
-
-                LoggingController.LogInfo("Generating PMC bots...done.");
-            }
-            catch (Exception e)
-            {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
-            }
-            finally
-            {
-                if (botsGenerated < totalCount)
+                catch (Exception e)
                 {
-                    LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " initial PMC's were generated due to an error.");
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
                 }
+                finally
+                {
+                    if (botsGenerated < totalCount)
+                    {
+                        LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " initial PMC's were generated due to an error.");
+                    }
 
-                hasGeneratedBotGroups = true;
-            }
+                    hasGeneratedBotGroups = true;
+                }
+            };
         }
 
         private float getMinDistanceFromOtherPlayers()

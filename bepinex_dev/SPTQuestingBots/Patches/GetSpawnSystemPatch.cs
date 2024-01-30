@@ -2,6 +2,7 @@
 using Comfort.Common;
 using EFT;
 using EFT.Bots;
+using EFT.Communications;
 using EFT.Game.Spawning;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
@@ -11,6 +12,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using UnityEngine;
+using Aki.Reflection.Utils;
 
 namespace SPTQuestingBots.Patches
 {
@@ -22,8 +26,20 @@ namespace SPTQuestingBots.Patches
             return baseLocalGameType.GetMethod("method_5", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
+        [PatchPrefix]
+        private static void PatchPrefix(BotControllerSettings botsSettings, ISpawnSystem spawnSystem, Callback runCallback)
+        {
+            string message = "Generating bots...";
+            NotificationManagerClass.DisplayMessageNotification(message, ENotificationDurationType.Default, ENotificationIconType.Default, Color.white);
+        }
+
         [PatchPostfix]
         private static void PatchPostfix(BotControllerSettings botsSettings, ISpawnSystem spawnSystem, Callback runCallback)
+        {
+            getSpawnSystem(spawnSystem);
+        }
+
+        private static void getSpawnSystem(ISpawnSystem spawnSystem)
         {
             Type spawnSystemClassType = Aki.Reflection.Utils.PatchConstants.EftTypes.Single((Type x) => x.Name == "SpawnSystemClass");
 

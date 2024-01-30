@@ -34,6 +34,14 @@ namespace SPTQuestingBots.Components.Spawning
 
             ConfigController.GetScavRaidSettings();
             createBotSpawnSchedule();
+
+            // Check if PScavs are allowed to spawn in the raid
+            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
+            {
+                return;
+            }
+
+            generateBotGroups();
         }
 
         protected override void Update()
@@ -62,7 +70,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return;
             }
 
-            generateBotGroups();
+            //generateBotGroups();
         }
 
         public override bool HasGeneratedBotGroups() => hasGeneratedBotGroups;
@@ -94,58 +102,62 @@ namespace SPTQuestingBots.Components.Spawning
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
             BotDifficulty botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
-            LoggingController.LogInfo("Generating " + botSpawnSchedule.Count + " PScavs...");
-
             #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count);
+            //generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count);
+            AddBotGenerationTask(generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count));
             #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        private async Task generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
+        private Func<Task> generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
         {
-            int botsGenerated = 0;
-
-            try
+            return async () =>
             {
-                isGeneratingBotGroups = true;
+                int botsGenerated = 0;
 
-                // Ensure the PMC-conversion chances have remained at 0%
-                ConfigController.AdjustPMCConversionChances(0, true);
-
-                System.Random random = new System.Random();
-                int botGroup = 0;
-                while (botsGenerated < totalCount)
+                try
                 {
-                    // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                    int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
-                    botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
+                    isGeneratingBotGroups = true;
 
-                    ServerRequestPatch.ForcePScavCount += botsInGroup;
-                    Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botdifficulty, botsInGroup);
-                    group.RaidETRangeToSpawn.Min = botSpawnSchedule[botsGenerated];
-                    BotGroups.Add(group);
+                    LoggingController.LogInfo("Generating " + totalCount + " PScavs...");
 
-                    botsGenerated += botsInGroup;
-                    botGroup++;
+                    // Ensure the PMC-conversion chances have remained at 0%
+                    ConfigController.AdjustPMCConversionChances(0, true);
+
+                    System.Random random = new System.Random();
+                    int botGroup = 0;
+                    while (botsGenerated < totalCount)
+                    {
+                        // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
+                        int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
+                        botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
+
+                        ServerRequestPatch.ForcePScavCount += botsInGroup;
+                        Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botdifficulty, botsInGroup);
+                        group.RaidETRangeToSpawn.Min = botSpawnSchedule[botsGenerated];
+                        BotGroups.Add(group);
+
+                        botsGenerated += botsInGroup;
+                        botGroup++;
+                    }
+
+                    LoggingController.LogInfo("Generating " + totalCount + " PScavs...done.");
                 }
-
-                LoggingController.LogInfo("Generating PScavs...done.");
-            }
-            catch (Exception e)
-            {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
-            }
-            finally
-            {
-                if (botsGenerated < totalCount)
+                catch (Exception e)
                 {
-                    LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " PScavs were generated due to an error.");
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
                 }
+                finally
+                {
+                    if (botsGenerated < totalCount)
+                    {
+                        LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " PScavs were generated due to an error.");
+                    }
 
-                hasGeneratedBotGroups = true;
-                isGeneratingBotGroups = false;
-            }
+                    hasGeneratedBotGroups = true;
+                    isGeneratingBotGroups = false;
+                }
+            };
         }
 
         protected override int NumberOfBotsAllowedToSpawn()

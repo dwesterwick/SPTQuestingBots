@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public abstract class BotGenerator : MonoBehaviour
     {
+        public static Task BotGenerationTask { get; private set; } = null;
+
         public bool IsSpawningBots { get; private set; } = false;
         public string BotTypeName { get; private set; } = "???";
 
@@ -235,6 +238,21 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return remainingBots;
+        }
+
+        protected void AddBotGenerationTask(Func<Task> botGenerationTask)
+        {
+            if ((BotGenerationTask == null) || BotGenerationTask.IsCompleted)
+            {
+                BotGenerationTask = botGenerationTask();
+            }
+            else
+            {
+                BotGenerationTask.ContinueWith((_) =>
+                {
+                    botGenerationTask(); 
+                }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            }
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
