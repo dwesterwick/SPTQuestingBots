@@ -54,6 +54,7 @@ namespace SPTQuestingBots
                     new Patches.WaitForBotGenPatch().Enable();
                     new Patches.InitBossSpawnLocationPatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
+                    new Patches.GameStartPatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.LimitInitialBossSpawns.Enabled)
                     {

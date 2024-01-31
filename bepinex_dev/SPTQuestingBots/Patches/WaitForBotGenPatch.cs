@@ -25,6 +25,8 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref Task __result)
         {
+            return;
+
             Task originalTask = __result;
             __result = addTask(originalTask);
 
