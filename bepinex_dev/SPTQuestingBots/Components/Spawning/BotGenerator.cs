@@ -30,8 +30,8 @@ namespace SPTQuestingBots.Components.Spawning
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
 
-        private static Task botGenerationMonitorTask = null;
-        private static readonly List<Task> botGeneratorTaskList = new List<Task>();
+        public static int RemainingBotGenerators = 0;
+        public static Task BotGenerationTask = null;
         private static readonly List<Func<Task>> botGeneratorCreatorList = new List<Func<Task>>();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
@@ -39,14 +39,13 @@ namespace SPTQuestingBots.Components.Spawning
         public bool HasRemainingSpawns => !HasGeneratedBotGroups() || BotGroups.Any(g => !g.HasSpawned);
         public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
 
-        public static int RemainingBotGenerators => botGeneratorCreatorList.Count - botGeneratorTaskList.Count + (botGenerationMonitorTask.IsCompleted ? 0 : 1);
-        public static IReadOnlyCollection<Task> GetBotGeneratorTasks() => botGeneratorTaskList.AsReadOnly();
-
         public BotGenerator(string _botTypeName)
         {
             BotTypeName = _botTypeName;
 
             LoggingController.LogInfo("Started " + BotTypeName + " generator");
+
+            GenerateInitialBotGroups();
         }
 
         public abstract bool HasGeneratedBotGroups();
@@ -57,7 +56,7 @@ namespace SPTQuestingBots.Components.Spawning
         
         protected virtual void Awake()
         {
-            GenerateInitialBotGroups();
+            
         }
 
         protected virtual void Update()
@@ -245,28 +244,31 @@ namespace SPTQuestingBots.Components.Spawning
             return remainingBots;
         }
 
+        public static void RunBotGenerationTasks()
+        {
+            BotGenerationTask = runBotGenerationTasks();
+        }
+
+        private static async Task runBotGenerationTasks()
+        {
+            RemainingBotGenerators = botGeneratorCreatorList.Count;
+
+            foreach (Func<Task> botGeneratorCreator in botGeneratorCreatorList)
+            {
+                Task task = botGeneratorCreator();
+                await task;
+
+                RemainingBotGenerators--;
+            }
+
+            botGeneratorCreatorList.Clear();
+
+            RemainingBotGenerators = 0;
+        }
+
         protected void AddBotGenerationTask(Func<Task> botGenerationTask)
         {
             botGeneratorCreatorList.Add(botGenerationTask);
-
-            if ((botGenerationMonitorTask == null) || botGenerationMonitorTask.IsCompleted)
-            {
-                Task task = botGenerationTask();
-                botGeneratorTaskList.Add(task);
-
-                botGenerationMonitorTask = task;
-            }
-            else
-            {
-                botGenerationMonitorTask = botGenerationMonitorTask.ContinueWith(async (_) =>
-                {
-                    Task task = botGenerationTask();
-                    botGeneratorTaskList.Add(task);
-
-                    await task;
-                    LoggingController.LogInfo("Finished additional task");
-                }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-            }
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)

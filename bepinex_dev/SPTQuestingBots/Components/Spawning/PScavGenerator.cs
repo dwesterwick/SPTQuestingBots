@@ -15,7 +15,6 @@ namespace SPTQuestingBots.Components.Spawning
     public class PScavGenerator : BotGenerator
     {
         private bool hasGeneratedBotGroups = false;
-        private bool isGeneratingBotGroups = false;
         private Dictionary<int, float> botSpawnSchedule = new Dictionary<int, float>();
 
         // Temporarily stores spawn points for bots while trying to spawn several of them
@@ -35,12 +34,6 @@ namespace SPTQuestingBots.Components.Spawning
             ConfigController.GetScavRaidSettings();
             createBotSpawnSchedule();
 
-            // Check if PScavs are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
-            {
-                return;
-            }
-
             generateBotGroups();
         }
 
@@ -52,25 +45,6 @@ namespace SPTQuestingBots.Components.Spawning
             {
                 pendingSpawnPoints.Clear();
             }
-
-            if (isGeneratingBotGroups || HasGeneratedBotGroups())
-            {
-                return;
-            }
-
-            // Check if PScavs are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
-            {
-                return;
-            }
-
-            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
-            if ((pmcGenerator != null) && !pmcGenerator.HasGeneratedBotGroups())
-            {
-                return;
-            }
-
-            //generateBotGroups();
         }
 
         public override bool HasGeneratedBotGroups() => hasGeneratedBotGroups;
@@ -99,13 +73,16 @@ namespace SPTQuestingBots.Components.Spawning
 
         private void generateBotGroups()
         {
+            // Check if PScavs are allowed to spawn in the raid
+            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
+            {
+                return;
+            }
+
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
             BotDifficulty botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
-            #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            //generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count);
             AddBotGenerationTask(generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count));
-            #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
         private Func<Task> generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
@@ -116,8 +93,6 @@ namespace SPTQuestingBots.Components.Spawning
 
                 try
                 {
-                    isGeneratingBotGroups = true;
-
                     LoggingController.LogInfo("Generating " + totalCount + " PScavs...");
 
                     // Ensure the PMC-conversion chances have remained at 0%
@@ -155,7 +130,6 @@ namespace SPTQuestingBots.Components.Spawning
                     }
 
                     hasGeneratedBotGroups = true;
-                    isGeneratingBotGroups = false;
                 }
             };
         }

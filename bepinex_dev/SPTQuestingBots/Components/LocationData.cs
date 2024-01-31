@@ -10,6 +10,7 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using HarmonyLib;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
@@ -57,6 +58,8 @@ namespace SPTQuestingBots.Components
                 {
                     Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PScavGenerator>();
                 }
+
+                BotGenerator.RunBotGenerationTasks();
             }
         }
 

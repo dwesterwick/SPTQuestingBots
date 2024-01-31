@@ -60,16 +60,16 @@ namespace SPTQuestingBots.Components.Spawning
             Configuration.MinMaxConfig pmcCountRange = getPMCCount();
             int pmcCount = random.Next((int)pmcCountRange.Min, (int)pmcCountRange.Max);
 
+            // There must be at least 1 PMC still in the map or PScavs will not be allowed to join in live
+            pmcCount = Math.Max(1, pmcCount);
+
             if (pmcCount > 0)
             {
                 LoggingController.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
 
                 BotDifficulty botDifficulty = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
-                #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                //generateBotGroupsTask(botDifficulty, pmcCount);
                 AddBotGenerationTask(generateBotGroupsTask(botDifficulty, pmcCount));
-                #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             else
             {
