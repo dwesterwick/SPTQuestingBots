@@ -21,6 +21,9 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix()
         {
             Singleton<GameWorld>.Instance.gameObject.AddComponent<Components.LocationData>();
+
+            GameStartPatch.ClearMissedWaves();
+            GameStartPatch.IsDelayingGameStart = true;
         }
     }
 }
