@@ -18,6 +18,12 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("spawn_retry_time")]
         public float SpawnRetryTime { get; set; } = 10;
 
+        [JsonProperty("delay_game_start_until_bot_gen_finishes")]
+        public bool DelayGameStartUntilBotGenFinishes { get; set; } = false;
+
+        [JsonProperty("spawn_initial_bosses_first")]
+        public bool SpawnInitialBossesFirst { get; set; } = true;
+
         [JsonProperty("advanced_eft_bot_count_management")]
         public bool AdvancedEFTBotCountManagement { get; set; } = false;
 

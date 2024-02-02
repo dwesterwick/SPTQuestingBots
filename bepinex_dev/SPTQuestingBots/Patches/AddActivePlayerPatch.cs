@@ -1,6 +1,7 @@
 ﻿using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,11 @@ namespace SPTQuestingBots.Patches
         {
             Singleton<GameWorld>.Instance.gameObject.AddComponent<Components.LocationData>();
 
-            GameStartPatch.ClearMissedWaves();
-            GameStartPatch.IsDelayingGameStart = true;
+            if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
+            {
+                GameStartPatch.ClearMissedWaves();
+                GameStartPatch.IsDelayingGameStart = true;
+            }
         }
     }
 }

@@ -49,8 +49,26 @@ namespace SPTQuestingBots.Patches
             BotType botType = Controllers.BotRegistrationManager.GetBotType(__instance);
             if ((botType == BotType.PMC) || (botType == BotType.PScav))
             {
+                float chance = 0;
+                if (botType == BotType.Scav)
+                {
+                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Scav;
+                }
+                else if (botType == BotType.PScav)
+                {
+                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PScav;
+                }
+                else if (botType == BotType.PMC)
+                {
+                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PMC;
+                }
+                else if (botType == BotType.Boss)
+                {
+                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Boss;
+                }
+
                 System.Random random = new System.Random();
-                if (random.Next(1, 100) <= ConfigController.Config.ChanceOfPlayersBeingHostileTowardAllBosses)
+                if (random.Next(1, 100) <= chance)
                 {
                     Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
                 }

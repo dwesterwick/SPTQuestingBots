@@ -18,8 +18,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_calc_time_per_frame_ms")]
         public float MaxCalcTimePerFrame { get; set; } = 5;
 
-        [JsonProperty("chance_of_players_being_hostile_toward_all_bosses")]
-        public float ChanceOfPlayersBeingHostileTowardAllBosses { get; set; } = 0;
+        [JsonProperty("chance_of_being_hostile_toward_bosses")]
+        public BotTypeValueConfig ChanceOfBeingHostileTowardBosses { get; set; } = new BotTypeValueConfig();
 
         [JsonProperty("questing")]
         public QuestingConfig Questing { get; set; } = new QuestingConfig();

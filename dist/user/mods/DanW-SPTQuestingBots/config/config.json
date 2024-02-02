@@ -13,7 +13,12 @@
 		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
-	"chance_of_players_being_hostile_toward_all_bosses": 100,
+	"chance_of_being_hostile_toward_bosses": {
+		"scav": 0,
+		"pscav": 20,
+		"pmc": 80,
+		"boss": 0
+	},
 	"questing": {
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
@@ -96,6 +101,7 @@
 			}
 		},
 		"extraction_requirements": {
+			"min_alive_time": 60,
 			"must_extract_time_remaining": 300,
 			"total_quests": {
 				"min": 6,
@@ -194,6 +200,8 @@
 		"enabled": true,
 		"blacklisted_pmc_bot_brains": [ "bossKilla", "bossTagilla", "exUsec", "followerGluharAssault", "followerGluharProtect", "crazyAssaultEvent", "bossKnight" ],
 		"spawn_retry_time": 10,
+		"delay_game_start_until_bot_gen_finishes": true,
+		"spawn_initial_bosses_first": true,
 		"advanced_eft_bot_count_management": false,
 		"bot_cap_adjustments" : {
 			"enabled": true,

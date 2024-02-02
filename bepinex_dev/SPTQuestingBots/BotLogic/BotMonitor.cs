@@ -195,9 +195,7 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsBotReadyToExtract()
         {
-            int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
-
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
+            if (Time.time - botOwner.ActivateTime < ConfigController.Config.Questing.ExtractionRequirements.MinAliveTime)
             {
                 return false;
             }
@@ -207,6 +205,12 @@ namespace SPTQuestingBots.BotLogic
             {
                 LoggingController.LogInfo(botOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
                 return true;
+            }
+
+            int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
+            {
+                return false;
             }
 
             System.Random random = new System.Random();

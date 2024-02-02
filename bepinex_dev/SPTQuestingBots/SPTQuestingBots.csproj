@@ -133,6 +133,7 @@
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="Configuration\BotCapAdjustmentsConfig.cs" />
     <Compile Include="Configuration\BotSpawnTypeConfig.cs" />
+    <Compile Include="Configuration\BotTypeValueConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\LimitInitialBossSpawnsConfig.cs" />

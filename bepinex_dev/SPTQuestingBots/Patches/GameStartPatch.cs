@@ -34,6 +34,11 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
         {
+            if (!IsDelayingGameStart)
+            {
+                return;
+            }
+
             localGameObj = __instance;
 
             __result = addTask(__result);
@@ -62,13 +67,23 @@ namespace SPTQuestingBots.Patches
             float safetyDelay = 999;
 
             IEnumerable<object> timers = getAllTimers();
+
+            //IEnumerable<float> originalTimerEndTimes = timers.Select(t => getTimerEndTime(t));
+            //LoggingController.LogInfo("Original Start Time: " + startTime);
+            //LoggingController.LogInfo("Original Timer EndTimes: " + string.Join(", ", originalTimerEndTimes));
+
             updateAllTimers(timers, 0, safetyDelay);
 
             yield return waitForBotGen();
 
             LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator completed");
 
-            updateAllTimers(timers, Time.time - startTime, -1 * safetyDelay);
+            float newStartTime = Time.time;
+            updateAllTimers(timers, newStartTime - startTime, -1 * safetyDelay);
+
+            //IEnumerable<float> newTimerEndTimes = timers.Select(t => getTimerEndTime(t));
+            //LoggingController.LogInfo("New Start Time: " + newStartTime);
+            //LoggingController.LogInfo("New Timer EndTimes: " + string.Join(", ", newTimerEndTimes));
 
             IsDelayingGameStart = false;
 
@@ -101,8 +116,7 @@ namespace SPTQuestingBots.Patches
         {
             foreach (object timer in timers)
             {
-                PropertyInfo endTimeProperty = AccessTools.Property(timer.GetType(), "EndTime");
-                float currentEndTime = (float)endTimeProperty.GetValue(timer);
+                float currentEndTime = getTimerEndTime(timer);
                 float newEndTime = currentEndTime + delay + safetyDelay;
 
                 MethodInfo restartMethod = AccessTools.Method(timer.GetType(), "Restart");
@@ -110,6 +124,14 @@ namespace SPTQuestingBots.Patches
             }
 
             LoggingController.LogInfo("Added additional delay of " + delay + "s to " + timers.Count() + " timers");
+        }
+
+        private static float getTimerEndTime(object timer)
+        {
+            PropertyInfo endTimeProperty = AccessTools.Property(timer.GetType(), "EndTime");
+            float endTime = (float)endTimeProperty.GetValue(timer);
+
+            return endTime;
         }
 
         private static IEnumerable<object> getAllTimers()
