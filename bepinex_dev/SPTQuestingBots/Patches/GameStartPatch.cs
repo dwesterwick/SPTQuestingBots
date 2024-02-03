@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
+using ChatShared;
 using Comfort.Common;
 using EFT;
 using EFT.Communications;
@@ -34,6 +35,8 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
         {
+            MatchmakerFinalCountdownUpdatePatch.ResetText();
+
             if (!IsDelayingGameStart)
             {
                 return;
@@ -199,24 +202,24 @@ namespace SPTQuestingBots.Patches
         private static IEnumerator waitForBotGen()
         {
             bool hadToWait = false;
-            float waitPeriod = 50;
-            int notificationUpdatePeriod = 2000;
+            float waitPeriod = 100;
+            int maxPeriods = 5;
 
-            Stopwatch notificationDelayTimer = Stopwatch.StartNew();
+            int periods = 1;
             while (BotGenerator.RemainingBotGenerators > 0)
             {
-                if (!hadToWait || (notificationDelayTimer.ElapsedMilliseconds > notificationUpdatePeriod))
-                {
-                    string message = "Waiting for " + BotGenerator.RemainingBotGenerators + " bot generator(s) to finish...";
-
-                    LoggingController.LogInfo(message);
-                    NotificationManagerClass.DisplayMessageNotification(message, ENotificationDurationType.Default, ENotificationIconType.Default, Color.white);
-
-                    notificationDelayTimer.Restart();
-                }
+                hadToWait = true;
+                string message = "Waiting for " + BotGenerator.RemainingBotGenerators + " bot generator(s)";
 
                 yield return new WaitForSeconds(waitPeriod / 1000f);
-                hadToWait = true;
+                
+                MatchmakerFinalCountdownUpdatePatch.SetText(message + (new string('.', periods)));
+
+                periods++;
+                if (periods > maxPeriods)
+                {
+                    periods = 1;
+                }
             }
 
             if (hadToWait)

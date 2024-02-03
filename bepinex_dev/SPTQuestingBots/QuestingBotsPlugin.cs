@@ -52,6 +52,7 @@ namespace SPTQuestingBots
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.GameStartPatch().Enable();
+                    new Patches.MatchmakerFinalCountdownUpdatePatch().Enable();
                     new Patches.ActivateBotsByWavePatch().Enable();
                     new Patches.ActivateBotsByWavePatch2().Enable();
                     new Patches.AddEnemyPatch().Enable();
