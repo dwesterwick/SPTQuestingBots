@@ -489,13 +489,13 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
-                "maxRunDistance": 5,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
-                            "x": -58.4208,
-                            "y": 21.32553,
-                            "z": -286.422943
+                            "x": -59.2878952,
+                            "y": 21.50956,
+                            "z": -291.0813
                         }
                     }
                 ]

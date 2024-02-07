@@ -127,7 +127,7 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        public bool TryForceBotToLootNow(float duration)
+        public bool TryForceBotToScanLoot()
         {
             if (!canUseLootingBotsInterop)
             {
@@ -140,14 +140,9 @@ namespace SPTQuestingBots.BotLogic
                 LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly.");
             }
 
-            if (LootingBots.LootingBotsInterop.TryForceBotToLootNow(botOwner, duration))
+            if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(botOwner))
             {
                 LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
-
-                // Need to reset these or bots may crouch-walk for a long distance
-                // TODO: This doesn't seem to work. Maybe Looting Bots is forcing this behavior?
-                botOwner.SetPose(1f);
-                botOwner.SetTargetMoveSpeed(1f);
 
                 return true;
             }
@@ -164,6 +159,12 @@ namespace SPTQuestingBots.BotLogic
             if (!canUseSAINInterop)
             {
                 //LoggingController.LogWarning("SAIN Interop not detected");
+                return false;
+            }
+
+            if (!SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner))
+            {
+                LoggingController.LogWarning("Could find an extract for " + botOwner.GetText());
                 return false;
             }
 

@@ -342,12 +342,12 @@ namespace SPTQuestingBots.BotLogic.Objective
             return false;
         }
 
-        public void UpdateLootingBehavior(LootAfterCompleting behavior, float duration)
+        public void UpdateLootingBehavior(LootAfterCompleting behavior, float duration = 0)
         {
             switch (behavior)
             {
                 case LootAfterCompleting.Force:
-                    BotMonitor.TryForceBotToLootNow(duration);
+                    BotMonitor.TryForceBotToScanLoot();
                     break;
                 case LootAfterCompleting.Inhibit:
                     BotMonitor.TryPreventBotFromLooting(duration);

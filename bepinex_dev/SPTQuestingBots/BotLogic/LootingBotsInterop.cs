@@ -1,6 +1,9 @@
 ﻿using BepInEx.Bootstrap;
+
 using EFT;
+
 using HarmonyLib;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +20,7 @@ namespace LootingBots
 
         private static bool _IsLootingBotsLoaded;
         private static Type _LootingBotsExternalType;
-        private static MethodInfo _ForceBotToLootNowMethod;
+        private static MethodInfo _ForceBotToScanLootMethod;
         private static MethodInfo _PreventBotFromLootingMethod;
 
         /**
@@ -52,7 +55,7 @@ namespace LootingBots
                 // Only try to get the methods if we have the type
                 if (_LootingBotsExternalType != null)
                 {
-                    _ForceBotToLootNowMethod = AccessTools.Method(_LootingBotsExternalType, "ForceBotToLootNow");
+                    _ForceBotToScanLootMethod = AccessTools.Method(_LootingBotsExternalType, "ForceBotToScanLoot");
                     _PreventBotFromLootingMethod = AccessTools.Method(_LootingBotsExternalType, "PreventBotFromLooting");
                 }
             }
@@ -64,12 +67,12 @@ namespace LootingBots
         /**
          * Force a bot to search for loot immediately if Looting Bots is loaded. Return true if successful.
          */
-        public static bool TryForceBotToLootNow(BotOwner botOwner, float duration)
+        public static bool TryForceBotToScanLoot(BotOwner botOwner)
         {
             if (!Init()) return false;
-            if (_ForceBotToLootNowMethod == null) return false;
+            if (_ForceBotToScanLootMethod == null) return false;
 
-            return (bool)_ForceBotToLootNowMethod.Invoke(null, new object[] { botOwner, duration });
+            return (bool)_ForceBotToScanLootMethod.Invoke(null, new object[] { botOwner });
         }
 
         /**

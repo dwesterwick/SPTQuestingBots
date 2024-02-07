@@ -7,10 +7,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
-using ChatShared;
 using Comfort.Common;
 using EFT;
-using EFT.Communications;
 using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
@@ -35,8 +33,6 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
         {
-            MatchmakerFinalCountdownUpdatePatch.ResetText();
-
             if (!IsDelayingGameStart)
             {
                 return;
@@ -209,10 +205,14 @@ namespace SPTQuestingBots.Patches
             while (BotGenerator.RemainingBotGenerators > 0)
             {
                 hadToWait = true;
-                string message = "Waiting for " + BotGenerator.RemainingBotGenerators + " bot generator(s)";
-
                 yield return new WaitForSeconds(waitPeriod / 1000f);
-                
+
+                string message = "Waiting for " + BotGenerator.RemainingBotGenerators + " bot generator";
+                if (BotGenerator.RemainingBotGenerators > 1)
+                {
+                    message += "s";
+                }
+
                 MatchmakerFinalCountdownUpdatePatch.SetText(message + (new string('.', periods)));
 
                 periods++;
@@ -226,6 +226,8 @@ namespace SPTQuestingBots.Patches
             {
                 LoggingController.LogInfo("All bot generators have finished.");
             }
+
+            MatchmakerFinalCountdownUpdatePatch.ResetText();
         }
     }
 }

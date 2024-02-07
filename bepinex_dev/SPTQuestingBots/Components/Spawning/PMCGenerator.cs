@@ -163,6 +163,7 @@ namespace SPTQuestingBots.Components.Spawning
                         // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
                         int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
                         botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
+                        botsInGroup = (int)Math.Min(botsInGroup, MaxAliveBots);
                         botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
 
                         // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
