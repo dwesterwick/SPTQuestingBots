@@ -1,10 +1,4 @@
-﻿using Comfort.Common;
-using EFT;
-using EFT.Game.Spawning;
-using HarmonyLib;
-using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Comfort.Common;
+using EFT;
+using HarmonyLib;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning
@@ -21,37 +19,46 @@ namespace SPTQuestingBots.Components.Spawning
     {
         public bool IsSpawningBots { get; private set; } = false;
         public string BotTypeName { get; private set; } = "???";
+        public bool HasGeneratedBots { get; private set; } = false;
+        public int MaxGeneratedBots { get; private set; } = 0;
+        public int GeneratedBotCount { get; private set; } = 0;
 
         public bool WaitForInitialBossesToSpawn { get; protected set; } = true;
+        public bool RespectMaxBotCap { get; protected set; } = true;
         public int MaxAliveBots { get; protected set; } = 10;
         public int MinOtherBotsAllowedToSpawn { get; protected set; } = -99;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
+        private readonly Stopwatch updateTimer = Stopwatch.StartNew();
 
-        public static int RemainingBotGenerators = 0;
-        public static Task BotGenerationTask = null;
-        private static readonly List<Func<Task>> botGeneratorCreatorList = new List<Func<Task>>();
+        public static int RemainingBotGenerators { get; private set; } = 0;
+        public static int CurrentBotGeneratorProgress { get; protected set; } = 0;
+        public static string CurrentBotGeneratorType { get; protected set; } = "???";
+
+        private static Task BotGenerationTask = null;
+        private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
-        public bool HasRemainingSpawns => !HasGeneratedBotGroups() || BotGroups.Any(g => !g.HasSpawned);
+        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HasSpawned);
         public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
+        public int MaxBotsToGenerate => Math.Min(MaxAliveBots, MaxGeneratedBots - GeneratedBotCount);
+        public int GeneratorProgress => 100 * GeneratedBotCount / MaxGeneratedBots;
 
         public BotGenerator(string _botTypeName)
         {
             BotTypeName = _botTypeName;
 
-            LoggingController.LogInfo("Started " + BotTypeName + " generator");
-
-            GenerateInitialBotGroups();
+            MaxGeneratedBots = GetMaxGeneratedBots();
+            botGeneratorList.Add(generateAllBotsTask(GenerateBotGroup()));
         }
 
-        public abstract bool HasGeneratedBotGroups();
+        protected abstract int GetMaxGeneratedBots();
         protected abstract bool CanSpawnBots();
-        protected abstract void GenerateInitialBotGroups();
-        protected abstract int NumberOfBotsAllowedToSpawn();
+        protected abstract int GetNumberOfBotsAllowedToSpawn();
+        protected abstract Func<Task<Models.BotSpawnInfo>> GenerateBotGroup();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
         
         protected virtual void Awake()
@@ -61,6 +68,13 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected virtual void Update()
         {
+            // Reduce the performance impact
+            if (updateTimer.ElapsedMilliseconds < 50)
+            {
+                return;
+            }
+            updateTimer.Restart();
+
             // If the previous attempt to spawn a bot failed, wait a minimum amount of time before trying again
             if (retrySpawnTimer.ElapsedMilliseconds < RetryTimeSeconds * 1000)
             {
@@ -110,11 +124,11 @@ namespace SPTQuestingBots.Components.Spawning
             return generatedBotProfiles;
         }
 
-        public bool TryGetBotGroup(BotOwner bot, out BotSpawnInfo matchingGroupData)
+        public bool TryGetBotGroup(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
         {
             matchingGroupData = null;
 
-            foreach (BotSpawnInfo info in BotGroups)
+            foreach (Models.BotSpawnInfo info in BotGroups)
             {
                 foreach (Profile profile in info.Data.Profiles)
                 {
@@ -133,7 +147,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
         {
-            IEnumerable<BotSpawnInfo> matchingSpawnGroups = BotGroups.Where(g => g.SpawnedBots.Contains(bot));
+            IEnumerable<Models.BotSpawnInfo> matchingSpawnGroups = BotGroups.Where(g => g.SpawnedBots.Contains(bot));
             if (matchingSpawnGroups.Count() == 0)
             {
                 return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
@@ -147,7 +161,7 @@ namespace SPTQuestingBots.Components.Spawning
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
-        public int NumberOfTotalBotsAllowedToSpawn()
+        public int BotCountBelowMaxBotCap()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
             return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
@@ -155,7 +169,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public bool AllowedToSpawnBots()
         {
-            if (!HasGeneratedBotGroups() || IsSpawningBots || !HasRemainingSpawns)
+            if (!HasGeneratedBots || IsSpawningBots || !HasRemainingSpawns)
             {
                 return false;
             }
@@ -183,7 +197,7 @@ namespace SPTQuestingBots.Components.Spawning
         public bool CanSpawnAdditionalBots()
         {
             // Ensure the total number of bots isn't too close to the bot cap for the map
-            if (NumberOfTotalBotsAllowedToSpawn() < MinOtherBotsAllowedToSpawn)
+            if (RespectMaxBotCap && (BotCountBelowMaxBotCap() < MinOtherBotsAllowedToSpawn))
             {
                 return false;
             }
@@ -251,9 +265,9 @@ namespace SPTQuestingBots.Components.Spawning
 
         private static async Task runBotGenerationTasks()
         {
-            RemainingBotGenerators = botGeneratorCreatorList.Count;
+            RemainingBotGenerators = botGeneratorList.Count;
 
-            foreach (Func<Task> botGeneratorCreator in botGeneratorCreatorList)
+            foreach (Func<Task> botGeneratorCreator in botGeneratorList)
             {
                 Task task = botGeneratorCreator();
                 await task;
@@ -261,14 +275,52 @@ namespace SPTQuestingBots.Components.Spawning
                 RemainingBotGenerators--;
             }
 
-            botGeneratorCreatorList.Clear();
+            botGeneratorList.Clear();
 
             RemainingBotGenerators = 0;
         }
 
-        protected void AddBotGenerationTask(Func<Task> botGenerationTask)
+        private Func<Task> generateAllBotsTask(Func<Task<Models.BotSpawnInfo>> generateBotGroupAction)
         {
-            botGeneratorCreatorList.Add(botGenerationTask);
+            return async () =>
+            {
+                try
+                {
+                    CurrentBotGeneratorType = BotTypeName;
+                    CurrentBotGeneratorProgress = 0;
+
+                    LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
+
+                    // Ensure the PMC-conversion chances have remained at 0%
+                    ConfigController.AdjustPMCConversionChances(0, true);
+
+                    while (GeneratedBotCount < MaxGeneratedBots)
+                    {
+                        CurrentBotGeneratorProgress = GeneratorProgress;
+
+                        Models.BotSpawnInfo group = await generateBotGroupAction();
+
+                        BotGroups.Add(group);
+                        GeneratedBotCount += group.Count;
+                    }
+
+                    LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                }
+                finally
+                {
+                    if (GeneratedBotCount < MaxGeneratedBots)
+                    {
+                        LoggingController.LogErrorToServerConsole("Only " + GeneratedBotCount + " of " + MaxGeneratedBots + " " + BotTypeName + "s were generated due to an error.");
+                    }
+
+                    HasGeneratedBots = true;
+                }
+            };
         }
 
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
@@ -317,8 +369,8 @@ namespace SPTQuestingBots.Components.Spawning
                 IsSpawningBots = true;
 
                 // Determine how many PMC's are allowed to spawn
-                int allowedSpawns = NumberOfBotsAllowedToSpawn();
-                List<Models.BotSpawnInfo> botGroupsToSpawn = new List<BotSpawnInfo>();
+                int allowedSpawns = GetNumberOfBotsAllowedToSpawn();
+                List<Models.BotSpawnInfo> botGroupsToSpawn = new List<Models.BotSpawnInfo>();
                 for (int i = 0; i < botGroups.Length; i++)
                 {
                     if (botGroups[i].HasSpawned)

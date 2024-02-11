@@ -1,20 +1,20 @@
-﻿using Comfort.Common;
-using EFT;
-using EFT.Game.Spawning;
-using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Patches;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
+using EFT;
+using EFT.Game.Spawning;
+using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Patches;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning
 {
     public class PScavGenerator : BotGenerator
     {
-        private bool hasGeneratedBotGroups = false;
+        private BotDifficulty botDifficulty = BotDifficulty.normal;
         private Dictionary<int, float> botSpawnSchedule = new Dictionary<int, float>();
 
         // Temporarily stores spawn points for bots while trying to spawn several of them
@@ -28,13 +28,12 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
+            RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement;
+
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            BotDifficulty botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
             setMaxAliveBots();
-
-            ConfigController.GetScavRaidSettings();
-            createBotSpawnSchedule();
-
-            generateBotGroups();
         }
 
         protected override void Update()
@@ -47,8 +46,19 @@ namespace SPTQuestingBots.Components.Spawning
             }
         }
 
-        public override bool HasGeneratedBotGroups() => hasGeneratedBotGroups;
-        protected override void GenerateInitialBotGroups() { }
+        protected override int GetMaxGeneratedBots()
+        {
+            // Check if PMC's are allowed to spawn in the raid
+            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPMCs)
+            {
+                return 0;
+            }
+
+            ConfigController.GetScavRaidSettings();
+            createBotSpawnSchedule();
+
+            return botSpawnSchedule.Count;
+        }
 
         protected override bool CanSpawnBots()
         {
@@ -71,71 +81,7 @@ namespace SPTQuestingBots.Components.Spawning
             return true;
         }
 
-        private void generateBotGroups()
-        {
-            // Check if PScavs are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
-            {
-                return;
-            }
-
-            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            BotDifficulty botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
-
-            AddBotGenerationTask(generateBotGroupsTask(botDifficulty, botSpawnSchedule.Count));
-        }
-
-        private Func<Task> generateBotGroupsTask(BotDifficulty botdifficulty, int totalCount)
-        {
-            return async () =>
-            {
-                int botsGenerated = 0;
-
-                try
-                {
-                    LoggingController.LogInfo("Generating " + totalCount + " PScavs...");
-
-                    // Ensure the PMC-conversion chances have remained at 0%
-                    ConfigController.AdjustPMCConversionChances(0, true);
-
-                    System.Random random = new System.Random();
-                    int botGroup = 0;
-                    while (botsGenerated < totalCount)
-                    {
-                        // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                        int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
-                        botsInGroup = (int)Math.Min(botsInGroup, MaxAliveBots);
-                        botsInGroup = (int)Math.Min(botsInGroup, totalCount - botsGenerated);
-
-                        ServerRequestPatch.ForcePScavCount += botsInGroup;
-                        Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botdifficulty, botsInGroup);
-                        group.RaidETRangeToSpawn.Min = botSpawnSchedule[botsGenerated];
-                        BotGroups.Add(group);
-
-                        botsGenerated += botsInGroup;
-                        botGroup++;
-                    }
-
-                    LoggingController.LogInfo("Generating " + totalCount + " PScavs...done.");
-                }
-                catch (Exception e)
-                {
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
-                }
-                finally
-                {
-                    if (botsGenerated < totalCount)
-                    {
-                        LoggingController.LogErrorToServerConsole("Only " + botsGenerated + " of " + totalCount + " PScavs were generated due to an error.");
-                    }
-
-                    hasGeneratedBotGroups = true;
-                }
-            };
-        }
-
-        protected override int NumberOfBotsAllowedToSpawn()
+        protected override int GetNumberOfBotsAllowedToSpawn()
         {
             int botsAllowedToSpawn = BotsAllowedToSpawnForGeneratorType();
 
@@ -147,6 +93,24 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return botsAllowedToSpawn;
+        }
+
+        protected override Func<Task<Models.BotSpawnInfo>> GenerateBotGroup()
+        {
+            return async () =>
+            {
+                System.Random random = new System.Random();
+
+                // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
+                int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
+                botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+
+                Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
+                group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
+                ServerRequestPatch.ForcePScavCount += group.Count;
+
+                return group;
+            };
         }
 
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)

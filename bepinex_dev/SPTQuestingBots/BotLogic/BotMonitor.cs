@@ -162,36 +162,39 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            if (!SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner))
+            if (!SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
             {
-                LoggingController.LogWarning("Could find an extract for " + botOwner.GetText());
+                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
+
                 return false;
             }
 
-            if (SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
-            {
-                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
+            LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
 
-                foreach(BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
+            foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
+            {
+                if ((follower == null) || follower.IsDead)
                 {
-                    if (SAIN.Plugin.SAINInterop.TryExtractBot(follower))
-                    {
-                        LoggingController.LogInfo("Instructing follower " + follower.GetText() + " to extract now");
-                    }
-                    else
-                    {
-                        LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now");
-                    }
+                    continue;
                 }
 
-                return true;
-            }
-            else
-            {
-                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
+                if (SAIN.Plugin.SAINInterop.TryExtractBot(follower))
+                {
+                    LoggingController.LogInfo("Instructing follower " + follower.GetText() + " to extract now");
+                }
+                else
+                {
+                    LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly.");
+                }
             }
 
-            return false;
+            if (!SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner))
+            {
+                LoggingController.LogWarning("Could not find an extract for " + botOwner.GetText());
+                return false;
+            }
+
+            return true;
         }
 
         public bool IsBotReadyToExtract()

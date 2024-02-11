@@ -73,8 +73,8 @@ namespace SPTQuestingBots
                         new Patches.GetSpawnSystemPatch().Enable();
                         new Patches.ExceptAIPatch().Enable();
                         new Patches.BotDiedPatch().Enable();
-                        new Patches.CheckOnMaxPatch().Enable();
                         new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
+                        //new Patches.CheckOnMaxPatch().Enable();
                     }
 
                     Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");

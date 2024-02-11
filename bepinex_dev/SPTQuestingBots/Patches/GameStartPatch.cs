@@ -207,12 +207,7 @@ namespace SPTQuestingBots.Patches
                 hadToWait = true;
                 yield return new WaitForSeconds(waitPeriod / 1000f);
 
-                string message = "Waiting for " + BotGenerator.RemainingBotGenerators + " bot generator";
-                if (BotGenerator.RemainingBotGenerators > 1)
-                {
-                    message += "s";
-                }
-
+                string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s (" + BotGenerator.CurrentBotGeneratorProgress + "%)";
                 MatchmakerFinalCountdownUpdatePatch.SetText(message + (new string('.', periods)));
 
                 periods++;

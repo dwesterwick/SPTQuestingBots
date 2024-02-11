@@ -30,7 +30,7 @@ namespace SPTQuestingBots.Patches
             message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
             Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
-            if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBotGroups())
+            if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots)
             {
                 BotOwner[] aliveInitialPMCs = pmcGenerator.AliveBots()?.ToArray();
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
