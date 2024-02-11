@@ -261,7 +261,10 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the bot is too far from any of its followers
-            IEnumerable<float> followerDistances = followers.Select(f => Vector3.Distance(botOwner.Position, f.Position));
+            IEnumerable<float> followerDistances = followers
+                .Where(f => (f != null) && !f.IsDead)
+                .Select(f => Vector3.Distance(botOwner.Position, f.Position));
+            
             if
             (
                 followerDistances.Any(d => d > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)

@@ -70,10 +70,10 @@ namespace SPTQuestingBots
                     if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement)
                     {
                         new Patches.GetListByZonePatch().Enable();
-                        new Patches.GetSpawnSystemPatch().Enable();
                         new Patches.ExceptAIPatch().Enable();
                         new Patches.BotDiedPatch().Enable();
                         new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
+                        //new Patches.GetSpawnSystemPatch().Enable();
                         //new Patches.CheckOnMaxPatch().Enable();
                     }
 

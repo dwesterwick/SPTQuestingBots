@@ -28,12 +28,12 @@ namespace SPTQuestingBots.Patches
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {
-                LoggingController.LogInfo("Allowing spawn of " + wave.WildSpawnType + " bot wave...");
+                //LoggingController.LogInfo("Allowing spawn of " + wave.WildSpawnType + " bot wave...");
                 return true;
             }
 
             GameStartPatch.AddMissedBotWave(wave);
-            LoggingController.LogInfo("Delaying spawn of " + wave.WildSpawnType + " bot wave...");
+            //LoggingController.LogInfo("Delaying spawn of " + wave.WildSpawnType + " bot wave...");
 
             return false;
         }

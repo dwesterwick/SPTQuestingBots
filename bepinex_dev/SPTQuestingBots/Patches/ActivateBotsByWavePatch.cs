@@ -28,12 +28,12 @@ namespace SPTQuestingBots.Patches
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {
-                LoggingController.LogInfo("Allowing spawn of boss wave " + wave.BossName + "...");
+                //LoggingController.LogInfo("Allowing spawn of boss wave " + wave.BossName + "...");
                 return true;
             }
 
             GameStartPatch.AddMissedBossWave(wave);
-            LoggingController.LogInfo("Delaying spawn of boss wave " + wave.BossName + "...");
+            //LoggingController.LogInfo("Delaying spawn of boss wave " + wave.BossName + "...");
 
             return false;
         }

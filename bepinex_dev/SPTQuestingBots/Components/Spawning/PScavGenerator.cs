@@ -49,7 +49,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected override int GetMaxGeneratedBots()
         {
             // Check if PMC's are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPMCs)
+            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
             {
                 return 0;
             }
@@ -105,10 +105,10 @@ namespace SPTQuestingBots.Components.Spawning
                 int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
                 botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
 
+                ServerRequestPatch.ForcePScavCount += botsInGroup;
                 Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
                 group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
-                ServerRequestPatch.ForcePScavCount += group.Count;
-
+                
                 return group;
             };
         }
@@ -117,7 +117,7 @@ namespace SPTQuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.All, pendingSpawnPoints.ToArray());
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, EPlayerSideMask.Savage, pendingSpawnPoints.ToArray());
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogError("Could not find a valid spawn point for PScav group");

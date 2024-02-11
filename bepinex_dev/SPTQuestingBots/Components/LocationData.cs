@@ -332,17 +332,18 @@ namespace SPTQuestingBots.Components
             return false;
         }
 
-        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedSpawnPointTypes)
+        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides)
         {
-            return TryGetFurthestSpawnPointFromAllPlayers(allowedSpawnPointTypes, new SpawnPointParams[0]);
+            return TryGetFurthestSpawnPointFromAllPlayers(allowedCategories, allowedSides, new SpawnPointParams[0]);
         }
 
-        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedSpawnPointTypes, SpawnPointParams[] excludedSpawnPoints)
+        public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints)
         {
             // Enumerate all valid spawn points
             SpawnPointParams[] validSpawnPoints = GetAllValidSpawnPointParams()
                     .Where(s => !excludedSpawnPoints.Contains(s))
-                    .Where(s => s.Categories.Any(allowedSpawnPointTypes))
+                    .Where(s => s.Categories.Any(allowedCategories))
+                    .Where(s => s.Sides.Any(allowedSides))
                     .ToArray();
 
             if (validSpawnPoints.Length == 0)

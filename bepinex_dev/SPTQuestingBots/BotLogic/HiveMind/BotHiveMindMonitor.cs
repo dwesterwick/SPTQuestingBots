@@ -338,6 +338,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                         Controllers.LoggingController.LogInfo("Removing null follower for " + boss.GetText());
 
                         botFollowers[boss].Remove(follower);
+                        deadBots.Add(follower);
 
                         continue;
                     }

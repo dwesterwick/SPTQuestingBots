@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(BotZone botZone, GClass513 data, bool withCheckMinMax, bool newWave, List<ISpawnPoint> pointsToSpawn, bool forcedSpawn)
         {
             IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.Nickname + "]");
-            LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
+            //LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
         }
     }
 }

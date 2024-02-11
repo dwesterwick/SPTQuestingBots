@@ -368,7 +368,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 exfiltrationPoint = furthestPoint.Key;
 
-                LoggingController.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
+                //LoggingController.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
             }
         }
 
