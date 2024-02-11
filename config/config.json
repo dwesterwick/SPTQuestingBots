@@ -201,11 +201,11 @@
 		"blacklisted_pmc_bot_brains": [ "bossKilla", "bossTagilla", "exUsec", "followerGluharAssault", "followerGluharProtect", "crazyAssaultEvent", "bossKnight" ],
 		"spawn_retry_time": 10,
 		"delay_game_start_until_bot_gen_finishes": true,
-		"spawn_initial_bosses_first": true,
-		"advanced_eft_bot_count_management": false,
+		"spawn_initial_bosses_first": false,
+		"advanced_eft_bot_count_management": true,
 		"bot_cap_adjustments" : {
-			"enabled": true,
-			"min_other_bots_allowed_to_spawn": 4,
+			"enabled": false,
+			"min_other_bots_allowed_to_spawn": 2,
 			"add_max_players_to_bot_cap": true,
 			"max_additional_bots": 5,
 			"max_total_bots": 26
@@ -213,8 +213,8 @@
 		"limit_initial_boss_spawns" : {
 			"enabled": true,
 			"disable_rogue_delay": true,
-			"max_initial_bosses": 10,
-			"max_initial_rogues": 6
+			"max_initial_bosses": 14,
+			"max_initial_rogues": 10
 		},
 		"max_alive_bots": {
 			"default": 6,
@@ -223,7 +223,7 @@
 			"bigmap": 7,
 			"woods": 8,
 			"shoreline": 7,
-			"lighthouse": 6,
+			"lighthouse": 7,
 			"rezervbase": 7,
 			"interchange": 8,
 			"laboratory": 7,
