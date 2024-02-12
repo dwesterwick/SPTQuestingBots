@@ -1128,6 +1128,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 30,
+        "pmcsOnly": true,
         "name": "Medical Block Elevator Stairwell",
         "objectives" : [
             {
@@ -1171,6 +1172,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Ventilation Shaft Stairwell",
         "objectives" : [
             {
@@ -1214,6 +1216,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Parking Stairwell",
         "objectives" : [
             {
@@ -1257,6 +1260,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "NE Stairwell",
         "objectives" : [
             {
@@ -1300,6 +1304,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Central Stairwell 1",
         "objectives" : [
             {
@@ -1343,6 +1348,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 20,
+        "pmcsOnly": true,
         "name": "Central Stairwell 2",
         "objectives" : [
             {
