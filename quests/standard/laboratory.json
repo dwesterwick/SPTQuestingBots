@@ -1,19 +1,19 @@
 [
     {
-        "repeatable": true,
+        "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 20,
-        "minRaidET": 420,
+        "desirability": 30,
+        "minRaidET": 0,
         "name": "Sewage Conduit Pump Switch",
         "objectives" : [
             {
-                "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -44,13 +44,13 @@
         "maxBots": 4,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 20,
+        "desirability": 25,
         "name": "Medical Block Elevator Power Switch",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "lootAfterCompleting": "Inhibit",
                 "maxRunDistance": 7,
                 "steps": [
@@ -82,13 +82,13 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 20,
+        "desirability": 25,
         "name": "Cargo Block Elevator Power Switch",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -120,13 +120,13 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 20,
+        "desirability": 25,
         "name": "Main Elevator Power Switch",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -166,8 +166,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -208,8 +208,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -249,8 +249,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -286,8 +286,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -313,7 +313,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 2,
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
@@ -327,7 +327,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 2,
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
@@ -341,7 +341,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 2,
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
@@ -355,7 +355,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 2,
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
@@ -381,8 +381,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -571,7 +571,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -586,7 +586,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -745,8 +745,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -773,7 +773,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -787,7 +787,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -801,7 +801,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -815,7 +815,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -829,7 +829,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -855,8 +855,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -897,7 +897,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -912,7 +912,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -926,7 +926,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1092,7 +1092,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1107,7 +1107,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1134,7 +1134,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1177,8 +1177,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1221,8 +1221,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1265,8 +1265,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 4,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1310,7 +1310,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1354,7 +1354,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1396,8 +1396,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1423,8 +1423,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1450,8 +1450,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1479,8 +1479,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1494,8 +1494,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1521,8 +1521,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
                     {
@@ -1536,8 +1536,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
                     {
@@ -1565,7 +1565,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -1579,7 +1579,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1594,7 +1594,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1620,8 +1620,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1647,8 +1647,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1676,7 +1676,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1691,7 +1691,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1706,7 +1706,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -1732,8 +1732,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "steps": [
                     {
                         "position" : {
@@ -1746,8 +1746,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -1761,8 +1761,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 9,
                 "steps": [
                     {
@@ -1775,9 +1775,9 @@
                 ]
             },
             {
-                "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1820,7 +1820,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 5,
                 "steps": [
                     {
@@ -1835,7 +1835,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 9,
                 "steps": [
                     {
@@ -1850,7 +1850,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 15,
                 "steps": [
                     {
@@ -1865,7 +1865,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 17,
                 "steps": [
                     {
@@ -1892,8 +1892,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 10,
                 "steps": [
                     {
@@ -1926,8 +1926,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxDistance": 10,
                 "steps": [
                     {
@@ -1953,8 +1953,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1967,8 +1967,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1995,7 +1995,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2025,7 +2025,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2055,7 +2055,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2085,7 +2085,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2115,7 +2115,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2158,7 +2158,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2188,7 +2188,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2218,7 +2218,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2248,7 +2248,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2278,7 +2278,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2308,7 +2308,7 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2349,8 +2349,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2363,8 +2363,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2377,8 +2377,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2391,14 +2391,354 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
                             "x": -221.317245,
                             "y": 0.0220257957,
                             "z": -426.07608
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Medical Block Elevator Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -117.399612,
+                            "y": -4.053968,
+                            "z": -359.553375
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -117.399612,
+                            "y": -4.053968,
+                            "z": -359.553375
+                        },
+                        "lookToPosition" : {
+                            "x": -114.933449,
+                            "y": -4.05397129,
+                            "z": -339.0504
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Server Room Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -142.244934,
+                            "y": 4.10393143,
+                            "z": -298.081055
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -142.244934,
+                            "y": 4.10393143,
+                            "z": -298.081055
+                        },
+                        "lookToPosition" : {
+                            "x": -143.251053,
+                            "y": 4.103654,
+                            "z": -310.166382
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Infirmary Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -134.822174,
+                            "y": 4.100027,
+                            "z": -379.592621
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -134.822174,
+                            "y": 4.100027,
+                            "z": -379.592621
+                        },
+                        "lookToPosition" : {
+                            "x": -168.417023,
+                            "y": 4.10266972,
+                            "z": -386.096558
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Security Office Outside Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -242.490189,
+                            "y": 4.123237,
+                            "z": -299.861084
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -242.490189,
+                            "y": 4.123237,
+                            "z": -299.861084
+                        },
+                        "lookToPosition" : {
+                            "x": -248.629562,
+                            "y": 4.102135,
+                            "z": -319.943054
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "desirability": 15,
+        "pmcsOnly": true,
+        "name": "Security Office Inside Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -251.448,
+                            "y": 4.098026,
+                            "z": -319.231445
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 4,
+                        "position" : {
+                            "x": -251.448,
+                            "y": 4.098026,
+                            "z": -319.231445
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -257.08374,
+                            "y": 4.09802532,
+                            "z": -317.778259
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -257.08374,
+                            "y": 4.09802532,
+                            "z": -317.778259
+                        },
+                        "lookToPosition" : {
+                            "x": -248.629562,
+                            "y": 4.102135,
+                            "z": -319.943054
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Black Room Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -127.330627,
+                            "y": 0.008892462,
+                            "z": -345.9635
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -127.330627,
+                            "y": 0.008892462,
+                            "z": -345.9635
+                        },
+                        "lookToPosition" : {
+                            "x": -145.733551,
+                            "y": 0.0118647423,
+                            "z": -342.427338
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 5,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Green Room Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -138.43988,
+                            "y": 4.100011,
+                            "z": -341.082458
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -138.43988,
+                            "y": 4.100011,
+                            "z": -341.082458
+                        },
+                        "lookToPosition" : {
+                            "x": -120.17894,
+                            "y": 4.099987,
+                            "z": -346.444977
                         }
                     }
                 ]
