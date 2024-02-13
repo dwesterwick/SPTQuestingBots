@@ -21,7 +21,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             BotOwner.PatrollingData.Pause();
 
-            RestartActionElapsedTime();
+            StartActionElapsedTime();
         }
 
         public override void Stop()
@@ -29,6 +29,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             base.Stop();
 
             BotOwner.PatrollingData.Unpause();
+
+            PauseActionElapsedTime();
         }
 
         public override void Update()

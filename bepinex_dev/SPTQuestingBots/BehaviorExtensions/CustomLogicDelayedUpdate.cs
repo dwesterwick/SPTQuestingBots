@@ -54,6 +54,16 @@ namespace SPTQuestingBots.BehaviorExtensions
             BotOwner.Mover.Sprint(false);
         }
 
+        public void StartActionElapsedTime()
+        {
+            actionElapsedTime.Start();
+        }
+
+        public void PauseActionElapsedTime()
+        {
+            actionElapsedTime.Stop();
+        }
+
         public void RestartActionElapsedTime()
         {
             actionElapsedTime.Restart();

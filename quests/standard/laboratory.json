@@ -6,8 +6,11 @@
         "maxBots": 4,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 30,
+        "desirability": 35,
         "minRaidET": 0,
+        "requiredSwitches": {
+            "00415": false
+        },
         "name": "Sewage Conduit Pump Switch",
         "objectives" : [
             {
@@ -38,17 +41,20 @@
         ]
     },
     {
-        "repeatable": true,
+        "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 25,
+        "desirability": 35,
+        "requiredSwitches": {
+            "00409": false
+        },
         "name": "Medical Block Elevator Power Switch",
         "objectives" : [
             {
-                "repeatable": true,
+                "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "lootAfterCompleting": "Inhibit",
@@ -82,7 +88,10 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 25,
+        "desirability": 30,
+        "requiredSwitches": {
+            "autoId_00007_EXFIL": false
+        },
         "name": "Cargo Block Elevator Power Switch",
         "objectives" : [
             {
@@ -120,7 +129,10 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
-        "desirability": 25,
+        "desirability": 30,
+        "requiredSwitches": {
+            "00404": false
+        },
         "name": "Main Elevator Power Switch",
         "objectives" : [
             {
@@ -157,7 +169,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
-        "desirability": 25,
+        "desirability": 40,
         "minRaidET": 420,
         "requiredSwitches": {
             "autoId_00014_EXFIL": false
@@ -240,7 +252,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
-        "desirability": 25,
+        "desirability": 40,
         "minRaidET": 420,
         "requiredSwitches": {
             "autoId_00632_EXFIL": false
@@ -1988,7 +2000,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
-        "desirability": 30,
+        "desirability": 20,
         "pmcsOnly": true,
         "name": "Rec Area 2nd Floor Patrol",
         "objectives" : [
@@ -2151,7 +2163,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
-        "desirability": 30,
+        "desirability": 20,
         "pmcsOnly": true,
         "name": "Main Work Area 2nd Floor Patrol",
         "objectives" : [

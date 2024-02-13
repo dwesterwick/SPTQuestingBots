@@ -161,7 +161,8 @@ namespace SPTQuestingBots.Controllers
             foreach (string id in botJobAssignments.Keys)
             {
                 num += botJobAssignments[id]
-                    .Where(a => a.Status == JobAssignmentStatus.Active)
+                    .Where(a => a.StartTime.HasValue)
+                    .Where(a => (a.Status == JobAssignmentStatus.Active) || ((a.Status == JobAssignmentStatus.Pending) && (a.TimeSinceStarted().Value < 0.3)))
                     .Where(a => a.QuestAssignment == quest)
                     .Count();
             }

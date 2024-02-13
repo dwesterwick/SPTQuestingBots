@@ -23,9 +23,10 @@ namespace SPTQuestingBots.BotLogic.Objective
             base.Start();
 
             BotOwner.PatrollingData.Pause();
-
             BotOwner.Mover.Stop();
-            RestartActionElapsedTime();
+
+            StartActionElapsedTime();
+
             maxWanderDistance = ObjectiveManager.MaxDistanceForCurrentStep;
         }
 
@@ -34,6 +35,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             base.Stop();
 
             BotOwner.PatrollingData.Unpause();
+
+            PauseActionElapsedTime();
         }
 
         public override void Update()

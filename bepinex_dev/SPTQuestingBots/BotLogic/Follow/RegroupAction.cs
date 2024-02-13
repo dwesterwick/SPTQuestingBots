@@ -13,6 +13,8 @@ namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class RegroupAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private bool wasStuck = false;
+
         public RegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             SetBaseAction(GClass394.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
@@ -52,6 +54,25 @@ namespace SPTQuestingBots.BotLogic.Follow
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)
             {
                 RecalculatePath(locationOfNearestGroupMember, targetDistance);
+            }
+
+            // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
+            if (checkIfBotIsStuck())
+            {
+                if (!wasStuck)
+                {
+                    IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner);
+                    string followersText = string.Join(", ", followers.Select(f => f.GetText()));
+
+                    LoggingController.LogWarning("Boss " + BotOwner.GetText() + " has been waiting for his followers (" + followersText + ") for a long time...");
+                }
+                wasStuck = true;
+
+                restartStuckTimer();
+            }
+            else
+            {
+                wasStuck = false;
             }
         }
     }

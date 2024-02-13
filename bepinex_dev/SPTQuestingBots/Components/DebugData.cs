@@ -100,7 +100,7 @@ namespace SPTQuestingBots.Components
                 BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
                 if (boss != null)
                 {
-                    sb.AppendLabeledValue("Boss", boss.GetText() + " (IsDead=" + boss.IsDead + ")", Color.white, boss.IsDead ? Color.red : Color.white);
+                    sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
                 }
                 else if (botObjectiveManager?.IsQuestingAllowed == true)
                 {
