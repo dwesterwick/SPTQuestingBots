@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
+        "desirability": 15,
         "minRaidET": 300,
         "requiredSwitches": {
             "autoId_00632_EXFIL": false
@@ -16,6 +17,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -26,6 +28,7 @@
                         }
                     },
                     {
+                        "waitTimeAfterCompleting": 2,
                         "stepType" : "ToggleSwitch",
                         "switchID" : "autoId_00632_EXFIL",
                         "position" : {
@@ -45,17 +48,33 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 17,
+        "desirability": 25,
         "requiredSwitches": {
             "autoId_00632_EXFIL": true
         },
+        "pmcsOnly": true,
         "name": "Hermetic Alarm Patrol",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "position" : {
+                            "x": -81.3760452,
+                            "y": -6.946467,
+                            "z": 22.4286537
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 45
+                        },
                         "position" : {
                             "x": -81.3760452,
                             "y": -6.946467,
@@ -68,8 +87,22 @@
                 "repeatable": true,
                 "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "position" : {
+                            "x": -63.6107635,
+                            "y": -6.94646835,
+                            "z": -10.7402258
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 45
+                        },
                         "position" : {
                             "x": -63.6107635,
                             "y": -6.94646835,
@@ -82,8 +115,22 @@
                 "repeatable": true,
                 "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "position" : {
+                            "x": -28.246294,
+                            "y": -6.951963,
+                            "z": -24.6942272
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 45
+                        },
                         "position" : {
                             "x": -28.246294,
                             "y": -6.951963,
@@ -96,8 +143,22 @@
                 "repeatable": true,
                 "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "position" : {
+                            "x": -23.83467,
+                            "y": -5.108245,
+                            "z": -120.502487
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 45
+                        },
                         "position" : {
                             "x": -23.83467,
                             "y": -5.108245,
@@ -110,8 +171,22 @@
                 "repeatable": true,
                 "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "position" : {
+                            "x": 77.3197861,
+                            "y": -5.544286,
+                            "z": -147.147156
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 45
+                        },
                         "position" : {
                             "x": 77.3197861,
                             "y": -5.544286,
@@ -129,12 +204,14 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
+        "desirability": 20,
         "name": "D2 Switch",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -172,6 +249,7 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "D2 Area",
         "objectives" : [
@@ -179,6 +257,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -193,6 +272,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -207,6 +287,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -221,6 +302,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -235,6 +317,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 23,
                 "steps": [
                     {
                         "position" : {
@@ -249,6 +332,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 28,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -278,13 +362,16 @@
         "maxBots": 4,
         "chanceForSelecting": 30,
         "priority": 18,
+        "desirability": 35,
         "maxRaidET": 300,
+        "pmcsOnly": true,
         "name": "Command Center Rush",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -299,6 +386,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -318,12 +406,14 @@
         "maxBots": 4,
         "chanceForSelecting": 20,
         "priority": 18,
+        "desirability": 20,
         "name": "Black Bishop Tech Room",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -357,6 +447,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "RB-ST",
         "objectives" : [
@@ -364,6 +455,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -404,6 +496,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Hermetic Depot",
         "objectives" : [
@@ -425,6 +518,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -467,6 +561,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -495,6 +590,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -509,6 +605,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -528,6 +625,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "White Knight",
         "objectives" : [
@@ -535,6 +633,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -563,6 +662,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -591,6 +691,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -617,6 +718,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Black Knight",
         "objectives" : [
@@ -624,6 +726,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -638,6 +741,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -652,6 +756,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -666,6 +771,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -680,6 +786,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -694,6 +801,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -708,6 +816,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -722,20 +831,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 8.590523,
-                            "y": -3.99343967,
-                            "z": -3.061327
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -750,6 +846,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -769,6 +866,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Dome Buildings",
         "objectives" : [
@@ -776,6 +874,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -790,6 +889,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -804,6 +904,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -818,6 +919,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -832,6 +934,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -846,6 +949,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -860,6 +964,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -874,6 +979,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -888,6 +994,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 19,
                 "steps": [
                     {
                         "position" : {
@@ -905,9 +1012,12 @@
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 3,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
+        "pmcsOnly": true,
         "name": "Dome Upper Sniping",
         "objectives" : [
             {
@@ -916,11 +1026,29 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -9.513783,
                             "y": 32.7222748,
                             "z": 167.4318
                         }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -9.513783,
+                            "y": 32.7222748,
+                            "z": 167.4318
+                        },
+                        "lookToPosition" : {
+                            "x": -31.8708572,
+                            "y": -6.946465,
+                            "z": 40.4750557
+                        }
                     }
                 ]
             },
@@ -928,12 +1056,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -1.54383075,
                             "y": 29.593111,
                             "z": 165.933792
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -1.54383075,
+                            "y": 29.593111,
+                            "z": 165.933792
+                        },
+                        "lookToPosition" : {
+                            "x": 43.51071,
+                            "y": -6.951962,
+                            "z": 34.4554
                         }
                     }
                 ]
@@ -944,10 +1091,28 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -13.1465931,
                             "y": 29.5931129,
                             "z": 165.906708
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -13.1465931,
+                            "y": 29.5931129,
+                            "z": 165.906708
+                        },
+                        "lookToPosition" : {
+                            "x": 74.27228,
+                            "y": -6.95198441,
+                            "z": -5.50878668
                         }
                     }
                 ]
@@ -961,6 +1126,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Black Bishop",
         "objectives" : [
@@ -968,6 +1134,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -982,6 +1149,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -996,6 +1164,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1010,6 +1179,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1024,6 +1194,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1038,6 +1209,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1052,6 +1224,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1066,6 +1239,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 17,
                 "steps": [
                     {
                         "position" : {
@@ -1085,6 +1259,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Black Bishop Underground",
         "objectives" : [
@@ -1092,6 +1267,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1106,6 +1282,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1120,6 +1297,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1134,6 +1312,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -1148,6 +1327,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1162,6 +1342,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1181,6 +1362,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "White Bishop",
         "objectives" : [
@@ -1188,6 +1370,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1202,6 +1385,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1216,6 +1400,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1230,6 +1415,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1244,6 +1430,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1258,6 +1445,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1272,6 +1460,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1286,6 +1475,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1300,6 +1490,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1319,6 +1510,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "White King",
         "objectives" : [
@@ -1326,6 +1518,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1340,6 +1533,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1354,6 +1548,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1368,6 +1563,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 22,
                 "steps": [
                     {
                         "position" : {
@@ -1382,6 +1578,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1396,6 +1593,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1410,6 +1608,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1424,6 +1623,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -1438,6 +1638,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -1452,6 +1653,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1466,6 +1668,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -1480,6 +1683,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1494,6 +1698,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 19,
                 "steps": [
                     {
                         "position" : {
@@ -1508,6 +1713,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1522,6 +1728,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1541,6 +1748,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Command Center",
         "objectives" : [
@@ -1548,6 +1756,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1590,6 +1799,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1604,6 +1814,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1618,6 +1829,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1632,6 +1844,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1646,6 +1859,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1660,6 +1874,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1674,6 +1889,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1693,6 +1909,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Black Pawn",
         "objectives" : [
@@ -1700,6 +1917,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1714,6 +1932,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1728,6 +1947,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1742,6 +1962,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1756,6 +1977,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1770,6 +1992,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1784,6 +2007,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -1798,6 +2022,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1812,6 +2037,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1826,6 +2052,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1840,6 +2067,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1859,6 +2087,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "BMP #1",
         "objectives" : [
             {
@@ -1882,20 +2111,43 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "BMP #1 Tower",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
-                            "x": -114.754509,
-                            "y": 2.8130424,
-                            "z": -153.692276
+                            "x": -115.884071,
+                            "y": 2.90959239,
+                            "z": -152.189316
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -115.884071,
+                            "y": 2.90959239,
+                            "z": -152.189316
+                        },
+                        "lookToPosition" : {
+                            "x": -100.219185,
+                            "y": -6.9519577,
+                            "z": -41.6008224
                         }
                     }
                 ]
@@ -1909,12 +2161,14 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Scav Lands North Building",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1934,6 +2188,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Scav Lands South Building",
         "objectives" : [
@@ -1941,6 +2196,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1974,12 +2230,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "SW Bunker",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1999,6 +2257,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "SW Tank",
         "objectives" : [
             {
@@ -2024,6 +2283,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Black Pawn Back Bunker",
         "objectives" : [
             {
@@ -2049,12 +2309,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Helicopter",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2074,6 +2336,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Helicopter Platform Crawl Space",
         "objectives" : [
             {
@@ -2099,12 +2362,14 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Trenches",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2119,6 +2384,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2138,6 +2404,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Sewer Manhole Building",
         "objectives" : [
@@ -2145,6 +2412,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2159,6 +2427,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2178,6 +2447,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Knight Garages",
         "objectives" : [
@@ -2185,6 +2455,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2199,6 +2470,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2218,12 +2490,14 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "NW Bunkers",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2266,6 +2540,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2299,6 +2574,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Train Yard",
         "objectives" : [
@@ -2306,6 +2582,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2320,6 +2597,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2334,6 +2612,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2348,6 +2627,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2362,6 +2642,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2376,6 +2657,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2395,12 +2677,14 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Train Yard Bunker Entrance",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2420,12 +2704,14 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "White Rook",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2440,6 +2726,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2454,6 +2741,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -2468,6 +2756,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2487,12 +2776,15 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
+        "pmcsOnly": true,
         "name": "White Rook Roof",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2512,6 +2804,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "White Rook North Tank",
         "objectives" : [
             {
@@ -2537,6 +2830,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "White Rook Barracks",
         "objectives" : [
@@ -2544,6 +2838,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2558,6 +2853,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2572,6 +2868,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2589,16 +2886,34 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
+        "pmcsOnly": true,
         "name": "South Hill Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 129.253372,
+                            "y": -0.2681621,
+                            "z": -179.9267
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 129.253372,
                             "y": -0.2681621,
@@ -2613,6 +2928,20 @@
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 98.9659958,
+                            "y": -0.00396029,
+                            "z": -172.420685
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 98.9659958,
                             "y": -0.00396029,
@@ -2627,10 +2956,28 @@
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": 67.30062,
                             "y": -0.2021343,
                             "z": -163.727432
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 150
+                        },
+                        "position" : {
+                            "x": 67.30062,
+                            "y": -0.2021343,
+                            "z": -163.727432
+                        },
+                        "lookToPosition" : {
+                            "x": 108.711143,
+                            "y": -6.914482,
+                            "z": -90.76131
                         }
                     }
                 ]
@@ -2641,6 +2988,20 @@
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 34.9776154,
+                            "y": -0.115867242,
+                            "z": -155.036057
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 34.9776154,
                             "y": -0.115867242,
@@ -2658,6 +3019,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Hermetic",
         "objectives" : [
@@ -2665,6 +3027,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2679,6 +3042,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2693,6 +3057,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2707,6 +3072,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2724,14 +3090,18 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "White Knight Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2746,12 +3116,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 88.902565,
                             "y": -0.9757629,
                             "z": -48.589325
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 88.902565,
+                            "y": -0.9757629,
+                            "z": -48.589325
+                        },
+                        "lookToPosition" : {
+                            "x": 90.79628,
+                            "y": -5.36612,
+                            "z": -92.01196
                         }
                     }
                 ]
@@ -2760,12 +3150,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 72.21781,
                             "y": -0.9757645,
                             "z": -38.7165833
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 72.21781,
+                            "y": -0.9757645,
+                            "z": -38.7165833
+                        },
+                        "lookToPosition" : {
+                            "x": 27.3069553,
+                            "y": -6.951959,
+                            "z": -14.3200617
                         }
                     }
                 ]
@@ -2779,12 +3189,14 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "White Knight RB-MP22",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2804,12 +3216,14 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "White Knight Rear Drop-Down",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2827,16 +3241,34 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "Black Knight Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 24.8102913,
+                            "y": -0.9696667,
+                            "z": -12.8290911
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 150
+                        },
                         "position" : {
                             "x": 24.8102913,
                             "y": -0.9696667,
@@ -2849,8 +3281,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 19.7480946,
+                            "y": -0.9696676,
+                            "z": 1.46109843
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 150
+                        },
                         "position" : {
                             "x": 19.7480946,
                             "y": -0.9696676,
@@ -2863,12 +3310,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 7.020325,
                             "y": -0.969666958,
                             "z": -2.04534531
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 7.020325,
+                            "y": -0.969666958,
+                            "z": -2.04534531
+                        },
+                        "lookToPosition" : {
+                            "x": -28.8361664,
+                            "y": -6.940972,
+                            "z": 3.92544866
                         }
                     }
                 ]
@@ -2882,12 +3349,14 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Checkpoint",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2905,20 +3374,42 @@
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
+        "pmcsOnly": true,
         "name": "Dome Lower Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
-                            "x": -0.791452,
-                            "y": 7.46082163,
-                            "z": 141.074524
+                            "x": 0.888026536,
+                            "y": 7.626677,
+                            "z": 140.454575
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 0.888026536,
+                            "y": 7.626677,
+                            "z": 140.454575
+                        },
+                        "lookToPosition" : {
+                            "x": 40.4482536,
+                            "y": -6.951961,
+                            "z": 37.6250153
                         }
                     }
                 ]
@@ -2927,13 +3418,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -31.3627472,
                             "y": 4.94231129,
                             "z": 127.951225
                         }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -31.3627472,
+                            "y": 4.94231129,
+                            "z": 127.951225
+                        },
+                        "lookToPosition" : {
+                            "x": -31.1201019,
+                            "y": -6.94646263,
+                            "z": 41.0778236
+                        }
                     }
                 ]
             },
@@ -2941,13 +3451,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -59.98304,
                             "y": 8.704645,
                             "z": 143.714233
                         }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -59.98304,
+                            "y": 8.704645,
+                            "z": 143.714233
+                        },
+                        "lookToPosition" : {
+                            "x": -31.1201019,
+                            "y": -6.94646263,
+                            "z": 41.0778236
+                        }
                     }
                 ]
             },
@@ -2955,26 +3484,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -33.37853,
                             "y": 18.811985,
                             "z": 163.751053
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
-                "steps": [
+                    },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
-                            "x": 8.83328152,
-                            "y": 11.0311422,
-                            "z": 156.471985
+                            "x": -33.37853,
+                            "y": 18.811985,
+                            "z": 163.751053
+                        },
+                        "lookToPosition" : {
+                            "x": -31.1201019,
+                            "y": -6.94646263,
+                            "z": 41.0778236
                         }
                     }
                 ]
@@ -2983,12 +3517,64 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 8.83328152,
+                            "y": 11.0311422,
+                            "z": 156.471985
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 8.83328152,
+                            "y": 11.0311422,
+                            "z": 156.471985
+                        },
+                        "lookToPosition" : {
+                            "x": 10.954216,
+                            "y": -6.946465,
+                            "z": 42.46877
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -82.19405,
                             "y": 10.0370388,
                             "z": 150.827087
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -82.19405,
+                            "y": 10.0370388,
+                            "z": 150.827087
+                        },
+                        "lookToPosition" : {
+                            "x": -104.678566,
+                            "y": -7.07830667,
+                            "z": 103.295975
                         }
                     }
                 ]
@@ -3002,6 +3588,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "D2 from Dome",
         "objectives" : [
@@ -3009,6 +3596,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3023,6 +3611,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3037,6 +3626,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3054,16 +3644,34 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "Black Bishop Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -118.27533,
+                            "y": -1.295299,
+                            "z": -32.8276176
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -118.27533,
                             "y": -1.295299,
@@ -3076,8 +3684,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -110.636093,
+                            "y": -1.29530454,
+                            "z": -13.9235106
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -110.636093,
                             "y": -1.29530454,
@@ -3093,16 +3716,34 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "White Bishop Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -52.1349373,
+                            "y": -0.580698133,
+                            "z": -41.18904
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -52.1349373,
                             "y": -0.580698133,
@@ -3115,8 +3756,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -82.86299,
+                            "y": -0.580698,
+                            "z": -32.6192055
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -82.86299,
                             "y": -0.580698,
@@ -3129,12 +3786,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -81.45844,
                             "y": -0.5806979,
                             "z": -23.80794
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -81.45844,
+                            "y": -0.5806979,
+                            "z": -23.80794
+                        },
+                        "lookToPosition" : {
+                            "x": -137.524933,
+                            "y": -6.933003,
+                            "z": 18.9011421
                         }
                     }
                 ]
@@ -3143,12 +3819,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -51.06413,
                             "y": -0.5807715,
                             "z": -29.1011562
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -51.06413,
+                            "y": -0.5807715,
+                            "z": -29.1011562
+                        },
+                        "lookToPosition" : {
+                            "x": 1.76665545,
+                            "y": -6.951959,
+                            "z": 6.581832
                         }
                     }
                 ]
@@ -3160,21 +3856,44 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "White King Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -55.9039345,
                             "y": 2.17674446,
                             "z": 36.81612
                         }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -55.9039345,
+                            "y": 2.17674446,
+                            "z": 36.81612
+                        },
+                        "lookToPosition" : {
+                            "x": -21.94078,
+                            "y": 18.3918858,
+                            "z": 165.821
+                        }
                     }
                 ]
             },
@@ -3182,26 +3901,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -68.8098755,
                             "y": 2.17674017,
                             "z": 29.2512
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
+                    },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
-                            "x": -73.98968,
-                            "y": 2.17673826,
-                            "z": 8.926663
+                            "x": -68.8098755,
+                            "y": 2.17674017,
+                            "z": 29.2512
+                        },
+                        "lookToPosition" : {
+                            "x": -143.753754,
+                            "y": -6.94647,
+                            "z": 64.05402
                         }
                     }
                 ]
@@ -3210,8 +3934,56 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -73.98968,
+                            "y": 2.17673826,
+                            "z": 8.926663
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -73.98968,
+                            "y": 2.17673826,
+                            "z": 8.926663
+                        },
+                        "lookToPosition" : {
+                            "x": -110.156349,
+                            "y": -6.718902,
+                            "z": -82.92104
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "maxDistance": 10,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -61.7680779,
+                            "y": 2.17673659,
+                            "z": 3.19810128
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -61.7680779,
                             "y": 2.17673659,
@@ -3224,8 +3996,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -52.1793823,
+                            "y": 4.236157,
+                            "z": 24.5722637
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -52.1793823,
                             "y": 4.236157,
@@ -3238,12 +4025,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -61.52356,
                             "y": -1.43964159,
                             "z": -4.335618
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -61.52356,
+                            "y": -1.43964159,
+                            "z": -4.335618
+                        },
+                        "lookToPosition" : {
+                            "x": -128.495377,
+                            "y": -6.946466,
+                            "z": 0.27093178
                         }
                     }
                 ]
@@ -3252,8 +4059,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -22.13185,
+                            "y": 2.88331246,
+                            "z": 28.0139446
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -22.13185,
                             "y": 2.88331246,
@@ -3266,8 +4089,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 10,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -26.7579288,
+                            "y": 2.87685,
+                            "z": 7.72921562
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -26.7579288,
                             "y": 2.87685,
@@ -3280,12 +4119,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -43.67138,
                             "y": -1.44018316,
                             "z": -11.1153917
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -43.67138,
+                            "y": -1.44018316,
+                            "z": -11.1153917
+                        },
+                        "lookToPosition" : {
+                            "x": -26.2307072,
+                            "y": -6.95196056,
+                            "z": -35.39323
                         }
                     }
                 ]
@@ -3294,12 +4153,32 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 7,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -34.2895775,
                             "y": -1.4396385,
                             "z": 4.118504
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -34.2895775,
+                            "y": -1.4396385,
+                            "z": 4.118504
+                        },
+                        "lookToPosition" : {
+                            "x": 2.47579265,
+                            "y": -6.946465,
+                            "z": -3.74885082
                         }
                     }
                 ]
@@ -3311,20 +4190,43 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "Black Pawn Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -172.084579,
                             "y": 5.291526,
                             "z": 32.26616
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -172.084579,
+                            "y": 5.291526,
+                            "z": 32.26616
+                        },
+                        "lookToPosition" : {
+                            "x": -178.962372,
+                            "y": -7.006898,
+                            "z": -34.85421
                         }
                     }
                 ]
@@ -3333,8 +4235,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -159.942719,
+                            "y": 5.29152632,
+                            "z": 46.7519951
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -159.942719,
                             "y": 5.29152632,
@@ -3347,12 +4264,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -156.319138,
                             "y": 5.29153,
                             "z": 76.2519455
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -156.319138,
+                            "y": 5.29153,
+                            "z": 76.2519455
+                        },
+                        "lookToPosition" : {
+                            "x": -68.24686,
+                            "y": 15.6919317,
+                            "z": 168.428329
                         }
                     }
                 ]
@@ -3366,6 +4302,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "White Pawn",
         "objectives" : [
@@ -3373,6 +4310,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3387,6 +4325,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3401,6 +4340,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3415,6 +4355,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3429,6 +4370,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3443,6 +4385,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3460,14 +4403,18 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "White Pawn Roof",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -3482,6 +4429,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -3496,6 +4444,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -3510,8 +4459,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxDistance": 13,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -83.51541,
+                            "y": 5.586532,
+                            "z": 81.13965
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -83.51541,
                             "y": 5.586532,

@@ -127,6 +127,7 @@
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 30,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
                         "position" : {
