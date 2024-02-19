@@ -117,7 +117,7 @@ namespace SPTQuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, EPlayerSideMask.Savage, pendingSpawnPoints.ToArray());
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, EPlayerSideMask.All, pendingSpawnPoints.ToArray());
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogError("Could not find a valid spawn point for PScav group");

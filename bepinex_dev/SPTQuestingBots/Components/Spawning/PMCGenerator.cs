@@ -99,7 +99,8 @@ namespace SPTQuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(getSpawnCategoryMask(), getSpawnSideMask(), pendingSpawnPoints.ToArray());
+            EPlayerSideMask playerMask = getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, playerMask, pendingSpawnPoints.ToArray());
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogError("Could not find a valid spawn point for PMC group");
@@ -130,9 +131,6 @@ namespace SPTQuestingBots.Components.Spawning
 
             return spawnPositions;
         }
-
-        private ESpawnCategoryMask getSpawnCategoryMask() => getRaidTimeRemainingFraction() > 0.98 ? ESpawnCategoryMask.Player : ESpawnCategoryMask.All;
-        private EPlayerSideMask getSpawnSideMask() => getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
 
         private void setMaxAliveBots()
         {

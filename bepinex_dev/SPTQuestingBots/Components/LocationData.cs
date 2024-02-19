@@ -339,8 +339,10 @@ namespace SPTQuestingBots.Components
 
         public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints)
         {
+            SpawnPointParams[] allSpawnPoints = GetAllValidSpawnPointParams();
+
             // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = GetAllValidSpawnPointParams()
+            SpawnPointParams[] validSpawnPoints = allSpawnPoints
                     .Where(s => !excludedSpawnPoints.Contains(s))
                     .Where(s => s.Categories.Any(allowedCategories))
                     .Where(s => s.Sides.Any(allowedSides))
