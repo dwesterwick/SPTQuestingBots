@@ -11,8 +11,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -38,8 +38,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -61,12 +61,12 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 15,
-        "name": "Cult House",
+        "name": "Priest's House",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -92,8 +92,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -107,8 +107,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -122,8 +122,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -137,8 +137,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -147,13 +147,49 @@
                             "y": -54.08855,
                             "z": 159.745621
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": 412.895355,
+                            "y": -54.0883446,
+                            "z": 166.176758
+                        }
                     }
                 ]
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 401.778137,
+                            "y": -54.123127,
+                            "z": 134.666214
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 397.729584,
+                            "y": -54.12313,
+                            "z": 139.847336
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 391.9996,
+                            "y": -54.1231346,
+                            "z": 143.169861
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -167,8 +203,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -194,8 +230,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -208,8 +244,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -223,8 +259,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -233,13 +269,50 @@
                             "y": -56.09436,
                             "z": 156.510147
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": 315.598663,
+                            "y": -56.09436,
+                            "z": 160.63385
+                        }
                     }
                 ]
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 15,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 315.911255,
+                            "y": -56.35905,
+                            "z": 135.109314
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 299.348022,
+                            "y": -56.2416153,
+                            "z": 116.038452
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -247,6 +320,21 @@
                             "x": 266.100342,
                             "y": -56.2385445,
                             "z": 181.419678
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 323.2423,
+                            "y": -55.73268,
+                            "z": 133.799942
                         }
                     }
                 ]
@@ -266,8 +354,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -282,6 +370,13 @@
                             "x": 135.108,
                             "y": -45.4795532,
                             "z": 129.360336
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 143.665863,
+                            "y": -45.47955,
+                            "z": 129.045013
                         }
                     }
                 ]
@@ -300,8 +395,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -322,14 +417,14 @@
         "maxBots": 2,
         "chanceForSelecting": 25,
         "priority": 20,
-        "desirability": 25,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Sanitar's House",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 1000,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -337,6 +432,13 @@
                             "x": 94.232605,
                             "y": -45.4795532,
                             "z": 105.612335
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 98.57321,
+                            "y": -45.4795532,
+                            "z": 105.273567
                         }
                     },
                     {
@@ -364,8 +466,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -397,8 +499,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -430,8 +532,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -477,7 +579,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -510,7 +612,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -543,7 +645,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -590,7 +692,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -623,7 +725,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -668,8 +770,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -677,6 +779,59 @@
                             "x": -490.8275,
                             "y": -14.5118237,
                             "z": -183.727844
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 25,
+        "name": "House on the Hill",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -490.8275,
+                            "y": -14.5118237,
+                            "z": -183.727844
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 15,
+        "name": "Lookout",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -195.208145,
+                            "y": -11.3044462,
+                            "z": -243.197723
                         }
                     }
                 ]
@@ -696,8 +851,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 2,
@@ -741,7 +896,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 4,
                 "steps": [
@@ -751,12 +906,19 @@
                             "y": -25.5797958,
                             "z": 238.421341
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": -512.6976,
+                            "y": -25.5797958,
+                            "z": 235.053925
+                        }
                     }
                 ]
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 5,
                 "steps": [
@@ -765,6 +927,88 @@
                             "x": -514.572632,
                             "y": -22.2631149,
                             "z": 237.802109
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -512.041,
+                            "y": -22.2631149,
+                            "z": 235.012741
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -507.538239,
+                            "y": -22.2631149,
+                            "z": 235.0583
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Weather Station Tower Base",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -509.715,
+                            "y": -25.7184753,
+                            "z": 269.445618
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 2,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -519.2476,
+                            "y": -25.747282,
+                            "z": 277.329376
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Weather Station Shack",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 2,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -464.609528,
+                            "y": -25.3642254,
+                            "z": 272.618683
                         }
                     }
                 ]
@@ -785,8 +1029,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -895,8 +1139,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1003,8 +1247,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1031,8 +1275,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1061,8 +1305,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1094,8 +1338,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1127,8 +1371,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1172,8 +1416,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1187,8 +1431,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1216,7 +1460,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1249,7 +1493,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1291,7 +1535,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 4,
                 "steps": [
@@ -1306,7 +1550,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 10,
                 "steps": [
@@ -1321,7 +1565,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 9,
                 "steps": [
@@ -1330,6 +1574,33 @@
                             "x": -324.293,
                             "y": -57.62731,
                             "z": 487.936432
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "desirability": 5,
+        "canRunBetweenObjectives": false,
+        "name": "Lighthouse",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -459.269958,
+                            "y": -60.074337,
+                            "z": 565.75415
                         }
                     }
                 ]
@@ -1350,7 +1621,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1379,7 +1650,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1424,8 +1695,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -1453,7 +1724,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1486,7 +1757,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1519,7 +1790,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1564,8 +1835,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1592,8 +1863,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1621,8 +1892,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1663,8 +1934,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
                 "steps": [
                     {
                         "position" : {
@@ -1677,8 +1948,37 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -128.711777,
+                            "y": -21.66043,
+                            "z": -19.70254
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -129.552048,
+                            "y": -21.6604328,
+                            "z": -9.973942
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -122.550819,
+                            "y": -21.65224,
+                            "z": -9.551044
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1686,6 +1986,13 @@
                             "x": -124.453461,
                             "y": -21.66043,
                             "z": -20.2967682
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -122.643539,
+                            "y": -21.6604328,
+                            "z": -17.638958
                         }
                     }
                 ]
@@ -1706,7 +2013,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1753,7 +2060,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -1824,8 +2131,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1839,8 +2146,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1854,8 +2161,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1863,6 +2170,65 @@
                             "x": -240.899338,
                             "y": -40.66365,
                             "z": 201.600082
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "desirability": 5,
+        "name": "Fountain",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -418.7227,
+                            "y": -20.5509319,
+                            "z": -239.818024
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -416.723022,
+                            "y": -20.55093,
+                            "z": -248.51796
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "desirability": 5,
+        "name": "Gazebo",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -328.780151,
+                            "y": -15.0998449,
+                            "z": -254.582886
                         }
                     }
                 ]
@@ -1881,8 +2247,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 9999,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -2722,6 +3088,53 @@
                             "x": -286.6105,
                             "y": 2.05199623,
                             "z": -89.11945
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "desirability": 10,
+        "name": "Tunnel Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 391.3144,
+                            "y": -49.88845,
+                            "z": 281.82135
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 391.3144,
+                            "y": -49.88845,
+                            "z": 281.82135
+                        },
+                        "lookToPosition" : {
+                            "x": 340.19693,
+                            "y": -59.2684937,
+                            "z": 292.860016
                         }
                     }
                 ]

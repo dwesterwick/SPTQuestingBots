@@ -6,6 +6,7 @@
         "maxBots": 3,
         "chanceForSelecting": 5,
         "priority": 18,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Lexos Director's Office",
         "objectives" : [
@@ -74,6 +75,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 18,
+        "desirability": 20,
         "name": "Concordia Basement Security Room",
         "objectives" : [
             {
@@ -99,6 +101,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 18,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Concordia Apartment 64",
         "objectives" : [
@@ -139,6 +142,7 @@
         "maxBots": 3,
         "chanceForSelecting": 10,
         "priority": 18,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Checkannaya 15",
         "objectives" : [
@@ -277,6 +281,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 19,
+        "desirability": 20,
         "name": "Lexos North Entry",
         "objectives" : [
             {
@@ -330,6 +335,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 19,
+        "desirability": 20,
         "name": "Lexos Center",
         "objectives" : [
             {
@@ -411,6 +417,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 19,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Lexos Garage",
         "objectives" : [
@@ -507,6 +514,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 19,
+        "desirability": 20,
         "name": "Lexos South Entry",
         "objectives" : [
             {
@@ -616,6 +624,7 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 19,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Lexos Offices",
         "objectives" : [
@@ -712,6 +721,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Petersen Center",
         "objectives" : [
@@ -801,6 +811,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Finance Building",
         "objectives" : [
@@ -890,6 +901,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Dentist",
         "objectives" : [
@@ -972,6 +984,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Post Office",
         "objectives" : [
@@ -1047,6 +1060,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 19,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Primorsky Locked Apartment",
         "objectives" : [
@@ -1115,6 +1129,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 19,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Checkannaya 15 Upstairs",
         "objectives" : [
@@ -1190,6 +1205,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "name": "Convoy",
         "objectives" : [
             {
@@ -1250,6 +1266,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Nikitskaya 6",
         "objectives" : [
@@ -1374,6 +1391,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 19,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Dostoevsky Restaurant",
         "objectives" : [
@@ -1428,6 +1446,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 19,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 46",
         "objectives" : [
@@ -1559,6 +1578,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 19,
+        "desirability": 20,
         "name": "Underpass Stores",
         "objectives" : [
             {
@@ -1612,6 +1632,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Concordia Goshan",
         "objectives" : [
@@ -1645,6 +1666,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "Concordia Apartment 8",
         "objectives" : [
             {
@@ -1670,6 +1692,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Concordia Building 9 Gym",
         "objectives" : [
@@ -1738,6 +1761,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Concordia Building 9 Office",
         "objectives" : [
@@ -1806,6 +1830,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Construction",
         "objectives" : [
             {
@@ -1957,6 +1982,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Sparja",
         "objectives" : [
@@ -2053,6 +2079,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Koener Steak and Grill",
         "objectives" : [
             {
@@ -2078,6 +2105,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Primorsky Extract Area",
         "objectives" : [
             {
@@ -2103,6 +2131,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "TrainHard",
         "objectives" : [
             {
@@ -2128,6 +2157,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "S Cinema Store",
         "objectives" : [
             {
@@ -2153,6 +2183,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Cinema",
         "objectives" : [
             {
@@ -2297,6 +2328,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Cinema Hideout",
         "objectives" : [
             {
@@ -2336,6 +2368,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "name": "Cinema Courtyard",
         "objectives" : [
             {
@@ -2361,6 +2394,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Bilbo Coffee",
         "objectives" : [
@@ -2429,6 +2463,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Diner",
         "objectives" : [
@@ -2469,6 +2504,7 @@
         "maxBots": 2,
         "chanceForSelecting": 5,
         "priority": 20,
+        "desirability": 5,
         "name": "Diner Hideout",
         "objectives" : [
             {
@@ -2494,6 +2530,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "canRunBetweenObjectives": false,
         "name": "Car Lot Office",
         "objectives" : [
@@ -2527,6 +2564,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Basement Access",
         "objectives" : [
@@ -2567,6 +2605,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel 2nd Floor",
         "objectives" : [
@@ -2621,6 +2660,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Main Entrance",
         "objectives" : [
@@ -2675,6 +2715,7 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Sparja",
         "objectives" : [
@@ -2757,6 +2798,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Burger Spot",
         "objectives" : [
@@ -2825,6 +2867,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Nikita Cafe",
         "objectives" : [
             {
@@ -2850,6 +2893,7 @@
         "maxBots": 3,
         "chanceForSelecting": 25,
         "priority": 20,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Shestyorochka",
         "objectives" : [
@@ -2904,6 +2948,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "ALCO-Point",
         "objectives" : [
@@ -2965,6 +3010,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Coffee Joy",
         "objectives" : [
@@ -3019,6 +3065,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pharmacy",
         "objectives" : [
@@ -3087,6 +3134,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Census Building",
         "objectives" : [
@@ -3169,6 +3217,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Brodian Pub",
         "objectives" : [
@@ -3209,6 +3258,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Prestigio",
         "objectives" : [
             {
@@ -3234,6 +3284,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Aba",
         "objectives" : [
             {
@@ -3259,6 +3310,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Theater Construction",
         "objectives" : [
             {
@@ -3284,6 +3336,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Theater Hideout",
         "objectives" : [
             {
@@ -3309,6 +3362,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Malevicha 2",
         "objectives" : [
@@ -3349,6 +3403,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "name": "Nikitskaya 8",
         "objectives" : [
             {
@@ -3374,6 +3429,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Zmejsky 5",
         "objectives" : [
@@ -3414,6 +3470,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 20,
+        "desirability": 5,
         "canRunBetweenObjectives": false,
         "name": "Zmejsky 5",
         "objectives" : [
@@ -3454,6 +3511,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48",
         "objectives" : [
@@ -3494,6 +3552,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48 Apt 10",
         "objectives" : [
@@ -3548,6 +3607,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Crash Site Warehouse",
         "objectives" : [
             {
@@ -3601,6 +3661,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "School",
         "objectives" : [
             {
@@ -3689,6 +3750,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Building across from Brodian Pub",
         "objectives" : [
             {
@@ -3728,6 +3790,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Terragroup Building",
         "objectives" : [
             {
@@ -3781,6 +3844,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Terragroup Office",
         "objectives" : [
             {
@@ -3834,6 +3898,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Mall Storage and Construction",
         "objectives" : [
             {
@@ -3887,6 +3952,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 20,
+        "desirability": 10,
         "name": "Mall Storage and Construction Rear",
         "objectives" : [
             {
@@ -3926,6 +3992,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Beluga",
         "objectives" : [
             {
@@ -4049,6 +4116,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Beluga Rear Storage",
         "objectives" : [
             {
@@ -4088,6 +4156,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 21,
+        "desirability": 15,
         "name": "Primorsky Courtyard",
         "objectives" : [
             {
@@ -4225,6 +4294,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Scav Checkpoint",
         "objectives" : [
             {
@@ -4264,6 +4334,8 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 21,
+        "desirability": 15,
+        "pmcsOnly": true,
         "name": "Pinewood Hotel Patrol",
         "objectives" : [
             {
@@ -4385,8 +4457,11 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 20,
         "priority": 21,
+        "desirability": 15,
+        "pmcsOnly": true,
         "name": "Cinema Sniping",
         "objectives" : [
             {
@@ -4468,6 +4543,7 @@
         "maxBots": 3,
         "chanceForSelecting": 20,
         "priority": 21,
+        "desirability": 15,
         "name": "Concordia Courtyard",
         "objectives" : [
             {
@@ -4521,6 +4597,7 @@
         "maxBots": 3,
         "chanceForSelecting": 30,
         "priority": 21,
+        "desirability": 20,
         "name": "Concordia Basement",
         "objectives" : [
             {
@@ -4588,6 +4665,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 21,
+        "desirability": 15,
         "name": "Crash SW Apartment",
         "objectives" : [
             {
@@ -4613,6 +4691,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Father and Sons Apartments",
         "objectives" : [
             {
@@ -4652,6 +4731,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Golden World",
         "objectives" : [
             {
@@ -4691,6 +4771,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Shop Near Kamchatskaya Arch",
         "objectives" : [
             {
@@ -4716,6 +4797,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Apartments Across from Kamchatskaya Arch",
         "objectives" : [
             {
@@ -4748,6 +4830,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Spawns South of Kamchatskaya Arch",
         "objectives" : [
             {
@@ -4787,6 +4870,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "West Car Garage Bag",
         "objectives" : [
             {
@@ -4812,6 +4896,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "West Apartments Near Car Garage",
         "objectives" : [
             {
@@ -4851,6 +4936,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 10,
         "name": "Vet Clinic",
         "objectives" : [
             {
@@ -4876,6 +4962,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Children's Polyclinic No. 69",
         "objectives" : [
             {
@@ -4929,6 +5016,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Klimova 16A Adjacent Building",
         "objectives" : [
             {
@@ -4954,6 +5042,7 @@
         "maxBots": 2,
         "chanceForSelecting": 20,
         "priority": 20,
+        "desirability": 15,
         "name": "Klimova 16A",
         "objectives" : [
             {
@@ -5021,6 +5110,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Expo Building",
         "objectives" : [
             {
@@ -5046,6 +5136,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Cardinal West Building",
         "objectives" : [
             {
@@ -5071,6 +5162,7 @@
         "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
+        "desirability": 25,
         "name": "Cardinal East Building",
         "objectives" : [
             {
@@ -5131,6 +5223,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Cardinal South Building",
         "objectives" : [
             {
@@ -5170,6 +5263,7 @@
         "maxBots": 2,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
         "name": "Apartments near Tonni Hellfinger",
         "objectives" : [
             {
@@ -5209,6 +5303,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Figaro",
         "objectives" : [
             {
@@ -5248,6 +5343,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "Bear Hunting and Fishing Shop",
         "objectives" : [
             {
@@ -5280,6 +5376,7 @@
         "maxBots": 2,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 5,
         "name": "G Phone",
         "objectives" : [
             {
@@ -5303,8 +5400,11 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "Mall Second Floor Sniping",
         "objectives" : [
             {
@@ -5328,8 +5428,11 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 15,
         "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "Mall Third Floor Sniping",
         "objectives" : [
             {
@@ -5367,8 +5470,11 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 10,
         "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
         "name": "World of Childhood Sniping",
         "objectives" : [
             {

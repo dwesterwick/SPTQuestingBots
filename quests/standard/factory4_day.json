@@ -278,6 +278,176 @@
     },
     {
         "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 20,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Dumpster Hiding",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 32.56265,
+                            "y": 0.09880137,
+                            "z": -0.195569143
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": 32.56265,
+                            "y": 0.09880137,
+                            "z": -0.195569143
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 10,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Timmy's Forklift Hiding Spot",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 68.51851,
+                            "y": 0.107345276,
+                            "z": -55.857235
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 68.51851,
+                            "y": 0.107345276,
+                            "z": -55.857235
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Pumping Station Roof",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 38.0217552,
+                            "y": 3.11602068,
+                            "z": -8.460687
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 38.0217552,
+                            "y": 3.11602068,
+                            "z": -8.460687
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 5,
+        "pmcsOnly": true,
+        "name": "Unloading Area Rafters",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 50.31439,
+                            "y": 8.414999,
+                            "z": 15.6041031
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 8,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 50.31439,
+                            "y": 8.414999,
+                            "z": 15.6041031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
@@ -873,6 +1043,153 @@
                             "x": 61.16576,
                             "y": 1.230174035,
                             "z": 56.8760529
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Entrance",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 56.4665833,
+                            "y": 0.208644077,
+                            "z": 46.9904823
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 56.4665833,
+                            "y": 0.208644077,
+                            "z": 46.9904823
+                        },
+                        "lookToPosition" : {
+                            "x": 60.8949471,
+                            "y": 0.290820271,
+                            "z": 42.35923
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Outside",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 2,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 65.1394958,
+                            "y": 0.0274034645,
+                            "z": 41.22894
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 65.1394958,
+                            "y": 0.0274034645,
+                            "z": 41.22894
+                        },
+                        "lookToPosition" : {
+                            "x": 49.66302,
+                            "y": 0.020422332,
+                            "z": 32.2418823
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 5,
+        "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 54.47111,
+                            "y": 0.0356474668,
+                            "z": 22.30104
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 54.47111,
+                            "y": 0.0356474668,
+                            "z": 22.30104
+                        },
+                        "lookToPosition" : {
+                            "x": 60.8949471,
+                            "y": 0.290820271,
+                            "z": 42.35923
                         }
                     }
                 ]

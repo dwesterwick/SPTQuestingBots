@@ -1526,10 +1526,12 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 10,
-        "name": "Emercom Camping",
+        "name": "Emercom Camping Tent",
         "objectives" : [
             {
                 "repeatable": true,
@@ -1561,6 +1563,237 @@
                             "x": -317.337341,
                             "y": 21.3254356,
                             "z": 267.088
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Emercom Camping Bushes",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -331.513672,
+                            "y": 21.7780323,
+                            "z": 253.956451
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -331.513672,
+                            "y": 21.7780323,
+                            "z": 253.956451
+                        },
+                        "lookToPosition" : {
+                            "x": -314.042053,
+                            "y": 21.32544,
+                            "z": 256.040039
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Emercom Camping Bushes 2",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -351.59906,
+                            "y": 24.1870937,
+                            "z": 225.808167
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -351.59906,
+                            "y": 24.1870937,
+                            "z": 225.808167
+                        },
+                        "lookToPosition" : {
+                            "x": -293.029572,
+                            "y": 21.3254414,
+                            "z": 229.219772
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Emercom Camping Loading Dock",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -153.829926,
+                            "y": 27.1066227,
+                            "z": 202.994034
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -153.829926,
+                            "y": 27.1066227,
+                            "z": 202.994034
+                        },
+                        "lookToPosition" : {
+                            "x": -136.6634,
+                            "y": 24.9211922,
+                            "z": 281.90274
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Hole in Fence Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -222.046082,
+                            "y": 21.3254414,
+                            "z": -10.0693922
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -222.046082,
+                            "y": 21.3254414,
+                            "z": -10.0693922
+                        },
+                        "lookToPosition" : {
+                            "x": -222.926514,
+                            "y": 21.3254337,
+                            "z": -37.6849
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "chanceForSelecting": 15,
+        "priority": 20,
+        "desirability": 10,
+        "name": "Hole in Fence Camping Garage",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -192.4741,
+                            "y": 21.3254967,
+                            "z": -12.081954
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -192.4741,
+                            "y": 21.3254967,
+                            "z": -12.081954
                         }
                     }
                 ]
@@ -2128,6 +2361,60 @@
                             "x": -194.609314,
                             "y": 20.153717,
                             "z": -57.69243
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 30,
+        "priority": 20,
+        "desirability": 15,
+        "name": "Goshan Automotive Section",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -142.415588,
+                            "y": 27.0861816,
+                            "z": 32.86329
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -139.431381,
+                            "y": 27.0861816,
+                            "z": 25.0017624
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -152.649338,
+                            "y": 27.08618,
+                            "z": 16.317543
                         }
                     }
                 ]
