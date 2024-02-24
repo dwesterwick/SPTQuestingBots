@@ -1655,6 +1655,7 @@
         "chanceForSelecting": 20,
         "priority": 19,
         "desirability": 20,
+        "canRunBetweenObjectives": false,
         "name": "Underpass Stores",
         "objectives" : [
             {
@@ -3723,7 +3724,7 @@
         "priority": 20,
         "desirability": 15,
         "canRunBetweenObjectives": false,
-        "name": "Primorksy 48 Apt 10",
+        "name": "Primorksy 48 Bridge",
         "objectives" : [
             {
                 "repeatable": true,
@@ -3732,14 +3733,70 @@
                 "maxRunDistance": 11,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
-                            "x": 50.08894,
-                            "y": 11.7166252,
-                            "z": 139.023453
+                            "x": 48.5443535,
+                            "y": 11.7166243,
+                            "z": 142.8658
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 48.5443535,
+                            "y": 11.7166243,
+                            "z": 142.8658
+                        },
+                        "lookToPosition" : {
+                            "x": -6.248683,
+                            "y": 1.48904061,
+                            "z": 142.435852
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 52.73892,
+                            "y": 11.7166243,
+                            "z": 142.1063
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": 52.73892,
+                            "y": 11.7166243,
+                            "z": 142.1063
+                        },
+                        "lookToPosition" : {
+                            "x": 99.8137741,
+                            "y": 0.936501145,
+                            "z": 157.2298
                         }
                     }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "chanceForSelecting": 20,
+        "priority": 20,
+        "desirability": 15,
+        "canRunBetweenObjectives": false,
+        "name": "Primorksy 48 Apt 10",
+        "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
@@ -3780,6 +3837,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Crash Site Warehouse",
         "objectives" : [
             {
@@ -3837,6 +3895,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "School",
         "objectives" : [
             {
@@ -3931,6 +3990,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Building across from Brodian Pub",
         "objectives" : [
             {
@@ -3973,6 +4033,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 25,
+        "canRunBetweenObjectives": false,
         "name": "Terragroup Building",
         "objectives" : [
             {
@@ -4052,6 +4113,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 25,
+        "canRunBetweenObjectives": false,
         "name": "Terragroup Office",
         "objectives" : [
             {
@@ -4108,6 +4170,7 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 15,
+        "canRunBetweenObjectives": false,
         "name": "Mall Storage and Construction",
         "objectives" : [
             {
@@ -4165,6 +4228,7 @@
         "chanceForSelecting": 15,
         "priority": 20,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Mall Storage and Construction Rear",
         "objectives" : [
             {
@@ -4207,6 +4271,7 @@
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 25,
+        "canRunBetweenObjectives": false,
         "name": "Beluga",
         "objectives" : [
             {
@@ -4283,8 +4348,10 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -27.93754,
                             "y": 5.130017,
@@ -4292,24 +4359,45 @@
                         }
                     },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
+                        "position" : {
+                            "x": -27.93754,
+                            "y": 5.130017,
+                            "z": -33.9282265
+                        },
+                        "lookToPosition" : {
+                            "x": -30.9397335,
+                            "y": 1.39377892,
+                            "z": 50.2239761
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -46.3925819,
                             "y": 5.099983,
                             "z": -30.2969856
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
+                    },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
-                            "x": -60.28956,
-                            "y": 5.09998035,
-                            "z": -28.0160255
+                            "x": -46.3925819,
+                            "y": 5.099983,
+                            "z": -30.2969856
+                        },
+                        "lookToPosition" : {
+                            "x": -30.9397335,
+                            "y": 1.39377892,
+                            "z": 50.2239761
                         }
                     }
                 ]
@@ -4318,6 +4406,40 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -60.28956,
+                            "y": 5.09998035,
+                            "z": -28.0160255
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -60.28956,
+                            "y": 5.09998035,
+                            "z": -28.0160255
+                        },
+                        "lookToPosition" : {
+                            "x": -46.29684,
+                            "y": -0.0366578177,
+                            "z": 26.2706852
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 18,
                 "steps": [
                     {
                         "position" : {
@@ -4332,6 +4454,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -4346,12 +4469,38 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
-                            "x": -23.3563824,
+                            "x": -22.3383141,
                             "y": 9.600991,
-                            "z": -54.4971542
+                            "z": -60.5044
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -20.6509666,
+                            "y": 9.600991,
+                            "z": -54.7453
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -20.6509666,
+                            "y": 9.600991,
+                            "z": -54.7453
+                        },
+                        "lookToPosition" : {
+                            "x": 15.12835,
+                            "y": -0.400947422,
+                            "z": -14.8123875
                         }
                     },
                     {
@@ -4373,12 +4522,14 @@
         "chanceForSelecting": 15,
         "priority": 21,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Beluga Rear Storage",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -4393,6 +4544,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 19,
                 "steps": [
                     {
                         "position" : {
@@ -4410,6 +4562,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "maxBotsInGroup": 1,
         "chanceForSelecting": 20,
         "priority": 21,
         "desirability": 15,
@@ -4419,8 +4572,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 56.3479233,
+                            "y": 0.3971393,
+                            "z": 65.8521
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 56.3479233,
                             "y": 0.3971393,
@@ -4433,8 +4601,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 109.903419,
+                            "y": -1.80542445,
+                            "z": 88.87916
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": 109.903419,
                             "y": -1.80542445,
@@ -4447,8 +4631,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 77.20853,
+                            "y": 0.4610692,
+                            "z": 103.875023
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": 77.20853,
                             "y": 0.4610692,
@@ -4461,8 +4661,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 72.19021,
+                            "y": 0.439517617,
+                            "z": 121.300545
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 72.19021,
                             "y": 0.439517617,
@@ -4475,8 +4690,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 91.03747,
+                            "y": 0.936500132,
+                            "z": 165.844482
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 91.03747,
                             "y": 0.936500132,
@@ -4489,8 +4719,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 69.71718,
+                            "y": 0.8752645,
+                            "z": 190.368637
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 69.71718,
                             "y": 0.8752645,
@@ -4503,8 +4748,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 55.30679,
+                            "y": 1.806842,
+                            "z": 211.80069
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 55.30679,
                             "y": 1.806842,
@@ -4517,8 +4777,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 102.5392,
+                            "y": 1.80684209,
+                            "z": 210.893326
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 102.5392,
                             "y": 1.80684209,
@@ -4531,8 +4806,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 130.035736,
+                            "y": 1.806843,
+                            "z": 203.031387
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": 130.035736,
                             "y": 1.806843,
@@ -4598,8 +4888,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -29.59368,
+                            "y": 2.13255286,
+                            "z": 59.3848534
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -29.59368,
                             "y": 2.13255286,
@@ -4612,8 +4917,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -46.74783,
+                            "y": 0.924344242,
+                            "z": 113.845749
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -46.74783,
                             "y": 0.924344242,
@@ -4626,8 +4946,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -84.4248,
+                            "y": 0.7818383,
+                            "z": 140.0992
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -84.4248,
                             "y": 0.7818383,
@@ -4640,8 +4975,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -118.395714,
+                            "y": 1.39386487,
+                            "z": 116.379974
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -118.395714,
                             "y": 1.39386487,
@@ -4654,8 +5004,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -111.091057,
+                            "y": 0.7818203,
+                            "z": 82.57084
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -111.091057,
                             "y": 0.7818203,
@@ -4668,8 +5033,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -59.40102,
+                            "y": 0.9088143,
+                            "z": 71.2935
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -59.40102,
                             "y": 0.9088143,
@@ -4682,8 +5062,24 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -79.6148758,
+                            "y": 1.4166919,
+                            "z": 108.157623
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": -79.6148758,
                             "y": 1.4166919,
@@ -4696,8 +5092,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -59.3550034,
+                            "y": 0.930239856,
+                            "z": 91.5497742
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
                         "position" : {
                             "x": -59.3550034,
                             "y": 0.930239856,
@@ -4724,12 +5135,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -155.487381,
                             "y": 8.612576,
                             "z": 417.749939
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -155.487381,
+                            "y": 8.612576,
+                            "z": 417.749939
+                        },
+                        "lookToPosition" : {
+                            "x": -116.18235,
+                            "y": 2.73625278,
+                            "z": 410.7118
                         }
                     }
                 ]
@@ -4738,8 +5168,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -141.055588,
+                            "y": 8.615528,
+                            "z": 407.461823
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -141.055588,
                             "y": 8.615528,
@@ -4752,8 +5197,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -140.654236,
+                            "y": 8.615907,
+                            "z": 393.06662
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -140.654236,
                             "y": 8.615907,
@@ -4766,8 +5226,23 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -155.320755,
+                            "y": 8.612573,
+                            "z": 379.406738
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
                         "position" : {
                             "x": -155.320755,
                             "y": 8.612573,
@@ -4780,12 +5255,31 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -181.624435,
                             "y": 8.612579,
                             "z": 376.933472
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -181.624435,
+                            "y": 8.612579,
+                            "z": 376.933472
+                        },
+                        "lookToPosition" : {
+                            "x": -174.234634,
+                            "y": 2.11355042,
+                            "z": 333.569519
                         }
                     }
                 ]
@@ -4808,6 +5302,20 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 251.376511,
+                            "y": 3.435551,
+                            "z": 391.864258
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
                         "position" : {
                             "x": 251.376511,
                             "y": 3.435551,
@@ -4822,6 +5330,20 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 237.170456,
+                            "y": 3.45196724,
+                            "z": 342.2511
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
                         "position" : {
                             "x": 237.170456,
                             "y": 3.45196724,
@@ -4836,6 +5358,20 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 203.37616,
+                            "y": 3.4520092,
+                            "z": 367.619049
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
                         "position" : {
                             "x": 203.37616,
                             "y": 3.4520092,
@@ -4860,6 +5396,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -4876,6 +5413,20 @@
                 "maxDistanceFromBot": 750,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 201.4759,
+                            "y": -1.25006711,
+                            "z": 378.854065
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 201.4759,
                             "y": -1.25006711,
@@ -4888,6 +5439,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -4902,6 +5454,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -4948,12 +5501,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Father and Sons Apartments",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -4968,6 +5523,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -4988,12 +5544,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Golden World",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -5008,6 +5566,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -5034,6 +5593,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -5054,12 +5614,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Apartments Across from Kamchatskaya Arch",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -5153,12 +5715,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "West Apartments Near Car Garage",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -5199,6 +5763,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -5219,12 +5784,14 @@
         "chanceForSelecting": 15,
         "priority": 21,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Children's Polyclinic No. 69",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -5239,6 +5806,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -5253,6 +5821,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -5279,6 +5848,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -5299,12 +5869,14 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 15,
+        "canRunBetweenObjectives": false,
         "name": "Klimova 16A",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -5326,6 +5898,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -5347,6 +5920,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -5373,6 +5947,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -5399,6 +5974,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -5416,15 +5992,43 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "desirability": 5,
+        "name": "Cardinal West Courtyard",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 126.64296,
+                            "y": -1.8731209,
+                            "z": -122.456009
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
         "chanceForSelecting": 30,
         "priority": 20,
         "desirability": 25,
+        "canRunBetweenObjectives": false,
         "name": "Cardinal East Building",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -5439,6 +6043,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -5453,6 +6058,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -5473,6 +6079,86 @@
         ]
     },
     {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "chanceForSelecting": 10,
+        "priority": 21,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Cardinal East Courtyard Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 71.25703,
+                            "y": 3.96834064,
+                            "z": -116.052307
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": 71.25703,
+                            "y": 3.96834064,
+                            "z": -116.052307
+                        },
+                        "lookToPosition" : {
+                            "x": 80.1702042,
+                            "y": -0.162712038,
+                            "z": -64.23136
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 84.3904,
+                            "y": 3.9683342,
+                            "z": -132.492035
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": 84.3904,
+                            "y": 3.9683342,
+                            "z": -132.492035
+                        },
+                        "lookToPosition" : {
+                            "x": 116.749123,
+                            "y": -1.87315965,
+                            "z": -110.267609
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
@@ -5480,12 +6166,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Cardinal South Building",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -5500,6 +6188,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -5520,12 +6209,14 @@
         "chanceForSelecting": 15,
         "priority": 21,
         "desirability": 10,
+        "canRunBetweenObjectives": false,
         "name": "Apartments near Tonni Hellfinger",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -5540,6 +6231,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -5560,12 +6252,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Figaro",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -5580,6 +6274,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -5600,12 +6295,14 @@
         "chanceForSelecting": 10,
         "priority": 21,
         "desirability": 5,
+        "canRunBetweenObjectives": false,
         "name": "Bear Hunting and Fishing Shop",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -5639,6 +6336,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -5661,18 +6359,39 @@
         "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
+        "canRunBetweenObjectives": false,
         "name": "Mall Second Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -132.727127,
                             "y": 5.10298967,
                             "z": -7.13410759
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -132.727127,
+                            "y": 5.10298967,
+                            "z": -7.13410759
+                        },
+                        "lookToPosition" : {
+                            "x": -120.712944,
+                            "y": 0.8374527,
+                            "z": 53.7423134
                         }
                     }
                 ]
@@ -5689,14 +6408,18 @@
         "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
+        "canRunBetweenObjectives": false,
         "name": "Mall Third Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -123.361588,
                             "y": 9.675658,
@@ -5704,6 +6427,24 @@
                         }
                     },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -123.361588,
+                            "y": 9.675658,
+                            "z": -7.740727
+                        },
+                        "lookToPosition" : {
+                            "x": -101.232567,
+                            "y": 0.8511692,
+                            "z": 53.6889343
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -111.714615,
                             "y": 9.599993,
@@ -5711,10 +6452,45 @@
                         }
                     },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -111.714615,
+                            "y": 9.599993,
+                            "z": -9.486496
+                        },
+                        "lookToPosition" : {
+                            "x": -76.59862,
+                            "y": 0.8368392,
+                            "z": 44.810894
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -145.898621,
                             "y": 9.599993,
                             "z": -4.03885031
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": -145.898621,
+                            "y": 9.599993,
+                            "z": -4.03885031
+                        },
+                        "lookToPosition" : {
+                            "x": -131.243439,
+                            "y": 0.7818421,
+                            "z": 95.8936157
                         }
                     }
                 ]
@@ -5737,6 +6513,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 17,
                 "steps": [
                     {
                         "position" : {
@@ -5751,8 +6528,11 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
+                "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -84.46308,
                             "y": 5.09000063,
@@ -5760,6 +6540,24 @@
                         }
                     },
                     {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -84.46308,
+                            "y": 5.09000063,
+                            "z": -24.3518181
+                        },
+                        "lookToPosition" : {
+                            "x": -75.07488,
+                            "y": 0.7527769,
+                            "z": 43.0171165
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -94.2130356,
                             "y": 5.090004,
@@ -5767,10 +6565,41 @@
                         }
                     },
                     {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -94.2130356,
+                            "y": 5.090004,
+                            "z": -16.8490162
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": -108.345856,
                             "y": 5.090003,
                             "z": -14.8044291
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -108.345856,
+                            "y": 5.090003,
+                            "z": -14.8044291
+                        },
+                        "lookToPosition" : {
+                            "x": -31.09747,
+                            "y": 0.008697266,
+                            "z": 38.80326
                         }
                     }
                 ]
