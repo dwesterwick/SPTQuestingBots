@@ -14,6 +14,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -28,6 +29,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -42,6 +44,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -56,6 +59,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -82,6 +86,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -109,6 +114,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -123,6 +129,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -147,23 +154,10 @@
         "name": "Checkannaya 15",
         "objectives" : [
             {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 102.553955,
-                            "y": 3.50900435,
-                            "z": 231.324356
-                        }
-                    }
-                ]
-            },
-            {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -178,6 +172,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -192,6 +187,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -206,6 +202,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -220,6 +217,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -234,6 +232,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -248,6 +247,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -262,6 +262,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -288,6 +289,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -302,6 +304,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -318,6 +321,20 @@
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 67.60499,
+                            "y": 5.08100033,
+                            "z": 266.61087
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": 67.60499,
                             "y": 5.08100033,
@@ -356,6 +373,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -370,6 +388,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -384,6 +403,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -425,6 +445,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -439,6 +460,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -453,6 +475,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -467,6 +490,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -481,6 +505,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -495,6 +520,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 16,
                 "steps": [
                     {
                         "position" : {
@@ -563,6 +589,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -577,6 +604,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -624,7 +652,7 @@
         "maxBots": 3,
         "chanceForSelecting": 15,
         "priority": 19,
-        "desirability": 20,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Lexos Offices",
         "objectives" : [
@@ -632,6 +660,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -646,6 +675,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -660,6 +690,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -674,6 +705,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -688,6 +720,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -702,6 +735,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -743,12 +777,13 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
-                            "x": -88.3481445,
-                            "y": -0.0618792251,
-                            "z": 415.480927
+                            "x": -151.405685,
+                            "y": 2.21096063,
+                            "z": 340.1596
                         }
                     }
                 ]
@@ -757,6 +792,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -792,6 +828,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -819,6 +856,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -840,6 +878,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -854,6 +893,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -868,6 +908,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -909,6 +950,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -923,6 +965,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -937,6 +980,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -951,6 +995,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -965,6 +1010,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -992,6 +1038,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1006,6 +1053,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1034,6 +1082,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1068,6 +1117,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -1082,6 +1132,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1096,6 +1147,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1110,6 +1162,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1137,6 +1190,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1151,6 +1205,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1172,6 +1227,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1186,6 +1242,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1274,6 +1331,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1288,6 +1346,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1302,6 +1361,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1316,6 +1376,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1330,6 +1391,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1344,6 +1406,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1358,6 +1421,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -1372,6 +1436,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1399,6 +1464,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1413,6 +1479,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1427,6 +1494,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1454,6 +1522,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -1468,6 +1537,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -1482,6 +1552,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1496,6 +1567,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1510,6 +1582,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1531,6 +1604,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1545,6 +1619,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -1559,6 +1634,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1585,6 +1661,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1599,6 +1676,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1613,6 +1691,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -1640,6 +1719,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1673,6 +1753,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1700,6 +1781,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1714,6 +1796,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1728,6 +1811,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1742,6 +1826,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1769,20 +1854,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 123.898621,
-                            "y": 3.26701021,
-                            "z": 348.6928
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1797,6 +1869,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1811,6 +1884,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1837,6 +1911,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1851,6 +1926,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -1865,6 +1941,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -1893,6 +1970,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1921,6 +1999,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1935,6 +2014,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1949,6 +2029,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1963,6 +2044,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1990,6 +2072,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2004,6 +2087,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2018,6 +2102,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -2032,6 +2117,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -2046,6 +2132,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2060,6 +2147,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2086,6 +2174,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 75,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -2138,6 +2227,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 75,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -2164,6 +2254,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2184,12 +2275,14 @@
         "chanceForSelecting": 20,
         "priority": 20,
         "desirability": 15,
+        "canRunBetweenObjectives": false,
         "name": "Cinema",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -2211,6 +2304,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 22,
                 "steps": [
                     {
                         "position" : {
@@ -2246,6 +2340,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2267,6 +2362,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2295,6 +2391,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2309,6 +2406,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2335,6 +2433,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2349,6 +2448,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2416,6 +2516,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2430,6 +2531,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2471,6 +2573,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2485,6 +2588,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -2511,6 +2615,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2538,6 +2643,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2572,6 +2678,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2586,6 +2693,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2613,6 +2721,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2627,6 +2736,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -2641,6 +2751,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2668,6 +2779,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2682,6 +2794,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -2696,6 +2809,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 16,
                 "steps": [
                     {
                         "position" : {
@@ -2723,6 +2837,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -2737,6 +2852,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2751,6 +2867,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -2765,6 +2882,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2779,6 +2897,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 2,
                 "steps": [
                     {
                         "position" : {
@@ -2806,6 +2925,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2820,6 +2940,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2834,6 +2955,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2848,6 +2970,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2874,6 +2997,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -2901,6 +3025,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -2915,6 +3040,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -2956,6 +3082,22 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -218.175873,
+                            "y": 2.21795559,
+                            "z": 281.3167
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2970,6 +3112,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3018,6 +3161,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3032,6 +3176,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3046,6 +3191,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3073,6 +3219,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3087,6 +3234,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3101,6 +3249,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3115,6 +3264,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -3156,6 +3306,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3170,6 +3321,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3184,6 +3336,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3198,6 +3351,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3225,6 +3379,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3239,6 +3394,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3265,6 +3421,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 50,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3291,6 +3448,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 50,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -3317,6 +3475,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 50,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3343,6 +3502,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -3370,6 +3530,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3384,6 +3545,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3410,6 +3572,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3437,6 +3600,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3451,6 +3615,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -3472,12 +3637,13 @@
         "priority": 20,
         "desirability": 5,
         "canRunBetweenObjectives": false,
-        "name": "Zmejsky 5",
+        "name": "Zmejsky 3",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3492,6 +3658,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3519,6 +3686,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3533,6 +3701,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3560,6 +3729,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -3574,6 +3744,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -3588,6 +3759,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -3614,6 +3786,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3628,6 +3801,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3642,6 +3816,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3668,6 +3843,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -3682,6 +3858,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3696,6 +3873,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3710,6 +3888,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3724,6 +3903,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -3757,6 +3937,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3771,6 +3952,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3797,6 +3979,29 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 56.34013,
+                            "y": 0.242748529,
+                            "z": -74.131546
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 59.560276,
+                            "y": 0.242748484,
+                            "z": -74.53773
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3811,6 +4016,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3825,6 +4031,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 750,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3851,6 +4058,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3872,6 +4080,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3905,6 +4114,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 24,
                 "steps": [
                     {
                         "position" : {
@@ -3919,6 +4129,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 48,
                 "steps": [
                     {
                         "position" : {
@@ -3933,6 +4144,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 50,
                 "steps": [
                     {
                         "position" : {
@@ -3959,6 +4171,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 50,
                 "steps": [
                     {
                         "position" : {
@@ -3973,6 +4186,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 50,
                 "steps": [
                     {
                         "position" : {
@@ -4001,6 +4215,7 @@
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -38.4692955,
                             "y": 0.599966645,
@@ -4008,6 +4223,20 @@
                         }
                     },
                     {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
+                        "position" : {
+                            "x": -38.4692955,
+                            "y": 0.599966645,
+                            "z": -45.16779
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -45.33511,
                             "y": 0.6216386,
@@ -4015,6 +4244,33 @@
                         }
                     },
                     {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
+                        "position" : {
+                            "x": -45.33511,
+                            "y": 0.6216386,
+                            "z": -36.7298355
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": -29.8334522,
+                            "y": 0.6120954,
+                            "z": -44.8534851
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 10,
+                            "max": 45
+                        },
                         "position" : {
                             "x": -29.8334522,
                             "y": 0.6120954,
@@ -5273,9 +5529,9 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 62.5269,
-                            "y": 0.24274838,
-                            "z": -78.1427
+                            "x": -61.71989,
+                            "y": 6.22127247,
+                            "z": -146.008392
                         }
                     }
                 ]
