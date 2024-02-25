@@ -4,14 +4,14 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 15,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Lexos Director's Office",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1500,
+                "maxDistanceFromBot": 100,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -26,7 +26,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1500,
+                "maxDistanceFromBot": 100,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -41,7 +41,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1500,
+                "maxDistanceFromBot": 100,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -56,7 +56,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1500,
+                "maxDistanceFromBot": 100,
                 "maxRunDistance": 9,
                 "steps": [
                     {
@@ -74,14 +74,14 @@
         "repeatable": false,
         "minLevel": 15,
         "maxLevel": 99,
-        "maxBots": 2,
-        "desirability": 20,
+        "maxBots": 3,
+        "desirability": 30,
         "name": "Concordia Basement Security Room",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -107,7 +107,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -122,7 +122,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -141,7 +141,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 20,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Checkannaya 15",
         "objectives" : [
@@ -272,13 +272,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 30,
         "name": "Lexos North Entry",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -292,8 +292,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -307,8 +307,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 1,
@@ -340,12 +340,12 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 30,
         "name": "Lexos Center",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
@@ -359,7 +359,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 2,
                 "steps": [
@@ -374,7 +374,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 2,
                 "steps": [
@@ -389,7 +389,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 2,
                 "steps": [
@@ -404,7 +404,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "steps": [
                     {
@@ -429,7 +429,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 8,
                 "steps": [
@@ -444,7 +444,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 11,
                 "steps": [
@@ -459,7 +459,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 13,
                 "steps": [
@@ -474,7 +474,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 10,
                 "steps": [
@@ -489,7 +489,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 15,
                 "steps": [
@@ -504,7 +504,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 1000,
                 "maxRunDistance": 16,
                 "steps": [
@@ -524,13 +524,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 30,
         "name": "Lexos South Entry",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -543,8 +543,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -557,8 +557,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -571,8 +571,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -586,8 +586,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -601,8 +601,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -615,8 +615,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 1000,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -634,14 +634,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Lexos Offices",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -656,7 +656,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -671,7 +671,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -686,7 +686,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -701,7 +701,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -716,7 +716,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -741,8 +741,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -755,8 +755,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -770,8 +770,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -806,7 +806,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
@@ -826,14 +826,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Finance Building",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -854,8 +854,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -869,8 +869,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -884,8 +884,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -918,14 +918,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Dentist",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -940,7 +940,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -955,7 +955,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -970,7 +970,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -985,7 +985,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 1000,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1004,14 +1004,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Post Office",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -1025,8 +1025,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1054,8 +1054,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1081,14 +1081,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Primorsky Locked Apartment",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -1103,7 +1103,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1118,7 +1118,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -1133,7 +1133,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 750,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1152,14 +1152,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Checkannaya 15 Upstairs",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -1174,7 +1174,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 9,
                 "steps": [
                     {
@@ -1196,7 +1196,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -1211,7 +1211,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1235,8 +1235,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1263,8 +1263,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1289,7 +1289,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Nikitskaya 6",
         "objectives" : [
@@ -1426,8 +1426,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -1441,8 +1441,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1456,8 +1456,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1476,14 +1476,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 46",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -1497,8 +1497,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -1512,8 +1512,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -1527,8 +1527,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -1542,8 +1542,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -1564,8 +1564,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1579,8 +1579,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -1594,8 +1594,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -1614,14 +1614,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Underpass Stores",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -1635,8 +1635,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -1650,8 +1650,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -1676,8 +1676,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1708,8 +1708,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1728,14 +1728,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Concordia Building 9 Gym",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1749,8 +1749,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -1764,8 +1764,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1779,8 +1779,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -1805,8 +1805,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1820,8 +1820,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1835,8 +1835,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -1855,13 +1855,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 25,
         "name": "Construction",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -1875,8 +1875,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -1890,8 +1890,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -1905,8 +1905,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1919,8 +1919,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1934,8 +1934,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1948,8 +1948,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -1963,8 +1963,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -1978,8 +1978,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -1993,8 +1993,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -2013,14 +2013,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Sparja",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -2034,8 +2034,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2049,8 +2049,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -2064,8 +2064,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -2079,8 +2079,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -2094,8 +2094,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -2119,8 +2119,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -2139,13 +2139,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 25,
         "name": "Primorsky Extract Area",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2168,8 +2168,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 75,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -2188,12 +2188,12 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "name": "S Cinema Store",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
@@ -2213,13 +2213,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Cinema",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 12,
                 "steps": [
@@ -2241,7 +2241,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 22,
                 "steps": [
@@ -2277,7 +2277,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
@@ -2299,7 +2299,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
@@ -2328,7 +2328,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
@@ -2343,7 +2343,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -2363,13 +2363,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "name": "Cinema Hideout",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -2383,8 +2383,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -2403,13 +2403,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "name": "Cinema Courtyard",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 50,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2427,14 +2427,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Bilbo Coffee",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2447,8 +2447,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2462,8 +2462,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -2477,8 +2477,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -2496,14 +2496,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Diner",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2517,8 +2517,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -2537,13 +2537,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 5,
+        "desirability": 10,
         "name": "Diner Hideout",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 300,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -2562,14 +2562,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 5,
+        "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Car Lot Office",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -2595,14 +2595,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 5,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Basement Access",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2616,8 +2616,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2636,14 +2636,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel 2nd Floor",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2657,8 +2657,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -2672,8 +2672,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -2692,14 +2692,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Main Entrance",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2713,8 +2713,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -2728,8 +2728,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 16,
                 "steps": [
                     {
@@ -2748,14 +2748,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 15,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Pinewood Hotel Sparja",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -2769,8 +2769,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 14,
                 "steps": [
                     {
@@ -2784,8 +2784,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 13,
                 "steps": [
                     {
@@ -2799,8 +2799,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2814,8 +2814,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 2,
                 "steps": [
                     {
@@ -2840,8 +2840,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -2855,8 +2855,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -2870,8 +2870,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -2885,8 +2885,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -2910,8 +2910,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -2936,8 +2936,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -2951,8 +2951,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -2985,14 +2985,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "ALCO-Point",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3006,8 +3006,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 14,
                 "steps": [
                     {
@@ -3021,8 +3021,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3043,8 +3043,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -3068,8 +3068,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3083,8 +3083,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3098,8 +3098,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3118,13 +3118,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Pharmacy",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
@@ -3139,7 +3139,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
@@ -3154,7 +3154,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
@@ -3169,7 +3169,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 11,
                 "steps": [
@@ -3189,13 +3189,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Census Building",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
@@ -3209,7 +3209,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
@@ -3224,7 +3224,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
@@ -3239,7 +3239,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 4,
                 "steps": [
@@ -3254,7 +3254,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "steps": [
@@ -3274,14 +3274,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Brodian Pub",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
                     {
@@ -3295,8 +3295,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -3320,8 +3320,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 50,
-                "maxDistanceFromBot": 300,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -3345,8 +3345,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 50,
-                "maxDistanceFromBot": 300,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 9,
                 "steps": [
                     {
@@ -3370,8 +3370,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 50,
-                "maxDistanceFromBot": 300,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3395,8 +3395,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -3421,8 +3421,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -3436,8 +3436,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3461,7 +3461,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 30,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
@@ -3487,8 +3487,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3502,8 +3502,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
                     {
@@ -3528,8 +3528,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -3543,8 +3543,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3563,14 +3563,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -3584,8 +3584,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3604,14 +3604,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48 Bridge",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -3673,14 +3673,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48 Apt 10",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 12,
                 "steps": [
                     {
@@ -3694,8 +3694,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
                     {
@@ -3714,14 +3714,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Crash Site Warehouse",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
                     {
@@ -3735,8 +3735,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -3750,8 +3750,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -3770,13 +3770,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "School",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 9,
                 "steps": [
@@ -3791,7 +3791,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -3806,7 +3806,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
@@ -3821,7 +3821,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -3836,7 +3836,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
@@ -3863,13 +3863,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Building across from Brodian Pub",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
@@ -3884,7 +3884,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
@@ -3904,14 +3904,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Terragroup Building",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -3932,8 +3932,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -3947,8 +3947,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3962,8 +3962,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -3982,13 +3982,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Terragroup Office",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "steps": [
@@ -4010,7 +4010,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
@@ -4037,13 +4037,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Mall Storage and Construction",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 24,
                 "steps": [
@@ -4058,7 +4058,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 48,
                 "steps": [
@@ -4073,7 +4073,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 50,
                 "steps": [
@@ -4093,13 +4093,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 10,
+        "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Mall Storage and Construction Rear",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 50,
                 "steps": [
@@ -4114,7 +4114,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 50,
                 "steps": [
@@ -4134,13 +4134,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Beluga",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "steps": [
                     {
@@ -4210,7 +4210,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
@@ -4268,7 +4268,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "steps": [
@@ -4301,7 +4301,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 18,
                 "steps": [
@@ -4316,7 +4316,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 15,
                 "steps": [
@@ -4331,7 +4331,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
                 "maxRunDistance": 10,
                 "steps": [
@@ -4389,7 +4389,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 8,
                 "steps": [
@@ -4404,7 +4404,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 19,
                 "steps": [
@@ -4430,8 +4430,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4459,8 +4459,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 8,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -4489,8 +4489,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -4519,8 +4519,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4548,8 +4548,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4577,8 +4577,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4606,8 +4606,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4635,8 +4635,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4664,8 +4664,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4687,44 +4687,6 @@
                             "x": 130.035736,
                             "y": 1.806843,
                             "z": 203.031387
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 2,
-        "desirability": 10,
-        "name": "Scav Checkpoint",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 123.791542,
-                            "y": -2.02420974,
-                            "z": 52.574894
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 110.171463,
-                            "y": -2.13371754,
-                            "z": 55.742836
                         }
                     }
                 ]
@@ -4742,8 +4704,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4771,8 +4733,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4800,8 +4762,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4829,8 +4791,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4858,8 +4820,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4887,8 +4849,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4916,8 +4878,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -4946,8 +4908,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4981,14 +4943,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "desirability": 15,
+        "desirability": 20,
         "pmcsOnly": true,
         "name": "Cinema Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5020,8 +4982,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5049,8 +5011,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5078,8 +5040,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5107,8 +5069,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5150,8 +5112,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 2,
@@ -5178,8 +5140,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 2,
@@ -5206,8 +5168,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 2,
@@ -5244,8 +5206,8 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -5259,8 +5221,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 2,
@@ -5287,8 +5249,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -5302,8 +5264,8 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 750,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 3,
                 "steps": [
                     {
@@ -5322,13 +5284,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 15,
+        "desirability": 10,
         "name": "Crash SW Apartment",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -5352,7 +5314,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
@@ -5367,7 +5329,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
@@ -5387,13 +5349,13 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 5,
+        "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Golden World",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -5408,7 +5370,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
@@ -5433,7 +5395,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
@@ -5459,7 +5421,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -5491,7 +5453,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
@@ -5505,7 +5467,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
@@ -5529,7 +5491,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
@@ -5554,7 +5516,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
@@ -5593,8 +5555,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 20,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 7,
                 "steps": [
                     {
@@ -5619,7 +5581,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
@@ -5634,7 +5596,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
@@ -5649,7 +5611,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 6,
                 "steps": [
@@ -5674,7 +5636,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 4,
                 "steps": [
@@ -5700,8 +5662,8 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
                     {
@@ -5722,8 +5684,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
                     {
@@ -5744,8 +5706,8 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 500,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
                 "maxRunDistance": 9,
                 "steps": [
                     {
@@ -5769,7 +5731,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
@@ -5794,7 +5756,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
@@ -5819,7 +5781,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "steps": [
                     {
@@ -5844,7 +5806,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 9,
                 "steps": [
@@ -5859,7 +5821,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 11,
                 "steps": [
@@ -5874,7 +5836,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
@@ -5908,7 +5870,7 @@
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -5941,7 +5903,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -5985,7 +5947,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
@@ -6000,7 +5962,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 13,
                 "steps": [
@@ -6026,7 +5988,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 5,
                 "steps": [
@@ -6041,7 +6003,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
@@ -6067,7 +6029,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 10,
                 "steps": [
@@ -6082,7 +6044,7 @@
             },
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 13,
                 "steps": [
@@ -6108,7 +6070,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
@@ -6140,7 +6102,7 @@
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
                 "maxRunDistance": 15,
                 "steps": [
@@ -6161,14 +6123,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "desirability": 10,
+        "desirability": 15,
         "pmcsOnly": true,
         "canRunBetweenObjectives": false,
         "name": "Mall Second Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
@@ -6208,14 +6170,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "desirability": 10,
+        "desirability": 15,
         "pmcsOnly": true,
         "canRunBetweenObjectives": false,
         "name": "Mall Third Floor Sniping",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 10,
                 "lootAfterCompleting": "Inhibit",
@@ -6305,14 +6267,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "desirability": 10,
+        "desirability": 15,
         "pmcsOnly": true,
         "name": "World of Childhood Sniping",
         "objectives" : [
             {
                 "repeatable": false,
-                "minDistanceFromBot": 10,
-                "maxDistanceFromBot": 300,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
                 "maxRunDistance": 17,
                 "steps": [
                     {
@@ -6326,7 +6288,7 @@
             },
             {
                 "repeatable": true,
-                "minDistanceFromBot": 10,
+                "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
