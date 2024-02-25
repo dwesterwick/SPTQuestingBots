@@ -34,14 +34,8 @@ namespace SPTQuestingBots.Models
         [JsonProperty("maxBotsInGroup")]
         public int MaxBotsInGroup { get; set; } = 99;
 
-        [JsonProperty("chanceForSelecting")]
-        public float ChanceForSelecting { get; set; } = 50;
-
-        [JsonProperty("priority")]
-        public int Priority { get; set; } = 99;
-
         [JsonProperty("desirability")]
-        public float Desirability { get; set; } = -1;
+        public float Desirability { get; set; } = 0;
 
         [JsonProperty("minRaidET")]
         public float MinRaidET { get; set; } = 0;
@@ -84,27 +78,12 @@ namespace SPTQuestingBots.Models
 
         }
 
-        public Quest(int priority) : this()
-        {
-            Priority = priority;
-        }
-
         public Quest(string _name) : this()
         {
             name = _name;
         }
 
         public Quest(RawQuestClass template) : this()
-        {
-            Template = template;
-        }
-
-        public Quest(int priority, string _name): this(priority)
-        {
-            name = _name;
-        }
-
-        public Quest(int priority, RawQuestClass template) : this(priority)
         {
             Template = template;
         }

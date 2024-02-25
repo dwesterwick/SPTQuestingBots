@@ -149,8 +149,6 @@
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
 			"airdrop_bot_interest_time": 420,
 			"eft_quests": {
-				"priority": 15,
-				"chance": 50,
 				"desirability": 65,
 				"max_bots_per_quest": 3,
 				"chance_of_having_keys": 50,
@@ -164,23 +162,17 @@
 				]
 			},
 			"spawn_rush": {
-				"priority": 5,
-				"chance": 50,
 				"desirability": 100,
 				"max_bots_per_quest": 1,
 				"max_distance": 75,
 				"max_raid_ET": 30
 			},
 			"spawn_point_wander": {
-				"priority": 25,
-				"chance": 1,
 				"desirability": 0,
 				"min_distance": 75,
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"priority": 14,
-				"chance": 10,
 				"desirability": 75,
 				"min_level": 15,
 				"max_raid_ET": 300,
@@ -188,8 +180,6 @@
 				"max_bots_per_quest": 2
 			},
 			"airdrop_chaser": {
-				"priority": 10,
-				"chance": 20,
 				"desirability": 80,
 				"max_bots_per_quest": 3,
 				"max_distance": 500

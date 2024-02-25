@@ -10,12 +10,6 @@ namespace SPTQuestingBots.Configuration
 {
     public class QuestSettingsConfig
     {
-        [JsonProperty("priority")]
-        public int Priority { get; set; } = 10;
-
-        [JsonProperty("chance")]
-        public float Chance { get; set; } = 50;
-
         [JsonProperty("desirability")]
         public float Desirability { get; set; } = 50;
 
@@ -50,8 +44,6 @@ namespace SPTQuestingBots.Configuration
 
         public static void ApplyQuestSettingsFromConfig(Models.Quest quest, QuestSettingsConfig settings)
         {
-            quest.Priority = settings.Priority;
-            quest.ChanceForSelecting = settings.Chance;
             quest.Desirability = settings.Desirability;
             quest.MaxBots = settings.MaxBotsPerQuest;
             quest.MaxRaidET = settings.MaxRaidET;

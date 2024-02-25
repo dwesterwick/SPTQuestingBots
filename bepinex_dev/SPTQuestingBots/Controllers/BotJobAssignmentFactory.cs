@@ -586,17 +586,6 @@ namespace SPTQuestingBots.Controllers
                 .Where(q => !invalidQuests.Contains(q))
                 .ToArray();
 
-            foreach (Quest quest in assignableQuests)
-            {
-                if (quest.Desirability != -1)
-                {
-                    continue;
-                }
-
-                quest.Desirability = 100 * (1f - quest.Priority / 25f) * (quest.ChanceForSelecting / 100);
-                LoggingController.LogWarning("Quest " + quest.ToString() + " Desirability set to " + quest.Desirability + ". Priority=" + quest.Priority + ", ChanceForSelecting=" + quest.ChanceForSelecting);
-            }
-
             if (!assignableQuests.Any())
             {
                 return null;
@@ -668,71 +657,6 @@ namespace SPTQuestingBots.Controllers
             //LoggingController.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
 
             return selectedQuest;
-        }
-
-        public static Quest GetRandomQuest_OLD(this BotOwner bot, IEnumerable<Quest> invalidQuests)
-        {
-            // Group all valid quests by their priority number in ascending order
-            var groupedQuests = allQuests
-                .Where(q => !invalidQuests.Contains(q))
-                .Where(q => q.NumberOfValidObjectives > 0)
-                .Where(q => q.CanMoreBotsDoQuest())
-                .Where(q => q.CanAssignToBot(bot))
-                .GroupBy
-                (
-                    q => q.Priority,
-                    q => q,
-                    (key, q) => new { Priority = key, Quests = q.ToList() }
-                )
-                .OrderBy(g => g.Priority);
-
-            if (!groupedQuests.Any())
-            {
-                return null;
-            }
-
-            foreach (var priorityGroup in groupedQuests)
-            {
-                // Get the distances to the nearest and furthest objectives for each quest in the group
-                Dictionary<Quest, Configuration.MinMaxConfig> questObjectiveDistances = new Dictionary<Quest, Configuration.MinMaxConfig>();
-                foreach (Quest quest in priorityGroup.Quests)
-                {
-                    IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
-                    IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p.Value);
-                    IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot.Position, p));
-
-                    questObjectiveDistances.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
-                }
-
-                if (questObjectiveDistances.Count == 0)
-                {
-                    continue;
-                }
-
-                // Calculate the maximum amount of "randomness" to apply to each quest
-                double distanceRange = questObjectiveDistances.Max(q => q.Value.Max) - questObjectiveDistances.Min(q => q.Value.Min);
-                int maxRandomDistance = (int)Math.Ceiling(distanceRange * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
-
-                //string timestampText = "[" + DateTime.Now.ToLongTimeString() + "] ";
-                //LoggingController.LogInfo(timestampText + "Possible quests for priority " + priorityGroup.Priority + ": " + questObjectiveDistances.Count + ", Distance Range: " + distanceRange);
-                //LoggingController.LogInfo(timestampText + "Possible quests for priority " + priorityGroup.Priority + ": " + string.Join(", ", questObjectiveDistances.Select(o => o.Key.Name)));
-
-                // Sort the quests in the group by their distance to you, with some randomness applied, in ascending order
-                System.Random random = new System.Random();
-                IEnumerable<Quest> randomizedQuests = questObjectiveDistances
-                    .OrderBy(q => q.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance))
-                    .Select(q => q.Key);
-
-                // Use a random number to determine if the bot should be assigned to the first quest in the list
-                Quest firstRandomQuest = randomizedQuests.First();
-                if (random.Next(1, 100) <= firstRandomQuest.ChanceForSelecting)
-                {
-                    return firstRandomQuest;
-                }
-            }
-
-            // If no quest was assigned to the bot, randomly assign a quest in the first priority group as a fallback method
-            return groupedQuests.First().Quests.Random();
         }
 
         public static IEnumerable<BotJobAssignment> GetCompletedOrAchivedQuests(this BotOwner bot)
