@@ -323,7 +323,7 @@
         "maxLevel": 10,
         "maxBots": 1,
         "maxBotsInGroup": 1,
-        "desirability": 10,
+        "desirability": 3,
         "name": "Timmy's Forklift Hiding Spot",
         "objectives" : [
             {

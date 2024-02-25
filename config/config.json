@@ -208,15 +208,15 @@
 		},
 		"max_alive_bots": {
 			"default": 6,
-			"factory4_day": 5,
-			"factory4_night": 5,
+			"factory4_day": 6,
+			"factory4_night": 6,
 			"bigmap": 7,
 			"woods": 8,
 			"shoreline": 7,
 			"lighthouse": 7,
 			"rezervbase": 7,
 			"interchange": 8,
-			"laboratory": 7,
+			"laboratory": 8,
 			"tarkovstreets": 8
 		},
 		"pmcs" : {

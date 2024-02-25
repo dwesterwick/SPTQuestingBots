@@ -741,32 +741,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
-        "name": "House on the Hill",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
-                "maxRunDistance": 5,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -490.8275,
-                            "y": -14.5118237,
-                            "z": -183.727844
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "desirability": 25,
+        "desirability": 15,
         "name": "House on the Hill",
         "objectives" : [
             {

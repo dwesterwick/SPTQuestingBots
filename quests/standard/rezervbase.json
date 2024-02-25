@@ -4,7 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 20,
+        "desirability": 25,
         "minRaidET": 300,
         "requiredSwitches": {
             "autoId_00632_EXFIL": false
@@ -198,7 +198,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "name": "D2 Switch",
         "objectives" : [
             {

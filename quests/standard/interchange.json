@@ -4,7 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": false
         },
@@ -360,7 +360,7 @@
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 35,
+        "desirability": 50,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": true,
             "Shopping_Mall_DesignStuff_00057": true
@@ -405,7 +405,7 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 50,
         "name": "KIBA",
         "objectives" : [
             {
@@ -507,7 +507,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Power Station",
         "objectives" : [
@@ -569,7 +569,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
-        "desirability": 35,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Goshan Food Spawns",
         "objectives" : [
@@ -788,7 +788,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "IDEA Office",
         "objectives" : [
@@ -865,7 +865,7 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Emercom",
         "objectives" : [
