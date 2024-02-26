@@ -149,8 +149,6 @@
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
 			"airdrop_bot_interest_time": 420,
 			"eft_quests": {
-				"priority": 15,
-				"chance": 50,
 				"desirability": 65,
 				"max_bots_per_quest": 3,
 				"chance_of_having_keys": 50,
@@ -164,33 +162,25 @@
 				]
 			},
 			"spawn_rush": {
-				"priority": 5,
-				"chance": 50,
 				"desirability": 100,
 				"max_bots_per_quest": 1,
 				"max_distance": 75,
 				"max_raid_ET": 30
 			},
 			"spawn_point_wander": {
-				"priority": 25,
-				"chance": 1,
 				"desirability": 0,
 				"min_distance": 75,
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"priority": 14,
-				"chance": 10,
-				"desirability": 75,
+				"desirability": 65,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 25,
 				"max_bots_per_quest": 2
 			},
 			"airdrop_chaser": {
-				"priority": 10,
-				"chance": 20,
-				"desirability": 80,
+				"desirability": 70,
 				"max_bots_per_quest": 3,
 				"max_distance": 500
 			}
@@ -218,15 +208,15 @@
 		},
 		"max_alive_bots": {
 			"default": 6,
-			"factory4_day": 5,
-			"factory4_night": 5,
+			"factory4_day": 6,
+			"factory4_night": 6,
 			"bigmap": 7,
 			"woods": 8,
 			"shoreline": 7,
 			"lighthouse": 7,
 			"rezervbase": 7,
 			"interchange": 8,
-			"laboratory": 7,
+			"laboratory": 8,
 			"tarkovstreets": 8
 		},
 		"pmcs" : {

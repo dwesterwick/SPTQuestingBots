@@ -4,9 +4,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 15,
-        "priority": 18,
-        "desirability": 30,
+        "desirability": 35,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": false
         },
@@ -44,8 +42,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 20,
         "minRaidET": 180,
         "requiredSwitches": {
@@ -86,8 +82,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 20,
         "minRaidET": 180,
         "requiredSwitches": {
@@ -127,8 +121,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 20,
         "minRaidET": 180,
         "pmcsOnly": true,
@@ -170,8 +162,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 10,
-        "priority": 18,
         "desirability": 25,
         "name": "Safe Room Area",
         "objectives" : [
@@ -210,8 +200,6 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 18,
         "desirability": 25,
         "minRaidET": 180,
         "canRunBetweenObjectives": false,
@@ -253,8 +241,6 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 20,
-        "priority": 18,
         "desirability": 30,
         "name": "Pharmacy",
         "objectives" : [
@@ -280,8 +266,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 18,
         "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Techlight",
@@ -351,8 +335,6 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 18,
         "desirability": 35,
         "name": "ULTRA Medical Storage",
         "objectives" : [
@@ -378,9 +360,7 @@
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 18,
-        "desirability": 35,
+        "desirability": 50,
         "requiredSwitches": {
             "Shopping_Mall_DesignStuff_00055": true,
             "Shopping_Mall_DesignStuff_00057": true
@@ -425,9 +405,7 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 20,
-        "priority": 18,
-        "desirability": 30,
+        "desirability": 50,
         "name": "KIBA",
         "objectives" : [
             {
@@ -480,8 +458,6 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 19,
         "desirability": 15,
         "name": "Killa's Stash",
         "objectives" : [
@@ -507,8 +483,6 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 19,
         "desirability": 15,
         "name": "21WS Container",
         "objectives" : [
@@ -533,9 +507,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Power Station",
         "objectives" : [
@@ -597,9 +569,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
-        "chanceForSelecting": 30,
-        "priority": 19,
-        "desirability": 35,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Goshan Food Spawns",
         "objectives" : [
@@ -718,8 +688,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
         "desirability": 30,
         "canRunBetweenObjectives": true,
         "name": "OLI Logistics Area",
@@ -820,9 +788,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 19,
-        "desirability": 30,
+        "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "IDEA Office",
         "objectives" : [
@@ -899,9 +865,7 @@
         "minLevel": 15,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
-        "desirability": 30,
+        "desirability": 35,
         "canRunBetweenObjectives": false,
         "name": "Emercom",
         "objectives" : [
@@ -957,8 +921,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
         "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Mantis",
@@ -1030,8 +992,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 19,
         "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "Generic",
@@ -1088,8 +1048,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 30,
         "name": "East Wall Container",
         "objectives" : [
@@ -1114,8 +1072,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "name": "Power Station Stashes",
         "objectives" : [
@@ -1186,8 +1142,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "name": "Power Station West Shack",
         "objectives" : [
@@ -1213,8 +1167,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "name": "IDEA North Bus",
         "objectives" : [
@@ -1239,8 +1191,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "North Construction Site",
         "objectives" : [
@@ -1293,8 +1243,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "Railway Area",
         "objectives" : [
@@ -1361,8 +1309,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "name": "Railway Stashes",
         "objectives" : [
@@ -1443,8 +1389,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 20,
         "desirability": 10,
         "name": "Scav Camp Area",
         "objectives" : [
@@ -1526,10 +1470,10 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
         "desirability": 10,
-        "name": "Emercom Camping",
+        "name": "Emercom Camping Tent",
         "objectives" : [
             {
                 "repeatable": true,
@@ -1568,12 +1512,231 @@
         ]
     },
     {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "name": "Emercom Camping Bushes",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -331.513672,
+                            "y": 21.7780323,
+                            "z": 253.956451
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -331.513672,
+                            "y": 21.7780323,
+                            "z": 253.956451
+                        },
+                        "lookToPosition" : {
+                            "x": -314.042053,
+                            "y": 21.32544,
+                            "z": 256.040039
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "name": "Emercom Camping Bushes 2",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -351.59906,
+                            "y": 24.1870937,
+                            "z": 225.808167
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -351.59906,
+                            "y": 24.1870937,
+                            "z": 225.808167
+                        },
+                        "lookToPosition" : {
+                            "x": -293.029572,
+                            "y": 21.3254414,
+                            "z": 229.219772
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "name": "Emercom Camping Loading Dock",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -153.829926,
+                            "y": 27.1066227,
+                            "z": 202.994034
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -153.829926,
+                            "y": 27.1066227,
+                            "z": 202.994034
+                        },
+                        "lookToPosition" : {
+                            "x": -136.6634,
+                            "y": 24.9211922,
+                            "z": 281.90274
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "name": "Hole in Fence Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -222.046082,
+                            "y": 21.3254414,
+                            "z": -10.0693922
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -222.046082,
+                            "y": 21.3254414,
+                            "z": -10.0693922
+                        },
+                        "lookToPosition" : {
+                            "x": -222.926514,
+                            "y": 21.3254337,
+                            "z": -37.6849
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "name": "Hole in Fence Camping Garage",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 1000,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -192.4741,
+                            "y": 21.3254967,
+                            "z": -12.081954
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -192.4741,
+                            "y": 21.3254967,
+                            "z": -12.081954
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "Emercom Tank",
         "objectives" : [
@@ -1598,8 +1761,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "Emercom Extract North Entry",
         "objectives" : [
@@ -1638,8 +1799,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "Collapsed Floor Underside",
         "objectives" : [
@@ -1665,8 +1824,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "Parking Main Stairs",
         "objectives" : [
@@ -1707,8 +1864,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "Parking Tents",
         "objectives" : [
@@ -1749,8 +1904,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "IDEA Escalator Vestibules",
         "objectives" : [
@@ -1791,8 +1944,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "OLI Loading Dock",
         "objectives" : [
@@ -1888,8 +2039,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Loading Dock Stashes",
@@ -1975,8 +2124,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "name": "Goshan Loading Corridor",
         "objectives" : [
@@ -2085,8 +2232,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 20,
         "desirability": 10,
         "name": "Goshan Loading Corridor Stairs Top",
         "objectives" : [
@@ -2112,8 +2257,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 20,
         "desirability": 10,
         "name": "Goshan Loading Corridor Stairs Bottom",
         "objectives" : [
@@ -2139,8 +2282,58 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
+        "desirability": 15,
+        "name": "Goshan Automotive Section",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -142.415588,
+                            "y": 27.0861816,
+                            "z": 32.86329
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -139.431381,
+                            "y": 27.0861816,
+                            "z": 25.0017624
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -152.649338,
+                            "y": 27.08618,
+                            "z": 16.317543
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
         "desirability": 10,
         "name": "Goshan Interior Tents",
         "objectives" : [
@@ -2166,8 +2359,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "Goshan Lockers",
@@ -2201,8 +2392,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Goshan South Office",
@@ -2258,8 +2447,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "Goshan North Office",
@@ -2315,8 +2502,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "name": "IDEA Escalator Top Room",
         "objectives" : [
@@ -2341,8 +2526,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 20,
         "desirability": 10,
         "name": "IDEA Lockers",
         "objectives" : [
@@ -2367,8 +2550,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "OLI Loading Area",
@@ -2455,8 +2636,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Back Storage",
@@ -2498,8 +2677,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI SE Office",
@@ -2547,8 +2724,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI NE Office",
@@ -2589,8 +2764,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI NW Office",
@@ -2631,8 +2804,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 20,
         "name": "OLI East Bathrooms",
         "objectives" : [
@@ -2658,8 +2829,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom East",
@@ -2727,8 +2896,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom Center",
@@ -2810,8 +2977,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Showroom West",
@@ -3005,8 +3170,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "OLI Logistics Back Offices",
@@ -3078,8 +3241,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "OLI North Lockers",
         "objectives" : [
@@ -3104,8 +3265,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": true,
         "name": "OLI Mall Entrance",
@@ -3159,8 +3318,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "DOM",
@@ -3246,8 +3403,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "TEXHO",
@@ -3289,8 +3444,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "Pharma",
@@ -3332,8 +3485,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "MK",
         "objectives" : [
@@ -3359,8 +3510,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 10,
         "canRunBetweenObjectives": false,
         "name": "IDEA Showroom",
@@ -3462,8 +3611,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "TTS",
@@ -3535,8 +3682,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "name": "German",
         "objectives" : [
@@ -3562,8 +3707,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 15,
         "canRunBetweenObjectives": false,
         "name": "ADIK",
@@ -3605,8 +3748,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "The National",
@@ -3655,8 +3796,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Rasmussen",
@@ -3728,8 +3867,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 5,
         "name": "Power Station Roof",
         "objectives" : [
@@ -3740,6 +3877,20 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -216.995331,
+                            "y": 30.30841,
+                            "z": -345.504456
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 8,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": -216.995331,
                             "y": 30.30841,
@@ -3755,6 +3906,20 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -194.1136,
+                            "y": 30.30841,
+                            "z": -346.168243
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 8,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": -194.1136,
                             "y": 30.30841,
@@ -3770,6 +3935,20 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -194.536072,
+                            "y": 30.3084145,
+                            "z": -357.34317
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 8,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 60
+                        },
                         "position" : {
                             "x": -194.536072,
                             "y": 30.3084145,
@@ -3786,8 +3965,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 15,
-        "priority": 21,
         "desirability": 10,
         "canRunBetweenObjectives": false,
         "pmcsOnly": true,
@@ -3901,8 +4078,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 5,
         "pmcsOnly": true,
         "name": "OLI Loading Dock Sniping Spot",
@@ -3945,8 +4120,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 10,
-        "priority": 21,
         "desirability": 5,
         "pmcsOnly": true,
         "name": "SW Sniping Tower",
@@ -3988,8 +4161,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 10,
-        "priority": 21,
         "desirability": 5,
         "pmcsOnly": true,
         "name": "IDEA North Sniping Tower",
@@ -4031,8 +4202,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 10,
-        "priority": 21,
         "desirability": 5,
         "canRunBetweenObjectives": false,
         "pmcsOnly": true,
@@ -4113,8 +4282,6 @@
         "minLevel": 10,
         "maxLevel": 45,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 21,
         "desirability": 5,
         "name": "OLI Utility Room",
         "objectives" : [
@@ -4141,8 +4308,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 21,
         "desirability": 10,
         "name": "IDEA Registers",
         "objectives" : [

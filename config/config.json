@@ -173,14 +173,14 @@
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"desirability": 75,
+				"desirability": 65,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 25,
 				"max_bots_per_quest": 2
 			},
 			"airdrop_chaser": {
-				"desirability": 80,
+				"desirability": 70,
 				"max_bots_per_quest": 3,
 				"max_distance": 500
 			}

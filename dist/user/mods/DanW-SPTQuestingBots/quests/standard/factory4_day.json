@@ -5,8 +5,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "chanceForSelecting": 50,
-        "priority": 18,
         "desirability": 50,
         "maxRaidET": 300,
         "pmcsOnly": true,
@@ -24,6 +22,14 @@
                             "x": 19.6659336,
                             "y": 8.210877,
                             "z": 39.32507
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 12.1855478,
+                            "y": 8.210877,
+                            "z": 38.6432228
                         }
                     }
                 ]
@@ -64,7 +70,7 @@
                     {
                         "waitTimeAfterCompleting": 1,
                         "stepType" : "HoldAtPosition",
-                        "maxDistance": 3,
+                        "maxDistance": 2,
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120
@@ -84,8 +90,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 35,
         "name": "3rd Floor Office",
         "objectives" : [
@@ -101,32 +105,12 @@
                             "y": 8.210877,
                             "z": 39.32507
                         }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": true,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
-        "desirability": 35,
-        "name": "1st Floor Office",
-        "objectives" : [
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
-                "maxRunDistance": 5,
-                "steps": [
+                    },
                     {
                         "position" : {
-                            "x": 27.93569,
-                            "y": 1.05174947,
-                            "z": 45.4769974
+                            "x": 12.1855478,
+                            "y": 8.210877,
+                            "z": 38.6432228
                         }
                     }
                 ]
@@ -138,8 +122,59 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
+        "desirability": 35,
+        "name": "1st Floor Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 27.93569,
+                            "y": 1.05174947,
+                            "z": 45.4769974
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 28.7745857,
+                            "y": 1.052107,
+                            "z": 41.84227
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 29.4726028,
+                            "y": 1.047705,
+                            "z": 39.20264
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 21.9582081,
+                            "y": 0.992835164,
+                            "z": 41.4553871
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
         "desirability": 35,
         "pmcsOnly": true,
         "name": "3rd Floor Bridge",
@@ -180,8 +215,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 35,
         "name": "Med Tent",
         "objectives" : [
@@ -213,8 +246,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 30,
         "name": "Forklift",
         "objectives" : [
@@ -239,8 +270,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Boilers",
@@ -278,11 +307,171 @@
     },
     {
         "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 20,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Dumpster Hiding",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 32.56265,
+                            "y": 0.09880137,
+                            "z": -0.195569143
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 20,
+                            "max": 90
+                        },
+                        "position" : {
+                            "x": 32.56265,
+                            "y": 0.09880137,
+                            "z": -0.195569143
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 10,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 3,
+        "name": "Timmy's Forklift Hiding Spot",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 68.51851,
+                            "y": 0.107345276,
+                            "z": -55.857235
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 68.51851,
+                            "y": 0.107345276,
+                            "z": -55.857235
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Pumping Station Roof",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 38.0217552,
+                            "y": 3.11602068,
+                            "z": -8.460687
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 38.0217552,
+                            "y": 3.11602068,
+                            "z": -8.460687
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 5,
+        "pmcsOnly": true,
+        "name": "Unloading Area Rafters",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 150,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 50.31439,
+                            "y": 8.414999,
+                            "z": 15.6041031
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 8,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 50.31439,
+                            "y": 8.414999,
+                            "z": 15.6041031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 10,
         "name": "Engineer's Office",
         "objectives" : [
@@ -308,8 +497,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 35,
         "name": "Crates Outside of Stairwell",
         "objectives" : [
@@ -324,6 +511,20 @@
                             "y": 0.102185175,
                             "z": 21.2204361
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": 32.76818,
+                            "y": 0.08918919,
+                            "z": 23.6242046
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 28.2893925,
+                            "y": 0.236073449,
+                            "z": 18.7053452
+                        }
                     }
                 ]
             }
@@ -334,8 +535,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 35,
         "name": "Crates Near Lower Platform",
         "objectives" : [
@@ -367,8 +566,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 25,
-        "priority": 20,
         "desirability": 30,
         "name": "Basement Crates",
         "objectives" : [
@@ -407,8 +604,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 25,
         "name": "NE Crates in Workshop",
         "objectives" : [
@@ -429,12 +624,34 @@
         ]
     },
     {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Weapon Crates outside Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 20.5580559,
+                            "y": 0.0246979147,
+                            "z": 24.49675
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "repeatable": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "chanceForSelecting": 30,
-        "priority": 20,
         "desirability": 35,
         "name": "Crates Outside of Gate 3",
         "objectives" : [
@@ -459,8 +676,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 30,
         "name": "Crates Outside of Scav Bunker",
         "objectives" : [
@@ -492,8 +707,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 30,
         "name": "Weapon Crate in Workshop",
         "objectives" : [
@@ -518,8 +731,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 15,
         "name": "Holding Area Patrol",
         "objectives" : [
@@ -544,8 +755,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 15,
         "name": "Bathroom Key Spawns",
         "objectives" : [
@@ -584,8 +793,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 15,
         "name": "3rd Floor Hallway",
         "objectives" : [
@@ -610,10 +817,8 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 15,
-        "priority": 20,
         "desirability": 15,
-        "name": "Weapon Create Outside of Forklift",
+        "name": "Weapon Crate Outside of Forklift",
         "objectives" : [
             {
                 "repeatable": false,
@@ -636,8 +841,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 20,
-        "priority": 20,
         "desirability": 20,
         "name": "Break Room",
         "objectives" : [
@@ -662,8 +865,6 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "chanceForSelecting": 10,
-        "priority": 20,
         "desirability": 10,
         "name": "Silos",
         "objectives" : [
@@ -690,8 +891,6 @@
         "maxBots": 1,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Gate 0",
@@ -703,6 +902,24 @@
                 "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -55.60343,
+                            "y": 1.26428425,
+                            "z": 58.2746773
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": -55.60343,
+                            "y": 1.26428425,
+                            "z": 58.2746773
+                        }
+                    },
                     {
                         "waitTimeAfterCompleting": 1,
                         "position" : {
@@ -739,8 +956,6 @@
         "maxBots": 1,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Med Tent Gate",
@@ -752,6 +967,24 @@
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -19.4488735,
+                            "y": 0.172152728,
+                            "z": -50.8474846
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": -19.4488735,
+                            "y": 0.172152728,
+                            "z": -50.8474846
+                        }
+                    },
                     {
                         "waitTimeAfterCompleting": 1,
                         "position" : {
@@ -788,8 +1021,6 @@
         "maxBots": 1,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Cellars",
@@ -802,11 +1033,29 @@
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
-                        "waitTimeAfterCompleting": 1,
+                        "waitTimeAfterCompleting": 0,
                         "position" : {
-                            "x": 73.16466,
-                            "y": -4.6014514,
-                            "z": -28.6016216
+                            "x": 62.96204,
+                            "y": -2.63205647,
+                            "z": -28.9306927
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": 62.96204,
+                            "y": -2.63205647,
+                            "z": -28.9306927
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 62.96204,
+                            "y": -2.63205647,
+                            "z": -28.9306927
                         }
                     },
                     {
@@ -816,14 +1065,14 @@
                             "max": 180
                         },
                         "position" : {
-                            "x": 73.16466,
-                            "y": -4.6014514,
-                            "z": -28.6016216
+                            "x": 62.96204,
+                            "y": -2.63205647,
+                            "z": -28.9306927
                         },
                         "lookToPosition" : {
-                            "x": 65.4564362,
-                            "y": -1.63205576,
-                            "z": -29.097847
+                            "x": 66.16342,
+                            "y": -2.63204575,
+                            "z": -28.96788
                         }
                     }
                 ]
@@ -837,8 +1086,6 @@
         "maxBots": 2,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "chanceForSelecting": 5,
-        "priority": 21,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Gate 3",
@@ -850,6 +1097,42 @@
                 "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 60.68221,
+                            "y": 0.237433881,
+                            "z": 43.7271233
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": 60.68221,
+                            "y": 0.237433881,
+                            "z": 43.7271233
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 60.7302322,
+                            "y": 0.226131245,
+                            "z": 56.4667435
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": 60.7302322,
+                            "y": 0.226131245,
+                            "z": 56.4667435
+                        }
+                    },
                     {
                         "waitTimeAfterCompleting": 1,
                         "position" : {
@@ -873,6 +1156,165 @@
                             "x": 61.16576,
                             "y": 1.230174035,
                             "z": 56.8760529
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Entrance",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 60.68221,
+                            "y": 0.237433881,
+                            "z": 43.7271233
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 5,
+                        "position" : {
+                            "x": 60.68221,
+                            "y": 0.237433881,
+                            "z": 43.7271233
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 56.4665833,
+                            "y": 0.208644077,
+                            "z": 46.9904823
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 56.4665833,
+                            "y": 0.208644077,
+                            "z": 46.9904823
+                        },
+                        "lookToPosition" : {
+                            "x": 60.8949471,
+                            "y": 0.290820271,
+                            "z": 42.35923
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Outside",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 2,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 65.1394958,
+                            "y": 0.0274034645,
+                            "z": 41.22894
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 65.1394958,
+                            "y": 0.0274034645,
+                            "z": 41.22894
+                        },
+                        "lookToPosition" : {
+                            "x": 49.66302,
+                            "y": 0.020422332,
+                            "z": 32.2418823
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Gate 3 Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 54.47111,
+                            "y": 0.0356474668,
+                            "z": 22.30104
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 54.47111,
+                            "y": 0.0356474668,
+                            "z": 22.30104
+                        },
+                        "lookToPosition" : {
+                            "x": 60.8949471,
+                            "y": 0.290820271,
+                            "z": 42.35923
                         }
                     }
                 ]

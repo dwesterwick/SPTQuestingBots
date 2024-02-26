@@ -79,6 +79,12 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 }
             }
 
+            // Allow bots to extract so new ones can spawn
+            if (objectiveManager?.BotMonitor?.IsTryingToExtract() == true)
+            {
+                return updateUseLayer(false);
+            }
+
             // Ensure you're not dead
             Player you = Singleton<GameWorld>.Instance.MainPlayer;
             if (you == null)

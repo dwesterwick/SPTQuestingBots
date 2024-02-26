@@ -448,7 +448,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 25,
         "name": "Sawmill Checkpoint",
         "objectives" : [
             {
@@ -1898,6 +1898,30 @@
                             "x": 429.127625,
                             "y": -5.44915342,
                             "z": -24.4268322
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Scav House",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 414.505768,
+                            "y": -13.587635,
+                            "z": 239.253647
                         }
                     }
                 ]
