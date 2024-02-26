@@ -80,7 +80,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             }
 
             // Allow bots to extract so new ones can spawn
-            if (objectiveManager?.BotMonitor?.IsTryingToExtract() == true)
+            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value && (objectiveManager?.BotMonitor?.IsTryingToExtract() == true))
             {
                 return updateUseLayer(false);
             }
