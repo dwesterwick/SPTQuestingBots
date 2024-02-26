@@ -126,7 +126,7 @@
         "name": "1st Floor Office",
         "objectives" : [
             {
-                "repeatable": true,
+                "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 5,
@@ -136,6 +136,34 @@
                             "x": 27.93569,
                             "y": 1.05174947,
                             "z": 45.4769974
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 28.7745857,
+                            "y": 1.052107,
+                            "z": 41.84227
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 29.4726028,
+                            "y": 1.047705,
+                            "z": 39.20264
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 21.9582081,
+                            "y": 0.992835164,
+                            "z": 41.4553871
                         }
                     }
                 ]
@@ -483,6 +511,20 @@
                             "y": 0.102185175,
                             "z": 21.2204361
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": 32.76818,
+                            "y": 0.08918919,
+                            "z": 23.6242046
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 28.2893925,
+                            "y": 0.236073449,
+                            "z": 18.7053452
+                        }
                     }
                 ]
             }
@@ -575,6 +617,30 @@
                             "x": 15.7125025,
                             "y": -0.009169428,
                             "z": -29.56323
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Weapon Crates outside Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 75,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 20.5580559,
+                            "y": 0.0246979147,
+                            "z": 24.49675
                         }
                     }
                 ]
@@ -752,7 +818,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "desirability": 15,
-        "name": "Weapon Create Outside of Forklift",
+        "name": "Weapon Crate Outside of Forklift",
         "objectives" : [
             {
                 "repeatable": false,

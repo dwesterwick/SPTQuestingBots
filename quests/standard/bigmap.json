@@ -259,6 +259,21 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 79.2678,
+                            "y": 1.47550476,
+                            "z": -155.5014
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -321,6 +336,13 @@
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 6,
                 "steps": [
+                    {
+                        "position" : {
+                            "x": 79.30274,
+                            "y": 4.67290735,
+                            "z": -166.121521
+                        }
+                    },
                     {
                         "position" : {
                             "x": 78.8410339,
@@ -554,6 +576,20 @@
                 "maxRunDistance": 12,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 182.106155,
+                            "y": -0.168424651,
+                            "z": 171.605209
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 3,
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
                         "position" : {
                             "x": 182.106155,
                             "y": -0.168424651,
@@ -619,6 +655,13 @@
                             "y": 5.83152,
                             "z": 172.441666
                         }
+                    },
+                    {
+                        "position" : {
+                            "x": 194.875687,
+                            "y": 5.8315177,
+                            "z": 182.568375
+                        }
                     }
                 ]
             },
@@ -659,10 +702,28 @@
                 "maxRunDistance": 12,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": 172.2655,
                             "y": 2.82965255,
                             "z": 172.626465
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 172.2655,
+                            "y": 2.82965255,
+                            "z": 172.626465
+                        },
+                        "lookToPosition" : {
+                            "x": 179.367477,
+                            "y": 2.83157659,
+                            "z": 173.356155
                         }
                     }
                 ]
@@ -843,6 +904,21 @@
                 "repeatable": true,
                 "minDistanceFromBot": 10,
                 "maxDistanceFromBot": 9999,
+                "maxRunDistance": 10,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 206.295563,
+                            "y": 7.733179,
+                            "z": -98.26988
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
                 "maxRunDistance": 6,
                 "steps": [
                     {
@@ -850,6 +926,21 @@
                             "x": 194.3941,
                             "y": 7.73258257,
                             "z": -130.866074
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 6,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 216.440857,
+                            "y": 7.73369551,
+                            "z": -143.118912
                         }
                     }
                 ]
@@ -892,9 +983,23 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 205.497864,
-                            "y": 1.73051655,
-                            "z": -123.921364
+                            "x": 205.5561,
+                            "y": 1.78782523,
+                            "z": -125.002884
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 204.4628,
+                            "y": 1.83101928,
+                            "z": -122.759911
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 203.977112,
+                            "y": 1.73226619,
+                            "z": -117.51429
                         }
                     }
                 ]
@@ -907,9 +1012,30 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 188.888718,
-                            "y": 1.73051488,
-                            "z": -101.826157
+                            "x": 190.1115,
+                            "y": 1.73051548,
+                            "z": -103.7074
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 188.107941,
+                            "y": 1.73051727,
+                            "z": -101.955849
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 190.327271,
+                            "y": 1.73051584,
+                            "z": -101.181076
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 196.421982,
+                            "y": 1.73051262,
+                            "z": -102.10202
                         }
                     }
                 ]
@@ -2317,6 +2443,1038 @@
                             "x": 412.315857,
                             "y": 1.1334542,
                             "z": 39.5216637
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "minRaidET": 30,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "RUAF Crossing Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -11.95243,
+                            "y": 0.0827226639,
+                            "z": -110.21579
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -11.95243,
+                            "y": 0.0827226639,
+                            "z": -110.21579
+                        },
+                        "lookToPosition" : {
+                            "x": -111.718025,
+                            "y": -9.233237,
+                            "z": -133.932327
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 6.124784,
+                            "y": 1.092214,
+                            "z": -130.398132
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 6.124784,
+                            "y": 1.092214,
+                            "z": -130.398132
+                        },
+                        "lookToPosition" : {
+                            "x": -18.496603,
+                            "y": -0.244944811,
+                            "z": -139.338089
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "minRaidET": 30,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Center Crossing Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 19.99716,
+                            "y": 2.31667423,
+                            "z": -24.3914585
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 2,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 19.99716,
+                            "y": 2.31667423,
+                            "z": -24.3914585
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "minRaidET": 30,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Junk Bridge Crossing Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -9.838275,
+                            "y": -3.83657551,
+                            "z": 64.26963
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -9.838275,
+                            "y": -3.83657551,
+                            "z": 64.26963
+                        },
+                        "lookToPosition" : {
+                            "x": -46.2355042,
+                            "y": -12.54368,
+                            "z": 46.3045578
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Dorms 3 Story Bathroom Camping Floor 1",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 174.217545,
+                            "y": -0.167547345,
+                            "z": 168.831772
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 3,
+                        "position" : {
+                            "x": 174.217545,
+                            "y": -0.167547345,
+                            "z": 168.831772
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 174.064163,
+                            "y": -0.16754666,
+                            "z": 165.738785
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 174.064163,
+                            "y": -0.16754666,
+                            "z": 165.738785
+                        },
+                        "lookToPosition" : {
+                            "x": 174.217545,
+                            "y": -0.167547345,
+                            "z": 168.831772
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Dorms 3 Story Bathroom Camping Floor 2",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 174.415344,
+                            "y": 2.83025265,
+                            "z": 168.8857
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 3,
+                        "position" : {
+                            "x": 174.415344,
+                            "y": 2.83025265,
+                            "z": 168.8857
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 174.044876,
+                            "y": 2.83025336,
+                            "z": 165.752853
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 174.044876,
+                            "y": 2.83025336,
+                            "z": 165.752853
+                        },
+                        "lookToPosition" : {
+                            "x": 174.415344,
+                            "y": 2.83025265,
+                            "z": 168.8857
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Dorms 2 Story Bathroom Camping Floor 1",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 234.16925,
+                            "y": -0.1295471,
+                            "z": 150.712967
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 3,
+                        "position" : {
+                            "x": 234.16925,
+                            "y": -0.1295471,
+                            "z": 150.712967
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 234.149628,
+                            "y": -0.130434051,
+                            "z": 147.132141
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 234.149628,
+                            "y": -0.130434051,
+                            "z": 147.132141
+                        },
+                        "lookToPosition" : {
+                            "x": 234.16925,
+                            "y": -0.1295471,
+                            "z": 150.712967
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Dorms 3 Story Roof Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 190.586624,
+                            "y": 5.8315196,
+                            "z": 170.457611
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 190.586624,
+                            "y": 5.8315196,
+                            "z": 170.457611
+                        },
+                        "lookToPosition" : {
+                            "x": 182.936172,
+                            "y": -0.747057,
+                            "z": 112.072914
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "New Gas Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 476.315247,
+                            "y": 9.48634,
+                            "z": 66.9717255
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 476.315247,
+                            "y": 9.48634,
+                            "z": 66.9717255
+                        },
+                        "lookToPosition" : {
+                            "x": 434.040863,
+                            "y": 1.0296886,
+                            "z": 35.7012444
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Crackhouse Area Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 71.1528854,
+                            "y": 1.0945611,
+                            "z": -129.199066
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 71.1528854,
+                            "y": 1.0945611,
+                            "z": -129.199066
+                        },
+                        "lookToPosition" : {
+                            "x": 33.94431,
+                            "y": 1.14722192,
+                            "z": -103.734337
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Fortress Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 198.772247,
+                            "y": 7.73128128,
+                            "z": -99.7279358
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 198.772247,
+                            "y": 7.73128128,
+                            "z": -99.7279358
+                        },
+                        "lookToPosition" : {
+                            "x": 206.202789,
+                            "y": 1.07297981,
+                            "z": -32.9162025
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 192.248947,
+                            "y": 7.73369265,
+                            "z": -101.744789
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 192.248947,
+                            "y": 7.73369265,
+                            "z": -101.744789
+                        },
+                        "lookToPosition" : {
+                            "x": 206.202789,
+                            "y": 1.07297981,
+                            "z": -32.9162025
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 189.832092,
+                            "y": 7.73369455,
+                            "z": -109.900047
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 189.832092,
+                            "y": 7.73369455,
+                            "z": -109.900047
+                        },
+                        "lookToPosition" : {
+                            "x": 123.13324,
+                            "y": 0.9556721,
+                            "z": -136.702927
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 194.222244,
+                            "y": 7.73273134,
+                            "z": -132.402023
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 194.222244,
+                            "y": 7.73273134,
+                            "z": -132.402023
+                        },
+                        "lookToPosition" : {
+                            "x": 123.13324,
+                            "y": 0.9556721,
+                            "z": -136.702927
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 217.267136,
+                            "y": 7.733696,
+                            "z": -143.66011
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 217.267136,
+                            "y": 7.733696,
+                            "z": -143.66011
+                        },
+                        "lookToPosition" : {
+                            "x": 181.29628,
+                            "y": 1.10915828,
+                            "z": -212.707748
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 213.926559,
+                            "y": 7.733343,
+                            "z": -131.099319
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 213.926559,
+                            "y": 7.733343,
+                            "z": -131.099319
+                        },
+                        "lookToPosition" : {
+                            "x": 258.866547,
+                            "y": 1.09487545,
+                            "z": -99.1806259
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 210.388763,
+                            "y": 7.73300457,
+                            "z": -112.121925
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 210.388763,
+                            "y": 7.73300457,
+                            "z": -112.121925
+                        },
+                        "lookToPosition" : {
+                            "x": 258.866547,
+                            "y": 1.09487545,
+                            "z": -99.1806259
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Old Gas Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 358.0235,
+                            "y": 4.08880758,
+                            "z": -125.596245
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 358.0235,
+                            "y": 4.08880758,
+                            "z": -125.596245
+                        },
+                        "lookToPosition" : {
+                            "x": 319.473419,
+                            "y": 1.09529436,
+                            "z": -172.498062
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Container Building Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 511.061066,
+                            "y": 5.81796932,
+                            "z": -55.2220268
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 511.061066,
+                            "y": 5.81796932,
+                            "z": -55.2220268
+                        },
+                        "lookToPosition" : {
+                            "x": 497.4225,
+                            "y": 1.066496,
+                            "z": -28.0084057
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Checkpoint Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 512.9798,
+                            "y": 9.161013,
+                            "z": 60.3739433
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 512.9798,
+                            "y": 9.161013,
+                            "z": 60.3739433
+                        },
+                        "lookToPosition" : {
+                            "x": 548.4006,
+                            "y": -0.212774053,
+                            "z": -9.489813
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Big Red Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -217.619766,
+                            "y": 1.08684182,
+                            "z": -132.530685
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -217.619766,
+                            "y": 1.08684182,
+                            "z": -132.530685
+                        },
+                        "lookToPosition" : {
+                            "x": -206.120773,
+                            "y": 6.93737745,
+                            "z": -111.242264
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": -203.519424,
+                            "y": 7.046,
+                            "z": -106.483238
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "stepType" : "CloseNearbyDoors",
+                        "maxDistance": 3,
+                        "position" : {
+                            "x": -203.519424,
+                            "y": 7.046,
+                            "z": -106.483238
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -203.223343,
+                            "y": 7.04600048,
+                            "z": -109.223488
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -203.223343,
+                            "y": 7.04600048,
+                            "z": -109.223488
+                        },
+                        "lookToPosition" : {
+                            "x": -203.519424,
+                            "y": 7.046,
+                            "z": -106.483238
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Bridge Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -38.8045464,
+                            "y": 0.3854256,
+                            "z": -5.24403238
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -38.8045464,
+                            "y": 0.3854256,
+                            "z": -5.24403238
+                        },
+                        "lookToPosition" : {
+                            "x": -81.43917,
+                            "y": -10.5200768,
+                            "z": -41.25231
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -67.10572,
+                            "y": 0.385421634,
+                            "z": 13.5132275
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -67.10572,
+                            "y": 0.385421634,
+                            "z": 13.5132275
+                        },
+                        "lookToPosition" : {
+                            "x": -8.344412,
+                            "y": -0.575131834,
+                            "z": 38.67783
                         }
                     }
                 ]
