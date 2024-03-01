@@ -856,9 +856,23 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -41.914608,
+                            "x": -42.965435,
                             "y": 18.5722961,
-                            "z": 183.473068
+                            "z": 180.747482
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -42.2033234,
+                            "y": 18.5722961,
+                            "z": 184.5667
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -40.9005623,
+                            "y": 18.5722961,
+                            "z": 181.963577
                         }
                     }
                 ]
@@ -871,9 +885,23 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -41.67648,
+                            "x": -40.6306419,
                             "y": 18.5763016,
-                            "z": 169.874939
+                            "z": 169.444916
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -42.1741066,
+                            "y": 18.5763016,
+                            "z": 169.042862
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -41.52034,
+                            "y": 18.5763,
+                            "z": 172.828873
                         }
                     }
                 ]
@@ -1740,9 +1768,9 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -96.03114,
+                            "x": -95.12707,
                             "y": -14.5273008,
-                            "z": 39.75657
+                            "z": 39.25594
                         }
                     }
                 ]
@@ -1752,26 +1780,25 @@
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 9999,
                 "steps": [
+                    {
+                        "position" : {
+                            "x": -108.801476,
+                            "y": -14.5273027,
+                            "z": 42.42571
+                        }
+                    },
                     {
                         "position" : {
                             "x": -114.436234,
                             "y": -14.5273113,
                             "z": 44.64796
                         }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
-                "maxRunDistance": 7,
-                "steps": [
+                    },
                     {
                         "position" : {
-                            "x": -107.540993,
-                            "y": -14.5357494,
-                            "z": 29.4624043
+                            "x": -119.378761,
+                            "y": -14.52733,
+                            "z": 44.6141663
                         }
                     }
                 ]
@@ -1784,9 +1811,23 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -108.587051,
+                            "x": -102.003311,
+                            "y": -14.5357494,
+                            "z": 30.2233353
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -107.454155,
                             "y": -14.5357485,
-                            "z": 24.4424667
+                            "z": 27.72114
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -105.91214,
+                            "y": -14.53575,
+                            "z": 35.19026
                         }
                     }
                 ]
@@ -1799,24 +1840,16 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": -120.785591,
-                            "y": -14.5357494,
-                            "z": 32.4014244
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
-                "maxRunDistance": 7,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -116.692352,
+                            "x": -109.419205,
                             "y": -14.5357475,
-                            "z": 25.8707027
+                            "z": 24.0380917
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -107.254913,
+                            "y": -14.5357466,
+                            "z": 18.548975
                         }
                     }
                 ]
@@ -1827,11 +1860,69 @@
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 7,
                 "steps": [
+                    {
+                        "position" : {
+                            "x": -119.170906,
+                            "y": -14.5357494,
+                            "z": 32.3906136
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -121.787239,
+                            "y": -14.5357494,
+                            "z": 34.3567657
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -118.771942,
+                            "y": -14.5357485,
+                            "z": 28.8312778
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -117.871017,
+                            "y": -14.5357485,
+                            "z": 26.085268
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -122.181084,
+                            "y": -14.5357485,
+                            "z": 27.816637
+                        }
+                    },
                     {
                         "position" : {
                             "x": -122.000671,
                             "y": -14.5357485,
                             "z": 30.0795517
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -123.495941,
+                            "y": -14.5357475,
+                            "z": 26.4621124
                         }
                     }
                 ]
@@ -1847,21 +1938,6 @@
                             "x": -130.416855,
                             "y": -14.6537189,
                             "z": 51.39383
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 9999,
-                "maxRunDistance": 7,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -116.461212,
-                            "y": -14.5357466,
-                            "z": 21.0227413
                         }
                     }
                 ]
@@ -2108,6 +2184,77 @@
                             "x": -100.219185,
                             "y": -6.9519577,
                             "z": -41.6008224
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "South Hill Tower",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "maxRunDistance": 2,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -2.34005737,
+                            "y": 2.22303867,
+                            "z": -203.696259
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -2.34005737,
+                            "y": 2.22303867,
+                            "z": -203.696259
+                        },
+                        "lookToPosition" : {
+                            "x": -36.4596519,
+                            "y": -6.37780237,
+                            "z": -109.325836
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 5,
+        "name": "Gas Station Building",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 100,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 21.34781,
+                            "y": -6.7699976,
+                            "z": 34.7594147
                         }
                     }
                 ]
@@ -2628,6 +2775,21 @@
                         }
                     }
                 ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 30,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 11,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 119.891968,
+                            "y": -0.4590883,
+                            "z": -84.99323
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -2756,7 +2918,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 25,
+        "desirability": 30,
         "canRunBetweenObjectives": false,
         "name": "White Rook Barracks",
         "objectives" : [
@@ -3096,6 +3258,100 @@
                             "x": 27.3069553,
                             "y": -6.951959,
                             "z": -14.3200617
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 2,
+                        "position" : {
+                            "x": 92.3923645,
+                            "y": 2.254353,
+                            "z": -22.8853054
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 93.60874,
+                            "y": 2.25435066,
+                            "z": -20.2344475
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 96.75515,
+                            "y": 2.25435138,
+                            "z": -21.9188862
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 78.00441,
+                            "y": 2.25435114,
+                            "z": -20.2546329
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 78.00441,
+                            "y": 2.25435114,
+                            "z": -20.2546329
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 83.98091,
+                            "y": 2.25435138,
+                            "z": -16.0826168
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 83.98091,
+                            "y": 2.25435138,
+                            "z": -16.0826168
+                        },
+                        "lookToPosition" : {
+                            "x": 49.4165077,
+                            "y": -6.95198441,
+                            "z": 44.728096
                         }
                     }
                 ]
