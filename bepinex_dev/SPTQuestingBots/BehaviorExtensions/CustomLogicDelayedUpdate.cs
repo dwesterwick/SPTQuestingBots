@@ -10,7 +10,6 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.Interactive;
 using HarmonyLib;
-using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -156,11 +155,13 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return false;
             }
 
+            // Check if the bot is approaching a corner in its path
             if (Vector3.Distance(BotOwner.Position, BotOwner.Mover.RealDestPoint) > maxDistanceMinAngle.Distance)
             {
                 return false;
             }
 
+            // Check if the bot is approaching the end of its path
             int currentCornerIndex = (int)cornerIndexField.GetValue(BotOwner.Mover);
             if (currentCornerIndex == BotOwner.Mover.CurPath.Length - 1)
             {
@@ -168,11 +169,11 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             ObjectiveManager.LastCorner = BotOwner.Mover.CurPath[currentCornerIndex];
-
             Vector3 currentSegment = BotOwner.Mover.CurPath[currentCornerIndex] - BotOwner.Mover.CurPath[currentCornerIndex - 1];
             Vector3 nextSegment = BotOwner.Mover.CurPath[currentCornerIndex + 1] - BotOwner.Mover.CurPath[currentCornerIndex];
-            float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
 
+            // Check a large enough angle exists between the bot's current path segment and its next one
+            float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
             if (cornerAngle >= maxDistanceMinAngle.Angle)
             {
                 //LoggingController.LogInfo("Angle of corner for " + BotOwner.GetText() + ": " + cornerAngle);
@@ -185,6 +186,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         public bool IsNearAndMovingTowardClosedDoor(Configuration.DistanceAngleConfig maxDistanceMaxAngle)
         {
             Vector3 botMovingDirection = BotOwner.GetPlayer.MovementContext.TransformForwardVector;
+
             foreach (Door door in FindNearbyDoors(maxDistanceMaxAngle.Distance))
             {
                 if (door.DoorState == EDoorState.Open)
@@ -193,6 +195,8 @@ namespace SPTQuestingBots.BehaviorExtensions
                 }
 
                 Vector3 doorDirection = door.transform.position - BotOwner.Position;
+
+                // Check if the bot is moving (almost) directly toward the door
                 float doorAngle = Vector3.Angle(botMovingDirection, doorDirection);
                 if (doorAngle < maxDistanceMaxAngle.Angle)
                 {
@@ -224,6 +228,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             return false;
         }
 
+        // NOTE: This is no longer used
         public Vector3? FindDangerPoint()
         {
             // Enumerate all alive bots on the map
@@ -251,6 +256,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             return dangerPoint;
         }
 
+        // NOTE: This is no longer used
         public Vector3? FindNearestDangerPoint()
         {
             // Enumerate all alive bots on the map

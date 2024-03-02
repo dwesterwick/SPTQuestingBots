@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
-using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -37,6 +36,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             UpdateBaseAction();
 
+            // While the bot is moving to the ambush position, have it look where it's going. Once at the ambush position, have it look to the
+            // a specific location if defined by the quest. Otherwise, have it look where it just came from. 
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 UpdateBotSteering();

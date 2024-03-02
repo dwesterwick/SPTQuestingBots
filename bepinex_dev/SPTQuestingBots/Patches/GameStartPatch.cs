@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -40,7 +39,7 @@ namespace SPTQuestingBots.Patches
 
             localGameObj = __instance;
 
-            __result = addTask(__result);
+            __result = addIterationsToWaitForBotGenerators(__result);
             LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
         }
 
@@ -60,7 +59,7 @@ namespace SPTQuestingBots.Patches
             missedBossWaves.Add(wave);
         }
 
-        private static IEnumerator addTask(IEnumerator originalTask)
+        private static IEnumerator addIterationsToWaitForBotGenerators(IEnumerator originalTask)
         {
             float startTime = Time.time;
             float safetyDelay = 999;
@@ -73,7 +72,7 @@ namespace SPTQuestingBots.Patches
 
             updateAllTimers(timers, 0, safetyDelay);
 
-            yield return waitForBotGen();
+            yield return waitForBotGenerators();
 
             LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator completed");
 
@@ -195,23 +194,28 @@ namespace SPTQuestingBots.Patches
             return timers;
         }
 
-        private static IEnumerator waitForBotGen()
+        private static IEnumerator waitForBotGenerators()
         {
             bool hadToWait = false;
-            float waitPeriod = 100;
-            int maxPeriods = 5;
+            float waitIterationDuration = 100;
+            int maxPeriodsInText = 5;
 
             int periods = 1;
             while (BotGenerator.RemainingBotGenerators > 0)
             {
+                if (!hadToWait)
+                {
+                    LoggingController.LogInfo("Waiting for " + BotGenerator.RemainingBotGenerators + " bot generators...");
+                }
                 hadToWait = true;
-                yield return new WaitForSeconds(waitPeriod / 1000f);
+
+                yield return new WaitForSeconds(waitIterationDuration / 1000f);
 
                 string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s (" + BotGenerator.CurrentBotGeneratorProgress + "%)";
                 MatchmakerFinalCountdownUpdatePatch.SetText(message + (new string('.', periods)));
 
                 periods++;
-                if (periods > maxPeriods)
+                if (periods > maxPeriodsInText)
                 {
                     periods = 1;
                 }

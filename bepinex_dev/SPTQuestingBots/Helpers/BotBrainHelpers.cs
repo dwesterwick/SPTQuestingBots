@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using EFT;
 using SPTQuestingBots.Models;
 
@@ -228,7 +227,6 @@ namespace SPTQuestingBots.Helpers
             WildSpawnType sptUsec = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
             WildSpawnType sptBear = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue;
 
-            //if (spawnType == WildSpawnType.pmcBot || spawnType == sptUsec)
             if (spawnType == sptUsec)
             {
                 return EPlayerSide.Usec;

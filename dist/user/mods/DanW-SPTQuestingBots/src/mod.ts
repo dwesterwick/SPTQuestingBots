@@ -323,16 +323,16 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
         }
 
-        if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
-        {
-            this.increaseBotCaps();
-        }
-
         if (modConfig.bot_spawns.advanced_eft_bot_count_management)
         {
             this.commonUtils.logWarning("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
         }
 
+        if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
+        {
+            this.increaseBotCaps();
+        }
+        
         this.commonUtils.logInfo("Configuring game for bot spawning...done.");
     }
 

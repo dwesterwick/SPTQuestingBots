@@ -39,6 +39,7 @@ namespace SPTQuestingBots.BotLogic
             extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
 
+            // This is for using mounted guns, but questing bots aren't allowed to use them right now
             stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
 
@@ -135,6 +136,8 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            // This is required because the priority of the looting brain layers is lower than SAIN's brain layers. Without forcing bots to
+            // forget their current enemies, they will go into a combat layer, not a looting layer.
             if (canUseSAINInterop && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
             {
                 LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly.");
@@ -199,11 +202,13 @@ namespace SPTQuestingBots.BotLogic
 
         public bool IsBotReadyToExtract()
         {
+            // Prevent the bot from extracting too soon after it spawns
             if (Time.time - botOwner.ActivateTime < ConfigController.Config.Questing.ExtractionRequirements.MinAliveTime)
             {
                 return false;
             }
 
+            // If the raid is about to end, make the bot extract
             float remainingRaidTime = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds();
             if (remainingRaidTime < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
@@ -211,6 +216,7 @@ namespace SPTQuestingBots.BotLogic
                 return true;
             }
 
+            // Ensure enough time has elapsed in the raid to prevent players from getting run-throughs
             int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
             if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
             {
@@ -220,12 +226,14 @@ namespace SPTQuestingBots.BotLogic
             System.Random random = new System.Random();
             float initialRaidTimeFraction = (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
 
+            // Select a random number of total quests the bot must complete before it's allowed to extract
             if (minTotalQuestsForExtract == int.MaxValue)
             {
                 Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.TotalQuests * initialRaidTimeFraction;
                 minTotalQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
             }
 
+            // Check if the bot has completed enough total quests to extract
             int totalQuestsCompleted = botOwner.NumberOfCompletedOrAchivedQuests();
             if (totalQuestsCompleted >= minTotalQuestsForExtract)
             {
@@ -234,12 +242,14 @@ namespace SPTQuestingBots.BotLogic
             }
             //LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
 
+            // Select a random number of EFT quests the bot must complete before it's allowed to extract
             if (minEFTQuestsForExtract == int.MaxValue)
             {
                 Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.EFTQuests * initialRaidTimeFraction;
                 minEFTQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
             }
 
+            // Check if the bot has completed enough EFT quests to extract
             int EFTQuestsCompleted = botOwner.NumberOfCompletedOrAchivedEFTQuests();
             if (EFTQuestsCompleted >= minEFTQuestsForExtract)
             {

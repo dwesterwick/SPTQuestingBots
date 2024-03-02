@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
@@ -36,6 +35,7 @@ namespace SPTQuestingBots.Components
             StartCoroutine(LoadAllQuests());
 
             // Store the name of the current location so it can be used when writing the quest log file. The current location will be null when the log is written.
+            // TODO: I don't think this is needed anymore. Need to try removing it after the 0.4.0 release. 
             PreviousLocationID = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id;
         }
 
@@ -93,31 +93,25 @@ namespace SPTQuestingBots.Components
                     }
                 }
 
-                // Process each of the quests created by an EFT quest template using the provided action
+                // Process each of the quests created by an EFT quest template
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest);
 
-                IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
-                //IEnumerable<Type> allTriggerTypes = allTriggers.Select(t => t.GetType()).Distinct();
-                //LoggingController.LogInfo("Found " + allTriggers.Count() + " triggers of types: " + string.Join(", ", allTriggerTypes));
-
-                // Create quest objectives for all matching trigger objects found in the map
+                // Create quest objectives for all matching trigger colliders found in the map
                 enumeratorWithTimeLimit.Reset();
+                IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
                 yield return enumeratorWithTimeLimit.Run(allTriggers, ProcessTrigger);
 
+                // Create quest objectives for all matching quest items found in the map
                 //IEnumerable<LootItem> allLoot = FindObjectsOfType<LootItem>(); <-- this does not work for inactive quest items!
                 IEnumerable<LootItem> allItems = Singleton<GameWorld>.Instance.LootItems.Where(i => i.Item != null).Distinct(i => i.TemplateId);
-
-                //IEnumerable<LootItem> allQuestItems = allItems.Where(l => l.Item.QuestItem);
-                //LoggingController.LogInfo("Quest items: " + string.Join(", ", allQuestItems.Select(l => l.Item.LocalizedName())));
-
-                // Create quest objectives for all matching quest items found in the map
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
                 // Update all other settings for EFT quests
                 yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
-                Quest spawnPointQuest = createSpawnPointQuest(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
+                SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
+                Quest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
                 if (spawnPointQuest != null)
                 {
                     //LoggingController.LogInfo("Adding quest for going to random spawn points...");
@@ -137,7 +131,7 @@ namespace SPTQuestingBots.Components
                 }
                 else
                 {
-                    LoggingController.LogWarning("Cannot find player spawn point.");
+                    LoggingController.LogError("Cannot find player spawn point.");
                 }
 
                 if (spawnRushQuest != null)
@@ -151,18 +145,18 @@ namespace SPTQuestingBots.Components
                     LoggingController.LogError("Could not add quest for rushing your spawn point");
                 }
 
-                // Create a quest where initial PMC's can run to your spawn point (not directly to you).
+                // Create a quest for PMC's to go to boss spawn locations early in the raid to hunt them
                 Quest bossHunterQuest = null;
                 IEnumerable<string> bossZones = getBossSpawnZones();
                 if (bossZones.Any())
                 {
-                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
+                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
                     bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter", ConfigController.Config.Questing.BotQuests.BossHunter);
                 }
 
                 if (bossHunterQuest != null)
                 {
-                    LoggingController.LogInfo("Adding quest for hunting bosses...");
+                    //LoggingController.LogInfo("Adding quest for hunting bosses...");
                     bossHunterQuest.PMCsOnly = true;
                     BotJobAssignmentFactory.AddQuest(bossHunterQuest);
                 }
@@ -231,6 +225,7 @@ namespace SPTQuestingBots.Components
 
                 BotJobAssignmentFactory.AddQuest(quest);
             }
+
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
 
@@ -567,6 +562,7 @@ namespace SPTQuestingBots.Components
 
             // Set the target location to be in the center of the collider. If the collider is very large (i.e. for an entire building), set the
             // target location to be just above the floor. 
+            // TO DO: This is kinda sloppy and should be fixed.
             Vector3 triggerTargetPosition = triggerCollider.bounds.center;
             if (triggerCollider.bounds.extents.y > 1.5f)
             {
@@ -717,6 +713,8 @@ namespace SPTQuestingBots.Components
 
         private IEnumerable<string> getBossSpawnZones()
         {
+            // TODO: This seems to only return zones in which bosses will definitely spawn, not all possible spawn zones. Need to investigate.
+
             List<string> bossZones = new List<string>();
             foreach (BossLocationSpawn bossLocationSpawn in Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.BossLocationSpawn)
             {

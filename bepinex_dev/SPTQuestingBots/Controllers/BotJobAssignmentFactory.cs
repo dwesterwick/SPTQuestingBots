@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Common.Http;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
@@ -93,6 +90,8 @@ namespace SPTQuestingBots.Controllers
                     }
 
                     // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live. 
+                    // TODO: Eventually, it would be nice to keep these quests but have the bots doing them be friendly toward you until they
+                    //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
                     if ((locationId == "Lighthouse") && (firstPosition.Value.x > 120) && (firstPosition.Value.z > 325))
                     {
                         if (quest.TryRemoveObjective(objective))
@@ -157,12 +156,14 @@ namespace SPTQuestingBots.Controllers
 
         public static int NumberOfActiveBots(this Quest quest)
         {
+            float pendingTimeLimit = 0.3f;
+
             int num = 0;
             foreach (string id in botJobAssignments.Keys)
             {
                 num += botJobAssignments[id]
                     .Where(a => a.StartTime.HasValue)
-                    .Where(a => (a.Status == JobAssignmentStatus.Active) || ((a.Status == JobAssignmentStatus.Pending) && (a.TimeSinceStarted().Value < 0.3)))
+                    .Where(a => (a.Status == JobAssignmentStatus.Active) || ((a.Status == JobAssignmentStatus.Pending) && (a.TimeSinceStarted().Value < pendingTimeLimit)))
                     .Where(a => a.QuestAssignment == quest)
                     .Count();
             }
@@ -417,15 +418,13 @@ namespace SPTQuestingBots.Controllers
                 if (botJobAssignments[bot.Profile.Id].Count > 1)
                 {
                     BotJobAssignment lastAssignment = botJobAssignments[bot.Profile.Id].TakeLast(2).First();
-
                     LoggingController.LogInfo("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
 
-                    double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
-                    double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);
-
-                    string startedTimeText = timeSinceBotStartedQuest.HasValue ? timeSinceBotStartedQuest.Value.ToString() : "N/A";
-                    string lastFinishedTimeText = timeSinceBotLastFinishedQuest.HasValue ? timeSinceBotLastFinishedQuest.Value.ToString() : "N/A";
-                    LoggingController.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
+                    //double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
+                    //double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);
+                    //string startedTimeText = timeSinceBotStartedQuest.HasValue ? timeSinceBotStartedQuest.Value.ToString() : "N/A";
+                    //string lastFinishedTimeText = timeSinceBotLastFinishedQuest.HasValue ? timeSinceBotLastFinishedQuest.Value.ToString() : "N/A";
+                    //LoggingController.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
                 }
             }
 
@@ -485,11 +484,14 @@ namespace SPTQuestingBots.Controllers
                 return null;
             }
 
-            float? distanceToExfilPoint = botObjectiveManager?.DistanceToInitialExfiltrationPoint();
-            float minDistanceToSwitchExfil = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxExfilPointDistance() * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+            float maxDistanceBetweenExfils = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxDistanceBetweenExfils();
+            float minDistanceToSwitchExfil = maxDistanceBetweenExfils * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+
+            // If the bot is close to its selected exfil (only used for quest selection), select a new one
+            float? distanceToExfilPoint = botObjectiveManager?.DistanceToExfiltrationPointForQuesting();
             if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
             {
-                botObjectiveManager?.SetExfiliationPoint();
+                botObjectiveManager?.SetExfiliationPointForQuesting();
             }
 
             // Get the bot's most recent assingment if applicable
@@ -501,6 +503,7 @@ namespace SPTQuestingBots.Controllers
                 objective = botJobAssignments[bot.Profile.Id].Last().QuestObjectiveAssignment;
             }
 
+            // Clear the bot's assignment if it's been doing the same quest for too long
             if (quest?.HasBotBeingDoingQuestTooLong(bot, out double? timeDoingQuest) == true)
             {
                 LoggingController.LogInfo(bot.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
@@ -527,7 +530,7 @@ namespace SPTQuestingBots.Controllers
                 }
                 if (quest != null)
                 {
-                    LoggingController.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
+                    //LoggingController.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
                     invalidQuests.Add(quest);
                 }
 
@@ -537,22 +540,26 @@ namespace SPTQuestingBots.Controllers
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if (timeoutMonitor.ElapsedMilliseconds > ConfigController.Config.Questing.QuestSelectionTimeout)
                 {
+                    // First try allowing the bot to repeat quests it already completed
                     if (bot.TryArchiveRepeatableAssignments() > 0)
                     {
                         LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Trying to select a repeatable quest early instead...");
                         continue;
                     }
 
+                    // If there are still no quests available for the bot to select, give up trying to select one
                     LoggingController.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
                     botObjectiveManager?.StopQuesting();
 
+                    // Try making the bot extract because it has nothing to do
                     if (botObjectiveManager?.BotMonitor?.TryInstructBotToExtract() == true)
                     {
                         LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
                         return null;
                     }
 
-                    throw new TimeoutException("Finding a quest for " + bot.GetText() + " took too long. Questing disabled.");
+                    LoggingController.LogError(bot.GetText() + " cannot select any quests. Questing disabled.");
+                    return null;
                 }
 
             } while (objective == null);
@@ -568,18 +575,16 @@ namespace SPTQuestingBots.Controllers
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
 
             return allQuests
+                .Where(q => q.Desirability != 0)
                 .Where(q => q.NumberOfValidObjectives > 0)
                 .Where(q => q.MaxBotsInGroup >= botGroupSize)
                 .Where(q => q.CanMoreBotsDoQuest())
                 .Where(q => q.CanAssignToBot(bot))
-                .Where(q => q.Desirability != 0)
                 .ToArray();
         }
 
         public static Quest GetRandomQuest(this BotOwner bot, IEnumerable<Quest> invalidQuests)
         {
-            //return GetRandomQuest_OLD(bot, invalidQuests);
-
             Stopwatch questSelectionTimer = Stopwatch.StartNew();
 
             Quest[] assignableQuests = bot.GetAllPossibleQuests()
@@ -592,10 +597,13 @@ namespace SPTQuestingBots.Controllers
             }
 
             BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
-            Vector3? vectorToExfil = botObjectiveManager?.VectorToInitialExfiltrationPoint();
+            Vector3? vectorToExfil = botObjectiveManager?.VectorToExfiltrationPointForQuesting();
 
             Dictionary<Quest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<Quest, Configuration.MinMaxConfig>();
             Dictionary<Quest, Configuration.MinMaxConfig> questExfilAngleRanges = new Dictionary<Quest, Configuration.MinMaxConfig>();
+
+            // Calculate the distances from the bot to all valid quest objectives and the angles between the vector to the bot's selected
+            // exfil (for questing) and the vector to each valid quest objective
             foreach (Quest quest in assignableQuests)
             {
                 IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
@@ -628,10 +636,16 @@ namespace SPTQuestingBots.Controllers
 
             float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
             float desirabilityWeighting = ConfigController.Config.Questing.BotQuests.DesirabilityWeighting;
-            float exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
-            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id))
+            float exfilDirectionWeighting = 0;
+
+            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(locationId))
             {
-                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id];
+                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[locationId];
+            }
+            else if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey("default"))
+            {
+                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
             }
 
             System.Random random = new System.Random();
@@ -653,7 +667,7 @@ namespace SPTQuestingBots.Controllers
 
             Quest selectedQuest = sortedQuests.Last();
 
-            LoggingController.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
+            //LoggingController.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
             //LoggingController.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
 
             return selectedQuest;

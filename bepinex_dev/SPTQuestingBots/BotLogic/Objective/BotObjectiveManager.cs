@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
-using EFT.UI.Ragfair;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
@@ -109,7 +108,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (exfiltrationPoint == null)
             {
-                SetExfiliationPoint();
+                SetExfiliationPointForQuesting();
             }
         }
 
@@ -288,29 +287,15 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool IsAllowedToTakeABreak()
         {
-            if (CurrentQuestAction == QuestAction.HoldAtPosition)
+            switch (CurrentQuestAction)
             {
-                return false;
-            }
-
-            if (CurrentQuestAction == QuestAction.Ambush)
-            {
-                return false;
-            }
-
-            if (CurrentQuestAction == QuestAction.CloseNearbyDoors)
-            {
-                return false;
-            }
-
-            if (CurrentQuestAction == QuestAction.ToggleSwitch)
-            {
-                return false;
-            }
-
-            if ((CurrentQuestAction == QuestAction.PlantItem) && IsCloseToObjective())
-            {
-                return false;
+                case QuestAction.HoldAtPosition:
+                case QuestAction.Ambush:
+                case QuestAction.CloseNearbyDoors:
+                case QuestAction.ToggleSwitch:
+                    return false;
+                case QuestAction.PlantItem:
+                    return !IsCloseToObjective();
             }
 
             return true;
@@ -355,7 +340,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
-        public void SetExfiliationPoint()
+        public void SetExfiliationPointForQuesting()
         {
             Dictionary<ExfiltrationPoint, float> exfiltrationPointDistances = Singleton<GameWorld>.Instance.ExfiltrationController.ExfiltrationPoints
                 .ToDictionary(p => p, p => Vector3.Distance(p.transform.position, botOwner.Position));
@@ -372,7 +357,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
-        public float? DistanceToInitialExfiltrationPoint()
+        public float? DistanceToExfiltrationPointForQuesting()
         {
             if (exfiltrationPoint == null)
             {
@@ -382,7 +367,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             return Vector3.Distance(botOwner.Position, exfiltrationPoint.transform.position);
         }
 
-        public Vector3? VectorToInitialExfiltrationPoint()
+        public Vector3? VectorToExfiltrationPointForQuesting()
         {
             if (exfiltrationPoint == null)
             {

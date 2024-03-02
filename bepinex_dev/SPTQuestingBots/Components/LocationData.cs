@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -200,6 +199,7 @@ namespace SPTQuestingBots.Components
 
             if (CurrentLocation.Id == "TarkovStreets")
             {
+                // Band-aid fix for BSG not completing the generation of bot-cell data for all parts of the map
                 SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
                     .Where(s => s.Position.z < 440)
                     .ToArray();
@@ -369,12 +369,12 @@ namespace SPTQuestingBots.Components
         {
             if (referencePositions.Length == 0)
             {
-                throw new ArgumentException("The reference position array is empty.", "referencePositions");
+                throw new ArgumentException("The reference position array is empty.", nameof(referencePositions));
             }
 
             if (allSpawnPoints.Length == 0)
             {
-                throw new ArgumentException("The spawn-point array is empty.", "allSpawnPoints");
+                throw new ArgumentException("The spawn-point array is empty.", nameof(allSpawnPoints));
             }
 
             Dictionary<SpawnPointParams, float> nearestReferencePoints = new Dictionary<SpawnPointParams, float>();
@@ -587,7 +587,7 @@ namespace SPTQuestingBots.Components
             return null;
         }
 
-        public float GetMaxExfilPointDistance()
+        public float GetMaxDistanceBetweenExfils()
         {
             if (maxExfilPointDistance > 0)
             {

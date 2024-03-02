@@ -111,7 +111,6 @@ namespace SPTQuestingBots.Helpers
             try
             {
                 IEasyBundle data = Singleton<IEasyAssets>.Instance.System.GetNode(item.Prefab.path).Data;
-
                 if (data.LoadState.Value == Diz.DependencyManager.ELoadState.Loaded)
                 {
                     return true;

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep

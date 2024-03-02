@@ -9,13 +9,12 @@ using DrakiaXYZ.BigBrain.Brains;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
-using SPTQuestingBots.Patches;
 
 namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.3.3")]
+    [BepInDependency("xyz.drakia.waypoints", "1.3.4")]
     [BepInDependency("xyz.drakia.bigbrain", "0.3.1")]
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.4.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
@@ -73,8 +72,6 @@ namespace SPTQuestingBots
                         new Patches.ExceptAIPatch().Enable();
                         new Patches.BotDiedPatch().Enable();
                         new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
-                        //new Patches.GetSpawnSystemPatch().Enable();
-                        //new Patches.CheckOnMaxPatch().Enable();
                     }
 
                     Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");

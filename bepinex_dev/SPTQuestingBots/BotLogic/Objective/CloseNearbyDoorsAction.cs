@@ -83,23 +83,26 @@ namespace SPTQuestingBots.BotLogic.Objective
                 wasStuck = false;
             }
 
+            // If somebody else is interacting with the door, wait for them to finish. If this takes too long, the "stuck" detection above
+            // will catch it
             if ((targetDoor?.DoorState == EDoorState.Interacting) || (targetDoor?.DoorState == EDoorState.Breaching))
             {
                 BotOwner.Mover.Stop();
                 return;
             }
 
+            // If the current door is already open, select the next one
             if ((targetDoor != null) && (targetDoor.DoorState != EDoorState.Open))
             {
                 tryUpdateTargetDoor();
             }
 
+            // Try to locate where the bot should go to interact with the door
             Vector3 targetPosition = ObjectiveManager.Position.Value;
             if (interactionPosition.HasValue)
             {
                 targetPosition = interactionPosition.Value;
             }
-
             if (!tryGoToPosition(targetPosition))
             {
                 return;
@@ -130,6 +133,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return true;
             }
 
+            // If the bot cannot find a complete path to the door, it will be close to open it
             NavMeshPathStatus? pathStatus = RecalculatePath(position);
             if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
             {
@@ -196,12 +200,16 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return null;
             }
 
+            // The possible interaction position is found by offsetting the position of the door vertically by a configurable amount. Otherwise,
+            // a large search radius may find a NavMesh position on the floor below. Then, the position is translated toward the bot by a specified
+            // distance. This is to force the bot to close the door from inside of its current room.
             Vector3 possibleInteractionPosition = door.transform.position;
             Vector3 vectorToBot = (BotOwner.Position - possibleInteractionPosition).normalized;
             possibleInteractionPosition += new Vector3(0, ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset, 0);
             possibleInteractionPosition += vectorToBot * ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
 
-            // Determine the location to which the bot should go in order to unlock the door
+            // Determine the NavMesh position to which the bot should go in order to unlock the door. This is based on the possible interaction
+            // position defined above. 
             float searchRadius = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
             Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
             if (navMeshPosition == null)

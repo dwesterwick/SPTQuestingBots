@@ -25,16 +25,9 @@ namespace SPTQuestingBots.BotLogic
         private Stopwatch lastRequestedTimer = new Stopwatch();
         private float maxLayerSearchTime = 300;
 
-        public bool CanLayerBeUsed
-        {
-            get { return layer?.IsActive == true; }
-        }
-
-        public double TimeSinceLastRequested
-        {
-            get { return lastRequestedTimer.IsRunning ? lastRequestedTimer.ElapsedMilliseconds / 1000.0 : double.MaxValue; }
-        }
-
+        public bool CanLayerBeUsed => layer?.IsActive == true;
+        public double TimeSinceLastRequested => lastRequestedTimer.IsRunning ? lastRequestedTimer.ElapsedMilliseconds / 1000.0 : double.MaxValue;
+        
         public void Init(BotOwner _botOwner, string _layerName)
         {
             botOwner = _botOwner;

@@ -208,8 +208,8 @@
 		},
 		"max_alive_bots": {
 			"default": 6,
-			"factory4_day": 6,
-			"factory4_night": 6,
+			"factory4_day": 5,
+			"factory4_night": 5,
 			"bigmap": 7,
 			"woods": 8,
 			"shoreline": 7,

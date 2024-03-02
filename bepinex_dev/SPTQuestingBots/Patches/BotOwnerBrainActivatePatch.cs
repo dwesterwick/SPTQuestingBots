@@ -43,35 +43,11 @@ namespace SPTQuestingBots.Patches
             Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(__instance);
 
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
-
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
 
-            BotType botType = Controllers.BotRegistrationManager.GetBotType(__instance);
-            if ((botType == BotType.PMC) || (botType == BotType.PScav))
+            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
             {
-                float chance = 0;
-                if (botType == BotType.Scav)
-                {
-                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Scav;
-                }
-                else if (botType == BotType.PScav)
-                {
-                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PScav;
-                }
-                else if (botType == BotType.PMC)
-                {
-                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PMC;
-                }
-                else if (botType == BotType.Boss)
-                {
-                    chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Boss;
-                }
-
-                System.Random random = new System.Random();
-                if (random.Next(1, 100) <= chance)
-                {
-                    Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
-                }
+                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
             }
 
             if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
@@ -79,6 +55,37 @@ namespace SPTQuestingBots.Patches
                 LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
                 reduceBotCounts(__instance);
             }
+        }
+
+        private static bool shouldMakeBotGroupHostileTowardAllBosses(BotOwner bot)
+        {
+            BotType botType = Controllers.BotRegistrationManager.GetBotType(bot);
+
+            float chance = 0;
+            if (botType == BotType.Scav)
+            {
+                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Scav;
+            }
+            else if (botType == BotType.PScav)
+            {
+                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PScav;
+            }
+            else if (botType == BotType.PMC)
+            {
+                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PMC;
+            }
+            else if (botType == BotType.Boss)
+            {
+                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Boss;
+            }
+
+            System.Random random = new System.Random();
+            if (random.Next(1, 100) <= chance)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void reduceBotCounts(BotOwner bot)

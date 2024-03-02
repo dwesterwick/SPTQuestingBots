@@ -1,5 +1,4 @@
-﻿using ChatShared;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
@@ -85,6 +84,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Don't update the overlay too often or performance and RAM usage will be affected
                 if (botInfo[bot].LastUpdateElapsedTime < 100)
                 {
                     continue;
@@ -95,21 +95,23 @@ namespace SPTQuestingBots.Components
                 sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.yellow, Color.yellow);
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 
-                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
-
                 BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
                 if (boss != null)
                 {
                     sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
                 }
-                else if (botObjectiveManager?.IsQuestingAllowed == true)
+                else
                 {
-                    BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+                    BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                    if (botObjectiveManager?.IsQuestingAllowed == true)
+                    {
+                        BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
 
-                    sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
-                    sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
+                        sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
+                    }
                 }
 
                 botInfo[bot].StaticText = sb.ToString();
@@ -127,12 +129,14 @@ namespace SPTQuestingBots.Components
 
             Color botTypeColor = Color.green;
 
+            // If you're dead, there's no reason to worry about overlay colors
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
             if (mainPlayer == null)
             {
                 return botTypeColor;
             }
 
+            // Check if the bot doesn't like you
             if (bot.EnemiesController?.EnemyInfos?.Any(i => i.Value.ProfileId == mainPlayer.ProfileId) == true)
             {
                 botTypeColor = Color.red;
@@ -187,10 +191,20 @@ namespace SPTQuestingBots.Components
             }
         }
 
+        private void updateStaticJobAssignmentDistances()
+        {
+            Vector3 mainPlayerPosition = Singleton<GameWorld>.Instance.MainPlayer.Position;
+            foreach (JobAssignment jobAssignment in jobAssignmentDistances.Keys.ToArray())
+            {
+                jobAssignmentDistances[jobAssignment] = Math.Round(Vector3.Distance(mainPlayerPosition, jobAssignment.Position.Value), 1);
+            }
+        }
+
         private void updateStaticJobAssignmentOverlays()
         {
             foreach (JobAssignment jobAssignment in jobAssignmentMarkers.Keys.ToArray())
             {
+                // Set by updateStaticJobAssignmentMarkerVisibility()
                 if (!jobAssignmentMarkers[jobAssignment].activeSelf)
                 {
                     continue; 
@@ -202,6 +216,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Set by updateStaticJobAssignmentDistances()
                 jobAssignmentInfo[jobAssignment].GuiContent.text = jobAssignmentInfo[jobAssignment].StaticText + jobAssignmentDistances[jobAssignment];
 
                 Vector2 guiSize = guiStyle.CalcSize(jobAssignmentInfo[jobAssignment].GuiContent);
@@ -211,15 +226,6 @@ namespace SPTQuestingBots.Components
                 jobAssignmentInfo[jobAssignment].GuiRect = rect;
 
                 GUI.Box(jobAssignmentInfo[jobAssignment].GuiRect, jobAssignmentInfo[jobAssignment].GuiContent, guiStyle);
-            }
-        }
-
-        private void updateStaticJobAssignmentDistances()
-        {
-            Vector3 mainPlayerPosition = Singleton<GameWorld>.Instance.MainPlayer.Position;
-            foreach (JobAssignment jobAssignment in jobAssignmentDistances.Keys.ToArray())
-            {
-                jobAssignmentDistances[jobAssignment] = Math.Round(Vector3.Distance(mainPlayerPosition, jobAssignment.Position.Value), 1);
             }
         }
 
@@ -238,6 +244,7 @@ namespace SPTQuestingBots.Components
             Vector3 lastPosition = Vector3.positiveInfinity;
             foreach (JobAssignment jobAssignment in jobAssignments)
             {
+                // Ensure the position is valid and isn't the same as the previous step in the quest objective
                 Vector3? stepPosition = jobAssignment.Position;
                 if (!stepPosition.HasValue || (stepPosition == lastPosition))
                 {

@@ -127,69 +127,77 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            if (pathStatus.Value == NavMeshPathStatus.PathPartial)
+            if (pathStatus.Value == NavMeshPathStatus.PathComplete)
             {
-                float distanceToEndOfPath = float.NaN;
-                float distanceToObjective = float.NaN;
-                float missingDistance = float.NaN;
+                return true;
+            }
 
-                // Calculate distances between:
-                //  - the bot and the end of the incomplete path to its objective
-                //  - the bot and its objective step position
-                //  - the end of its partial path and its objective step position
-                Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
-                if (lastPathPoint.HasValue)
-                {
-                    distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);
-                    distanceToObjective = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
-                    missingDistance = Vector3.Distance(ObjectiveManager.Position.Value, lastPathPoint.Value);
-                }
+            float distanceToEndOfPath = float.NaN;
+            float distanceToObjective = float.NaN;
+            float missingDistance = float.NaN;
 
-                // Check if the bot is nearly at the end of its (incomplete) path
-                if (distanceToEndOfPath < ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
-                {
-                    // Check if it's possible that a locked door is blocking the bot's path
-                    if (missingDistance <= ConfigController.Config.Questing.UnlockingDoors.SearchRadius)
-                    {
-                        // Check if the bot is allowed to unlock doors
-                        if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
-                        {
-                            // Find a door for the bot to unlock
-                            bool foundDoor = ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
-                            Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
+            // Calculate distances between:
+            //  - the bot and the end of the incomplete path to its objective
+            //  - the bot and its objective step position
+            //  - the end of its partial path and its objective step position
+            Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
+            if (lastPathPoint.HasValue)
+            {
+                distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);
+                distanceToObjective = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
+                missingDistance = Vector3.Distance(ObjectiveManager.Position.Value, lastPathPoint.Value);
+            }
 
-                            if (foundDoor && (door != null))
-                            {
-                                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
-
-                                unlockDebounceTimer.Restart();
-                                return true;
-                            }
-                        }
-                    }
-
-                    if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
-                    {
-                        LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
-                        ObjectiveManager.CompleteObjective();
-                        return true;
-                    }
-
-                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
-                    ObjectiveManager.FailObjective();
-                    ObjectiveManager.StuckCount++;
-                    return false;
-                }
-
+            // If the bot is far from its objective position but its path is incomplete, have it try going there anyway. Sometimes I get lost too,
+            // so who am I to judge?
+            if (distanceToEndOfPath > ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
+            {
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (ObjectiveManager.HasCompletePath)
                 {
-                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
+                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
                     ObjectiveManager.ReportIncompletePath();
+                }
+
+                return true;
+            }
+
+            // Check if it's possible that a locked door is blocking the bot's path
+            if (missingDistance <= ConfigController.Config.Questing.UnlockingDoors.SearchRadius)
+            {
+                // Check if the bot is allowed to unlock doors
+                if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
+                {
+                    // Find a door for the bot to unlock
+                    bool foundDoor = ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
+                    Door door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
+
+                    // If there is a door for the bot to unlock, have it try doing that
+                    if (foundDoor && (door != null))
+                    {
+                        LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
+
+                        unlockDebounceTimer.Restart();
+                        return true;
+                    }
                 }
             }
 
-            return true;
+            // Check if the bot got "close enough" to its objective
+            if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
+            {
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
+                ObjectiveManager.CompleteObjective();
+
+                return true;
+            }
+
+            // If all previous checks fail, the bot is unable to reach its objective position
+            LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
+            ObjectiveManager.FailObjective();
+            ObjectiveManager.StuckCount++;
+
+            return false;
         }
 
         private bool isAllowedToUnlockDoors()

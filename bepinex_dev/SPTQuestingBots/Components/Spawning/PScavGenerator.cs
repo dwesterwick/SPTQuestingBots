@@ -31,7 +31,7 @@ namespace SPTQuestingBots.Components.Spawning
             RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement;
 
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            BotDifficulty botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
+            botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
             setMaxAliveBots();
         }
@@ -85,6 +85,7 @@ namespace SPTQuestingBots.Components.Spawning
         {
             int botsAllowedToSpawn = BotsAllowedToSpawnForGeneratorType();
 
+            // Ensure all PMC's have spawned first
             Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
             if (pmcGenerator != null)
             {
@@ -105,8 +106,11 @@ namespace SPTQuestingBots.Components.Spawning
                 int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
                 botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
 
+                // Force the server to generate a player Scav
                 ServerRequestPatch.ForcePScavCount += botsInGroup;
                 Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
+
+                // Set the minimum spawn time for the PScav group
                 group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
                 
                 return group;
@@ -117,6 +121,7 @@ namespace SPTQuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
+            // Find a spawn location for the bot group that is as far from other players and bots as possible
             SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, EPlayerSideMask.All, pendingSpawnPoints.ToArray());
             if (!spawnPoint.HasValue)
             {
@@ -124,6 +129,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return Enumerable.Empty<Vector3>();
             }
 
+            // Create a list of spawn points at the selected location
             IEnumerable<Vector3> spawnPositions = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, pendingSpawnPoints.ToArray())
                 .Select(p => p.Position.ToUnityVector3());
 
@@ -133,6 +139,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return Enumerable.Empty<Vector3>();
             }
 
+            // Ensure none of the spawn points are too close to other players or bots
             if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers()))
             {
                 LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Other players are too close.");
@@ -151,18 +158,18 @@ namespace SPTQuestingBots.Components.Spawning
 
         private void createBotSpawnSchedule()
         {
+            // Get the current location ID and ensure there are SPT Scav-raid raid-time-reduction settings for it
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
             string locationID = locationData.CurrentLocation.Id.ToLower();
-            int pScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
-
             if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
             {
                 throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
             }
 
             float originalEscapeTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
-            int randomAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
+            int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
 
+            // Parse the SPT raid-time-reduction settings
             List<float> possibleSpawnTimes = new List<float>();
             foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
@@ -171,6 +178,8 @@ namespace SPTQuestingBots.Components.Spawning
                     float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
                     int weight = ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
 
+                    // Add the same number of entries to the List as the weight value for the reduction percentage. This makes the
+                    // reduction percentage more likely to be selected when creating the spawn schedule.
                     for (int i = 0; i < weight; i++)
                     {
                         possibleSpawnTimes.Add(raidTime);
@@ -182,21 +191,22 @@ namespace SPTQuestingBots.Components.Spawning
                 }
             }
 
+            int maxSpawnTimeAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
+
+            // Create the spawn schedule
             System.Random random = new System.Random();
-            int totalBots = 0;
-            for (int wave = 0; wave < pScavs; wave++)
+            for (int pScav = 0; pScav < totalPScavs; pScav++)
             {
-                float selectedSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
-                float adjustedSpawnTime = Math.Min(possibleSpawnTimes.Max(), Math.Max(possibleSpawnTimes.Min(), selectedSpawnTime + random.Next(-1 * randomAdjustment, randomAdjustment)));
-                
-                botSpawnSchedule.Add(totalBots, adjustedSpawnTime);
-                totalBots++;
+                float randomSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
+                float adjustedRandomSpawnTime = randomSpawnTime + random.Next(-1 * maxSpawnTimeAdjustment, maxSpawnTimeAdjustment);
+
+                botSpawnSchedule.Add(pScav, Math.Min(possibleSpawnTimes.Max(), Math.Max(possibleSpawnTimes.Min(), adjustedRandomSpawnTime)));
             }
 
+            // Write the spawn schedule to the game console for debugging
             IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
             IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
-
-            LoggingController.LogInfo("PScav spawn times for " + totalBots + " bots: " + string.Join(", ", spawnTimeTexts));
+            LoggingController.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
         }
 
         private void setMaxAliveBots()
@@ -206,6 +216,10 @@ namespace SPTQuestingBots.Components.Spawning
             if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey(locationID))
             {
                 MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots[locationID];
+            }
+            else if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey("default"))
+            {
+                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots["default"];
             }
 
             LoggingController.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);

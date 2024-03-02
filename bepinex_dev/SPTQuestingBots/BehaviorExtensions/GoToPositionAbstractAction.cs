@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -55,16 +54,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
-            //Vector3 previousLastPoint = BotOwner.Mover.CurPathLastPoint;
-
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
             NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
-
-            /*Vector3 newLastPoint = BotOwner.Mover.CurPathLastPoint;
-            if (!previousLastPoint.Equals(newLastPoint))
-            {
-                LoggingController.LogInfo(BotOwner.GetText() + " changed its final path position from " + previousLastPoint.ToString() + " to " + newLastPoint.ToString() + " to reach " + position.ToString());
-            }*/
 
             return pathStatus;
         }
@@ -116,6 +107,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
+            // The visual representation of the bot's path needs to be offset vertically so it's raised above the ground
             List<Vector3> adjustedPathCorners = new List<Vector3>();
             foreach (Vector3 corner in botPath)
             {

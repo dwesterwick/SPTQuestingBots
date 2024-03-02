@@ -212,14 +212,12 @@
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
-    <Compile Include="Patches\CheckOnMaxPatch.cs" />
     <Compile Include="Patches\CheckSPTVersionPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\ExceptAIPatch.cs" />
     <Compile Include="Patches\GameStartPatch.cs" />
     <Compile Include="Patches\GetListByZonePatch.cs" />
-    <Compile Include="Patches\GetSpawnSystemPatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
     <Compile Include="Patches\LoadBotsPatch.cs" />

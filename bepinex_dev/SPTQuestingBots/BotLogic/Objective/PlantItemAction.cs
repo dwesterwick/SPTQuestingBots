@@ -32,6 +32,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             UpdateBaseAction();
 
+            // If the bot is travelling to its objective location, have it look where it's going. If it's at its objective location, have it
+            // look where it came from because that's where threats will most likely appear. 
             if (!ObjectiveManager.IsCloseToObjective())
             {
                 UpdateBotSteering();

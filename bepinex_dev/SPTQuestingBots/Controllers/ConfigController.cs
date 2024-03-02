@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -144,6 +143,7 @@ namespace SPTQuestingBots.Controllers
             string json = null;
             Exception lastException = null;
 
+            // Sometimes server requests fail, and nobody knows why. If this happens, retry a few times.
             for (int i = 0; i < 5; i++)
             {
                 try
@@ -184,6 +184,7 @@ namespace SPTQuestingBots.Controllers
                     throw new InvalidCastException("Could deserialize an empty string to an object of type " + typeof(T).FullName);
                 }
 
+                // Check if the server failed to provide a valid response
                 if (!json.StartsWith("["))
                 {
                     ServerResponseError serverResponse = JsonConvert.DeserializeObject<ServerResponseError>(json);

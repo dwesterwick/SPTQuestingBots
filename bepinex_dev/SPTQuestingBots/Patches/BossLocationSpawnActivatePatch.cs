@@ -69,9 +69,6 @@ namespace SPTQuestingBots.Patches
             message += "...";
             LoggingController.LogInfo(message);
 
-            // This doesn't seem to work
-            //bossWave.IgnoreMaxBots = true;
-            
             return true;
         }
     }

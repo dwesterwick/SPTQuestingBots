@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
@@ -34,10 +33,10 @@ namespace SPTQuestingBots.Components.Spawning
         private readonly Stopwatch updateTimer = Stopwatch.StartNew();
 
         public static int RemainingBotGenerators { get; private set; } = 0;
-        public static int CurrentBotGeneratorProgress { get; protected set; } = 0;
-        public static string CurrentBotGeneratorType { get; protected set; } = "???";
+        public static int CurrentBotGeneratorProgress { get; private set; } = 0;
+        public static string CurrentBotGeneratorType { get; private set; } = "???";
 
-        private static Task BotGenerationTask = null;
+        private static Task botGenerationTask = null;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
@@ -56,8 +55,8 @@ namespace SPTQuestingBots.Components.Spawning
         }
 
         protected abstract int GetMaxGeneratedBots();
-        protected abstract bool CanSpawnBots();
         protected abstract int GetNumberOfBotsAllowedToSpawn();
+        protected abstract bool CanSpawnBots();
         protected abstract Func<Task<Models.BotSpawnInfo>> GenerateBotGroup();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
         
@@ -161,7 +160,7 @@ namespace SPTQuestingBots.Components.Spawning
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
-        public int BotCountBelowMaxBotCap()
+        public int CountBeforeBotCapIsReached()
         {
             List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
             return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
@@ -197,7 +196,7 @@ namespace SPTQuestingBots.Components.Spawning
         public bool CanSpawnAdditionalBots()
         {
             // Ensure the total number of bots isn't too close to the bot cap for the map
-            if (RespectMaxBotCap && (BotCountBelowMaxBotCap() < MinOtherBotsAllowedToSpawn))
+            if (RespectMaxBotCap && (CountBeforeBotCapIsReached() < MinOtherBotsAllowedToSpawn))
             {
                 return false;
             }
@@ -218,6 +217,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return true;
             }
 
+            // Factory is too small to wait for bosses or the delay in bot spawns may be noticed
             if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
             {
                 return true;
@@ -260,7 +260,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         public static void RunBotGenerationTasks()
         {
-            BotGenerationTask = runBotGenerationTasks();
+            botGenerationTask = runBotGenerationTasks();
         }
 
         private static async Task runBotGenerationTasks()
@@ -276,7 +276,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             botGeneratorList.Clear();
-
             RemainingBotGenerators = 0;
         }
 
@@ -378,12 +377,14 @@ namespace SPTQuestingBots.Components.Spawning
                         continue;
                     }
 
+                    // Check if the bot group is allowed to spawn at this time in the raid
                     float raidET = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
                     if ((raidET < botGroups[i].RaidETRangeToSpawn.Min) || (raidET > botGroups[i].RaidETRangeToSpawn.Max))
                     {
                         continue;
                     }
 
+                    // Ensure there won't be too many bots on the map
                     if (botGroupsToSpawn.Sum(g => g.Count) + botGroups[i].Count > allowedSpawns)
                     {
                         break;

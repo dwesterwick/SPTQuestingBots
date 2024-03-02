@@ -1,12 +1,11 @@
-﻿using Aki.Custom.Airdrops;
-using Aki.Reflection.Patching;
-using SPTQuestingBots.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Aki.Reflection.Patching;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -38,6 +37,7 @@ namespace SPTQuestingBots.Patches
                 raidTimeRemainingFraction = (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
             }
 
+            // TODO: This doesn't seem to work
             bool preventPScav = ConfigController.Config.AdjustPScavChance.DisableForGroups && (conditions.Count > 1);
 
             ConfigController.AdjustPScavChance(raidTimeRemainingFraction, preventPScav);

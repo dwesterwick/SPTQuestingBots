@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BehaviorExtensions
 {
