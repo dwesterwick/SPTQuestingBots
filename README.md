@@ -1,5 +1,7 @@
 You're no longer the only PMC running around placing markers and collecting quest items. The bots have transcended and are coming for you...
 
+**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
+
 **---------- Mod Compatibility ----------**
 
 **REQUIRES:**
@@ -11,21 +13,16 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/)
 
 **NOT compatible with:**
-* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/)
+* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 * [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/) (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage PMC spawning when using this mod. Otherwise, PMC's will spawn right in front of you.) 
-* Any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) (if **initial_PMC_spawns.enabled=false** in this mod)
-* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **initial_PMC_spawns.enabled=true** in this mod, set **adjust_bot_spawn_chances.enabled=false** in LTTP)
+* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **bot_spawns.enabled=true** in this mod, ensure **adjust_bot_spawn_chances.adjust_pmc_conversion_chances=false** in LTTP)
 
-**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many PMC's on the map.**
-
-**The PMC-spawning system in this quest will be automatically disabled** if any of the following mods are detected:
+**NOTE: Please disable the PMC-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many PMC's on the map. The PMC-spawning system in this quest will be automatically disabled** if any of the following mods are detected:
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [MOAR](https://hub.sp-tarkov.com/files/file/1059-moar-bots-spawning-difficulty/)
-
-**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
 
 **---------- Overview ----------**
 
@@ -66,8 +63,6 @@ Only a certain (configurable) number of initial PMC's will spawn at the beginnin
 A new feature of the 0.4.0 and later releases is an advanced spawning system that tricks EFT into thinking that PMC's and player Scavs are human players. This makes PMC's and player Scavs not count toward the bot cap for the map, so it shouldn't impede normal EFT bot spawns for normal Scavs and bosses. It also prevents PMC's and player Scavs from counting toward the maximum bot counts for each zone on the map, and this allows normal Scavs to spawn like they would in live EFT. Without this system, all initial bosses must be configured to spawn first (which is a config option in this mod) or EFT may suppress them due to the high number of bots on the map. To accomodate the large initial PMC wave and still allow Scavs and bosses to spawn, the max-bot cap can be optionally increased (which is also a config option in this mod) if you're not using the advanced spawning system.
 
 **NOTE: Please disable the PMC-spawning system in this mod if you're using other mods like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) that manage spawning! Otherwise, there will be too many PMC's on the map.**
-
-**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
 
 **---------- Bot Quest-Selection Algorithm Overview ----------**
 
@@ -240,7 +235,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **max_bots_per_quest**: The maximum number of bots that can actively be performing each quest of that type.
 * **min_distance**: Each objective in the quest will only be selected if the bot is at least this many meters away from it.
 * **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.
-* **max_raid_ET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. If you're using mods like [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/), this is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid.
+* **max_raid_ET**: The quest can only be selected if this many seconds (or less) have elapsed in the raid. This is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid.
 * **chance_of_having_keys**: The chance that bots will have keys for the locations specified in the quests.
 * **min_level**: The absolute minimum player level allowed for bots to select the quest. 
 * **max_level**: The absolute maximum player level allowed for bots to select the quest. 
@@ -253,7 +248,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **initial_PMC_spawns.min_distance_from_players_during_raid**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of initial PMC spawns and is **100** m by default. 
 * **initial_PMC_spawns.min_distance_from_players_during_raid_factory**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of initial PMC spawns and is **50** m by default. However, this is only used for Factory raids and replaces **initial_PMC_spawns.min_distance_from_players_during_raid**.
 * **initial_PMC_spawns.max_alive_initial_pmcs**: The maximum number of initial PMC's that can be alive at the same time on each map. This only applies to initial PMC's generated by this mod; it doesn't apply to PMC's spawned by other mods or for Scavs converted to PMC's automatically by SPT. 
-* **initial_PMC_spawns.initial_pmcs_vs_raidET**: If you spawn late into the raid, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of initial PMC's allowed] pairs, and there is no limit to the number of pairs. This requires [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) to function. 
+* **initial_PMC_spawns.initial_pmcs_vs_raidET**: If you spawn late into the raid, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of initial PMC's allowed] pairs, and there is no limit to the number of pairs.
 * **initial_PMC_spawns.bots_per_group_distribution**: An array describing how likely PMC groups of various sizes are allowed to spawn. When generating initial PMC groups, this mod will select a random number for each group between 0 and 1. It will then use interpolation to determine how many bots to add to the group using this array. The first column is the look-up value for the random number selected for the group, and the second column is the number of bots to add to the group. The interpolated value for number of bots is rounded to the nearest integer.
 * **initial_PMC_spawns.spawn_retry_time**: If any PMC's fail to spawn, no other attempts will be made to spawn PMC's for this amount of time (in seconds). By default, this is **10** s.
 * **initial_PMC_spawns.min_other_bots_allowed_to_spawn**: PMC's will not be allowed to spawn unless there are fewer than this value below the maximum bot count for the map. For example, if this value is 4 and the maximum bot cap is 20, PMC's will not be allowed to spawn if there are 17 or more alive bots in the map. This is to retain a "buffer" below the maximum bot cap so that Scavs are able to continue spawning throughout the raid. This is **4** by default. 
@@ -316,9 +311,11 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (likely disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
-* **0.5.2** (ETA: Late April)
+* **0.5.2** (ETA: Early May)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
+* **0.6.0** (ETA: Mid July)
+    * Separate spawning system into a separate mod
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
     * Improve PMC senses to dissuade them from going to areas where many bots have died. Might require interaction with SAIN; TBD.
