@@ -26,7 +26,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **---------- Overview ----------**
 
-There are two main components of this mod: adding an objective system to the AI and spawning PMC's only at the beginning of the raid to mimic live Tarkov.
+There are two main components of this mod: adding an objective system to the AI and directly controlling PMC and player-Scav spawning to mimic live Tarkov.
 
 **Objective System:**
 Instead of simply patrolling their spawn areas, bots will now move around the map to perform randomly-selected quest objectives. By default this system is only active for PMC's and player Scavs, but it can be enabled for normal Scavs and bosses if you want an extra challenge.
@@ -53,7 +53,7 @@ There are currently several types of quests available to each bot:
 * **"Standard" Quests:** Bots will go to specified locations around the map. They will prioritize more desirable locations for loot and locations that are closer to them. These quests also include some sniping and camping quests on all maps, so be careful!
 * **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests. None are provided by default. 
 
-**PMC Spawning System:**
+**PMC and Player-Scav Spawning Systems:**
 At the beginning of the raid, PMC's will spawn around the map at actual EFT PMC spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The number of initial PMC's is a random number between the minimum and maximum player count for the map (other mods can change these values). The maximum number of PMC's will be reduced if you spawn into the map late for a Scav run. The PMC difficulty is set by your raid settings in EFT.
 
 Starting with the 0.4.0 release, player Scavs will also spawn throughout the raid. Each group of player Scavs will be assigned a minimum spawn time that is generated using SPT's raid-time-reduction settings for Scav raids. This mod will use SPT's weighting settings for choosing when player Scavs will spawn into each location, it will add some randomness, and then it will generate a spawn schedule for all player-Scav spawns. Effectively, this means that player Scavs are most likely to spawn toward the middle and last third of raids. They're unlikely to spawn toward the very beginning or very end of them. Player Scavs can spawn at any EFT PMC or player-Scav spawn point on the map, and player-Scav bot difficulty is set by your raid settings in EFT.
@@ -130,14 +130,14 @@ The three major data structures are:
 * If you want a bot to go to several specific positions that are close to each other (i.e. small, adjacent rooms), use multiple steps in a single objective instead of using multiple objectives each with a single step. 
 * Bots will use the NavMesh to calculate the more efficient path to their objective (using an internal Unity algorithm). They cannot perform complex actions to reach objective locations, so avoid placing objective steps on top of objects (i.e. inside truck beds) or in areas that are difficult to reach. Bots will not know to crouch or jump to get around obstacles. 
 
-**---------- PMC Group Spawning System ----------**
+**---------- Bot Group Spawning System ----------**
 
 * Spawn chances for various group sizes are configurable. By default, solo spawns are most likely, but 2-man and 3-man groups will be commonly seen. 4-man and 5-man groups are rare but possible. 
 * EFT will assign one bot in the group to be a "boss", and the boss will select the quest to perform. All other bots in the group will follow the boss.
 * If any group members stray too far from the boss, the boss will stop questing and attempt to regroup
 * If any member of the group engages in combat, all other members will stop questing (or following) and engage in combat too. 
 * If the boss is allowed to sprint, so are its followers and vice versa. 
-* If the boss of a PMC group dies, EFT will automatically assign a new one from the remaining members
+* If the boss of a bot group dies, EFT will automatically assign a new one from the remaining members
 * Followers are only allowed to loot if they remain within a certain distance from the boss
 
 **---------- AI Limiter System ----------**
@@ -261,7 +261,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **max_level**: The absolute maximum player level allowed for bots to select the quest. 
 * **level_range**: An array of [minimum player level for the quest, level range] pairs to determine the maximum player level for each quest of that type. This value is added to the minimum player level for the quest. For example, if a quest is only available at level 15, the level range for it will be 20 (as determined via interpolation of this array using its default values). As a result, only bots between levels 15 and 35 will be allowed select that quest. 
 
-**PMC Spawning Options:**
+**PMC and Player-Scav Spawning Options:**
 * **bot_spawns.enabled**: Allow this mod to spawn PMC's and player Scavs (**true** by default). 
 * **bot_spawns.blacklisted_pmc_bot_brains**: An array of the bot "brain" types that SPT will not be able to use when generating initial PMC's. These "brain" types have behaviors that inhibit their ability to quest, and this causes them to get stuck in areas for a long time (including their spawn locations). **Do not change this unless you know what you're doing!**
 * **bot_spawns.spawn_retry_time**: If any bots fail to spawn, no other attempts will be made to spawn more of them for this amount of time (in seconds). By default, this is **10** s.
@@ -330,15 +330,14 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 
-**PMC Spawning System:**
-* If one of the members of a PMC group is a straggler, the whole group will wait around for him
-* If the advanced spawning system is not used, not all PMC's or player Scavs spawn into Streets because too many Scavs spawn into the map first
-* Scavs can spawn close to PMC's (SPT limitation)
+**PMC and Player-Scav Spawning System:**
+* If one of the members of a bot group is a straggler, the whole group will wait around for him
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
-* In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_initial_pmcs** setting is high and this mod's advanced spawning system is disabled
-* In maps with a high number of max players, performance can be pretty bad if your **max_alive_initial_pmcs** or **max_total_bots** settings are high
-* Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_initial_pmcs** setting is high
-* Performance may be worse if the advanced spawning system is enabled because EFT will be allowed to spawn more Scavs than with previous versions of this mod. 
+* If **advanced_eft_bot_count_management=false**, not all PMC's or player Scavs spawn into Streets because too many Scavs spawn into the map first
+* In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_bots** setting is high and **advanced_eft_bot_count_management=false**
+* In maps with a high number of max players, performance can be pretty bad if your **max_alive_bots** or **max_total_bots** settings are high
+* Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_bots** setting is high
+* Performance may be worse if **advanced_eft_bot_count_management=true** because EFT will be allowed to spawn more Scavs than with previous versions of this mod. 
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
@@ -346,7 +345,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Update to SPT-AKI 3.8.0
 * **0.5.1** (ETA: Early April)
     * Add new quest type: hidden-stash running
-    * Add new quest type: blood-thirsty cheater (likely disabled by default)
+    * Add new quest type: blood-thirsty cheater (will be disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
 * **0.5.2** (ETA: Early May)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)

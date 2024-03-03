@@ -351,12 +351,12 @@
         "maxLevel": 10,
         "maxBots": 1,
         "maxBotsInGroup": 1,
-        "desirability": 3,
+        "desirability": 5,
         "name": "Timmy's Forklift Hiding Spot",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 5,
+                "minDistanceFromBot": 20,
                 "maxDistanceFromBot": 75,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
@@ -370,7 +370,7 @@
                     },
                     {
                         "stepType" : "HoldAtPosition",
-                        "maxDistance": 5,
+                        "maxDistance": 4,
                         "minElapsedTime": {
                             "min": 30,
                             "max": 180
@@ -391,7 +391,7 @@
         "maxLevel": 99,
         "maxBots": 1,
         "maxBotsInGroup": 1,
-        "desirability": 10,
+        "desirability": 8,
         "pmcsOnly": true,
         "name": "Pumping Station Roof",
         "objectives" : [
@@ -1087,12 +1087,11 @@
         "maxBotsInGroup": 1,
         "minRaidET": 300,
         "desirability": 10,
-        "pmcsOnly": true,
         "name": "Gate 3",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 5,
+                "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
@@ -1170,12 +1169,11 @@
         "maxBotsInGroup": 1,
         "minRaidET": 300,
         "desirability": 10,
-        "pmcsOnly": true,
         "name": "Gate 3 Entrance",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 5,
+                "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
@@ -1235,12 +1233,11 @@
         "maxBotsInGroup": 1,
         "minRaidET": 300,
         "desirability": 10,
-        "pmcsOnly": true,
         "name": "Gate 3 Outside",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 5,
+                "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 2,
                 "lootAfterCompleting": "Inhibit",
@@ -1282,12 +1279,11 @@
         "maxBotsInGroup": 1,
         "minRaidET": 300,
         "desirability": 10,
-        "pmcsOnly": true,
         "name": "Gate 3 Camping",
         "objectives" : [
             {
                 "repeatable": true,
-                "minDistanceFromBot": 5,
+                "minDistanceFromBot": 25,
                 "maxDistanceFromBot": 500,
                 "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
