@@ -371,6 +371,11 @@ namespace SPTQuestingBots.Components
                         // Find the required quest
                         string preReqQuestID = conditionQuest.target;
                         Quest preReqQuest = BotJobAssignmentFactory.FindQuest(preReqQuestID);
+                        if (preReqQuest == null)
+                        {
+                            LoggingController.LogWarning("Cannot find prerequisite quest " + preReqQuestID + " for quest " + quest.Name);
+                            continue;
+                        }
 
                         // Get the minimum player level to start that quest
                         int minLevelForPreReqQuest = getMinLevelForQuest(preReqQuest);

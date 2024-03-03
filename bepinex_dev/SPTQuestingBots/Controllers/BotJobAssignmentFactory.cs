@@ -69,12 +69,19 @@ namespace SPTQuestingBots.Controllers
         public static Quest FindQuest(string questID)
         {
             IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.TemplateId == questID);
-            if (matchingQuests.Count() == 0)
+            if (matchingQuests.Count() == 1)
             {
-                return null;
+                return matchingQuests.First();
             }
 
-            return matchingQuests.First();
+            // Needed for custom quests added by some mods
+            matchingQuests = allQuests.Where(q => q.Template.Id == questID);
+            if (matchingQuests.Count() == 1)
+            {
+                return matchingQuests.First();
+            }
+
+            return null;
         }
 
         public static void RemoveBlacklistedQuestObjectives(string locationId)
