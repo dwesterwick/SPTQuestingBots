@@ -122,7 +122,7 @@ namespace SPTQuestingBots.BotLogic
             }
             else
             {
-                LoggingController.LogError("Cannot prevent " + botOwner.GetText() + " from looting. Looting Bots Interop not initialized properly.");
+                LoggingController.LogWarning("Cannot prevent " + botOwner.GetText() + " from looting. Looting Bots Interop not initialized properly or is outdated.");
             }
 
             return false;
@@ -140,7 +140,7 @@ namespace SPTQuestingBots.BotLogic
             // forget their current enemies, they will go into a combat layer, not a looting layer.
             if (canUseSAINInterop && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
             {
-                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly.");
+                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly or is outdated.");
             }
 
             if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(botOwner))
@@ -151,7 +151,7 @@ namespace SPTQuestingBots.BotLogic
             }
             else
             {
-                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to loot. Looting Bots Interop not initialized properly.");
+                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to loot. Looting Bots Interop not initialized properly or is outdated.");
             }
 
             return false;
@@ -167,7 +167,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (!SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
             {
-                LoggingController.LogError("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly.");
+                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly or is outdated.");
 
                 return false;
             }
@@ -187,7 +187,7 @@ namespace SPTQuestingBots.BotLogic
                 }
                 else
                 {
-                    LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly.");
+                    LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly or is outdated.");
                 }
             }
 
