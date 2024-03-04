@@ -122,10 +122,10 @@ The three major data structures are:
         * **CloseNearbyDoors**: Bots are instructed to close all doors within **maxDistance** meters of **position**
     
         If **stepType** is omitted, **MoveToPosition** is used by default.
-    * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (**HoldAtPosition** and **Ambush**).
+    * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (namely **HoldAtPosition** and **Ambush**).
     * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
     * **maxDistance**: If **stepType="HoldAtPosition"**, this is the maximum distance (in meters) bots will be allowed to wander from **position** for the objective step. If **stepType="CloseNearbyDoors"**, bots will close all doors within this radius of **position** (in meters).
-    * **chanceOfHavingKey**: The chance that bots will have keys to unlock any doors that are blocking their paths to this objective step. This overrides the default chance of having keys defined by **questing.unlocking_doors.default_chance_of_bots_having_keys** or **questing.bot_quests.eft_quests.chance_of_having_keys**/ 
+    * **chanceOfHavingKey**: The chance that bots will have keys to unlock any doors that are blocking their paths to this objective step. This overrides the default chance of having keys defined by **questing.unlocking_doors.default_chance_of_bots_having_keys** or **questing.bot_quests.eft_quests.chance_of_having_keys**. 
 
 **Tips and Tricks**
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
@@ -238,12 +238,12 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.sprinting_limitations.approaching_closed_doors.distance**: If a bot is within this distance (in meters) of a closed door and is heading toward it, it will not be allowed to sprint. This was implemented to prevent bots from sliding into closed doors before opening them. this is **3** m by default.
 * **questing.sprinting_limitations.approaching_closed_doors.angle**: If a bot is within **questing.sprinting_limitations.approaching_closed_doors.distance** meters of a closed door, it will not be allowed to sprint if the angle between the bot's heading and the vector from the bot to the door is less than this value (in degrees). This was implemented to prevent bots from sliding into closed doors before opening them. This is **60** deg by default.
 * **questing.bot_quests.distance_randomness**: One of the sources of "randomness" to apply when selecting a new quest for a bot. This is defined as a percentage of the total range of distances between the bot and every quest objective available to it. By default, this is **30%**. 
-* **questing.bot_quests.desirability_randomness**: Tthe maximum amount that desirability ratings of quests can be randomly changed when bots select new quests. By default, this is **20%**. 
-* **questing.bot_quests.distance_weighting**: A factor to change how much the distances between bots and quest objectives are weighted when selecting new quests for them. Higher numbers mean that bots will tend to select quests that are closer, not more desirable. This is **1** by default. 
-* **questing.bot_quests.desirability_weighting**: A factor to change how much the desirability of quests are weighted when selecting new quests for them. Higher numbers mean that bots will tend to select quests that are more desirable even if they're further away. This is **1** by default. 
+* **questing.bot_quests.desirability_randomness**: The maximum amount that desirability ratings of quests can be randomly changed when bots select new quests. By default, this is **20%**. 
+* **questing.bot_quests.distance_weighting**: A factor to change how much the distances between bots and possible quest objectives for them are weighted when selecting new quests. Higher numbers mean that bots will tend to select quests that are closer, but not necessarily more desirable. This is **1** by default. 
+* **questing.bot_quests.desirability_weighting**: A factor to change how much the desirability of quests are weighted when selecting new quests for bots. Higher numbers mean that bots will tend to select quests that are more desirable even if they're further away. This is **1** by default. 
 * **questing.bot_quests.exfil_direction_weighting.xxx**: A factor to change how likely bots are to select new quests that are in the direction of their selected exfil point. Higher numbers mean that bots will tend to select quests that are on the way to their selected exfil even if they're undesirable. This factor is different for every map. 
-* **questing.bot_quests.exfil_direction_max_angle**: If the angle between the vector from a bot to its exfil and the vector from the bot to a quest objective is below this value (in degrees), the angle will be ignored (treated as 0 deg) for that objective when selecting new quests for bots. This is to allow bots to meander toward their exfil instead of having them tend to follow a straight path toward their selected exfil. This is **90** deg by default. 
-* **questing.bot_quests.exfil_reached_min_fraction**: This value is multiplied by the maximum distance between all exfils on the map to determine the distance thresholds below which bots will change their selected exfils. If a bot travels within that threshold of its selected exfil, it will choose a new exfil. This is to allow bots to travel around the map instead of gravitating toward their initially selected exfils. This is **0.2** by default. 
+* **questing.bot_quests.exfil_direction_max_angle**: If the angle between the vector from a bot to its selected exfil and the vector from the bot to a quest objective is below this value (in degrees), the angle will be ignored (treated as 0 deg) for that objective when selecting new quests for bots. This is to allow bots to meander toward their selected exfil instead of having them tend to follow a straight path toward it. This is **90** deg by default. 
+* **questing.bot_quests.exfil_reached_min_fraction**: This value is multiplied by the maximum distance between all exfils on the map to determine the distance threshold below which bots will change their selected exfils. If a bot travels within that threshold of its selected exfil, it will choose a new exfil. This is to allow bots to travel around the map instead of gravitating toward their initially selected exfils even after they reach them. This is **0.2** by default. 
 * **questing.bot_quests.blacklisted_boss_hunter_bosses**: An array containing the names of bosses that bots doing the "Boss Hunter" quest will not be allowed to hunt.
 * **questing.bot_quests.airdrop_bot_interest_time**: The time (in seconds) after an airdop lands during which bots can go to it via an "Airdrop Chaser" quest. This is **420** s by default. 
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
@@ -271,10 +271,10 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **bot_spawns.spawn_initial_bosses_first**: If initial bosses must spawn before PMC's are allowed to spawn. This does not apply to Factory (Day or Night). If this is **false** and **bot_spawns.advanced_eft_bot_count_management=false**, initial PMC spawns may prevent some bosses (i.e. Rogues on Lighthouse) from spawning at the beginning of the raid. This is **false** by default and assumes **bot_spawns.advanced_eft_bot_count_management=true**.
 * **bot_spawns.advanced_eft_bot_count_management**: If **true**, this enables code that tricks EFT into thinking that bots generated by this mod are human players. This makes EFT ignore bot caps (both total and zone-specific) for PMC's and player Scavs generated by this mod. This is **true** by default. 
 * **bot_spawns.bot_cap_adjustments.enabled**: If bot caps should be modified (**false** by default assuming **bot_spawns.advanced_eft_bot_count_management=true**).
-* **bot_spawns.bot_cap_adjustments.min_other_bots_allowed_to_spawn**: PMC's and player Scavs will not be allowed to spawn unless there are fewer than this value below the maximum bot count for the map. For example, if this value is 4 and the maximum bot cap is 20, PMC's and player Scavs will not be allowed to spawn if there are 17 or more alive bots in the map. This is to retain a "buffer" below the maximum bot cap so that Scavs are able to continue spawning throughout the raid. This is **2** by default. 
-* **bot_spawns.bot_cap_adjustments.add_max_players_to_bot_cap**: If this is **true** (which is the default setting), the maximum bot cap for the map will be increased by the maximum number of players for the map. This is to better emulate live Tarkov where there can still be many Scavs around the map even with a full lobby. 
-* **bot_spawns.bot_cap_adjustments.max_additional_bots**: The maximum bot cap for the map will not be allowed to be increased by more than this value. If this value is too high, performance may be impacted. This is **5** by default. 
-* **bot_spawns.bot_cap_adjustments.max_total_bots**: The highest allowed maximum bot cap for any map. If this value is too high, performance may be impacted. This is **26** by default. 
+* **bot_spawns.bot_cap_adjustments.min_other_bots_allowed_to_spawn**: PMC's and player Scavs will not be allowed to spawn unless there are fewer than this value below the bot count for the map. For example, if this value is 4 and the maximum bot cap is 20, PMC's and player Scavs will not be allowed to spawn if there are 17 or more alive bots in the map. This is to retain a "buffer" below the maximum bot cap so that Scavs are able to continue spawning throughout the raid. This is **2** by default. 
+* **bot_spawns.bot_cap_adjustments.add_max_players_to_bot_cap**: If this is **true** (which is the default setting), the bot cap for the map will be increased by the maximum number of players for the map. This is to better emulate live Tarkov where there can still be many Scavs around the map even with a full lobby. 
+* **bot_spawns.bot_cap_adjustments.max_additional_bots**: The bot cap for the map will not be allowed to be increased by more than this value. If this value is too high, performance may be impacted. This is **5** by default. 
+* **bot_spawns.bot_cap_adjustments.max_total_bots**: The highest allowed bot cap for any map. If this value is too high, performance may be impacted. This is **26** by default. 
 * **bot_spawns.limit_initial_boss_spawns.enabled**: If initial boss spawns should be limited (**true** by default).
 * **bot_spawns.limit_initial_boss_spawns.disable_rogue_delay**: If the 180-second delay SPT adds to Rogue spawns on Lighthouse should be removed. This is **true** by default.
 * **bot_spawns.limit_initial_boss_spawns.max_initial_bosses**: The maximum number of bosses that are allowed to spawn at the beginning of the raid (including Raiders and Rogues). After this number is reached, all remaining initial boss spawns will be canceled. If this number is too high, few Scavs will be able to spawn after the initial PMC spawns. This is **14** by default. 
@@ -284,15 +284,15 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **bot_spawns.player_scavs.xxx**: The settings to apply to player Scav spawns (see below for details).
 * **adjust_pscav_chance.enabled**: If the chances that Scavs are converted to player Scavs should be adjusted throughout the raid. This is only used if **bot_spawns.enabled=false** or **bot_spawns.player_scavs.enabled=false**, and it is **true** by default.
 * **adjust_pscav_chance.disable_for_groups**: If the player-Scav conversion chance should be forced to 0% when generated bot groups. Otherwise, only some of the group members may be converted to player Scavs. **This currently does not work correctly.**
-* **adjust_pscav_chance.chance_vs_time_remaining_fraction**: An array describing how likely Scavs are to be converted to player Scavs as a function of how the fraction of time remaining in the raid (before adjusting for Scav raids). The array contains [fraction of raid time remaining, conversion chance] pairs, and there is no limit to the number of pairs.
+* **adjust_pscav_chance.chance_vs_time_remaining_fraction**: An array describing how likely Scavs are to be converted to player Scavs as a function of the fraction of time remaining in the raid. This is based on the overall raid time, not the time after you spawn. The array contains [fraction of raid time remaining, conversion chance] pairs, and there is no limit to the number of pairs.
 
 **Options for *bot_spawns.pmcs* and *bot_spawns.player_scavs*:**
-* **enabled**: If that the corresponding bot type will be allowed to spawn. This is **true** by default for both bot types.
+* **enabled**: If the corresponding bot type will be allowed to spawn. This is **true** by default for both bot types.
 * **min_distance_from_players_initial**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used during the first wave of spawns and is **25** m by default. 
 * **min_distance_from_players_during_raid**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns.
 * **min_distance_from_players_during_raid_factory**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns. However, this is only used for Factory raids instead of **min_distance_from_players_during_raid**.
 * **fraction_of_max_players**: When determining how many total bots of this type will spawn throughout the raid, the maximum player count for the map is multiplied by this value. This is **1** by default for PMC's and **1.5** by default for player Scavs.
-* **fraction_of_max_players_vs_raidET**: If you spawn late into the raid, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of max players] pairs, and there is no limit to the number of pairs.
+* **fraction_of_max_players_vs_raidET**: If you spawn late into the raid as a Scav, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of max players] pairs, and there is no limit to the number of pairs.
 * **time_randomness**: The maximum percentage of total raid time (before reducing it for Scav raids) that player-Scav spawns can be randomly adjusted when generating a spawn schedule for them. However, player Scavs will never be allowed to spawn earlier than the minimum reduced raid time in the SPT configuration for the map, and they will never be allowed to spawn later than the maximum reduced raid time for the map. This is **10%** by default. 
 * **bots_per_group_distribution**: An array describing how likely bot groups of various sizes are allowed to spawn. When generating bot groups, this mod will select a random number for each group between 0 and 1. It will then use interpolation to determine how many bots to add to the group using this array. The first column is the look-up value for the random number selected for the group, and the second column is the number of bots to add to the group. The interpolated value for number of bots is rounded to the nearest integer.
 
@@ -302,9 +302,9 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots tend to get trapped in certain areas. Known areas:
     * Customs between Warehouse 4 and New Gas
+    * Customs in some Dorms rooms
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
-    * Lighthouse in various rocky areas
 * Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there). They will only engage you if they see you, so they may blindly run right past you. Honestly, this isn't so unrealistic compared to live Tarkov...
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
@@ -318,7 +318,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Mountain Area for Return the Favor in Woods
     * The second and third bunkers for Assessment Part 2 in Woods
     * The satellite antenna in the USEC camp for Return the Favor in Woods
-    * The USEC camp for Search Mission in Woods
     * The cottage area for Overpopulation in Lighthouse
     * The main area for Assessment - Part 1 in Lighthouse
     * The bridge for Knock-Knock in Lighthouse
@@ -327,7 +326,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * The underground depot for Safe Corridor in Reserve
     * One of the locations for Bunker Part 2 in Reserve (not sure which)
 * Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations. Examples include marking the tanker at New Gas in Customs; bots will fail to find a position to mark the tanker and then nearby unlock rooms in New Gas for no reason.
-* Bots will frequently unlock doors, go into the room, and not loot anything.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 
@@ -336,7 +334,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
 * If **advanced_eft_bot_count_management=false**, not all PMC's or player Scavs spawn into Streets because too many Scavs spawn into the map first
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_bots** setting is high and **advanced_eft_bot_count_management=false**
-* In maps with a high number of max players, performance can be pretty bad if your **max_alive_bots** or **max_total_bots** settings are high
+* In maps with a high number of max players, performance can be pretty bad if your **max_alive_bots** setting is high
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_bots** setting is high
 * Performance may be worse if **advanced_eft_bot_count_management=true** because EFT will be allowed to spawn more Scavs than with previous versions of this mod. 
 
