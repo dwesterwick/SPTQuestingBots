@@ -120,7 +120,8 @@ The three major data structures are:
         * **ToggleSwitch**: Bots are instructed to go to **position** and toggle the switch defined by **switchID**.
         * **RequestExtract**: This mod will try to instruct bots to extract via [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/).
         * **CloseNearbyDoors**: Bots are instructed to close all doors within **maxDistance** meters of **position**
-    If **stepType** is omitted, **MoveToPosition** is used by default.
+    
+        If **stepType** is omitted, **MoveToPosition** is used by default.
     * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (**HoldAtPosition** and **Ambush**).
     * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
     * **maxDistance**: If **stepType="HoldAtPosition"**, this is the maximum distance (in meters) bots will be allowed to wander from **position** for the objective step. If **stepType="CloseNearbyDoors"**, bots will close all doors within this radius of **position** (in meters).
