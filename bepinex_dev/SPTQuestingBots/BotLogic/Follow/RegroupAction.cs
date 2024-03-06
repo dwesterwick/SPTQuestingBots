@@ -55,6 +55,10 @@ namespace SPTQuestingBots.BotLogic.Follow
             {
                 RecalculatePath(locationOfNearestGroupMember, targetDistance);
             }
+            else
+            {
+                ObjectiveManager.PauseRequest = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
+            }
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
             if (checkIfBotIsStuck())

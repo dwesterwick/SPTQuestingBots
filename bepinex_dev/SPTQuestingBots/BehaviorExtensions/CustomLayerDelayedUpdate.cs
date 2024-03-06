@@ -109,6 +109,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool pauseLayer(float minTime)
         {
+            previousState = false;
             pauseLayerTime = minTime;
             pauseLayerTimer.Restart();
 

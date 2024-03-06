@@ -77,7 +77,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             float pauseRequestTime = getPauseRequestTime();
             if (pauseRequestTime > 0)
             {
-                LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                //LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
                 return pauseLayer(pauseRequestTime);
             }
 
