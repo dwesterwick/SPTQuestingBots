@@ -11,7 +11,6 @@ namespace SPTQuestingBots.BotLogic.Sleep
 {
     internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
-        private bool useLayer = false;
         private Objective.BotObjectiveManager objectiveManager = null;
 
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 250)
@@ -39,16 +38,22 @@ namespace SPTQuestingBots.BotLogic.Sleep
             // Check if AI limiting is enabled in the F12 menu
             if (!QuestingBotsPluginConfig.SleepingEnabled.Value)
             {
-                return updateUseLayer(false);
+                return updatePreviousState(false);
             }
 
             // Don't run this method too often or performance will be impacted (ironically)
             if (!canUpdate())
             {
-                return useLayer;
+                return previousState;
             }
 
             if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
+            {
+                return updatePreviousState(false);
+            }
+
+            // Unless enabled in the F12 menu, do not allow sniper Scavs to sleep
+            if (!QuestingBotsPluginConfig.SleepingEnabledForSniperScavs.Value && (BotOwner.Profile.Info.Settings.Role == WildSpawnType.marksman))
             {
                 return updatePreviousState(false);
             }
@@ -65,7 +70,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 // Check if bots that can quest are allowed to sleep
                 if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
                 {
-                    return updateUseLayer(false);
+                    return updatePreviousState(false);
                 }
 
                 // If the bot can quest and is allowed to sleep, ensure it's allowed to sleep on the current map
@@ -73,7 +78,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 {
                     if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(map))
                     {
-                        return updateUseLayer(false);
+                        return updatePreviousState(false);
                     }
                 }
             }
@@ -81,20 +86,20 @@ namespace SPTQuestingBots.BotLogic.Sleep
             // Allow bots to extract so new ones can spawn
             if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value && (objectiveManager?.BotMonitor?.IsTryingToExtract() == true))
             {
-                return updateUseLayer(false);
+                return updatePreviousState(false);
             }
 
             // Ensure you're not dead
             Player you = Singleton<GameWorld>.Instance.MainPlayer;
             if (you == null)
             {
-                return updateUseLayer(false);
+                return updatePreviousState(false);
             }
 
             // If the bot is close to you, don't allow it to sleep
             if (Vector3.Distance(BotOwner.Position, you.Position) < QuestingBotsPluginConfig.SleepingMinDistanceToYou.Value)
             {
-                return updateUseLayer(false);
+                return updatePreviousState(false);
             }
 
             // Enumerate all other bots on the map that are alive and active
@@ -129,18 +134,12 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 // If a questing bot is close to this one, don't allow this one to sleep
                 if (Vector3.Distance(BotOwner.Position, bot.Position) <= QuestingBotsPluginConfig.SleepingMinDistanceToPMCs.Value)
                 {
-                    return updateUseLayer(false);
+                    return updatePreviousState(false);
                 }
             }
 
             setNextAction(BehaviorExtensions.BotActionType.Sleep, "Sleep");
-            return updateUseLayer(true);
-        }
-
-        private bool updateUseLayer(bool newValue)
-        {
-            useLayer = newValue;
-            return useLayer;
+            return updatePreviousState(true);
         }
     }
 }

@@ -28,6 +28,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("chance_of_having_keys")]
         public float ChanceOfHavingKeys { get; set; } = 25;
 
+        [JsonProperty("match_looting_behavior_distance")]
+        public float MatchLootingBehaviorDistance { get; set; } = 0;
+
         [JsonProperty("min_level")]
         public int MinLevel { get; set; } = 0;
 

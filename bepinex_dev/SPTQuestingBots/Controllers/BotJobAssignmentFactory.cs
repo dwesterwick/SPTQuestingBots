@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Controllers
 
         public static Quest[] FindQuestsWithZone(string zoneId) => allQuests.Where(q => q.GetObjectiveForZoneID(zoneId) != null).ToArray();
         public static bool CanMoreBotsDoQuest(this Quest quest) => quest.NumberOfActiveBots() < quest.MaxBots;
-        
+
         public static void Clear()
         {
             // Only remove quests that are not based on an EFT quest template
@@ -819,6 +819,31 @@ namespace SPTQuestingBots.Controllers
             }
 
             return allAssignments;
+        }
+
+        public static IEnumerable<QuestObjective> GetQuestObjectivesNearPosition(Vector3 position, float distance, bool allowEFTQuests = true)
+        {
+            List<QuestObjective> nearbyObjectives = new List<QuestObjective>();
+
+            foreach (Quest quest in allQuests)
+            {
+                if (!allowEFTQuests && quest.IsEFTQuest)
+                {
+                    continue;
+                }
+
+                foreach (QuestObjective objective in quest.ValidObjectives)
+                {
+                    if (Vector3.Distance(position, objective.GetFirstStepPosition().Value) > distance)
+                    {
+                        continue;
+                    }
+
+                    nearbyObjectives.Add(objective);
+                }
+            }
+
+            return nearbyObjectives;
         }
     }
 }

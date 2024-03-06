@@ -106,9 +106,6 @@ namespace SPTQuestingBots.Components
                 IEnumerable<LootItem> allItems = Singleton<GameWorld>.Instance.LootItems.Where(i => i.Item != null).Distinct(i => i.TemplateId);
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LocateQuestItems, allItems);
 
-                // Update all other settings for EFT quests
-                yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
-
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
                 Quest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", ConfigController.Config.Questing.BotQuests.SpawnPointWander);
@@ -168,6 +165,9 @@ namespace SPTQuestingBots.Components
                 LoadCustomQuests();
 
                 BotJobAssignmentFactory.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
+
+                // Update all other settings for EFT quests
+                yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
 
                 HaveQuestsBeenBuilt = true;
                 LoggingController.LogInfo("Finished loading quest data.");
@@ -603,11 +603,6 @@ namespace SPTQuestingBots.Components
                     objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
                 }
 
-                // If the zone is large, allow twice as many bots to do the objective at the same time
-                // TO DO: This is kinda sloppy and should be fixed. 
-                int maxBots = ConfigController.Config.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
-                quest.MaxBots *= triggerCollider.bounds.Volume() > 5 ? maxBots * 2 : maxBots;
-
                 zoneIDsInLocation.Add(trigger.Id);
             }
 
@@ -625,13 +620,34 @@ namespace SPTQuestingBots.Components
 
         private void updateEFTQuestObjectives(Models.Quest quest)
         {
+            if (!quest.IsEFTQuest)
+            {
+                return;
+            }
+
+            float nearbyObjectiveDistance = ConfigController.Config.Questing.BotQuests.EFTQuests.MatchLootingBehaviorDistance;
             foreach (QuestObjective objective in quest.AllObjectives)
             {
-                objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
-
                 foreach (QuestObjectiveStep step in objective.AllSteps)
                 {
                     step.ChanceOfHavingKey = ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys;
+                }
+
+                Vector3? objectivePosition = objective.GetFirstStepPosition();
+                if (!objectivePosition.HasValue)
+                {
+                    continue;
+                }
+
+                // Find all nearby quest objectives that are not from EFT quests
+                QuestObjective[] nearbyObjectives = BotJobAssignmentFactory.GetQuestObjectivesNearPosition(objectivePosition.Value, nearbyObjectiveDistance, false)
+                    .ToArray();
+
+                // Match the looting behavior of the nearby objectives
+                if (!nearbyObjectives.Any() || nearbyObjectives.All(o => o.LootAfterCompletingSetting == LootAfterCompleting.Inhibit))
+                {
+                    objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
+                    //LoggingController.LogInfo("Preventing looting after completing EFT quest objective " + objective.ToString() + " for quest " + quest.ToString());
                 }
             }
         }

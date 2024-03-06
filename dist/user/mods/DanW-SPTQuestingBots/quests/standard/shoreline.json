@@ -442,6 +442,7 @@
         "maxLevel": 99,
         "maxBots": 3,
         "maxBotsInGroup": 1,
+        "minRaidET": 120,
         "desirability": 20,
         "pmcsOnly": true,
         "name": "Scav Island Sniping",

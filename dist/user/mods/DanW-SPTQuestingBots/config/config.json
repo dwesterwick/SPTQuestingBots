@@ -149,9 +149,10 @@
 			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent" ],
 			"airdrop_bot_interest_time": 420,
 			"eft_quests": {
-				"desirability": 65,
+				"desirability": 60,
 				"max_bots_per_quest": 3,
 				"chance_of_having_keys": 50,
+				"match_looting_behavior_distance": 5,
 				"level_range": [
 					[0, 99],
 					[1, 8],
@@ -182,7 +183,7 @@
 			"airdrop_chaser": {
 				"desirability": 70,
 				"max_bots_per_quest": 3,
-				"max_distance": 500
+				"max_distance": 400
 			}
 		}
 	},
