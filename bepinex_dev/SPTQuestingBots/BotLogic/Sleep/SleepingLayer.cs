@@ -52,12 +52,6 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 return updatePreviousState(false);
             }
 
-            // Unless enabled in the F12 menu, do not allow sniper Scavs to sleep
-            if (!QuestingBotsPluginConfig.SleepingEnabledForSniperScavs.Value && (BotOwner.Profile.Info.Settings.Role == WildSpawnType.marksman))
-            {
-                return updatePreviousState(false);
-            }
-
             // Check if the bot was ever allowed to quest
             if (objectiveManager == null)
             {

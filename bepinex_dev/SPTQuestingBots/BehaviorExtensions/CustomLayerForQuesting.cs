@@ -85,6 +85,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return true;
             }
+
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
 
             return false;

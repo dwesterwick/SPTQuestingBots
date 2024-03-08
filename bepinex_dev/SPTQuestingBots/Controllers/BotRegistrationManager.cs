@@ -31,6 +31,7 @@ namespace SPTQuestingBots.Controllers
         private static List<BotOwner> registeredPMCs = new List<BotOwner>();
         private static List<BotOwner> registeredBosses = new List<BotOwner>();
         private static List<BotsGroup> hostileGroups = new List<BotsGroup>();
+        private static List<string> sleepingBotIds = new List<string>();
 
         public static void Clear()
         {
@@ -45,6 +46,7 @@ namespace SPTQuestingBots.Controllers
             registeredPMCs.Clear();
             registeredBosses.Clear();
             hostileGroups.Clear();
+            sleepingBotIds.Clear();
         }
 
         public static BotType GetBotType(BotOwner botOwner)
@@ -123,6 +125,27 @@ namespace SPTQuestingBots.Controllers
         public static bool IsBotABoss(BotOwner botOwner)
         {
             return registeredBosses.Contains(botOwner);
+        }
+
+        public static void RegisterSleepingBot(BotOwner botOwner)
+        {
+            if (!sleepingBotIds.Contains(botOwner.ProfileId))
+            {
+                sleepingBotIds.Add(botOwner.ProfileId);
+            }
+        }
+
+        public static void UnregisterSleepingBot(BotOwner botOwner)
+        {
+            if (sleepingBotIds.Contains(botOwner.ProfileId))
+            {
+                sleepingBotIds.Remove(botOwner.ProfileId);
+            }
+        }
+
+        public static bool IsBotSleeping(string botId)
+        {
+            return sleepingBotIds.Contains(botId);
         }
 
         public static void MakeBotGroupHostileTowardAllBosses(BotOwner bot)

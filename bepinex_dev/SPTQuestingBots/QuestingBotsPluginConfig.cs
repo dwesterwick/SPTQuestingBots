@@ -34,7 +34,6 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
-        public static ConfigEntry<bool> SleepingEnabledForSniperScavs;
         public static ConfigEntry<int> SleepingMinDistanceToYou;
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
@@ -69,14 +68,12 @@ namespace SPTQuestingBots
                 false, "Improve FPS by minimizing CPU load for AI out of certain ranges");
             SleepingEnabledForQuestingBots = Config.Bind("AI Limiter", "Enable AI Limiting for Bots That Are Questing",
                 true, "Allow AI to be disabled for bots that are questing");
-            SleepingEnabledForSniperScavs = Config.Bind("AI Limiter", "Enable AI Limiting for Sniper Scavs",
-                false, "Allow AI to be disabled for sniper Scavs");
             MapsToAllowSleepingForQuestingBots = Config.Bind("AI Limiter", "Maps to Allow AI Limiting for Bots That Are Questing",
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
             SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You (m)",
                 200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
-                75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(50, 1000)));
+                75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(25, 1000)));
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 false, "Show information about what each bot is doing");

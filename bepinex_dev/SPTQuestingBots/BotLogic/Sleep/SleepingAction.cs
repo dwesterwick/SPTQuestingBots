@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BotLogic.Sleep
 {
@@ -22,6 +23,8 @@ namespace SPTQuestingBots.BotLogic.Sleep
             BotOwner.DecisionQueue.Clear();
             BotOwner.Memory.GoalEnemy = null;
             BotOwner.PatrollingData.Pause();
+
+            BotRegistrationManager.RegisterSleepingBot(BotOwner);
             BotOwner.gameObject.SetActive(false);
         }
 
@@ -30,6 +33,8 @@ namespace SPTQuestingBots.BotLogic.Sleep
             base.Stop();
 
             BotOwner.gameObject.SetActive(true);
+            BotRegistrationManager.UnregisterSleepingBot(BotOwner);
+
             BotOwner.PatrollingData.Unpause();
         }
 

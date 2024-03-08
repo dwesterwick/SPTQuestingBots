@@ -47,6 +47,7 @@ namespace SPTQuestingBots
                 new Patches.OnBeenKilledByAggressorPatch().Enable();
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
+                new Patches.CheckLookEnemyPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
