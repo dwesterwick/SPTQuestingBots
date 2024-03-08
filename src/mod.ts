@@ -21,6 +21,7 @@ import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { VFS } from "@spt-aki/utils/VFS";
 import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 import { BotController } from "@spt-aki/controllers/BotController";
 import { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
@@ -29,6 +30,7 @@ import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
 
 import { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
+import { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
 
 const modName = "SPTQuestingBots";
 
@@ -46,6 +48,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private profileHelper: ProfileHelper;
     private vfs: VFS;
     private httpResponseUtil: HttpResponseUtil;
+    private randomUtil: RandomUtil;
     private botController: BotController;
     private botGenerationCacheService: BotGenerationCacheService;
     private iBotConfig: IBotConfig;
@@ -181,11 +184,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     const urlParts = url.split("/");
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
 
-                    this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
+                    //this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
+                    //this.botGenerationCacheService.clearStoredBots();
 
-                    this.botGenerationCacheService.clearStoredBots();
-                    const bots = this.botController.generate(sessionID, info);
-                    
+                    const bots = this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
+
                     return this.httpResponseUtil.getBody(bots);
                 }
             }], "GenerateBot"
@@ -212,6 +215,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
         this.vfs = container.resolve<VFS>("VFS");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
+        this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
         this.botGenerationCacheService = container.resolve<BotGenerationCacheService>("BotGenerationCacheService");
 
@@ -298,6 +302,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
         {
             this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
+        }
+
+        // Make Questing Bots control PScav spawning
+        if (modConfig.adjust_pscav_chance.enabled || (modConfig.bot_spawns.enabled && modConfig.bot_spawns.player_scavs.enabled))
+        {
+            this.iBotConfig.chanceAssaultScavHasPlayerScavName = 0;
         }
 
         if (!modConfig.bot_spawns.enabled)
@@ -516,6 +526,33 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         {
             this.iLocationConfig.scavRaidTimeSettings.maps[map].reducedChancePercent = 0;
         }
+    }
+
+    private generateBots(info: IGenerateBotsRequestData, sessionID: string, shouldBePScavGroup: boolean) : IBotBase[]
+    {
+        const bots = this.botController.generate(sessionID, info);
+
+        if (!shouldBePScavGroup)
+        {
+            return bots;
+        }
+
+        const pmcNames = [
+            ...this.databaseTables.bots.types.usec.firstName,
+            ...this.databaseTables.bots.types.bear.firstName
+        ];
+
+        for (const bot in bots)
+        {
+            if (info.conditions[0].Role !== "assault")
+            {
+                continue;
+            }
+
+            bots[bot].Info.Nickname = `${bots[bot].Info.Nickname} (${this.randomUtil.getArrayValue(pmcNames)})`
+        }
+
+        return bots;
     }
 }
 
