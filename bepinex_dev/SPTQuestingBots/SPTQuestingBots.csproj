@@ -220,7 +220,6 @@
     <Compile Include="Patches\GetListByZonePatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />
     <Compile Include="Patches\IsFollowerSuitableForBossPatch.cs" />
-    <Compile Include="Patches\LoadBotsPatch.cs" />
     <Compile Include="Patches\MatchmakerFinalCountdownUpdatePatch.cs" />
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\AirdropLandPatch.cs" />

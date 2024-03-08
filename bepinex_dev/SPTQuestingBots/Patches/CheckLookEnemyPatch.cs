@@ -27,8 +27,6 @@ namespace SPTQuestingBots.Patches
             string botId = __instance?.Person?.ProfileId;
             if ((botId != null) && BotRegistrationManager.IsBotSleeping(botId))
             {
-                //LoggingController.LogInfo("Preventing " + __instance.Person.GetText() + " from being identified as an enemy by " + __instance.Owner.GetText() + " while it's sleeping");
-
                 __instance.SetVisible(false);
                 return false;
             }

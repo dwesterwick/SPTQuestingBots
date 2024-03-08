@@ -54,8 +54,6 @@ namespace SPTQuestingBots.Patches
 
                 legacyParams.Url = originalUrl.Replace(generateBotUrl, "/QuestingBots/GenerateBot/" + pScavChance);
                 ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
-
-                //LoggingController.LogInfo("Generating a bot with " + pScavChance + "% of becoming a PScav...");
             }
         }
 

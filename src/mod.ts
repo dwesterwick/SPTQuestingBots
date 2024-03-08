@@ -2,7 +2,7 @@ import modConfig from "../config/config.json";
 import { CommonUtils } from "./CommonUtils";
 import { QuestManager } from "./QuestManager";
 
-import { DependencyContainer } from "tsyringe";
+import type { DependencyContainer } from "tsyringe";
 import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
 import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
 import type { IPostAkiLoadMod } from "@spt-aki/models/external/IPostAkiLoadMod";
@@ -10,27 +10,27 @@ import type { StaticRouterModService } from "@spt-aki/services/mod/staticRouter/
 import type { DynamicRouterModService } from "@spt-aki/services/mod/dynamicRouter/DynamicRouterModService";
 import type { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
 
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { LocaleService } from "@spt-aki/services/LocaleService";
-import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
-import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import { VFS } from "@spt-aki/utils/VFS";
-import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
-import { BotController } from "@spt-aki/controllers/BotController";
-import { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
-import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
-import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
-import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
-import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
+import type { MinMax } from "@spt-aki/models/common/MinMax";
+import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
+import type { LocaleService } from "@spt-aki/services/LocaleService";
+import type { QuestHelper } from "@spt-aki/helpers/QuestHelper";
+import type { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import type { VFS } from "@spt-aki/utils/VFS";
+import type { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import type { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import type { BotController } from "@spt-aki/controllers/BotController";
+import type { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
+import type { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
+import type { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
 
-import { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
-import { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
+import type { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
+import type { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
+import type { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
+import type { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
 
 const modName = "SPTQuestingBots";
 
@@ -183,9 +183,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                 {
                     const urlParts = url.split("/");
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
-
-                    //this.iBotConfig.chanceAssaultScavHasPlayerScavName = pScavChance;
-                    //this.botGenerationCacheService.clearStoredBots();
 
                     const bots = this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
 

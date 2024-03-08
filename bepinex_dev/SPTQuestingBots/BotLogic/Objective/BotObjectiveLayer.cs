@@ -39,7 +39,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public override bool IsActive()
         {
-            if (!canUpdate() && QuestingBotsPluginConfig.QuestingLogicTimeGatingEnabled.Value)
+            if (!canUpdate())
             {
                 return previousState;
             }

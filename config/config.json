@@ -261,7 +261,6 @@
 	},
 	"adjust_pscav_chance" : {
 		"enabled": true,
-		"disable_for_groups": true,
 		"chance_vs_time_remaining_fraction" : [
 			[0, 50],
 			[0.3, 50],

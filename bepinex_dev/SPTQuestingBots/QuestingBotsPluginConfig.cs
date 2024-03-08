@@ -29,7 +29,6 @@ namespace SPTQuestingBots
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
 
         public static ConfigEntry<bool> QuestingEnabled;
-        public static ConfigEntry<bool> QuestingLogicTimeGatingEnabled;
         public static ConfigEntry<bool> SprintingEnabled;
 
         public static ConfigEntry<bool> SleepingEnabled;
@@ -59,8 +58,6 @@ namespace SPTQuestingBots
 
             QuestingEnabled = Config.Bind("Main", "Enable Questing",
                 true, "Allow bots to quest");
-            QuestingLogicTimeGatingEnabled = Config.Bind("Main", "Enable Time-Gating for Questing Logic",
-                true, "Slow down decision-making for bot questing to improve performance");
             SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
 
