@@ -95,6 +95,12 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return pauseLayer();
             }
 
+            if (IsSuspicious())
+            {
+                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Suspicious;
+                return pauseLayer();
+            }
+
             // Prevent the bot from following its boss if it needs to heal, etc. 
             if (!IsAbleBodied())
             {
@@ -103,6 +109,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
 
             // If any group members are in combat, the bot should also be in combat
+            // NOTE: This check MUST be performed after updating this bot's combate state!
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
                 // WIP. Hopefully not needed with SAIN.
@@ -112,6 +119,14 @@ namespace SPTQuestingBots.BotLogic.Follow
                 //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.GetText())));
 
                 objectiveManager.NotFollowingReason = Objective.NotQuestingReason.GroupInCombat;
+                return updatePreviousState(false);
+            }
+
+            // If any group members are suspicious, the bot should also be suspicious
+            // NOTE: This check MUST be performed after checking if this bot is suspicious!
+            if (objectiveManager.IsAllowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
+            {
+                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);
             }
 

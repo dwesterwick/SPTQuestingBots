@@ -24,9 +24,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("allowed_bot_types_for_questing")]
         public BotTypeConfig AllowedBotTypesForQuesting { get; set; } = new BotTypeConfig();
 
-        [JsonProperty("search_time_after_combat")]
-        public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
-
         [JsonProperty("stuck_bot_detection")]
         public StuckBotDetectionConfig StuckBotDetection { get; set; } = new StuckBotDetectionConfig();
 

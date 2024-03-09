@@ -9,7 +9,6 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.BotLogic.Follow;
-using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
@@ -37,8 +36,11 @@ namespace SPTQuestingBots.BotLogic
         {
             botOwner = _botOwner;
 
-            Singleton<GClass520>.Instance.OnSoundPlayed += enemySoundHeard;
-            botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<GClass520>.Instance.OnSoundPlayed -= enemySoundHeard; };
+            if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.Enabled)
+            {
+                Singleton<GClass520>.Instance.OnSoundPlayed += enemySoundHeard;
+                botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<GClass520>.Instance.OnSoundPlayed -= enemySoundHeard; };
+            }
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             lootingLayerMonitor.Init(botOwner, "Looting");
@@ -77,7 +79,6 @@ namespace SPTQuestingBots.BotLogic
             wasInCombat |= (Time.time - botOwner.Memory.EnemySetTime) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
-            wasInCombat |= (Time.time - lastEnemySoundHeardTime) < maxTimeSinceCombatEnded;
 
             return wasInCombat || hasCloseDanger;
         }
@@ -85,7 +86,25 @@ namespace SPTQuestingBots.BotLogic
         public int UpdateSearchTimeAfterCombat()
         {
             System.Random random = new System.Random();
-            return random.Next((int)ConfigController.Config.Questing.SearchTimeAfterCombat.Min, (int)ConfigController.Config.Questing.SearchTimeAfterCombat.Max);
+            int min = (int)ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Min;
+            int max = (int)ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Max;
+
+            return random.Next(min, max);
+        }
+
+        public bool ShouldBeSuspicious(double maxTimeSinceDangerSensed)
+        {
+            bool shouldBeSuspicious = (Time.time - lastEnemySoundHeardTime) < maxTimeSinceDangerSensed;
+            return shouldBeSuspicious;
+        }
+
+        public int UpdateSuspiciousTime()
+        {
+            System.Random random = new System.Random();
+            int min = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
+            int max = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Max;
+
+            return random.Next(min, max);
         }
 
         public bool WantsToUseStationaryWeapon()
@@ -370,10 +389,16 @@ namespace SPTQuestingBots.BotLogic
             return activeLogicName.Contains("Looting");
         }
 
+        public bool IsSearchingForLoot()
+        {
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            return activeLayerName.Contains(lootingLayerMonitor.LayerName);
+        }
+
         public bool IsQuesting()
         {
-            string activeLogicName = BrainManager.GetActiveLayer(botOwner)?.GetType()?.Name ?? "null";
-            return activeLogicName.Contains(nameof(BotObjectiveLayer)) || activeLogicName.Contains(nameof(BotFollowerLayer));
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            return activeLayerName.Contains(nameof(BotObjectiveLayer)) || activeLayerName.Contains(nameof(BotFollowerLayer));
         }
 
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
@@ -391,8 +416,7 @@ namespace SPTQuestingBots.BotLogic
 
             NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            bool isSearchingForLoot = activeLayerName.Contains(lootingLayerMonitor.LayerName);
+            bool isSearchingForLoot = IsSearchingForLoot();
             bool isLooting = IsLooting();
 
             // The following logic is used to determine if a bot is allowed to search for loot:
@@ -479,39 +503,49 @@ namespace SPTQuestingBots.BotLogic
             switch (type)
             {
                 case AISoundType.step:
-                    if (dist < 20)
+                    if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceFootsteps)
                     {
                         if (IsQuesting())
                         {
                             LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
-                        
-                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    else
+                    {
+                        return;
                     }
                     break;
                 case AISoundType.gun:
-                    if (dist < 75)
+                    if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfire)
                     {
                         if (IsQuesting())
                         {
                             LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
-
-                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    else
+                    {
+                        return;
                     }
                     break;
                 case AISoundType.silencedGun:
-                    if (dist < 75)
+                    if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfireSuppressed)
                     {
                         if (IsQuesting())
                         {
                             LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
-
-                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    else
+                    {
+                        return;
                     }
                     break;
+                default:
+                    return;
             }
+
+            lastEnemySoundHeardTime = Time.time;
         }
     }
 }

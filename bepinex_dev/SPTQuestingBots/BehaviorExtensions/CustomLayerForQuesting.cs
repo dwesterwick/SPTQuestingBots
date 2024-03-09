@@ -13,7 +13,8 @@ namespace SPTQuestingBots.BehaviorExtensions
     {
         protected BotLogic.Objective.BotObjectiveManager objectiveManager { get; private set; } = null;
 
-        private double searchTimeAfterCombat = ConfigController.Config.Questing.SearchTimeAfterCombat.Min;
+        private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Min;
+        private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private bool wasAbleBodied = true;
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
@@ -87,7 +88,23 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
+            return false;
+        }
 
+        protected bool IsSuspicious()
+        {
+            if (objectiveManager.BotMonitor.ShouldBeSuspicious(suspiciousTime))
+            {
+                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
+                {
+                    suspiciousTime = objectiveManager.BotMonitor.UpdateSuspiciousTime();
+                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
+                }
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
+                return true;
+            }
+
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, false);
             return false;
         }
     }

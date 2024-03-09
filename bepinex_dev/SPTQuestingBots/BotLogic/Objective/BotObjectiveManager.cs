@@ -29,6 +29,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         NotAbleBodied,
         InCombat,
         GroupInCombat,
+        Suspicious,
+        GroupIsSuspicious,
         StationaryWeapon,
         BreakForLooting
     }

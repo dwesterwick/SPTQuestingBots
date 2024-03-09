@@ -17,6 +17,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
     {
         Undefined,
         InCombat,
+        IsSuspicious,
         CanQuest,
         CanSprintToObjective,
         WantsToLoot
@@ -35,6 +36,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             UpdateInterval = 50;
 
             sensors.Add(BotHiveMindSensorType.InCombat, new BotHiveMindIsInCombatSensor());
+            sensors.Add(BotHiveMindSensorType.IsSuspicious, new BotHiveMindIsSuspiciousSensor());
             sensors.Add(BotHiveMindSensorType.CanQuest, new BotHiveMindCanQuestSensor());
             sensors.Add(BotHiveMindSensorType.CanSprintToObjective, new BotHiveMindCanSprintToObjectiveSensor());
             sensors.Add(BotHiveMindSensorType.WantsToLoot, new BotHiveMindWantsToLootSensor());

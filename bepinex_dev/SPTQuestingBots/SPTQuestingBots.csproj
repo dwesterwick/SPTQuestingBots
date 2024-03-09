@@ -123,6 +123,7 @@
     <Compile Include="BotLogic\HiveMind\BotHiveMindAbstractSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanQuestSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindCanSprintToObjectiveSensor.cs" />
+    <Compile Include="BotLogic\HiveMind\BotHiveMindIsSuspiciousSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindIsInCombatSensor.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindMonitor.cs" />
     <Compile Include="BotLogic\Follow\BotFollowerLayer.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Configuration\BotTypeValueConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
+    <Compile Include="Configuration\HearingSensorConfig.cs" />
     <Compile Include="Configuration\LimitInitialBossSpawnsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsConfig.cs" />

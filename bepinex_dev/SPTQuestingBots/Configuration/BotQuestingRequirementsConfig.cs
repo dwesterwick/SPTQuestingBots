@@ -39,6 +39,12 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_overweight_percentage")]
         public float MaxOverweightPercentage { get; set; } = 100;
 
+        [JsonProperty("search_time_after_combat")]
+        public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
+
+        [JsonProperty("hearing_sensor")]
+        public HearingSensorConfig HearingSensor { get; set; } = new HearingSensorConfig();
+
         [JsonProperty("break_for_looting")]
         public BreakForLootingConfig BreakForLooting { get; set; } = new BreakForLootingConfig();
 

@@ -177,7 +177,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 35,
+        "desirability": 25,
         "pmcsOnly": true,
         "name": "3rd Floor Bridge",
         "objectives" : [
