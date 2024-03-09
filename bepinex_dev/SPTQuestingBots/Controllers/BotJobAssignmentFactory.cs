@@ -63,6 +63,18 @@ namespace SPTQuestingBots.Controllers
                 objective.UpdateQuestObjectiveStepNumbers();
             }
 
+            if (quest.IsCamping)
+            {
+                float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier;
+
+                if (ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier != 1)
+                {
+                    LoggingController.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
+                }
+
+                quest.Desirability = newDesirability;
+            }
+
             allQuests.Add(quest);
         }
 

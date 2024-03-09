@@ -1,6 +1,7 @@
 [
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -172,6 +173,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -267,6 +269,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -307,6 +310,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 20,
         "maxBots": 1,
@@ -347,6 +351,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 10,
         "maxBots": 1,
@@ -387,6 +392,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -428,6 +434,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -886,6 +893,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
@@ -951,6 +959,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
@@ -1016,6 +1025,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 10,
         "maxLevel": 99,
         "maxBots": 1,
@@ -1081,6 +1091,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1163,6 +1174,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1227,6 +1239,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1273,6 +1286,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,

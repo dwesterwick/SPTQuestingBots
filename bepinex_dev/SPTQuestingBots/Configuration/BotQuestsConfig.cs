@@ -21,6 +21,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("desirability_weighting")]
         public float DesirabilityWeighting { get; set; } = 1;
 
+        [JsonProperty("desirability_camping_multiplier")]
+        public float DesirabilityCampingMultiplier { get; set; } = 1;
+
         [JsonProperty("exfil_direction_weighting")]
         public Dictionary<string, float> ExfilDirectionWeighting { get; set; } = new Dictionary<string, float>();
 
