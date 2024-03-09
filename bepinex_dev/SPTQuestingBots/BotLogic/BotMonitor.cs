@@ -8,6 +8,9 @@ using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
+using SPTQuestingBots.BotLogic.Follow;
+using SPTQuestingBots.BotLogic.HiveMind;
+using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -28,10 +31,14 @@ namespace SPTQuestingBots.BotLogic
         private bool canUseLootingBotsInterop = false;
         private int minTotalQuestsForExtract = int.MaxValue;
         private int minEFTQuestsForExtract = int.MaxValue;
+        private float lastEnemySoundHeardTime = 0;
 
         public BotMonitor(BotOwner _botOwner)
         {
             botOwner = _botOwner;
+
+            Singleton<GClass520>.Instance.OnSoundPlayed += enemySoundHeard;
+            botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<GClass520>.Instance.OnSoundPlayed -= enemySoundHeard; };
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             lootingLayerMonitor.Init(botOwner, "Looting");
@@ -70,6 +77,7 @@ namespace SPTQuestingBots.BotLogic
             wasInCombat |= (Time.time - botOwner.Memory.EnemySetTime) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.LastEnemyTimeSeen) < maxTimeSinceCombatEnded;
             wasInCombat |= (Time.time - botOwner.Memory.UnderFireTime) < maxTimeSinceCombatEnded;
+            wasInCombat |= (Time.time - lastEnemySoundHeardTime) < maxTimeSinceCombatEnded;
 
             return wasInCombat || hasCloseDanger;
         }
@@ -362,6 +370,12 @@ namespace SPTQuestingBots.BotLogic
             return activeLogicName.Contains("Looting");
         }
 
+        public bool IsQuesting()
+        {
+            string activeLogicName = BrainManager.GetActiveLayer(botOwner)?.GetType()?.Name ?? "null";
+            return activeLogicName.Contains(nameof(BotObjectiveLayer)) || activeLogicName.Contains(nameof(BotFollowerLayer));
+        }
+
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
         {
             if (!ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.Enabled)
@@ -435,6 +449,69 @@ namespace SPTQuestingBots.BotLogic
             wasLooting = false;
             hasFoundLoot = false;
             return false;
+        }
+
+        private void enemySoundHeard(IPlayer player, Vector3 position, float power, AISoundType type)
+        {
+            if ((player == null) || !player.HealthController.IsAlive)
+            {
+                return;
+            }
+
+            if (player.ProfileId == botOwner.ProfileId)
+            {
+                return;
+            }
+
+            float dist = Vector3.Distance(botOwner.Position, position);
+            float hearingRange = botOwner.Settings.Current.CurrentHearingSense * power;
+
+            if (dist > hearingRange)
+            {
+                return;
+            }
+
+            if (!botOwner.EnemiesController.EnemyInfos.Any(e => e.Key.ProfileId == player.ProfileId))
+            {
+                return;
+            }
+
+            switch (type)
+            {
+                case AISoundType.step:
+                    if (dist < 20)
+                    {
+                        if (IsQuesting())
+                        {
+                            LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                        }
+                        
+                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    break;
+                case AISoundType.gun:
+                    if (dist < 75)
+                    {
+                        if (IsQuesting())
+                        {
+                            LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                        }
+
+                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    break;
+                case AISoundType.silencedGun:
+                    if (dist < 75)
+                    {
+                        if (IsQuesting())
+                        {
+                            LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                        }
+
+                        lastEnemySoundHeardTime = Time.time;
+                    }
+                    break;
+            }
         }
     }
 }
