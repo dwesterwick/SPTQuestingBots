@@ -438,7 +438,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -551,7 +551,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -663,7 +663,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -791,7 +791,7 @@
     },
     {
         "repeatable": false,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -961,7 +961,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1070,7 +1070,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1203,7 +1203,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1385,7 +1385,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1541,7 +1541,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1641,7 +1641,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1777,7 +1777,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1924,7 +1924,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -1970,7 +1970,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,

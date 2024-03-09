@@ -391,6 +391,7 @@ namespace SPTQuestingBots.Components
 
             Models.QuestObjective objective = new Models.QuestObjective(navMeshPosition.Value);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
+            objective.SetName(quest.Name + ": Objective #1");
             quest.AddObjective(objective);
 
             return quest;
@@ -423,6 +424,7 @@ namespace SPTQuestingBots.Components
             Models.Quest quest = new Models.Quest(questName);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
+            int objNum = 1;
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
             {
                 // Ensure the spawn point has a valid nearby NavMesh position
@@ -435,7 +437,10 @@ namespace SPTQuestingBots.Components
 
                 Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
+                objective.SetName(quest.Name + ": Objective #" + objNum);
                 quest.AddObjective(objective);
+
+                objNum++;
             }
 
             return quest;

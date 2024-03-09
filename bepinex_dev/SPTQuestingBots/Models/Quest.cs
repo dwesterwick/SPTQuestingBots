@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Models
         [JsonProperty("isCamping")]
         public bool IsCamping { get; set; } = false;
 
+        [JsonProperty("isSniping")]
+        public bool IsSniping { get; set; } = false;
+
         [JsonProperty("minLevel")]
         public int MinLevel { get; set; } = 0;
 

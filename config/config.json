@@ -143,6 +143,7 @@
 			"distance_weighting": 1,
 			"desirability_weighting": 1,
 			"desirability_camping_multiplier": 1,
+			"desirability_sniping_multiplier": 1,
 			"exfil_direction_weighting": {
 				"default": 0,
 				"factory4_day": 0.2,

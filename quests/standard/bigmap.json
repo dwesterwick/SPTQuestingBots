@@ -2221,7 +2221,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -2811,7 +2811,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -2857,7 +2857,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -2949,7 +2949,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -3186,7 +3186,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -3278,7 +3278,7 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
+        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,

@@ -72,6 +72,15 @@ namespace SPTQuestingBots.Controllers
                 quest.Desirability = newDesirability;
             }
 
+            if (quest.IsSniping && (ConfigController.Config.Questing.BotQuests.DesirabilitySnipingMultiplier != 1))
+            {
+                float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilitySnipingMultiplier;
+
+                LoggingController.LogInfo("Adjusting desirability of sniping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
+
+                quest.Desirability = newDesirability;
+            }
+
             allQuests.Add(quest);
         }
 
