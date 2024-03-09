@@ -1,8 +1,8 @@
 import modConfig from "../config/config.json";
 
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { LocaleService } from "@spt-aki/services/LocaleService";
+import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
+import type { LocaleService } from "@spt-aki/services/LocaleService";
 
 export class CommonUtils
 {

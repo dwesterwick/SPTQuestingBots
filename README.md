@@ -83,6 +83,7 @@ The three major data structures are:
 
     Quests have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests that are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
+    * **isCamping**: If the quest should be considered to be a camping quest
     * **pmcsOnly**: Only PMC's will be allowed to select the quest
     * **minLevel**: Only bots that are at least this player level will be allowed to select the quest
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest

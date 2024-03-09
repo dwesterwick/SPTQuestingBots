@@ -490,6 +490,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
@@ -530,6 +531,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 1,
@@ -624,6 +626,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
@@ -837,6 +840,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1554,6 +1558,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1706,6 +1711,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -1750,6 +1756,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -1930,6 +1937,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,
@@ -1975,6 +1983,7 @@
     },
     {
         "repeatable": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,

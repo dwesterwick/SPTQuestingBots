@@ -42,6 +42,7 @@ namespace SPTQuestingBots.Components
 
             if (ConfigController.Config.Questing.Enabled)
             {
+                QuestHelpers.ClearCache();
                 Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
                 Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugData>();
             }

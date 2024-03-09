@@ -63,14 +63,11 @@ namespace SPTQuestingBots.Controllers
                 objective.UpdateQuestObjectiveStepNumbers();
             }
 
-            if (quest.IsCamping)
+            if (quest.IsCamping && (ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier != 1))
             {
                 float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier;
 
-                if (ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier != 1)
-                {
-                    LoggingController.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
-                }
+                LoggingController.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
 
                 quest.Desirability = newDesirability;
             }
@@ -760,8 +757,10 @@ namespace SPTQuestingBots.Controllers
                 }
             }
 
+            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+
             string filename = ConfigController.GetLoggingPath()
-                + Components.BotQuestBuilder.PreviousLocationID.Replace(" ", "")
+                + locationId.Replace(" ", "")
                 + "_"
                 + timestamp
                 + "_quests.csv";
@@ -805,8 +804,10 @@ namespace SPTQuestingBots.Controllers
                 }
             }
 
+            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+
             string filename = ConfigController.GetLoggingPath()
-                + Components.BotQuestBuilder.PreviousLocationID.Replace(" ", "")
+                + locationId.Replace(" ", "")
                 + "_"
                 + timestamp
                 + "_assignments.csv";

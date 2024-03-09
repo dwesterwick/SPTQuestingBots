@@ -1,6 +1,5 @@
-import { CommonUtils } from "./CommonUtils";
-
-import { VFS } from "@spt-aki/utils/VFS";
+import type { CommonUtils } from "./CommonUtils";
+import type { VFS } from "@spt-aki/utils/VFS";
 
 export interface Quest
 {

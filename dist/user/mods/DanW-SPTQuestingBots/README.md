@@ -83,6 +83,7 @@ The three major data structures are:
 
     Quests have the following properties:
     * **repeatable**: Boolean value indicating if the bot can repeat the quest later in the raid. This is typically used for quests that are PvP or PvE focused, where a bot might want to check an area again later in the raid for more enemies.
+    * **isCamping**: If the quest should be considered to be a camping quest
     * **pmcsOnly**: Only PMC's will be allowed to select the quest
     * **minLevel**: Only bots that are at least this player level will be allowed to select the quest
     * **maxLevel**: Only bots that are at most this player level will be allowed to select the quest
@@ -285,7 +286,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **bot_spawns.pmcs.xxx**: The settings to apply to PMC spawns (see below for details).
 * **bot_spawns.player_scavs.xxx**: The settings to apply to player Scav spawns (see below for details).
 * **adjust_pscav_chance.enabled**: If the chances that Scavs are converted to player Scavs should be adjusted throughout the raid. This is only used if **bot_spawns.enabled=false** or **bot_spawns.player_scavs.enabled=false**, and it is **true** by default.
-* **adjust_pscav_chance.disable_for_groups**: If the player-Scav conversion chance should be forced to 0% when generated bot groups. Otherwise, only some of the group members may be converted to player Scavs. **This currently does not work correctly.**
 * **adjust_pscav_chance.chance_vs_time_remaining_fraction**: An array describing how likely Scavs are to be converted to player Scavs as a function of the fraction of time remaining in the raid. This is based on the overall raid time, not the time after you spawn. The array contains [fraction of raid time remaining, conversion chance] pairs, and there is no limit to the number of pairs.
 
 **Options for *bot_spawns.pmcs* and *bot_spawns.player_scavs*:**
