@@ -22,6 +22,37 @@ namespace SPTQuestingBots.Helpers
             return (InventoryControllerClass)inventoryControllerField.GetValue(bot.GetPlayer);
         }
 
+        public static float HearingMultiplier(this BotOwner botOwner)
+        {
+            InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+
+            Item headset = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Earpiece).ContainedItem;
+            Item helmet = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Headwear).ContainedItem;
+            
+            float multiplier = 1;
+
+            if (headset != null)
+            {
+                //LoggingController.LogInfo(botOwner.GetText() + " is wearing a headset");
+                multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
+            }
+
+            GClass2352 helmetTemplate = helmet?.Template as GClass2352;
+            switch (helmetTemplate?.DeafStrength)
+            {
+                case EDeafStrength.Low:
+                    //LoggingController.LogInfo(botOwner.GetText() + " is wearing a helmet with low deaf strength");
+                    multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetLowDeaf;
+                    break;
+                case EDeafStrength.High:
+                    //LoggingController.LogInfo(botOwner.GetText() + " is wearing a helmet with high deaf strength");
+                    multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetHighDeaf;
+                    break;
+            }
+
+            return multiplier;
+        }
+
         public static bool TryTransferItem(this BotOwner botOwner, Item item)
         {
             try

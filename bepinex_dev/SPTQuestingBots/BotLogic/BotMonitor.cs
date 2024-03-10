@@ -11,6 +11,7 @@ using EFT.HealthSystem;
 using SPTQuestingBots.BotLogic.Follow;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
@@ -475,27 +476,34 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        private void enemySoundHeard(IPlayer player, Vector3 position, float power, AISoundType type)
+        private void enemySoundHeard(IPlayer iplayer, Vector3 position, float power, AISoundType type)
         {
-            if ((player == null) || !player.HealthController.IsAlive)
+            if ((iplayer == null) || !iplayer.HealthController.IsAlive)
             {
                 return;
             }
 
-            if (player.ProfileId == botOwner.ProfileId)
+            if (iplayer.ProfileId == botOwner.ProfileId)
             {
                 return;
             }
 
+            if (!botOwner.EnemiesController.EnemyInfos.Any(e => e.Key.ProfileId == iplayer.ProfileId))
+            {
+                return;
+            }
+
+            float adjustedPower = power * botOwner.HearingMultiplier();
+            adjustedPower *= (type == AISoundType.step) ? ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierFootsteps : 1;
+            if (adjustedPower < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MinCorrectedSoundPower)
+            {
+                //LoggingController.LogInfo("Power: " + power + ", Adjusted Power: " + adjustedPower);
+                return;
+            }
+
+            float hearingRange = botOwner.Settings.Current.CurrentHearingSense * adjustedPower;
             float dist = Vector3.Distance(botOwner.Position, position);
-            float hearingRange = botOwner.Settings.Current.CurrentHearingSense * power;
-
             if (dist > hearingRange)
-            {
-                return;
-            }
-
-            if (!botOwner.EnemiesController.EnemyInfos.Any(e => e.Key.ProfileId == player.ProfileId))
             {
                 return;
             }
@@ -507,7 +515,7 @@ namespace SPTQuestingBots.BotLogic
                     {
                         if (IsQuesting())
                         {
-                            LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                            //LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
                     }
                     else
@@ -520,7 +528,7 @@ namespace SPTQuestingBots.BotLogic
                     {
                         if (IsQuesting())
                         {
-                            LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                            //LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
                     }
                     else
@@ -533,7 +541,7 @@ namespace SPTQuestingBots.BotLogic
                     {
                         if (IsQuesting())
                         {
-                            LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + player.GetText() + " (Hearing range: " + hearingRange + ")");
+                            //LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
                         }
                     }
                     else

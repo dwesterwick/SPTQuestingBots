@@ -75,7 +75,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
-                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.HasQuestingBoss;
+                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.None;
                 return updatePreviousState(false);
             }
 
@@ -119,7 +119,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return pauseLayer();
             }
 
-            if (IsSuspicious())
+            if (objectiveManager.IsAllowedToTakeABreak() && IsSuspicious())
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Suspicious;
                 return pauseLayer();

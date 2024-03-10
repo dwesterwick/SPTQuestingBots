@@ -23,7 +23,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         IsDead,
         CannotQuest,
         WaitForNextQuest,
-        HasQuestingBoss,
         Regroup,
         Proximity,
         NotAbleBodied,

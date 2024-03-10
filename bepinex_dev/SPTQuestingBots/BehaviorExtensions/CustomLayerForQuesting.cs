@@ -99,6 +99,8 @@ namespace SPTQuestingBots.BehaviorExtensions
                 {
                     suspiciousTime = objectiveManager.BotMonitor.UpdateSuspiciousTime();
                     //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
+
+                    objectiveManager.BotMonitor.TryPreventBotFromLooting((float)suspiciousTime);
                 }
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
                 return true;

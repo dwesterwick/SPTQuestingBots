@@ -82,9 +82,14 @@
 			},
 			"hearing_sensor": {
 				"enabled": true,
+				"min_corrected_sound_power": 17,
 				"max_distance_footsteps": 20,
 				"max_distance_gunfire": 50,
 				"max_distance_gunfire_suppressed": 50,
+				"loudness_multiplier_footsteps": 0.3,
+				"loudness_multiplier_headset": 1.3,
+				"loudness_multiplier_helmet_low_deaf": 0.8,
+				"loudness_multiplier_helmet_high_deaf": 0.6,
 				"suspicious_time": {
 					"min": 5,
 					"max": 20

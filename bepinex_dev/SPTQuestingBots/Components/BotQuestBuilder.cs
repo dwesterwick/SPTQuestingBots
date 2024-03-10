@@ -310,6 +310,7 @@ namespace SPTQuestingBots.Components
 
                     Configuration.MinMaxConfig plantTimeMinMax = new Configuration.MinMaxConfig(plantTime.Value, plantTime.Value);
                     objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
+                    objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
                 }
 
                 zoneIDsInLocation.Add(trigger.Id);
@@ -340,6 +341,11 @@ namespace SPTQuestingBots.Components
                 foreach (QuestObjectiveStep step in objective.AllSteps)
                 {
                     step.ChanceOfHavingKey = ConfigController.Config.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys;
+                }
+
+                if (objective.LootAfterCompletingSetting == LootAfterCompleting.Inhibit)
+                {
+                    continue;
                 }
 
                 Vector3? objectivePosition = objective.GetFirstStepPosition();

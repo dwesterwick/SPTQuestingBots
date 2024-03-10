@@ -1558,7 +1558,6 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
         "minLevel": 5,
         "maxLevel": 99,
         "maxBots": 2,

@@ -1094,7 +1094,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 30,
+        "desirability": 25,
         "pmcsOnly": true,
         "name": "Medical Block Elevator Stairwell",
         "objectives" : [
@@ -1137,7 +1137,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 10,
         "pmcsOnly": true,
         "name": "Ventilation Shaft Stairwell",
         "objectives" : [
@@ -1180,7 +1180,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 10,
         "pmcsOnly": true,
         "name": "Parking Stairwell",
         "objectives" : [
@@ -1223,7 +1223,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 10,
         "pmcsOnly": true,
         "name": "NE Stairwell",
         "objectives" : [
@@ -1266,7 +1266,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 15,
         "pmcsOnly": true,
         "name": "Central Stairwell 1",
         "objectives" : [
@@ -1309,7 +1309,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 20,
+        "desirability": 15,
         "pmcsOnly": true,
         "name": "Central Stairwell 2",
         "objectives" : [
@@ -1351,7 +1351,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 25,
         "name": "Server Room SW Stairs",
         "objectives" : [
             {
@@ -1376,7 +1376,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 25,
         "name": "Server Room NW Stairs",
         "objectives" : [
             {
@@ -1918,7 +1918,6 @@
     },
     {
         "repeatable": true,
-        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -2080,7 +2079,6 @@
     },
     {
         "repeatable": true,
-        "isSniping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,

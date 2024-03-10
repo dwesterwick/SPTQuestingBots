@@ -124,7 +124,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             // If any group members are suspicious, the bot should also be suspicious
             // NOTE: This check MUST be performed after checking if this bot is suspicious!
-            if (objectiveManager.IsAllowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
+            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);

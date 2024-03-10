@@ -173,7 +173,6 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 3,
@@ -269,7 +268,6 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 1,

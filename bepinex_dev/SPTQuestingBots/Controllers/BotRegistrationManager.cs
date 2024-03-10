@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
@@ -47,6 +47,19 @@ namespace SPTQuestingBots.Controllers
             registeredBosses.Clear();
             hostileGroups.Clear();
             sleepingBotIds.Clear();
+        }
+
+        public static Player GetPlayer(this IPlayer player)
+        {
+            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
+            IEnumerable<Player> matchingPlayers = allPlayers.Where(p => p.ProfileId == player.ProfileId);
+
+            if (matchingPlayers.Count() == 1)
+            {
+                return matchingPlayers.First();
+            }
+
+            return null;
         }
 
         public static BotType GetBotType(BotOwner botOwner)
