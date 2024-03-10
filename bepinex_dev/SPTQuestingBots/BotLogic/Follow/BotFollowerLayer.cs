@@ -71,6 +71,8 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
+            Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
+
             float pauseRequestTime = getPauseRequestTime();
             if (pauseRequestTime > 0)
             {
@@ -78,16 +80,6 @@ namespace SPTQuestingBots.BotLogic.Follow
 
                 return pauseLayer(pauseRequestTime);
             }
-
-            // Only enable the layer if the bot is too far from the boss
-            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
-            {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Proximity;
-                return updatePreviousState(false);
-            }
-
-            Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
             if (IsInCombat())
             {
@@ -99,6 +91,14 @@ namespace SPTQuestingBots.BotLogic.Follow
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Suspicious;
                 return pauseLayer();
+            }
+
+            // Only enable the layer if the bot is too far from the boss
+            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
+            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
+            {
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Proximity;
+                return updatePreviousState(false);
             }
 
             // Prevent the bot from following its boss if it needs to heal, etc. 

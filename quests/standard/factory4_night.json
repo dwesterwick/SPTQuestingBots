@@ -63,23 +63,26 @@
                     {
                         "waitTimeAfterCompleting": 0,
                         "position" : {
-                            "x": 16.8211918,
-                            "y": 8.210876,
-                            "z": 40.7296944
+                            "x": 11.7088041,
+                            "y": 8.210877,
+                            "z": 38.1783676
                         }
                     },
                     {
-                        "waitTimeAfterCompleting": 1,
-                        "stepType" : "HoldAtPosition",
-                        "maxDistance": 2,
+                        "stepType" : "Ambush",
                         "minElapsedTime": {
                             "min": 30,
-                            "max": 120
+                            "max": 180
                         },
                         "position" : {
-                            "x": 16.8211918,
+                            "x": 11.7088041,
+                            "y": 8.210877,
+                            "z": 38.1783676
+                        },
+                        "lookToPosition" : {
+                            "x": 17.2959747,
                             "y": 8.210876,
-                            "z": 40.7296944
+                            "z": 39.6189461
                         }
                     }
                 ]

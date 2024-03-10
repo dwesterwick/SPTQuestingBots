@@ -119,7 +119,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return pauseLayer();
             }
 
-            if (objectiveManager.IsAllowedToTakeABreak() && IsSuspicious())
+            if (objectiveManager.IsAllowedToInvestigate() && IsSuspicious())
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Suspicious;
                 return pauseLayer();
@@ -148,7 +148,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Check if any of the bot's group members are suspicious
             // NOTE: This check MUST be performed after checking if this bot is suspicious!
-            if (objectiveManager.IsAllowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
+            if (objectiveManager.IsAllowedToInvestigate() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);

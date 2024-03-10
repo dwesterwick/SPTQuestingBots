@@ -323,6 +323,21 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
+        public bool IsAllowedToInvestigate()
+        {
+            switch (CurrentQuestAction)
+            {
+                case QuestAction.Ambush:
+                case QuestAction.CloseNearbyDoors:
+                case QuestAction.ToggleSwitch:
+                    return false;
+                case QuestAction.PlantItem:
+                    return !IsCloseToObjective();
+            }
+
+            return true;
+        }
+
         public EFT.Interactive.WorldInteractiveObject GetCurrentQuestInteractiveObject()
         {
             if (MustUnlockDoor)
