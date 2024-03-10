@@ -144,8 +144,9 @@ namespace SPTQuestingBots.BotLogic.Follow
                 || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.IsLooting())
             )
             {
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.BreakForLooting;
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
-                return updatePreviousState(pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
+                return pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 

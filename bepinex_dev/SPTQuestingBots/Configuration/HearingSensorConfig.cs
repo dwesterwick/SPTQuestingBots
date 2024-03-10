@@ -39,6 +39,12 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("suspicious_time")]
         public MinMaxConfig SuspiciousTime { get; set; } = new MinMaxConfig();
 
+        [JsonProperty("max_suspicious_time")]
+        public Dictionary<string, int> MaxSuspiciousTime { get; set; } = new Dictionary<string, int>();
+
+        [JsonProperty("suspicion_cooldown_time")]
+        public float SuspicionCooldownTime { get; set; } = 30;
+
         public HearingSensorConfig()
         {
 

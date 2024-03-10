@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
@@ -16,11 +18,16 @@ namespace SPTQuestingBots.BehaviorExtensions
         private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Min;
         private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private bool wasAbleBodied = true;
+        private float maxSuspiciousTime = 60;
+        private Stopwatch totalSuspiciousTimer = new Stopwatch();
+        private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
         {
             objectiveManager = _botOwner.GetPlayer.gameObject.GetOrAddComponent<BotLogic.Objective.BotObjectiveManager>();
             objectiveManager.Init(_botOwner);
+
+            updateMaxSuspiciousTime();
         }
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority) : this(_botOwner, _priority, updateInterval)
@@ -93,7 +100,13 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool IsSuspicious()
         {
-            if (objectiveManager.BotMonitor.ShouldBeSuspicious(suspiciousTime))
+            bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
+            if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
+            {
+                LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
+            }
+
+            if (!wasSuspiciousTooLong && objectiveManager.BotMonitor.ShouldBeSuspicious(suspiciousTime))
             {
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
                 {
@@ -102,12 +115,49 @@ namespace SPTQuestingBots.BehaviorExtensions
 
                     objectiveManager.BotMonitor.TryPreventBotFromLooting((float)suspiciousTime);
                 }
+
+                totalSuspiciousTimer.Start();
+                notSuspiciousTimer.Reset();
+
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
                 return true;
             }
 
+            notSuspiciousTimer.Start();
+            if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
+            {
+                if (totalSuspiciousTimer.IsRunning)
+                {
+                    LoggingController.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
+                }
+
+                totalSuspiciousTimer.Reset();
+            }
+            else
+            {
+                totalSuspiciousTimer.Stop();
+            }
+
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, false);
             return false;
+        }
+
+        private void updateMaxSuspiciousTime()
+        {
+            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+
+            if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey(locationId))
+            {
+                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime[locationId];
+            }
+            else if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey("default"))
+            {
+                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime["default"];
+            }
+            else
+            {
+                LoggingController.LogError("Could not set max suspicious time for " + BotOwner.GetText() + ". Defaulting to 60s.");
+            }
         }
     }
 }
