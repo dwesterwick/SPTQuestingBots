@@ -313,7 +313,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots tend to get trapped in certain areas. Known areas:
     * Customs between Warehouse 4 and New Gas
-    * Customs in some Dorms rooms
+    * Customs in some Dorms rooms (i.e. 214 and 220 in 3 story)
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
 * Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there). They will only engage you if they see you, so they may blindly run right past you. Honestly, this isn't so unrealistic compared to live Tarkov...

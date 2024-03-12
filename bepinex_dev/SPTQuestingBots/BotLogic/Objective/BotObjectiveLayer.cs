@@ -93,16 +93,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            // Check if the bot wants to loot
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
-            {
-                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
-
-                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.BreakForLooting;
-                return updatePreviousState(pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
-            }
-            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
-
             // Check if the bot is currently extracting or wants to extract via SAIN
             if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.IsTryingToExtract())
             {
@@ -153,6 +143,16 @@ namespace SPTQuestingBots.BotLogic.Objective
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);
             }
+
+            // Check if the bot wants to loot
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+            {
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
+
+                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.BreakForLooting;
+                return updatePreviousState(pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting));
+            }
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             // Check if the bot has wandered too far from its followers.
             if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldWaitForFollowers())

@@ -101,10 +101,10 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected bool IsSuspicious()
         {
             bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
-            if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
-            {
-                LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
-            }
+            //if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
+            //{
+            //    LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
+            //}
 
             if (!wasSuspiciousTooLong && objectiveManager.BotMonitor.ShouldBeSuspicious(suspiciousTime))
             {
@@ -123,13 +123,12 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return true;
             }
 
-            notSuspiciousTimer.Start();
             if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
             {
-                if (totalSuspiciousTimer.IsRunning)
-                {
-                    LoggingController.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
-                }
+                //if (wasSuspiciousTooLong)
+                //{
+                //    LoggingController.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
+                //}
 
                 totalSuspiciousTimer.Reset();
             }
@@ -137,6 +136,8 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 totalSuspiciousTimer.Stop();
             }
+
+            notSuspiciousTimer.Start();
 
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, false);
             return false;

@@ -89,7 +89,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             if (IsSuspicious())
             {
-                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Suspicious;
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Suspicious;
                 return pauseLayer();
             }
 
@@ -126,7 +126,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             // NOTE: This check MUST be performed after checking if this bot is suspicious!
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
-                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.GroupIsSuspicious;
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);
             }
 
