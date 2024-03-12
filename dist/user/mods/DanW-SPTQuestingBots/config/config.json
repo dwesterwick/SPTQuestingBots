@@ -93,7 +93,21 @@
 				"suspicious_time": {
 					"min": 5,
 					"max": 20
-				}
+				},
+				"max_suspicious_time": {
+					"default": 60,
+					"factory4_day": 30,
+					"factory4_night": 45,
+					"bigmap": 120,
+					"woods": 120,
+					"shoreline": 120,
+					"lighthouse": 120,
+					"rezervbase": 120,
+					"interchange": 120,
+					"laboratory": 60,
+					"tarkovstreets": 120
+				},
+				"suspicion_cooldown_time": 7
 			},
 			"break_for_looting": {
 				"enabled": true,
