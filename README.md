@@ -39,6 +39,7 @@ After spawning (regardless of when this occurs during the raid), bots will immed
 
 Otherwise, they will only temporarily stop questing for the following reasons:
 * They're currently or were just recently in combat
+* They heard a suspicious noise
 * They recently completed an objective
 * They're checking for or have found loot
 * Their health is too low or they have blacked limbs (besides arms)
