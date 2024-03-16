@@ -135,6 +135,7 @@
     <Compile Include="BotLogic\Objective\AmbushAction.cs" />
     <Compile Include="BotLogic\Objective\CloseNearbyDoorsAction.cs" />
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
+    <Compile Include="BotLogic\Objective\SnipeAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />

@@ -39,6 +39,7 @@ After spawning (regardless of when this occurs during the raid), bots will immed
 
 Otherwise, they will only temporarily stop questing for the following reasons:
 * They're currently or were just recently in combat
+* They heard a suspicious noise
 * They recently completed an objective
 * They're checking for or have found loot
 * Their health is too low or they have blacked limbs (besides arms)
@@ -113,18 +114,19 @@ The three major data structures are:
 
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
-    * **lookToPosition**: The position on the map that bots will look toward after they reach **position**. This is only used for the **Ambush** step type described below. 
+    * **lookToPosition**: The position on the map that bots will look toward after they reach **position**. This is only used for the **Ambush** and **Snipe** step types described below. 
     * **waitTimeAfterCompleting**: The time the bot must wait after completing the step before it will be allowed to quest again. The default value for this field is defined by **questing.default_wait_time_after_objective_completion**.
     * **stepType**: The only valid options for this are (case-sensitive):
         * **MoveToPosition**: Bots are instructed to go to **position**. If possible, they're allowed to unlock doors that block their path.
         * **HoldAtPosition**: Bots are instructed to remain within **maxDistance** meters of **position** and stay alert for a random time between the min and max values of **minElapsedTime**.
-        * **Ambush**: Bots are instructed to go to **position**, stand still, and look at **lookToPosition** for a random time between the min and max values of **minElapsedTime**. This is used to simulate camping and sniping quests.
+        * **Ambush**: Bots are instructed to go to **position**, stand still, and look at **lookToPosition** for a random time between the min and max values of **minElapsedTime**. This is used to simulate camping quests.
+        * **Snipe**: The same as **Ambush**, but bots can be interrupted if they hear suspicious noises
         * **ToggleSwitch**: Bots are instructed to go to **position** and toggle the switch defined by **switchID**.
         * **RequestExtract**: This mod will try to instruct bots to extract via [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/).
         * **CloseNearbyDoors**: Bots are instructed to close all doors within **maxDistance** meters of **position**
     
         If **stepType** is omitted, **MoveToPosition** is used by default.
-    * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (namely **HoldAtPosition** and **Ambush**).
+    * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (namely **HoldAtPosition**, **Ambush**, and **Snipe**).
     * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
     * **maxDistance**: If **stepType="HoldAtPosition"**, this is the maximum distance (in meters) bots will be allowed to wander from **position** for the objective step. If **stepType="CloseNearbyDoors"**, bots will close all doors within this radius of **position** (in meters).
     * **chanceOfHavingKey**: The chance that bots will have keys to unlock any doors that are blocking their paths to this objective step. This overrides the default chance of having keys defined by **questing.unlocking_doors.default_chance_of_bots_having_keys** or **questing.bot_quests.eft_quests.chance_of_having_keys**. 

@@ -3624,7 +3624,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 45,
                             "max": 180
@@ -3649,7 +3649,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -4225,7 +4225,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 20,
                             "max": 60
@@ -4250,7 +4250,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -4283,7 +4283,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -4353,7 +4353,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120
@@ -4965,7 +4965,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 45,
                             "max": 120
@@ -5085,7 +5085,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 45,
                             "max": 120
@@ -5887,7 +5887,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -5920,7 +5920,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -6149,7 +6149,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -6197,7 +6197,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120
@@ -6222,7 +6222,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -6247,7 +6247,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 90
@@ -6309,7 +6309,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120
@@ -6355,7 +6355,7 @@
                         }
                     },
                     {
-                        "stepType" : "Ambush",
+                        "stepType" : "Snipe",
                         "minElapsedTime": {
                             "min": 30,
                             "max": 120

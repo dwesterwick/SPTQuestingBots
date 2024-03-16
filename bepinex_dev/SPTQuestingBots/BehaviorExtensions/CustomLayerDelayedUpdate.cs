@@ -16,6 +16,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         FollowBoss,
         HoldPosition,
         Ambush,
+        Snipe,
         PlantItem,
         Regroup,
         Sleep,
@@ -63,6 +64,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.FollowBoss: return new Action(typeof(BotLogic.Follow.FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(BotLogic.Objective.HoldAtObjectiveAction), actionReason);
                 case BotActionType.Ambush: return new Action(typeof(BotLogic.Objective.AmbushAction), actionReason);
+                case BotActionType.Snipe: return new Action(typeof(BotLogic.Objective.SnipeAction), actionReason);
                 case BotActionType.PlantItem: return new Action(typeof(BotLogic.Objective.PlantItemAction), actionReason);
                 case BotActionType.Regroup: return new Action(typeof(BotLogic.Follow.RegroupAction), actionReason);
                 case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);

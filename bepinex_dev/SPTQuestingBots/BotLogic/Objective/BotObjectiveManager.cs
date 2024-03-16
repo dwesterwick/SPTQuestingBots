@@ -313,6 +313,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 case QuestAction.HoldAtPosition:
                 case QuestAction.Ambush:
+                case QuestAction.Snipe:
                 case QuestAction.CloseNearbyDoors:
                 case QuestAction.ToggleSwitch:
                     return false;

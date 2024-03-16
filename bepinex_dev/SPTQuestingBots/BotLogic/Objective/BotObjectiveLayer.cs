@@ -221,6 +221,17 @@ namespace SPTQuestingBots.BotLogic.Objective
                     }
                     return updatePreviousState(true);
 
+                case QuestAction.Snipe:
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToSnipePosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.Snipe, "Snipe (" + objectiveManager.MinElapsedActionTime + "s)");
+                    }
+                    return updatePreviousState(true);
+
                 case QuestAction.PlantItem:
                     if (!objectiveManager.IsCloseToObjective())
                     {

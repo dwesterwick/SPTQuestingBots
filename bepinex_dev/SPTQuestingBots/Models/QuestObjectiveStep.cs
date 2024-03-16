@@ -19,6 +19,7 @@ namespace SPTQuestingBots.Models
         MoveToPosition,
         HoldAtPosition,
         Ambush,
+        Snipe,
         PlantItem,
         ToggleSwitch,
         RequestExtract,
