@@ -305,31 +305,39 @@ namespace SPTQuestingBots.Components
             return null;
         }
 
-        public bool AreAnyPositionsCloseToOtherPlayers(IEnumerable<Vector3> positions, float distanceFromPlayers)
+        public bool AreAnyPositionsCloseToOtherPlayers(IEnumerable<Vector3> positions, float distanceFromPlayers, out float distance)
         {
-            if (positions.Any(p => IsPositionCloseToOtherPlayers(p, distanceFromPlayers)))
+            foreach (Vector3 postion in positions)
             {
-                return true;
+                if (IsPositionCloseToOtherPlayers(postion, distanceFromPlayers, out distance))
+                {
+                    return true;
+                }
             }
 
+            distance = float.MaxValue;
             return false;
         }
 
-        public bool IsPositionCloseToOtherPlayers(Vector3 position, float distanceFromPlayers)
+        public bool IsPositionCloseToOtherPlayers(Vector3 position, float distanceFromPlayers, out float distance)
         {
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (Vector3.Distance(position, mainPlayer.Position) < distanceFromPlayers)
-            {
-                return true;
-            }
-
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
+
             BotOwner closestBot = botControllerClass.ClosestBotToPoint(position);
-            if ((closestBot != null) && (Vector3.Distance(position, closestBot.Position) < distanceFromPlayers))
+            distance = Vector3.Distance(position, closestBot.Position);
+            if ((closestBot != null) && (distance < distanceFromPlayers))
             {
                 return true;
             }
 
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            distance = Vector3.Distance(position, mainPlayer.Position);
+            if (distance < distanceFromPlayers)
+            {
+                return true;
+            }
+
+            distance = float.MaxValue;
             return false;
         }
 

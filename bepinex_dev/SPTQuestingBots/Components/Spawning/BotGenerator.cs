@@ -99,6 +99,44 @@ namespace SPTQuestingBots.Components.Spawning
             return raidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
         }
 
+        public static bool IsPositionCloseToAnyGeneratedBots(Vector3 position, float distanceFromPlayers, out float distance)
+        {
+            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
+            {
+                if (botGenerator == null)
+                {
+                    continue;
+                }
+
+                if (botGenerator.IsPositionCloseToGeneratedBots(position, distanceFromPlayers, out distance))
+                {
+                    return true;
+                }
+            }
+
+            distance = float.MaxValue;
+            return false;
+        }
+
+        public static bool AreAnyPositionsCloseToAnyGeneratedBots(IEnumerable<Vector3> positions, float distanceFromPlayers, out float distance)
+        {
+            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
+            {
+                if (botGenerator == null)
+                {
+                    continue;
+                }
+
+                if (botGenerator.AreAnyPositionsCloseToGeneratedBots(positions, distanceFromPlayers, out distance))
+                {
+                    return true;
+                }
+            }
+
+            distance = float.MaxValue;
+            return false;
+        }
+
         public static IEnumerable<string> GetAllGeneratedBotProfileIDs()
         {
             return GetAllGeneratedBotProfiles().Select(b => b.Id);
@@ -118,6 +156,39 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return generatedBotProfiles;
+        }
+
+        public bool AreAnyPositionsCloseToGeneratedBots(IEnumerable<Vector3> positions, float distanceFromPlayers, out float distance)
+        {
+            foreach (Vector3 position in positions)
+            {
+                if (IsPositionCloseToGeneratedBots(position, distanceFromPlayers, out distance))
+                {
+                    return true;
+                }
+            }
+
+            distance = float.MaxValue;
+            return false;
+        }
+
+        public bool IsPositionCloseToGeneratedBots(Vector3 position, float distanceFromPlayers, out float distance)
+        {
+            foreach (Models.BotSpawnInfo botGroup in GetBotGroups())
+            {
+                IEnumerable<BotOwner> aliveBots = botGroup.SpawnedBots.Where(b => (b != null) && !b.IsDead);
+                foreach (BotOwner bot in aliveBots)
+                {
+                    distance = Vector3.Distance(bot.Position, position);
+                    if (distance <= distanceFromPlayers)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            distance = float.MaxValue;
+            return false;
         }
 
         public IEnumerable<string> GetGeneratedBotProfileIDs()

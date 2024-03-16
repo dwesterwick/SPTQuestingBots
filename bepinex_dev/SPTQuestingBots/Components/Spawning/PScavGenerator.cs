@@ -146,9 +146,9 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             // Ensure none of the spawn points are too close to other players or bots
-            if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers()))
+            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositions, getMinDistanceFromOtherPlayers(), out float distance))
             {
-                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Other players are too close.");
+                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
             }
 
