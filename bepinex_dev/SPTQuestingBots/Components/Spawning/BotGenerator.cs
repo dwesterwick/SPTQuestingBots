@@ -114,10 +114,24 @@ namespace SPTQuestingBots.Components.Spawning
                     continue;
                 }
 
-                foreach (Models.BotSpawnInfo botGroup in botGenerator.GetBotGroups())
-                {
-                    generatedBotProfiles.AddRange(botGroup.Data.Profiles);
-                }
+                generatedBotProfiles.AddRange(botGenerator.GetGeneratedBotProfiles());
+            }
+
+            return generatedBotProfiles;
+        }
+
+        public IEnumerable<string> GetGeneratedBotProfileIDs()
+        {
+            return GetGeneratedBotProfiles().Select(b => b.Id);
+        }
+
+        public IEnumerable<Profile> GetGeneratedBotProfiles()
+        {
+            List<Profile> generatedBotProfiles = new List<Profile>();
+
+            foreach (Models.BotSpawnInfo botGroup in GetBotGroups())
+            {
+                generatedBotProfiles.AddRange(botGroup.Data.Profiles);
             }
 
             return generatedBotProfiles;

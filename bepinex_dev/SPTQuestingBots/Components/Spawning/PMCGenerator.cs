@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -93,12 +94,17 @@ namespace SPTQuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
+            IEnumerable<Player> playersToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
+                .Where(p => GetAllGeneratedBotProfileIDs().Contains(p.ProfileId))
+                .AddItem(Singleton<GameWorld>.Instance.MainPlayer);
+
             // Find a spawn location for the bot group that is as far from other players and bots as possible
             EPlayerSideMask playerMask = getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask.Player, playerMask, pendingSpawnPoints.ToArray());
+            float minDistanceFromOtherPlayers = getMinDistanceFromOtherPlayers() + 5;
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPlayers(playersToAvoid, ESpawnCategoryMask.Player, playerMask, pendingSpawnPoints.ToArray(), minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
-                LoggingController.LogError("Could not find a valid spawn point for PMC group");
+                LoggingController.LogWarning("Could not find a spawn point for PMC group");
                 return Enumerable.Empty<Vector3>();
             }
 

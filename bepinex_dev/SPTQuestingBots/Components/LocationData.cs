@@ -335,11 +335,22 @@ namespace SPTQuestingBots.Components
 
         public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides)
         {
-            return TryGetFurthestSpawnPointFromAllPlayers(allowedCategories, allowedSides, new SpawnPointParams[0]);
+            return TryGetFurthestSpawnPointFromPlayers(Singleton<GameWorld>.Instance.AllAlivePlayersList, allowedCategories, allowedSides, new SpawnPointParams[0]);
         }
 
         public SpawnPointParams? TryGetFurthestSpawnPointFromAllPlayers(ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints)
         {
+            return TryGetFurthestSpawnPointFromPlayers(Singleton<GameWorld>.Instance.AllAlivePlayersList, allowedCategories, allowedSides, new SpawnPointParams[0]);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(IEnumerable<Player> players, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, float distanceFromAllPlayers = 5)
+        {
+            return TryGetFurthestSpawnPointFromPlayers(players, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(IEnumerable<Player> players, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
+        {
+            Vector3[] allPlayerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(p => p.Position).ToArray();
             SpawnPointParams[] allSpawnPoints = GetAllValidSpawnPointParams();
 
             // Enumerate all valid spawn points
@@ -347,6 +358,7 @@ namespace SPTQuestingBots.Components
                     .Where(s => !excludedSpawnPoints.Contains(s))
                     .Where(s => s.Categories.Any(allowedCategories))
                     .Where(s => s.Sides.Any(allowedSides))
+                    .Where(s => allPlayerPositions.All(p => Vector3.Distance(s.Position, p) > distanceFromAllPlayers))
                     .ToArray();
 
             if (validSpawnPoints.Length == 0)
@@ -355,7 +367,7 @@ namespace SPTQuestingBots.Components
             }
 
             // Get the locations of all alive bots/players on the map.
-            Vector3[] playerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Position).ToArray();
+            Vector3[] playerPositions = players.Select(s => s.Position).ToArray();
             if (playerPositions.Length == 0)
             {
                 return null;
