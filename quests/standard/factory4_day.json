@@ -1292,8 +1292,8 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 300,
-        "desirability": 15,
+        "minRaidET": 0,
+        "desirability": 10,
         "name": "Gate 3 Camping",
         "objectives" : [
             {

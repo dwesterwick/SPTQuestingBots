@@ -478,21 +478,25 @@ namespace SPTQuestingBots.BotLogic
 
         private void enemySoundHeard(IPlayer iplayer, Vector3 position, float power, AISoundType type)
         {
+            // Ignore dead or despawned bots
             if ((iplayer == null) || !iplayer.HealthController.IsAlive)
             {
                 return;
             }
 
+            // Ignore noises the bot makes itself
             if (iplayer.ProfileId == botOwner.ProfileId)
             {
                 return;
             }
 
+            // Ignore noises that aren't from enemy bots or you
             if (!botOwner.EnemiesController.EnemyInfos.Any(e => e.Key.ProfileId == iplayer.ProfileId))
             {
                 return;
             }
 
+            // Adjust the sound power based on the bot's loadout and the type of noise
             float adjustedPower = power * botOwner.HearingMultiplier();
             adjustedPower *= (type == AISoundType.step) ? ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierFootsteps : 1;
             if (adjustedPower < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MinCorrectedSoundPower)
@@ -501,6 +505,7 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
+            // Ignore sounds that the bot cannot hear
             float hearingRange = botOwner.Settings.Current.CurrentHearingSense * adjustedPower;
             float dist = Vector3.Distance(botOwner.Position, position);
             if (dist > hearingRange)
@@ -508,15 +513,16 @@ namespace SPTQuestingBots.BotLogic
                 return;
             }
 
+            // Ignore sounds that are too far away
             switch (type)
             {
                 case AISoundType.step:
                     if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceFootsteps)
                     {
-                        if (IsQuesting())
-                        {
-                            //LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
-                        }
+                        //if (IsQuesting())
+                        //{
+                        //    LoggingController.LogInfo(botOwner.GetText() + " heard footsteps " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
+                        //}
                     }
                     else
                     {
@@ -526,10 +532,10 @@ namespace SPTQuestingBots.BotLogic
                 case AISoundType.gun:
                     if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfire)
                     {
-                        if (IsQuesting())
-                        {
-                            //LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
-                        }
+                        //if (IsQuesting())
+                        //{
+                        //    LoggingController.LogInfo(botOwner.GetText() + " heard gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
+                        //}
                     }
                     else
                     {
@@ -539,10 +545,10 @@ namespace SPTQuestingBots.BotLogic
                 case AISoundType.silencedGun:
                     if (dist < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfireSuppressed)
                     {
-                        if (IsQuesting())
-                        {
-                            //LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
-                        }
+                        //if (IsQuesting())
+                        //{
+                        //    LoggingController.LogInfo(botOwner.GetText() + " heard suppressed gunfire " + dist + "m away from " + iplayer.GetText() + " (Hearing range: " + hearingRange + ")");
+                        //}
                     }
                     else
                     {
