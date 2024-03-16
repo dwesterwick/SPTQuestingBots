@@ -55,7 +55,7 @@ There are several types of quests available to each bot:
 * **"Custom" Quests:** You can create your own quests for bots using the templates for "standard" quests. None are provided by default. 
 
 **PMC and Player-Scav Spawning Systems:**
-At the beginning of the raid, PMC's will spawn around the map at actual EFT PMC spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The total number of PMC's that can spawn is a random number between the minimum and maximum player count for the map (other mods can change these values). That number will be reduced if you spawn into the map late for a Scav run. The PMC difficulty is set by your raid settings in EFT.
+At the beginning of the raid, PMC's will spawn around the map at actual EFT PMC spawn points. The spawning system will try to separate spawn points as much as possible, but spawn killing is still entirely possible just like it is in live Tarkov. The total number of PMC's that can spawn is a random number between the minimum and maximum player count for the map (other mods can change these values). However, you count as one of those PMC's for PMC raids. That number will be reduced if you spawn into the map late for a Scav run. The PMC difficulty is set by your raid settings in EFT.
 
 Starting with the 0.4.0 release, player Scavs will also spawn throughout the raid. Each group of player Scavs will be assigned a minimum spawn time that is generated using SPT's raid-time-reduction settings for Scav raids. This mod will use SPT's weighting settings for choosing when player Scavs will spawn into each location, it will add some randomness, and then it will generate a spawn schedule for all player-Scav spawns. Effectively, this means that player Scavs are most likely to spawn toward the middle and last third of raids. They're unlikely to spawn toward the very beginning or very end of them. Player Scavs can spawn at any EFT PMC or player-Scav spawn point on the map, and player-Scav bot difficulty is set by your raid settings in EFT.
 
@@ -219,10 +219,17 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_questing_requirements.max_overweight_percentage**: The maximum total weight permitted for bots (as a percentage of their overweight threshold) or they will not be allowed to quest. This is **100%** by default. 
 * **questing.bot_questing_requirements.search_time_after_combat.min/max:** Bots will not be allowed to quest until a random amount of time (in seconds) in this range has passed after combat most recently ended for them.
 * **questing.bot_questing_requirements.hearing_sensor.enabled**: If bots are allowed to stop questing due to suspicious noises. This is **true** by default.
+* **questing.bot_questing_requirements.hearing_sensor.min_corrected_sound_power**: If the "loudness" of a sound is less than this value, bots will ignore it. Currently, this results in all bots (even those wearing a headset) ignoring you if you crouch-walk at the slowest speed. This is **17** by default, and the units are unknown. 
 * **questing.bot_questing_requirements.hearing_sensor.max_distance_footsteps**: If bots hear footsteps within this distance (in meters), they will become suspicious and stop questing. This is **20** m by default. 
 * **questing.bot_questing_requirements.hearing_sensor.max_distance_gunfire**: If bots hear gunfire within this distance (in meters), they will become suspicious and stop questing. This is **50** m by default. 
 * **questing.bot_questing_requirements.hearing_sensor.max_distance_gunfire_suppressed**: If bots hear suppressed gunfire within this distance (in meters), they will become suspicious and stop questing. This is **50** m by default. 
+* **questing.bot_questing_requirements.hearing_sensor.loudness_multiplier_footsteps**: A scaling factor to adjust the bot's hearing sensitivity to footsteps. This is **1** by default. 
+* **questing.bot_questing_requirements.hearing_sensor.loudness_multiplier_headset**: A scaling factor to apply to the "loudness" of sounds if a bot is wearing any type of headset. This is **1.3** by default.
+* **questing.bot_questing_requirements.hearing_sensor.loudness_multiplier_helmet_low_deaf**: A scaling factor to apply to the "loudness" of sounds if a bot is wearing a helmet that has a "low deafness" rating for reducing the volume of sounds it perceives. This is **0.8** by default.
+* **questing.bot_questing_requirements.hearing_sensor.loudness_multiplier_helmet_high_deaf**: A scaling factor to apply to the "loudness" of sounds if a bot is wearing a helmet that has a "high deafness" rating for reducing the volume of sounds it perceives. This is **0.6** by default.
 * **questing.bot_questing_requirements.hearing_sensor.suspicious_time.min/max**: If a bot becomes suspicious of a noise, they will stop questing until a random amount of time (in seconds) in this range has passed after the last suspicious noise they heard. 
+* **questing.bot_questing_requirements.hearing_sensor.max_suspicious_time**: The maximum time (in seconds) that a bot can remain suspicious of noises it hears before it will be forced to ignore them for at least **questing.bot_questing_requirements.hearing_sensor.suspicion_cooldown_time** seconds. This is to prevent bots for remaining in one spot for a long time, especially for PVP-focused maps like Factory. The value of this is map-specific. 
+* **questing.bot_questing_requirements.hearing_sensor.suspicion_cooldown_time**: If a bot is suspicious for at least **questing.bot_questing_requirements.hearing_sensor.max_suspicious_time** seconds, it will be forced to ignore suspicious noises for this amount of time (in seconds) before it will be allowed to be suspicious of noises again. This is **7** s by default. 
 * **questing.bot_questing_requirements.break_for_looting.enabled**: If **true** (the default setting), bots will temporarily stop questing at certain intervals to check for loot (or whatever). 
 * **questing.bot_questing_requirements.break_for_looting.min_time_between_looting_checks**: The minimum delay (in seconds) after a bot takes a break to check for loot before it will be allowed to take a break again. If this value is very low, bots may frequently back-track and may never reach their objectives. If this value is high, bots will rarely loot. This is **50** s by default. 
 * **questing.bot_questing_requirements.break_for_looting.min_time_between_follower_looting_checks**: The minimum delay (in seconds) after any of a bot's followers take a break to check for loot before they will be allowed to take a break again. If this value is very low, bot groups may frequently back-track and may never reach their objectives. If this value is high, followers will rarely loot. This is **30** s by default. 
@@ -351,9 +358,12 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.0** (ETA: Late March)
+* **0.4.2** (ETA: Late March)
+    * Improve behaviors of members of bot groups
+    * Improvements to PMC and PScav spawning locations when using the Questing Bots spawning system
+* **0.5.0** (ETA: Early April)
     * Update to SPT-AKI 3.8.0
-* **0.5.1** (ETA: Early April)
+* **0.5.1** (ETA: Late April)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)

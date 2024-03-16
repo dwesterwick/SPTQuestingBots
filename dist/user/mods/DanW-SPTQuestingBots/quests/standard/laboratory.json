@@ -1666,7 +1666,6 @@
     },
     {
         "repeatable": true,
-        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -1716,7 +1715,21 @@
                         }
                     }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "maxRaidET": 300,
+        "pmcsOnly": true,
+        "name": "Cafeteria Camping",
+        "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
@@ -1724,7 +1737,7 @@
                 "maxRunDistance": 5,
                 "steps": [
                     {
-                        "waitTimeAfterCompleting": 1,
+                        "waitTimeAfterCompleting": 2,
                         "position" : {
                             "x": -215.828735,
                             "y": 4.123237,

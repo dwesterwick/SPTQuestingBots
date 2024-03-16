@@ -1098,7 +1098,7 @@
         "maxBots": 2,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "desirability": 10,
+        "desirability": 15,
         "name": "Gate 3",
         "objectives" : [
             {
@@ -1181,7 +1181,7 @@
         "maxBots": 2,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "desirability": 10,
+        "desirability": 15,
         "name": "Gate 3 Entrance",
         "objectives" : [
             {
@@ -1293,7 +1293,7 @@
         "maxBots": 2,
         "maxBotsInGroup": 1,
         "minRaidET": 300,
-        "desirability": 10,
+        "desirability": 15,
         "name": "Gate 3 Camping",
         "objectives" : [
             {
