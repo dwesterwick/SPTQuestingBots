@@ -33,9 +33,9 @@ namespace SPTQuestingBots.Patches
             IEnumerable<BotOwner> groupMembers = Enumerable.Empty<BotOwner>();
             foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
             {
-                if ((botGenerator != null) && botGenerator.TryGetBotGroup(__instance.Owner, out Models.BotSpawnInfo botSpawnInfo))
+                if ((botGenerator != null) && botGenerator.TryGetBotGroup(offer, out Models.BotSpawnInfo botSpawnInfo))
                 {
-                    groupMembers = botGenerator.GetSpawnGroupMembers(__instance.Owner);
+                    groupMembers = botGenerator.GetSpawnGroupMembers(offer);
                     break;
                 }
             }
@@ -56,7 +56,7 @@ namespace SPTQuestingBots.Patches
             //Controllers.LoggingController.LogInfo(__instance.Owner.GetText() + "'s group contains: " + string.Join(",", groupMembers.Select(m => m.GetText())));
 
             // If the bot is not a member of the boss's group, don't allow it to join
-            if (!groupMembers.Any(m => m.Id == offer.Id))
+            if (!groupMembers.Any(m => m.Id == __instance.Id))
             {
                 Controllers.LoggingController.LogInfo("Preventing " + offer.GetText() + " from becoming a follower for " + __instance.Owner.GetText());
 
