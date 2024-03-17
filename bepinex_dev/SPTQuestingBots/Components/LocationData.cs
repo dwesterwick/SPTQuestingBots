@@ -324,17 +324,23 @@ namespace SPTQuestingBots.Components
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
 
             BotOwner closestBot = botControllerClass.ClosestBotToPoint(position);
-            distance = Vector3.Distance(position, closestBot.Position);
-            if ((closestBot != null) && (distance < distanceFromPlayers))
+            if (closestBot != null)
             {
-                return true;
+                distance = Vector3.Distance(position, closestBot.Position);
+                if ((closestBot != null) && (distance < distanceFromPlayers))
+                {
+                    return true;
+                }
             }
 
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            distance = Vector3.Distance(position, mainPlayer.Position);
-            if (distance < distanceFromPlayers)
+            if (mainPlayer != null)
             {
-                return true;
+                distance = Vector3.Distance(position, mainPlayer.Position);
+                if (distance < distanceFromPlayers)
+                {
+                    return true;
+                }
             }
 
             distance = float.MaxValue;

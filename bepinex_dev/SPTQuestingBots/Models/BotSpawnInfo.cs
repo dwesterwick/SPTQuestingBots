@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.Components.Spawning;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {
         public GClass513 Data { get; private set; }
+        public BotGenerator BotGenerator { get; private set; }
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
         private List<BotOwner> bots = new List<BotOwner>();
@@ -19,12 +22,13 @@ namespace SPTQuestingBots.Models
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
         public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
 
-        public BotSpawnInfo(GClass513 data)
+        public BotSpawnInfo(GClass513 data, BotGenerator botGenerator)
         {
             Data = data;
+            BotGenerator = botGenerator;
         }
 
-        public BotSpawnInfo(GClass513 data, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data)
+        public BotSpawnInfo(GClass513 data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
         }
@@ -52,6 +56,35 @@ namespace SPTQuestingBots.Models
             }
 
             bots.Add(bot);
+        }
+
+        public void SeparateBotOwner(BotOwner bot)
+        {
+            if (!HasSpawned)
+            {
+                throw new InvalidOperationException("Cannot remove a BotOwner from a group that has not spawned yet");
+            }
+
+            if (!bots.Contains(bot))
+            {
+                LoggingController.LogError("Cannot separate " + bot.GetText() + " from group that does not contain it");
+                return;
+            }
+
+            if (!Data.Profiles.Any(p => p == bot.Profile))
+            {
+                LoggingController.LogError("Cannot separate " + bot.GetText() + " from group that does not contain its profile");
+                return;
+            }
+
+            GClass513 newData = GClass513.CreateWithoutProfile(bot.SpawnProfileData);
+            newData.AddProfile(bot.Profile);
+            Models.BotSpawnInfo newGroup = new BotSpawnInfo(newData, BotGenerator);
+            BotGenerator.AddNewBotGroup(newGroup);
+            newGroup.AddBotOwner(bot);
+
+            Data.RemoveProfile(bot.Profile);
+            bots.Remove(bot);
         }
     }
 }

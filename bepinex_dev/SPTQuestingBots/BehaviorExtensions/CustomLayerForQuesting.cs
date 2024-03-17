@@ -21,6 +21,9 @@ namespace SPTQuestingBots.BehaviorExtensions
         private float maxSuspiciousTime = 60;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
+        private Stopwatch notAbleBodiedTimer = new Stopwatch();
+
+        protected float NotAbleBodiedTime => notAbleBodiedTimer.ElapsedMilliseconds / 1000;
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
         {
@@ -57,13 +60,17 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
             {
+                notAbleBodiedTimer.Start();
                 wasAbleBodied = false;
+
                 return false;
             }
             if (!wasAbleBodied)
             {
                 LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
             }
+
+            notAbleBodiedTimer.Reset();
             wasAbleBodied = true;
 
             return true;

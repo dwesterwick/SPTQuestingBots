@@ -229,6 +229,25 @@ namespace SPTQuestingBots.Components.Spawning
             return false;
         }
 
+        public void AddNewBotGroup(Models.BotSpawnInfo newGroup)
+        {
+            BotGroups.Add(newGroup);
+        }
+
+        public static bool TryGetBotGroupFromAnyGenerator(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
+        {
+            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
+            {
+                if (botGenerator?.TryGetBotGroup(bot, out matchingGroupData) == true)
+                {
+                    return true;
+                }
+            }
+
+            matchingGroupData = null;
+            return false;
+        }
+
         public IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
         {
             IEnumerable<Models.BotSpawnInfo> matchingSpawnGroups = BotGroups.Where(g => g.SpawnedBots.Contains(bot));
@@ -426,7 +445,7 @@ namespace SPTQuestingBots.Components.Spawning
                     GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, null);
                     GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
-                    botSpawnInfo = new Models.BotSpawnInfo(botSpawnData);
+                    botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
                 }
                 catch (NullReferenceException nre)
                 {

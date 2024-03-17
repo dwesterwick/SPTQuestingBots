@@ -118,6 +118,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Prevent the bot from following its boss if it needs to heal, etc. 
             if (!IsAbleBodied())
             {
+                if (NotAbleBodiedTime > 10)
+                {
+                    BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
+                }
+
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.NotAbleBodied;
                 return updatePreviousState(false);
             }

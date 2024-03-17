@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.UI.Ragfair;
 using HarmonyLib;
 using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
@@ -237,6 +240,74 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             }
         }
 
+        public static void SeparateBotFromGroup(BotOwner bot)
+        {
+            if (bot.BotsGroup.MembersCount <= 1)
+            {
+                return;
+            }
+
+            Controllers.LoggingController.LogInfo("Separating " + bot.GetText() + " from its group...");
+
+            foreach (BotOwner follower in botBosses.Keys.ToArray())
+            {
+                if (botBosses[follower] == bot)
+                {
+                    botBosses[follower] = null;
+                }
+
+                if (follower == bot)
+                {
+                    botBosses[bot] = null;
+                }
+            }
+
+            foreach (BotOwner boss in botFollowers.Keys.ToArray())
+            {
+                if (boss == bot)
+                {
+                    botFollowers[boss].Clear();
+                }
+
+                if (botFollowers[boss].Contains(bot))
+                {
+                    botFollowers[boss].Remove(bot);
+                }
+            }
+
+            bool isBoss = false;
+            if (bot.BotFollower?.HaveBoss == true)
+            {
+                bot.BotFollower.BossToFollow?.RemoveFollower(bot);
+            }
+            else if (bot.Boss.HaveFollowers() && (bot.BotsGroup.BossGroup != null))
+            {
+                isBoss = true;
+            }
+
+            BotsGroup currentGroup = bot.BotsGroup;
+            currentGroup.RemoveAlly(bot);
+
+            if (isBoss)
+            {
+                MethodInfo resetBossMethod = AccessTools.Method(typeof(BossGroup), "method_0");
+                resetBossMethod.Invoke(bot.BotsGroup.BossGroup, new object[] { bot, bot.Boss.Followers });
+            }
+
+            if (BotGenerator.TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
+            {
+                matchingGroupData.SeparateBotOwner(bot);
+            }
+
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+            BotZone closestBotZone = botSpawnerClass.GetClosestZone(bot.Position, out float dist);
+            BotsGroup newGroup = botSpawnerClass.GetGroupAndSetEnemies(bot, closestBotZone);
+            bot.BotsGroup = newGroup;
+            newGroup.Lock();
+
+            LoggingController.LogInfo("Boss of " + bot.GetText() + ": " + botBosses[bot].GetText());
+        }
+
         private static void throwIfSensorNotRegistred(BotHiveMindSensorType sensorType)
         {
             if (!sensors.ContainsKey(sensorType))
@@ -257,7 +328,13 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (botBosses[bot] == null)
                 {
-                    botBosses[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
+                    BotOwner newBoss = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
+                    if (newBoss?.BotsGroup != bot.BotsGroup)
+                    {
+                        continue;
+                    }
+
+                    botBosses[bot] = newBoss;
                 }
                 if (botBosses[bot] == null)
                 {
@@ -297,6 +374,11 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             if (bot == null)
             {
                 throw new ArgumentNullException("Bot argument cannot be null", nameof(bot));
+            }
+
+            if (boss.GroupId != bot.GroupId)
+            {
+                return;
             }
 
             if (!botFollowers.ContainsKey(boss))
