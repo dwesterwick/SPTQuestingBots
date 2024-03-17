@@ -395,8 +395,9 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             if (!botFollowers[boss].Contains(bot))
             {
                 Controllers.LoggingController.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
-
                 botFollowers[boss].Add(bot);
+
+                BotJobAssignmentFactory.CheckBotJobAssignmentValidity(boss);
             }
         }
 

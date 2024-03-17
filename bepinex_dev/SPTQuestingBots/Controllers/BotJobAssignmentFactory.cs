@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -866,6 +867,30 @@ namespace SPTQuestingBots.Controllers
             }
 
             return nearbyObjectives;
+        }
+
+        public static void CheckBotJobAssignmentValidity(BotOwner bot)
+        {
+            BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            if (botJobAssignment?.QuestAssignment == null)
+            {
+                return;
+            }
+
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+            if (botGroupSize > botJobAssignment.QuestAssignment.MaxBotsInGroup)
+            {
+                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+
+                if (botObjectiveManager.TryChangeObjective())
+                {
+                    LoggingController.LogWarning("Selected new quest for " + bot.GetText() + " because it has too many followers for its previous quest");
+                }
+                else
+                {
+                    LoggingController.LogError("Cannot select new quest for " + bot.GetText() + ". It has too many followers for quest " + botJobAssignment.QuestAssignment.ToString());
+                }
+            }
         }
     }
 }

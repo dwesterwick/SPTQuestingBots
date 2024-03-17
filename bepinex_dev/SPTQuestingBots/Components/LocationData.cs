@@ -24,6 +24,7 @@ namespace SPTQuestingBots.Components
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
         
         private TarkovApplication tarkovApplication = null;
+        private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
@@ -35,6 +36,7 @@ namespace SPTQuestingBots.Components
         private void Awake()
         {
             tarkovApplication = FindObjectOfType<TarkovApplication>();
+            gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
             CurrentRaidSettings = getCurrentRaidSettings();
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
 
@@ -604,6 +606,13 @@ namespace SPTQuestingBots.Components
         {
             foreach (Door door in doors)
             {
+                // Ensure a player can interact with the door
+                GClass2805 availableActions = GClass1726.GetAvailableActions(gamePlayerOwner, door);
+                if ((availableActions == null) || (availableActions.Actions.Count == 0))
+                {
+                    continue;
+                }
+
                 Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)
                 {

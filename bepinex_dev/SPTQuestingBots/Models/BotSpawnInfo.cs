@@ -77,12 +77,14 @@ namespace SPTQuestingBots.Models
                 return;
             }
 
+            // Create a new spawn group for the bot
             GClass513 newData = GClass513.CreateWithoutProfile(bot.SpawnProfileData);
             newData.AddProfile(bot.Profile);
             Models.BotSpawnInfo newGroup = new BotSpawnInfo(newData, BotGenerator);
             BotGenerator.AddNewBotGroup(newGroup);
             newGroup.AddBotOwner(bot);
 
+            // Remove the bot from this spawn group
             Data.RemoveProfile(bot.Profile);
             bots.Remove(bot);
         }
