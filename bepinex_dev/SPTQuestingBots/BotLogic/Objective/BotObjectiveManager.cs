@@ -21,6 +21,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         QuestsNotReady,
         Pause,
         IsDead,
+        IsStuck,
         CannotQuest,
         WaitForNextQuest,
         Regroup,

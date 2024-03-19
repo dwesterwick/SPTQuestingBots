@@ -118,7 +118,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Prevent the bot from following its boss if it needs to heal, etc. 
             if (!IsAbleBodied())
             {
-                if (NotAbleBodiedTime > 10)
+                if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
                 {
                     BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 }
@@ -183,8 +183,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to quest.");
                 objectiveManager.StopQuesting();
                 BotOwner.Mover.Stop();
+                BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
 
-                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.CannotQuest;
+                objectiveManager.NotQuestingReason = Objective.NotQuestingReason.IsStuck;
                 return updatePreviousState(false);
             }
 

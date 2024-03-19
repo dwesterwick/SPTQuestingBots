@@ -97,6 +97,9 @@ namespace SPTQuestingBots.BehaviorExtensions
                     searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
+
+                notAbleBodiedTimer.Stop();
+
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return true;
             }
@@ -125,6 +128,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
                 totalSuspiciousTimer.Start();
                 notSuspiciousTimer.Reset();
+                notAbleBodiedTimer.Stop();
 
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
                 return true;

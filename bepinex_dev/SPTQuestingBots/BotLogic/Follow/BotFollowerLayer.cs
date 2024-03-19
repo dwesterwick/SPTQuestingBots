@@ -93,23 +93,23 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return pauseLayer();
             }
 
-            // Only enable the layer if the bot is too far from the boss
-            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
-            {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Proximity;
-                return updatePreviousState(false);
-            }
-
             // Prevent the bot from following its boss if it needs to heal, etc. 
             if (!IsAbleBodied())
             {
-                if (NotAbleBodiedTime > 10)
+                if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
                 {
                     BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 }
 
                 objectiveManager.NotFollowingReason = Objective.NotQuestingReason.NotAbleBodied;
+                return updatePreviousState(false);
+            }
+
+            // Only enable the layer if the bot is too far from the boss
+            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
+            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
+            {
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Proximity;
                 return updatePreviousState(false);
             }
 
@@ -154,6 +154,18 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
+
+            // Check if the bot has been stuck too many times
+            if (objectiveManager.StuckCount >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
+            {
+                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to follow its boss.");
+                objectiveManager.StopQuesting();
+                BotOwner.Mover.Stop();
+                BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
+
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.IsStuck;
+                return updatePreviousState(false);
+            }
 
             objectiveManager.NotFollowingReason = Objective.NotQuestingReason.None;
             setNextAction(BotActionType.FollowBoss, "FollowBoss");

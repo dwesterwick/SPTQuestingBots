@@ -21,6 +21,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("follower_break_time")]
         public float FollowerBreakTime { get; set; } = 10;
 
+        [JsonProperty("max_not_able_bodied_time")]
+        public float MaxNotAbleBodiedTime { get; set; } = 120;
+
         public StuckBotDetectionConfig()
         {
 
