@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using EFT.UI.Ragfair;
 using HarmonyLib;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.Components.Spawning;

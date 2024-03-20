@@ -42,6 +42,8 @@ namespace SPTQuestingBots.Components
 
             UpdateMaxTotalBots();
 
+            Singleton<GameWorld>.Instance.gameObject.AddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
+
             if (ConfigController.Config.Questing.Enabled)
             {
                 QuestHelpers.ClearCache();

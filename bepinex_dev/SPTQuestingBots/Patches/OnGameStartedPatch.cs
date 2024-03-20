@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(GameWorld __instance)
         {
-            __instance.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
+            
         }
     }
 }
