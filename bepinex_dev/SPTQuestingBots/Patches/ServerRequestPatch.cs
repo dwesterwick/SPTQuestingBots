@@ -78,7 +78,7 @@ namespace SPTQuestingBots.Patches
                 return Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
             }
 
-            return (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
+            return (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

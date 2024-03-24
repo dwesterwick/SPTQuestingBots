@@ -245,14 +245,14 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Ensure enough time has elapsed in the raid to prevent players from getting run-throughs
-            int minRaidET = Singleton<BackendConfigSettingsClass>.Instance.Experience.MatchEnd.SurvivedTimeRequirement;
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < (minRaidET - Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.SurvivalTimeReductionSeconds))
+            int minSurviveTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewSurvivalTimeSeconds;
+            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < minSurviveTime)
             {
                 return false;
             }
 
             System.Random random = new System.Random();
-            float initialRaidTimeFraction = (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewEscapeTimeMinutes / Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeMinutes;
+            float initialRaidTimeFraction = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
 
             // Select a random number of total quests the bot must complete before it's allowed to extract
             if (minTotalQuestsForExtract == int.MaxValue)

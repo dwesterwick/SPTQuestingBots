@@ -1,40 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using HarmonyLib;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Helpers
 {
     public class VersionCheckHelper
     {
-        public static bool CheckSPTVersion()
+        public static bool IsSPTWithinVersionRange(string minVersionString, string maxVersionString)
         {
             try
             {
-                string typeName = "Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil";
-                Type raidTimeUtilType = AccessTools.TypeByName(typeName);
-                if (raidTimeUtilType == null)
+                Assembly assembly = Assembly.Load("Aki.Common");
+                if (assembly == null)
                 {
-                    throw new TypeAccessException("Cannot find type " + typeName);
-                }
-
-                string methodName = "HasRaidStarted";
-                if (!AccessTools.GetMethodNames(raidTimeUtilType).Any(m => m == methodName))
-                {
-                    throw new MissingMethodException(typeName, methodName);
-                }
-            }
-            catch (Exception ex)
-            {
-                if ((ex is TypeAccessException) || (ex is MissingMethodException))
-                {
-                    LoggingController.LogErrorToServerConsole("Cannot find methods for retrieving raid-time data. Please ensure you are using SPT-AKI 3.7.4 with the 2023-12-06 hotfix or newer.");
-
+                    LoggingController.LogError("Could not find assembly Aki.Common");
                     return false;
                 }
+
+                Version actualVersion = new Version(System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion);
+                Version minVersion = new Version(minVersionString);
+                Version maxVersion = new Version(maxVersionString);
+
+                if (actualVersion.CompareTo(minVersion) < 0)
+                {
+                    LoggingController.LogError("SPT-AKI " + minVersionString + " or later is required. Current version is " + actualVersion.ToString());
+                    return false;
+                }
+                if (actualVersion.CompareTo(maxVersion) > 0)
+                {
+                    LoggingController.LogError("SPT-AKI " + maxVersionString + " or below is required. Current version is " + actualVersion.ToString());
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingController.LogError("An exception occurred when checking the current SPT-AKI version: " + e.Message);
+                return false;
             }
 
             return true;

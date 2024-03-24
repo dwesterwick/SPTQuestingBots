@@ -13,6 +13,9 @@ namespace SPTQuestingBots.Patches
 {
     public class CheckSPTVersionPatch : ModulePatch
     {
+        public static string MinVersion { get; set; } = "0.0.0.0";
+        public static string MaxVersion { get; set; } = "999999.999999.999999.999999";
+
         protected override MethodBase GetTargetMethod()
         {
             return typeof(TarkovApplication).GetMethod("Init", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -21,9 +24,10 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(IAssetsManager assetsManager, InputTree inputTree)
         {
-            if (!Helpers.VersionCheckHelper.CheckSPTVersion())
+            if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion))
             {
-                Chainloader.DependencyErrors.Add("Could not load " + QuestingBotsPlugin.ModName + " because it requires a newer SPT version");
+                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT-AKI between versions " + MinVersion + " and " + MaxVersion;
+                Chainloader.DependencyErrors.Add(errorMessage);
                 return;
             }
         }

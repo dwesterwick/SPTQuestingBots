@@ -23,6 +23,9 @@ namespace SPTQuestingBots
 
         private void Awake()
         {
+            Patches.CheckSPTVersionPatch.MinVersion = "3.7.6.0";
+            Patches.CheckSPTVersionPatch.MaxVersion = "3.7.6.0";
+
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;
             ModName = Info.Metadata.Name;
