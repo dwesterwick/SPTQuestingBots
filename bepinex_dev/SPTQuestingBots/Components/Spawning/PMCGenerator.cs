@@ -93,15 +93,18 @@ namespace SPTQuestingBots.Components.Spawning
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            EPlayerSideMask playerMask = getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
+            float minDistanceFromOtherPlayers = getMinDistanceFromOtherPlayers() + 5;
 
+            string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
             IEnumerable<Player> playersToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
-                .Where(p => GetAllGeneratedBotProfileIDs().Contains(p.ProfileId))
+                .Where(p => allGeneratedProfileIDs.Contains(p.ProfileId))
                 .AddItem(Singleton<GameWorld>.Instance.MainPlayer);
 
             // Find a spawn location for the bot group that is as far from other players and bots as possible
-            EPlayerSideMask playerMask = getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
-            float minDistanceFromOtherPlayers = getMinDistanceFromOtherPlayers() + 5;
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPlayers(playersToAvoid, ESpawnCategoryMask.Player, playerMask, pendingSpawnPoints.ToArray(), minDistanceFromOtherPlayers);
+            SpawnPointParams[] excludedSpawnpoints = pendingSpawnPoints
+                .SelectMany(s => locationData.GetNearbySpawnPoints(s.Position, minDistanceFromOtherPlayers)).ToArray();
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPlayers(playersToAvoid, ESpawnCategoryMask.Player, playerMask, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogWarning("Could not find a spawn point for PMC group");
@@ -109,7 +112,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             // Create a list of spawn points at the selected location
-            IEnumerable<Vector3> spawnPositions = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, pendingSpawnPoints.ToArray())
+            IEnumerable<Vector3> spawnPositions = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, excludedSpawnpoints)
                 .Select(p => p.Position.ToUnityVector3());
 
             if (!spawnPositions.Any())

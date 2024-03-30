@@ -372,15 +372,31 @@ namespace SPTQuestingBots.Components
             SpawnPointParams[] allSpawnPoints = GetAllValidSpawnPointParams();
 
             // Enumerate all valid spawn points
-            SpawnPointParams[] validSpawnPoints = allSpawnPoints
-                    .Where(s => !excludedSpawnPoints.Contains(s))
-                    .Where(s => s.Categories.Any(allowedCategories))
-                    .Where(s => s.Sides.Any(allowedSides))
-                    .Where(s => allPlayerPositions.All(p => Vector3.Distance(s.Position, p) > distanceFromAllPlayers))
-                    .ToArray();
+            IEnumerable<SpawnPointParams> validSpawnPoints = allSpawnPoints
+                .Where(s => !excludedSpawnPoints.Contains(s))
+                .Where(s => s.Categories.Any(allowedCategories))
+                .Where(s => s.Sides.Any(allowedSides));
+            
+            // Remove spawn points that are too close to other bots or you
+            SpawnPointParams[] eligibleSpawnPoints = validSpawnPoints
+                .Where(s => allPlayerPositions.All(p => Vector3.Distance(s.Position, p) > distanceFromAllPlayers))
+                .ToArray();
 
-            if (validSpawnPoints.Length == 0)
+            if (eligibleSpawnPoints.Length == 0)
             {
+                if (validSpawnPoints.Any())
+                {
+                    float maxDistance = validSpawnPoints
+                        .Select(s => allPlayerPositions.Min(p => Vector3.Distance(s.Position, p)))
+                        .Max();
+
+                    LoggingController.LogWarning("Maximum distance from other players using " + validSpawnPoints.Count() + " spawn points: " + maxDistance);
+                }
+                else
+                {
+                    LoggingController.LogWarning("No valid spawn points");
+                }
+
                 return null;
             }
 
@@ -388,12 +404,13 @@ namespace SPTQuestingBots.Components
             Vector3[] playerPositions = players.Select(s => s.Position).ToArray();
             if (playerPositions.Length == 0)
             {
+                LoggingController.LogWarning("No player positions");
                 return null;
             }
 
             //LoggingController.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
 
-            return GetFurthestSpawnPoint(playerPositions, validSpawnPoints);
+            return GetFurthestSpawnPoint(playerPositions, eligibleSpawnPoints);
         }
 
         public SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
@@ -470,6 +487,16 @@ namespace SPTQuestingBots.Components
             }
 
             return spawnPoints;
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearbySpawnPoints(Vector3 position, float distance)
+        {
+            return GetNearbySpawnPoints(position, distance, GetAllValidSpawnPointParams());
+        }
+
+        public IEnumerable<SpawnPointParams> GetNearbySpawnPoints(Vector3 position, float distance, SpawnPointParams[] allSpawnPoints)
+        {
+            return allSpawnPoints.Where(s => Vector3.Distance(position, s.Position) < distance);
         }
 
         public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)

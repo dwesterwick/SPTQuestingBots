@@ -24,11 +24,30 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(IAssetsManager assetsManager, InputTree inputTree)
         {
-            if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion))
+            if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion, out string currentVersion))
             {
-                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT-AKI between versions " + MinVersion + " and " + MaxVersion;
+                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT-AKI ";
+                
+                if (MinVersion == MaxVersion)
+                {
+                    errorMessage += MinVersion;
+                }
+                else if (MaxVersion == "999999.999999.999999.999999")
+                {
+                    errorMessage += MinVersion + " or later";
+                }
+                else if (MinVersion == "0.0.0.0")
+                {
+                    errorMessage += MaxVersion + " or older";
+                }
+                else
+                {
+                    errorMessage += "between versions " + MinVersion + " and " + MaxVersion;
+                }
+
+                errorMessage += ". The current version is " + currentVersion + ".";
+
                 Chainloader.DependencyErrors.Add(errorMessage);
-                return;
             }
         }
     }

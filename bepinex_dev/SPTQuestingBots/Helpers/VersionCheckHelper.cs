@@ -10,29 +10,31 @@ namespace SPTQuestingBots.Helpers
 {
     public class VersionCheckHelper
     {
-        public static bool IsSPTWithinVersionRange(string minVersionString, string maxVersionString)
+        public static bool IsSPTWithinVersionRange(string minVersionString, string maxVersionString, out string currentVersionString)
         {
+            currentVersionString = "???";
+
             try
             {
-                Assembly assembly = Assembly.Load("Aki.Common");
+                string assemblyName = "Aki.Common";
+                Assembly assembly = Assembly.Load(assemblyName);
                 if (assembly == null)
                 {
-                    LoggingController.LogError("Could not find assembly Aki.Common");
+                    LoggingController.LogError("Could not find assembly " + assemblyName);
                     return false;
                 }
 
-                Version actualVersion = new Version(System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion);
+                currentVersionString = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+                Version actualVersion = new Version(currentVersionString);
                 Version minVersion = new Version(minVersionString);
                 Version maxVersion = new Version(maxVersionString);
 
                 if (actualVersion.CompareTo(minVersion) < 0)
                 {
-                    LoggingController.LogError("SPT-AKI " + minVersionString + " or later is required. Current version is " + actualVersion.ToString());
                     return false;
                 }
                 if (actualVersion.CompareTo(maxVersion) > 0)
                 {
-                    LoggingController.LogError("SPT-AKI " + maxVersionString + " or below is required. Current version is " + actualVersion.ToString());
                     return false;
                 }
             }
