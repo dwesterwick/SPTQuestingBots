@@ -241,6 +241,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
         public static void SeparateBotFromGroup(BotOwner bot)
         {
+            // Not necessary if the bot is solo
             if (bot.BotsGroup.MembersCount <= 1)
             {
                 return;
@@ -248,6 +249,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             Controllers.LoggingController.LogInfo("Separating " + bot.GetText() + " from its group...");
 
+            // Clear stored information about the bot's boss (if applicable)
             foreach (BotOwner follower in botBosses.Keys.ToArray())
             {
                 if (botBosses[follower] == bot)
@@ -261,6 +263,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 }
             }
 
+            // Clear stored information about the bot's followers (if applicable)
             foreach (BotOwner boss in botFollowers.Keys.ToArray())
             {
                 if (boss == bot)
@@ -274,6 +277,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 }
             }
 
+            // If the bot was spawned by this mod, create a new spawn group for it
             if (BotGenerator.TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
             {
                 matchingGroupData.SeparateBotOwner(bot);
@@ -282,6 +286,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             MethodInfo bossGroupSetter = AccessTools.PropertySetter(typeof(BotsGroup), "BossGroup");
             MethodInfo bossToFollowSetter = AccessTools.PropertySetter(typeof(BotFollower), "BossToFollow");
 
+            // Check if the bot is the boss of its group
             bool isBoss = false;
             if (bot.BotFollower?.HaveBoss == true)
             {
@@ -293,6 +298,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 isBoss = true;
             }
 
+            // If the bot is a boss, instruct its followers to follow a new boss
             bot.Boss.RemoveFollower(bot);
             if (isBoss && (bot.Boss.Followers.Count >= 1))
             {
@@ -303,6 +309,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     bossToFollowSetter.Invoke(follower.BotFollower, new object[] { null });
                 }
 
+                // Setting a new boss is only required for groups that have more than 2 bots
                 if (bot.Boss.Followers.Count > 1)
                 {
                     BotOwner newBoss = bot.Boss.Followers.RandomElement();
@@ -312,9 +319,11 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 }
             }
 
+            // Dissociate the bot from its group
             BotsGroup currentGroup = bot.BotsGroup;
             currentGroup.RemoveAlly(bot);
 
+            // Create a new bot group for the bot
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(bot.Position, out float dist);
             BotsGroup newGroup = botSpawnerClass.GetGroupAndSetEnemies(bot, closestBotZone);
@@ -342,8 +351,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (botBosses[bot] == null)
                 {
-                    BotOwner newBoss = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
-                    botBosses[bot] = newBoss;
+                    botBosses[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
                 }
                 if (botBosses[bot] == null)
                 {

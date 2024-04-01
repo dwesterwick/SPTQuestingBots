@@ -326,7 +326,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Customs in some Dorms rooms (i.e. 214 and 220 in 3 story)
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
-* Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there). They will only engage you if they see you, so they may blindly run right past you. Honestly, this isn't so unrealistic compared to live Tarkov...
+* Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there).
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
@@ -351,7 +351,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 
 **PMC and Player-Scav Spawning System:**
-* If one of the members of a bot group is a straggler, the whole group will wait around for him
 * If there is a lot of PMC action at the beginning of the raid, the rest of the raid will feel dead. However, this isn't so different from live Tarkov. 
 * If **advanced_eft_bot_count_management=false**, not all PMC's or player Scavs spawn into Streets because too many Scavs spawn into the map first
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_bots** setting is high and **advanced_eft_bot_count_management=false**
@@ -361,16 +360,13 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.4.2** (ETA: Late March)
-    * Improve behaviors of members of bot groups
-    * Improvements to PMC and PScav spawning locations when using the Questing Bots spawning system
-* **0.5.0** (ETA: Early April)
+* **0.5.0** (ETA: Mid April)
     * Update to SPT-AKI 3.8.0
-* **0.5.1** (ETA: Late April)
+* **0.5.1** (ETA: Early May)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
-* **0.5.2** (ETA: Early May)
+* **0.5.2** (ETA: Late May)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
 * **0.6.0** (ETA: Mid July)

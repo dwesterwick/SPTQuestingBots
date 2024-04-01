@@ -871,7 +871,7 @@ namespace SPTQuestingBots.Controllers
 
         public static void CheckBotJobAssignmentValidity(BotOwner bot)
         {
-            BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            BotJobAssignment botJobAssignment = GetCurrentJobAssignment(bot, false);
             if (botJobAssignment?.QuestAssignment == null)
             {
                 return;
