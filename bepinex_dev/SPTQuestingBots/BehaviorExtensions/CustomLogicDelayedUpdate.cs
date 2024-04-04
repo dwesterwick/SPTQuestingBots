@@ -22,7 +22,6 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected GClass134 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
-        private PropertyInfo cornerIndexField = null;
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch actionElapsedTime = new Stopwatch();
 
@@ -33,7 +32,6 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
-            cornerIndexField = AccessTools.Property(typeof(BotMover), "_cornerIndex");
             ObjectiveManager = BotLogic.Objective.BotObjectiveManager.GetObjectiveManagerForBot(botOwner);
         }
 
@@ -151,7 +149,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public bool IsNearPathCorner(Configuration.DistanceAngleConfig maxDistanceMinAngle)
         {
-            if (BotOwner?.Mover?.CurPath() == null)
+            Vector3[] currentPath = BotOwner?.Mover?.GetCurrentPath();
+            if (currentPath == null)
             {
                 return false;
             }
@@ -163,15 +162,15 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             // Check if the bot is approaching the end of its path
-            int currentCornerIndex = (int)cornerIndexField.GetValue(BotOwner.Mover);
-            if (currentCornerIndex == BotOwner.Mover.CurPath().Length - 1)
+            int currentCornerIndex = BotOwner.Mover.GetCurrentCornerIndex();
+            if (currentCornerIndex == currentPath.Length - 1)
             {
                 return true;
             }
 
-            ObjectiveManager.LastCorner = BotOwner.Mover.CurPath()[currentCornerIndex];
-            Vector3 currentSegment = BotOwner.Mover.CurPath()[currentCornerIndex] - BotOwner.Mover.CurPath()[currentCornerIndex - 1];
-            Vector3 nextSegment = BotOwner.Mover.CurPath()[currentCornerIndex + 1] - BotOwner.Mover.CurPath()[currentCornerIndex];
+            ObjectiveManager.LastCorner = currentPath[currentCornerIndex];
+            Vector3 currentSegment = currentPath[currentCornerIndex] - currentPath[currentCornerIndex - 1];
+            Vector3 nextSegment = currentPath[currentCornerIndex + 1] - currentPath[currentCornerIndex];
 
             // Check a large enough angle exists between the bot's current path segment and its next one
             float cornerAngle = Vector3.Angle(currentSegment, nextSegment);

@@ -246,7 +246,7 @@ namespace SPTQuestingBots.Helpers
             ConditionCounterCreator conditionCounterCreator = condition as ConditionCounterCreator;
             if (conditionCounterCreator != null)
             {
-                foreach (Condition childCondition in conditionCounterCreator.counter.conditions)
+                foreach (Condition childCondition in conditionCounterCreator.Conditions)
                 {
                     zoneIDs.AddRange(childCondition.getAllZoneIDs());
                 }
@@ -284,7 +284,7 @@ namespace SPTQuestingBots.Helpers
             ConditionCounterCreator conditionCounterCreator = condition as ConditionCounterCreator;
             if (conditionCounterCreator != null)
             {
-                foreach (Condition childCondition in conditionCounterCreator.counter.conditions)
+                foreach (Condition childCondition in conditionCounterCreator.Conditions)
                 {
                     float? plantTime = childCondition.FindPlantTime(zoneID);
                     if (plantTime.HasValue)

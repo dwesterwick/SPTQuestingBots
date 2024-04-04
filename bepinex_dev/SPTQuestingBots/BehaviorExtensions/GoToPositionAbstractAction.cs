@@ -101,7 +101,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected void drawBotPath(Color color)
         {
-            Vector3[] botPath = BotOwner.Mover?.CurPath();
+            Vector3[] botPath = BotOwner.Mover?.GetCurrentPath();
             if (botPath == null)
             {
                 return;

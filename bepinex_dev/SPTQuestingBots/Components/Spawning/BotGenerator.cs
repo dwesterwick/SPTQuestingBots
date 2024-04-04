@@ -554,7 +554,8 @@ namespace SPTQuestingBots.Components.Spawning
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
             {
-                botSpawnInfo.Data.AddPosition(position);
+                int corePointId = AICorePointHolder.GetClosest(position).Id;
+                botSpawnInfo.Data.AddPosition(position, corePointId);
             }
 
             // In SPT-AKI 3.7.1, this is GClass732
