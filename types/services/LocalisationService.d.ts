@@ -1,5 +1,4 @@
 import { I18n } from "i18n";
-import { ILocaleConfig } from "@spt-aki/models/spt/config/ILocaleConfig";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
 import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 import { LocaleService } from "@spt-aki/services/LocaleService";
@@ -12,7 +11,6 @@ export declare class LocalisationService {
     protected randomUtil: RandomUtil;
     protected databaseServer: DatabaseServer;
     protected localeService: LocaleService;
-    protected localeConfig: ILocaleConfig;
     protected i18n: I18n;
     constructor(logger: ILogger, randomUtil: RandomUtil, databaseServer: DatabaseServer, localeService: LocaleService);
     /**

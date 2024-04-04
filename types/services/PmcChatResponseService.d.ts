@@ -8,9 +8,11 @@ import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { LocalisationService } from "@spt-aki/services/LocalisationService";
 import { MatchBotDetailsCacheService } from "@spt-aki/services/MatchBotDetailsCacheService";
+import { HashUtil } from "@spt-aki/utils/HashUtil";
 import { RandomUtil } from "@spt-aki/utils/RandomUtil";
 export declare class PmcChatResponseService {
     protected logger: ILogger;
+    protected hashUtil: HashUtil;
     protected randomUtil: RandomUtil;
     protected notificationSendHelper: NotificationSendHelper;
     protected matchBotDetailsCacheService: MatchBotDetailsCacheService;
@@ -18,7 +20,7 @@ export declare class PmcChatResponseService {
     protected weightedRandomHelper: WeightedRandomHelper;
     protected configServer: ConfigServer;
     protected pmcResponsesConfig: IPmcChatResponse;
-    constructor(logger: ILogger, randomUtil: RandomUtil, notificationSendHelper: NotificationSendHelper, matchBotDetailsCacheService: MatchBotDetailsCacheService, localisationService: LocalisationService, weightedRandomHelper: WeightedRandomHelper, configServer: ConfigServer);
+    constructor(logger: ILogger, hashUtil: HashUtil, randomUtil: RandomUtil, notificationSendHelper: NotificationSendHelper, matchBotDetailsCacheService: MatchBotDetailsCacheService, localisationService: LocalisationService, weightedRandomHelper: WeightedRandomHelper, configServer: ConfigServer);
     /**
      * For each PMC victim of the player, have a chance to send a message to the player, can be positive or negative
      * @param sessionId Session id

@@ -14,9 +14,13 @@ import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 import { SaveServer } from "@spt-aki/servers/SaveServer";
 import { LocalisationService } from "@spt-aki/services/LocalisationService";
 import { HashUtil } from "@spt-aki/utils/HashUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { TimeUtil } from "@spt-aki/utils/TimeUtil";
 export declare class LauncherController {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
+    protected timeUtil: TimeUtil;
+    protected randomUtil: RandomUtil;
     protected saveServer: SaveServer;
     protected httpServerHelper: HttpServerHelper;
     protected profileHelper: ProfileHelper;
@@ -25,7 +29,7 @@ export declare class LauncherController {
     protected preAkiModLoader: PreAkiModLoader;
     protected configServer: ConfigServer;
     protected coreConfig: ICoreConfig;
-    constructor(logger: ILogger, hashUtil: HashUtil, saveServer: SaveServer, httpServerHelper: HttpServerHelper, profileHelper: ProfileHelper, databaseServer: DatabaseServer, localisationService: LocalisationService, preAkiModLoader: PreAkiModLoader, configServer: ConfigServer);
+    constructor(logger: ILogger, hashUtil: HashUtil, timeUtil: TimeUtil, randomUtil: RandomUtil, saveServer: SaveServer, httpServerHelper: HttpServerHelper, profileHelper: ProfileHelper, databaseServer: DatabaseServer, localisationService: LocalisationService, preAkiModLoader: PreAkiModLoader, configServer: ConfigServer);
     connect(): IConnectResponse;
     /**
      * Get descriptive text for each of the profile edtions a player can choose, keyed by profile.json profile type e.g. "Edge Of Darkness"
@@ -36,6 +40,8 @@ export declare class LauncherController {
     login(info: ILoginRequestData): string;
     register(info: IRegisterData): string;
     protected createAccount(info: IRegisterData): string;
+    protected generateProfileId(): string;
+    protected formatID(timeStamp: number, counter: number): string;
     changeUsername(info: IChangeRequestData): string;
     changePassword(info: IChangeRequestData): string;
     wipe(info: IRegisterData): string;

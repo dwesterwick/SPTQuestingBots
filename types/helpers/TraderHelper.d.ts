@@ -59,22 +59,28 @@ export declare class TraderHelper {
     /**
      * Reset a profiles trader data back to its initial state as seen by a level 1 player
      * Does NOT take into account different profile levels
-     * @param sessionID session id
+     * @param sessionID session id of player
      * @param traderID trader id to reset
      */
     resetTrader(sessionID: string, traderID: string): void;
+    /**
+     * Get the starting standing of a trader based on the current profiles type (e.g. EoD, Standard etc)
+     * @param traderId Trader id to get standing for
+     * @param rawProfileTemplate Raw profile from profiles.json to look up standing from
+     * @returns Standing value
+     */
     protected getStartingStanding(traderId: string, rawProfileTemplate: ProfileTraderTemplate): number;
     /**
      * Alter a traders unlocked status
      * @param traderId Trader to alter
      * @param status New status to use
-     * @param sessionId Session id
+     * @param sessionId Session id of player
      */
     setTraderUnlockedState(traderId: string, status: boolean, sessionId: string): void;
     /**
      * Add standing to a trader and level them up if exp goes over level threshold
-     * @param sessionId Session id
-     * @param traderId Traders id
+     * @param sessionId Session id of player
+     * @param traderId Traders id to add standing to
      * @param standingToAdd Standing value to add to trader
      */
     addStandingToTrader(sessionId: string, traderId: string, standingToAdd: number): void;
@@ -111,11 +117,11 @@ export declare class TraderHelper {
      */
     addTraderPurchasesToPlayerProfile(sessionID: string, newPurchaseDetails: {
         items: {
-            item_id: string;
+            itemId: string;
             count: number;
         }[];
-        tid: string;
-    }): void;
+        traderId: string;
+    }, itemPurchased: Item): void;
     /**
      * Get the highest rouble price for an item from traders
      * UNUSED

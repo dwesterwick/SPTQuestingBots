@@ -30,7 +30,7 @@ export declare class BotLootCacheService {
      * @param botJsonTemplate Base json db file for the bot having its loot generated
      * @returns ITemplateItem array
      */
-    getLootFromCache(botRole: string, isPmc: boolean, lootType: LootCacheType, botJsonTemplate: IBotType): ITemplateItem[];
+    getLootFromCache(botRole: string, isPmc: boolean, lootType: LootCacheType, botJsonTemplate: IBotType): Record<string, number>;
     /**
      * Generate loot for a bot and store inside a private class property
      * @param botRole bots role (assault / pmcBot etc)
@@ -39,16 +39,12 @@ export declare class BotLootCacheService {
      */
     protected addLootToCache(botRole: string, isPmc: boolean, botJsonTemplate: IBotType): void;
     /**
-     * Sort a pool of item objects by its flea price
-     * @param poolToSort pool of items to sort
-     */
-    protected sortPoolByRagfairPrice(poolToSort: ITemplateItem[]): void;
-    /**
      * Add unique items into combined pool
-     * @param combinedItemPool Pool of items to add to
+     * @param poolToAddTo Pool of items to add to
      * @param itemsToAdd items to add to combined pool if unique
      */
-    protected addUniqueItemsToPool(combinedItemPool: ITemplateItem[], itemsToAdd: ITemplateItem[]): void;
+    protected addUniqueItemsToPool(poolToAddTo: ITemplateItem[], itemsToAdd: ITemplateItem[]): void;
+    protected addItemsToPool(poolToAddTo: Record<string, number>, poolOfItemsToAdd: Record<string, number>): void;
     /**
      * Ammo/grenades have this property
      * @param props

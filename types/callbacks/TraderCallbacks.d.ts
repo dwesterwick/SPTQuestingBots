@@ -8,7 +8,8 @@ import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 export declare class TraderCallbacks implements OnLoad, OnUpdate {
     protected httpResponse: HttpResponseUtil;
     protected traderController: TraderController;
-    constructor(httpResponse: HttpResponseUtil, traderController: TraderController);
+    constructor(httpResponse: HttpResponseUtil, // TODO: delay required
+    traderController: TraderController);
     onLoad(): Promise<void>;
     onUpdate(): Promise<boolean>;
     getRoute(): string;

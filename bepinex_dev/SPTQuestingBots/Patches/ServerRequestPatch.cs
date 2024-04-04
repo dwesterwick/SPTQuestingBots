@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static void PatchPrefix(ref GStruct21 legacyParams)
+        private static void PatchPrefix(ref LegacyParamsStruct legacyParams)
         {
             string originalUrl = legacyParams.Url;
 

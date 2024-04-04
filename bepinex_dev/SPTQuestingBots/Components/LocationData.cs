@@ -636,7 +636,7 @@ namespace SPTQuestingBots.Components
             foreach (Door door in doors)
             {
                 // Ensure a player can interact with the door
-                GClass2805 availableActions = GClass1726.GetAvailableActions(gamePlayerOwner, door);
+                ActionsReturnClass availableActions = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
                 if ((availableActions == null) || (availableActions.Actions.Count == 0))
                 {
                     continue;

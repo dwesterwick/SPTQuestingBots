@@ -20,7 +20,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? interactionPosition = null;
         private IResult keyGenerationResult = null;
         private KeyComponent keyComponent = null;
-        private DependencyGraph<IEasyBundle>.GClass3114 bundleLoader = null;
+        private DependencyGraph<IEasyBundle>.GClass3391 bundleLoader = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {

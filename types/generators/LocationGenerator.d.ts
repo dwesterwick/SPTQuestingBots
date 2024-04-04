@@ -1,7 +1,6 @@
 import { ContainerHelper } from "@spt-aki/helpers/ContainerHelper";
 import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
 import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
-import { RagfairServerHelper } from "@spt-aki/helpers/RagfairServerHelper";
 import { IContainerMinMax, IStaticContainer } from "@spt-aki/models/eft/common/ILocation";
 import { ILocationBase } from "@spt-aki/models/eft/common/ILocationBase";
 import { ILooseLoot, Spawnpoint, SpawnpointTemplate, SpawnpointsForced } from "@spt-aki/models/eft/common/ILooseLoot";
@@ -34,7 +33,6 @@ export declare class LocationGenerator {
     protected jsonUtil: JsonUtil;
     protected objectId: ObjectId;
     protected randomUtil: RandomUtil;
-    protected ragfairServerHelper: RagfairServerHelper;
     protected itemHelper: ItemHelper;
     protected mathUtil: MathUtil;
     protected seasonalEventService: SeasonalEventService;
@@ -43,7 +41,7 @@ export declare class LocationGenerator {
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
     protected locationConfig: ILocationConfig;
-    constructor(logger: ILogger, databaseServer: DatabaseServer, jsonUtil: JsonUtil, objectId: ObjectId, randomUtil: RandomUtil, ragfairServerHelper: RagfairServerHelper, itemHelper: ItemHelper, mathUtil: MathUtil, seasonalEventService: SeasonalEventService, containerHelper: ContainerHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer);
+    constructor(logger: ILogger, databaseServer: DatabaseServer, jsonUtil: JsonUtil, objectId: ObjectId, randomUtil: RandomUtil, itemHelper: ItemHelper, mathUtil: MathUtil, seasonalEventService: SeasonalEventService, containerHelper: ContainerHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer);
     /**
      * Create an array of container objects with randomised loot
      * @param locationBase Map base to generate containers for
@@ -147,5 +145,5 @@ export declare class LocationGenerator {
      * @returns Item object
      */
     protected getItemInArray(items: Item[], chosenTpl: string): Item;
-    protected createStaticLootItem(tpl: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, parentId?: string): IContainerItem;
+    protected createStaticLootItem(chosenTpl: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, parentId?: string): IContainerItem;
 }

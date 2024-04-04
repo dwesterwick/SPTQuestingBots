@@ -7,11 +7,12 @@ import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
 import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
 import { IQuestStatus } from "@spt-aki/models/eft/common/tables/IBotBase";
 import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { AvailableForConditions, IQuest, Reward } from "@spt-aki/models/eft/common/tables/IQuest";
+import { IQuest, IQuestCondition } from "@spt-aki/models/eft/common/tables/IQuest";
 import { IRepeatableQuest } from "@spt-aki/models/eft/common/tables/IRepeatableQuests";
 import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
 import { IAcceptQuestRequestData } from "@spt-aki/models/eft/quests/IAcceptQuestRequestData";
 import { ICompleteQuestRequestData } from "@spt-aki/models/eft/quests/ICompleteQuestRequestData";
+import { IFailQuestRequestData } from "@spt-aki/models/eft/quests/IFailQuestRequestData";
 import { IHandoverQuestRequestData } from "@spt-aki/models/eft/quests/IHandoverQuestRequestData";
 import { IQuestConfig } from "@spt-aki/models/spt/config/IQuestConfig";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
@@ -69,12 +70,6 @@ export declare class QuestController {
      */
     protected showEventQuestToPlayer(questId: string): boolean;
     /**
-     * Is the quest for the opposite side the player is on
-     * @param playerSide Player side (usec/bear)
-     * @param questId QuestId to check
-     */
-    protected questIsForOtherSide(playerSide: string, questId: string): boolean;
-    /**
      * Handle QuestAccept event
      * Handle the client accepting a quest and starting it
      * Send starting rewards if any to player and
@@ -114,6 +109,12 @@ export declare class QuestController {
      */
     completeQuest(pmcData: IPmcData, body: ICompleteQuestRequestData, sessionID: string): IItemEventRouterResponse;
     /**
+     * Return a list of quests that would fail when supplied quest is completed
+     * @param completedQuestId quest completed id
+     * @returns array of IQuest objects
+     */
+    protected getQuestsFailedByCompletingQuest(completedQuestId: string, pmcProfile: IPmcData): IQuest[];
+    /**
      * Remove a quest entirely from a profile
      * @param sessionId Player id
      * @param questIdToRemove Qid of quest to remove
@@ -133,7 +134,7 @@ export declare class QuestController {
      * @param completedQuestId Completed quest id
      * @param questRewards Rewards given to player
      */
-    protected sendSuccessDialogMessageOnQuestComplete(sessionID: string, pmcData: IPmcData, completedQuestId: string, questRewards: Reward[]): void;
+    protected sendSuccessDialogMessageOnQuestComplete(sessionID: string, pmcData: IPmcData, completedQuestId: string, questRewards: Item[]): void;
     /**
      * Look for newly available quests after completing a quest with a requirement to wait x minutes (time-locked) before being available and add data to profile
      * @param pmcData Player profile to update
@@ -141,12 +142,6 @@ export declare class QuestController {
      * @param completedQuestId Quest just completed
      */
     protected addTimeLockedQuestsToProfile(pmcData: IPmcData, quests: IQuest[], completedQuestId: string): void;
-    /**
-     * Returns a list of quests that should be failed when a quest is completed
-     * @param completedQuestId quest completed id
-     * @returns array of quests
-     */
-    protected getQuestsFailedByCompletingQuest(completedQuestId: string): IQuest[];
     /**
      * Fail the provided quests
      * Update quest in profile, otherwise add fresh quest object with failed status
@@ -179,7 +174,7 @@ export declare class QuestController {
      * @param output Response to send to user
      * @returns IItemEventRouterResponse
      */
-    protected showQuestItemHandoverMatchError(handoverQuestRequest: IHandoverQuestRequestData, itemHandedOver: Item, handoverRequirements: AvailableForConditions, output: IItemEventRouterResponse): IItemEventRouterResponse;
+    protected showQuestItemHandoverMatchError(handoverQuestRequest: IHandoverQuestRequestData, itemHandedOver: Item, handoverRequirements: IQuestCondition, output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Increment a backend counter stored value by an amount,
      * Create counter if it does not exist
@@ -188,5 +183,13 @@ export declare class QuestController {
      * @param questId quest id counter is associated with
      * @param counterValue value to increment the backend counter with
      */
-    protected updateProfileBackendCounterValue(pmcData: IPmcData, conditionId: string, questId: string, counterValue: number): void;
+    protected updateProfileTaskConditionCounterValue(pmcData: IPmcData, conditionId: string, questId: string, counterValue: number): void;
+    /**
+     * Handle /client/game/profile/items/moving - QuestFail
+     * @param pmcData Pmc profile
+     * @param request Fail qeust request
+     * @param sessionID Session id
+     * @returns IItemEventRouterResponse
+     */
+    failQuest(pmcData: IPmcData, request: IFailQuestRequestData, sessionID: string, output: IItemEventRouterResponse): IItemEventRouterResponse;
 }

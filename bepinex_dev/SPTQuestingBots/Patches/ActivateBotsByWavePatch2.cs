@@ -17,12 +17,12 @@ namespace SPTQuestingBots.Patches
                 "ActivateBotsByWave",
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
-                new Type[] { typeof(GClass1360) },
+                new Type[] { typeof(BotWaveDataClass) },
                 null);
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(GClass1360 wave)
+        private static bool PatchPrefix(BotWaveDataClass wave)
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {

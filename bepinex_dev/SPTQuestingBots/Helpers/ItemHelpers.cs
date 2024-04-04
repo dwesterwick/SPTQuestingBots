@@ -37,7 +37,7 @@ namespace SPTQuestingBots.Helpers
                 multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
-            GClass2352 helmetTemplate = helmet?.Template as GClass2352;
+            GClass2536 helmetTemplate = helmet?.Template as GClass2536;
             switch (helmetTemplate?.DeafStrength)
             {
                 case EDeafStrength.Low:
@@ -76,7 +76,7 @@ namespace SPTQuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                GStruct375<GClass2593> moveResult = GClass2585.Add(item, locationForItem, inventoryControllerClass, true);
+                GStruct414<GClass2782> moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -119,7 +119,7 @@ namespace SPTQuestingBots.Helpers
 
                 // Search through all grids in the equipment slot
                 SearchableItemClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as SearchableItemClass;
-                foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
+                foreach (StashGridClass grid in (equipmentSlot?.Grids ?? (new StashGridClass[0])))
                 {
                     //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
@@ -129,7 +129,7 @@ namespace SPTQuestingBots.Helpers
                     {
                         LoggingController.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
 
-                        return new GClass2580(grid, locationInGrid);
+                        return new GClass2769(grid, locationInGrid);
                     }
                 }
             }
@@ -158,7 +158,7 @@ namespace SPTQuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraph<IEasyBundle>.GClass3114 LoadBundle(this Item item)
+        public static DependencyGraph<IEasyBundle>.GClass3391 LoadBundle(this Item item)
         {
             try
             {

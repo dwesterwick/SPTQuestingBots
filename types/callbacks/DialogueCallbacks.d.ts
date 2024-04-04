@@ -86,11 +86,11 @@ export declare class DialogueCallbacks implements OnUpdate {
     /** Handle client/friend/ignore/set */
     ignoreFriend(url: string, request: {
         uid: string;
-    }, sessionID: string): any;
+    }, sessionID: string): INullResponseData;
     /** Handle client/friend/ignore/remove */
     unIgnoreFriend(url: string, request: {
         uid: string;
-    }, sessionID: string): any;
+    }, sessionID: string): INullResponseData;
     clearMail(url: string, request: IClearMailMessageRequest, sessionID: string): IGetBodyResponseData<any[]>;
     removeMail(url: string, request: IRemoveMailMessageRequest, sessionID: string): IGetBodyResponseData<any[]>;
     onUpdate(timeSinceLastRun: number): Promise<boolean>;

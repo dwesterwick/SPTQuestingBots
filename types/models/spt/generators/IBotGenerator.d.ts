@@ -3,8 +3,3 @@ import { Chances, Generation, Inventory } from "@spt-aki/models/eft/common/table
 export interface IBotGenerator {
     generateInventory(templateInventory: Inventory, equipmentChances: Chances, generation: Generation, botRole: string, isPmc: boolean): PmcInventory;
 }
-export interface IExhaustableArray<T> {
-    getRandomValue(): T;
-    getFirstValue(): T;
-    hasValues(): boolean;
-}

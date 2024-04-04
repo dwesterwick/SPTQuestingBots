@@ -34,10 +34,19 @@ export interface ILocationConfig extends IBaseConfig {
     /** How full must a random static magazine be %*/
     minFillStaticMagazinePercent: number;
     allowDuplicateItemsInStaticContainers: boolean;
+    /** Chance loose/static magazines have ammo in them */
+    magazineLootHasAmmoChancePercent: number;
     /** Key: map, value: loose loot ids to ignore */
     looseLootBlacklist: Record<string, string[]>;
     /** Key: map, value: settings to control how long scav raids are*/
     scavRaidTimeSettings: IScavRaidTimeSettings;
+    /** Settings to adjust mods for lootable equipment in raid */
+    equipmentLootSettings: IEquipmentLootSettings;
+    /** Sets the max Patrol Value of the Boxzone on the map Ground Zero*/
+    sandboxMaxPatrolvalue: number;
+}
+export interface IEquipmentLootSettings {
+    modSpawnChancePercent: Record<string, number>;
 }
 export interface IFixEmptyBotWavesSettings {
     enabled: boolean;
@@ -78,6 +87,7 @@ export interface LootMultiplier {
     tarkovstreets: number;
     terminal: number;
     town: number;
+    sandbox: number;
 }
 export interface IContainerRandomistionSettings {
     enabled: boolean;
@@ -98,10 +108,13 @@ export interface IScavRaidTimeConfigSettings {
 export interface IScavRaidTimeLocationSettings {
     /** Should loot be reduced by same percent length of raid is reduced by */
     reduceLootByPercent: boolean;
+    /** Smallest % of container loot that should be spawned */
     minStaticLootPercent: number;
+    /** Smallest % of loose loot that should be spawned */
     minDynamicLootPercent: number;
     /** Chance raid time is reduced */
     reducedChancePercent: number;
+    /** How much should raid time be reduced - weighted */
     reductionPercentWeights: Record<string, number>;
     /** Should bot waves be removed / spawn times be adjusted */
     adjustWaves: boolean;

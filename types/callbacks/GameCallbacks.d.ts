@@ -9,6 +9,7 @@ import { IGameKeepAliveResponse } from "@spt-aki/models/eft/game/IGameKeepAliveR
 import { IGameLogoutResponseData } from "@spt-aki/models/eft/game/IGameLogoutResponseData";
 import { IGameStartResponse } from "@spt-aki/models/eft/game/IGameStartResponse";
 import { IGetRaidTimeRequest } from "@spt-aki/models/eft/game/IGetRaidTimeRequest";
+import { IGetRaidTimeResponse } from "@spt-aki/models/eft/game/IGetRaidTimeResponse";
 import { IReportNicknameRequestData } from "@spt-aki/models/eft/game/IReportNicknameRequestData";
 import { IServerDetails } from "@spt-aki/models/eft/game/IServerDetails";
 import { IVersionValidateRequestData } from "@spt-aki/models/eft/game/IVersionValidateRequestData";
@@ -17,7 +18,7 @@ import { INullResponseData } from "@spt-aki/models/eft/httpResponse/INullRespons
 import { SaveServer } from "@spt-aki/servers/SaveServer";
 import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import { Watermark } from "@spt-aki/utils/Watermark";
-declare class GameCallbacks implements OnLoad {
+export declare class GameCallbacks implements OnLoad {
     protected httpResponse: HttpResponseUtil;
     protected watermark: Watermark;
     protected saveServer: SaveServer;
@@ -70,9 +71,8 @@ declare class GameCallbacks implements OnLoad {
     getVersion(url: string, info: IEmptyRequestData, sessionID: string): string;
     reportNickname(url: string, info: IReportNicknameRequestData, sessionID: string): INullResponseData;
     /**
- * Handle singleplayer/settings/getRaidTime
- * @returns string
- */
-    getRaidTime(url: string, request: IGetRaidTimeRequest, sessionID: string): any;
+     * Handle singleplayer/settings/getRaidTime
+     * @returns string
+     */
+    getRaidTime(url: string, request: IGetRaidTimeRequest, sessionID: string): IGetRaidTimeResponse;
 }
-export { GameCallbacks };

@@ -4,7 +4,7 @@ import { BotDifficultyHelper } from "@spt-aki/helpers/BotDifficultyHelper";
 import { BotHelper } from "@spt-aki/helpers/BotHelper";
 import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
-import { Health as PmcHealth, IBaseJsonSkills, IBaseSkill, IBotBase, Info, Skills as botSkills } from "@spt-aki/models/eft/common/tables/IBotBase";
+import { IBaseJsonSkills, IBaseSkill, IBotBase, Info, Health as PmcHealth, Skills as botSkills } from "@spt-aki/models/eft/common/tables/IBotBase";
 import { Appearance, Health, IBotType } from "@spt-aki/models/eft/common/tables/IBotType";
 import { BotGenerationDetails } from "@spt-aki/models/spt/bots/BotGenerationDetails";
 import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
@@ -48,12 +48,12 @@ export declare class BotGenerator {
      */
     generatePlayerScav(sessionId: string, role: string, difficulty: string, botTemplate: IBotType): IBotBase;
     /**
-     * Create x number of bots of the type/side/difficulty defined in botGenerationDetails
+     * Create 1  bots of the type/side/difficulty defined in botGenerationDetails
      * @param sessionId Session id
      * @param botGenerationDetails details on how to generate bots
-     * @returns array of bots
+     * @returns constructed bot
      */
-    prepareAndGenerateBots(sessionId: string, botGenerationDetails: BotGenerationDetails): IBotBase[];
+    prepareAndGenerateBot(sessionId: string, botGenerationDetails: BotGenerationDetails): IBotBase;
     /**
      * Get a clone of the database\bots\base.json file
      * @returns IBotBase object
@@ -78,11 +78,11 @@ export declare class BotGenerator {
     /**
      * Create a bot nickname
      * @param botJsonTemplate x.json from database
-     * @param isPlayerScav Will bot be player scav
+     * @param botGenerationDetails
      * @param botRole role of bot e.g. assault
      * @returns Nickname for bot
      */
-    protected generateBotNickname(botJsonTemplate: IBotType, isPlayerScav: boolean, botRole: string, sessionId: string): string;
+    protected generateBotNickname(botJsonTemplate: IBotType, botGenerationDetails: BotGenerationDetails, botRole: string, sessionId: string): string;
     /**
      * Log the number of PMCs generated to the debug console
      * @param output Generated bot array, ready to send to client
@@ -113,8 +113,8 @@ export declare class BotGenerator {
      * @param bot bot to update
      * @returns updated IBotBase object
      */
-    protected generateId(bot: IBotBase): IBotBase;
-    protected generateInventoryID(profile: IBotBase): IBotBase;
+    protected generateId(bot: IBotBase): void;
+    protected generateInventoryID(profile: IBotBase): void;
     /**
      * Randomise a bots game version and account category
      * Chooses from all the game versions (standard, eod etc)
@@ -127,5 +127,5 @@ export declare class BotGenerator {
      * @param bot bot to add dogtag to
      * @returns Bot with dogtag added
      */
-    protected generateDogtag(bot: IBotBase): IBotBase;
+    protected addDogtagToBot(bot: IBotBase): void;
 }

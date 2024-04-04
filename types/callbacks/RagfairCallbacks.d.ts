@@ -11,6 +11,8 @@ import { IExtendOfferRequestData } from "@spt-aki/models/eft/ragfair/IExtendOffe
 import { IGetItemPriceResult } from "@spt-aki/models/eft/ragfair/IGetItemPriceResult";
 import { IGetMarketPriceRequestData } from "@spt-aki/models/eft/ragfair/IGetMarketPriceRequestData";
 import { IGetOffersResult } from "@spt-aki/models/eft/ragfair/IGetOffersResult";
+import { IGetRagfairOfferByIdRequest } from "@spt-aki/models/eft/ragfair/IGetRagfairOfferByIdRequest";
+import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
 import { IRemoveOfferRequestData } from "@spt-aki/models/eft/ragfair/IRemoveOfferRequestData";
 import { ISearchRequestData } from "@spt-aki/models/eft/ragfair/ISearchRequestData";
 import { ISendRagfairReportRequestData } from "@spt-aki/models/eft/ragfair/ISendRagfairReportRequestData";
@@ -45,7 +47,7 @@ export declare class RagfairCallbacks implements OnLoad, OnUpdate {
     getMarketPrice(url: string, info: IGetMarketPriceRequestData, sessionID: string): IGetBodyResponseData<IGetItemPriceResult>;
     /** Handle RagFairAddOffer event */
     addOffer(pmcData: IPmcData, info: IAddOfferRequestData, sessionID: string): IItemEventRouterResponse;
-    /** \Handle RagFairRemoveOffer event */
+    /** Handle RagFairRemoveOffer event */
     removeOffer(pmcData: IPmcData, info: IRemoveOfferRequestData, sessionID: string): IItemEventRouterResponse;
     /** Handle RagFairRenewOffer event */
     extendOffer(pmcData: IPmcData, info: IExtendOfferRequestData, sessionID: string): IItemEventRouterResponse;
@@ -57,4 +59,6 @@ export declare class RagfairCallbacks implements OnLoad, OnUpdate {
     /** Handle client/reports/ragfair/send */
     sendReport(url: string, info: ISendRagfairReportRequestData, sessionID: string): INullResponseData;
     storePlayerOfferTaxAmount(url: string, request: IStorePlayerOfferTaxAmountRequestData, sessionId: string): INullResponseData;
+    /** Handle client/ragfair/offer/findbyid */
+    getFleaOfferById(url: string, request: IGetRagfairOfferByIdRequest, sessionID: string): IGetBodyResponseData<IRagfairOffer>;
 }

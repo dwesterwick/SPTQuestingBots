@@ -15,6 +15,7 @@ export declare class WeatherGenerator {
     protected applicationContext: ApplicationContext;
     protected configServer: ConfigServer;
     protected weatherConfig: IWeatherConfig;
+    private serverStartTimestampMS;
     constructor(weightedRandomHelper: WeightedRandomHelper, logger: ILogger, randomUtil: RandomUtil, timeUtil: TimeUtil, applicationContext: ApplicationContext, configServer: ConfigServer);
     /**
      * Get current + raid datetime and format into correct BSG format and return
@@ -28,13 +29,13 @@ export declare class WeatherGenerator {
      * @param currentDate current date
      * @returns formatted time
      */
-    protected getBsgFormattedInRaidTime(currentDate: Date): string;
+    protected getBsgFormattedInRaidTime(): string;
     /**
      * Get the current in-raid time
      * @param currentDate (new Date())
      * @returns Date object of current in-raid time
      */
-    getInRaidTime(currentDate: Date): Date;
+    getInRaidTime(): Date;
     /**
      * Get current time formatted to fit BSGs requirement
      * @param date date to format into bsg style

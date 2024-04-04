@@ -6,6 +6,7 @@ import { SeasonalEventType } from "@spt-aki/models/enums/SeasonalEventType";
 import { IHttpConfig } from "@spt-aki/models/spt/config/IHttpConfig";
 import { IQuestConfig } from "@spt-aki/models/spt/config/IQuestConfig";
 import { ISeasonalEvent, ISeasonalEventConfig } from "@spt-aki/models/spt/config/ISeasonalEventConfig";
+import { IWeatherConfig } from "@spt-aki/models/spt/config/IWeatherConfig";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
@@ -24,8 +25,11 @@ export declare class SeasonalEventService {
     protected seasonalEventConfig: ISeasonalEventConfig;
     protected questConfig: IQuestConfig;
     protected httpConfig: IHttpConfig;
-    protected halloweenEventActive: any;
-    protected christmasEventActive: any;
+    protected weatherConfig: IWeatherConfig;
+    protected halloweenEventActive: boolean;
+    protected christmasEventActive: boolean;
+    /** All events active at this point in time */
+    protected currentlyActiveEvents: SeasonalEventType[];
     constructor(logger: ILogger, databaseServer: DatabaseServer, databaseImporter: DatabaseImporter, giftService: GiftService, localisationService: LocalisationService, botHelper: BotHelper, profileHelper: ProfileHelper, configServer: ConfigServer);
     protected get christmasEventItems(): string[];
     protected get halloweenEventItems(): string[];
@@ -48,11 +52,12 @@ export declare class SeasonalEventService {
      */
     itemIsSeasonalRelated(itemTpl: string): boolean;
     /**
-     * Get an array of items that appear during a seasonal event
-     * returns multiple seasonal event items if they are both active
+     * Get an array of seasonal items that should not appear
+     * e.g. if halloween is active, only return christmas items
+     * or, if halloween and christmas are inactive, return both sets of items
      * @returns array of tpl strings
      */
-    getAllSeasonalEventItems(): string[];
+    getInactiveSeasonalEventItems(): string[];
     /**
      * Is a seasonal event currently active
      * @returns true if event is active
@@ -99,10 +104,10 @@ export declare class SeasonalEventService {
     protected cacheActiveEvents(): void;
     /**
      * Iterate through bots inventory and loot to find and remove christmas items (as defined in SeasonalEventService)
-     * @param nodeInventory Bots inventory to iterate over
+     * @param botInventory Bots inventory to iterate over
      * @param botRole the role of the bot being processed
      */
-    removeChristmasItemsFromBotInventory(nodeInventory: Inventory, botRole: string): void;
+    removeChristmasItemsFromBotInventory(botInventory: Inventory, botRole: string): void;
     /**
      * Make adjusted to server code based on the name of the event passed in
      * @param sessionId Player id
@@ -110,6 +115,9 @@ export declare class SeasonalEventService {
      * @param eventName Name of the event to enable. e.g. Christmas
      */
     protected updateGlobalEvents(sessionId: string, globalConfig: IConfig, eventType: SeasonalEventType): void;
+    protected adjustZryachiyMeleeChance(): void;
+    protected enableHalloweenSummonEvent(): void;
+    protected addEventBossesToMaps(eventType: SeasonalEventType): void;
     /**
      * Change trader icons to be more event themed (Halloween only so far)
      * @param eventType What event is active
@@ -139,4 +147,11 @@ export declare class SeasonalEventService {
      * @param giftkey Key of gift to give
      */
     protected giveGift(playerId: string, giftkey: string): void;
+    /**
+     * Get the underlying bot type for an event bot e.g. `peacefullZryachiyEvent` will return `bossZryachiy`
+     * @param eventBotRole Event bot role type
+     * @returns Bot role as string
+     */
+    getBaseRoleForEventBot(eventBotRole: string): string;
+    enableSnow(): void;
 }

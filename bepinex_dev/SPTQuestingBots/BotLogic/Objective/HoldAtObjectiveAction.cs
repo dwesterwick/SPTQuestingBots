@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass394.CreateNode(BotLogicDecision.search, BotOwner));
+            SetBaseAction(GClass460.CreateNode(BotLogicDecision.search, BotOwner));
         }
 
         public override void Start()

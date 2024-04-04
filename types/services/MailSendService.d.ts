@@ -63,7 +63,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendLocalisedSystemMessageToPlayer(sessionId: string, messageLocaleId: string, items?: Item[], maxStorageTimeSeconds?: any): void;
+    sendLocalisedSystemMessageToPlayer(sessionId: string, messageLocaleId: string, items?: Item[], profileChangeEvents?: any[], maxStorageTimeSeconds?: any): void;
     /**
      * Send a USER message to a player with or without items
      * @param sessionId The session ID to send the message to

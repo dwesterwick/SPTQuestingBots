@@ -19,14 +19,14 @@ namespace SPTQuestingBots.Patches
     {
         public static bool IsDelayingGameStart { get; set; } = false;
 
-        private static readonly List<GClass1360> missedBotWaves = new List<GClass1360>();
+        private static readonly List<BotWaveDataClass> missedBotWaves = new List<BotWaveDataClass>();
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
         private static object localGameObj = null;
 
         protected override MethodBase GetTargetMethod()
         {
             Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
-            return localGameType.GetMethod("method_18", BindingFlags.NonPublic | BindingFlags.Instance);
+            return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -49,7 +49,7 @@ namespace SPTQuestingBots.Patches
             missedBossWaves.Clear();
         }
 
-        public static void AddMissedBotWave(GClass1360 wave)
+        public static void AddMissedBotWave(BotWaveDataClass wave)
         {
             missedBotWaves.Add(wave);
         }
@@ -89,7 +89,7 @@ namespace SPTQuestingBots.Patches
             {
                 LoggingController.LogInfo("Spawning missed bot waves...");
 
-                foreach (GClass1360 missedBotWave in missedBotWaves)
+                foreach (BotWaveDataClass missedBotWave in missedBotWaves)
                 {
                     Singleton<IBotGame>.Instance.BotsController.ActivateBotsByWave(missedBotWave);
                 }

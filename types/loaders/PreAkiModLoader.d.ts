@@ -1,5 +1,4 @@
 import { DependencyContainer } from "tsyringe";
-import { BundleLoader } from "@spt-aki/loaders/BundleLoader";
 import { ModLoadOrder } from "@spt-aki/loaders/ModLoadOrder";
 import { ModTypeCheck } from "@spt-aki/loaders/ModTypeCheck";
 import { ModDetails } from "@spt-aki/models/eft/profile/IAkiProfile";
@@ -17,12 +16,11 @@ export declare class PreAkiModLoader implements IModLoader {
     protected vfs: VFS;
     protected jsonUtil: JsonUtil;
     protected modCompilerService: ModCompilerService;
-    protected bundleLoader: BundleLoader;
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
     protected modLoadOrder: ModLoadOrder;
     protected modTypeCheck: ModTypeCheck;
-    protected static container: DependencyContainer;
+    protected container: DependencyContainer;
     protected readonly basepath = "user/mods/";
     protected readonly modOrderPath = "user/mods/order.json";
     protected order: Record<string, number>;
@@ -30,7 +28,7 @@ export declare class PreAkiModLoader implements IModLoader {
     protected akiConfig: ICoreConfig;
     protected serverDependencies: Record<string, string>;
     protected skippedMods: Set<string>;
-    constructor(logger: ILogger, vfs: VFS, jsonUtil: JsonUtil, modCompilerService: ModCompilerService, bundleLoader: BundleLoader, localisationService: LocalisationService, configServer: ConfigServer, modLoadOrder: ModLoadOrder, modTypeCheck: ModTypeCheck);
+    constructor(logger: ILogger, vfs: VFS, jsonUtil: JsonUtil, modCompilerService: ModCompilerService, localisationService: LocalisationService, configServer: ConfigServer, modLoadOrder: ModLoadOrder, modTypeCheck: ModTypeCheck);
     load(container: DependencyContainer): Promise<void>;
     /**
      * Returns a list of mods with preserved load order
@@ -68,10 +66,9 @@ export declare class PreAkiModLoader implements IModLoader {
     protected isModCombatibleWithAki(mod: IPackageJsonData): boolean;
     /**
      * Execute each mod found in this.imported
-     * @param container Dependence container to give to mod when it runs
      * @returns void promise
      */
-    protected executeModsAsync(container: DependencyContainer): Promise<void>;
+    protected executeModsAsync(): Promise<void>;
     /**
      * Read loadorder.json (create if doesnt exist) and return sorted list of mods
      * @returns string array of sorted mod names

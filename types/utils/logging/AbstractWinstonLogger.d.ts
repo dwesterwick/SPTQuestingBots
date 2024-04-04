@@ -7,10 +7,8 @@ import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
 import { SptLogger } from "@spt-aki/models/spt/logging/SptLogger";
 import { IAsyncQueue } from "@spt-aki/models/spt/utils/IAsyncQueue";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { IUUidGenerator } from "@spt-aki/models/spt/utils/IUuidGenerator";
 export declare abstract class AbstractWinstonLogger implements ILogger {
     protected asyncQueue: IAsyncQueue;
-    protected uuidGenerator: IUUidGenerator;
     protected showDebugInConsole: boolean;
     protected filePath: string;
     protected logLevels: {
@@ -44,7 +42,7 @@ export declare abstract class AbstractWinstonLogger implements ILogger {
     };
     protected logger: winston.Logger & SptLogger;
     protected writeFilePromisify: (path: fs.PathLike, data: string, options?: any) => Promise<void>;
-    constructor(asyncQueue: IAsyncQueue, uuidGenerator: IUUidGenerator);
+    constructor(asyncQueue: IAsyncQueue);
     protected abstract isLogToFile(): boolean;
     protected abstract isLogToConsole(): boolean;
     protected abstract isLogExceptions(): boolean;

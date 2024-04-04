@@ -1,10 +1,14 @@
 import { ProfileController } from "@spt-aki/controllers/ProfileController";
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { IEmptyRequestData } from "@spt-aki/models/eft/common/IEmptyRequestData";
 import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
 import { IGetBodyResponseData } from "@spt-aki/models/eft/httpResponse/IGetBodyResponseData";
 import { INullResponseData } from "@spt-aki/models/eft/httpResponse/INullResponseData";
 import { IGetMiniProfileRequestData } from "@spt-aki/models/eft/launcher/IGetMiniProfileRequestData";
 import { GetProfileStatusResponseData } from "@spt-aki/models/eft/profile/GetProfileStatusResponseData";
+import { ICreateProfileResponse } from "@spt-aki/models/eft/profile/ICreateProfileResponse";
+import { IGetOtherProfileRequest } from "@spt-aki/models/eft/profile/IGetOtherProfileRequest";
+import { IGetOtherProfileResponse } from "@spt-aki/models/eft/profile/IGetOtherProfileResponse";
 import { IGetProfileSettingsRequest } from "@spt-aki/models/eft/profile/IGetProfileSettingsRequest";
 import { IProfileChangeNicknameRequestData } from "@spt-aki/models/eft/profile/IProfileChangeNicknameRequestData";
 import { IProfileChangeVoiceRequestData } from "@spt-aki/models/eft/profile/IProfileChangeVoiceRequestData";
@@ -19,11 +23,12 @@ export declare class ProfileCallbacks {
     protected httpResponse: HttpResponseUtil;
     protected timeUtil: TimeUtil;
     protected profileController: ProfileController;
-    constructor(httpResponse: HttpResponseUtil, timeUtil: TimeUtil, profileController: ProfileController);
+    protected profileHelper: ProfileHelper;
+    constructor(httpResponse: HttpResponseUtil, timeUtil: TimeUtil, profileController: ProfileController, profileHelper: ProfileHelper);
     /**
      * Handle client/game/profile/create
      */
-    createProfile(url: string, info: IProfileCreateRequestData, sessionID: string): IGetBodyResponseData<any>;
+    createProfile(url: string, info: IProfileCreateRequestData, sessionID: string): IGetBodyResponseData<ICreateProfileResponse>;
     /**
      * Handle client/game/profile/list
      * Get the complete player profile (scav + pmc character)
@@ -61,6 +66,11 @@ export declare class ProfileCallbacks {
      * Called when creating a character when choosing a character face/voice
      */
     getProfileStatus(url: string, info: IEmptyRequestData, sessionID: string): IGetBodyResponseData<GetProfileStatusResponseData>;
+    /**
+     * Handle client/profile/view
+     * Called when viewing another players profile
+     */
+    getOtherProfile(url: string, request: IGetOtherProfileRequest, sessionID: string): IGetBodyResponseData<IGetOtherProfileResponse>;
     /**
      * Handle client/profile/settings
      */

@@ -7,7 +7,7 @@ import { IRemoveProfileData } from "@spt-aki/models/eft/launcher/IRemoveProfileD
 import { SaveServer } from "@spt-aki/servers/SaveServer";
 import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import { Watermark } from "@spt-aki/utils/Watermark";
-declare class LauncherCallbacks {
+export declare class LauncherCallbacks {
     protected httpResponse: HttpResponseUtil;
     protected launcherController: LauncherController;
     protected saveServer: SaveServer;
@@ -27,4 +27,3 @@ declare class LauncherCallbacks {
     getLoadedServerMods(): string;
     getServerModsProfileUsed(url: string, info: IEmptyRequestData, sessionId: string): string;
 }
-export { LauncherCallbacks };

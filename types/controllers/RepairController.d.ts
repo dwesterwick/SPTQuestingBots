@@ -1,3 +1,4 @@
+import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
 import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import { RepairHelper } from "@spt-aki/helpers/RepairHelper";
 import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
@@ -20,8 +21,9 @@ export declare class RepairController {
     protected paymentService: PaymentService;
     protected repairHelper: RepairHelper;
     protected repairService: RepairService;
+    protected profileHelper: ProfileHelper;
     protected repairConfig: IRepairConfig;
-    constructor(logger: ILogger, eventOutputHolder: EventOutputHolder, databaseServer: DatabaseServer, questHelper: QuestHelper, traderHelper: TraderHelper, paymentService: PaymentService, repairHelper: RepairHelper, repairService: RepairService);
+    constructor(logger: ILogger, eventOutputHolder: EventOutputHolder, databaseServer: DatabaseServer, questHelper: QuestHelper, traderHelper: TraderHelper, paymentService: PaymentService, repairHelper: RepairHelper, repairService: RepairService, profileHelper: ProfileHelper);
     /**
      * Handle TraderRepair event
      * Repair with trader

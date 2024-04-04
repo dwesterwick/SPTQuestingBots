@@ -131,12 +131,13 @@ export declare class RandomUtil {
         [x: string]: any;
     }): any;
     /**
-     * Draw from normal distribution
-     * @param   {number}    mu      Mean of the normal distribution
+     * Generate a normally distributed random number
+     * Uses the Box-Muller transform
+     * @param   {number}    mean    Mean of the normal distribution
      * @param   {number}    sigma   Standard deviation of the normal distribution
      * @returns {number}            The value drawn
      */
-    randn(mu: number, sigma: number): number;
+    getNormallyDistributedRandomNumber(mean: number, sigma: number, attempt?: number): number;
     /**
      * Draw Random integer low inclusive, high exclusive
      * if high is not set we draw from 0 to low (exclusive)
@@ -149,11 +150,11 @@ export declare class RandomUtil {
      * Draw a random element of the provided list N times to return an array of N random elements
      * Drawing can be with or without replacement
      * @param   {array}     list            The array we want to draw randomly from
-     * @param   {integer}   count               The number of times we want to draw
-     * @param   {boolean}   replacement     Draw with or without replacement from the input array(defult true)
+     * @param   {integer}   count           The number of times we want to draw
+     * @param   {boolean}   replacement     Draw with or without replacement from the input array(default true)
      * @return  {array}                     Array consisting of N random elements
      */
-    drawRandomFromList<T>(list: Array<T>, count?: number, replacement?: boolean): Array<T>;
+    drawRandomFromList<T>(originalList: Array<T>, count?: number, replacement?: boolean): Array<T>;
     /**
      * Draw a random (top level) element of the provided dictionary N times to return an array of N random dictionary keys
      * Drawing can be with or without replacement
@@ -170,4 +171,12 @@ export declare class RandomUtil {
      * @returns Shuffled array
      */
     shuffle<T>(array: Array<T>): Array<T>;
+    /**
+     * Rolls for a probability based on chance
+     * @param number Probability Chance as float (0-1)
+     * @returns If roll succeed or not
+     * @example
+     * rollForChanceProbability(0.25); // returns true 25% probability
+     */
+    rollForChanceProbability(probabilityChance: number): boolean;
 }

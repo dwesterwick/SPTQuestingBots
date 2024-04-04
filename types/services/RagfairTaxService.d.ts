@@ -16,6 +16,16 @@ export declare class RagfairTaxService {
     storeClientOfferTaxValue(sessionId: string, offer: IStorePlayerOfferTaxAmountRequestData): void;
     clearStoredOfferTaxById(offerIdToRemove: string): void;
     getStoredClientOfferTaxValueById(offerIdToGet: string): IStorePlayerOfferTaxAmountRequestData;
+    /**
+    // This method, along with calculateItemWorth, is trying to mirror the client-side code found in the method "CalculateTaxPrice".
+    // It's structured to resemble the client-side code as closely as possible - avoid making any big structure changes if it's not necessary.
+     * @param item Item being sold on flea
+     * @param pmcData player profile
+     * @param requirementsValue
+     * @param offerItemCount Number of offers being created
+     * @param sellInOnePiece
+     * @returns Tax in roubles
+     */
     calculateTax(item: Item, pmcData: IPmcData, requirementsValue: number, offerItemCount: number, sellInOnePiece: boolean): number;
     protected calculateItemWorth(item: Item, itemTemplate: ITemplateItem, itemCount: number, pmcData: IPmcData, isRootItem?: boolean): number;
 }

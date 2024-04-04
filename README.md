@@ -360,8 +360,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.0** (ETA: Mid April)
-    * Update to SPT-AKI 3.8.0
 * **0.5.1** (ETA: Early May)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)

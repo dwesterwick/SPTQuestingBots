@@ -442,8 +442,8 @@ namespace SPTQuestingBots.Components.Spawning
             {
                 try
                 {
-                    GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, null);
-                    GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
+                    GClass592 botProfileData = new GClass592(spawnSide, spawnType, botdifficulty, 0f, null);
+                    GClass591 botSpawnData = await GClass591.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
                 }

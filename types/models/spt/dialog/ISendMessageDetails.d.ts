@@ -25,6 +25,12 @@ export interface ISendMessageDetails {
     systemData?: ISystemData;
     /** Optional - Used by ragfair messages */
     ragfairDetails?: MessageContentRagfair;
-    /** Optional - Usage not known, unsure of purpose, even dumps dont have it */
-    profileChangeEvents?: any[];
+    /** OPTIONAL - allows modification of profile settings via mail */
+    profileChangeEvents?: IProfileChangeEvent[];
+}
+export interface IProfileChangeEvent {
+    _id: string;
+    Type: "TraderSalesSum" | "TraderStanding" | "ProfileLevel" | "SkillPoints" | "ExamineAllItems" | "UnlockTrader";
+    value: number;
+    entity?: string;
 }

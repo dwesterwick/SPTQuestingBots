@@ -1,4 +1,4 @@
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
+import type { DependencyContainer } from "tsyringe";
 export interface IPostDBLoadMod {
     postDBLoad(container: DependencyContainer): void;
 }

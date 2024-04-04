@@ -5,6 +5,7 @@ export interface IPackageJsonData {
     dependencies?: Record<string, string>;
     modDependencies?: Record<string, string>;
     name: string;
+    url: string;
     author: string;
     version: string;
     akiVersion: string;

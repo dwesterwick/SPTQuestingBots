@@ -1,6 +1,7 @@
 import { MinMax } from "@spt-aki/models/common/MinMax";
 export interface LootRequest {
-    presetCount: MinMax;
+    weaponPresetCount: MinMax;
+    armorPresetCount: MinMax;
     itemCount: MinMax;
     weaponCrateCount: MinMax;
     itemBlacklist: string[];

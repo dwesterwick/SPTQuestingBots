@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(TarkovApplication).GetMethod("Init", BindingFlags.NonPublic | BindingFlags.Instance);
+            return typeof(TarkovApplication).GetMethod("Init", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

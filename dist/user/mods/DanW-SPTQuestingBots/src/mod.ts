@@ -245,6 +245,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             this.iAirdropConfig.airdropChancePercent.interchange = 100;
             this.iAirdropConfig.airdropChancePercent.reserve = 100;
             this.iAirdropConfig.airdropChancePercent.tarkovStreets = 100;
+            this.iAirdropConfig.airdropChancePercent.sandbox = 100;
 
             this.iAirdropConfig.airdropMinStartTimeSeconds = 5;
             this.iAirdropConfig.airdropMaxStartTimeSeconds = 10;
@@ -478,6 +479,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.iBotConfig.maxBotCap.interchange = Math.min(this.iBotConfig.maxBotCap.interchange + Math.min(this.databaseTables.locations.interchange.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.laboratory = Math.min(this.iBotConfig.maxBotCap.laboratory + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.tarkovstreets = Math.min(this.iBotConfig.maxBotCap.tarkovstreets + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.sandbox = Math.min(this.iBotConfig.maxBotCap.sandbox + Math.min(this.databaseTables.locations.sandbox.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.default = Math.min(this.iBotConfig.maxBotCap.default + maxAddtlBots, maxTotalBots);
 
         for (const location in this.iBotConfig.maxBotCap)

@@ -34,8 +34,20 @@ export declare class LocaleService {
      */
     getServerSupportedLocales(): string[];
     /**
+     * Get array of languages supported for localisation
+     * @returns array of locales e.g. en/fr/cn
+     */
+    getLocaleFallbacks(): {
+        [locale: string]: string;
+    };
+    /**
+     * Get the full locale of the computer running the server lowercased e.g. en-gb / pt-pt
+     * @returns string
+     */
+    protected getPlatformForServerLocale(): string;
+    /**
      * Get the locale of the computer running the server
      * @returns langage part of locale e.g. 'en' part of 'en-US'
      */
-    protected getPlatformLocale(): string;
+    protected getPlatformForClientLocale(): string;
 }

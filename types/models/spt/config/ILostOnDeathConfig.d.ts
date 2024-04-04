@@ -16,6 +16,7 @@ export interface Equipment {
     ArmorVest: boolean;
     Eyewear: boolean;
     TacticalVest: boolean;
+    PocketItems: boolean;
     Backpack: boolean;
     Holster: boolean;
     FirstPrimaryWeapon: boolean;

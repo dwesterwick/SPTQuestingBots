@@ -13,7 +13,9 @@ import { IGetRaidTimeRequest } from "@spt-aki/models/eft/game/IGetRaidTimeReques
 import { IGetRaidTimeResponse } from "@spt-aki/models/eft/game/IGetRaidTimeResponse";
 import { IServerDetails } from "@spt-aki/models/eft/game/IServerDetails";
 import { IAkiProfile } from "@spt-aki/models/eft/profile/IAkiProfile";
+import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { ICoreConfig } from "@spt-aki/models/spt/config/ICoreConfig";
+import { IHideoutConfig } from "@spt-aki/models/spt/config/IHideoutConfig";
 import { IHttpConfig } from "@spt-aki/models/spt/config/IHttpConfig";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
 import { ILootConfig } from "@spt-aki/models/spt/config/ILootConfig";
@@ -59,21 +61,23 @@ export declare class GameController {
     protected coreConfig: ICoreConfig;
     protected locationConfig: ILocationConfig;
     protected ragfairConfig: IRagfairConfig;
+    protected hideoutConfig: IHideoutConfig;
     protected pmcConfig: IPmcConfig;
     protected lootConfig: ILootConfig;
+    protected botConfig: IBotConfig;
     constructor(logger: ILogger, databaseServer: DatabaseServer, jsonUtil: JsonUtil, timeUtil: TimeUtil, hashUtil: HashUtil, preAkiModLoader: PreAkiModLoader, httpServerHelper: HttpServerHelper, randomUtil: RandomUtil, hideoutHelper: HideoutHelper, profileHelper: ProfileHelper, profileFixerService: ProfileFixerService, localisationService: LocalisationService, customLocationWaveService: CustomLocationWaveService, openZoneService: OpenZoneService, seasonalEventService: SeasonalEventService, itemBaseClassService: ItemBaseClassService, giftService: GiftService, raidTimeAdjustmentService: RaidTimeAdjustmentService, applicationContext: ApplicationContext, configServer: ConfigServer);
     load(): void;
     /**
      * Handle client/game/start
      */
     gameStart(_url: string, _info: IEmptyRequestData, sessionID: string, startTimeStampMS: number): void;
+    protected adjustLocationBotValues(): void;
     /**
      * Out of date/incorrectly made trader mods forget this data
      */
     protected checkTraderRepairValuesExist(): void;
     protected addCustomLooseLootPositions(): void;
     protected adjustLooseLootSpawnProbabilities(): void;
-    protected setHideoutAreasAndCraftsTo40Secs(): void;
     /** Apply custom limits on bot types as defined in configs/location.json/botTypeLimits */
     protected adjustMapBotLimits(): void;
     /**
@@ -112,8 +116,7 @@ export declare class GameController {
     protected flagAllItemsInDbAsSellableOnFlea(): void;
     /**
      * When player logs in, iterate over all active effects and reduce timer
-     * TODO - add body part HP regen
-     * @param pmcProfile
+     * @param pmcProfile Profile to adjust values for
      */
     protected updateProfileHealthValues(pmcProfile: IPmcData): void;
     /**
@@ -130,7 +133,8 @@ export declare class GameController {
      */
     protected sendPraporGiftsToNewProfiles(pmcProfile: IPmcData): void;
     /**
-     * Find and split waves with large numbers of bots into smaller waves - BSG appears to reduce the size of these waves to one bot when they're waiting to spawn for too long
+     * Find and split waves with large numbers of bots into smaller waves - BSG appears to reduce the size of these
+     * waves to one bot when they're waiting to spawn for too long
      */
     protected splitBotWavesIntoSingleWaves(): void;
     /**
@@ -139,7 +143,7 @@ export declare class GameController {
      */
     protected saveActiveModsToProfile(fullProfile: IAkiProfile): void;
     /**
-     * Check for any missing assorts inside each traders assort.json data, checking against traders qeustassort.json
+     * Check for any missing assorts inside each traders assort.json data, checking against traders questassort.json
      */
     protected validateQuestAssortUnlocksExist(): void;
     /**

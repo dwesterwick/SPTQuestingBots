@@ -44,9 +44,15 @@ export declare class TraderAssortHelper {
      * Filter out assorts not unlocked due to level OR quest completion
      * @param sessionId session id
      * @param traderId traders id
+     * @param flea Should assorts player hasn't unlocked be returned - default false
      * @returns a traders' assorts
      */
     getAssort(sessionId: string, traderId: string, flea?: boolean): ITraderAssort;
+    /**
+     * Reset every traders root item `BuyRestrictionCurrent` property to 0
+     * @param assortItems Items to adjust
+     */
+    protected resetBuyRestrictionCurrentValue(assortItems: Item[]): void;
     /**
      * Create a dict of all assort id = quest id mappings used to work out what items should be shown to player based on the quests they've started/completed/failed
      */

@@ -26,11 +26,11 @@ export declare class HideoutCallbacks implements OnUpdate {
     /**
      * Handle HideoutUpgrade event
      */
-    upgrade(pmcData: IPmcData, body: IHideoutUpgradeRequestData, sessionID: string): IItemEventRouterResponse;
+    upgrade(pmcData: IPmcData, body: IHideoutUpgradeRequestData, sessionID: string, output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Handle HideoutUpgradeComplete event
      */
-    upgradeComplete(pmcData: IPmcData, body: IHideoutUpgradeCompleteRequestData, sessionID: string): IItemEventRouterResponse;
+    upgradeComplete(pmcData: IPmcData, body: IHideoutUpgradeCompleteRequestData, sessionID: string, output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Handle HideoutPutItemsInAreaSlots
      */
@@ -62,11 +62,11 @@ export declare class HideoutCallbacks implements OnUpdate {
     /**
      * Handle HideoutQuickTimeEvent
      */
-    handleQTEEvent(pmcData: IPmcData, request: IHandleQTEEventRequestData, sessionId: string): IItemEventRouterResponse;
+    handleQTEEvent(pmcData: IPmcData, request: IHandleQTEEventRequestData, sessionId: string, output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Handle client/game/profile/items/moving - RecordShootingRangePoints
      */
-    recordShootingRangePoints(pmcData: IPmcData, request: IRecordShootingRangePoints, sessionId: string): IItemEventRouterResponse;
+    recordShootingRangePoints(pmcData: IPmcData, request: IRecordShootingRangePoints, sessionId: string, output: IItemEventRouterResponse): IItemEventRouterResponse;
     /**
      * Handle client/game/profile/items/moving - RecordShootingRangePoints
      */

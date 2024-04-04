@@ -4,5 +4,5 @@ import { HttpServerHelper } from "@spt-aki/helpers/HttpServerHelper";
 export declare class HttpFileUtil {
     protected httpServerHelper: HttpServerHelper;
     constructor(httpServerHelper: HttpServerHelper);
-    sendFile(resp: ServerResponse, file: any): void;
+    sendFile(resp: ServerResponse, filePath: string): void;
 }

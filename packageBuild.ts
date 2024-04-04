@@ -10,7 +10,7 @@ const csharpBuildFolder = "Debug";
 const fs = require("fs-extra");
 const glob = require("glob");
 const zip = require("bestzip");
-const path = require("path");
+const path = require("node:path");
 
 // Load the package.json file to get some information about the package so we can name things appropriately. This is
 // atypical, and you would never do this in a production environment, but this script is only used for development so
@@ -45,7 +45,7 @@ const ignoreList = [
     "mod.code-workspace",
     "package-lock.json",
     "tsconfig.json",
-    csharpDevFolder + "/"
+    `${csharpDevFolder}/`
 ];
 const exclude = glob.sync(`{${ignoreList.join(",")}}`, { realpath: true, dot: true, absolute: true });
 
@@ -66,10 +66,10 @@ zip({
     source: "",
     destination: `../${modName}.zip`,
     cwd: `${__dirname}/dist/${modName}`
-}).catch(function(err)
+}).catch((err)=> 
 {
     console.error("A bestzip error has occurred: ", err.stack);
-}).then(function()
+}).then(()=> 
 {
     console.log(`Compressed mod package to: /dist/${modName}.zip`);
 

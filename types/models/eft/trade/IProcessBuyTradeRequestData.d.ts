@@ -1,6 +1,6 @@
 import { IProcessBaseTradeRequestData } from "@spt-aki/models/eft/trade/IProcessBaseTradeRequestData";
 export interface IProcessBuyTradeRequestData extends IProcessBaseTradeRequestData {
-    Action: "buy_from_trader" | "TradingConfirm" | "RestoreHealth" | "" | "SptInsure" | "SptRepair";
+    Action: "buy_from_trader" | "TradingConfirm" | "RestoreHealth" | "SptInsure" | "SptRepair" | "";
     type: string;
     tid: string;
     item_id: string;

@@ -9,5 +9,10 @@ export interface OwnerInventoryItems {
 export declare class SecureContainerHelper {
     protected itemHelper: ItemHelper;
     constructor(itemHelper: ItemHelper);
+    /**
+     * Get an array of the item IDs (NOT tpls) inside a secure container
+     * @param items Inventory items to look for secure container in
+     * @returns Array of ids
+     */
     getSecureContainerItems(items: Item[]): string[];
 }

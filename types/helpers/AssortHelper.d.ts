@@ -14,7 +14,7 @@ export declare class AssortHelper {
     protected questHelper: QuestHelper;
     constructor(logger: ILogger, itemHelper: ItemHelper, databaseServer: DatabaseServer, localisationService: LocalisationService, questHelper: QuestHelper);
     /**
-     * Remove assorts from a trader that have not been unlocked yet (via player completing corrisponding quest)
+     * Remove assorts from a trader that have not been unlocked yet (via player completing corresponding quest)
      * @param pmcProfile Player profile
      * @param traderId Traders id the assort belongs to
      * @param traderAssorts All assort items from same trader

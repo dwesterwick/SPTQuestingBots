@@ -47,10 +47,10 @@ export declare class ProfileFixerService {
      */
     checkForAndFixScavProfileIssues(scavProfile: IPmcData): void;
     protected addMissingGunStandContainerImprovements(pmcProfile: IPmcData): void;
+    protected addMissingHallOfFameContainerImprovements(pmcProfile: IPmcData): void;
     protected ensureGunStandLevelsMatch(pmcProfile: IPmcData): void;
     protected addHideoutAreaStashes(pmcProfile: IPmcData): void;
     protected addMissingHideoutWallAreas(pmcProfile: IPmcData): void;
-    protected adjustUnreasonableModFleaPrices(): void;
     /**
      * Add tag to profile to indicate when it was made
      * @param fullProfile
@@ -64,7 +64,11 @@ export declare class ProfileFixerService {
     removeDanglingConditionCounters(pmcProfile: IPmcData): void;
     addLighthouseKeeperIfMissing(pmcProfile: IPmcData): void;
     protected addUnlockedInfoObjectIfMissing(pmcProfile: IPmcData): void;
-    protected removeDanglingBackendCounters(pmcProfile: IPmcData): void;
+    /**
+     * Repeatable quests leave behind TaskConditionCounter objects that make the profile bloat with time, remove them
+     * @param pmcProfile Player profile to check
+     */
+    protected removeDanglingTaskConditionCounters(pmcProfile: IPmcData): void;
     protected getActiveRepeatableQuests(repeatableQuests: IPmcDataRepeatableQuest[]): IRepeatableQuest[];
     protected fixNullTraderSalesSums(pmcProfile: IPmcData): void;
     protected addMissingBonusesProperty(pmcProfile: IPmcData): void;
@@ -98,11 +102,6 @@ export declare class ProfileFixerService {
      */
     protected addEmptyObjectsToHideoutAreaSlots(areaType: HideoutAreas, emptyItemCount: number, pmcProfile: IPmcData): void;
     protected addObjectsToArray(count: number, slots: HideoutSlot[]): HideoutSlot[];
-    /**
-     * In 18876 bsg changed the pockets tplid to be one that has 3 additional special slots
-     * @param pmcProfile
-     */
-    protected updateProfilePocketsToNewId(pmcProfile: IPmcData): void;
     /**
      * Iterate over players hideout areas and find what's build, look for missing bonuses those areas give and add them if missing
      * @param pmcProfile Profile to update
@@ -161,4 +160,9 @@ export declare class ProfileFixerService {
      * @param pmcProfile Profile to migrate improvements in
      */
     protected migrateImprovements(pmcProfile: IPmcData): void;
+    /**
+     * After removing mods that add quests, the quest panel will break without removing these
+     * @param pmcProfile Profile to remove dead quests from
+     */
+    protected removeOrphanedQuests(pmcProfile: IPmcData): void;
 }

@@ -1,3 +1,7 @@
+import { Category } from "@spt-aki/models/eft/common/tables/IHandbookBase";
+import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { IItemConfig } from "@spt-aki/models/spt/config/IItemConfig";
+import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 import { JsonUtil } from "@spt-aki/utils/JsonUtil";
 declare class LookupItem<T, I> {
@@ -13,9 +17,11 @@ export declare class LookupCollection {
 export declare class HandbookHelper {
     protected databaseServer: DatabaseServer;
     protected jsonUtil: JsonUtil;
+    protected configServer: ConfigServer;
+    protected itemConfig: IItemConfig;
     protected lookupCacheGenerated: boolean;
     protected handbookPriceCache: LookupCollection;
-    constructor(databaseServer: DatabaseServer, jsonUtil: JsonUtil);
+    constructor(databaseServer: DatabaseServer, jsonUtil: JsonUtil, configServer: ConfigServer);
     /**
      * Create an in-memory cache of all items with associated handbook price in handbookPriceCache class
      */
@@ -27,6 +33,7 @@ export declare class HandbookHelper {
      * @returns price in roubles
      */
     getTemplatePrice(tpl: string): number;
+    getTemplatePriceForItems(items: Item[]): number;
     /**
      * Get all items in template with the given parent category
      * @param parentId
@@ -59,5 +66,6 @@ export declare class HandbookHelper {
      * @returns currency count in desired type
      */
     fromRUB(roubleCurrencyCount: number, currencyTypeTo: string): number;
+    getCategoryById(handbookId: string): Category;
 }
 export {};

@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GClass503).GetMethod("smethod_0", BindingFlags.NonPublic | BindingFlags.Static);
+            return typeof(GClass579).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]

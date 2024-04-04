@@ -1,13 +1,13 @@
 import ts from "typescript";
 import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { HashCacheService } from "@spt-aki/services/HashCacheService";
+import { ModHashCacheService } from "@spt-aki/services/cache/ModHashCacheService";
 import { VFS } from "@spt-aki/utils/VFS";
 export declare class ModCompilerService {
     protected logger: ILogger;
-    protected hashCacheService: HashCacheService;
+    protected modHashCacheService: ModHashCacheService;
     protected vfs: VFS;
     protected serverDependencies: string[];
-    constructor(logger: ILogger, hashCacheService: HashCacheService, vfs: VFS);
+    constructor(logger: ILogger, modHashCacheService: ModHashCacheService, vfs: VFS);
     /**
      * Convert a mods TS into JS
      * @param modName Name of mod

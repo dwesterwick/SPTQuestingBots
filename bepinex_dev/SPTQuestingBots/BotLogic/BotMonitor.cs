@@ -39,8 +39,8 @@ namespace SPTQuestingBots.BotLogic
 
             if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.Enabled)
             {
-                Singleton<GClass520>.Instance.OnSoundPlayed += enemySoundHeard;
-                botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<GClass520>.Instance.OnSoundPlayed -= enemySoundHeard; };
+                Singleton<BotEventHandler>.Instance.OnSoundPlayed += enemySoundHeard;
+                botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<BotEventHandler>.Instance.OnSoundPlayed -= enemySoundHeard; };
             }
 
             lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();

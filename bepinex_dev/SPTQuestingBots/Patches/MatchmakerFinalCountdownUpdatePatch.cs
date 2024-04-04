@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(MatchmakerFinalCountdown).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+            return typeof(MatchmakerFinalCountdown).GetMethod("Update", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

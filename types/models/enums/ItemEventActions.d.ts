@@ -22,5 +22,8 @@ export declare enum ItemEventActions {
     REMOVE_WEAPON_BUILD = "RemoveWeaponBuild",
     REMOVE_BUILD = "RemoveBuild",
     SAVE_EQUIPMENT_BUILD = "SaveEquipmentBuild",
-    REMOVE_EQUIPMENT_BUILD = "RemoveEquipmentBuild"
+    REMOVE_EQUIPMENT_BUILD = "RemoveEquipmentBuild",
+    REDEEM_PROFILE_REWARD = "RedeemProfileReward",
+    SET_FAVORITE_ITEMS = "SetFavoriteItems",
+    QUEST_FAIL = "QuestFail"
 }

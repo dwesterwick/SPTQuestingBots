@@ -20,10 +20,17 @@ export declare class BotLevelGenerator {
      */
     generateBotLevel(levelDetails: MinMax, botGenerationDetails: BotGenerationDetails, bot: IBotBase): IRandomisedBotLevelResult;
     /**
-     * Get the highest level a bot can be relative to the players level, but no futher than the max size from globals.exp_table
+     * Get the highest level a bot can be relative to the players level, but no further than the max size from globals.exp_table
      * @param playerLevel Players current level
      * @param relativeDeltaMax max delta above player level to go
      * @returns highest level possible for bot
      */
     protected getHighestRelativeBotLevel(playerLevel: number, relativeDeltaMax: number, levelDetails: MinMax, expTable: IExpTable[]): number;
+    /**
+     * Get the lowest level a bot can be relative to the players level, but no lower than 1
+     * @param playerLevel Players current level
+     * @param relativeDeltaMin Min delta below player level to go
+     * @returns lowest level possible for bot
+     */
+    protected getLowestRelativeBotLevel(playerLevel: number, relativeDeltaMin: number, levelDetails: MinMax, expTable: IExpTable[]): number;
 }

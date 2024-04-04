@@ -16,15 +16,15 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.3.4")]
     [BepInDependency("xyz.drakia.bigbrain", "0.3.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.4.2")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.5.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         public static string ModName { get; private set; } = "???";
 
         private void Awake()
         {
-            Patches.CheckSPTVersionPatch.MinVersion = "3.7.6.0";
-            Patches.CheckSPTVersionPatch.MaxVersion = "3.7.6.0";
+            Patches.CheckSPTVersionPatch.MinVersion = "3.8.0.0";
+            Patches.CheckSPTVersionPatch.MaxVersion = "3.8.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;

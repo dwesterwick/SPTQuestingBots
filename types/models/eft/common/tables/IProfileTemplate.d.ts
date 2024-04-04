@@ -11,10 +11,10 @@ export interface IProfileTemplates {
 }
 export interface IProfileSides {
     descriptionLocaleKey: string;
-    usec: TemplateSide;
-    bear: TemplateSide;
+    usec: ITemplateSide;
+    bear: ITemplateSide;
 }
-export interface TemplateSide {
+export interface ITemplateSide {
     character: IPmcData;
     suits: string[];
     dialogues: Record<string, Dialogue>;
@@ -22,7 +22,7 @@ export interface TemplateSide {
     trader: ProfileTraderTemplate;
 }
 export interface ProfileTraderTemplate {
-    initialLoyaltyLevel: number;
+    initialLoyaltyLevel: Record<string, number>;
     setQuestsAvailableForStart?: boolean;
     setQuestsAvailableForFinish?: boolean;
     initialStanding: number;

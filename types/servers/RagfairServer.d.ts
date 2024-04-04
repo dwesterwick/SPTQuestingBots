@@ -2,6 +2,7 @@ import { RagfairOfferGenerator } from "@spt-aki/generators/RagfairOfferGenerator
 import { TraderAssortHelper } from "@spt-aki/helpers/TraderAssortHelper";
 import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
 import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
+import { ISearchRequestData } from "@spt-aki/models/eft/ragfair/ISearchRequestData";
 import { IRagfairConfig } from "@spt-aki/models/spt/config/IRagfairConfig";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
@@ -27,9 +28,8 @@ export declare class RagfairServer {
      * Get traders who need to be periodically refreshed
      * @returns string array of traders
      */
-    protected getUpdateableTraders(): string[];
-    getAllCategories(): Record<string, number>;
-    getBespokeCategories(offers: IRagfairOffer[]): Record<string, number>;
+    getUpdateableTraders(): string[];
+    getAllActiveCategories(fleaUnlocked: boolean, searchRequestData: ISearchRequestData, offers: IRagfairOffer[]): Record<string, number>;
     /**
      * Disable/Hide an offer from flea
      * @param offerId

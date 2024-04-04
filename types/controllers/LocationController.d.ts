@@ -13,6 +13,7 @@ import { LootRequest } from "@spt-aki/models/spt/services/LootRequest";
 import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { ItemFilterService } from "@spt-aki/services/ItemFilterService";
 import { LocalisationService } from "@spt-aki/services/LocalisationService";
 import { RaidTimeAdjustmentService } from "@spt-aki/services/RaidTimeAdjustmentService";
 import { HashUtil } from "@spt-aki/utils/HashUtil";
@@ -28,6 +29,7 @@ export declare class LocationController {
     protected locationGenerator: LocationGenerator;
     protected localisationService: LocalisationService;
     protected raidTimeAdjustmentService: RaidTimeAdjustmentService;
+    protected itemFilterService: ItemFilterService;
     protected lootGenerator: LootGenerator;
     protected databaseServer: DatabaseServer;
     protected timeUtil: TimeUtil;
@@ -35,7 +37,7 @@ export declare class LocationController {
     protected applicationContext: ApplicationContext;
     protected airdropConfig: IAirdropConfig;
     protected locationConfig: ILocationConfig;
-    constructor(jsonUtil: JsonUtil, hashUtil: HashUtil, randomUtil: RandomUtil, weightedRandomHelper: WeightedRandomHelper, logger: ILogger, locationGenerator: LocationGenerator, localisationService: LocalisationService, raidTimeAdjustmentService: RaidTimeAdjustmentService, lootGenerator: LootGenerator, databaseServer: DatabaseServer, timeUtil: TimeUtil, configServer: ConfigServer, applicationContext: ApplicationContext);
+    constructor(jsonUtil: JsonUtil, hashUtil: HashUtil, randomUtil: RandomUtil, weightedRandomHelper: WeightedRandomHelper, logger: ILogger, locationGenerator: LocationGenerator, localisationService: LocalisationService, raidTimeAdjustmentService: RaidTimeAdjustmentService, itemFilterService: ItemFilterService, lootGenerator: LootGenerator, databaseServer: DatabaseServer, timeUtil: TimeUtil, configServer: ConfigServer, applicationContext: ApplicationContext);
     /**
      * Handle client/location/getLocalloot
      * Get a location (map) with generated loot data
@@ -59,7 +61,7 @@ export declare class LocationController {
     generateAll(sessionId: string): ILocationsGenerateAllResponse;
     /**
      * Handle client/location/getAirdropLoot
-     * Get loot for an airdop container
+     * Get loot for an airdrop container
      * Generates it randomly based on config/airdrop.json values
      * @returns Array of LootItem objects
      */

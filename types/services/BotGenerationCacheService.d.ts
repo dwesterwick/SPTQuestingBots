@@ -11,6 +11,7 @@ export declare class BotGenerationCacheService {
     protected localisationService: LocalisationService;
     protected botHelper: BotHelper;
     protected storedBots: Map<string, IBotBase[]>;
+    protected activeBotsInRaid: IBotBase[];
     constructor(logger: ILogger, randomUtil: RandomUtil, jsonUtil: JsonUtil, localisationService: LocalisationService, botHelper: BotHelper);
     /**
      * Store array of bots in cache, shuffle results before storage
@@ -24,6 +25,18 @@ export declare class BotGenerationCacheService {
      * @returns IBotBase object
      */
     getBot(key: string): IBotBase;
+    /**
+     * Cache a bot that has been sent to the client in memory for later use post-raid to determine if player killed a traitor scav
+     * @param botToStore Bot object to store
+     */
+    storeUsedBot(botToStore: IBotBase): void;
+    /**
+     * Get a bot by its profileId that has been generated and sent to client for current raid
+     * Cache is wiped post-raid in client/match/offline/end  endOfflineRaid()
+     * @param profileId Id of bot to get
+     * @returns IBotBase
+     */
+    getUsedBot(profileId: string): IBotBase;
     /**
      * Remove all cached bot profiles from memory
      */
