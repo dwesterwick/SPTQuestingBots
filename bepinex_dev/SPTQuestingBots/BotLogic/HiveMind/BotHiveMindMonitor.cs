@@ -283,15 +283,12 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 matchingGroupData.SeparateBotOwner(bot);
             }
 
-            MethodInfo bossGroupSetter = AccessTools.PropertySetter(typeof(BotsGroup), "BossGroup");
-            MethodInfo bossToFollowSetter = AccessTools.PropertySetter(typeof(BotFollower), "BossToFollow");
-
             // Check if the bot is the boss of its group
             bool isBoss = false;
             if (bot.BotFollower?.HaveBoss == true)
             {
                 bot.BotFollower.BossToFollow.RemoveFollower(bot);
-                bossToFollowSetter.Invoke(bot.BotFollower, new object[] { null });
+                bot.BotFollower.BossToFollow = null;
             }
             else if (bot.Boss.HaveFollowers() && (bot.BotsGroup.BossGroup != null))
             {
@@ -302,11 +299,11 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             bot.Boss.RemoveFollower(bot);
             if (isBoss && (bot.Boss.Followers.Count >= 1))
             {
-                bossGroupSetter.Invoke(bot.BotsGroup, new object[] { null });
+                bot.BotsGroup.BossGroup = null;
 
                 foreach (BotOwner follower in bot.Boss.Followers)
                 {
-                    bossToFollowSetter.Invoke(follower.BotFollower, new object[] { null });
+                    follower.BotFollower.BossToFollow = null;
                 }
 
                 // Setting a new boss is only required for groups that have more than 2 bots

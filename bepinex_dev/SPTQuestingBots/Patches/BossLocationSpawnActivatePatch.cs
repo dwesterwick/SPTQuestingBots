@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches
             Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
             Type targetType = localGameType.GetNestedType("Class1367", BindingFlags.Public | BindingFlags.Instance);
 
-            return targetType.GetMethod("method_1", BindingFlags.NonPublic | BindingFlags.Instance);
+            return targetType.GetMethod("method_1", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

@@ -597,8 +597,7 @@ namespace SPTQuestingBots.Components.Spawning
                 // I have no idea why BSG passes a stopwatch into this call...
                 stopWatch.Start();
 
-                MethodInfo method = AccessTools.Method(typeof(BotSpawner), "method_10");
-                method.Invoke(botSpawnerClass, new object[] { bot, botSpawnInfo.Data, null, false, stopWatch });
+                botSpawnerClass.method_10(bot, botSpawnInfo.Data, null, false, stopWatch);
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {

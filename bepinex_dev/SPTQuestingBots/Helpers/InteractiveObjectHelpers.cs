@@ -82,8 +82,7 @@ namespace SPTQuestingBots.Helpers
 
                 Type doorOpenerType = typeof(BotDoorOpener);
 
-                PropertyInfo interactingProperty = doorOpenerType.GetProperty("Interacting", BindingFlags.Public | BindingFlags.Instance);
-                interactingProperty.SetValue(botOwner.DoorOpener, true);
+                botOwner.DoorOpener.Interacting = true;
 
                 float _traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 

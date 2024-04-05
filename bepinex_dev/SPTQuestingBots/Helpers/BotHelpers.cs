@@ -17,15 +17,35 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
+            if (botMover == null)
+            {
+                return null;
+            }
+
             PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
+            if (pathController?.CurPath == null)
+            {
+                return null;
+            }
+
             Vector3[] path = (Vector3[])pathPointsField.GetValue(pathController.CurPath);
 
             return path;
         }
 
-        public static int GetCurrentCornerIndex(this BotMover botMover)
+        public static int? GetCurrentCornerIndex(this BotMover botMover)
         {
+            if (botMover == null)
+            {
+                return null;
+            }
+
             PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
+            if (pathController?.CurPath == null)
+            {
+                return null;
+            }
+
             int index = (int)pathIndexField.GetValue(pathController.CurPath);
 
             return index;

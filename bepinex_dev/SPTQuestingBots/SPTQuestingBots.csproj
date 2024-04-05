@@ -67,8 +67,9 @@
     <Reference Include="DissonanceVoip">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
     </Reference>
-    <Reference Include="DrakiaXYZ-BigBrain">
-      <HintPath>..\..\..\..\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
+    <Reference Include="DrakiaXYZ-BigBrain, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DrakiaXYZ-BigBrain.dll</HintPath>
     </Reference>
     <Reference Include="ItemComponent.Types">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\ItemComponent.Types.dll</HintPath>
