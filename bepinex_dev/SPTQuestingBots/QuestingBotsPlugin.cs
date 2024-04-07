@@ -51,6 +51,8 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
+                new Patches.GoToPositionPatch().Enable();
+                //new Patches.FindPathPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {

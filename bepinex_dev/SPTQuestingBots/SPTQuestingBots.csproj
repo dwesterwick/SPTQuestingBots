@@ -217,6 +217,8 @@
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\ExceptAIPatch.cs" />
+    <Compile Include="Patches\FindPathPatch.cs" />
+    <Compile Include="Patches\GoToPositionPatch.cs" />
     <Compile Include="Patches\GameStartPatch.cs" />
     <Compile Include="Patches\GetListByZonePatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />

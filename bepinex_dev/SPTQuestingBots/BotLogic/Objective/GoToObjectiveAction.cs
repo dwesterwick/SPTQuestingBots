@@ -8,6 +8,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -120,7 +121,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // If the path is invalid, there's nowhere for the bot to move
-            if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
+            //if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
+            if (!pathStatus.HasValue)
             {
                 LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a path to " + ObjectiveManager);
                 ObjectiveManager.FailObjective();
@@ -132,15 +134,19 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return true;
             }
 
-            float distanceToEndOfPath = float.NaN;
-            float distanceToObjective = float.NaN;
-            float missingDistance = float.NaN;
-
             // Calculate distances between:
             //  - the bot and the end of the incomplete path to its objective
             //  - the bot and its objective step position
             //  - the end of its partial path and its objective step position
-            Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
+
+            float distanceToEndOfPath = float.NaN;
+            float distanceToObjective = float.NaN;
+            float missingDistance = float.NaN;
+
+            //Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
+            Vector3[] currentPath = BotOwner.Mover?.GetCurrentPath();
+            Vector3? lastPathPoint = currentPath?.Last();
+
             if (lastPathPoint.HasValue)
             {
                 distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);
@@ -191,6 +197,8 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 return true;
             }
+
+            LoggingController.LogInfo("Distance to objective: " + distanceToObjective + ", Distance to end of path: " + distanceToEndOfPath + ", Missing distance: " + missingDistance);
 
             // If all previous checks fail, the bot is unable to reach its objective position
             LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
