@@ -14,8 +14,8 @@ namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.3.4")]
-    [BepInDependency("xyz.drakia.bigbrain", "0.3.1")]
+    [BepInDependency("xyz.drakia.waypoints", "1.4.1")]
+    [BepInDependency("xyz.drakia.bigbrain", "0.4.0")]
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.5.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
@@ -51,7 +51,7 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                new Patches.GoToPositionPatch().Enable();
+                //new Patches.GoToPositionPatch().Enable();
                 //new Patches.FindPathPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)

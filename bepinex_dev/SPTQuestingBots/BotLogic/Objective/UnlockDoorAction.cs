@@ -168,7 +168,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 NavMeshPathStatus? pathStatus = RecalculatePath(interactionPosition.Value);
 
                 //if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
-                if (!pathStatus.HasValue)
+                if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(interactionPosition.Value, 0.5f) != true))
                 {
                     LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 

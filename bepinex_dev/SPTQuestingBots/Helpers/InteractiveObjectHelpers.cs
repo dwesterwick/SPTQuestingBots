@@ -91,6 +91,7 @@ namespace SPTQuestingBots.Helpers
 
                 LoggingController.LogInfo(botOwner.GetText() + " is unlocking door " + door.Id + "...");
                 botOwner.GetPlayer.CurrentManagedState.StartDoorInteraction(door, interactionResult, null);
+                botOwner.GetPlayer.CurrentManagedState.ExecuteDoorInteraction(door, interactionResult, null, botOwner.GetPlayer);
             }
             catch (Exception e)
             {

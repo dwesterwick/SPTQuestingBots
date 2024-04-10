@@ -129,7 +129,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            if (pathStatus.Value == NavMeshPathStatus.PathComplete)
+            if ((pathStatus.Value == NavMeshPathStatus.PathComplete) && (BotOwner.Mover?.IsPathComplete(ObjectiveManager.Position.Value, 0.5f) == true))
             {
                 return true;
             }
@@ -144,9 +144,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             float missingDistance = float.NaN;
 
             //Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
-            Vector3[] currentPath = BotOwner.Mover?.GetCurrentPath();
-            Vector3? lastPathPoint = currentPath?.Last();
-
+            Vector3? lastPathPoint = BotOwner.Mover?.GetCurrentPathLastPoint();
             if (lastPathPoint.HasValue)
             {
                 distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);

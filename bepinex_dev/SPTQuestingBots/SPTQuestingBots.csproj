@@ -156,7 +156,7 @@
     <Compile Include="Controllers\BotRegistrationManager.cs" />
     <Compile Include="Components\Spawning\BotGenerator.cs" />
     <Compile Include="Components\DebugData.cs" />
-    <Compile Include="Helpers\BotHelpers.cs" />
+    <Compile Include="Helpers\BotPathingHelpers.cs" />
     <Compile Include="Helpers\DebugHelpers.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />
     <Compile Include="Helpers\ItemHelpers.cs" />

@@ -169,7 +169,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             int currentCornerIndex = currentCornerIndexNullable.Value;
-            if (currentCornerIndex == currentPath.Length - 1)
+            if ((currentCornerIndex == 0) || (currentCornerIndex >= currentPath.Length - 1))
             {
                 return true;
             }

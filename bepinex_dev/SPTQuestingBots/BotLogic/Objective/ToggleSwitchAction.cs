@@ -105,7 +105,8 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
-                if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
+                //if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
+                if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(ObjectiveManager.Position.Value, 0.5f) != true))
                 {
                     LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
