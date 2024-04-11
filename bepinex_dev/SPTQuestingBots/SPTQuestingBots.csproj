@@ -136,6 +136,7 @@
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
     <Compile Include="Components\Spawning\PScavGenerator.cs" />
+    <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="Configuration\BotCapAdjustmentsConfig.cs" />
     <Compile Include="Configuration\BotSpawnTypeConfig.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Models\QuestSpawnPointObjective.cs" />
     <Compile Include="Models\QuestZoneObjective.cs" />
     <Compile Include="Models\SerializableVector3.cs" />
+    <Compile Include="Models\StoredQuestLocation.cs" />
     <Compile Include="Patches\ActivateBotsByWavePatch2.cs" />
     <Compile Include="Patches\ActivateBotsByWavePatch.cs" />
     <Compile Include="Patches\AddEnemyPatch.cs" />

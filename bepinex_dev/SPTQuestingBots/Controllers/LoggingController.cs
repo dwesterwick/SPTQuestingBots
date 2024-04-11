@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using Newtonsoft.Json;
+using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -109,6 +111,35 @@ namespace SPTQuestingBots.Controllers
             {
                 e.Data.Add("Filename", filename);
                 LogError("Writing " + logName + " log file...failed!");
+                LogError(e.ToString());
+            }
+        }
+
+        public static void AppendQuestLocation(string filename, StoredQuestLocation location)
+        {
+            try
+            {
+                string content = JsonConvert.SerializeObject(location, Formatting.Indented);
+
+                if (!Directory.Exists(ConfigController.LoggingPath))
+                {
+                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                }
+
+                if (File.Exists(filename))
+                {
+                    content = ",\n" + content;
+                }
+
+                File.AppendAllText(filename, content);
+
+                LogInfo("Appended custom quest location: " + location.Name + " at " + location.Position.ToString());
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Filename", filename);
+                e.Data.Add("LocationName", location.Name);
+                LogError("Could not create custom quest location for " + location.Name);
                 LogError(e.ToString());
             }
         }

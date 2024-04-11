@@ -12,6 +12,7 @@ using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,7 +23,8 @@ namespace SPTQuestingBots.Components
         public int MaxTotalBots { get; private set; } = 15;
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
-        
+
+        private readonly DateTime awakeTime = DateTime.Now;
         private TarkovApplication tarkovApplication = null;
         private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
@@ -69,7 +71,7 @@ namespace SPTQuestingBots.Components
 
         private void Update()
         {
-            
+            handleCustomQuestKeypress();
         }
 
         public void UpdateMaxTotalBots()
@@ -704,6 +706,46 @@ namespace SPTQuestingBots.Components
             FieldInfo raidSettingsField = typeof(TarkovApplication).GetField("_raidSettings", BindingFlags.NonPublic | BindingFlags.Instance);
             RaidSettings raidSettings = raidSettingsField.GetValue(tarkovApplication) as RaidSettings;
             return raidSettings;
+        }
+
+        private void handleCustomQuestKeypress()
+        {
+            if (!QuestingBotsPluginConfig.CreateQuestLocations.Value)
+            {
+                return;
+            }
+
+            if (!QuestingBotsPluginConfig.StoreQuestLocationKey.Value.IsDown())
+            {
+                return;
+            }
+
+            if (QuestingBotsPluginConfig.QuestLocationName.Value.Length == 0)
+            {
+                LoggingController.LogErrorToServerConsole("The name of custom quest locations cannot be an empty string. Please create a name in the F12 advanced menu.");
+                return;
+            }
+
+            if (!Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            {
+                return;
+            }
+
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (!mainPlayer.isActiveAndEnabled || !mainPlayer.HealthController.IsAlive)
+            {
+                return;
+            }
+
+            StoredQuestLocation location = new StoredQuestLocation(QuestingBotsPluginConfig.QuestLocationName.Value, mainPlayer.Position);
+
+            string filename = ConfigController.GetLoggingPath()
+                + CurrentLocation.Id.Replace(" ", "")
+                + "_"
+                + awakeTime.ToFileTimeUtc()
+                + "_customQuestLocations.json";
+
+            LoggingController.AppendQuestLocation(filename, location);
         }
     }
 }
