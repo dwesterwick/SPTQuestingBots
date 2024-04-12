@@ -554,8 +554,7 @@ namespace SPTQuestingBots.Components.Spawning
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
             {
-                int corePointId = AICorePointHolder.GetClosest(position).Id;
-                botSpawnInfo.Data.AddPosition(position, corePointId);
+                botSpawnInfo.Data.AddPosition(position, GetClosestCorePoint(position).Id);
             }
 
             // In SPT-AKI 3.7.1, this is GClass732
@@ -566,6 +565,12 @@ namespace SPTQuestingBots.Components.Spawning
             Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
 
             ibotCreator.ActivateBot(botSpawnInfo.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
+        }
+
+        private static AICorePoint GetClosestCorePoint(Vector3 position)
+        {
+            GroupPoint groupPoint = Singleton<IBotGame>.Instance.BotsController.CoversData.GetClosest(position);
+            return groupPoint.CorePointInGame;
         }
 
         internal class GroupActionsWrapper
