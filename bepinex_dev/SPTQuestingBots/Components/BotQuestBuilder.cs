@@ -150,7 +150,10 @@ namespace SPTQuestingBots.Components
                 }
                 else
                 {
-                    LoggingController.LogWarning("Could not add quest for hunting bosses. This is normal if bosses do not spawn on this map.");
+                    if (LocationScene.GetAllObjects<BotZone>(false).Count() > 1)
+                    {
+                        LoggingController.LogWarning("Could not add quest for hunting bosses. This is normal if bosses do not spawn on this map. Boss zones: " + string.Join(", ", bossZones));
+                    }
                 }
 
                 LoadCustomQuests();
@@ -454,8 +457,6 @@ namespace SPTQuestingBots.Components
 
         private IEnumerable<string> getBossSpawnZones()
         {
-            // TODO: This seems to only return zones in which bosses will definitely spawn, not all possible spawn zones. Need to investigate.
-
             List<string> bossZones = new List<string>();
             foreach (BossLocationSpawn bossLocationSpawn in Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.BossLocationSpawn)
             {
