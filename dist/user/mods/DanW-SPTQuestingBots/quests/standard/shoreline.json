@@ -490,9 +490,9 @@
                     {
                         "waitTimeAfterCompleting": 1,
                         "position" : {
-                            "x": 189.156387,
-                            "y": -55.7266426,
-                            "z": 289.8128
+                            "x": 207.988464,
+                            "y": -54.4940147,
+                            "z": 284.815552
                         }
                     },
                     {
@@ -502,9 +502,9 @@
                             "max": 120
                         },
                         "position" : {
-                            "x": 189.156387,
-                            "y": -55.7266426,
-                            "z": 289.8128
+                            "x": 207.988464,
+                            "y": -54.4940147,
+                            "z": 284.815552
                         },
                         "lookToPosition" : {
                             "x": 244.119278,
@@ -734,31 +734,6 @@
                             "x": -145.314117,
                             "y": -3.890499,
                             "z": -274.509644
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "desirability": 15,
-        "name": "House on the Hill",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 500,
-                "maxRunDistance": 5,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -490.8275,
-                            "y": -14.5118237,
-                            "z": -183.727844
                         }
                     }
                 ]
@@ -1171,30 +1146,6 @@
                             "x": -516.012939,
                             "y": -9.915513,
                             "z": 267.982117
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 3,
-        "desirability": 25,
-        "name": "Sunken House",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -726.10144,
-                            "y": -45.95984,
-                            "z": 257.5394
                         }
                     }
                 ]
@@ -3027,6 +2978,543 @@
                             "x": 340.19693,
                             "y": -59.2684937,
                             "z": 292.860016
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Smuggler's Base Perimeter",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -659.930054,
+                            "y": -26.8988571,
+                            "z": -150.467682
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -652.408264,
+                            "y": -26.898859,
+                            "z": -151.756485
+                        },
+                        "lookToPosition" : {
+                            "x": -745.6886,
+                            "y": -38.0334663,
+                            "z": -39.3524857
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -652.408264,
+                            "y": -26.898859,
+                            "z": -151.756485
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -652.408264,
+                            "y": -26.898859,
+                            "z": -151.756485
+                        },
+                        "lookToPosition" : {
+                            "x": -616.9993,
+                            "y": -35.3503151,
+                            "z": -73.23421
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -619.1516,
+                            "y": -29.91479,
+                            "z": -159.871078
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -619.1516,
+                            "y": -29.91479,
+                            "z": -159.871078
+                        },
+                        "lookToPosition" : {
+                            "x": -606.0618,
+                            "y": -35.30925,
+                            "z": -74.07168
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -591.283752,
+                            "y": -29.9329052,
+                            "z": -176.106873
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -591.283752,
+                            "y": -29.9329052,
+                            "z": -176.106873
+                        },
+                        "lookToPosition" : {
+                            "x": -528.980347,
+                            "y": -33.96387,
+                            "z": -95.3847351
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -613.775757,
+                            "y": -24.3135643,
+                            "z": -214.044266
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": -613.775757,
+                            "y": -24.3135643,
+                            "z": -214.044266
+                        },
+                        "lookToPosition" : {
+                            "x": -511.399139,
+                            "y": -29.129221,
+                            "z": -176.369125
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 35,
+        "name": "Smuggler's Base Lower",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -659.6437,
+                            "y": -26.8988552,
+                            "z": -160.437546
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -637.0751,
+                            "y": -29.8972111,
+                            "z": -178.819809
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -622.1201,
+                            "y": -29.8831959,
+                            "z": -177.351761
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -613.1678,
+                            "y": -29.8831959,
+                            "z": -178.565521
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -605.8719,
+                            "y": -29.8831921,
+                            "z": -176.448135
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -597.0507,
+                            "y": -29.8831959,
+                            "z": -179.305
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -596.0134,
+                            "y": -29.883194,
+                            "z": -175.137024
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -598.224365,
+                            "y": -29.883194,
+                            "z": -185.169769
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -638.3148,
+                            "y": -29.91373,
+                            "z": -194.43895
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 35,
+        "name": "Smuggler's Base Upper",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -634.739258,
+                            "y": -26.69983,
+                            "z": -223.532013
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -613.3373,
+                            "y": -26.7354164,
+                            "z": -213.0972
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 9,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -622.0946,
+                            "y": -26.8833637,
+                            "z": -231.472076
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -626.0907,
+                            "y": -26.8833637,
+                            "z": -231.968018
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -632.139954,
+                            "y": -26.88336,
+                            "z": -246.904892
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -627.891235,
+                            "y": -26.88336,
+                            "z": -249.69426
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -638.672,
+                            "y": -26.88336,
+                            "z": -243.913208
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -655.216064,
+                            "y": -26.93842,
+                            "z": -217.6703
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -679.4224,
+                            "y": -26.8511734,
+                            "z": -244.553253
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -669.1542,
+                            "y": -26.8140144,
+                            "z": -247.920654
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 15,
+        "name": "Smuggler's Base VEX Buildings",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -536.1614,
+                            "y": -18.5464649,
+                            "z": -337.298157
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 2,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -519.8777,
+                            "y": -15.896472,
+                            "z": -340.4342
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -514.245544,
+                            "y": -18.498764,
+                            "z": -324.194122
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -512.290833,
+                            "y": -18.5832787,
+                            "z": -341.1352
                         }
                     }
                 ]

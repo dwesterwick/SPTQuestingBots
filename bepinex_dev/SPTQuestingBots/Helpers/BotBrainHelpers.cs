@@ -15,6 +15,11 @@ namespace SPTQuestingBots.Helpers
             return list.Concat(new[] { new BotBrainType("BossTest") });
         }
 
+        public static IEnumerable<BotBrainType> AddBTRBrain(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[] { new BotBrainType("BTR") });
+        }
+
         public static IEnumerable<BotBrainType> AddNormalScavBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]
@@ -31,10 +36,7 @@ namespace SPTQuestingBots.Helpers
 
         public static IEnumerable<BotBrainType> AddBloodhoundBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[]
-            {
-                new BotBrainType("ArenaFighter")
-            });
+            return list.Concat(new[] { new BotBrainType("ArenaFighter") });
         }
 
         public static IEnumerable<BotBrainType> AddCrazyScavBrain(this IEnumerable<BotBrainType> list)
@@ -109,7 +111,8 @@ namespace SPTQuestingBots.Helpers
                 new BotBrainType("BossSanitar"),
                 new BotBrainType("BossGluhar"),
                 new BotBrainType("BossKojaniy"),
-                new BotBrainType("BossBoar") 
+                new BotBrainType("BossBoar"),
+                new BotBrainType("BossKolontay")
             });
         }
 
@@ -125,7 +128,9 @@ namespace SPTQuestingBots.Helpers
                 new BotBrainType("FollowerGluharScout"),
                 new BotBrainType("FollowerKojaniy"),
                 new BotBrainType("BoarSniper"),
-                new BotBrainType("FlBoar")
+                new BotBrainType("FlBoar"),
+                new BotBrainType("FlKlnAslt"),
+                new BotBrainType("KolonSec")
             });
         }
 

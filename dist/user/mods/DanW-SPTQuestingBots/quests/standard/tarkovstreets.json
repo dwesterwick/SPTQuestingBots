@@ -6374,5 +6374,718 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Anteka",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 12,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 93.7763443,
+                            "y": 4.058631,
+                            "z": -280.887817
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 85.27599,
+                            "y": 4.05863142,
+                            "z": -281.193268
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 84.34332,
+                            "y": 4.05863,
+                            "z": -272.386719
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "name": "Ministry of the Interior Academy",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -258.33,
+                            "y": 2.23882627,
+                            "z": 131.874527
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -257.7969,
+                            "y": 2.23882651,
+                            "z": 142.58757
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -253.162231,
+                            "y": 2.94072342,
+                            "z": 133.702469
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -247.3432,
+                            "y": 2.940724,
+                            "z": 132.609741
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -251.248428,
+                            "y": 2.940724,
+                            "z": 145.03653
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -257.455658,
+                            "y": 2.94072413,
+                            "z": 158.0185
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Ministry of the Interior Academy Outside",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -236.000687,
+                            "y": 2.19418645,
+                            "z": 153.599
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -195.289,
+                            "y": 2.10708165,
+                            "z": 108.28479
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -222.065125,
+                            "y": 2.12017,
+                            "z": 119.184563
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 10,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 40,
+        "name": "The Hive",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -212.551254,
+                            "y": 3.21706963,
+                            "z": 298.108368
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -208.394852,
+                            "y": 3.21706963,
+                            "z": 299.4081
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -207.216461,
+                            "y": 3.21706939,
+                            "z": 305.8043
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -206.263275,
+                            "y": 3.21706939,
+                            "z": 307.474243
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -214.571777,
+                            "y": 3.21706915,
+                            "z": 310.054535
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Petrov Vodkin Restaurant",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -193.006241,
+                            "y": 3.04550123,
+                            "z": 342.037964
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -200.798981,
+                            "y": 3.44209361,
+                            "z": 343.115936
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -209.901413,
+                            "y": 3.43565583,
+                            "z": 343.237244
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -196.6189,
+                            "y": 3.442097,
+                            "z": 331.301239
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Pharmancy #2",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -55.4303,
+                            "y": 3.19695544,
+                            "z": 341.47876
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -57.0017433,
+                            "y": 3.19694114,
+                            "z": 337.698364
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Russian Real Estate Fund",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -58.3585,
+                            "y": 2.67853069,
+                            "z": 455.702179
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -66.08994,
+                            "y": 2.67853022,
+                            "z": 460.781342
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 10,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -51.9071579,
+                            "y": 2.67853022,
+                            "z": 461.048645
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -65.9715,
+                            "y": 6.848742,
+                            "z": 456.4898
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 15,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -44.5732536,
+                            "y": 6.848741,
+                            "z": 465.318054
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -58.1385345,
+                            "y": 6.848741,
+                            "z": 464.6553
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 40,
+        "name": "IT Firm Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 169.807846,
+                            "y": 0.752712846,
+                            "z": 159.437241
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 171.441589,
+                            "y": 0.752697,
+                            "z": 163.915848
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 167.295135,
+                            "y": 0.75269717,
+                            "z": 165.7098
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 164.063919,
+                            "y": 0.7526971,
+                            "z": 154.965378
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 167.587418,
+                            "y": 0.7526969,
+                            "z": 153.55513
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 163.663422,
+                            "y": 0.752697349,
+                            "z": 146.361969
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 162.7122,
+                            "y": 0.752697766,
+                            "z": 142.92366
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 156.70433,
+                            "y": 0.75269717,
+                            "z": 141.441025
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 158.979828,
+                            "y": 0.752713263,
+                            "z": 137.218124
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 5,
+        "name": "Barber Shop",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 209.7088,
+                            "y": 3.35634685,
+                            "z": 407.1214
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 5,
+        "name": "Unity Credit Bank",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 120.044136,
+                            "y": 0.25194326,
+                            "z": -21.88104
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 114.29512,
+                            "y": 0.251943678,
+                            "z": -25.8415241
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
