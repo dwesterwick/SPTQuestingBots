@@ -193,7 +193,7 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(boss.Profile.Nickname))
+                if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(boss.Brain?.BaseBrain?.ShortName()))
                 {
                     continue;
                 }
