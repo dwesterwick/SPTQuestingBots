@@ -554,7 +554,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -568,7 +568,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -589,7 +589,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -603,7 +603,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -617,7 +617,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -631,7 +631,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -702,7 +702,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -716,7 +716,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -730,7 +730,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -744,7 +744,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -872,30 +872,6 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
-        "maxBots": 2,
-        "desirability": 10,
-        "name": "PMC Crash Site",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": 80.88326,
-                            "y": 22.5970783,
-                            "z": 244.236176
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
         "maxBots": 3,
         "desirability": 40,
         "name": "Capital Insight",
@@ -903,7 +879,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -917,7 +893,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -931,7 +907,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -945,7 +921,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -980,7 +956,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1112,7 +1088,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1136,7 +1112,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1206,7 +1182,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1220,7 +1196,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1234,7 +1210,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1248,7 +1224,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1262,7 +1238,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1276,7 +1252,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1300,7 +1276,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1314,7 +1290,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1328,7 +1304,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1356,7 +1332,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 500,
                 "steps": [
                     {
                         "position" : {
@@ -1474,7 +1450,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1596,7 +1572,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1610,7 +1586,7 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 200,
+                "maxDistanceFromBot": 300,
                 "steps": [
                     {
                         "position" : {
@@ -1631,6 +1607,977 @@
                             "x": -26.3561287,
                             "y": 24.1810627,
                             "z": -26.91148
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "TerraGroup Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -10.1596451,
+                            "y": 24.17935,
+                            "z": 31.54771
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -32.108902,
+                            "y": 24.1793537,
+                            "z": 26.0656338
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -41.80921,
+                            "y": 24.1793537,
+                            "z": 23.2063637
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -51.34287,
+                            "y": 24.1793537,
+                            "z": 43.7349625
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -59.5476952,
+                            "y": 24.2161388,
+                            "z": 28.3822746
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -27.2428532,
+                            "y": 24.1793537,
+                            "z": 56.88943
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 30,
+        "name": "TerraGroup Office Upstairs",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -44.12124,
+                            "y": 29.6709957,
+                            "z": 59.059597
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -26.84891,
+                            "y": 29.67099,
+                            "z": 55.365303
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -12.3301678,
+                            "y": 29.6996956,
+                            "z": 65.2422256
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -20.8411789,
+                            "y": 29.6710052,
+                            "z": 74.9792
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -23.3120861,
+                            "y": 29.6710072,
+                            "z": 84.47814
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -11.4437027,
+                            "y": 29.6714783,
+                            "z": 56.4455147
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -17.8279419,
+                            "y": 29.6714783,
+                            "z": 53.4957848
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -17.53707,
+                            "y": 29.6714783,
+                            "z": 46.1114922
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -14.1333857,
+                            "y": 29.6714535,
+                            "z": 41.28094
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "pmcsOnly": true,
+        "name": "TerraGroup Office Upstairs Sniping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -4.130823,
+                            "y": 29.6710033,
+                            "z": 64.97122
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -4.130823,
+                            "y": 29.6710033,
+                            "z": 64.97122
+                        },
+                        "lookToPosition" : {
+                            "x": 98.38838,
+                            "y": 22.5970783,
+                            "z": 65.62153
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -20.292757,
+                            "y": 29.6710072,
+                            "z": 90.44623
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -20.292757,
+                            "y": 29.6710072,
+                            "z": 90.44623
+                        },
+                        "lookToPosition" : {
+                            "x": 79.51354,
+                            "y": 22.5970783,
+                            "z": 115.00383
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "TerraGroup Office Quest Room Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -10.8554859,
+                            "y": 29.671463,
+                            "z": 47.4867439
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -10.8554859,
+                            "y": 29.671463,
+                            "z": 47.4867439
+                        },
+                        "lookToPosition" : {
+                            "x": -17.2306175,
+                            "y": 29.6714783,
+                            "z": 56.959095
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "TerraGroup Office Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -25.35518,
+                            "y": 24.1793537,
+                            "z": 48.9441833
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -25.35518,
+                            "y": 24.1793537,
+                            "z": 48.9441833
+                        },
+                        "lookToPosition" : {
+                            "x": -24.865366,
+                            "y": 24.1793537,
+                            "z": 31.2225685
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "TerraGroup Office Upstairs Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -19.7170582,
+                            "y": 29.67101,
+                            "z": 69.4867
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -19.7170582,
+                            "y": 29.67101,
+                            "z": 69.4867
+                        },
+                        "lookToPosition" : {
+                            "x": -17.9040451,
+                            "y": 29.6710377,
+                            "z": 60.5756721
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -32.0340347,
+                            "y": 29.6709938,
+                            "z": 56.03422
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -32.0340347,
+                            "y": 29.6709938,
+                            "z": 56.03422
+                        },
+                        "lookToPosition" : {
+                            "x": -40.77839,
+                            "y": 29.6709938,
+                            "z": 53.0022125
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Underground North",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 55.6714478,
+                            "y": 13.9418392,
+                            "z": -29.1467381
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 77.4694061,
+                            "y": 13.9693232,
+                            "z": -32.66117
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 87.33883,
+                            "y": 14.0978947,
+                            "z": -21.7858887
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 96.41335,
+                            "y": 13.9439812,
+                            "z": -6.35317659
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 100.936844,
+                            "y": 14.6940727,
+                            "z": -7.477905
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 102.768585,
+                            "y": 14.0990772,
+                            "z": 3.76116157
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 93.0439148,
+                            "y": 13.9439716,
+                            "z": 15.5140181
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 67.95334,
+                            "y": 13.9605808,
+                            "z": 24.4858589
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 65.3907547,
+                            "y": 13.9605808,
+                            "z": 26.6148129
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 96.28356,
+                            "y": 13.9439812,
+                            "z": 41.36817
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Underground Entrance",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 98.5235443,
+                            "y": 14.1010294,
+                            "z": 53.9608345
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 104.107056,
+                            "y": 14.0745573,
+                            "z": 69.84481
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 130.692474,
+                            "y": 20.2392139,
+                            "z": 70.87822
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "name": "Underground Utility Room",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 109.225586,
+                            "y": 12.4136572,
+                            "z": 50.14779
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 105.188919,
+                            "y": 12.4141121,
+                            "z": 47.08673
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 103.045837,
+                            "y": 12.4141121,
+                            "z": 49.5498352
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 101.540321,
+                            "y": 12.4141121,
+                            "z": 46.91429
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Underground South",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 74.15664,
+                            "y": 14.0978041,
+                            "z": 125.574028
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 92.8373947,
+                            "y": 14.0977993,
+                            "z": 142.331009
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 68.2226639,
+                            "y": 13.9406805,
+                            "z": 162.789734
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 67.77592,
+                            "y": 13.9406805,
+                            "z": 158.244614
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 81.90137,
+                            "y": 14.169383,
+                            "z": 179.991714
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "Tarbank Stairwell Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 50.18682,
+                            "y": 26.3637,
+                            "z": 149.469254
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 50.18682,
+                            "y": 26.3637,
+                            "z": 149.469254
+                        },
+                        "lookToPosition" : {
+                            "x": 44.93504,
+                            "y": 24.8662,
+                            "z": 151.547562
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "Capital Insight Stairwell Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 134.72644,
+                            "y": 32.8086967,
+                            "z": 269.9746
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 134.72644,
+                            "y": 32.8086967,
+                            "z": 269.9746
+                        },
+                        "lookToPosition" : {
+                            "x": 129.681458,
+                            "y": 29.69892,
+                            "z": 257.3434
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "Capital Insight Cafe Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 117.332855,
+                            "y": 32.80909,
+                            "z": 289.0309
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 117.332855,
+                            "y": 32.80909,
+                            "z": 289.0309
+                        },
+                        "lookToPosition" : {
+                            "x": 118.727158,
+                            "y": 32.80909,
+                            "z": 268.060852
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 0,
+        "desirability": 15,
+        "name": "Capital Insight Quest Room Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 110.526047,
+                            "y": 32.80914,
+                            "z": 273.995239
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 110.526047,
+                            "y": 32.80914,
+                            "z": 273.995239
+                        },
+                        "lookToPosition" : {
+                            "x": 110.844894,
+                            "y": 32.80909,
+                            "z": 281.7187
                         }
                     }
                 ]
