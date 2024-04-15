@@ -25,6 +25,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -89,7 +90,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
+        "minRaidET": 500,
         "desirability": 10,
         "name": "Mira Avenue Extract Camping",
         "objectives" : [
@@ -140,6 +141,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -154,6 +156,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -168,6 +171,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 23,
                 "steps": [
                     {
                         "position" : {
@@ -182,6 +186,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 20,
                 "steps": [
                     {
                         "position" : {
@@ -196,6 +201,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -272,6 +278,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -286,6 +293,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -404,6 +412,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -418,6 +427,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -437,7 +447,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Oasis Sniping",
@@ -446,6 +455,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -479,6 +489,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -512,6 +523,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -555,6 +567,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 21,
                 "steps": [
                     {
                         "position" : {
@@ -569,6 +582,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 20,
                 "steps": [
                     {
                         "position" : {
@@ -590,6 +604,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -604,6 +619,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 21,
                 "steps": [
                     {
                         "position" : {
@@ -618,6 +634,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -632,6 +649,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -651,7 +669,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Olive Restaurant Sniping",
@@ -660,6 +677,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -703,6 +721,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -717,6 +736,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 17,
                 "steps": [
                     {
                         "position" : {
@@ -731,6 +751,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 18,
                 "steps": [
                     {
                         "position" : {
@@ -745,6 +766,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -776,6 +798,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -795,7 +818,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "M Showroom Sniping",
@@ -804,6 +826,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -837,6 +860,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -880,6 +904,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -894,6 +919,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 26,
                 "steps": [
                     {
                         "position" : {
@@ -908,6 +934,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 20,
                 "steps": [
                     {
                         "position" : {
@@ -922,6 +949,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -957,6 +985,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -1004,15 +1033,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 20,
-        "pmcsOnly": true,
         "name": "Capital Insight Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1046,6 +1074,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1113,6 +1142,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -1132,7 +1162,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
+        "minRaidET": 400,
         "desirability": 10,
         "name": "Nakatani Tower Camping",
         "objectives" : [
@@ -1140,6 +1170,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1183,6 +1214,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1197,6 +1229,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1211,6 +1244,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 25,
                 "steps": [
                     {
                         "position" : {
@@ -1225,6 +1259,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 16,
                 "steps": [
                     {
                         "position" : {
@@ -1239,6 +1274,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1253,6 +1289,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1277,6 +1314,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1291,6 +1329,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 18,
                 "steps": [
                     {
                         "position" : {
@@ -1305,6 +1344,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1333,6 +1373,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1366,7 +1407,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Tarbank Upstairs Sniping",
@@ -1375,6 +1415,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1408,6 +1449,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1470,7 +1512,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
+        "minRaidET": 400,
         "desirability": 10,
         "name": "VEX Camping",
         "objectives" : [
@@ -1573,6 +1615,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1587,6 +1630,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -1639,6 +1683,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 22,
                 "steps": [
                     {
                         "position" : {
@@ -1653,6 +1698,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 33,
                 "steps": [
                     {
                         "position" : {
@@ -1667,6 +1713,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 39,
                 "steps": [
                     {
                         "position" : {
@@ -1681,6 +1728,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 50,
                 "steps": [
                     {
                         "position" : {
@@ -1695,6 +1743,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 17,
                 "steps": [
                     {
                         "position" : {
@@ -1719,6 +1768,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 33,
                 "steps": [
                     {
                         "position" : {
@@ -1733,6 +1783,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 17,
                 "steps": [
                     {
                         "position" : {
@@ -1747,6 +1798,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -1761,6 +1813,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1775,6 +1828,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1789,6 +1843,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1803,6 +1858,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -1817,6 +1873,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -1831,6 +1888,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -1850,15 +1908,14 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
-        "pmcsOnly": true,
         "name": "TerraGroup Office Upstairs Sniping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1892,6 +1949,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1930,14 +1988,15 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
+        "pmcsOnly": true,
         "name": "TerraGroup Office Quest Room Camping",
         "objectives" : [
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -1976,7 +2035,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "TerraGroup Office Camping",
         "objectives" : [
@@ -1984,6 +2042,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2022,7 +2081,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "TerraGroup Office Upstairs Camping",
         "objectives" : [
@@ -2030,6 +2088,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2063,6 +2122,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 22,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2148,6 +2208,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2169,6 +2230,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "steps": [
                     {
                         "position" : {
@@ -2218,6 +2280,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2294,6 +2357,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2367,6 +2431,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2407,7 +2472,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "Tarbank Stairwell Camping",
         "objectives" : [
@@ -2415,6 +2479,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2453,7 +2518,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "Capital Insight Stairwell Camping",
         "objectives" : [
@@ -2461,6 +2525,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 29,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2499,7 +2564,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "Capital Insight Cafe Camping",
         "objectives" : [
@@ -2507,6 +2571,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 20,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2545,7 +2610,6 @@
         "maxLevel": 99,
         "maxBots": 2,
         "maxBotsInGroup": 1,
-        "minRaidET": 0,
         "desirability": 15,
         "name": "Capital Insight Quest Room Camping",
         "objectives" : [
@@ -2553,6 +2617,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 11,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
