@@ -191,6 +191,15 @@ namespace SPTQuestingBots.BotLogic.HiveMind
         public static Vector3 GetLocationOfNearestGroupMember(BotOwner bot)
         {
             IReadOnlyCollection<BotOwner> members = GetAllGroupMembers(bot);
+
+            IEnumerable<string> deadMemberNames = members
+                .Where(m => m.IsDead)
+                .Select(m => m.GetText());
+            if (deadMemberNames.Any())
+            {
+                LoggingController.LogError(bot.GetText() + " is trying to regroup with dead followers: " + string.Join(", ", deadMemberNames));
+            }
+            
             if (members.Count == 0)
             {
                 return bot.Position;
@@ -431,14 +440,16 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     {
                         Controllers.LoggingController.LogInfo("Removing null follower for " + boss.GetText());
 
-                        botFollowers[boss].Remove(follower);
                         deadBots.Add(follower);
-
-                        continue;
                     }
 
                     if (deadBots.Contains(follower))
                     {
+                        if (botFollowers[boss].Contains(follower))
+                        {
+                            botFollowers[boss].Remove(follower);
+                        }
+
                         continue;
                     }
 
@@ -446,7 +457,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                     {
                         Controllers.LoggingController.LogInfo("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
 
-                        botFollowers[boss].Remove(follower);
                         deadBots.Add(follower);
                     }
                 }
