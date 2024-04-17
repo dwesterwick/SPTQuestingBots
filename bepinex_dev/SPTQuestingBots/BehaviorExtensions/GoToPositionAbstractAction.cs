@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +15,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
     {
+        protected BotPathData BotPath { get; private set; }
         protected bool CanSprint { get; set; } = true;
 
         private Stopwatch botIsStuckTimer = new Stopwatch();
@@ -23,7 +25,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
-            
+            BotPath = new BotPathData(_BotOwner);
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -55,9 +57,24 @@ namespace SPTQuestingBots.BehaviorExtensions
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
-            NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
 
-            return pathStatus;
+            // Old method
+            //NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
+
+            NavMeshPathStatus previousStatus = BotPath.Status;
+            bool newPath = BotPath.Update(position, reachDist, previousStatus != NavMeshPathStatus.PathComplete);
+
+            if (newPath && (BotPath.Status != NavMeshPathStatus.PathInvalid))
+            {
+                LoggingController.LogInfo("Updated path for " + BotOwner.GetText());
+                BotOwner.Mover?.GoToByWay(BotPath.Corners, reachDist);
+            }
+            else
+            {
+                BotOwner.Mover?.Stop();
+            }
+
+            return BotPath.Status;
         }
 
         protected void restartStuckTimer()

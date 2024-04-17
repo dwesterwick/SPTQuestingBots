@@ -198,6 +198,7 @@
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
     <Compile Include="Models\BotJobAssignment.cs" />
+    <Compile Include="Models\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />

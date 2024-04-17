@@ -129,28 +129,14 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return false;
             }
 
-            if ((pathStatus.Value == NavMeshPathStatus.PathComplete) && (BotOwner.Mover?.IsPathComplete(ObjectiveManager.Position.Value, 0.5f) == true))
+            if (pathStatus.Value == NavMeshPathStatus.PathComplete)
             {
                 return true;
             }
 
-            // Calculate distances between:
-            //  - the bot and the end of the incomplete path to its objective
-            //  - the bot and its objective step position
-            //  - the end of its partial path and its objective step position
-
-            float distanceToEndOfPath = float.NaN;
-            float distanceToObjective = float.NaN;
-            float missingDistance = float.NaN;
-
-            //Vector3? lastPathPoint = BotOwner.Mover?.CurPathLastPoint;
-            Vector3? lastPathPoint = BotOwner.Mover?.GetCurrentPathLastPoint();
-            if (lastPathPoint.HasValue)
-            {
-                distanceToEndOfPath = Vector3.Distance(BotOwner.Position, lastPathPoint.Value);
-                distanceToObjective = Vector3.Distance(BotOwner.Position, ObjectiveManager.Position.Value);
-                missingDistance = Vector3.Distance(ObjectiveManager.Position.Value, lastPathPoint.Value);
-            }
+            float distanceToEndOfPath = BotPath.GetDistanceToFinalPoint();
+            float distanceToObjective = BotPath.DistanceToTarget;
+            float missingDistance = BotPath.GetMissingDistanceToTarget();
 
             // If the bot is far from its objective position but its path is incomplete, have it try going there anyway. Sometimes I get lost too,
             // so who am I to judge?

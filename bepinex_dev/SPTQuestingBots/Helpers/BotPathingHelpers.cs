@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 using EFT.UI;
 using HarmonyLib;
 using UnityEngine;
@@ -32,6 +33,22 @@ namespace SPTQuestingBots.Helpers
             Vector3[] path = (Vector3[])pathPointsField.GetValue(pathController.CurPath);
 
             return path;
+        }
+
+        public static bool HasSameTargetPosition(this BotOwner bot, Vector3 targetPosition)
+        {
+            if (bot?.Mover == null)
+            {
+                return false;
+            }
+
+            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(bot.Mover);
+            if (pathController?.CurPath == null)
+            {
+                return false;
+            }
+
+            return pathController.IsSameWay(targetPosition, bot.Position);
         }
 
         public static int? GetCurrentCornerIndex(this BotMover botMover)
