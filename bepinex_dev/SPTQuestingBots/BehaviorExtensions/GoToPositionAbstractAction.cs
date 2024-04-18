@@ -64,10 +64,12 @@ namespace SPTQuestingBots.BehaviorExtensions
             NavMeshPathStatus previousStatus = BotPath.Status;
             bool newPath = BotPath.Update(position, reachDist, previousStatus != NavMeshPathStatus.PathComplete);
 
-            if (newPath && (BotPath.Status != NavMeshPathStatus.PathInvalid))
+            if (BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
-                LoggingController.LogInfo("Updated path for " + BotOwner.GetText());
-                BotOwner.Mover?.GoToByWay(BotPath.Corners, reachDist);
+                if (newPath)
+                {
+                    BotOwner.FollowPath(BotPath, true, false);
+                }
             }
             else
             {

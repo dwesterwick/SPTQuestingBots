@@ -5,8 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
-using EFT.UI;
 using HarmonyLib;
+using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Helpers
@@ -14,8 +15,24 @@ namespace SPTQuestingBots.Helpers
     public static class BotPathingHelpers
     {
         private static FieldInfo pathControllerField = AccessTools.Field(typeof(BotMover), "_pathController");
+        private static FieldInfo pathFinderField = AccessTools.Field(typeof(BotMover), "_pathFinder");
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass466), "vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass466), "int_0");
+
+        public static void FollowPath(this BotOwner bot, BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
+        {
+            //LoggingController.LogInfo("Updated path for " + bot.GetText());
+
+            bot.Mover?.GoToByWay(botPath.Corners, botPath.ReachDistance);
+            bot.Mover?.SetSlowAtTheEnd(slowAtTheEnd);
+
+            if (bot.BotLay.IsLay && (botPath.DistanceToTarget > 0.2f))
+            {
+                bot.BotLay.GetUp(getUpWithCheck);
+            }
+
+            bot.WeaponManager.Stationary.StartMove();
+        }
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
@@ -49,6 +66,23 @@ namespace SPTQuestingBots.Helpers
             }
 
             return pathController.IsSameWay(targetPosition, bot.Position);
+        }
+
+        public static bool SetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
+        {
+            if (botMover == null)
+            {
+                return false;
+            }
+
+            GClass423 pathFinder = (GClass423)pathFinderField.GetValue(botMover);
+            if (pathFinder == null)
+            {
+                return false;
+            }
+
+            pathFinder.SlowAtTheEnd = slowAtTheEnd;
+            return true;
         }
 
         public static int? GetCurrentCornerIndex(this BotMover botMover)

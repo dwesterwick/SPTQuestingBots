@@ -252,6 +252,7 @@ namespace SPTQuestingBots.Components
             IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
 
             Vector3 lastPosition = Vector3.positiveInfinity;
+            Quest lastQuest = null;
             foreach (JobAssignment jobAssignment in jobAssignments)
             {
                 // Ensure the position is valid and isn't the same as the previous step in the quest objective
@@ -266,17 +267,37 @@ namespace SPTQuestingBots.Components
                 questText += "\nStep: " + jobAssignment.QuestObjectiveStepAssignment.ToString();
                 questText += "\nDistance: ";
 
-                Vector3 overlayPosition = stepPosition.Value + new Vector3(0, markerRadius + 0.1f, 0);
-                OverlayData overlayData = new OverlayData(overlayPosition, questText);
+                addJobAssignment(jobAssignment, questText, stepPosition.Value, Color.red);
 
-                jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
-                jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(stepPosition.Value, markerRadius * 2, Color.red));
-                jobAssignmentInfo.Add(jobAssignment, overlayData);
+                if (lastQuest != jobAssignment.QuestAssignment)
+                {
+                    IList<Vector3> waypoints = jobAssignment.QuestAssignment.GetWaypointPositions();
+                    for (int w = 0; w < waypoints.Count; w++)
+                    {
+                        questText = "Quest: " + jobAssignment.QuestAssignment.ToString();
+                        questText += "\nWaypoint #" + (w + 1) + ": " + waypoints[w];
+                        questText += "\nDistance: ";
+
+                        JobAssignment clonedAssignment = (JobAssignment)jobAssignment.Clone();
+                        addJobAssignment(clonedAssignment, questText, waypoints[w], Color.blue);
+                    }
+                }
 
                 lastPosition = stepPosition.Value;
+                lastQuest = jobAssignment.QuestAssignment;
             }
 
             LoggingController.LogInfo("Loading all possible job assignments...done (Created " + jobAssignmentDistances.Count + " markers).");
+        }
+
+        private void addJobAssignment(JobAssignment jobAssignment, string questText, Vector3 position, Color markerColor)
+        {
+            Vector3 overlayPosition = position + new Vector3(0, markerRadius + 0.1f, 0);
+            OverlayData overlayData = new OverlayData(overlayPosition, questText);
+
+            jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
+            jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(position, markerRadius * 2, markerColor));
+            jobAssignmentInfo.Add(jobAssignment, overlayData);
         }
 
         internal class OverlayData

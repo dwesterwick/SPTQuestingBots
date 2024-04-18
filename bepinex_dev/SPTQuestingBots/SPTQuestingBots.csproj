@@ -209,6 +209,7 @@
     <Compile Include="Models\QuestSpawnPointObjective.cs" />
     <Compile Include="Models\QuestZoneObjective.cs" />
     <Compile Include="Models\SerializableVector3.cs" />
+    <Compile Include="Models\StaticPathData.cs" />
     <Compile Include="Models\StoredQuestLocation.cs" />
     <Compile Include="Patches\ActivateBotsByWavePatch2.cs" />
     <Compile Include="Patches\ActivateBotsByWavePatch.cs" />

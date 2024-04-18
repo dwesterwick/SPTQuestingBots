@@ -1035,6 +1035,23 @@
         "maxBotsInGroup": 1,
         "desirability": 20,
         "name": "Capital Insight Sniping",
+        "waypoints" : [
+            {
+                "x": 124.025024,
+                "y": 31.3263378,
+                "z": 257.744019
+            },
+            {
+                "x": 124.181259,
+                "y": 32.7994957,
+                "z": 261.500854
+            },
+            {
+                "x": 118.806427,
+                "y": 32.8090935,
+                "z": 267.8658
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,

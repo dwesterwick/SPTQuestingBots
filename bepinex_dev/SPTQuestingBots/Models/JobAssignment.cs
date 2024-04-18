@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
-    public class JobAssignment
+    public class JobAssignment : ICloneable
     {
         public Quest QuestAssignment { get; protected set; } = null;
         public QuestObjective QuestObjectiveAssignment { get; protected set; } = null;
@@ -32,6 +32,11 @@ namespace SPTQuestingBots.Models
         {
             string stepNumberText = QuestObjectiveStepAssignment?.StepNumber?.ToString() ?? "???";
             return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
+        }
+
+        public object Clone()
+        {
+            return new JobAssignment(QuestAssignment, QuestObjectiveAssignment, QuestObjectiveStepAssignment);
         }
     }
 }
