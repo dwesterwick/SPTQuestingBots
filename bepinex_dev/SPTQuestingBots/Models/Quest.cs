@@ -73,9 +73,6 @@ namespace SPTQuestingBots.Models
         [JsonIgnore]
         private IList<Vector3> waypointPositions = null;
 
-        [JsonIgnore]
-        private Dictionary<(Vector3, Vector3), StaticPathData> staticPaths = new Dictionary<(Vector3, Vector3), StaticPathData>();
-
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
         public bool IsEFTQuest => Template != null;
@@ -145,32 +142,6 @@ namespace SPTQuestingBots.Models
 
             waypointPositions = positions;
             return positions;
-        }
-
-        public void AddStaticPath(Vector3 from, Vector3 to, StaticPathData pathData)
-        {
-            staticPaths.Add((from, to), pathData);
-        }
-
-        public IList<StaticPathData> GetStaticPaths(Vector3 target)
-        {
-            IList<StaticPathData> paths = new List<StaticPathData>();
-            foreach ((Vector3 from, Vector3 to) in staticPaths.Keys)
-            {
-                if (to != target)
-                {
-                    continue;
-                }
-
-                if (staticPaths[(from, to)].Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
-                {
-                    continue;
-                }
-
-                paths.Add(staticPaths[(from, to)]);
-            }
-
-            return paths;
         }
 
         public bool CanAssignBot(BotOwner bot)

@@ -56,11 +56,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
-            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc. 
-
-            // Old method
-            //NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
-
+            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc.
             NavMeshPathStatus previousStatus = BotPath.Status;
             bool newPath = BotPath.Update(position, reachDist, previousStatus != NavMeshPathStatus.PathComplete);
 
@@ -68,6 +64,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 if (newPath)
                 {
+                    LoggingController.LogInfo("Set " + BotPath.Status.ToString() + " path to " + BotPath.TargetPosition + " for " + BotOwner.GetText());
                     BotOwner.FollowPath(BotPath, true, false);
                 }
             }
@@ -77,6 +74,14 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             return BotPath.Status;
+        }
+
+        public NavMeshPathStatus? RecalculatePath_OLD(Vector3 position, float reachDist)
+        {
+            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc.
+            NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
+
+            return pathStatus;
         }
 
         protected void restartStuckTimer()

@@ -22,6 +22,7 @@ namespace SPTQuestingBots.Components
         public bool HaveQuestsBeenBuilt { get; private set; } = false;
 
         private CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private Dictionary<(Vector3, Vector3), StaticPathData> staticPaths = new Dictionary<(Vector3, Vector3), StaticPathData>();
         private List<string> zoneIDsInLocation = new List<string>();
         
         private void Awake()
@@ -33,6 +34,27 @@ namespace SPTQuestingBots.Components
         private void Update()
         {
             
+        }
+
+        public IList<StaticPathData> GetStaticPaths(Vector3 target)
+        {
+            IList<StaticPathData> paths = new List<StaticPathData>();
+            foreach ((Vector3 from, Vector3 to) in staticPaths.Keys)
+            {
+                if (to != target)
+                {
+                    continue;
+                }
+
+                if (staticPaths[(from, to)].Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
+                {
+                    continue;
+                }
+
+                paths.Add(staticPaths[(from, to)]);
+            }
+
+            return paths;
         }
 
         public void AddAirdropChaserQuest(Vector3 airdropPosition)
@@ -200,11 +222,16 @@ namespace SPTQuestingBots.Components
                         continue;
                     }
 
+                    if (staticPaths.ContainsKey((from, to)))
+                    {
+                        continue;
+                    }
+
                     StaticPathData path = new StaticPathData(from, to, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         LoggingController.LogInfo("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
-                        quest.AddStaticPath(from, to, path);
+                        staticPaths.Add((from, to), path);
                     }
                     else
                     {
@@ -219,11 +246,16 @@ namespace SPTQuestingBots.Components
 
                 foreach (Vector3 waypoint in waypoints)
                 {
+                    if (staticPaths.ContainsKey((waypoint, firstStepPosition)))
+                    {
+                        continue;
+                    }
+
                     StaticPathData path = new StaticPathData(waypoint, firstStepPosition, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         LoggingController.LogInfo("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
-                        quest.AddStaticPath(waypoint, firstStepPosition, path);
+                        staticPaths.Add((waypoint, firstStepPosition), path);
                     }
                     else
                     {
