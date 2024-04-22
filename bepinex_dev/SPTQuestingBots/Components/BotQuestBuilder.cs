@@ -213,6 +213,8 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
+            Dictionary<(Vector3, Vector3), StaticPathData> tmpStaticPaths = new Dictionary<(Vector3, Vector3), StaticPathData>();
+
             foreach (Vector3 from in waypoints)
             {
                 foreach (Vector3 to in waypoints)
@@ -222,7 +224,7 @@ namespace SPTQuestingBots.Components
                         continue;
                     }
 
-                    if (staticPaths.ContainsKey((from, to)))
+                    if (tmpStaticPaths.ContainsKey((from, to)))
                     {
                         continue;
                     }
@@ -231,7 +233,7 @@ namespace SPTQuestingBots.Components
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         LoggingController.LogInfo("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
-                        staticPaths.Add((from, to), path);
+                        tmpStaticPaths.Add((from, to), path);
                     }
                     else
                     {
@@ -246,7 +248,7 @@ namespace SPTQuestingBots.Components
 
                 foreach (Vector3 waypoint in waypoints)
                 {
-                    if (staticPaths.ContainsKey((waypoint, firstStepPosition)))
+                    if (tmpStaticPaths.ContainsKey((waypoint, firstStepPosition)))
                     {
                         continue;
                     }
@@ -255,7 +257,7 @@ namespace SPTQuestingBots.Components
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         LoggingController.LogInfo("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
-                        staticPaths.Add((waypoint, firstStepPosition), path);
+                        tmpStaticPaths.Add((waypoint, firstStepPosition), path);
                     }
                     else
                     {
@@ -263,6 +265,60 @@ namespace SPTQuestingBots.Components
                     }
                 }
             }
+
+            tmpStaticPaths = addCombinedPaths(tmpStaticPaths);
+
+            foreach ((Vector3 from, Vector3 to) in tmpStaticPaths.Keys)
+            {
+                if (staticPaths.ContainsKey((from, to)))
+                {
+                    continue;
+                }
+
+                staticPaths.Add((from, to), tmpStaticPaths[(from, to)]);
+            }
+        }
+
+        private static Dictionary<(Vector3, Vector3), StaticPathData> addCombinedPaths(Dictionary<(Vector3, Vector3), StaticPathData> paths)
+        {
+            int newPaths = 0;
+            do
+            {
+                newPaths = 0;
+
+                foreach ((Vector3 from, Vector3 to) in paths.Keys)
+                {
+                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.TargetPosition == from))
+                    {
+                        if (paths.ContainsKey((matchingPath.StartPosition, to)))
+                        {
+                            continue;
+                        }
+
+                        StaticPathData combinedPath = matchingPath.Append(paths[(from, to)]);
+
+                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
+                        newPaths++;
+                    }
+
+                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.StartPosition == to))
+                    {
+                        if (paths.ContainsKey((to, matchingPath.TargetPosition)))
+                        {
+                            continue;
+                        }
+
+                        StaticPathData combinedPath = paths[(from, to)].Append(matchingPath);
+
+                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
+                        newPaths++;
+                    }
+                }
+            } while (newPaths > 0);
+
+            return paths;
         }
 
         private void LoadCustomQuests()
