@@ -15,7 +15,6 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
     {
-        protected BotPathData BotPath { get; private set; }
         protected bool CanSprint { get; set; } = true;
 
         private Stopwatch botIsStuckTimer = new Stopwatch();
@@ -25,7 +24,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
-            BotPath = new BotPathData(_BotOwner);
+            
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -57,15 +56,19 @@ namespace SPTQuestingBots.BehaviorExtensions
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
             // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc.
-            NavMeshPathStatus previousStatus = BotPath.Status;
-            bool newPath = BotPath.Update(position, reachDist, previousStatus != NavMeshPathStatus.PathComplete);
+            NavMeshPathStatus previousStatus = ObjectiveManager.BotPath.Status;
+            BotPathUpdateReason updateReason = ObjectiveManager.BotPath.Update(position, reachDist);
 
-            if (BotPath.Status != NavMeshPathStatus.PathInvalid)
+            if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
-                if (newPath)
+                if (updateReason != BotPathUpdateReason.None)
                 {
-                    LoggingController.LogInfo("Set " + BotPath.Status.ToString() + " path to " + BotPath.TargetPosition + " for " + BotOwner.GetText());
-                    BotOwner.FollowPath(BotPath, true, false);
+                    if (!ObjectiveManager.BotMonitor.IsFollowing())
+                    {
+                        LoggingController.LogInfo("Set " + ObjectiveManager.BotPath.Status.ToString() + " path to " + ObjectiveManager.BotPath.TargetPosition + " for " + BotOwner.GetText() + " due to " + updateReason.ToString());
+                    }
+
+                    BotOwner.FollowPath(ObjectiveManager.BotPath, true, false);
                 }
             }
             else
@@ -73,7 +76,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 BotOwner.Mover?.Stop();
             }
 
-            return BotPath.Status;
+            return ObjectiveManager.BotPath.Status;
         }
 
         public NavMeshPathStatus? RecalculatePath_OLD(Vector3 position, float reachDist)

@@ -88,7 +88,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
+                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
                 }
                 wasStuck = true;
 
@@ -134,9 +134,9 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return true;
             }
 
-            float distanceToEndOfPath = BotPath.GetDistanceToFinalPoint();
-            float distanceToObjective = BotPath.DistanceToTarget;
-            float missingDistance = BotPath.GetMissingDistanceToTarget();
+            float distanceToEndOfPath = ObjectiveManager.BotPath.GetDistanceToFinalPoint();
+            float distanceToObjective = ObjectiveManager.BotPath.DistanceToTarget;
+            float missingDistance = ObjectiveManager.BotPath.GetMissingDistanceToTarget();
 
             // If the bot is far from its objective position but its path is incomplete, have it try going there anyway. Sometimes I get lost too,
             // so who am I to judge?

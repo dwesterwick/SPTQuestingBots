@@ -19,6 +19,9 @@ namespace SPTQuestingBots.Models
         public float PathLength { get; protected set; } = float.NaN;
         public float LastSetTime { get; protected set; } = 0;
 
+        public bool IsInitialized => TargetPosition != Vector3.positiveInfinity;
+        public bool HasPath => Corners.Length > 0;
+
         public StaticPathData()
         {
 

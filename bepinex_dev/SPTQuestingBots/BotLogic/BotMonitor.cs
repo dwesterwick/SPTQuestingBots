@@ -399,7 +399,13 @@ namespace SPTQuestingBots.BotLogic
         public bool IsQuesting()
         {
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            return activeLayerName.Contains(nameof(BotObjectiveLayer)) || activeLayerName.Contains(nameof(BotFollowerLayer));
+            return activeLayerName.Contains(nameof(BotObjectiveLayer));
+        }
+
+        public bool IsFollowing()
+        {
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            return activeLayerName.Contains(nameof(BotFollowerLayer));
         }
 
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)

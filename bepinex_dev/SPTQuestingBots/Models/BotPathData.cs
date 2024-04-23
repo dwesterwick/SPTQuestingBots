@@ -7,12 +7,25 @@ using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
+    public enum BotPathUpdateReason
+    {
+        None = 0,
+        Force,
+        RefreshNeededTime,
+        RefreshNeededPath,
+        NewTarget,
+        IncompletePath,
+    }
+
     public class BotPathData : StaticPathData
     {
+        public static float MinRefreshDistance { get; } = 0.5f;
+        public static float IncompletePathRefreshDelay { get; } = 5f;
         public float DistanceToTarget => Vector3.Distance(bot.Position, TargetPosition);
 
         private BotOwner bot;
@@ -22,30 +35,64 @@ namespace SPTQuestingBots.Models
             bot = botOwner;
         }
 
-        public bool Update(Vector3 target, float reachDistance = 0.5f, bool force = false)
+        public BotPathUpdateReason Update(Vector3 target, float reachDistance = 0.5f, bool force = false)
         {
-            bool requiresUpdate = force;
+            bool requiresUpdate = false;
+            BotPathUpdateReason reason = BotPathUpdateReason.None;
 
-            if (bot.Mover.LastPathSetTime != LastSetTime)
+            float distanceFromStartPosition = Vector3.Distance(bot.Position, StartPosition);
+
+            if (force)
             {
                 requiresUpdate = true;
+                reason = BotPathUpdateReason.Force;
             }
 
-            if ((target != TargetPosition) || (reachDistance != ReachDistance))
+            if (!requiresUpdate && ((target != TargetPosition) || (reachDistance != ReachDistance)))
             {
                 TargetPosition = target;
                 ReachDistance = reachDistance;
+
                 requiresUpdate = true;
+                reason = BotPathUpdateReason.NewTarget;
             }
 
-            requiresUpdate |= Corners.Length == 0;
+            if (!requiresUpdate)
+            {
+                if (Status == UnityEngine.AI.NavMeshPathStatus.PathInvalid)
+                {
+                    requiresUpdate = true;
+                    reason = BotPathUpdateReason.IncompletePath;
+                }
+                else if ((Status == UnityEngine.AI.NavMeshPathStatus.PathPartial) && (Time.time - LastSetTime > IncompletePathRefreshDelay))
+                {
+                    requiresUpdate = true;
+                    reason = BotPathUpdateReason.IncompletePath;
+                }
+            }
+
+            /*if (!requiresUpdate && (bot.Mover.LastPathSetTime != LastSetTime))
+            {
+                requiresUpdate &= distanceFromStartPosition > MinRefreshDistance;
+                reason = BotPathUpdateReason.RefreshNeededTime;
+            }*/
+
+            if (!requiresUpdate)
+            {
+                Vector3[] currentPath = bot.Mover.GetCurrentPath();
+                if (Corners.Any() && (currentPath?.Any() == true) && (currentPath.Last() != Corners.Last()))
+                {
+                    requiresUpdate &= distanceFromStartPosition > MinRefreshDistance;
+                    reason = BotPathUpdateReason.RefreshNeededPath;
+                }
+            }
 
             if (requiresUpdate)
             {
                 updateCorners(target);
             }
 
-            return requiresUpdate;
+            return reason;
         }
 
         public float GetDistanceToFinalPoint()
