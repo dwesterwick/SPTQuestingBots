@@ -39,7 +39,7 @@ namespace SPTQuestingBots
             
             if (ConfigController.Config.Enabled)
             {
-                LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");
+                LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
 
                 new Patches.CheckSPTVersionPatch().Enable();
                 new Patches.AddActivePlayerPatch().Enable();
@@ -51,8 +51,6 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                //new Patches.GoToPositionPatch().Enable();
-                //new Patches.FindPathPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {

@@ -135,6 +135,7 @@
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="Components\QuestPathFinder.cs" />
     <Compile Include="Components\Spawning\PScavGenerator.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
@@ -221,8 +222,6 @@
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\ExceptAIPatch.cs" />
-    <Compile Include="Patches\FindPathPatch.cs" />
-    <Compile Include="Patches\GoToPositionPatch.cs" />
     <Compile Include="Patches\GameStartPatch.cs" />
     <Compile Include="Patches\GetListByZonePatch.cs" />
     <Compile Include="Patches\InitBossSpawnLocationPatch.cs" />

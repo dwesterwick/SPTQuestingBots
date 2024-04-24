@@ -1,16 +1,16 @@
-﻿using Comfort.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -86,6 +86,15 @@ namespace SPTQuestingBots.Components
             updateBotPathOverlays();
         }
 
+        private void destroyPathMarker(BotOwner bot)
+        {
+            if (botPathMarkers.ContainsKey(bot))
+            {
+                Destroy(botPathMarkers[bot]);
+                botPathMarkers.Remove(bot);
+            }
+        }
+
         private void updateBotInfo()
         {
             foreach (BotOwner bot in botInfo.Keys.ToArray())
@@ -149,12 +158,7 @@ namespace SPTQuestingBots.Components
                 if ((bot == null) || bot.IsDead)
                 {
                     botPathInfo.Remove(bot);
-
-                    if (botPathMarkers.ContainsKey(bot))
-                    {
-                        Destroy(botPathMarkers[bot]);
-                    }
-                    botPathMarkers.Remove(bot);
+                    destroyPathMarker(bot);
 
                     continue;
                 }
@@ -165,6 +169,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Check if a path has been defined for the bot by this mod
                 BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
                 if ((botObjectiveManager?.BotPath == null) || !botObjectiveManager.BotPath.HasPath)
                 {
@@ -175,6 +180,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Ensure the bot has an active quest and is not a follower
                 if (!botObjectiveManager.IsQuestingAllowed || !botObjectiveManager.IsJobAssignmentActive || BotHiveMindMonitor.HasBoss(bot))
                 {
                     if (botPathMarkers.ContainsKey(bot))
@@ -346,6 +352,12 @@ namespace SPTQuestingBots.Components
         {
             foreach (BotOwner bot in botPathMarkers.Keys.ToArray())
             {
+                if (!QuestingBotsPluginConfig.ShowBotPathOverlays.Value)
+                {
+                    destroyPathMarker(bot);
+                    continue;
+                }
+
                 if ((bot == null) || bot.IsDead)
                 {
                     continue;
@@ -363,6 +375,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Copy the text here in case we want to add dynamic text in the future
                 botPathInfo[bot].GuiContent.text = botPathInfo[bot].StaticText;
 
                 Vector2 guiSize = guiStyle.CalcSize(botPathInfo[bot].GuiContent);

@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Components
         public bool HaveQuestsBeenBuilt { get; private set; } = false;
 
         private CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
-        private Dictionary<(Vector3, Vector3), StaticPathData> staticPaths = new Dictionary<(Vector3, Vector3), StaticPathData>();
+        private QuestPathFinder questPathFinder = new QuestPathFinder();
         private List<string> zoneIDsInLocation = new List<string>();
         
         private void Awake()
@@ -38,23 +38,7 @@ namespace SPTQuestingBots.Components
 
         public IList<StaticPathData> GetStaticPaths(Vector3 target)
         {
-            IList<StaticPathData> paths = new List<StaticPathData>();
-            foreach ((Vector3 from, Vector3 to) in staticPaths.Keys)
-            {
-                if (to != target)
-                {
-                    continue;
-                }
-
-                if (staticPaths[(from, to)].Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
-                {
-                    continue;
-                }
-
-                paths.Add(staticPaths[(from, to)]);
-            }
-
-            return paths;
+            return questPathFinder.GetStaticPaths(target);
         }
 
         public void AddAirdropChaserQuest(Vector3 airdropPosition)
@@ -188,137 +172,12 @@ namespace SPTQuestingBots.Components
                 HaveQuestsBeenBuilt = true;
                 LoggingController.LogInfo("Finished loading quest data.");
 
-                StartCoroutine(findStaticPathsForAllQuests());
+                StartCoroutine(questPathFinder.FindStaticPathsForAllQuests());
             }
             finally
             {
                 IsBuildingQuests = false;
             }
-        }
-
-        private IEnumerator findStaticPathsForAllQuests()
-        {
-            LoggingController.LogInfo("Finding static paths...");
-
-            yield return BotJobAssignmentFactory.ProcessAllQuests(findStaticPaths);
-
-            LoggingController.LogInfo("Finding static paths...done.");
-        }
-
-        private void findStaticPaths(Models.Quest quest)
-        {
-            IList<Vector3> waypoints = quest.GetWaypointPositions();
-            if (waypoints.Count == 0)
-            {
-                return;
-            }
-
-            Dictionary<(Vector3, Vector3), StaticPathData> tmpStaticPaths = new Dictionary<(Vector3, Vector3), StaticPathData>();
-
-            foreach (Vector3 from in waypoints)
-            {
-                foreach (Vector3 to in waypoints)
-                {
-                    if (from == to)
-                    {
-                        continue;
-                    }
-
-                    if (tmpStaticPaths.ContainsKey((from, to)))
-                    {
-                        continue;
-                    }
-
-                    StaticPathData path = new StaticPathData(from, to, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
-                    if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
-                    {
-                        LoggingController.LogInfo("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
-                        tmpStaticPaths.Add((from, to), path);
-                    }
-                    else
-                    {
-                        LoggingController.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
-                    }
-                }
-            }
-
-            foreach (QuestObjective questObjective in quest.ValidObjectives)
-            {
-                Vector3 firstStepPosition = questObjective.GetFirstStepPosition().Value;
-
-                foreach (Vector3 waypoint in waypoints)
-                {
-                    if (tmpStaticPaths.ContainsKey((waypoint, firstStepPosition)))
-                    {
-                        continue;
-                    }
-
-                    StaticPathData path = new StaticPathData(waypoint, firstStepPosition, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
-                    if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
-                    {
-                        LoggingController.LogInfo("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
-                        tmpStaticPaths.Add((waypoint, firstStepPosition), path);
-                    }
-                    else
-                    {
-                        LoggingController.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
-                    }
-                }
-            }
-
-            tmpStaticPaths = addCombinedPaths(tmpStaticPaths);
-
-            foreach ((Vector3 from, Vector3 to) in tmpStaticPaths.Keys)
-            {
-                if (staticPaths.ContainsKey((from, to)))
-                {
-                    continue;
-                }
-
-                staticPaths.Add((from, to), tmpStaticPaths[(from, to)]);
-            }
-        }
-
-        private static Dictionary<(Vector3, Vector3), StaticPathData> addCombinedPaths(Dictionary<(Vector3, Vector3), StaticPathData> paths)
-        {
-            int newPaths = 0;
-            do
-            {
-                newPaths = 0;
-
-                foreach ((Vector3 from, Vector3 to) in paths.Keys)
-                {
-                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.TargetPosition == from))
-                    {
-                        if (paths.ContainsKey((matchingPath.StartPosition, to)))
-                        {
-                            continue;
-                        }
-
-                        StaticPathData combinedPath = matchingPath.Append(paths[(from, to)]);
-
-                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
-                        paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
-                        newPaths++;
-                    }
-
-                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.StartPosition == to))
-                    {
-                        if (paths.ContainsKey((to, matchingPath.TargetPosition)))
-                        {
-                            continue;
-                        }
-
-                        StaticPathData combinedPath = paths[(from, to)].Append(matchingPath);
-
-                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
-                        paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
-                        newPaths++;
-                    }
-                }
-            } while (newPaths > 0);
-
-            return paths;
         }
 
         private void LoadCustomQuests()

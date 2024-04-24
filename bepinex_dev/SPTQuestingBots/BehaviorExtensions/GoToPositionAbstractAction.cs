@@ -57,13 +57,11 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
         {
-            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc.
-            NavMeshPathStatus previousStatus = ObjectiveManager.BotPath.Status;
-            BotPathUpdateReason updateReason = ObjectiveManager.BotPath.Update(position, reachDist);
+            BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist);
 
             if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
-                if (updateReason != BotPathUpdateReason.None)
+                if (updateReason != BotPathUpdateNeededReason.None)
                 {
                     if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
                     {

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using HarmonyLib;
-using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -21,9 +20,10 @@ namespace SPTQuestingBots.Helpers
 
         public static void FollowPath(this BotOwner bot, BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
+            // Combines _pathFinder.method_0 and GoToByWay
+
             //LoggingController.LogInfo("Updated path for " + bot.GetText());
 
-            bot.Mover?.GoToByWay(botPath.Corners, botPath.ReachDistance);
             bot.Mover?.SetSlowAtTheEnd(slowAtTheEnd);
 
             if (bot.BotLay.IsLay && (botPath.DistanceToTarget > 0.2f))
@@ -32,6 +32,8 @@ namespace SPTQuestingBots.Helpers
             }
 
             bot.WeaponManager.Stationary.StartMove();
+
+            bot.Mover?.GoToByWay(botPath.Corners, botPath.ReachDistance);
         }
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
