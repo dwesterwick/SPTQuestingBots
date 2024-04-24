@@ -84,14 +84,6 @@ namespace SPTQuestingBots
                     ConfigController.AdjustPMCConversionChances(0, false);
                 }
                 
-                if (ConfigController.Config.Debug.Enabled)
-                {
-                    if (ConfigController.Config.Debug.ShowZoneOutlines || ConfigController.Config.Debug.ShowFailedPaths)
-                    {
-                        this.GetOrAddComponent<PathRender>();
-                    }
-                }
-
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
                 

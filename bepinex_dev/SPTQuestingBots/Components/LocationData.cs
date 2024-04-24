@@ -67,6 +67,11 @@ namespace SPTQuestingBots.Components
 
                 BotGenerator.RunBotGenerationTasks();
             }
+
+            if (ConfigController.Config.Debug.Enabled)
+            {
+                Singleton<GameWorld>.Instance.gameObject.AddComponent<PathRender>();
+            }
         }
 
         private void Update()

@@ -175,7 +175,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                if (!botObjectiveManager.IsQuestingAllowed || !botObjectiveManager.IsJobAssignmentActive || botObjectiveManager.BotMonitor.IsFollowing())
+                if (!botObjectiveManager.IsQuestingAllowed || !botObjectiveManager.IsJobAssignmentActive || BotHiveMindMonitor.HasBoss(bot))
                 {
                     if (botPathMarkers.ContainsKey(bot))
                     {

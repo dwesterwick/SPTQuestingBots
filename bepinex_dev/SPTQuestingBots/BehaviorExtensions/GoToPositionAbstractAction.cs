@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
@@ -63,7 +65,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 if (updateReason != BotPathUpdateReason.None)
                 {
-                    if (!ObjectiveManager.BotMonitor.IsFollowing())
+                    if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
                     {
                         LoggingController.LogInfo("Set " + ObjectiveManager.BotPath.Status.ToString() + " path to " + ObjectiveManager.BotPath.TargetPosition + " for " + BotOwner.GetText() + " due to " + updateReason.ToString());
                     }
@@ -131,8 +133,11 @@ namespace SPTQuestingBots.BehaviorExtensions
             Vector3[] botPath = BotOwner.Mover?.GetCurrentPath();
             if (botPath == null)
             {
+                LoggingController.LogWarning("Cannot draw null path for " + BotOwner.GetText());
                 return;
             }
+
+            //LoggingController.LogInfo("Drawing " + botPath.CalculatePathLength() + "m path with " + botPath.Length + " corners for " + BotOwner.GetText());
 
             // The visual representation of the bot's path needs to be offset vertically so it's raised above the ground
             List<Vector3> adjustedPathCorners = new List<Vector3>();
@@ -144,7 +149,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
 
             Models.PathVisualizationData botPathRendering = new Models.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
-            PathRender.AddOrUpdatePath(botPathRendering);
+            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(botPathRendering);
         }
 
         protected void outlineTargetPosition(Color color)

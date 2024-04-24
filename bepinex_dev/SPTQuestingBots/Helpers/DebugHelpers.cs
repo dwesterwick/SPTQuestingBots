@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
+using EFT;
+using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -88,7 +91,7 @@ namespace SPTQuestingBots.Helpers
 
             Vector3[] positionOutlinePoints = GetSpherePoints(position, radius, 10);
             PathVisualizationData positionOutline = new PathVisualizationData(pathName, positionOutlinePoints, color);
-            PathRender.AddOrUpdatePath(positionOutline);
+            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(positionOutline);
         }
 
         public static GUIStyle CreateGuiStyle()

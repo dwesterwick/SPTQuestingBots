@@ -80,7 +80,13 @@ namespace SPTQuestingBots.Models
             if (!requiresUpdate)
             {
                 Vector3[] currentPath = bot.Mover.GetCurrentPath();
-                if (Corners.Any() && (currentPath?.Any() == true) && (currentPath.Last() != Corners.Last()))
+                if (currentPath == null)
+                {
+                    requiresUpdate = true;
+                    reason = BotPathUpdateReason.RefreshNeededPath;
+                }
+
+                if (!requiresUpdate && Corners.Any() && (currentPath?.Any() == true) && (currentPath.Last() != Corners.Last()))
                 {
                     requiresUpdate &= distanceFromStartPosition > MinRefreshDistance;
                     reason = BotPathUpdateReason.RefreshNeededPath;
@@ -117,6 +123,11 @@ namespace SPTQuestingBots.Models
                     .GetStaticPaths(target)
                     .OrderBy(p => p.PathLength + Vector3.Distance(bot.Position, p.StartPosition));
 
+                /*if (staticPaths.Any())
+                {
+                    LoggingController.LogInfo("Testing " + staticPaths.Count() + " static paths for " + bot.GetText() + "...");
+                }*/
+
                 foreach (StaticPathData staticPath in staticPaths)
                 {
                     UnityEngine.AI.NavMeshPathStatus staticPathStatus = CreatePathSegment(bot.Position, staticPath.StartPosition, out Vector3[] staticPathCorners);
@@ -129,6 +140,9 @@ namespace SPTQuestingBots.Models
                         SetCorners(combinedPath.Corners);
 
                         LoggingController.LogInfo("Using static path from " + staticPath.StartPosition + " to " + staticPath.TargetPosition + " for " + bot.GetText());
+                        //LoggingController.LogInfo("Path to Static Path: " + string.Join(", ", staticPathCorners));
+                        //LoggingController.LogInfo("Static Path: " + string.Join(", ", staticPath.Corners));
+                        //LoggingController.LogInfo("Combined Path: " + string.Join(", ", Corners));
 
                         return;
                     }

@@ -55,11 +55,6 @@ namespace SPTQuestingBots.Models
 
         public void Update()
         {
-            if (!Controllers.ConfigController.Config.Debug.Enabled || !Controllers.ConfigController.Config.Debug.ShowZoneOutlines)
-            {
-                return;
-            }
-
             lock (lineRendererLockObj)
             {
                 if (lineRenderer == null)

@@ -472,11 +472,11 @@ namespace SPTQuestingBots.Components
             {
                 Vector3[] triggerColliderBounds = DebugHelpers.GetBoundingBoxPoints(triggerCollider.bounds);
                 PathVisualizationData triggerBoundingBox = new PathVisualizationData("Trigger_" + trigger.Id, triggerColliderBounds, Color.cyan);
-                PathRender.AddOrUpdatePath(triggerBoundingBox);
+                Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(triggerBoundingBox);
 
                 Vector3[] triggerTargetPoint = DebugHelpers.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
                 PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
-                PathRender.AddOrUpdatePath(triggerTargetPosSphere);
+                Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(triggerTargetPosSphere);
             }
         }
 
