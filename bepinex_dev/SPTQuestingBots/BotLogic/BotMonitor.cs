@@ -393,13 +393,25 @@ namespace SPTQuestingBots.BotLogic
         public bool IsSearchingForLoot()
         {
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            return activeLayerName.Contains(lootingLayerMonitor.LayerName);
+            return activeLayerName.Equals(lootingLayerMonitor.LayerName);
         }
 
         public bool IsQuesting()
         {
             string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            return activeLayerName.Contains(nameof(BotObjectiveLayer)) || activeLayerName.Contains(nameof(BotFollowerLayer));
+            return activeLayerName.Equals(nameof(BotObjectiveLayer));
+        }
+
+        public bool IsFollowing()
+        {
+            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            return activeLayerName.Equals(nameof(BotFollowerLayer));
+        }
+
+        public bool IsRegrouping()
+        {
+            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+            return activeLogicName.Equals(nameof(RegroupAction));
         }
 
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
@@ -432,8 +444,6 @@ namespace SPTQuestingBots.BotLogic
                 && (isLooting || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
             )
             {
-                //LoggingController.LogInfo("Layer for bot " + BotOwner.GetText() + ": " + activeLayerName + ". Logic: " + activeLogicName);
-
                 if (isLooting)
                 {
                     if (!hasFoundLoot)

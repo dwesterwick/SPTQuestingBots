@@ -185,7 +185,7 @@ namespace SPTQuestingBots.Helpers
                         {
                             Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
                             PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
-                            PathRender.AddOrUpdatePath(itemPositionSphere);
+                            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(itemPositionSphere);
                         }
 
                         continue;

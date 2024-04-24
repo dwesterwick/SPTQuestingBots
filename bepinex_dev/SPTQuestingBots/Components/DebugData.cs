@@ -1,17 +1,18 @@
-﻿using Comfort.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace SPTQuestingBots.Components
 {
@@ -21,6 +22,8 @@ namespace SPTQuestingBots.Components
         private Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
         private Dictionary<JobAssignment, OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, OverlayData>();
         private Dictionary<BotOwner, OverlayData> botInfo = new Dictionary<BotOwner, OverlayData>();
+        private Dictionary<BotOwner, OverlayData> botPathInfo = new Dictionary<BotOwner, OverlayData>();
+        private Dictionary<BotOwner, GameObject> botPathMarkers = new Dictionary<BotOwner, GameObject>();
 
         private readonly float markerRadius = 0.5f;
         private float screenScale = 1.0f;
@@ -28,8 +31,11 @@ namespace SPTQuestingBots.Components
 
         public void RegisterBot(BotOwner bot)
         {
-            OverlayData overlayData = new OverlayData();
-            botInfo.Add(bot, overlayData);
+            OverlayData botOverlayData = new OverlayData();
+            botInfo.Add(bot, botOverlayData);
+
+            OverlayData pathOverlayData = new OverlayData();
+            botPathInfo.Add(bot, pathOverlayData);
         }
 
         private void Awake()
@@ -53,6 +59,11 @@ namespace SPTQuestingBots.Components
             {
                 updateBotInfo();
             }
+
+            if (QuestingBotsPluginConfig.ShowBotPathOverlays.Value)
+            {
+                updateBotPathInfo();
+            }
         }
 
         private void OnGUI()
@@ -72,6 +83,16 @@ namespace SPTQuestingBots.Components
             updateStaticJobAssignmentOverlays();
 
             updateBotOverlays();
+            updateBotPathOverlays();
+        }
+
+        private void destroyPathMarker(BotOwner bot)
+        {
+            if (botPathMarkers.ContainsKey(bot))
+            {
+                Destroy(botPathMarkers[bot]);
+                botPathMarkers.Remove(bot);
+            }
         }
 
         private void updateBotInfo()
@@ -130,9 +151,69 @@ namespace SPTQuestingBots.Components
             }
         }
 
+        private void updateBotPathInfo()
+        {
+            foreach (BotOwner bot in botPathInfo.Keys.ToArray())
+            {
+                if ((bot == null) || bot.IsDead)
+                {
+                    botPathInfo.Remove(bot);
+                    destroyPathMarker(bot);
+
+                    continue;
+                }
+
+                // Don't update the overlay too often or performance and RAM usage will be affected
+                if (botPathInfo[bot].LastUpdateElapsedTime < 100)
+                {
+                    continue;
+                }
+
+                // Check if a path has been defined for the bot by this mod
+                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                if ((botObjectiveManager?.BotPath == null) || !botObjectiveManager.BotPath.HasPath)
+                {
+                    if (botPathMarkers.ContainsKey(bot))
+                    {
+                        botPathMarkers[bot].SetActive(false);
+                    }
+                    continue;
+                }
+
+                // Ensure the bot has an active quest and is not a follower
+                if (!botObjectiveManager.IsQuestingAllowed || !botObjectiveManager.IsJobAssignmentActive || BotHiveMindMonitor.HasBoss(bot))
+                {
+                    if (botPathMarkers.ContainsKey(bot))
+                    {
+                        botPathMarkers[bot].SetActive(false);
+                    }
+                    continue;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLabeledValue("Target Position", botObjectiveManager.BotPath.TargetPosition.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Bot", bot.GetText(), Color.white, Color.white);
+                sb.AppendLabeledValue("Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
+
+                botPathInfo[bot].StaticText = sb.ToString();
+                botPathInfo[bot].Position = botObjectiveManager.BotPath.TargetPosition;
+                botPathInfo[bot].ResetUpdateTime();
+                
+                if (!botPathMarkers.ContainsKey(bot))
+                {
+                    botPathMarkers.Add(bot, DebugHelpers.CreateSphere(botPathInfo[bot].Position, markerRadius * 2, Color.green));
+                }
+                else
+                {
+                    botPathMarkers[bot].transform.position = botPathInfo[bot].Position;
+                }
+                botPathMarkers[bot].SetActive(true);
+            }
+        }
+
         private static Color getColorForBotType(BotOwner bot)
         {
-            if (bot == null)
+            if ((bot == null) || bot.IsDead)
             {
                 return Color.white;
             }
@@ -155,6 +236,16 @@ namespace SPTQuestingBots.Components
             return botTypeColor;
         }
 
+        private static Color getColorForPathStatus(NavMeshPathStatus status)
+        {
+            switch (status)
+            {
+                case NavMeshPathStatus.PathComplete: return Color.green;
+                case NavMeshPathStatus.PathPartial: return Color.yellow;
+                default: return Color.red;
+            }
+        }
+
         private void updateBotOverlays()
         {
             if (!QuestingBotsPluginConfig.ShowBotInfoOverlays.Value)
@@ -162,8 +253,19 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (mainPlayer == null)
+            {
+                return;
+            }
+
             foreach (BotOwner bot in botInfo.Keys.ToArray())
             {
+                if ((bot == null) || bot.IsDead)
+                {
+                    continue;
+                }
+
                 Vector3 botHeadPosition = bot.Position + new Vector3(0, 1.5f, 0);
                 Vector3 screenPos = Camera.main.WorldToScreenPoint(botHeadPosition);
                 if (screenPos.z <= 0)
@@ -171,7 +273,6 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
                 double distanceToBot = Math.Round(Vector3.Distance(bot.Position, mainPlayer.Position), 1);
 
                 StringBuilder sb = new StringBuilder();
@@ -203,10 +304,18 @@ namespace SPTQuestingBots.Components
 
         private void updateStaticJobAssignmentDistances()
         {
-            Vector3 mainPlayerPosition = Singleton<GameWorld>.Instance.MainPlayer.Position;
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            
             foreach (JobAssignment jobAssignment in jobAssignmentDistances.Keys.ToArray())
             {
-                jobAssignmentDistances[jobAssignment] = Math.Round(Vector3.Distance(mainPlayerPosition, jobAssignment.Position.Value), 1);
+                if (mainPlayer == null)
+                {
+                    jobAssignmentDistances[jobAssignment] = double.PositiveInfinity;
+                }
+                else
+                {
+                    jobAssignmentDistances[jobAssignment] = Math.Round(Vector3.Distance(mainPlayer.Position, jobAssignment.Position.Value), 1);
+                }
             }
         }
 
@@ -239,6 +348,46 @@ namespace SPTQuestingBots.Components
             }
         }
 
+        private void updateBotPathOverlays()
+        {
+            foreach (BotOwner bot in botPathMarkers.Keys.ToArray())
+            {
+                if (!QuestingBotsPluginConfig.ShowBotPathOverlays.Value)
+                {
+                    destroyPathMarker(bot);
+                    continue;
+                }
+
+                if ((bot == null) || bot.IsDead)
+                {
+                    continue;
+                }
+
+                // Set by updateBotPathInfo()
+                if (!botPathMarkers[bot].activeSelf)
+                {
+                    continue;
+                }
+
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(botPathInfo[bot].Position);
+                if (screenPos.z <= 0)
+                {
+                    continue;
+                }
+
+                // Copy the text here in case we want to add dynamic text in the future
+                botPathInfo[bot].GuiContent.text = botPathInfo[bot].StaticText;
+
+                Vector2 guiSize = guiStyle.CalcSize(botPathInfo[bot].GuiContent);
+                float x = (screenPos.x * screenScale) - (guiSize.x / 2);
+                float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
+                Rect rect = new Rect(new Vector2(x, y), guiSize);
+                botPathInfo[bot].GuiRect = rect;
+
+                GUI.Box(botPathInfo[bot].GuiRect, botPathInfo[bot].GuiContent, guiStyle);
+            }
+        }
+
         private void loadAllPossibleJobAssignments()
         {
             // If DLSS or FSR are enabled, set a screen scale value
@@ -252,6 +401,7 @@ namespace SPTQuestingBots.Components
             IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
 
             Vector3 lastPosition = Vector3.positiveInfinity;
+            Quest lastQuest = null;
             foreach (JobAssignment jobAssignment in jobAssignments)
             {
                 // Ensure the position is valid and isn't the same as the previous step in the quest objective
@@ -266,17 +416,37 @@ namespace SPTQuestingBots.Components
                 questText += "\nStep: " + jobAssignment.QuestObjectiveStepAssignment.ToString();
                 questText += "\nDistance: ";
 
-                Vector3 overlayPosition = stepPosition.Value + new Vector3(0, markerRadius + 0.1f, 0);
-                OverlayData overlayData = new OverlayData(overlayPosition, questText);
+                addJobAssignment(jobAssignment, questText, stepPosition.Value, Color.red);
 
-                jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
-                jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(stepPosition.Value, markerRadius * 2, Color.red));
-                jobAssignmentInfo.Add(jobAssignment, overlayData);
+                if (lastQuest != jobAssignment.QuestAssignment)
+                {
+                    IList<Vector3> waypoints = jobAssignment.QuestAssignment.GetWaypointPositions();
+                    for (int w = 0; w < waypoints.Count; w++)
+                    {
+                        questText = "Quest: " + jobAssignment.QuestAssignment.ToString();
+                        questText += "\nWaypoint #" + (w + 1) + ": " + waypoints[w];
+                        questText += "\nDistance: ";
+
+                        JobAssignment clonedAssignment = (JobAssignment)jobAssignment.Clone();
+                        addJobAssignment(clonedAssignment, questText, waypoints[w], Color.blue);
+                    }
+                }
 
                 lastPosition = stepPosition.Value;
+                lastQuest = jobAssignment.QuestAssignment;
             }
 
             LoggingController.LogInfo("Loading all possible job assignments...done (Created " + jobAssignmentDistances.Count + " markers).");
+        }
+
+        private void addJobAssignment(JobAssignment jobAssignment, string questText, Vector3 position, Color markerColor)
+        {
+            Vector3 overlayPosition = position + new Vector3(0, markerRadius + 0.1f, 0);
+            OverlayData overlayData = new OverlayData(overlayPosition, questText);
+
+            jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
+            jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(position, markerRadius * 2, markerColor));
+            jobAssignmentInfo.Add(jobAssignment, overlayData);
         }
 
         internal class OverlayData

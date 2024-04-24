@@ -10,6 +10,7 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
@@ -63,8 +64,14 @@ namespace SPTQuestingBots.Models
         [JsonProperty("name")]
         private string name = "Unnamed Quest";
 
+        [JsonProperty("waypoints")]
+        private SerializableVector3[] serializableWaypointPositions = new SerializableVector3[0];
+
         [JsonProperty("objectives")]
         private QuestObjective[] objectives = new QuestObjective[0];
+
+        [JsonIgnore]
+        private IList<Vector3> waypointPositions = null;
 
         public string Name => Template?.Name ?? name;
         public string TemplateId => Template?.TemplateId ?? "";
@@ -101,6 +108,40 @@ namespace SPTQuestingBots.Models
         public void Clear()
         {
             objectives = new QuestObjective[0];
+        }
+
+        public IList<Vector3> GetWaypointPositions()
+        {
+            if (waypointPositions != null)
+            {
+                return waypointPositions;
+            }
+
+            List<Vector3> positions = new List<Vector3>();
+
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            float searchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+
+            foreach (SerializableVector3 serializableVector3 in serializableWaypointPositions)
+            {
+                if ((serializableVector3 == null) || serializableVector3.Any(float.NaN))
+                {
+                    continue;
+                }
+
+                Vector3 uncorrectedPosition = serializableVector3.ToUnityVector3();
+                Vector3? navMeshPosition = locationData.FindNearestNavMeshPosition(uncorrectedPosition, searchDistance);
+                if (!navMeshPosition.HasValue)
+                {
+                    LoggingController.LogError("Cannot find NavMesh position for " + uncorrectedPosition.ToString());
+                    continue;
+                }
+
+                positions.Add(navMeshPosition.Value);
+            }
+
+            waypointPositions = positions;
+            return positions;
         }
 
         public bool CanAssignBot(BotOwner bot)

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT.UI;
+using EFT;
 using HarmonyLib;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Helpers
@@ -13,8 +14,27 @@ namespace SPTQuestingBots.Helpers
     public static class BotPathingHelpers
     {
         private static FieldInfo pathControllerField = AccessTools.Field(typeof(BotMover), "_pathController");
+        private static FieldInfo pathFinderField = AccessTools.Field(typeof(BotMover), "_pathFinder");
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass466), "vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass466), "int_0");
+
+        public static void FollowPath(this BotOwner bot, BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
+        {
+            // Combines _pathFinder.method_0 and GoToByWay
+
+            //LoggingController.LogInfo("Updated path for " + bot.GetText());
+
+            bot.Mover?.SetSlowAtTheEnd(slowAtTheEnd);
+
+            if (bot.BotLay.IsLay && (botPath.DistanceToTarget > 0.2f))
+            {
+                bot.BotLay.GetUp(getUpWithCheck);
+            }
+
+            bot.WeaponManager.Stationary.StartMove();
+
+            bot.Mover?.GoToByWay(botPath.Corners, botPath.ReachDistance);
+        }
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
@@ -32,6 +52,39 @@ namespace SPTQuestingBots.Helpers
             Vector3[] path = (Vector3[])pathPointsField.GetValue(pathController.CurPath);
 
             return path;
+        }
+
+        public static bool HasSameTargetPosition(this BotOwner bot, Vector3 targetPosition)
+        {
+            if (bot?.Mover == null)
+            {
+                return false;
+            }
+
+            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(bot.Mover);
+            if (pathController?.CurPath == null)
+            {
+                return false;
+            }
+
+            return pathController.IsSameWay(targetPosition, bot.Position);
+        }
+
+        public static bool SetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
+        {
+            if (botMover == null)
+            {
+                return false;
+            }
+
+            GClass423 pathFinder = (GClass423)pathFinderField.GetValue(botMover);
+            if (pathFinder == null)
+            {
+                return false;
+            }
+
+            pathFinder.SlowAtTheEnd = slowAtTheEnd;
+            return true;
         }
 
         public static int? GetCurrentCornerIndex(this BotMover botMover)

@@ -39,6 +39,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
 
         public static ConfigEntry<bool> ShowBotInfoOverlays;
+        public static ConfigEntry<bool> ShowBotPathOverlays;
         public static ConfigEntry<bool> ShowQuestInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
         public static ConfigEntry<int> QuestOverlayFontSize;
@@ -80,6 +81,8 @@ namespace SPTQuestingBots
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 false, "Show information about what each bot is doing");
+            ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
+                false, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
                 false, "Show information about every nearby quest objective location");
             ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",

@@ -39,7 +39,7 @@ namespace SPTQuestingBots
             
             if (ConfigController.Config.Enabled)
             {
-                LoggingController.LogInfo("Loading QuestingBots...enabling patches and controllers...");
+                LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
 
                 new Patches.CheckSPTVersionPatch().Enable();
                 new Patches.AddActivePlayerPatch().Enable();
@@ -51,8 +51,6 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                //new Patches.GoToPositionPatch().Enable();
-                //new Patches.FindPathPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
@@ -84,14 +82,6 @@ namespace SPTQuestingBots
                     ConfigController.AdjustPMCConversionChances(0, false);
                 }
                 
-                if (ConfigController.Config.Debug.Enabled)
-                {
-                    if (ConfigController.Config.Debug.ShowZoneOutlines || ConfigController.Config.Debug.ShowFailedPaths)
-                    {
-                        this.GetOrAddComponent<PathRender>();
-                    }
-                }
-
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
                 

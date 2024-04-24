@@ -5,19 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Controllers
+namespace SPTQuestingBots.Components
 {
     public class PathRender : MonoBehaviour
     {
-        private static Dictionary<string, Models.PathVisualizationData> paths = new Dictionary<string, Models.PathVisualizationData>();
-        private static object pathDictLock = new object();
-
-        private void OnDisable()
-        {
-            Clear();
-        }
+        private Dictionary<string, Models.PathVisualizationData> paths = new Dictionary<string, Models.PathVisualizationData>();
+        private object pathDictLock = new object();
 
         private void LateUpdate()
         {
@@ -36,7 +32,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static void Clear()
+        public void Clear()
         {
             // Prevent registered paths from being drawn again
             lock (pathDictLock)
@@ -50,7 +46,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static bool AddOrUpdatePath(Models.PathVisualizationData data, bool autoIncrementPathName = true)
+        public bool AddOrUpdatePath(Models.PathVisualizationData data, bool autoIncrementPathName = true)
         {
             if (data == null)
             {
@@ -82,7 +78,7 @@ namespace SPTQuestingBots.Controllers
             return true;
         }
 
-        public static bool RemovePath(string pathName)
+        public bool RemovePath(string pathName)
         {
             lock (pathDictLock)
             {
@@ -99,7 +95,7 @@ namespace SPTQuestingBots.Controllers
             return false;
         }
 
-        public static bool RemovePath(Models.PathVisualizationData data)
+        public bool RemovePath(Models.PathVisualizationData data)
         {
             if (data == null)
             {

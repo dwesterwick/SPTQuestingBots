@@ -1035,6 +1035,13 @@
         "maxBotsInGroup": 1,
         "desirability": 20,
         "name": "Capital Insight Sniping",
+        "waypoints" : [
+            {
+                "x": 124.025024,
+                "y": 31.3263378,
+                "z": 257.744019
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1763,6 +1770,13 @@
         "maxBots": 3,
         "desirability": 30,
         "name": "TerraGroup Office Upstairs",
+        "waypoints" : [
+            {
+                "x": -40.541584,
+                "y": 29.6709938,
+                "z": 56.053112
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": false,
@@ -1910,6 +1924,13 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "TerraGroup Office Upstairs Sniping",
+        "waypoints" : [
+            {
+                "x": -40.541584,
+                "y": 29.6709938,
+                "z": 56.053112
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1991,6 +2012,13 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "TerraGroup Office Quest Room Camping",
+        "waypoints" : [
+            {
+                "x": -40.541584,
+                "y": 29.6709938,
+                "z": 56.053112
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2083,6 +2111,13 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "TerraGroup Office Upstairs Camping",
+        "waypoints" : [
+            {
+                "x": -40.541584,
+                "y": 29.6709938,
+                "z": 56.053112
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,

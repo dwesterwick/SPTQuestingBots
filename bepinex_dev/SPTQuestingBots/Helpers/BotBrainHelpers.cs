@@ -224,6 +224,12 @@ namespace SPTQuestingBots.Helpers
 
         public static bool WillBotBeABoss(BotOwner botOwner)
         {
+            // Probably should enable this after the 0.5.0 release. 
+            /*if (botOwner.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
+            {
+                return false;
+            }*/
+
             return botOwner.Profile.Info.Settings.Role.IsBoss();
         }
 
