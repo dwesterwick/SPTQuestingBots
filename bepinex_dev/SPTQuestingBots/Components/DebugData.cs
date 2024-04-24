@@ -143,7 +143,10 @@ namespace SPTQuestingBots.Components
                         sb.AppendLabeledValue("NotFollowingReason", botObjectiveManager.NotFollowingReason.ToString(), Color.white, Color.white);
                     }
 
-                    sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
+                    if (botObjectiveManager.IsQuestingAllowed)
+                    {
+                        sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
+                    }
                 }
 
                 botInfo[bot].StaticText = sb.ToString();
