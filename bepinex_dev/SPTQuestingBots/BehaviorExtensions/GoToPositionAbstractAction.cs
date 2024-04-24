@@ -63,10 +63,10 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 if (updateReason != BotPathUpdateNeededReason.None)
                 {
-                    if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
+                    /*if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
                     {
                         LoggingController.LogInfo("Set " + ObjectiveManager.BotPath.Status.ToString() + " path to " + ObjectiveManager.BotPath.TargetPosition + " for " + BotOwner.GetText() + " due to " + updateReason.ToString());
-                    }
+                    }*/
 
                     BotOwner.FollowPath(ObjectiveManager.BotPath, true, false);
                 }

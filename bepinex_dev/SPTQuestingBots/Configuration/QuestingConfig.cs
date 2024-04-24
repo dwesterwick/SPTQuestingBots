@@ -45,6 +45,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("bot_search_distances")]
         public BotSearchDistanceConfig BotSearchDistances { get; set; } = new BotSearchDistanceConfig();
 
+        [JsonProperty("bot_pathing")]
+        public BotPathingConfig BotPathing { get; set; } = new BotPathingConfig();
+
         [JsonProperty("bot_questing_requirements")]
         public BotQuestingRequirementsConfig BotQuestingRequirements { get; set; } = new BotQuestingRequirementsConfig();
 

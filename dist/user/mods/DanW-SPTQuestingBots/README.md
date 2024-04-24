@@ -210,6 +210,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_search_distances.objective_reached_ideal**: Bots must travel within this distance (in meters) of their target objective positions for the objective to be considered successfully completed. This is **0.25** m by default. 
 * **questing.bot_search_distances.objective_reached_navmesh_path_error**: The maximum distance (in meters) that the end of a bot's calculated path can be from its target objective position before the objective is considerd unreachable. This is **20** m by default. 
 * **questing.bot_search_distances.max_navmesh_path_error**: If a complete path cannot be generated to a bot's target objective position, it will try to get within this radius (in meters) of it anyway. This is to simulate situations like bots checking if a door is unlocked when it doesn't have the key. This is **10** m by default. 
+* **questing.bot_pathing.max_start_position_discrepancy**: The minimum distance (in meters) between the bot's position and the start of its path above which its path will be recalculated if there is a difference between its current target position and the target position for its quest. **Do not change this unless you know what you're doing!**
+* **questing.bot_pathing.incomplete_path_retry_interval**: If a bot's path to its objective is incomplete, the path will be recalculated at this interval (in seconds) until a complete path is found. This is **5** s by default.
 * **questing.bot_questing_requirements.exclude_bots_by_level**: Each quest has a minimum and maximum player level assigned to it. If this option is **true** (which is the default setting), bots will only be allowed to select a quest if its player level is within this range. This prevents low-level bots from selecting end-game quests and vice versa. 
 * **questing.bot_questing_requirements.repeat_quest_delay**: The minimum delay (in seconds) after a bot stops performing objectives for a repeatable quest before it's allowed to repeat the quest. This is **360** s by default. 
 * **questing.bot_questing_requirements.max_time_per_quest**: The maximum amount of time (in seconds) that bots are allowed to perform objectives for the same quest. This is to encourage questing diversity for bots and to deter them from remaining in the same area for a long time. This is **300** s by default. 
@@ -360,14 +362,14 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.1** (ETA: Early May)
+* **0.5.1** (ETA: Late May)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
-* **0.5.2** (ETA: Late May)
+* **0.5.2** (ETA: Early June)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.6.0** (ETA: Mid July)
+* **0.6.0** (ETA: Late July)
     * Separate spawning system into a separate mod
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas

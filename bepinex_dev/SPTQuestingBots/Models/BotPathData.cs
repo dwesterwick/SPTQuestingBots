@@ -24,8 +24,6 @@ namespace SPTQuestingBots.Models
 
     public class BotPathData : StaticPathData
     {
-        public static float MinRefreshDistance { get; } = 0.5f;
-        public static float IncompletePathRefreshDelay { get; } = 5f;
         public float DistanceToTarget => Vector3.Distance(bot.Position, TargetPosition);
 
         private BotOwner bot;
@@ -66,7 +64,7 @@ namespace SPTQuestingBots.Models
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.IncompletePath;
                 }
-                else if ((Status == UnityEngine.AI.NavMeshPathStatus.PathPartial) && (Time.time - LastSetTime > IncompletePathRefreshDelay))
+                else if ((Status == UnityEngine.AI.NavMeshPathStatus.PathPartial) && (Time.time - LastSetTime > ConfigController.Config.Questing.BotPathing.IncompletePathRetryInterval))
                 {
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.IncompletePath;
@@ -85,7 +83,9 @@ namespace SPTQuestingBots.Models
 
                 if (!requiresUpdate && Corners.Any() && (currentPath?.Any() == true) && (currentPath.Last() != Corners.Last()))
                 {
-                    requiresUpdate &= distanceFromStartPosition > MinRefreshDistance;
+                    // Only update the path if the bot has moved from the start position set in the currently cached path. Otherwise, the path may
+                    // constantly be recalculated as brain layers are switched. 
+                    requiresUpdate &= distanceFromStartPosition > ConfigController.Config.Questing.BotPathing.MaxStartPositionDiscrepancy;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
             }

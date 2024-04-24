@@ -66,6 +66,10 @@
 			"objective_reached_navmesh_path_error": 20,
 			"max_navmesh_path_error": 10
 		},
+		"bot_pathing": {
+			"max_start_position_discrepancy": 0.5,
+			"incomplete_path_retry_interval": 5
+		},
 		"bot_questing_requirements": {
 			"exclude_bots_by_level": true,
 			"repeat_quest_delay": 360,

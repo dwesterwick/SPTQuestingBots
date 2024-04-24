@@ -113,28 +113,27 @@ namespace SPTQuestingBots.Components
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLabeledValue(Controllers.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
-                sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.yellow, Color.yellow);
+                sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.magenta, Color.magenta);
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 
                 BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
-
-                BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
-                if (boss != null)
-                {
-                    sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
-                }
-                else if (botObjectiveManager?.IsQuestingAllowed == true)
-                {
-                    BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
-
-                    sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
-                    sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
-                }
-
                 if (botObjectiveManager != null)
                 {
+                    BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
+                    if (boss != null)
+                    {
+                        sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
+                    }
+                    else if (botObjectiveManager?.IsQuestingAllowed == true)
+                    {
+                        BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+
+                        sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
+                        sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
+                    }
+
                     if (botObjectiveManager.NotQuestingReason != NotQuestingReason.None)
                     {
                         sb.AppendLabeledValue("NotQuestingReason", botObjectiveManager.NotQuestingReason.ToString(), Color.white, Color.white);
@@ -143,6 +142,8 @@ namespace SPTQuestingBots.Components
                     {
                         sb.AppendLabeledValue("NotFollowingReason", botObjectiveManager.NotFollowingReason.ToString(), Color.white, Color.white);
                     }
+
+                    sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
                 }
 
                 botInfo[bot].StaticText = sb.ToString();
