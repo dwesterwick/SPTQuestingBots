@@ -1,6 +1,6 @@
 You're no longer the only PMC running around placing markers and collecting quest items. The bots have transcended and are coming for you...
 
-**This mod will have a performance impact**, so unfortunately it may be difficult to use on slower computers. I'll work on optimizations in future releases.
+**This mod may have a performance impact**, but it should be minimal starting with the 0.5.0 release. If you notice performance problems, please try using the built-in AI limiter.
 
 **---------- Mod Compatibility ----------**
 
@@ -9,8 +9,8 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (2.1.9 or later recommended)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.2.1 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (2.1.12 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.0 or later recommended)
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
@@ -98,6 +98,7 @@ The three major data structures are:
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **requiredSwitches**: A dictionary of the switches that must be in a specific position bot bots to perform the quest. The dictionary key is the ID of the switch, and the value is a boolean indicating if the switch must be open (actuated). If the dictionary is empty, no switches will be checked. 
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.
+    * **waypoints**: An array of waypoints that can be used to assist bots with finding paths to the quest's objectives. Each waypoint is an (x, y, z) coordinate. 
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
 
 * **Objectives**: An objective is a collection of at least one step. An objective represents a list of actions that the bot must complete in the order you specify. 
@@ -135,6 +136,7 @@ The three major data structures are:
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
 * If you want a bot to go to several specific positions that are close to each other (i.e. small, adjacent rooms), use multiple steps in a single objective instead of using multiple objectives each with a single step. 
 * Bots will use the NavMesh to calculate the more efficient path to their objective (using an internal Unity algorithm). They cannot perform complex actions to reach objective locations, so avoid placing objective steps on top of objects (i.e. inside truck beds) or in areas that are difficult to reach. Bots will not know to crouch or jump to get around obstacles. 
+* Quest waypoints can help bots find paths to objectives in labyrinthic areas, but adding too many to a quest may impact performance.
 
 **---------- Bot Group Spawning System ----------**
 
@@ -358,11 +360,13 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * In maps with a high number of max players, Scavs don't always spawn when the game generates them if your **max_alive_bots** setting is high and **advanced_eft_bot_count_management=false**
 * In maps with a high number of max players, performance can be pretty bad if your **max_alive_bots** setting is high
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_bots** setting is high
-* Performance may be worse if **advanced_eft_bot_count_management=true** because EFT will be allowed to spawn more Scavs than with previous versions of this mod. 
+* Performance may be worse if **advanced_eft_bot_count_management=true** because EFT will be allowed to spawn more Scavs than with previous versions of this mod.
+* When using "As Online" raid difficulty, all PMC's spawn with "Normal" difficulty at the beginning of the raid.
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
 * **0.5.1** (ETA: Late May)
+    * Set PMC and PScav difficulties independently of the difficulty set for the raid in EFT
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
