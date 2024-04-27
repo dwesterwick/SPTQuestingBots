@@ -21,13 +21,7 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix()
         {
-            if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
-            {
-                LoggingController.LogInfo("Destroying previous location data...");
-                UnityEngine.GameObject.Destroy(oldLocationData);
-            }
-
-            Singleton<GameWorld>.Instance.gameObject.AddComponent<Components.LocationData>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
 
             if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {
