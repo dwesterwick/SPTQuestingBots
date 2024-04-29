@@ -21,6 +21,11 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix()
         {
+            if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
+            {
+                LoggingController.LogWarning("There is already a LocationData component added to the current GameWorld instance.");
+            }
+
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
 
             if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
