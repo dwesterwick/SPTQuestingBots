@@ -44,25 +44,25 @@ namespace SPTQuestingBots.Components
 
             UpdateMaxTotalBots();
 
-            Singleton<GameWorld>.Instance.gameObject.AddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
 
             if (ConfigController.Config.Questing.Enabled)
             {
                 QuestHelpers.ClearCache();
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugData>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotQuestBuilder>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
             }
 
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 if (ConfigController.Config.BotSpawns.PMCs.Enabled)
                 {
-                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PMCGenerator>();
+                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PMCGenerator>();
                 }
 
                 if (ConfigController.Config.BotSpawns.PScavs.Enabled && !CurrentLocation.DisabledForScav)
                 {
-                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PScavGenerator>();
+                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PScavGenerator>();
                 }
 
                 BotGenerator.RunBotGenerationTasks();
@@ -70,7 +70,7 @@ namespace SPTQuestingBots.Components
 
             if (ConfigController.Config.Debug.Enabled)
             {
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<PathRender>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
             }
         }
 
