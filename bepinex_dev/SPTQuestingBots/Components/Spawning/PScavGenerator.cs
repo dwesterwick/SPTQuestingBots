@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.Bots;
 using EFT.Game.Spawning;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
@@ -15,7 +16,6 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public class PScavGenerator : BotGenerator
     {
-        private BotDifficulty botDifficulty = BotDifficulty.normal;
         private Dictionary<int, float> botSpawnSchedule = new Dictionary<int, float>();
 
         // Temporarily stores spawn points for bots while trying to spawn several of them
@@ -30,9 +30,6 @@ namespace SPTQuestingBots.Components.Spawning
 
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
             RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement;
-
-            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
             setMaxAliveBots();
         }
@@ -106,6 +103,10 @@ namespace SPTQuestingBots.Components.Spawning
                 // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
                 int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
                 botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+
+                // Determine the difficulty for the new bot group
+                Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+                BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PScavs.BotDifficultyAsOnline);
 
                 // Force the server to generate a player Scav
                 ServerRequestPatch.ForcePScavCount += botsInGroup;
