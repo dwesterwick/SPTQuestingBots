@@ -31,6 +31,7 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<bool> QuestingEnabled;
         public static ConfigEntry<bool> SprintingEnabled;
+        public static ConfigEntry<int> MinSprintingDistance;
 
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
@@ -67,6 +68,8 @@ namespace SPTQuestingBots
                 true, "Allow bots to quest");
             SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
+            MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",
+                3, new ConfigDescription("Bots will not be allowed to sprint if they are within this distance from their objective", new AcceptableValueRange<int>(0, 75)));
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
                 false, "Improve FPS by minimizing CPU load for AI out of certain ranges");

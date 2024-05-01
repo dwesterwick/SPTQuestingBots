@@ -50,6 +50,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;
+        private BotJobAssignment lastAssignment = null;
         private ExfiltrationPoint exfiltrationPoint = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
 
@@ -65,6 +66,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
+        public float DistanceFromLastObjective => (lastAssignment?.Position != null) ? Vector3.Distance(lastAssignment.Position.Value, botOwner.Position) : float.MaxValue;
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
         public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
@@ -236,7 +238,18 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return;
                 }
 
-                assignment = botOwner.GetCurrentJobAssignment();
+                SetObjective(botOwner.GetCurrentJobAssignment());
+            }
+        }
+
+        public void SetObjective(BotJobAssignment objective)
+        {
+            if (objective != assignment)
+            {
+                lastAssignment = assignment;
+                assignment = objective;
+                
+                //LoggingController.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
             }
         }
 
@@ -265,7 +278,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             assignment?.Inactivate();
 
-            assignment = botOwner?.GetNewBotJobAssignment();
+            SetObjective(botOwner?.GetNewBotJobAssignment());
             LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + (assignment?.ToString() ?? "[NULL]"));
 
             return true;
@@ -289,26 +302,34 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public bool CanSprintToObjective()
         {
-            if (assignment == null)
+            if (assignment?.QuestObjectiveAssignment != null)
             {
-                return true;
+                if (DistanceToObjective < QuestingBotsPluginConfig.MinSprintingDistance.Value)
+                {
+                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
+                    return false;
+                }
+
+                if (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance)
+                {
+                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
+                    return false;
+                }
+
+                if (!assignment.QuestAssignment.CanRunBetweenObjectives && (assignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(botOwner) > 0))
+                {
+                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);
+                    return false;
+                }
             }
 
-            if ((assignment.QuestObjectiveAssignment != null) && (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance))
+            if (lastAssignment?.QuestObjectiveAssignment != null)
             {
-                //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + targetObjective.ToString());
-                return false;
-            }
-
-            if 
-            (
-                (assignment.QuestAssignment != null)
-                && !assignment.QuestAssignment.CanRunBetweenObjectives
-                && (assignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(botOwner) > 0)
-            )
-            {
-                //LoggingController.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);
-                return false;
+                if (DistanceFromLastObjective < lastAssignment.QuestObjectiveAssignment.MaxRunDistance)
+                {
+                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to its last objective, " + assignment.Position.ToString());
+                    return false;
+                }
             }
 
             return true;
@@ -444,7 +465,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                 LoggingController.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 try
                 {
-                    assignment = botOwner.GetCurrentJobAssignment();
+                    SetObjective(botOwner.GetCurrentJobAssignment());
                 }
                 catch (TimeoutException)
                 {
