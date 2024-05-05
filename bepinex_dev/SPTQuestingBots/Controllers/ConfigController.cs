@@ -47,7 +47,7 @@ namespace SPTQuestingBots.Controllers
 
         public static void ReportError(string errorMessage)
         {
-            GetJson("/QuestingBots/ReportError/" + errorMessage, "Could not report an error message to the server");
+            Aki.Common.Utils.ServerLog.Error("Questing Bots", errorMessage);
         }
 
         public static string GetLoggingPath()

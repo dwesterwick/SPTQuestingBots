@@ -36,7 +36,7 @@ namespace SPTQuestingBots
                 Chainloader.DependencyErrors.Add("Could not load " + ModName + " because it cannot communicate with the server. Please ensure the mod has been installed correctly.");
                 return;
             }
-            
+
             if (ConfigController.Config.Enabled)
             {
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
