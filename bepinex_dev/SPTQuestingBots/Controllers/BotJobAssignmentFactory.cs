@@ -794,7 +794,7 @@ namespace SPTQuestingBots.Controllers
 
             // Write the header row
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Bot Name,Bot Nickname,Bot Level,Assignment Status,Quest Name,Objective Name,Step Number,Start Time,End Time");
+            sb.AppendLine("Bot Name,Bot Nickname,Bot Difficulty,Bot Level,Assignment Status,Quest Name,Objective Name,Step Number,Start Time,End Time");
 
             // Write a row for every quest, objective, and step that each bot was assigned to perform
             foreach (string botID in botJobAssignments.Keys)
@@ -803,6 +803,7 @@ namespace SPTQuestingBots.Controllers
                 {
                     sb.Append(assignment.BotName + ",");
                     sb.Append("\"" + assignment.BotNickname.Replace(",", "") + "\",");
+                    sb.Append(assignment.BotOwner.Profile.Info.Settings.BotDifficulty.ToString() + ",");
                     sb.Append(assignment.BotLevel + ",");
                     sb.Append(assignment.Status.ToString() + ",");
                     sb.Append("\"" + (assignment.QuestAssignment?.ToString()?.Replace(",", "") ?? "N/A") + "\",");
@@ -811,6 +812,20 @@ namespace SPTQuestingBots.Controllers
                     sb.Append("\"" + (assignment.StartTime?.ToLongTimeString() ?? "N/A") + "\",");
                     sb.AppendLine("\"" + (assignment.EndTime?.ToLongTimeString() ?? "N/A") + "\",");
                 }
+            }
+
+            foreach (Profile profile in Components.Spawning.BotGenerator.GetAllGeneratedBotProfiles())
+            {
+                if (botJobAssignments.ContainsKey(profile.Id))
+                {
+                    continue;
+                }
+
+                sb.Append("[Not Spawned]" + ",");
+                sb.Append("\"" + profile.Info.Nickname.Replace(",", "") + "\",");
+                sb.Append(profile.Info.Settings.BotDifficulty.ToString() + ",");
+                sb.Append(profile.Info.Level + ",");
+                sb.AppendLine(",,,,,,");
             }
 
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
