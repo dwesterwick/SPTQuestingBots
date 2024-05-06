@@ -45,9 +45,19 @@ namespace SPTQuestingBots.Controllers
             GetJson("/QuestingBots/AdjustPScavChance/" + factor, "Could not adjust PScav conversion chance");
         }
 
-        public static void ReportError(string errorMessage)
+        public static void ReportInfoToServer(string message)
         {
-            Aki.Common.Utils.ServerLog.Error("Questing Bots", errorMessage);
+            Aki.Common.Utils.ServerLog.Info("Questing Bots", message);
+        }
+
+        public static void ReportWarningToServer(string message)
+        {
+            Aki.Common.Utils.ServerLog.Warn("Questing Bots", message);
+        }
+
+        public static void ReportErrorToServer(string message)
+        {
+            Aki.Common.Utils.ServerLog.Error("Questing Bots", message);
         }
 
         public static string GetLoggingPath()

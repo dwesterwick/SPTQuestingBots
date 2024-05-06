@@ -17,6 +17,7 @@ import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables
 import type { LocaleService } from "@spt-aki/services/LocaleService";
 import type { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import type { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
+import type { VFS } from "@spt-aki/utils/VFS";
 import type { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt-aki/utils/RandomUtil";
 import type { BotController } from "@spt-aki/controllers/BotController";
@@ -42,6 +43,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private localeService: LocaleService;
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
+    private vfs: VFS;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
     private botController: BotController;
@@ -173,6 +175,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
+        this.vfs = container.resolve<VFS>("VFS");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
@@ -190,6 +193,8 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         {
             return;
         }
+
+        this.performFileIntegrityCheck();
 
         if (modConfig.debug.always_have_airdrops)
         {
@@ -290,7 +295,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         if (modConfig.bot_spawns.advanced_eft_bot_count_management)
         {
-            this.commonUtils.logWarning("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
+            this.commonUtils.logInfo("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
         }
 
         if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
@@ -509,6 +514,21 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
 
         return bots;
+    }
+
+    private performFileIntegrityCheck(): void
+    {
+        const path = `${__dirname}/..`;
+
+        if (this.vfs.exists(`${path}/quests/`))
+        {
+            this.commonUtils.logWarning("Found obsolete quests folder 'user\\mods\\DanW-SPTQuestingBots\\quests'. Only quest files in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\quests' will be used.");
+        }
+
+        if (this.vfs.exists(`${path}/log/`))
+        {
+            this.commonUtils.logWarning("Found obsolete log folder 'user\\mods\\DanW-SPTQuestingBots\\log'. Logs are now saved in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\log'.");
+        }
     }
 }
 

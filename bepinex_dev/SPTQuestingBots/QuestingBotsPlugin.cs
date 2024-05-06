@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
+using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
@@ -86,6 +87,8 @@ namespace SPTQuestingBots
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
                 
                 performLobotomies();
+
+                this.GetOrAddComponent<TarkovData>();
             }
 
             Logger.LogInfo("Loading QuestingBots...done.");

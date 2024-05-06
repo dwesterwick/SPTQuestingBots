@@ -27,6 +27,20 @@ namespace SPTQuestingBots.Helpers
             plantTimeForCondition.Clear();
         }
 
+        public static bool ValidateQuestFiles(string locationId)
+        {
+            IEnumerable<Quest> quests = ConfigController.GetCustomQuests(locationId);
+
+            if (!quests.Any())
+            {
+                LoggingController.LogWarningToServerConsole("Could not find any non-EFT quests for " + locationId);
+                return false;
+            }
+
+            LoggingController.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
+            return true;
+        }
+
         public static int GetMinLevel(this Quest quest)
         {
             if (minLevelForQuest.ContainsKey(quest.Template?.Id))

@@ -25,7 +25,6 @@ namespace SPTQuestingBots.Components
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
 
         private readonly DateTime awakeTime = DateTime.Now;
-        private TarkovApplication tarkovApplication = null;
         private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
@@ -37,9 +36,14 @@ namespace SPTQuestingBots.Components
 
         private void Awake()
         {
-            tarkovApplication = FindObjectOfType<TarkovApplication>();
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
-            CurrentRaidSettings = getCurrentRaidSettings();
+
+            CurrentRaidSettings = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetCurrentRaidSettings();
+            if (CurrentRaidSettings == null)
+            {
+                LoggingController.LogError("Could not retrieve current raid settings");
+            }
+
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
 
             UpdateMaxTotalBots();
@@ -681,36 +685,6 @@ namespace SPTQuestingBots.Components
 
             maxExfilPointDistance = maxDistance;
             return maxExfilPointDistance;
-        }
-
-        private LocationSettingsClass getLocationSettings(TarkovApplication app)
-        {
-            if (app == null)
-            {
-                LoggingController.LogError("Invalid Tarkov application instance");
-                return null;
-            }
-
-            ISession session = app.GetClientBackEndSession();
-            if (session == null)
-            {
-                return null;
-            }
-
-            return session.LocationSettings;
-        }
-
-        private RaidSettings getCurrentRaidSettings()
-        {
-            if (tarkovApplication == null)
-            {
-                LoggingController.LogError("Invalid Tarkov application instance");
-                return null;
-            }
-
-            FieldInfo raidSettingsField = typeof(TarkovApplication).GetField("_raidSettings", BindingFlags.NonPublic | BindingFlags.Instance);
-            RaidSettings raidSettings = raidSettingsField.GetValue(tarkovApplication) as RaidSettings;
-            return raidSettings;
         }
 
         private void handleCustomQuestKeypress()
