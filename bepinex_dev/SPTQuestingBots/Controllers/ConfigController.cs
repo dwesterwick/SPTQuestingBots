@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace SPTQuestingBots.Controllers
     {
         public static Configuration.ModConfig Config { get; private set; } = null;
         public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings = null;
+        public static string ModPathRelative { get; } = "/BepInEx/plugins/DanW-SPTQuestingBots";
         public static string LoggingPath { get; private set; } = null;
 
         public static Configuration.ModConfig GetConfig()
@@ -67,9 +69,7 @@ namespace SPTQuestingBots.Controllers
                 return LoggingPath;
             }
 
-            string qbDir = AppDomain.CurrentDomain.BaseDirectory + "/BepInEx/plugins/DanW-SPTQuestingBots/log/";
-            LoggingPath = qbDir;
-
+            LoggingPath = AppDomain.CurrentDomain.BaseDirectory + ModPathRelative + "/log/";
             LoggingController.LogInfo("Logging path: " + LoggingPath);
 
             return LoggingPath;

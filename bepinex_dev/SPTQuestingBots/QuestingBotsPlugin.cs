@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,12 @@ namespace SPTQuestingBots
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;
             ModName = Info.Metadata.Name;
+
+            if (!confirmNoPreviousVersionExists())
+            {
+                Chainloader.DependencyErrors.Add("An older version of " + ModName + " still exists in '/BepInEx/plugins'. Please remove SPTQuestingBots.dll from that directory, or this mod will not work correctly.");
+                return;
+            }
 
             Logger.LogInfo("Loading QuestingBots...getting configuration data...");
             if (ConfigController.GetConfig() == null)
@@ -112,6 +119,17 @@ namespace SPTQuestingBots
 
             LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriority + 1);
+        }
+
+        private bool confirmNoPreviousVersionExists()
+        {
+            string oldPath = AppDomain.CurrentDomain.BaseDirectory + "/BepInEx/plugins/SPTQuestingBots.dll";
+            if (File.Exists(oldPath))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
