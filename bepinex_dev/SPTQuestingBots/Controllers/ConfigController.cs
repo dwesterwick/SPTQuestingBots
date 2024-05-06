@@ -57,17 +57,10 @@ namespace SPTQuestingBots.Controllers
                 return LoggingPath;
             }
 
-            string errorMessage = "Cannot retrieve logging path from the server. Falling back to using the current directory.";
-            string json = GetJson("/QuestingBots/GetLoggingPath", errorMessage);
+            string qbDir = AppDomain.CurrentDomain.BaseDirectory + "/BepInEx/plugins/DanW-SPTQuestingBots/log/";
+            LoggingPath = qbDir;
 
-            if (TryDeserializeObject(json, errorMessage, out Configuration.LoggingPath _path))
-            {
-                LoggingPath = _path.Path;
-            }
-            else
-            {
-                LoggingPath = Assembly.GetExecutingAssembly().Location;
-            }
+            LoggingController.LogInfo("Logging path: " + LoggingPath);
 
             return LoggingPath;
         }

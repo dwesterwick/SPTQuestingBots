@@ -1,6 +1,5 @@
 import modConfig from "../config/config.json";
 import { CommonUtils } from "./CommonUtils";
-import { QuestManager } from "./QuestManager";
 
 import type { DependencyContainer } from "tsyringe";
 import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
@@ -18,11 +17,9 @@ import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables
 import type { LocaleService } from "@spt-aki/services/LocaleService";
 import type { QuestHelper } from "@spt-aki/helpers/QuestHelper";
 import type { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import type { VFS } from "@spt-aki/utils/VFS";
 import type { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt-aki/utils/RandomUtil";
 import type { BotController } from "@spt-aki/controllers/BotController";
-import type { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
 import type { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
 
@@ -37,7 +34,6 @@ const modName = "SPTQuestingBots";
 class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
-    private questManager: QuestManager
 
     private logger: ILogger;
     private configServer: ConfigServer;
@@ -46,11 +42,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private localeService: LocaleService;
     private questHelper: QuestHelper;
     private profileHelper: ProfileHelper;
-    private vfs: VFS;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
     private botController: BotController;
-    private botGenerationCacheService: BotGenerationCacheService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -76,20 +70,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "GetConfig"
         ); 
         
-        // Get the logging directory for saving quest information after raids
-        staticRouterModService.registerStaticRouter(`StaticGetLoggingPath${modName}`,
-            [{
-                url: "/QuestingBots/GetLoggingPath",
-                action: () => 
-                {
-                    const loggingPath = `${__dirname}\\..\\log\\`;
-                    this.commonUtils.logInfo(`Logging path: ${loggingPath}`);
-
-                    return JSON.stringify({ path: loggingPath });
-                }
-            }], "GetLoggingPath"
-        );
-
         if (!modConfig.enabled)
         {
             return;
@@ -193,11 +173,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
-        this.vfs = container.resolve<VFS>("VFS");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
-        this.botGenerationCacheService = container.resolve<BotGenerationCacheService>("BotGenerationCacheService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -207,15 +185,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.basePScavConversionChance = this.iBotConfig.chanceAssaultScavHasPlayerScavName;
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
-        this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
         if (!modConfig.enabled)
         {
             return;
         }
-
-        // Ensure all of the custom quests are valid JSON files
-        this.questManager.validateCustomQuests();
 
         if (modConfig.debug.always_have_airdrops)
         {
