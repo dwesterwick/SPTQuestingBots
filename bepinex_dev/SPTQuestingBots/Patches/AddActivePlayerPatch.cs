@@ -23,11 +23,10 @@ namespace SPTQuestingBots.Patches
         {
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
             {
-                LoggingController.LogInfo("Destroying previous location data...");
-                UnityEngine.GameObject.Destroy(oldLocationData);
+                LoggingController.LogWarning("There is already a LocationData component added to the current GameWorld instance.");
             }
 
-            Singleton<GameWorld>.Instance.gameObject.AddComponent<Components.LocationData>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
 
             if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {

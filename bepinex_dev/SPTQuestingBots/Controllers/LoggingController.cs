@@ -88,10 +88,22 @@ namespace SPTQuestingBots.Controllers
             Logger.LogError(message);
         }
 
+        public static void LogInfoToServerConsole(string message)
+        {
+            LogInfo(message);
+            ConfigController.ReportInfoToServer(message);
+        }
+
+        public static void LogWarningToServerConsole(string message)
+        {
+            LogWarning(message);
+            ConfigController.ReportWarningToServer(message);
+        }
+
         public static void LogErrorToServerConsole(string message)
         {
             LogError(message);
-            ConfigController.ReportError(message);
+            ConfigController.ReportErrorToServer(message);
         }
 
         public static void CreateLogFile(string logName, string filename, string content)

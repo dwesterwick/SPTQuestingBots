@@ -33,6 +33,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("bots_per_group_distribution")]
         public double[][] BotsPerGroupDistribution { get; set; } = new double[0][];
 
+        [JsonProperty("bot_difficulty_as_online")]
+        public double[][] BotDifficultyAsOnline { get; set; } = new double[0][];
+
         public BotSpawnTypeConfig()
         {
 

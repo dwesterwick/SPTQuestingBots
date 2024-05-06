@@ -137,6 +137,7 @@
     <Compile Include="BotLogic\SAINInterop.cs" />
     <Compile Include="Components\QuestPathFinder.cs" />
     <Compile Include="Components\Spawning\PScavGenerator.cs" />
+    <Compile Include="Components\TarkovData.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="Configuration\BotCapAdjustmentsConfig.cs" />
@@ -219,7 +220,7 @@
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
-    <Compile Include="Patches\CheckSPTVersionPatch.cs" />
+    <Compile Include="Patches\TarkovInitPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\ExceptAIPatch.cs" />

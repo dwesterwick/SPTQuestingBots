@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace SPTQuestingBots.Controllers
     {
         public static Configuration.ModConfig Config { get; private set; } = null;
         public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings = null;
+        public static string ModPathRelative { get; } = "/BepInEx/plugins/DanW-SPTQuestingBots";
         public static string LoggingPath { get; private set; } = null;
 
         public static Configuration.ModConfig GetConfig()
@@ -45,9 +47,19 @@ namespace SPTQuestingBots.Controllers
             GetJson("/QuestingBots/AdjustPScavChance/" + factor, "Could not adjust PScav conversion chance");
         }
 
-        public static void ReportError(string errorMessage)
+        public static void ReportInfoToServer(string message)
         {
-            GetJson("/QuestingBots/ReportError/" + errorMessage, "Could not report an error message to the server");
+            Aki.Common.Utils.ServerLog.Info("Questing Bots", message);
+        }
+
+        public static void ReportWarningToServer(string message)
+        {
+            Aki.Common.Utils.ServerLog.Warn("Questing Bots", message);
+        }
+
+        public static void ReportErrorToServer(string message)
+        {
+            Aki.Common.Utils.ServerLog.Error("Questing Bots", message);
         }
 
         public static string GetLoggingPath()
@@ -57,17 +69,8 @@ namespace SPTQuestingBots.Controllers
                 return LoggingPath;
             }
 
-            string errorMessage = "Cannot retrieve logging path from the server. Falling back to using the current directory.";
-            string json = GetJson("/QuestingBots/GetLoggingPath", errorMessage);
-
-            if (TryDeserializeObject(json, errorMessage, out Configuration.LoggingPath _path))
-            {
-                LoggingPath = _path.Path;
-            }
-            else
-            {
-                LoggingPath = Assembly.GetExecutingAssembly().Location;
-            }
+            LoggingPath = AppDomain.CurrentDomain.BaseDirectory + ModPathRelative + "/log/";
+            LoggingController.LogInfo("Logging path: " + LoggingPath);
 
             return LoggingPath;
         }

@@ -45,7 +45,8 @@ const ignoreList = [
     "mod.code-workspace",
     "package-lock.json",
     "tsconfig.json",
-    `${csharpDevFolder}/`
+    `${csharpDevFolder}/`,
+    "quests/"
 ];
 const exclude = glob.sync(`{${ignoreList.join(",")}}`, { realpath: true, dot: true, absolute: true });
 
@@ -55,7 +56,8 @@ fs.copySync(__dirname, path.normalize(`${__dirname}/../dist/~${modName}/user/mod
 {
     return !exclude.includes(filePath);
 }});
-fs.copySync(path.normalize(`${__dirname}/${csharpDevFolder}/${packageName}/bin/${csharpBuildFolder}/${packageName}.dll`), path.normalize(`${__dirname}/../dist/~${modName}/BepInEx/plugins/${packageName}.dll`));
+fs.copySync(path.normalize(`${__dirname}/${csharpDevFolder}/${packageName}/bin/${csharpBuildFolder}/${packageName}.dll`), path.normalize(`${__dirname}/../dist/~${modName}/BepInEx/plugins/${modName}/${packageName}.dll`));
+fs.copySync(path.normalize(`${__dirname}/quests/`), path.normalize(`${__dirname}/../dist/~${modName}/BepInEx/plugins/${modName}/quests`));
 fs.moveSync(path.normalize(`${__dirname}/../dist/~${modName}`), path.normalize(`${__dirname}/dist/${modName}`), { overwrite: true });
 fs.copySync(path.normalize(`${__dirname}/dist/${modName}`), path.normalize(`${__dirname}/dist`));
 console.log("Build files copied.");

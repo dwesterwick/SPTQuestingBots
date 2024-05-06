@@ -1,6 +1,5 @@
 import modConfig from "../config/config.json";
 import { CommonUtils } from "./CommonUtils";
-import { QuestManager } from "./QuestManager";
 
 import type { DependencyContainer } from "tsyringe";
 import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
@@ -22,7 +21,6 @@ import type { VFS } from "@spt-aki/utils/VFS";
 import type { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt-aki/utils/RandomUtil";
 import type { BotController } from "@spt-aki/controllers/BotController";
-import type { BotGenerationCacheService } from "@spt-aki/services/BotGenerationCacheService";
 import type { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
 
@@ -37,7 +35,6 @@ const modName = "SPTQuestingBots";
 class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
-    private questManager: QuestManager
 
     private logger: ILogger;
     private configServer: ConfigServer;
@@ -50,7 +47,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
     private botController: BotController;
-    private botGenerationCacheService: BotGenerationCacheService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -76,37 +72,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "GetConfig"
         ); 
         
-        // Report error messages to the SPT-AKI server console in case the user hasn't enabled the bepinex console
-        dynamicRouterModService.registerDynamicRouter(`DynamicReportError${modName}`,
-            [{
-                url: "/QuestingBots/ReportError/",
-                action: (url: string) => 
-                {
-                    const urlParts = url.split("/");
-                    const errorMessage = urlParts[urlParts.length - 1];
-
-                    const regex = /%20/g;
-                    this.commonUtils.logError(errorMessage.replace(regex, " "));
-
-                    return JSON.stringify({ resp: "OK" });
-                }
-            }], "ReportError"
-        );
-
-        // Get the logging directory for saving quest information after raids
-        staticRouterModService.registerStaticRouter(`StaticGetLoggingPath${modName}`,
-            [{
-                url: "/QuestingBots/GetLoggingPath",
-                action: () => 
-                {
-                    const loggingPath = `${__dirname}\\..\\log\\`;
-                    this.commonUtils.logInfo(`Logging path: ${loggingPath}`);
-
-                    return JSON.stringify({ path: loggingPath });
-                }
-            }], "GetLoggingPath"
-        );
-
         if (!modConfig.enabled)
         {
             return;
@@ -214,7 +179,6 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
-        this.botGenerationCacheService = container.resolve<BotGenerationCacheService>("BotGenerationCacheService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -224,15 +188,13 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.basePScavConversionChance = this.iBotConfig.chanceAssaultScavHasPlayerScavName;
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
-        this.questManager = new QuestManager(this.commonUtils, this.vfs);
 
         if (!modConfig.enabled)
         {
             return;
         }
 
-        // Ensure all of the custom quests are valid JSON files
-        this.questManager.validateCustomQuests();
+        this.performFileIntegrityCheck();
 
         if (modConfig.debug.always_have_airdrops)
         {
@@ -333,7 +295,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         if (modConfig.bot_spawns.advanced_eft_bot_count_management)
         {
-            this.commonUtils.logWarning("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
+            this.commonUtils.logInfo("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
         }
 
         if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
@@ -552,6 +514,21 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
 
         return bots;
+    }
+
+    private performFileIntegrityCheck(): void
+    {
+        const path = `${__dirname}/..`;
+
+        if (this.vfs.exists(`${path}/quests/`))
+        {
+            this.commonUtils.logWarning("Found obsolete quests folder 'user\\mods\\DanW-SPTQuestingBots\\quests'. Only quest files in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\quests' will be used.");
+        }
+
+        if (this.vfs.exists(`${path}/log/`))
+        {
+            this.commonUtils.logWarning("Found obsolete log folder 'user\\mods\\DanW-SPTQuestingBots\\log'. Logs are now saved in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\log'.");
+        }
     }
 }
 

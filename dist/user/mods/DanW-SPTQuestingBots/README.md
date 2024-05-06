@@ -320,6 +320,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **fraction_of_max_players_vs_raidET**: If you spawn late into the raid as a Scav, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of max players] pairs, and there is no limit to the number of pairs.
 * **time_randomness**: The maximum percentage of total raid time (before reducing it for Scav raids) that player-Scav spawns can be randomly adjusted when generating a spawn schedule for them. However, player Scavs will never be allowed to spawn earlier than the minimum reduced raid time in the SPT configuration for the map, and they will never be allowed to spawn later than the maximum reduced raid time for the map. This is **10%** by default. 
 * **bots_per_group_distribution**: An array describing how likely bot groups of various sizes are allowed to spawn. When generating bot groups, this mod will select a random number for each group between 0 and 1. It will then use interpolation to determine how many bots to add to the group using this array. The first column is the look-up value for the random number selected for the group, and the second column is the number of bots to add to the group. The interpolated value for number of bots is rounded to the nearest integer.
+* **bot_difficulty_as_online**: An array describing the chances that members of a new bot group will be of a certain difficulty. When generating bot groups, this mod will select a random number for each group between 0 and 1. It will then use interpolation to determine the difficulty of all bots in the group using this array. The first column is the look-up value for the random number selected for the group, and the second column is a number corresponding to the difficulty that will be used (0 = easy, 1 = normal, 2 = hard, 3 = impossible). The interpolated value for number of bots is rounded to the nearest integer.
 
 **---------- Known Issues ----------**
 
@@ -361,18 +362,16 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * In maps with a high number of max players, performance can be pretty bad if your **max_alive_bots** setting is high
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_bots** setting is high
 * Performance may be worse if **advanced_eft_bot_count_management=true** because EFT will be allowed to spawn more Scavs than with previous versions of this mod.
-* When using "As Online" raid difficulty, all PMC's spawn with "Normal" difficulty at the beginning of the raid.
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.1** (ETA: Late May)
-    * Set PMC and PScav difficulties independently of the difficulty set for the raid in EFT
+* **0.5.2** (ETA: Late May)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
-    * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
-* **0.5.2** (ETA: Early June)
+* **0.5.3** (ETA: Early June)
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
+    * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
 * **0.6.0** (ETA: Late July)
     * Separate spawning system into a separate mod
 * **Not Planned**

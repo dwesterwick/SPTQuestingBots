@@ -14,8 +14,6 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public class PMCGenerator : BotGenerator
     {
-        private BotDifficulty botDifficulty = BotDifficulty.normal;
-
         // Temporarily stores spawn points for bots while trying to spawn several of them
         private List<SpawnPointParams> pendingSpawnPoints = new List<SpawnPointParams>();
 
@@ -28,9 +26,6 @@ namespace SPTQuestingBots.Components.Spawning
 
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
             RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement;
-
-            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            botDifficulty = locationData.CurrentRaidSettings.WavesSettings.BotDifficulty.ToBotDifficulty();
 
             setMaxAliveBots();
         }
@@ -83,6 +78,10 @@ namespace SPTQuestingBots.Components.Spawning
                 botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
                 botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
 
+                // Determine the difficulty for the new bot group
+                Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+                BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PMCs.BotDifficultyAsOnline);
+                
                 // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
                 WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
 

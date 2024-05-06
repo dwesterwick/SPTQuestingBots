@@ -31,6 +31,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
         private readonly Stopwatch updateTimer = Stopwatch.StartNew();
+        private readonly System.Random random = new System.Random();
 
         public static int RemainingBotGenerators { get; private set; } = 0;
         public static int CurrentBotGeneratorProgress { get; private set; } = 0;
@@ -435,7 +436,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             EPlayerSide spawnSide = Helpers.BotBrainHelpers.GetSideForWildSpawnType(spawnType);
 
-            LoggingController.LogInfo("Generating " + BotTypeName + " group (Number of bots: " + bots + ")...");
+            LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
             Models.BotSpawnInfo botSpawnInfo = null;
             while (botSpawnInfo == null)
@@ -451,7 +452,7 @@ namespace SPTQuestingBots.Components.Spawning
                 }
                 catch (NullReferenceException nre)
                 {
-                    LoggingController.LogWarning("Generating " + BotTypeName + " group (Number of bots: " + bots + ")...failed. Trying again...");
+                    LoggingController.LogWarning("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...failed. Trying again...");
 
                     LoggingController.LogError(nre.Message);
                     LoggingController.LogError(nre.StackTrace);
@@ -465,6 +466,16 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return botSpawnInfo;
+        }
+
+        protected BotDifficulty GetBotDifficulty(EFT.Bots.EBotDifficulty raidDifficulty, double[][] difficultyChances)
+        {
+            if (raidDifficulty != EFT.Bots.EBotDifficulty.AsOnline)
+            {
+                return raidDifficulty.ToBotDifficulty();
+            }
+
+            return (BotDifficulty)Math.Round(ConfigController.InterpolateForFirstCol(difficultyChances, random.NextDouble()));
         }
 
         private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)

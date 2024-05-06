@@ -25,7 +25,6 @@ namespace SPTQuestingBots.Components
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
 
         private readonly DateTime awakeTime = DateTime.Now;
-        private TarkovApplication tarkovApplication = null;
         private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
@@ -37,32 +36,37 @@ namespace SPTQuestingBots.Components
 
         private void Awake()
         {
-            tarkovApplication = FindObjectOfType<TarkovApplication>();
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
-            CurrentRaidSettings = getCurrentRaidSettings();
+
+            CurrentRaidSettings = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetCurrentRaidSettings();
+            if (CurrentRaidSettings == null)
+            {
+                LoggingController.LogError("Could not retrieve current raid settings");
+            }
+
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
 
             UpdateMaxTotalBots();
 
-            Singleton<GameWorld>.Instance.gameObject.AddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
 
             if (ConfigController.Config.Questing.Enabled)
             {
                 QuestHelpers.ClearCache();
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<BotQuestBuilder>();
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<DebugData>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotQuestBuilder>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
             }
 
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 if (ConfigController.Config.BotSpawns.PMCs.Enabled)
                 {
-                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PMCGenerator>();
+                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PMCGenerator>();
                 }
 
                 if (ConfigController.Config.BotSpawns.PScavs.Enabled && !CurrentLocation.DisabledForScav)
                 {
-                    Singleton<GameWorld>.Instance.gameObject.AddComponent<Spawning.PScavGenerator>();
+                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PScavGenerator>();
                 }
 
                 BotGenerator.RunBotGenerationTasks();
@@ -70,7 +74,7 @@ namespace SPTQuestingBots.Components
 
             if (ConfigController.Config.Debug.Enabled)
             {
-                Singleton<GameWorld>.Instance.gameObject.AddComponent<PathRender>();
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
             }
         }
 
@@ -681,36 +685,6 @@ namespace SPTQuestingBots.Components
 
             maxExfilPointDistance = maxDistance;
             return maxExfilPointDistance;
-        }
-
-        private LocationSettingsClass getLocationSettings(TarkovApplication app)
-        {
-            if (app == null)
-            {
-                LoggingController.LogError("Invalid Tarkov application instance");
-                return null;
-            }
-
-            ISession session = app.GetClientBackEndSession();
-            if (session == null)
-            {
-                return null;
-            }
-
-            return session.LocationSettings;
-        }
-
-        private RaidSettings getCurrentRaidSettings()
-        {
-            if (tarkovApplication == null)
-            {
-                LoggingController.LogError("Invalid Tarkov application instance");
-                return null;
-            }
-
-            FieldInfo raidSettingsField = typeof(TarkovApplication).GetField("_raidSettings", BindingFlags.NonPublic | BindingFlags.Instance);
-            RaidSettings raidSettings = raidSettingsField.GetValue(tarkovApplication) as RaidSettings;
-            return raidSettings;
         }
 
         private void handleCustomQuestKeypress()
