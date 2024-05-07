@@ -24,6 +24,7 @@ namespace SPTQuestingBots.Patches
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
             {
                 LoggingController.LogWarning("There is already a LocationData component added to the current GameWorld instance.");
+                return;
             }
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
