@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BepInEx.Bootstrap;
 using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
@@ -166,9 +167,15 @@ namespace SPTQuestingBots.BotLogic
 
             // This is required because the priority of the looting brain layers is lower than SAIN's brain layers. Without forcing bots to
             // forget their current enemies, they will go into a combat layer, not a looting layer.
-            if (canUseSAINInterop && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
+            if (canUseSAINInterop)
             {
-                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly or is outdated.");
+                Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
+                Version maxVersionForResettingDecisions = new Version("2.2.1.99");
+                
+                if ((sainVersion.CompareTo(maxVersionForResettingDecisions) < 0) && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
+                {
+                    LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly or is outdated.");
+                }
             }
 
             if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(botOwner))
