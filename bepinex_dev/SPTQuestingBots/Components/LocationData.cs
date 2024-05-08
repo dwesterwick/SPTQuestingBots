@@ -280,7 +280,7 @@ namespace SPTQuestingBots.Components
             return false;
         }
 
-        public Vector3? GetPlayerPosition()
+        public Vector3? GetMainPlayerPosition()
         {
             if (Singleton<GameWorld>.Instance == null)
             {
@@ -290,9 +290,9 @@ namespace SPTQuestingBots.Components
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
         }
 
-        public SpawnPointParams? GetPlayerSpawnPoint()
+        public SpawnPointParams? GetMainPlayerSpawnPoint()
         {
-            Vector3? playerPosition = GetPlayerPosition();
+            Vector3? playerPosition = GetMainPlayerPosition();
             if (!playerPosition.HasValue)
             {
                 return null;
@@ -348,10 +348,9 @@ namespace SPTQuestingBots.Components
                 }
             }
 
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (mainPlayer != null)
+            foreach (Player player in Singleton<GameWorld>.Instance.AllAlivePlayersList.Where(p => !p.IsAI))
             {
-                distance = Vector3.Distance(position, mainPlayer.Position);
+                distance = Vector3.Distance(position, player.Position);
                 if (distance < distanceFromPlayers)
                 {
                     return true;
