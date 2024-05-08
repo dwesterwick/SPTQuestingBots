@@ -97,8 +97,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
             IEnumerable<Player> playersToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
-                .Where(p => allGeneratedProfileIDs.Contains(p.ProfileId))
-                .AddItem(Singleton<GameWorld>.Instance.MainPlayer);
+                .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId));
 
             // Find a spawn location for the bot group that is as far from other players and bots as possible
             SpawnPointParams[] excludedSpawnpoints = pendingSpawnPoints

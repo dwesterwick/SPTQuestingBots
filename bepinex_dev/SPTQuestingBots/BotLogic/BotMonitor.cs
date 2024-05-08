@@ -166,11 +166,12 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // This is required because the priority of the looting brain layers is lower than SAIN's brain layers. Without forcing bots to
-            // forget their current enemies, they will go into a combat layer, not a looting layer.
+            // forget their current enemies, they will go into a combat layer, not a looting layer. However, first check SAIN's version because later releases
+            // reduce how long bots unnecessarily spend in SAIN's layers.
             if (canUseSAINInterop)
             {
                 Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
-                Version maxVersionForResettingDecisions = new Version("2.2.1.99");
+                Version maxVersionForResettingDecisions = new Version(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxSainVersionForResettingDecisions);
                 
                 if ((sainVersion.CompareTo(maxVersionForResettingDecisions) < 0) && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
                 {

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Components.Spawning;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
@@ -83,15 +85,15 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 return updatePreviousState(false);
             }
 
-            // Ensure you're not dead
-            Player you = Singleton<GameWorld>.Instance.MainPlayer;
-            if (you == null)
+            // Ensure there are still alive human players on the map
+            IEnumerable<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList.Where(p => !p.IsAI);
+            if (!allPlayers.Any())
             {
                 return updatePreviousState(false);
             }
 
-            // If the bot is close to you, don't allow it to sleep
-            if (Vector3.Distance(BotOwner.Position, you.Position) < QuestingBotsPluginConfig.SleepingMinDistanceToYou.Value)
+            // If the bot is close to any of the human players, don't allow it to sleep
+            if (allPlayers.Any(p => Vector3.Distance(BotOwner.Position, p.Position) < QuestingBotsPluginConfig.SleepingMinDistanceToYou.Value))
             {
                 return updatePreviousState(false);
             }
