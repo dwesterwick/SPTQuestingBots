@@ -314,6 +314,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **Options for *bot_spawns.pmcs* and *bot_spawns.player_scavs*:**
 * **enabled**: If the corresponding bot type will be allowed to spawn. This is **true** by default for both bot types.
+* **min_raid_time_remaining**: The minimum time (in seconds) that must be remaining in the raid for bots of the corresponding bot type to spawn. This is **180** s by default for both PMC's and PScavs.
 * **min_distance_from_players_initial**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used during the first wave of spawns and is **25** m by default. 
 * **min_distance_from_players_during_raid**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns.
 * **min_distance_from_players_during_raid_factory**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns. However, this is only used for Factory raids instead of **min_distance_from_players_during_raid**.

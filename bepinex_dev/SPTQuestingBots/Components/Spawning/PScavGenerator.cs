@@ -112,9 +112,11 @@ namespace SPTQuestingBots.Components.Spawning
                 ServerRequestPatch.ForcePScavCount += botsInGroup;
                 Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
 
-                // Set the minimum spawn time for the PScav group
+                // Set the minimum and maximum spawn times for the PScav group
+                float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
                 group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
-                
+                group.RaidETRangeToSpawn.Max = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+
                 return group;
             };
         }

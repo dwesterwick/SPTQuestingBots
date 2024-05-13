@@ -85,7 +85,13 @@ namespace SPTQuestingBots.Components.Spawning
                 // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
                 WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
 
-                return await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
+                Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
+
+                // Set the maximum spawn time for the PMC group
+                float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
+                group.RaidETRangeToSpawn.Max = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+
+                return group;
             };
         }
 

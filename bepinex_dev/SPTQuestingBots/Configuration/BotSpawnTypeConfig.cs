@@ -12,6 +12,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonProperty("min_raid_time_remaining")]
+        public float MinRaidTimeRemaining { get; set; } = 0;
+
         [JsonProperty("min_distance_from_players_initial")]
         public float MinDistanceFromPlayersInitial { get; set; } = 25;
 
