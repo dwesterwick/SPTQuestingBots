@@ -27,6 +27,7 @@ namespace SPTQuestingBots.Models
         public float DistanceToTarget => Vector3.Distance(bot.Position, TargetPosition);
 
         private BotOwner bot;
+        private List<Vector3[]> previousPaths = new List<Vector3[]>();
         
         public BotPathData(BotOwner botOwner) : base()
         {
@@ -43,6 +44,7 @@ namespace SPTQuestingBots.Models
             if (force)
             {
                 requiresUpdate = true;
+                previousPaths.Clear();
                 reason = BotPathUpdateNeededReason.Force;
             }
 
@@ -53,6 +55,7 @@ namespace SPTQuestingBots.Models
                 ReachDistance = reachDistance;
 
                 requiresUpdate = true;
+                previousPaths.Clear();
                 reason = BotPathUpdateNeededReason.NewTarget;
             }
 
@@ -92,7 +95,7 @@ namespace SPTQuestingBots.Models
 
             if (requiresUpdate)
             {
-                updateCorners(target);
+                updateCorners(target, reason == BotPathUpdateNeededReason.IncompletePath);
             }
 
             return reason;
@@ -108,7 +111,7 @@ namespace SPTQuestingBots.Models
             return Vector3.Distance(bot.Position, Corners.Last());
         }
 
-        private void updateCorners(Vector3 target)
+        private void updateCorners(Vector3 target, bool ignoreDuplicates = false)
         {
             StartPosition = bot.Position;
 
@@ -149,6 +152,27 @@ namespace SPTQuestingBots.Models
                 }
             }
 
+            // If the current and proposed paths have already been calculated, do not update the bot's path to avoid getting stuck in infinite loops
+            Vector3[] newCorners = corners.Skip(1).ToArray();
+            Vector3[] currentCorners = Corners.Skip(1).ToArray();
+
+            if (previousPaths.Any(p => p.IsSamePath(newCorners)))
+            {
+                if (ignoreDuplicates && previousPaths.Any(p => p.IsSamePath(currentCorners)))
+                {
+                    LoggingController.LogInfo("Ignoring duplicate path: " + string.Join(", ", corners.Select(c => c.ToString())));
+                    return;
+                }
+            }
+            else
+            {
+                if (newCorners.Length > 0)
+                {
+                    LoggingController.LogInfo("Found new path: " + string.Join(", ", corners.Select(c => c.ToString())));
+                    previousPaths.Add(newCorners);
+                }
+            }
+            
             SetCorners(corners);
         }
     }

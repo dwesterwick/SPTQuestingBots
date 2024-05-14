@@ -114,8 +114,21 @@ namespace SPTQuestingBots.BotLogic.Objective
                 return;
             }
 
-            if ((door == null) || !interactionPosition.HasValue)
+            if (door == null)
             {
+                LoggingController.LogError("Door" + door.Id + " no longer exists");
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
+
+            if (!interactionPosition.HasValue)
+            {
+                LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
+
+                ObjectiveManager.FailObjective();
+
                 return;
             }
 

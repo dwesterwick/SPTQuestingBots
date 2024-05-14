@@ -24,6 +24,8 @@ namespace SPTQuestingBots.Components
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
 
+        private static readonly string noPowerTipText = "NO_POWER_TIP".Localized(null);
+
         private readonly DateTime awakeTime = DateTime.Now;
         private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
@@ -167,6 +169,12 @@ namespace SPTQuestingBots.Components
 
             foreach (Door door in areLockedDoorsUnlocked.Keys.ToArray())
             {
+                // Remove the door from the dictionary if it has been destroyed (namely due to Backdoor Bandit)
+                if (door == null)
+                {
+                    areLockedDoorsUnlocked.Remove(door);
+                }
+
                 // Check if the door has been unlocked since this method was previously called
                 if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
                 {
@@ -645,12 +653,20 @@ namespace SPTQuestingBots.Components
         {
             foreach (Door door in doors)
             {
-                // Ensure a player can interact with the door
-                ActionsReturnClass availableActions = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
-                if ((availableActions == null) || (availableActions.Actions.Count == 0))
+                // Ensure the door hasn't been destroyed (namely by BackdoorBandit)
+                if (door == null)
                 {
                     continue;
                 }
+
+                // Ensure a player can interact with the door
+                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
+                if ((availableActionsResult == null) || !availableActionsResult.Actions.Any() || availableActionsResult.Error.Equals(noPowerTipText))
+                {
+                    continue;
+                }
+
+                LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
                 Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)
