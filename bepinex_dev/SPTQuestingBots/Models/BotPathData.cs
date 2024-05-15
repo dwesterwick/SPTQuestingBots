@@ -158,9 +158,10 @@ namespace SPTQuestingBots.Models
 
             if (previousPaths.Any(p => p.IsSamePath(newCorners)))
             {
-                if (ignoreDuplicates && previousPaths.Any(p => p.IsSamePath(currentCorners)))
+                if (ignoreDuplicates && !newCorners.IsSamePath(currentCorners) && previousPaths.Any(p => p.IsSamePath(currentCorners)))
                 {
-                    LoggingController.LogInfo("Ignoring duplicate path: " + string.Join(", ", corners.Select(c => c.ToString())));
+                    LoggingController.LogWarning("Ignoring duplicate path: " + string.Join(", ", corners.Select(c => c.ToString())));
+                    LoggingController.LogWarning("Current path: " + string.Join(", ", Corners.Select(c => c.ToString())));
                     return;
                 }
             }
@@ -168,7 +169,7 @@ namespace SPTQuestingBots.Models
             {
                 if (newCorners.Length > 0)
                 {
-                    LoggingController.LogInfo("Found new path: " + string.Join(", ", corners.Select(c => c.ToString())));
+                    //LoggingController.LogInfo("Found new path: " + string.Join(", ", corners.Select(c => c.ToString())));
                     previousPaths.Add(newCorners);
                 }
             }
