@@ -236,6 +236,8 @@
     <Compile Include="Patches\CheckLookEnemyPatch.cs" />
     <Compile Include="Patches\TryToSpawnInZoneAndDelayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestingBotsExternal.cs" />
+    <Compile Include="QuestingBotsInterop.cs" />
     <Compile Include="QuestingBotsPlugin.cs" />
     <Compile Include="QuestingBotsPluginConfig.cs" />
   </ItemGroup>

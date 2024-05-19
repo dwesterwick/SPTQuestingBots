@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPTQuestingBots", "SPTQuestingBots.csproj", "{2704BAEC-427A-4611-921D-E8AF51D9ECED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPTQuestingBots-InteropTest", "..\SPTQuestingBots-InteropTest\SPTQuestingBots-InteropTest.csproj", "{362866A9-FA28-410B-BFDD-762EEAC33708}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2704BAEC-427A-4611-921D-E8AF51D9ECED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2704BAEC-427A-4611-921D-E8AF51D9ECED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2704BAEC-427A-4611-921D-E8AF51D9ECED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{362866A9-FA28-410B-BFDD-762EEAC33708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{362866A9-FA28-410B-BFDD-762EEAC33708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{362866A9-FA28-410B-BFDD-762EEAC33708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{362866A9-FA28-410B-BFDD-762EEAC33708}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

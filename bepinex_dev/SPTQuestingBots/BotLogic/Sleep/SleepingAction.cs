@@ -36,6 +36,9 @@ namespace SPTQuestingBots.BotLogic.Sleep
             BotRegistrationManager.UnregisterSleepingBot(BotOwner);
 
             BotOwner.PatrollingData.Unpause();
+
+            // Need to ensure BotState = EBotState.PreActive
+            BotOwner.PostActivate();
         }
 
         public override void Update()
