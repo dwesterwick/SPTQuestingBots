@@ -131,6 +131,11 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        public IEnumerable<Vector3?> GetAllPositions()
+        {
+            return questObjectiveSteps.Select(step => step.GetPosition());
+        }
+
         public bool TrySnapAllStepPositionsToNavMesh()
         {
             bool allSnapped = true;
@@ -160,7 +165,7 @@ namespace SPTQuestingBots.Models
                     LoggingController.LogError("Unable to find switch \"" + step.SwitchID + "\" for quest objective " + ToString());
                 }
             }
-            
+
             return allFound;
         }
 
