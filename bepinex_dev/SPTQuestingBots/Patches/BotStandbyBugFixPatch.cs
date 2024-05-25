@@ -25,9 +25,13 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         private static void PatchPrefix(BotStandBy __instance)
         {
-            BotOwner botOwner = (BotOwner)botOwnerField.GetValue(__instance);
             Vector3? curPoint = (Vector3?)curPointField.GetValue(__instance);
+            if (curPoint.HasValue)
+            {
+                return;
+            }
 
+            BotOwner botOwner = (BotOwner)botOwnerField.GetValue(__instance);
             if (botOwner == null)
             {
                 LoggingController.LogError("BotStandby BotOwner is null");
@@ -40,23 +44,15 @@ namespace SPTQuestingBots.Patches
                 return;
             }
 
-            if (!curPoint.HasValue)
+            CustomNavigationPoint customNavigationPoint = botOwner.Covers.GetClosestPoint(botOwner.Position, null, true, false, 1000);
+            if (customNavigationPoint == null)
             {
-                CustomNavigationPoint customNavigationPoint = botOwner.Covers.GetClosestPoint(botOwner.Position, null, true, false, 1000);
-
-                if (customNavigationPoint == null)
-                {
-                    LoggingController.LogError("BotStandby CustomNavigationPoint is null");
-                }
-                else
-                {
-                    curPointField.SetValue(__instance, customNavigationPoint.Position);
-                }
-            }
-
-            if (!curPoint.HasValue)
-            {
+                LoggingController.LogError("BotStandby CustomNavigationPoint is null");
                 curPointField.SetValue(__instance, botOwner.Position);
+            }
+            else
+            {
+                curPointField.SetValue(__instance, customNavigationPoint.Position);
             }
         }
     }
