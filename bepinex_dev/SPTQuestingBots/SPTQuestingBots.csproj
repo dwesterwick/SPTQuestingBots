@@ -220,6 +220,7 @@
     <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
+    <Compile Include="Patches\BotStandbyBugFixPatch.cs" />
     <Compile Include="Patches\TarkovInitPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />

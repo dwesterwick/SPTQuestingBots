@@ -23,11 +23,13 @@ namespace SPTQuestingBotsInteropTest
             if (!SPTQuestingBots.QuestingBotsInterop.IsQuestingBotsLoaded())
             {
                 LoggingController.LogWarning("Questing Bots not detected");
+                return;
             }
 
             if (!SPTQuestingBots.QuestingBotsInterop.Init())
             {
                 LoggingController.LogWarning("Questing Bots interop could not be initialized");
+                return;
             }
 
             Task.Run(async() => await checkBotGenerators());

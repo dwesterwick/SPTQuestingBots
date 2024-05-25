@@ -7,7 +7,7 @@ using BepInEx;
 
 namespace SPTQuestingBotsInteropTest
 {
-    [BepInDependency("com.DanW.QuestingBots", "0.5.1")]
+    //[BepInDependency("com.DanW.QuestingBots", "0.5.1")]
     [BepInPlugin("com.DanW.QuestingBotsInteropTest", "DanW-QuestingBots-InteropTest", "1.0.0")]
     public class QuestingBotsInteropTestPlugin : BaseUnityPlugin
     {
