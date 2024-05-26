@@ -183,12 +183,15 @@ namespace SPTQuestingBots.Components
                 return false;
             }
 
+            // Check if the door is a keycard door
             KeycardDoor keycardDoor = door as KeycardDoor;
             if (keycardDoor != null)
             {
+                // Need to expand the collider because the Saferoom keypad on Interchange isn't fully contained by the NoPowerTip for it
                 float boundsExpansion = 2.5f;
                 Bounds expandedBounds = new Bounds(collider.bounds.center, collider.bounds.size * boundsExpansion);
 
+                // Check if there is a NoPowerTip for any of the keypads for the door (but there should only be one)
                 foreach (InteractiveProxy interactiveProxy in keycardDoor.Proxies)
                 {
                     if (expandedBounds.Contains(interactiveProxy.transform.position))
@@ -201,6 +204,7 @@ namespace SPTQuestingBots.Components
             }
             else
             {
+                // Check if the door has a handle, which is what is needed to test if it's within a NoPowerTip collider
                 Transform doorTestTransform = door.LockHandle?.transform;
                 if (doorTestTransform == null)
                 {
@@ -714,6 +718,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                // Prevent the inner KIBA door from being unlocked before the outer KIBA door
                 if (door.Id == "Shopping_Mall_DesignStuff_00049")
                 {
                     IEnumerable<bool> kibaOuterDoor = areLockedDoorsUnlocked
@@ -727,6 +732,7 @@ namespace SPTQuestingBots.Components
                     }
                 }
 
+                // Prevent doors that require power from being unlocked before the power is turned on
                 if (noPowerTipsForDoors.ContainsKey(door) && noPowerTipsForDoors[door].isActiveAndEnabled)
                 {
                     LoggingController.LogInfo("NoPowerTip for door " + door.Id + " is still active.");
@@ -740,14 +746,9 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
+                //LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
-                /*if (!availableActionsResult.Actions.Any(a => a.Name == "Breach"))
-                {
-                    continue;
-                }*/
-
-                Vector3 ? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
+                Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)
                 {
                     return door;

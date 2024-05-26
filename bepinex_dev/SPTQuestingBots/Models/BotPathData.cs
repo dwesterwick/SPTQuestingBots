@@ -152,8 +152,9 @@ namespace SPTQuestingBots.Models
                 }
             }
 
+            // TODO: This needs a lot more testing and optimization before it can be released
             // If the current and proposed paths have already been calculated, do not update the bot's path to avoid getting stuck in infinite loops
-            Vector3[] newCorners = corners.Skip(1).ToArray();
+            /*Vector3[] newCorners = corners.Skip(1).ToArray();
             Vector3[] currentCorners = Corners.Skip(1).ToArray();
 
             if (previousPaths.Any(p => p.IsSamePath(newCorners)))
@@ -172,7 +173,7 @@ namespace SPTQuestingBots.Models
                     //LoggingController.LogInfo("Found new path: " + string.Join(", ", corners.Select(c => c.ToString())));
                     previousPaths.Add(newCorners);
                 }
-            }
+            }*/
             
             SetCorners(corners);
         }
