@@ -160,27 +160,62 @@ namespace SPTQuestingBots.Components
 
                 foreach(NoPowerTip noPowerTip in allNoPowerTips)
                 {
-                    if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
+                    if (!doorHasNoPowerTip(door, noPowerTip))
                     {
-                        LoggingController.LogWarning("Could not find collider for NoPowerTip " + noPowerTip.name);
-                        continue;
-                    }
-
-                    Transform doorTestTransform = door.LockHandle?.transform;
-                    if ((doorTestTransform == null) || !collider.bounds.Contains(doorTestTransform.position))
-                    {
-                        //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + collider.bounds.center + ") does not surround door " + door.Id + "(" + doorTestTransform.position + ")");
                         continue;
                     }
 
                     noPowerTipsForDoors.Add(door, noPowerTip);
-
                     LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + door.Id);
+                    break;
                 }
             }
 
             LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors");
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+        }
+
+        private bool doorHasNoPowerTip(Door door, NoPowerTip noPowerTip)
+        {
+            if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
+            {
+                LoggingController.LogWarning("Could not find collider for NoPowerTip " + noPowerTip.name);
+                return false;
+            }
+
+            KeycardDoor keycardDoor = door as KeycardDoor;
+            if (keycardDoor != null)
+            {
+                float boundsExpansion = 2.5f;
+                Bounds expandedBounds = new Bounds(collider.bounds.center, collider.bounds.size * boundsExpansion);
+
+                foreach (InteractiveProxy interactiveProxy in keycardDoor.Proxies)
+                {
+                    if (expandedBounds.Contains(interactiveProxy.transform.position))
+                    {
+                        return true;
+                    }
+
+                    //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + expandedBounds.center + " with extents " + expandedBounds.extents + ") does not surround proxy of door " + door.Id + "(" + interactiveProxy.transform.position + ")");
+                }
+            }
+            else
+            {
+                Transform doorTestTransform = door.LockHandle?.transform;
+                if (doorTestTransform == null)
+                {
+                    return false;
+                }
+
+                if (collider.bounds.Contains(doorTestTransform.position))
+                {
+                    return true;
+                }
+
+                //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + collider.bounds.center + ") does not surround door " + door.Id + "(" + doorTestTransform.position + ")");
+            }
+
+            return false;
         }
 
         public IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
@@ -671,15 +706,25 @@ namespace SPTQuestingBots.Components
 
         public Door FindFirstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
         {
-            // Shopping_Mall_DesignStuff_00049 = Inner KIBA door
-            // Shopping_Mall_DesignStuff_00050 = Outer KIBA door
-
             foreach (Door door in doors)
             {
                 // Ensure the door hasn't been destroyed (namely by BackdoorBandit)
                 if (door == null)
                 {
                     continue;
+                }
+
+                if (door.Id == "Shopping_Mall_DesignStuff_00049")
+                {
+                    IEnumerable<bool> kibaOuterDoor = areLockedDoorsUnlocked
+                        .Where(d => d.Key.Id == "Shopping_Mall_DesignStuff_00050")
+                        .Select(d => d.Value);
+
+                    if (kibaOuterDoor.Any(v => v == false))
+                    {
+                        LoggingController.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
+                        continue;
+                    }
                 }
 
                 if (noPowerTipsForDoors.ContainsKey(door) && noPowerTipsForDoors[door].isActiveAndEnabled)
@@ -696,6 +741,11 @@ namespace SPTQuestingBots.Components
                 }
 
                 LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
+
+                /*if (!availableActionsResult.Actions.Any(a => a.Name == "Breach"))
+                {
+                    continue;
+                }*/
 
                 Vector3 ? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)
