@@ -113,13 +113,11 @@ namespace SPTQuestingBots.Controllers
                     //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
                     if (locationId == "Lighthouse")
                     {
-                        Vector3? firstPosition = objective.GetFirstStepPosition();
-                        if (!firstPosition.HasValue)
-                        {
-                            continue;
-                        }
+                        bool visitsIsland = objective.GetAllPositions()
+                            .Where(p => p.HasValue)
+                            .Any(position => position.Value.x > 120 && position.Value.z > 325);
 
-                        if (firstPosition.Value.x > 120 && firstPosition.Value.z > 325)
+                        if (visitsIsland)
                         {
                             if (quest.TryRemoveObjective(objective))
                             {
@@ -130,25 +128,34 @@ namespace SPTQuestingBots.Controllers
                                 LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective + " for quest " + quest);
                             }
                         }
-
-                        // If there are no remaining objectives, remove the quest too
-                        if (quest.NumberOfObjectives == 0)
-                        {
-                            LoggingController.LogInfo("Removing quest on Lightkeeper island: " + quest + "...");
-                            allQuests.Remove(quest);
-                        }
                     }
 
                     // https://github.com/dwesterwick/SPTQuestingBots/issues/18
                     // Disable quests that try to go to the Scav Island, pathing is broken there
                     if (locationId == "Shoreline")
                     {
-                        bool visitsIsland = objective.GetAllPositions().Where(p => p.HasValue).Any(position => position.Value.x > 160 && position.Value.z > 360);
+                        bool visitsIsland = objective.GetAllPositions()
+                            .Where(p => p.HasValue)
+                            .Any(position => position.Value.x > 160 && position.Value.z > 360);
+                        
                         if (visitsIsland)
                         {
-                            LoggingController.LogInfo("Removing quest on Shoreline's skav island: " + quest + "...");
-                            allQuests.Remove(quest);
+                            if (quest.TryRemoveObjective(objective))
+                            {
+                                LoggingController.LogInfo("Removing quest objective on Scav island: " + objective + " for quest " + quest);
+                            }
+                            else
+                            {
+                                LoggingController.LogError("Could not remove quest objective on Scav island: " + objective + " for quest " + quest);
+                            }
                         }
+                    }
+
+                    // If there are no remaining objectives, remove the quest too
+                    if (quest.NumberOfObjectives == 0)
+                    {
+                        LoggingController.LogInfo("Removing quest with no valid objectives: " + quest + "...");
+                        allQuests.Remove(quest);
                     }
                 }
             }
