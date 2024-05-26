@@ -59,7 +59,9 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                new Patches.BotStandbyBugFixPatch().Enable();
+
+                // This should be fixed with SAIN 2.2.5.2, and it's only an issue with the debug version of BigBrain
+                //new Patches.BotStandbyBugFixPatch().Enable();
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
