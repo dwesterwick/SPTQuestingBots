@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
 using HarmonyLib;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 

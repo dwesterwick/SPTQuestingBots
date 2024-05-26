@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EFT;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Helpers
@@ -250,6 +251,22 @@ namespace SPTQuestingBots.Helpers
             {
                 return EPlayerSide.Savage;
             }
+        }
+
+        public static bool ShouldPlayerBeConsideredAsHuman(this IPlayer player)
+        {
+            if (!player.IsAI)
+            {
+                return true;
+            }
+
+            string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
+            return generatedBotIDs.Contains(player.Profile.Id);
+        }
+
+        public static bool ShouldPlayerBeConsideredAsHuman(this BotOwner bot)
+        {
+            return bot.GetPlayer.ShouldPlayerBeConsideredAsHuman();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.Components.Spawning;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -20,9 +20,8 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         private static void PatchPostfix(ref List<BotOwner> __result, BotZone zone)
         {
-            string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
-            List <BotOwner> remainingBots = __result
-                .Where(b => !generatedBotIDs.Contains(b.Profile.Id))
+            List<BotOwner> remainingBots = __result
+                .Where(b => !b.ShouldPlayerBeConsideredAsHuman())
                 .ToList();
 
             __result = remainingBots;

@@ -8,6 +8,7 @@ using Aki.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -22,6 +23,11 @@ namespace SPTQuestingBots.Patches
         private static bool PatchPrefix(BotOwner bot)
         {
             //LoggingController.LogInfo("Bot " + bot.GetText() + " died. Updating BotSpawner data...");
+
+            if (!bot.ShouldPlayerBeConsideredAsHuman())
+            {
+                return true;
+            }
 
             bot.IsDead = true;
 

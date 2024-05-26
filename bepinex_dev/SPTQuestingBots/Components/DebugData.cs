@@ -18,6 +18,10 @@ namespace SPTQuestingBots.Components
 {
     public class DebugData : MonoBehaviour
     {
+        private readonly static float markerRadius = 0.5f;
+        private static float _screenScale = 1.0f;
+        private static float _nextCheckScreenTime = 0;
+
         private Dictionary<JobAssignment, double> jobAssignmentDistances = new Dictionary<JobAssignment, double>();
         private Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
         private Dictionary<JobAssignment, OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, OverlayData>();
@@ -25,8 +29,6 @@ namespace SPTQuestingBots.Components
         private Dictionary<BotOwner, OverlayData> botPathInfo = new Dictionary<BotOwner, OverlayData>();
         private Dictionary<BotOwner, GameObject> botPathMarkers = new Dictionary<BotOwner, GameObject>();
 
-        private readonly float markerRadius = 0.5f;
-        private float screenScale = 1.0f;
         private GUIStyle guiStyle;
 
         public void RegisterBot(BotOwner bot)
@@ -285,6 +287,7 @@ namespace SPTQuestingBots.Components
                 botInfo[bot].GuiContent.text = sb.ToString();
 
                 Vector2 guiSize = guiStyle.CalcSize(botInfo[bot].GuiContent);
+                float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
@@ -343,6 +346,7 @@ namespace SPTQuestingBots.Components
                 jobAssignmentInfo[jobAssignment].GuiContent.text = jobAssignmentInfo[jobAssignment].StaticText + jobAssignmentDistances[jobAssignment];
 
                 Vector2 guiSize = guiStyle.CalcSize(jobAssignmentInfo[jobAssignment].GuiContent);
+                float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
@@ -383,6 +387,7 @@ namespace SPTQuestingBots.Components
                 botPathInfo[bot].GuiContent.text = botPathInfo[bot].StaticText;
 
                 Vector2 guiSize = guiStyle.CalcSize(botPathInfo[bot].GuiContent);
+                float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
@@ -394,12 +399,6 @@ namespace SPTQuestingBots.Components
 
         private void loadAllPossibleJobAssignments()
         {
-            // If DLSS or FSR are enabled, set a screen scale value
-            if (CameraClass.Instance.SSAA.isActiveAndEnabled)
-            {
-                screenScale = (float)CameraClass.Instance.SSAA.GetOutputWidth() / (float)CameraClass.Instance.SSAA.GetInputWidth();
-            }
-
             LoggingController.LogInfo("Loading all possible job assignments...");
 
             IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
@@ -451,6 +450,16 @@ namespace SPTQuestingBots.Components
             jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
             jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(position, markerRadius * 2, markerColor));
             jobAssignmentInfo.Add(jobAssignment, overlayData);
+        }
+
+        private static float GetScreenScale()
+        {
+            if (_nextCheckScreenTime < Time.time && CameraClass.Instance.SSAA.isActiveAndEnabled)
+            {
+                _nextCheckScreenTime = Time.time + 10f;
+                _screenScale = (float)CameraClass.Instance.SSAA.GetOutputWidth() / (float)CameraClass.Instance.SSAA.GetInputWidth();
+            }
+            return _screenScale;
         }
 
         internal class OverlayData

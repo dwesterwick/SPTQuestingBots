@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
-using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -28,8 +28,7 @@ namespace SPTQuestingBots.Patches
         {
             //LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
 
-            string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
-            __result = persons.Where(p => !p.IsAI || generatedBotIDs.Contains(p.Profile.Id));
+            __result = persons.Where(p => p.ShouldPlayerBeConsideredAsHuman());
 
             //LoggingController.LogInfo("Non-AI Players: " + string.Join(", ", __result.Select(x => x.Profile.Nickname)));
 

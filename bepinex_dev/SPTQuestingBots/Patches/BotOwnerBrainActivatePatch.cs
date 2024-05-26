@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(BotOwner __instance)
         {
             registerBot(__instance);
+
+            // Fix for bots getting stuck in Standby when enemy PMC's are near them
+            __instance.StandBy.CanDoStandBy = false;
         }
 
         private static void registerBot(BotOwner __instance)

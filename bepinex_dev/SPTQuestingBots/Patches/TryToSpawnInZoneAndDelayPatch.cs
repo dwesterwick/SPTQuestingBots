@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
 using EFT.Game.Spawning;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -21,7 +22,7 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(BotZone botZone, GClass591 data, bool withCheckMinMax, bool newWave, List<ISpawnPoint> pointsToSpawn, bool forcedSpawn)
         {
             IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.Nickname + "]");
-            //LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
+            LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
         }
     }
 }
