@@ -21,7 +21,7 @@ namespace SPTQuestingBots.Patches
         private static void PatchPostfix(ref List<BotOwner> __result, BotZone zone)
         {
             List<BotOwner> remainingBots = __result
-                .Where(b => !b.ShouldPlayerBeConsideredAsHuman())
+                .Where(b => !b.ShouldPlayerBeTreatedAsHuman())
                 .ToList();
 
             __result = remainingBots;

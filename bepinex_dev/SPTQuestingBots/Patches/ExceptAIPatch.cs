@@ -28,7 +28,7 @@ namespace SPTQuestingBots.Patches
         {
             //LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
 
-            __result = persons.Where(p => p.ShouldPlayerBeConsideredAsHuman());
+            __result = persons.Where(p => p.ShouldPlayerBeTreatedAsHuman());
 
             //LoggingController.LogInfo("Non-AI Players: " + string.Join(", ", __result.Select(x => x.Profile.Nickname)));
 

@@ -217,7 +217,6 @@
     <Compile Include="Patches\ActivateBotsByWavePatch2.cs" />
     <Compile Include="Patches\ActivateBotsByWavePatch.cs" />
     <Compile Include="Patches\AddEnemyPatch.cs" />
-    <Compile Include="Patches\BossLocationSpawnActivatePatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\BotStandbyBugFixPatch.cs" />

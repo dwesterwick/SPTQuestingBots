@@ -64,6 +64,8 @@ namespace SPTQuestingBots.Models
             {
                 if (Status == UnityEngine.AI.NavMeshPathStatus.PathInvalid)
                 {
+                    //LoggingController.LogError(bot.GetText() + " has an invalid path");
+
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.IncompletePath;
                 }

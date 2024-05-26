@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Patches
         {
             //LoggingController.LogInfo("Bot " + bot.GetText() + " died. Updating BotSpawner data...");
 
-            if (!bot.ShouldPlayerBeConsideredAsHuman())
+            if (!bot.ShouldPlayerBeTreatedAsHuman())
             {
                 return true;
             }

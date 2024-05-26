@@ -253,7 +253,7 @@ namespace SPTQuestingBots.Helpers
             }
         }
 
-        public static bool ShouldPlayerBeConsideredAsHuman(this IPlayer player)
+        public static bool ShouldPlayerBeTreatedAsHuman(this IPlayer player)
         {
             if (!player.IsAI)
             {
@@ -264,9 +264,9 @@ namespace SPTQuestingBots.Helpers
             return generatedBotIDs.Contains(player.Profile.Id);
         }
 
-        public static bool ShouldPlayerBeConsideredAsHuman(this BotOwner bot)
+        public static bool ShouldPlayerBeTreatedAsHuman(this BotOwner bot)
         {
-            return bot.GetPlayer.ShouldPlayerBeConsideredAsHuman();
+            return bot.GetPlayer.ShouldPlayerBeTreatedAsHuman();
         }
     }
 }

@@ -210,7 +210,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.quest_generation.navmesh_search_distance_spawn**: The radius (in meters) around spawn points to seach for a valid NavMesh position to use for a target location for creating a quest objective for it. If this value is too low, bots may not be able to generate a complete path to the spawn point. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **2** m by default. 
 * **questing.quest_generation.navmesh_search_distance_doors**: The radius (in meters) to search for a valid NavMesh position around the test points used for determining if a bot can unlock a door. If this value is too low, bots may not be able to unlock the door. If this value is too high, bots may generate paths into adjacent rooms or to vertical positions on different floors. This is **0.75** m by default. 
 * **questing.bot_search_distances.objective_reached_ideal**: Bots must travel within this distance (in meters) of their target objective positions for the objective to be considered successfully completed. This is **0.25** m by default. 
-* **questing.bot_search_distances.objective_reached_navmesh_path_error**: The maximum distance (in meters) that the end of a bot's calculated path can be from its target objective position before the objective is considerd unreachable. This is **20** m by default. 
+* **questing.bot_search_distances.objective_reached_navmesh_path_error**: The maximum distance (in meters) that the end of a bot's calculated path can be from its target objective position before the objective is considerd unreachable. This is **2** m by default. 
 * **questing.bot_search_distances.max_navmesh_path_error**: If a complete path cannot be generated to a bot's target objective position, it will try to get within this radius (in meters) of it anyway. This is to simulate situations like bots checking if a door is unlocked when it doesn't have the key. This is **10** m by default. 
 * **questing.bot_pathing.max_start_position_discrepancy**: The minimum distance (in meters) between the bot's position and the start of its path above which its path will be recalculated if there is a difference between its current target position and the target position for its quest. **Do not change this unless you know what you're doing!**
 * **questing.bot_pathing.incomplete_path_retry_interval**: If a bot's path to its objective is incomplete, the path will be recalculated at this interval (in seconds) until a complete path is found. This is **5** s by default.
@@ -367,16 +367,17 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.2** (ETA: Late May)
+* **0.5.2** (ETA: Late June)
+    * New AI-limiter options
     * Improvements with how Questing Bots interacts with SAIN:
         * Better transitioning between combat and questing
         * Bug fixes for bots suddenly forgetting about their enemies
         * Ability to have bots avoid quests in dangerous areas of the map
-* **0.5.3** (ETA: Early June)
+* **0.5.3** (ETA: Mid July)
     * Add new quest type: hidden-stash running
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.6.0** (ETA: Late July)
+* **0.6.0** (ETA: Early August)
     * Separate spawning system into a separate mod
 * **Backlog**
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
