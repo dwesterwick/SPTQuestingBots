@@ -108,30 +108,45 @@ namespace SPTQuestingBots.Controllers
             {
                 foreach (QuestObjective objective in quest.AllObjectives)
                 {
-                    Vector3? firstPosition = objective.GetFirstStepPosition();
-                    if (!firstPosition.HasValue)
-                    {
-                        continue;
-                    }
-
-                    // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live. 
+                    // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live.
                     // TODO: Eventually, it would be nice to keep these quests but have the bots doing them be friendly toward you until they
                     //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
-                    if ((locationId == "Lighthouse") && (firstPosition.Value.x > 120) && (firstPosition.Value.z > 325))
+                    if (locationId == "Lighthouse")
                     {
-                        if (quest.TryRemoveObjective(objective))
+                        Vector3? firstPosition = objective.GetFirstStepPosition();
+                        if (!firstPosition.HasValue)
                         {
-                            LoggingController.LogInfo("Removing quest objective on Lightkeeper island: " + objective.ToString() + " for quest " + quest.ToString());
+                            continue;
                         }
-                        else
+
+                        if (firstPosition.Value.x > 120 && firstPosition.Value.z > 325)
                         {
-                            LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective.ToString() + " for quest " + quest.ToString());
+                            if (quest.TryRemoveObjective(objective))
+                            {
+                                LoggingController.LogInfo("Removing quest objective on Lightkeeper island: " + objective + " for quest " + quest);
+                            }
+                            else
+                            {
+                                LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective + " for quest " + quest);
+                            }
                         }
 
                         // If there are no remaining objectives, remove the quest too
                         if (quest.NumberOfObjectives == 0)
                         {
-                            LoggingController.LogInfo("Removing quest on Lightkeeper island: " + quest.ToString() + "...");
+                            LoggingController.LogInfo("Removing quest on Lightkeeper island: " + quest + "...");
+                            allQuests.Remove(quest);
+                        }
+                    }
+
+                    // https://github.com/dwesterwick/SPTQuestingBots/issues/18
+                    // Disable quests that try to go to the Scav Island, pathing is broken there
+                    if (locationId == "Shoreline")
+                    {
+                        bool visitsIsland = objective.GetAllPositions().Where(p => p.HasValue).Any(position => position.Value.x > 160 && position.Value.z > 360);
+                        if (visitsIsland)
+                        {
+                            LoggingController.LogInfo("Removing quest on Shoreline's skav island: " + quest + "...");
                             allQuests.Remove(quest);
                         }
                     }
@@ -218,7 +233,7 @@ namespace SPTQuestingBots.Controllers
             IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
                 .Where(a => a.QuestAssignment == quest)
                 .Where(a => a.Status != JobAssignmentStatus.Archived);
-            
+
             return quest.AllObjectives.Where(o => !matchingAssignments.Any(a => a.QuestObjectiveAssignment == o));
         }
 
@@ -328,7 +343,7 @@ namespace SPTQuestingBots.Controllers
             }
 
             // If the bot has never been assigned a job, it should be able to do the quest
-            // TO DO: Could this return a false positive? 
+            // TO DO: Could this return a false positive?
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
                 return true;
@@ -408,7 +423,7 @@ namespace SPTQuestingBots.Controllers
             {
                 return true;
             }
-            
+
             // If the assignment hasn't been archived yet, not enough time has elapsed to repeat it
             if (!objective.IsRepeatable && matchingAssignments.Any(a => a.Status == JobAssignmentStatus.Completed))
             {
@@ -476,7 +491,7 @@ namespace SPTQuestingBots.Controllers
             if (botJobAssignments[bot.Profile.Id].Count > 0)
             {
                 BotJobAssignment currentAssignment = botJobAssignments[bot.Profile.Id].Last();
-                
+
                 // Check if the bot is currently doing an assignment
                 if (currentAssignment.IsActive)
                 {
@@ -547,7 +562,7 @@ namespace SPTQuestingBots.Controllers
                     .Where(o => o.CanAssignBot(bot))?
                     .Where(o => o.CanBotRepeatQuestObjective(bot))?
                     .NearestToBot(bot);
-                
+
                 // Exit the loop if an objective was found for the bot
                 if (objective != null)
                 {
@@ -711,7 +726,7 @@ namespace SPTQuestingBots.Controllers
         public static int NumberOfCompletedOrAchivedQuests(this BotOwner bot)
         {
             IEnumerable<BotJobAssignment> assignments = bot.GetCompletedOrAchivedQuests();
-            
+
             return assignments
                 .Distinct(a => a.QuestAssignment)
                 .Count();
@@ -720,7 +735,7 @@ namespace SPTQuestingBots.Controllers
         public static int NumberOfCompletedOrAchivedEFTQuests(this BotOwner bot)
         {
             IEnumerable<BotJobAssignment> assignments = bot.GetCompletedOrAchivedQuests();
-            
+
             return assignments
                 .Distinct(a => a.QuestAssignment)
                 .Where(a => a.QuestAssignment.IsEFTQuest)
@@ -773,7 +788,7 @@ namespace SPTQuestingBots.Controllers
                 + "_"
                 + timestamp
                 + "_quests.csv";
-            
+
             LoggingController.CreateLogFile("quest", filename, sb.ToString());
         }
 
