@@ -30,6 +30,7 @@ namespace SPTQuestingBots.Components
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
         private Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
+        private Dictionary<Door, NoPowerTip> noPowerTipsForDoors = new Dictionary<Door, NoPowerTip>();
         private float maxExfilPointDistance = 0;
 
         public bool IsScavRun => Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid;
@@ -135,6 +136,7 @@ namespace SPTQuestingBots.Components
             areLockedDoorsUnlocked.Clear();
 
             Door[] allDoors = FindObjectsOfType<Door>();
+            NoPowerTip[] allNoPowerTips = FindObjectsOfType<NoPowerTip>();
             foreach (Door door in allDoors)
             {
                 if (!door.Operatable)
@@ -155,10 +157,69 @@ namespace SPTQuestingBots.Components
                 }
 
                 areLockedDoorsUnlocked.Add(door, false);
+
+                foreach(NoPowerTip noPowerTip in allNoPowerTips)
+                {
+                    if (!doorHasNoPowerTip(door, noPowerTip))
+                    {
+                        continue;
+                    }
+
+                    noPowerTipsForDoors.Add(door, noPowerTip);
+                    LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + door.Id);
+                    break;
+                }
             }
 
             LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors");
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+        }
+
+        private bool doorHasNoPowerTip(Door door, NoPowerTip noPowerTip)
+        {
+            if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
+            {
+                LoggingController.LogWarning("Could not find collider for NoPowerTip " + noPowerTip.name);
+                return false;
+            }
+
+            // Check if the door is a keycard door
+            KeycardDoor keycardDoor = door as KeycardDoor;
+            if (keycardDoor != null)
+            {
+                // Need to expand the collider because the Saferoom keypad on Interchange isn't fully contained by the NoPowerTip for it
+                float boundsExpansion = 2.5f;
+                Bounds expandedBounds = new Bounds(collider.bounds.center, collider.bounds.size * boundsExpansion);
+
+                // Check if there is a NoPowerTip for any of the keypads for the door (but there should only be one)
+                foreach (InteractiveProxy interactiveProxy in keycardDoor.Proxies)
+                {
+                    if (expandedBounds.Contains(interactiveProxy.transform.position))
+                    {
+                        return true;
+                    }
+
+                    //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + expandedBounds.center + " with extents " + expandedBounds.extents + ") does not surround proxy of door " + door.Id + "(" + interactiveProxy.transform.position + ")");
+                }
+            }
+            else
+            {
+                // Check if the door has a handle, which is what is needed to test if it's within a NoPowerTip collider
+                Transform doorTestTransform = door.LockHandle?.transform;
+                if (doorTestTransform == null)
+                {
+                    return false;
+                }
+
+                if (collider.bounds.Contains(doorTestTransform.position))
+                {
+                    return true;
+                }
+
+                //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + collider.bounds.center + ") does not surround door " + door.Id + "(" + doorTestTransform.position + ")");
+            }
+
+            return false;
         }
 
         public IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
@@ -167,6 +228,12 @@ namespace SPTQuestingBots.Components
 
             foreach (Door door in areLockedDoorsUnlocked.Keys.ToArray())
             {
+                // Remove the door from the dictionary if it has been destroyed (namely due to Backdoor Bandit)
+                if (door == null)
+                {
+                    areLockedDoorsUnlocked.Remove(door);
+                }
+
                 // Check if the door has been unlocked since this method was previously called
                 if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
                 {
@@ -645,12 +712,41 @@ namespace SPTQuestingBots.Components
         {
             foreach (Door door in doors)
             {
-                // Ensure a player can interact with the door
-                ActionsReturnClass availableActions = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
-                if ((availableActions == null) || (availableActions.Actions.Count == 0))
+                // Ensure the door hasn't been destroyed (namely by BackdoorBandit)
+                if (door == null)
                 {
                     continue;
                 }
+
+                // Prevent the inner KIBA door from being unlocked before the outer KIBA door
+                if (door.Id == "Shopping_Mall_DesignStuff_00049")
+                {
+                    IEnumerable<bool> kibaOuterDoor = areLockedDoorsUnlocked
+                        .Where(d => d.Key.Id == "Shopping_Mall_DesignStuff_00050")
+                        .Select(d => d.Value);
+
+                    if (kibaOuterDoor.Any(v => v == false))
+                    {
+                        LoggingController.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
+                        continue;
+                    }
+                }
+
+                // Prevent doors that require power from being unlocked before the power is turned on
+                if (noPowerTipsForDoors.ContainsKey(door) && noPowerTipsForDoors[door].isActiveAndEnabled)
+                {
+                    LoggingController.LogInfo("NoPowerTip for door " + door.Id + " is still active.");
+                    continue;
+                }
+
+                // Ensure a player can interact with the door
+                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
+                if ((availableActionsResult == null) || !availableActionsResult.Actions.Any())
+                {
+                    continue;
+                }
+
+                //LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
                 Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
                 if (interactionPosition.HasValue)

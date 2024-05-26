@@ -144,5 +144,17 @@ namespace SPTQuestingBots.Helpers
 
             return true;
         }
+
+        public static bool IsSamePath(this IEnumerable<Vector3> path, IEnumerable<Vector3> other)
+        {
+            if (path.Count() != other.Count())
+            {
+                return false;
+            }
+
+            IEnumerable<bool> areElementsEqual = path.Zip(other, (first, second) => first == second);
+
+            return areElementsEqual.All(e => e == true);
+        }
     }
 }
