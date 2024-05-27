@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EFT;
 
 namespace SPTQuestingBots.Models
 {
     public class BotBrainType
     {
-        private string name;
+        public WildSpawnType SpawnType { get; private set; } = WildSpawnType.test;
+        public string Name { get; private set; } = "???";
 
         public BotBrainType(string _name)
         {
-            name = _name;
+            Name = _name;
         }
 
-        public override string ToString() => name;
+        public BotBrainType(string _name, WildSpawnType _spawnType) : this(_name)
+        {
+            SpawnType = _spawnType;
+        }
+
+        public override string ToString() => Name;
     }
 }

@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using SPTQuestingBots.Components.Spawning;
-using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
@@ -50,6 +48,11 @@ namespace SPTQuestingBots.BotLogic.Sleep
             }
 
             if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
+            {
+                return updatePreviousState(false);
+            }
+
+            if (isSleeplessBot())
             {
                 return updatePreviousState(false);
             }
@@ -136,6 +139,19 @@ namespace SPTQuestingBots.BotLogic.Sleep
 
             setNextAction(BehaviorExtensions.BotActionType.Sleep, "Sleep");
             return updatePreviousState(true);
+        }
+
+        private bool isSleeplessBot()
+        {
+            if (!QuestingBotsPluginConfig.ExceptionFlagForWildSpawnType.ContainsKey(BotOwner.Profile.Info.Settings.Role))
+            {
+                return false;
+            }
+
+            BotTypeException botTypeException = QuestingBotsPluginConfig.ExceptionFlagForWildSpawnType[BotOwner.Profile.Info.Settings.Role];
+            BotTypeException shouldBeSleepless = botTypeException & QuestingBotsPluginConfig.SleeplessBotTypes.Value;
+
+            return shouldBeSleepless > 0;
         }
     }
 }

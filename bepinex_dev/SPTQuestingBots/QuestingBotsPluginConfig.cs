@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
+using EFT;
+using SPTQuestingBots.Helpers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots
@@ -25,9 +28,21 @@ namespace SPTQuestingBots
         All = Customs | Factory | Interchange | Labs | Lighthouse | Reserve | Shoreline | Streets | Woods | GroundZero,
     }
 
+    [Flags]
+    public enum BotTypeException
+    {
+        SniperScavs = 1,
+        Rogues = 2,
+        Raiders = 4,
+        BossesAndFollowers = 8,
+
+        All = SniperScavs | Rogues | Raiders | BossesAndFollowers,
+    }
+
     public static class QuestingBotsPluginConfig
     {
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
+        public static Dictionary<WildSpawnType, BotTypeException> ExceptionFlagForWildSpawnType = new Dictionary<WildSpawnType, BotTypeException>();
 
         public static ConfigEntry<bool> QuestingEnabled;
         public static ConfigEntry<bool> SprintingEnabled;
@@ -38,6 +53,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToYou;
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
+        public static ConfigEntry<BotTypeException> SleeplessBotTypes;
 
         public static ConfigEntry<bool> ShowBotInfoOverlays;
         public static ConfigEntry<bool> ShowBotPathOverlays;
@@ -52,17 +68,8 @@ namespace SPTQuestingBots
 
         public static void BuildConfigOptions(ConfigFile Config)
         {
-            TarkovMapIDToEnum.Add("bigmap", TarkovMaps.Customs);
-            TarkovMapIDToEnum.Add("factory4_day", TarkovMaps.Factory);
-            TarkovMapIDToEnum.Add("factory4_night", TarkovMaps.Factory);
-            TarkovMapIDToEnum.Add("Interchange", TarkovMaps.Interchange);
-            TarkovMapIDToEnum.Add("laboratory", TarkovMaps.Labs);
-            TarkovMapIDToEnum.Add("Lighthouse", TarkovMaps.Lighthouse);
-            TarkovMapIDToEnum.Add("RezervBase", TarkovMaps.Reserve);
-            TarkovMapIDToEnum.Add("Shoreline", TarkovMaps.Shoreline);
-            TarkovMapIDToEnum.Add("TarkovStreets", TarkovMaps.Streets);
-            TarkovMapIDToEnum.Add("Woods", TarkovMaps.Woods);
-            TarkovMapIDToEnum.Add("Sandbox", TarkovMaps.GroundZero);
+            indexMapIDs();
+            indexWildSpawnTypeExceptions();
 
             QuestingEnabled = Config.Bind("Main", "Enable Questing",
                 true, "Allow bots to quest");
@@ -77,6 +84,8 @@ namespace SPTQuestingBots
                 true, "Allow AI to be disabled for bots that are questing");
             MapsToAllowSleepingForQuestingBots = Config.Bind("AI Limiter", "Maps to Allow AI Limiting for Bots That Are Questing",
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
+            SleeplessBotTypes = Config.Bind("AI Limiter", "Bot Types that Cannot be Disabled",
+                BotTypeException.SniperScavs | BotTypeException.Rogues, "These bot types will never be disabled by the AI limiter");
             SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You (m)",
                 200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
@@ -101,6 +110,49 @@ namespace SPTQuestingBots
                 "Custom Quest Location", new ConfigDescription("Name of the next quest location that will be stored", null, new ConfigurationManagerAttributes { Order = 2, IsAdvanced = true }));
             StoreQuestLocationKey = Config.Bind("Custom Quest Locations", "Store New Quest Location",
                 new KeyboardShortcut(KeyCode.KeypadEnter), new ConfigDescription("Store your current location as a quest location", null, new ConfigurationManagerAttributes { Order = 1, IsAdvanced = true }));
+        }
+
+        private static void indexMapIDs()
+        {
+            TarkovMapIDToEnum.Add("bigmap", TarkovMaps.Customs);
+            TarkovMapIDToEnum.Add("factory4_day", TarkovMaps.Factory);
+            TarkovMapIDToEnum.Add("factory4_night", TarkovMaps.Factory);
+            TarkovMapIDToEnum.Add("Interchange", TarkovMaps.Interchange);
+            TarkovMapIDToEnum.Add("laboratory", TarkovMaps.Labs);
+            TarkovMapIDToEnum.Add("Lighthouse", TarkovMaps.Lighthouse);
+            TarkovMapIDToEnum.Add("RezervBase", TarkovMaps.Reserve);
+            TarkovMapIDToEnum.Add("Shoreline", TarkovMaps.Shoreline);
+            TarkovMapIDToEnum.Add("TarkovStreets", TarkovMaps.Streets);
+            TarkovMapIDToEnum.Add("Woods", TarkovMaps.Woods);
+            TarkovMapIDToEnum.Add("Sandbox", TarkovMaps.GroundZero);
+        }
+
+        private static void indexWildSpawnTypeExceptions()
+        {
+            IEnumerable<BotBrainType> sniperScavBrains = Enumerable.Empty<BotBrainType>().AddSniperScavBrain();
+            IEnumerable<BotBrainType> rogueBrains = Enumerable.Empty<BotBrainType>().AddRogueBrain();
+            IEnumerable<BotBrainType> raiderBrains = Enumerable.Empty<BotBrainType>().AddRaiderBrain();
+            IEnumerable<BotBrainType> bossAndFollowerBrains = Enumerable.Empty<BotBrainType>().AddAllNormalBossAndFollowerBrains();
+
+            addBrainsToExceptions(sniperScavBrains, BotTypeException.SniperScavs);
+            addBrainsToExceptions(rogueBrains, BotTypeException.Rogues);
+            addBrainsToExceptions(raiderBrains, BotTypeException.Raiders);
+            addBrainsToExceptions(bossAndFollowerBrains, BotTypeException.BossesAndFollowers);
+        }
+
+        private static void addBrainsToExceptions(IEnumerable<BotBrainType> brainTypes, BotTypeException botTypeException)
+        {
+            foreach (BotBrainType brainType in brainTypes)
+            {
+                if (!ExceptionFlagForWildSpawnType.ContainsKey(brainType.SpawnType))
+                {
+                    ExceptionFlagForWildSpawnType.Add(brainType.SpawnType, botTypeException);
+                }
+                else
+                {
+                    ExceptionFlagForWildSpawnType[brainType.SpawnType] |= botTypeException;
+                }
+            }
         }
     }
 }

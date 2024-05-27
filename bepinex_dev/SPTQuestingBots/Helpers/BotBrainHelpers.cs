@@ -13,107 +13,107 @@ namespace SPTQuestingBots.Helpers
 
         public static IEnumerable<BotBrainType> AddTestBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("BossTest") });
+            return list.Concat(new[] { new BotBrainType("BossTest", WildSpawnType.bossTest) });
         }
 
         public static IEnumerable<BotBrainType> AddBTRBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("BTR") });
+            return list.Concat(new[] { new BotBrainType("BTR", WildSpawnType.shooterBTR) });
         }
 
         public static IEnumerable<BotBrainType> AddNormalScavBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]
             {
-                new BotBrainType("Assault"),
-                new BotBrainType("CursAssault")
+                new BotBrainType("Assault", WildSpawnType.assault),
+                new BotBrainType("CursAssault", WildSpawnType.cursedAssault)
             });
         }
 
         public static IEnumerable<BotBrainType> AddSniperScavBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Marksman") });
+            return list.Concat(new[] { new BotBrainType("Marksman", WildSpawnType.marksman) });
         }
 
         public static IEnumerable<BotBrainType> AddBloodhoundBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("ArenaFighter") });
+            return list.Concat(new[] { new BotBrainType("ArenaFighter", WildSpawnType.arenaFighter) });
         }
 
         public static IEnumerable<BotBrainType> AddCrazyScavBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Obdolbs") });
+            return list.Concat(new[] { new BotBrainType("Obdolbs", WildSpawnType.arenaFighterEvent) });
         }
 
         public static IEnumerable<BotBrainType> AddSantaBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Gifter") });
+            return list.Concat(new[] { new BotBrainType("Gifter", WildSpawnType.gifter) });
         }
 
         public static IEnumerable<BotBrainType> AddRogueBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("ExUsec") });
+            return list.Concat(new[] { new BotBrainType("ExUsec", WildSpawnType.exUsec) });
         }
 
         public static IEnumerable<BotBrainType> AddRaiderBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("PMC") });
+            return list.Concat(new[] { new BotBrainType("PMC", WildSpawnType.pmcBot) });
         }
 
         public static IEnumerable<BotBrainType> AddKnightBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Knight") });
+            return list.Concat(new[] { new BotBrainType("Knight", WildSpawnType.bossKnight) });
         }
 
         public static IEnumerable<BotBrainType> AddGoonFollowerBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]
             {
-                new BotBrainType("BigPipe"),
-                new BotBrainType("BirdEye")
+                new BotBrainType("BigPipe", WildSpawnType.followerBigPipe),
+                new BotBrainType("BirdEye", WildSpawnType.followerBirdEye)
             });
         }
 
         public static IEnumerable<BotBrainType> AddCultistBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("SectantWarrior") });
+            return list.Concat(new[] { new BotBrainType("SectantWarrior", WildSpawnType.sectantWarrior) });
         }
 
         public static IEnumerable<BotBrainType> AddCultistPriestBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("SectantPriest") });
+            return list.Concat(new[] { new BotBrainType("SectantPriest", WildSpawnType.sectantPriest) });
         }
 
         public static IEnumerable<BotBrainType> AddZryachiyBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("BossZryachiy") });
+            return list.Concat(new[] { new BotBrainType("BossZryachiy", WildSpawnType.bossZryachiy) });
         }
 
         public static IEnumerable<BotBrainType> AddZryachiyFollowerBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Fl_Zraychiy") });
+            return list.Concat(new[] { new BotBrainType("Fl_Zraychiy", WildSpawnType.followerZryachiy) });
         }
 
         public static IEnumerable<BotBrainType> AddTagillaBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Tagilla") });
+            return list.Concat(new[] { new BotBrainType("Tagilla", WildSpawnType.bossTagilla) });
         }
 
         public static IEnumerable<BotBrainType> AddKillaBrain(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Killa") });
+            return list.Concat(new[] { new BotBrainType("Killa", WildSpawnType.bossKilla) });
         }
 
         public static IEnumerable<BotBrainType> AddNormalBossBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]
             {
-                new BotBrainType("BossBully"),
-                new BotBrainType("BossSanitar"),
-                new BotBrainType("BossGluhar"),
-                new BotBrainType("BossKojaniy"),
-                new BotBrainType("BossBoar"),
-                new BotBrainType("BossKolontay")
+                new BotBrainType("BossBully", WildSpawnType.bossBully),
+                new BotBrainType("BossSanitar", WildSpawnType.bossSanitar),
+                new BotBrainType("BossGluhar", WildSpawnType.bossGluhar),
+                new BotBrainType("BossKojaniy", WildSpawnType.bossKojaniy),
+                new BotBrainType("BossBoar", WildSpawnType.bossBoar),
+                new BotBrainType("BossKolontay", WildSpawnType.bossKolontay)
             });
         }
 
@@ -121,17 +121,19 @@ namespace SPTQuestingBots.Helpers
         {
             return list.Concat(new[]
             {
-                new BotBrainType("FollowerBully"),
-                new BotBrainType("FollowerSanitar"),
-                new BotBrainType("TagillaFollower"),
-                new BotBrainType("FollowerGluharAssault"),
-                new BotBrainType("FollowerGluharProtect"),
-                new BotBrainType("FollowerGluharScout"),
-                new BotBrainType("FollowerKojaniy"),
-                new BotBrainType("BoarSniper"),
-                new BotBrainType("FlBoar"),
-                new BotBrainType("FlKlnAslt"),
-                new BotBrainType("KolonSec")
+                new BotBrainType("FollowerBully", WildSpawnType.followerBully),
+                new BotBrainType("FollowerSanitar", WildSpawnType.followerSanitar),
+                new BotBrainType("TagillaFollower", WildSpawnType.followerTagilla),
+                new BotBrainType("FollowerGluharAssault", WildSpawnType.followerGluharAssault),
+                new BotBrainType("FollowerGluharProtect", WildSpawnType.followerGluharSecurity),
+                new BotBrainType("FollowerGluharScout", WildSpawnType.followerGluharScout),
+                new BotBrainType("FollowerKojaniy", WildSpawnType.followerKojaniy),
+                new BotBrainType("BoarSniper", WildSpawnType.bossBoarSniper),
+                new BotBrainType("FlBoar", WildSpawnType.followerBoar),
+                new BotBrainType("FlBoarCl", WildSpawnType.followerBoarClose1),
+                new BotBrainType("FlBoarSt", WildSpawnType.followerBoarClose2),
+                new BotBrainType("FlKlnAslt", WildSpawnType.followerKolontayAssault),
+                new BotBrainType("KolonSec", WildSpawnType.followerKolontaySecurity)
             });
         }
 
