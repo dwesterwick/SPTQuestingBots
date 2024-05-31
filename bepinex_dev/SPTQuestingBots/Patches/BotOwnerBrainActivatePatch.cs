@@ -53,7 +53,7 @@ namespace SPTQuestingBots.Patches
                 Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
             }
 
-            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
                 LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
                 reduceBotCounts(__instance);

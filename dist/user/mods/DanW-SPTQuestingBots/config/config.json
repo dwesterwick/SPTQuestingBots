@@ -233,7 +233,25 @@
 		"spawn_retry_time": 10,
 		"delay_game_start_until_bot_gen_finishes": true,
 		"spawn_initial_bosses_first": false,
-		"advanced_eft_bot_count_management": true,
+		"advanced_eft_bot_count_management": {
+			"enabled": true,
+			"use_EFT_bot_caps": true,
+			"only_decrease_bot_caps": true,
+			"bot_cap_adjustments": {
+				"default": 0,
+				"factory4_day": 13,
+				"factory4_night": 0,
+				"bigmap": 0,
+				"woods": 0,
+				"shoreline": 0,
+				"lighthouse": 4,
+				"rezervbase": 0,
+				"interchange": 0,
+				"laboratory": 0,
+				"tarkovstreets": -4,
+				"sandbox": 0
+			}
+		},
 		"bot_cap_adjustments" : {
 			"enabled": false,
 			"min_other_bots_allowed_to_spawn": 2,

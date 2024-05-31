@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
-            RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement;
+            RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled;
 
             setMaxAliveBots();
         }

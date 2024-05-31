@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Configuration
         public bool SpawnInitialBossesFirst { get; set; } = true;
 
         [JsonProperty("advanced_eft_bot_count_management")]
-        public bool AdvancedEFTBotCountManagement { get; set; } = false;
+        public AdvancedEFTBotCountManagementConfig AdvancedEFTBotCountManagement { get; set; } = new AdvancedEFTBotCountManagementConfig();
 
         [JsonProperty("bot_cap_adjustments")]
         public BotCapAdjustmentsConfig BotCapAdjustments { get; set; } = new BotCapAdjustmentsConfig();

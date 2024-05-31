@@ -76,7 +76,7 @@ namespace SPTQuestingBots
                         new Patches.InitBossSpawnLocationPatch().Enable();
                     }
                     
-                    if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement)
+                    if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled)
                     {
                         new Patches.GetListByZonePatch().Enable();
                         new Patches.ExceptAIPatch().Enable();
