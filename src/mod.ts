@@ -194,7 +194,11 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             return;
         }
 
-        this.performFileIntegrityCheck();
+        if (!this.doesFileIntegrityCheckPass())
+        {
+            modConfig.enabled = false;
+            return;
+        }
 
         if (modConfig.debug.always_have_airdrops)
         {
@@ -522,7 +526,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         return bots;
     }
 
-    private performFileIntegrityCheck(): void
+    private doesFileIntegrityCheckPass(): boolean
     {
         const path = `${__dirname}/..`;
 
@@ -535,6 +539,15 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         {
             this.commonUtils.logWarning("Found obsolete log folder 'user\\mods\\DanW-SPTQuestingBots\\log'. Logs are now saved in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\log'.");
         }
+
+        if (this.vfs.exists(`${path}/../../../BepInEx/plugins/SPTQuestingBots.dll`))
+        {
+            this.commonUtils.logError("Please remove BepInEx/plugins/SPTQuestingBots.dll from the previous version of this mod and restart the server, or it will NOT work correctly.");
+        
+            return false;
+        }
+
+        return true;
     }
 
     private useEFTBotCaps(): void
