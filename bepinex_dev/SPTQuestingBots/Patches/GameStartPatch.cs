@@ -41,6 +41,26 @@ namespace SPTQuestingBots.Patches
 
             __result = addIterationsToWaitForBotGenerators(__result);
             LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
+
+            if (!QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            {
+                return;
+            }
+
+            FieldInfo wavesSpawnScenarioField = AccessTools.Field(typeof(LocalGame), "wavesSpawnScenario_0");
+            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
+
+            if (wavesSpawnScenario?.SpawnWaves == null)
+            {
+                LoggingController.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
+
+                return;
+            }
+
+            foreach (BotWaveDataClass wave in wavesSpawnScenario.SpawnWaves.ToArray())
+            {
+                LoggingController.LogInfo("BotWaveDataClass at " + wave.Time + "s: " + wave.BotsCount + " bots of type " + wave.WildSpawnType.ToString());
+            }
         }
 
         public static void ClearMissedWaves()

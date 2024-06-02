@@ -45,6 +45,7 @@ namespace SPTQuestingBots
         public static Dictionary<WildSpawnType, BotTypeException> ExceptionFlagForWildSpawnType = new Dictionary<WildSpawnType, BotTypeException>();
 
         public static ConfigEntry<bool> QuestingEnabled;
+        public static ConfigEntry<bool> ShowSpawnDebugMessages;
         public static ConfigEntry<bool> SprintingEnabled;
         public static ConfigEntry<int> MinSprintingDistance;
 
@@ -73,6 +74,8 @@ namespace SPTQuestingBots
 
             QuestingEnabled = Config.Bind("Main", "Enable Questing",
                 true, "Allow bots to quest");
+            ShowSpawnDebugMessages = Config.Bind("Main", "Show Debug Messages for Spawning",
+                false, new ConfigDescription("Show additional debug messages to troubleshoot spawning issues", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
             MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",

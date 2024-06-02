@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aki.Reflection.Patching;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -26,12 +27,20 @@ namespace SPTQuestingBots.Patches
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {
-                //LoggingController.LogInfo("Allowing spawn of " + wave.WildSpawnType + " bot wave...");
+                if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+                {
+                    LoggingController.LogInfo("Allowing spawn of " + wave.WildSpawnType + " bot wave...");
+                }
+
                 return true;
             }
 
             GameStartPatch.AddMissedBotWave(wave);
-            //LoggingController.LogInfo("Delaying spawn of " + wave.WildSpawnType + " bot wave...");
+
+            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            {
+                LoggingController.LogInfo("Delaying spawn of " + wave.WildSpawnType + " bot wave...");
+            }
 
             return false;
         }
