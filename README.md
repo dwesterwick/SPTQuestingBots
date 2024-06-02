@@ -370,17 +370,17 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.5.2** (ETA: Late June)
+* **0.6.1** (ETA: Late June)
     * New AI-limiter options
     * Improvements with how Questing Bots interacts with SAIN:
         * Better transitioning between combat and questing
         * Bug fixes for bots suddenly forgetting about their enemies
         * Ability to have bots avoid quests in dangerous areas of the map
-* **0.5.3** (ETA: Mid July)
+* **0.6.2** (ETA: Mid July)
     * Add new quest type: hidden-stash running
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
     * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.6.0** (ETA: Early August)
+* **0.7.0** (ETA: Early August)
     * Separate spawning system into a separate mod
 * **Backlog**
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
