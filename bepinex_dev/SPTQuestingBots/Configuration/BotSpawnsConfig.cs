@@ -24,6 +24,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("spawn_initial_bosses_first")]
         public bool SpawnInitialBossesFirst { get; set; } = true;
 
+        [JsonProperty("non_wave_bot_spawn_period_factor")]
+        public float NonWaveBotSpawnPeriodFactor { get; set; } = 1;
+
         [JsonProperty("advanced_eft_bot_count_management")]
         public AdvancedEFTBotCountManagementConfig AdvancedEFTBotCountManagement { get; set; } = new AdvancedEFTBotCountManagementConfig();
 

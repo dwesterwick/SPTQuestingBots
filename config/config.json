@@ -233,6 +233,7 @@
 		"spawn_retry_time": 10,
 		"delay_game_start_until_bot_gen_finishes": true,
 		"spawn_initial_bosses_first": false,
+		"non_wave_bot_spawn_period_factor": 3,
 		"advanced_eft_bot_count_management": {
 			"enabled": true,
 			"use_EFT_bot_caps": true,
