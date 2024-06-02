@@ -28,6 +28,9 @@ namespace SPTQuestingBots.Patches
 
             IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.Nickname + "]");
             LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
+
+            //System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+            //LoggingController.LogInfo(stackTrace.ToString());
         }
     }
 }
