@@ -131,6 +131,16 @@ namespace SPTQuestingBots.Models
             }
         }
 
+        public void SetFirstWaitTimeAfterCompleting(float time)
+        {
+            if (questObjectiveSteps.Length == 0)
+            {
+                throw new InvalidOperationException("There are no steps in the objective.");
+            }
+
+            questObjectiveSteps[0].WaitTimeAfterCompleting = time;
+        }
+
         public IEnumerable<Vector3?> GetAllPositions()
         {
             return questObjectiveSteps.Select(step => step.GetPosition());

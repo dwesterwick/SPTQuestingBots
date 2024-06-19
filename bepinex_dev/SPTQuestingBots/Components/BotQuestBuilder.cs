@@ -340,6 +340,14 @@ namespace SPTQuestingBots.Components
                     objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
                 }
 
+                float? beaconTime = quest.FindBeaconTime(trigger.Id);
+                if (beaconTime.HasValue)
+                {
+                    LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding beacon time: " + beaconTime.Value + "s");
+
+                    objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
+                }
+
                 zoneIDsInLocation.Add(trigger.Id);
             }
 

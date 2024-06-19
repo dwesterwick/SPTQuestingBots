@@ -19,12 +19,14 @@ namespace SPTQuestingBots.Helpers
         private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
+        private static Dictionary<Condition, float?> beaconTimeForCondition = new Dictionary<Condition, float?>();
 
         public static void ClearCache()
         {
             minLevelForQuest.Clear();
             allZoneIDsForCondition.Clear();
             plantTimeForCondition.Clear();
+            beaconTimeForCondition.Clear();
         }
 
         public static bool ValidateQuestFiles(string locationId)
@@ -124,17 +126,21 @@ namespace SPTQuestingBots.Helpers
 
         public static float? FindPlantTime(this Quest quest, string zoneID)
         {
-            EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
-            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
+            float? plantTime = quest.findQuestValue(zoneID, FindPlantTime);
+            if (plantTime.HasValue)
             {
-                foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
-                {
-                    float? plantTime = condition.FindPlantTime(zoneID);
-                    if (plantTime.HasValue)
-                    {
-                        return plantTime.Value;
-                    }
-                }
+                return plantTime.Value;
+            }
+
+            return null;
+        }
+
+        public static float? FindBeaconTime(this Quest quest, string zoneID)
+        {
+            float? beaconTime = quest.findQuestValue(zoneID, FindBeaconTime);
+            if (beaconTime.HasValue)
+            {
+                return beaconTime.Value;
             }
 
             return null;
@@ -295,32 +301,88 @@ namespace SPTQuestingBots.Helpers
                 }
             }
 
+            float? plantTime = condition.recursiveConditionSearch(zoneID, FindPlantTime);
+            if (plantTime.HasValue)
+            {
+                plantTimeForCondition.Add(condition, plantTime.Value);
+                return plantTime.Value;
+            }
+
+            plantTimeForCondition.Add(condition, null);
+            return null;
+        }
+
+        private static float? FindBeaconTime(this Condition condition, string zoneID)
+        {
+            if (beaconTimeForCondition.ContainsKey(condition))
+            {
+                return beaconTimeForCondition[condition];
+            }
+
+            ConditionPlaceBeacon conditionLeaveItemAtLocation = condition as ConditionPlaceBeacon;
+            if (conditionLeaveItemAtLocation?.zoneId == zoneID)
+            {
+                if (conditionLeaveItemAtLocation.plantTime > 0)
+                {
+                    beaconTimeForCondition.Add(condition, conditionLeaveItemAtLocation.plantTime);
+                    return conditionLeaveItemAtLocation.plantTime;
+                }
+            }
+
+            float? plantTime = condition.recursiveConditionSearch(zoneID, FindBeaconTime);
+            if (plantTime.HasValue)
+            {
+                beaconTimeForCondition.Add(condition, plantTime.Value);
+                return plantTime.Value;
+            }
+
+            beaconTimeForCondition.Add(condition, null);
+            return null;
+        }
+
+        private static T findQuestValue<T>(this Quest quest, string zoneID, Func<Condition, string, T> searchMethod)
+        {
+            EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
+            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
+            {
+                foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
+                {
+                    T value = searchMethod(condition, zoneID);
+                    if (value != null)
+                    {
+                        return value;
+                    }
+                }
+            }
+
+            return default(T);
+        }
+
+        private static T recursiveConditionSearch<T>(this Condition condition, string zoneID, Func<Condition, string, T> searchMethod)
+        {
             ConditionCounterCreator conditionCounterCreator = condition as ConditionCounterCreator;
             if (conditionCounterCreator != null)
             {
                 foreach (Condition childCondition in conditionCounterCreator.Conditions)
                 {
-                    float? plantTime = childCondition.FindPlantTime(zoneID);
-                    if (plantTime.HasValue)
+                    T value = searchMethod(childCondition, zoneID);
+                    if (value != null)
                     {
-                        plantTimeForCondition.Add(condition, plantTime.Value);
-                        return plantTime.Value;
+                        return value;
                     }
                 }
             }
 
             foreach (Condition childCondition in condition.ChildConditions)
             {
-                float? plantTime = childCondition.FindPlantTime(zoneID);
-                if (plantTime.HasValue)
+                T value = searchMethod(childCondition, zoneID);
+                if (value != null)
                 {
-                    plantTimeForCondition.Add(condition, plantTime.Value);
-                    return plantTime.Value;
+                    return value;
                 }
             }
 
-            plantTimeForCondition.Add(condition, null);
-            return null;
+            return default(T);
         }
     }
 }
