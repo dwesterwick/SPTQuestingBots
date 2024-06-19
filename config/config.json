@@ -170,6 +170,7 @@
 			"desirability_weighting": 1,
 			"desirability_camping_multiplier": 1,
 			"desirability_sniping_multiplier": 1,
+			"desirability_active_quest_multiplier": 1.2,
 			"exfil_direction_weighting": {
 				"default": 0,
 				"factory4_day": 0.2,

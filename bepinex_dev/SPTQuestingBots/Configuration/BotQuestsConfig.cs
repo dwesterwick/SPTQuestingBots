@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("desirability_sniping_multiplier")]
         public float DesirabilitySnipingMultiplier { get; set; } = 1;
 
+        [JsonProperty("desirability_active_quest_multiplier")]
+        public float DesirabilityActiveQuestMultiplier { get; set; } = 1;
+
         [JsonProperty("exfil_direction_weighting")]
         public Dictionary<string, float> ExfilDirectionWeighting { get; set; } = new Dictionary<string, float>();
 

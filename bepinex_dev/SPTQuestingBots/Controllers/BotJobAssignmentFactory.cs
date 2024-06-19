@@ -86,14 +86,7 @@ namespace SPTQuestingBots.Controllers
 
         public static Quest FindQuest(string questID)
         {
-            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.TemplateId == questID);
-            if (matchingQuests.Count() == 1)
-            {
-                return matchingQuests.First();
-            }
-
-            // Needed for custom quests added by some mods
-            matchingQuests = allQuests.Where(q => q.Template.Id == questID);
+            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.Template.Id == questID);
             if (matchingQuests.Count() == 1)
             {
                 return matchingQuests.First();
@@ -699,7 +692,11 @@ namespace SPTQuestingBots.Controllers
             Dictionary<Quest, double> questDistanceFractions = questDistanceRanges
                 .ToDictionary(o => o.Key, o => 1 - (o.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance);
             Dictionary<Quest, float> questDesirabilityFractions = questDistanceRanges
-                .ToDictionary(o => o.Key, o => (o.Key.Desirability + random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100);
+                .ToDictionary(o => o.Key, o => 
+                (
+                    o.Key.Desirability * (o.Key.IsActiveForPlayer ? ConfigController.Config.Questing.BotQuests.DesirabilityActiveQuestMultiplier : 1)
+                    + random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100
+                );
             Dictionary<Quest, double> questExfilAngleFactor = questExfilAngleRanges
                 .ToDictionary(o => o.Key, o => Math.Max(0, o.Value.Min - maxExfilAngle) / (180 - maxExfilAngle));
 

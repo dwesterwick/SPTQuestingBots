@@ -61,6 +61,9 @@ namespace SPTQuestingBots.Models
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
+        [JsonIgnore]
+        public bool IsActiveForPlayer { get; set; } = false;
+
         [JsonProperty("name")]
         private string name = "Unnamed Quest";
 
@@ -74,7 +77,6 @@ namespace SPTQuestingBots.Models
         private IList<Vector3> waypointPositions = null;
 
         public string Name => Template?.Name ?? name;
-        public string TemplateId => Template?.TemplateId ?? "";
         public bool IsEFTQuest => Template != null;
         
         // Return all objectives in the quest

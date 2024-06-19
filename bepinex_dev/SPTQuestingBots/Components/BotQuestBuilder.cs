@@ -8,6 +8,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using HarmonyLib;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -90,8 +91,17 @@ namespace SPTQuestingBots.Components
                     }
                 }
 
+                // Check which quests are currently active for the player
+                ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
+                QuestDataClass[] activeQuests = session.Profile.QuestsData
+                    .Where(q => q.Status == EFT.Quests.EQuestStatus.Started || q.Status == EFT.Quests.EQuestStatus.AvailableForFinish || q.Status == EFT.Quests.EQuestStatus.Success)
+                    .ToArray();
+
+                //string activeQuestNames = string.Join(", ", activeQuests.Select(q => q.Template.Name + " (" + q.Template.Id + ")"));
+                //LoggingController.LogInfo("There are " + activeQuests.Length + " active quests for the current player: " + activeQuestNames);
+
                 // Process each of the quests created by an EFT quest template
-                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest);
+                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest, activeQuests);
 
                 // Create quest objectives for all matching trigger colliders found in the map
                 enumeratorWithTimeLimit.Reset();
@@ -231,7 +241,7 @@ namespace SPTQuestingBots.Components
             LoggingController.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
 
-        private void LoadQuest(Quest quest)
+        private void LoadQuest(Quest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
         {
             quest.MaxBots = ConfigController.Config.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
 
@@ -258,7 +268,13 @@ namespace SPTQuestingBots.Components
             double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.Questing.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
             quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
 
-            //LoggingController.LogInfo("Level range for quest \"" + quest.Name + "\": " + quest.MinLevel + "-" + quest.MaxLevel);
+            quest.IsActiveForPlayer = activeQuestsForPlayer.Any(q => q.Template.Id == quest.Template.Id);
+            /*if (quest.IsActiveForPlayer)
+            {
+                LoggingController.LogInfo("Quest " + quest.Name + " is currently active for the player");
+            }*/
+
+            //LoggingController.LogInfo("Level range for quest \"" + quest.Name + " (" + quest.Template.Id + ")\": " + quest.MinLevel + "-" + quest.MaxLevel);
         }
 
         private void ProcessTrigger(TriggerWithId trigger)
