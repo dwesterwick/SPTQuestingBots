@@ -301,21 +301,8 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            // Set the target location to be in the center of the collider. If the collider is very large (i.e. for an entire building), set the
-            // target location to be just above the floor. 
-            // TO DO: This is kinda sloppy and should be fixed.
-            Vector3 triggerTargetPosition = triggerCollider.bounds.center;
-            if (triggerCollider.bounds.extents.y > 1.5f)
-            {
-                triggerTargetPosition.y = triggerCollider.bounds.min.y + 0.75f;
-                LoggingController.LogInfo("Adjusting position for zone " + trigger.Id + " to " + triggerTargetPosition.ToString());
-            }
-
-            // Determine how far to search for a valid NavMesh position from the target location. If the collider (zone) is very large, expand the search range.
-            // TO DO: This is kinda sloppy and should be fixed. 
-            float maxSearchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceZone;
-            maxSearchDistance *= triggerCollider.bounds.Volume() > 20 ? 2 : 1;
-            Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(triggerTargetPosition, maxSearchDistance);
+            // Find a suitable NavMesh point within the collider
+            Vector3? navMeshTargetPoint = findNavMeshPointForCollider(triggerCollider, trigger.Id);
             if (!navMeshTargetPoint.HasValue)
             {
                 LoggingController.LogError("Cannot find NavMesh point for trigger " + trigger.Id);
@@ -361,6 +348,47 @@ namespace SPTQuestingBots.Components
                 PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
                 Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(triggerTargetPosSphere);
             }
+        }
+
+        private Vector3? findNavMeshPointForCollider(Collider collider, string zoneName)
+        {
+            bool UseNavMeshTestPoints = true;
+            Vector3 targetPosition = collider.bounds.center;
+            float maxSearchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceZone;
+
+            if (UseNavMeshTestPoints && (collider.bounds.Volume() > Math.Pow(maxSearchDistance, 3)))
+            {
+                float density = (float)Math.Min(0.2, 5 / collider.bounds.extents.magnitude);
+
+                IEnumerable<Vector3> navMeshTestPoints = collider.bounds.GetNavMeshTestPoints(0.25f, density);
+                IList<Vector3> navMeshPoints = navMeshTestPoints.FindPointsOnNavMesh(maxSearchDistance);
+
+                LoggingController.LogInfo("Generated " + navMeshTestPoints.Count() + " test points for " + zoneName + " (" + collider.bounds.Volume() + " m3) and found " + navMeshPoints.Count + " on the NavMesh");
+
+                if (navMeshPoints.Count > 0)
+                {
+                    float minY = navMeshPoints.Min(p => p.y);
+                    return navMeshPoints.OrderBy(p => Vector3.Distance(collider.bounds.center, p) + ((p.y - minY) * 10)).First();
+                }
+            }
+
+            // This is the old algorithm and should only be used for troubleshooting
+            if (!UseNavMeshTestPoints)
+            {
+                // Set the target location to be in the center of the collider. If the collider is very large (i.e. for an entire building), set the
+                // target location to be just above the floor.
+                if (collider.bounds.extents.y > 1.5f)
+                {
+                    targetPosition.y = collider.bounds.min.y + 0.75f;
+                    LoggingController.LogInfo("Adjusting position for zone " + zoneName + " to " + targetPosition.ToString());
+                }
+
+                // Determine how far to search for a valid NavMesh position from the target location. If the collider (zone) is very large, expand the search range.
+                maxSearchDistance *= collider.bounds.Volume() > 20 ? 2 : 1;
+            }
+
+            Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(targetPosition, maxSearchDistance);
+            return navMeshTargetPoint;
         }
 
         private void updateEFTQuestObjectives(Models.Quest quest)
