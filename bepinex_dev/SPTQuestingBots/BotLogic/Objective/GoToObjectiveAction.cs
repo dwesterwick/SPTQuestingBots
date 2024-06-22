@@ -9,7 +9,6 @@ using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using UnityEngine;
 using UnityEngine.AI;
 
 namespace SPTQuestingBots.BotLogic.Objective
@@ -73,6 +72,12 @@ namespace SPTQuestingBots.BotLogic.Objective
                     ObjectiveManager.CompleteObjective();
                 }
 
+                // If a door must be opened for the objective, force the bot to open it
+                if (ObjectiveManager.DoorIDToUnlockForObjective != "")
+                {
+                    ensureRequiredDoorIsOpen();
+                }
+
                 //LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
 
                 return;
@@ -127,6 +132,17 @@ namespace SPTQuestingBots.BotLogic.Objective
                 LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a path to " + ObjectiveManager);
                 ObjectiveManager.FailObjective();
                 return false;
+            }
+
+            // Check if a door must be unlocked to complete proceed with the objective
+            if ((ObjectiveManager.DoorIDToUnlockForObjective != "") && (ObjectiveManager.BotPath.DistanceToTarget < ConfigController.Config.Questing.UnlockingDoors.SearchRadius))
+            {
+                WorldInteractiveObject doorToUnlockForObjective = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindWorldInteractiveObjectsByID(ObjectiveManager.DoorIDToUnlockForObjective);
+
+                if ((doorToUnlockForObjective != null) && (doorToUnlockForObjective.DoorState == EDoorState.Locked))
+                {
+                    ObjectiveManager.UnlockDoor(doorToUnlockForObjective);
+                }
             }
 
             if (pathStatus.Value == NavMeshPathStatus.PathComplete)
@@ -224,13 +240,13 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private bool tryFindLockedDoorToOpen(float searchDistance)
         {
-            IEnumerable<Door> lockedDoors = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
+            IEnumerable<WorldInteractiveObject> lockedDoors = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindLockedDoorsNearPosition(ObjectiveManager.Position.Value, searchDistance);
             if (!lockedDoors.Any())
             {
                 return false;
             }
 
-            Door nearestAccessibleDoor = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
+            WorldInteractiveObject nearestAccessibleDoor = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindFirstAccessibleDoor(lockedDoors, BotOwner.Position);
             if (nearestAccessibleDoor == null)
             {
                 return false;
@@ -238,6 +254,25 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.UnlockDoor(nearestAccessibleDoor);
             return true;
+        }
+
+        private void ensureRequiredDoorIsOpen()
+        {
+            WorldInteractiveObject worldInteractiveObject = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindWorldInteractiveObjectsByID(ObjectiveManager.DoorIDToUnlockForObjective);
+            if (worldInteractiveObject == null)
+            {
+                return;
+            }
+
+            if (worldInteractiveObject.DoorState != EDoorState.Shut)
+            {
+                return;
+            }
+
+            InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(EInteractionType.Open, BotOwner);
+            worldInteractiveObject.Interact(interactionResult);
+
+            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " opened door " + worldInteractiveObject.Id);
         }
     }
 }

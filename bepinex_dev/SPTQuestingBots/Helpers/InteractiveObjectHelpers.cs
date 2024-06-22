@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Helpers
 {
     public static class InteractiveObjectHelpers
     {
-        public static Item GenerateKey(this Door door)
+        public static Item GenerateKey(this WorldInteractiveObject door)
         {
             // Create an instance of the class used to generate new ID's for items
             // TO DO: Not sure if this should use false
@@ -32,7 +32,7 @@ namespace SPTQuestingBots.Helpers
             return keyItem;
         }
 
-        public static InteractionResult GetInteractionResult(this Door door, EInteractionType interactionType, BotOwner botOwner, KeyComponent key = null)
+        public static InteractionResult GetInteractionResult(this WorldInteractiveObject door, EInteractionType interactionType, BotOwner botOwner, KeyComponent key = null)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace SPTQuestingBots.Helpers
             }
         }
 
-        public static void UnlockDoor(this BotOwner botOwner, Door door, InteractionResult interactionResult)
+        public static void UnlockDoor(this BotOwner botOwner, WorldInteractiveObject door, InteractionResult interactionResult)
         {
             try
             {

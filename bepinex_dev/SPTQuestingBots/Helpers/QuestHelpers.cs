@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Helpers
 {
     public static class QuestHelpers
     {
-        private static Dictionary<string, SerializableVector3> zoneAndItemQuestPositions = new Dictionary<string, SerializableVector3>();
+        private static Dictionary<string, Configuration.ZoneAndItemPositionInfo> zoneAndItemQuestPositions = new Dictionary<string, Configuration.ZoneAndItemPositionInfo>();
         private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
@@ -155,6 +155,12 @@ namespace SPTQuestingBots.Helpers
 
         public static void LocateQuestItems(this Quest quest, IEnumerable<LootItem> allLoot)
         {
+            LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
+            if (locationData == null)
+            {
+                throw new InvalidOperationException("Cannot access location data");
+            }
+
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
             if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
             {
@@ -203,14 +209,40 @@ namespace SPTQuestingBots.Helpers
                     }
 
                     Vector3 itemPosition = itemCollider.bounds.center;
+                    string doorIDToUnlock = "";
+                    SerializableVector3 interactionPositionForDoorToUnlock = null;
                     if (zoneAndItemQuestPositions.ContainsKey(target))
                     {
-                        itemPosition = zoneAndItemQuestPositions[target].ToUnityVector3();
-                        LoggingController.LogInfo("Using override position for " + item.Item.LocalizedName());
+                        if (zoneAndItemQuestPositions[target].Position != null)
+                        {
+                            itemPosition = zoneAndItemQuestPositions[target].Position.ToUnityVector3();
+                            LoggingController.LogInfo("Using override position for " + item.Item.LocalizedName());
+                        }
+
+                        if (zoneAndItemQuestPositions[target].MustUnlockNearbyDoor)
+                        {
+                            IEnumerable<WorldInteractiveObject> matchingWorldInteractiveObjects = locationData.FindAllWorldInteractiveObjectsNearPosition(itemPosition, zoneAndItemQuestPositions[target].NearbyDoorSearchRadius);
+
+                            int matchingDoorCount = matchingWorldInteractiveObjects.Count();
+                            if (matchingDoorCount == 0)
+                            {
+                                LoggingController.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                            }
+                            if (matchingDoorCount > 1)
+                            {
+                                LoggingController.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                            }
+                            if (matchingDoorCount == 1)
+                            {
+                                doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
+                                interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
+                                LoggingController.LogInfo("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                            }
+                        }
                     }
 
                     // Try to find the nearest NavMesh position next to the quest item.
-                    Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(itemPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
+                    Vector3? navMeshTargetPoint = locationData.FindNearestNavMeshPosition(itemPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
                         LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
@@ -226,7 +258,11 @@ namespace SPTQuestingBots.Helpers
                     }
 
                     // Add an objective for the quest item using the nearest valid NavMesh position to it
-                    quest.AddObjective(new QuestItemObjective(item, navMeshTargetPoint.Value));
+                    QuestObjective newObjective = new QuestItemObjective(item, navMeshTargetPoint.Value);
+                    newObjective.DoorIDToUnlock = doorIDToUnlock;
+                    newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
+                    quest.AddObjective(newObjective);
+
                     LoggingController.LogInfo("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
                 }
             }

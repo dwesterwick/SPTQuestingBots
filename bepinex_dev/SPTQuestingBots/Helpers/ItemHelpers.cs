@@ -183,7 +183,7 @@ namespace SPTQuestingBots.Helpers
             }
         }
 
-        public static KeyComponent FindKeyComponent(this BotOwner botOwner, Door door)
+        public static KeyComponent FindKeyComponent(this BotOwner botOwner, WorldInteractiveObject door)
         {
             try
             {

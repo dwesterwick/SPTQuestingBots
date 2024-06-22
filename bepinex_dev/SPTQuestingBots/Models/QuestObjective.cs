@@ -37,6 +37,12 @@ namespace SPTQuestingBots.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public LootAfterCompleting LootAfterCompletingSetting { get; set; } = LootAfterCompleting.Force;
 
+        [JsonProperty("doorIDToUnlock")]
+        public string DoorIDToUnlock = "";
+
+        [JsonProperty("fixedPositionToUnlockDoor")]
+        public SerializableVector3 InteractionPositionToUnlockDoor = null;
+
         [JsonProperty("name")]
         private string name = "Unnamed Quest Objective";
 

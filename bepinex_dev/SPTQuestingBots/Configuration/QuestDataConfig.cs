@@ -16,9 +16,29 @@ namespace SPTQuestingBots.Configuration
         public Dictionary<string, Dictionary<string, object>> Settings { get; set; } = new Dictionary<string, Dictionary<string, object>>();
 
         [JsonProperty("zoneAndItemPositions")]
-        public Dictionary<string, SerializableVector3> ZoneAndItemPositions { get; set; } = new Dictionary<string, SerializableVector3>();
+        public Dictionary<string, ZoneAndItemPositionInfo> ZoneAndItemPositions { get; set; } = new Dictionary<string, ZoneAndItemPositionInfo>();
 
         public QuestDataConfig()
+        {
+
+        }
+    }
+
+    public class ZoneAndItemPositionInfo
+    {
+        [JsonProperty("position")]
+        public SerializableVector3 Position { get; set; } = null;
+
+        [JsonProperty("mustUnlockNearbyDoor")]
+        public bool MustUnlockNearbyDoor = false;
+
+        [JsonProperty("nearbyDoorSearchRadius")]
+        public float NearbyDoorSearchRadius = 5;
+
+        [JsonProperty("nearbyDoorInteractionPosition")]
+        public SerializableVector3 NearbyDoorInteractionPosition { get; set; } = null;
+
+        public ZoneAndItemPositionInfo()
         {
 
         }

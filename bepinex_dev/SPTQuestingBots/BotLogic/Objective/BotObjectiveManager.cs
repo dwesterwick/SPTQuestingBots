@@ -58,6 +58,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         public Vector3? LookToPosition => assignment?.LookToPosition;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
+        public string DoorIDToUnlockForObjective => assignment?.QuestObjectiveAssignment?.DoorIDToUnlock ?? "";
+        public Vector3? InteractionPositionForDoorToUnlockForObjective => assignment?.QuestObjectiveAssignment?.InteractionPositionToUnlockDoor?.ToUnityVector3();
         public bool MustUnlockDoor => assignment?.DoorToUnlock != null;
         public QuestAction CurrentQuestAction => assignment?.QuestObjectiveStepAssignment?.ActionType ?? QuestAction.Undefined;
         public double MinElapsedActionTime => assignment?.MinElapsedTime ?? 0;
@@ -284,7 +286,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             return true;
         }
 
-        public void UnlockDoor(EFT.Interactive.Door door)
+        public void UnlockDoor(EFT.Interactive.WorldInteractiveObject door)
         {
             assignment.SetDoorToUnlock(door);
         }

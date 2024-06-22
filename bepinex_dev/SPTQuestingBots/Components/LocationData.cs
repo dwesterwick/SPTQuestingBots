@@ -28,9 +28,10 @@ namespace SPTQuestingBots.Components
         private GamePlayerOwner gamePlayerOwner = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
-        private Dictionary<Door, bool> areLockedDoorsUnlocked = new Dictionary<Door, bool>();
-        private Dictionary<Door, Vector3> doorInteractionPositions = new Dictionary<Door, Vector3>();
-        private Dictionary<Door, NoPowerTip> noPowerTipsForDoors = new Dictionary<Door, NoPowerTip>();
+        private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
+        private Dictionary<WorldInteractiveObject, bool> areLockedDoorsUnlocked = new Dictionary<WorldInteractiveObject, bool>();
+        private Dictionary<WorldInteractiveObject, Vector3> doorInteractionPositions = new Dictionary<WorldInteractiveObject, Vector3>();
+        private Dictionary<WorldInteractiveObject, NoPowerTip> noPowerTipsForDoors = new Dictionary<WorldInteractiveObject, NoPowerTip>();
         private float maxExfilPointDistance = 0;
 
         public bool IsScavRun => Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid;
@@ -135,38 +136,42 @@ namespace SPTQuestingBots.Components
         {
             areLockedDoorsUnlocked.Clear();
 
-            Door[] allDoors = FindObjectsOfType<Door>();
+            WorldInteractiveObject[] allWorldInteractiveObjects = FindObjectsOfType<WorldInteractiveObject>();
             NoPowerTip[] allNoPowerTips = FindObjectsOfType<NoPowerTip>();
-            foreach (Door door in allDoors)
+            foreach (WorldInteractiveObject worldInteractiveObject in allWorldInteractiveObjects)
             {
-                if (!door.Operatable)
+                IDsForWorldInteractiveObjects.Add(worldInteractiveObject.Id, worldInteractiveObject);
+                //LoggingController.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
+
+                if (!worldInteractiveObject.Operatable)
                 {
                     //LoggingController.LogInfo("Door " + door.Id + " is inoperable");
                     continue;
                 }
 
-                if (!door.CanBeBreached && (door.KeyId == ""))
+                Door door = worldInteractiveObject as Door;
+                if ((door != null) && !door.CanBeBreached && (door.KeyId == ""))
                 {
                     //LoggingController.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
                     continue;
                 }
 
-                if (door.DoorState != EDoorState.Locked)
+                if (worldInteractiveObject.DoorState != EDoorState.Locked)
                 {
                     continue;
                 }
 
-                areLockedDoorsUnlocked.Add(door, false);
+                areLockedDoorsUnlocked.Add(worldInteractiveObject, false);
 
                 foreach(NoPowerTip noPowerTip in allNoPowerTips)
                 {
-                    if (!doorHasNoPowerTip(door, noPowerTip))
+                    if (!doorHasNoPowerTip(worldInteractiveObject, noPowerTip))
                     {
                         continue;
                     }
 
-                    noPowerTipsForDoors.Add(door, noPowerTip);
-                    LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + door.Id);
+                    noPowerTipsForDoors.Add(worldInteractiveObject, noPowerTip);
+                    LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
                     break;
                 }
             }
@@ -175,7 +180,7 @@ namespace SPTQuestingBots.Components
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 
-        private bool doorHasNoPowerTip(Door door, NoPowerTip noPowerTip)
+        private bool doorHasNoPowerTip(WorldInteractiveObject door, NoPowerTip noPowerTip)
         {
             if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
             {
@@ -222,42 +227,59 @@ namespace SPTQuestingBots.Components
             return false;
         }
 
-        public IEnumerable<Door> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
+        public WorldInteractiveObject FindWorldInteractiveObjectsByID(string id)
         {
-            Dictionary<Door, float> lockedDoorsAndDistance = new Dictionary<Door, float>();
+            if (IDsForWorldInteractiveObjects.ContainsKey(id))
+            {
+                return IDsForWorldInteractiveObjects[id];
+            }
 
-            foreach (Door door in areLockedDoorsUnlocked.Keys.ToArray())
+            return null;
+        }
+
+        public IEnumerable<WorldInteractiveObject> FindAllWorldInteractiveObjectsNearPosition(Vector3 position, float maxDistance)
+        {
+            return IDsForWorldInteractiveObjects
+                .Where(d => Vector3.Distance(position, d.Value.transform.position) < maxDistance)
+                .Select(d => d.Value);
+        }
+
+        public IEnumerable<WorldInteractiveObject> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
+        {
+            Dictionary<WorldInteractiveObject, float> lockedDoorsAndDistance = new Dictionary<WorldInteractiveObject, float>();
+
+            foreach (WorldInteractiveObject worldInteractiveObject in areLockedDoorsUnlocked.Keys.ToArray())
             {
                 // Remove the door from the dictionary if it has been destroyed (namely due to Backdoor Bandit)
-                if (door == null)
+                if (worldInteractiveObject == null)
                 {
-                    areLockedDoorsUnlocked.Remove(door);
+                    areLockedDoorsUnlocked.Remove(worldInteractiveObject);
                 }
 
                 // Check if the door has been unlocked since this method was previously called
-                if (!areLockedDoorsUnlocked[door] && (door.DoorState != EDoorState.Locked))
+                if (!areLockedDoorsUnlocked[worldInteractiveObject] && (worldInteractiveObject.DoorState != EDoorState.Locked))
                 {
-                    LoggingController.LogInfo("Door " + door.Id + " is no longer locked.");
-                    areLockedDoorsUnlocked[door] = true;
+                    LoggingController.LogInfo("Door " + worldInteractiveObject.Id + " is no longer locked.");
+                    areLockedDoorsUnlocked[worldInteractiveObject] = true;
                 }
 
                 // Check if the door is within the desired distance
-                float distance = Vector3.Distance(position, door.transform.position);
+                float distance = Vector3.Distance(position, worldInteractiveObject.transform.position);
                 if (distance > maxDistance)
                 {
                     continue;
                 }
 
                 // Check if the door is locked
-                if (stillLocked && !areLockedDoorsUnlocked[door])
+                if (stillLocked && !areLockedDoorsUnlocked[worldInteractiveObject])
                 {
-                    lockedDoorsAndDistance.Add(door, distance);
+                    lockedDoorsAndDistance.Add(worldInteractiveObject, distance);
                 }
 
                 // Check if the door is unlocked
-                if (!stillLocked && areLockedDoorsUnlocked[door])
+                if (!stillLocked && areLockedDoorsUnlocked[worldInteractiveObject])
                 {
-                    lockedDoorsAndDistance.Add(door, distance);
+                    lockedDoorsAndDistance.Add(worldInteractiveObject, distance);
                 }
             }
 
@@ -265,7 +287,7 @@ namespace SPTQuestingBots.Components
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
-        public void ReportUnlockedDoor(Door door)
+        public void ReportUnlockedDoor(WorldInteractiveObject door)
         {
             if (areLockedDoorsUnlocked.ContainsKey(door))
             {
@@ -623,7 +645,7 @@ namespace SPTQuestingBots.Components
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }
 
-        public Vector3? GetDoorInteractionPosition(Door door, Vector3 startingPosition)
+        public Vector3? GetDoorInteractionPosition(WorldInteractiveObject door, Vector3 startingPosition)
         {
             // If a cached position exists, return it
             if (doorInteractionPositions.ContainsKey(door))
@@ -708,9 +730,9 @@ namespace SPTQuestingBots.Components
             return null;
         }
 
-        public Door FindFirstAccessibleDoor(IEnumerable<Door> doors, Vector3 startingPosition)
+        public WorldInteractiveObject FindFirstAccessibleDoor(IEnumerable<WorldInteractiveObject> worldInteractiveObjects, Vector3 startingPosition)
         {
-            foreach (Door door in doors)
+            foreach (WorldInteractiveObject door in worldInteractiveObjects)
             {
                 // Ensure the door hasn't been destroyed (namely by BackdoorBandit)
                 if (door == null)

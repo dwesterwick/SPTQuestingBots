@@ -27,7 +27,7 @@ namespace SPTQuestingBots.Models
         public string BotName { get; private set; } = "???";
         public string BotNickname { get; private set; } = "???";
         public int BotLevel { get; private set; } = -1;
-        public Door DoorToUnlock { get; private set; } = null;
+        public WorldInteractiveObject DoorToUnlock { get; private set; } = null;
         public DateTime? StartTime { get; private set; } = null;
         public DateTime? EndTime { get; private set; } = null;
         public bool HasCompletePath { get; set; } = true;
@@ -145,7 +145,7 @@ namespace SPTQuestingBots.Models
             Status = JobAssignmentStatus.Archived;
         }
 
-        public void SetDoorToUnlock(Door door)
+        public void SetDoorToUnlock(WorldInteractiveObject door)
         {
             DoorToUnlock = door;
             HasCompletePath = true;

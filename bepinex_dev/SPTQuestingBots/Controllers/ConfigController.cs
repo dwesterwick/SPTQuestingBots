@@ -109,7 +109,7 @@ namespace SPTQuestingBots.Controllers
             return _settings.Settings;
         }
 
-        public static Dictionary<string, SerializableVector3> GetZoneAndItemPositions()
+        public static Dictionary<string, ZoneAndItemPositionInfo> GetZoneAndItemPositions()
         {
             string errorMessage = "Cannot retrieve positions for quest zones and items.";
             string json = GetJson("/QuestingBots/GetZoneAndItemQuestPositions", errorMessage);
