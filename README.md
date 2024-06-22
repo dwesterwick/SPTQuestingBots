@@ -343,21 +343,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
 * Some quest items or locations can't be resolved:
-    * Fortress for Capturing Outposts in Customs
-    * Scav Base for Capturing Outposts in Woods
-    * Health Resort for Capturing Outposts in Shoreline
     * Bronze pocket watch for Checking in Customs
-    * Flash drive with fake info for Bullshit in Customs
-    * Mountain Area for Return the Favor in Woods
-    * The second and third bunkers for Assessment Part 2 in Woods
-    * The satellite antenna in the USEC camp for Return the Favor in Woods
-    * The cottage area for Overpopulation in Lighthouse
-    * The main area for Assessment - Part 1 in Lighthouse
-    * The bridge for Knock-Knock in Lighthouse
-    * All locations for Long Line in Interchange
-    * The 21WS Container for Provocation in Interchange
-    * The underground depot for Safe Corridor in Reserve
-    * One of the locations for Bunker Part 2 in Reserve (not sure which)
+    * Laptop with information for Seaside Vacation in Lighthouse
 * Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations. Examples include marking the tanker at New Gas in Customs; bots will fail to find a position to mark the tanker and then nearby unlock rooms in New Gas for no reason.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.

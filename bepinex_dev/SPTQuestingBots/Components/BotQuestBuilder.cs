@@ -14,6 +14,7 @@ using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using UnityEngine;
+using static RootMotion.FinalIK.IKSolver;
 
 namespace SPTQuestingBots.Components
 {
@@ -358,17 +359,18 @@ namespace SPTQuestingBots.Components
 
             if (UseNavMeshTestPoints && (collider.bounds.Volume() > Math.Pow(maxSearchDistance, 3)))
             {
-                float density = (float)Math.Min(0.2, 5 / collider.bounds.extents.magnitude);
+                float maxDensity = 0.2f;
+                float density = (float)Math.Min(maxDensity, 5 / collider.bounds.extents.magnitude);
 
+                // Generate a 3D grid of test points in the collider's bounds and check which points are on the NavMesh
                 IEnumerable<Vector3> navMeshTestPoints = collider.bounds.GetNavMeshTestPoints(0.25f, density);
                 IList<Vector3> navMeshPoints = navMeshTestPoints.FindPointsOnNavMesh(maxSearchDistance);
 
-                LoggingController.LogInfo("Generated " + navMeshTestPoints.Count() + " test points for " + zoneName + " (" + collider.bounds.Volume() + " m3) and found " + navMeshPoints.Count + " on the NavMesh");
+                //LoggingController.LogInfo("Generated " + navMeshTestPoints.Count() + " test points for " + zoneName + " (" + collider.bounds.Volume() + " m3) and found " + navMeshPoints.Count + " on the NavMesh");
 
                 if (navMeshPoints.Count > 0)
                 {
-                    float minY = navMeshPoints.Min(p => p.y);
-                    return navMeshPoints.OrderBy(p => Vector3.Distance(collider.bounds.center, p) + ((p.y - minY) * 10)).First();
+                    return navMeshPoints.OrderBy(p => getPointCostForCollider(collider, p)).First();
                 }
             }
 
@@ -389,6 +391,27 @@ namespace SPTQuestingBots.Components
 
             Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(targetPosition, maxSearchDistance);
             return navMeshTargetPoint;
+        }
+
+        private static float getPointCostForCollider(Collider collider, Vector3 point)
+        {
+            // Initialize the cost as the distance from the center of the collider
+            float cost = Vector3.Distance(collider.bounds.center, point);
+
+            // Add an additional penalty if the point's elevation deviates from the center. The penalty should be higher if the point is
+            // above the center of the collider.
+            float heightFromCenter = point.y - collider.bounds.center.y;
+            float heightPenaltyFactor = heightFromCenter > 0 ? 10 : 3;
+            cost += Math.Abs(heightFromCenter) * heightPenaltyFactor;
+
+            // Add an additional penalty if the selected NavMesh point isn't within the collder bounds
+            if (!collider.bounds.Contains(point))
+            {
+                Vector3 closestPoint = collider.ClosestPointOnBounds(point);
+                cost += Vector3.Distance(point, closestPoint) * 50;
+            }
+
+            return cost;
         }
 
         private void updateEFTQuestObjectives(Models.Quest quest)
