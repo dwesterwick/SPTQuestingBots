@@ -16,11 +16,12 @@ namespace SPTQuestingBots.Helpers
 {
     public static class QuestHelpers
     {
+        private static Dictionary<string, SerializableVector3> zoneAndItemQuestPositions = new Dictionary<string, SerializableVector3>();
         private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
         private static Dictionary<Condition, float?> beaconTimeForCondition = new Dictionary<Condition, float?>();
-
+        
         public static void ClearCache()
         {
             minLevelForQuest.Clear();
@@ -41,6 +42,12 @@ namespace SPTQuestingBots.Helpers
 
             LoggingController.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
             return true;
+        }
+
+        public static void LoadZoneAndItemQuestPositions()
+        {
+            zoneAndItemQuestPositions = ConfigController.GetZoneAndItemPositions();
+            LoggingController.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
         }
 
         public static int GetMinLevel(this Quest quest)
@@ -195,8 +202,15 @@ namespace SPTQuestingBots.Helpers
                         continue;
                     }
 
+                    Vector3 itemPosition = itemCollider.bounds.center;
+                    if (zoneAndItemQuestPositions.ContainsKey(target))
+                    {
+                        itemPosition = zoneAndItemQuestPositions[target].ToUnityVector3();
+                        LoggingController.LogInfo("Using override position for " + item.Item.LocalizedName());
+                    }
+
                     // Try to find the nearest NavMesh position next to the quest item.
-                    Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(itemCollider.bounds.center, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
+                    Vector3? navMeshTargetPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(itemPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
                         LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());

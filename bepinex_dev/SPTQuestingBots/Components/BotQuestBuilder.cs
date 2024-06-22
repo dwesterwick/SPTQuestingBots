@@ -83,11 +83,24 @@ namespace SPTQuestingBots.Components
                     // Create quests based on the EFT quest templates loaded from the server. This may include custom quests added by mods. 
                     RawQuestClass[] allQuestTemplates = ConfigController.GetAllQuestTemplates();
 
+                    Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = ConfigController.GetEFTQuestSettings();
+                    LoggingController.LogInfo("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
+
+                    QuestHelpers.LoadZoneAndItemQuestPositions();
+
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
                         Quest quest = new Quest(questTemplate);
+                        
                         QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, ConfigController.Config.Questing.BotQuests.EFTQuests);
                         quest.PMCsOnly = true;
+                        
+                        if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
+                        {
+                            LoggingController.LogInfo("Applying override settings for quest " + quest.Name + "...");
+                            quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id]);
+                        }
+
                         BotJobAssignmentFactory.AddQuest(quest);
                     }
                 }

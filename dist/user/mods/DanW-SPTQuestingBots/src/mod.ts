@@ -1,4 +1,6 @@
 import modConfig from "../config/config.json";
+import eftQuestSettings from "../config/eftQuestSettings.json";
+import eftZoneAndItemPositions from "../config/zoneAndItemQuestPositions.json";
 import { CommonUtils } from "./CommonUtils";
 
 import type { DependencyContainer } from "tsyringe";
@@ -138,6 +140,28 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
                     return JSON.stringify({ templates: this.questHelper.getQuestsFromDb() });
                 }
             }], "GetAllQuestTemplates"
+        );
+
+        // Get override settings for EFT quests
+        staticRouterModService.registerStaticRouter(`GetEFTQuestSettings${modName}`,
+            [{
+                url: "/QuestingBots/GetEFTQuestSettings",
+                action: () => 
+                {
+                    return JSON.stringify({ settings: eftQuestSettings });
+                }
+            }], "GetEFTQuestSettings"
+        );
+
+        // Get override settings for quest zones and items
+        staticRouterModService.registerStaticRouter(`GetZoneAndItemQuestPositions${modName}`,
+            [{
+                url: "/QuestingBots/GetZoneAndItemQuestPositions",
+                action: () => 
+                {
+                    return JSON.stringify({ zoneAndItemPositions: eftZoneAndItemPositions });
+                }
+            }], "GetZoneAndItemQuestPositions"
         );
 
         // Override bot generation to include PScav conversion chance

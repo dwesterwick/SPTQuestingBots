@@ -100,6 +100,24 @@ namespace SPTQuestingBots.Controllers
             return _templates.Templates;
         }
 
+        public static Dictionary<string,Dictionary<string,object>> GetEFTQuestSettings()
+        {
+            string errorMessage = "Cannot retrieve EFT quest settings.";
+            string json = GetJson("/QuestingBots/GetEFTQuestSettings", errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _settings);
+            return _settings.Settings;
+        }
+
+        public static Dictionary<string, SerializableVector3> GetZoneAndItemPositions()
+        {
+            string errorMessage = "Cannot retrieve positions for quest zones and items.";
+            string json = GetJson("/QuestingBots/GetZoneAndItemQuestPositions", errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _positions);
+            return _positions.ZoneAndItemPositions;
+        }
+
         public static IEnumerable<Quest> GetCustomQuests(string locationID)
         {
             Quest[] standardQuests = new Quest[0];

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
@@ -14,7 +15,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
-    public class Quest
+    public class Quest : JSONObject<Quest>
     {
         [JsonProperty("repeatable")]
         public bool IsRepeatable { get; set; } = false;
