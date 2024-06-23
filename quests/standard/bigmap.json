@@ -2002,6 +2002,26 @@
                         }
                     }
                 ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "doorIDToUnlock": "custom_Garage_00011",
+                "fixedPositionToUnlockDoor" : {
+                    "x": -261.573944,
+                    "y": 0.84999454,
+                    "z": -167.1803
+                },
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -261.573944,
+                            "y": 0.84999454,
+                            "z": -167.1803
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -3491,6 +3511,66 @@
                             "x": -8.344412,
                             "y": -0.575131834,
                             "z": 38.67783
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "OLI Logistics Trunk",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "doorIDToUnlock": "custom_factoryStorageZone_00007",
+                "fixedPositionToUnlockDoor" : {
+                    "x": 343.4478,
+                    "y": 1.09565461,
+                    "z": -10.0575485
+                },
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 343.4478,
+                            "y": 1.09565461,
+                            "z": -10.0575485
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 35,
+        "name": "Giving Trunk",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "doorIDToUnlock": "custom_Garage_00003",
+                "fixedPositionToUnlockDoor" : {
+                    "x": -259.3982,
+                    "y": 0.7883575,
+                    "z": -75.15435
+                },
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -259.3982,
+                            "y": 0.7883575,
+                            "z": -75.15435
                         }
                     }
                 ]

@@ -476,12 +476,25 @@
                             "y": -2.4683075,
                             "z": -61.74488
                         }
-                    },
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "doorIDToUnlock": "woods_combined_00024",
+                "fixedPositionToUnlockDoor" : {
+                    "x": 231.960449,
+                    "y": -2.25580788,
+                    "z": -69.86198
+                },
+                "steps": [
                     {
                         "position" : {
-                            "x": 231.783539,
-                            "y": -2.2582314,
-                            "z": -69.59268
+                            "x": 231.960449,
+                            "y": -2.25580788,
+                            "z": -69.86198
                         }
                     }
                 ]
