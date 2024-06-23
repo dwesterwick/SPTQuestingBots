@@ -213,12 +213,14 @@ namespace SPTQuestingBots.Helpers
                     SerializableVector3 interactionPositionForDoorToUnlock = null;
                     if (zoneAndItemQuestPositions.ContainsKey(target))
                     {
+                        // Check if a specific position should be used for bots to get the item
                         if (zoneAndItemQuestPositions[target].Position != null)
                         {
                             itemPosition = zoneAndItemQuestPositions[target].Position.ToUnityVector3();
                             LoggingController.LogInfo("Using override position for " + item.Item.LocalizedName());
                         }
 
+                        // Check if bots should open a specific door to get the item
                         if (zoneAndItemQuestPositions[target].MustUnlockNearbyDoor)
                         {
                             IEnumerable<WorldInteractiveObject> matchingWorldInteractiveObjects = locationData.FindAllWorldInteractiveObjectsNearPosition(itemPosition, zoneAndItemQuestPositions[target].NearbyDoorSearchRadius);

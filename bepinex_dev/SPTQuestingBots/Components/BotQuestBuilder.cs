@@ -349,6 +349,14 @@ namespace SPTQuestingBots.Components
                     objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
                 }
 
+                if ((quest.Template != null) && (quest.Template.QuestType == RawQuestClass.EQuestType.Elimination))
+                {
+                    float searchTime = ConfigController.Config.Questing.BotQuests.EliminationQuestSearchTime;
+                    LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding elimination search time: " + searchTime + "s");
+
+                    objective.SetFirstWaitTimeAfterCompleting(searchTime);
+                }
+
                 zoneIDsInLocation.Add(trigger.Id);
             }
 

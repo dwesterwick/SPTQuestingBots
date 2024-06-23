@@ -45,6 +45,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("airdrop_bot_interest_time")]
         public float AirdropBotInterestTime { get; set; } = 1800;
 
+        [JsonProperty("elimination_quest_search_time")]
+        public float EliminationQuestSearchTime { get; set; } = 60;
+
         [JsonProperty("eft_quests")]
         public QuestSettingsConfig EFTQuests { get; set; } = new QuestSettingsConfig();
 

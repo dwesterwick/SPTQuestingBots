@@ -275,6 +275,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_quests.exfil_reached_min_fraction**: This value is multiplied by the maximum distance between all exfils on the map to determine the distance threshold below which bots will change their selected exfils. If a bot travels within that threshold of its selected exfil, it will choose a new exfil. This is to allow bots to travel around the map instead of gravitating toward their initially selected exfils even after they reach them. This is **0.2** by default. 
 * **questing.bot_quests.blacklisted_boss_hunter_bosses**: An array containing the names of bosses that bots doing the "Boss Hunter" quest will not be allowed to hunt.
 * **questing.bot_quests.airdrop_bot_interest_time**: The time (in seconds) after an airdop lands during which bots can go to it via an "Airdrop Chaser" quest. This is **420** s by default. 
+* **questing.bot_quests.elimination_quest_search_time**: The time (in seconds) a bot will wait before selecting another quest after reaching each objective in an elimination EFT quest. This is **60** s by default. 
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
 * **questing.bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
 * **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest.
@@ -358,22 +359,19 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.6.1** (ETA: Late June)
+* **0.6.2** (ETA: Mid July)
     * New AI-limiter options
     * Improvements with how Questing Bots interacts with SAIN:
         * Better transitioning between combat and questing
-        * Bug fixes for bots suddenly forgetting about their enemies
         * Ability to have bots avoid quests in dangerous areas of the map
-* **0.6.2** (ETA: Mid July)
+* **0.6.3** (ETA: Mid August)
     * Add new quest type: hidden-stash running
     * Add optional quest prerequisite to have at least one item in a list (i.e. a sniper rifle for sniping areas or an encoded DSP for Lighthouse)
-    * Add configuration options to overwrite default settings for EFT-based quests and their objectives
-* **0.7.0** (ETA: Early August)
+* **0.7.0** (ETA: Early September)
     * Separate spawning system into a separate mod
 * **Backlog**
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
-    * Add config option to increase the desirability of quests that you currently have
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 

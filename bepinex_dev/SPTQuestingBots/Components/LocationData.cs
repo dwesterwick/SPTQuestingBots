@@ -180,7 +180,7 @@ namespace SPTQuestingBots.Components
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 
-        private bool doorHasNoPowerTip(WorldInteractiveObject door, NoPowerTip noPowerTip)
+        private bool doorHasNoPowerTip(WorldInteractiveObject worldInteractiveObject, NoPowerTip noPowerTip)
         {
             if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
             {
@@ -189,7 +189,7 @@ namespace SPTQuestingBots.Components
             }
 
             // Check if the door is a keycard door
-            KeycardDoor keycardDoor = door as KeycardDoor;
+            KeycardDoor keycardDoor = worldInteractiveObject as KeycardDoor;
             if (keycardDoor != null)
             {
                 // Need to expand the collider because the Saferoom keypad on Interchange isn't fully contained by the NoPowerTip for it
@@ -210,7 +210,7 @@ namespace SPTQuestingBots.Components
             else
             {
                 // Check if the door has a handle, which is what is needed to test if it's within a NoPowerTip collider
-                Transform doorTestTransform = door.LockHandle?.transform;
+                Transform doorTestTransform = worldInteractiveObject.LockHandle?.transform;
                 if (doorTestTransform == null)
                 {
                     return false;
@@ -287,11 +287,11 @@ namespace SPTQuestingBots.Components
             return lockedDoorsAndDistance.OrderBy(d => d.Value).Select(d => d.Key);
         }
 
-        public void ReportUnlockedDoor(WorldInteractiveObject door)
+        public void ReportUnlockedDoor(WorldInteractiveObject worldInteractiveObject)
         {
-            if (areLockedDoorsUnlocked.ContainsKey(door))
+            if (areLockedDoorsUnlocked.ContainsKey(worldInteractiveObject))
             {
-                areLockedDoorsUnlocked[door] = true;
+                areLockedDoorsUnlocked[worldInteractiveObject] = true;
             }
         }
 
@@ -732,16 +732,16 @@ namespace SPTQuestingBots.Components
 
         public WorldInteractiveObject FindFirstAccessibleDoor(IEnumerable<WorldInteractiveObject> worldInteractiveObjects, Vector3 startingPosition)
         {
-            foreach (WorldInteractiveObject door in worldInteractiveObjects)
+            foreach (WorldInteractiveObject worldInteractiveObject in worldInteractiveObjects)
             {
                 // Ensure the door hasn't been destroyed (namely by BackdoorBandit)
-                if (door == null)
+                if (worldInteractiveObject == null)
                 {
                     continue;
                 }
 
                 // Prevent the inner KIBA door from being unlocked before the outer KIBA door
-                if (door.Id == "Shopping_Mall_DesignStuff_00049")
+                if (worldInteractiveObject.Id == "Shopping_Mall_DesignStuff_00049")
                 {
                     IEnumerable<bool> kibaOuterDoor = areLockedDoorsUnlocked
                         .Where(d => d.Key.Id == "Shopping_Mall_DesignStuff_00050")
@@ -755,14 +755,14 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Prevent doors that require power from being unlocked before the power is turned on
-                if (noPowerTipsForDoors.ContainsKey(door) && noPowerTipsForDoors[door].isActiveAndEnabled)
+                if (noPowerTipsForDoors.ContainsKey(worldInteractiveObject) && noPowerTipsForDoors[worldInteractiveObject].isActiveAndEnabled)
                 {
-                    LoggingController.LogInfo("NoPowerTip for door " + door.Id + " is still active.");
+                    LoggingController.LogInfo("NoPowerTip for door " + worldInteractiveObject.Id + " is still active.");
                     continue;
                 }
 
                 // Ensure a player can interact with the door
-                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, door);
+                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, worldInteractiveObject);
                 if ((availableActionsResult == null) || !availableActionsResult.Actions.Any())
                 {
                     continue;
@@ -770,10 +770,10 @@ namespace SPTQuestingBots.Components
 
                 //LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
-                Vector3? interactionPosition = GetDoorInteractionPosition(door, startingPosition);
+                Vector3? interactionPosition = GetDoorInteractionPosition(worldInteractiveObject, startingPosition);
                 if (interactionPosition.HasValue)
                 {
-                    return door;
+                    return worldInteractiveObject;
                 }
             }
 
