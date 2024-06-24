@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
 
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 250)
         {
-            
+
         }
 
         public override string GetName()
@@ -63,6 +63,14 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
             }
 
+            // Determine the distance from human players beyond which bots will be disabled
+            int mapSpecificHumanDistance = 1000;
+            if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id, out TarkovMaps currentMap))
+            {
+                mapSpecificHumanDistance = getMapSpecificHumanDistance(currentMap);
+            }
+            int distanceFromHumans = Math.Min(mapSpecificHumanDistance, QuestingBotsPluginConfig.SleepingMinDistanceToHumansGlobal.Value);
+
             // Check if the bot is currently allowed to quest
             if ((objectiveManager?.IsQuestingAllowed == true) || (objectiveManager?.IsInitialized == false))
             {
@@ -73,12 +81,9 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 }
 
                 // If the bot can quest and is allowed to sleep, ensure it's allowed to sleep on the current map
-                if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id, out TarkovMaps map))
+                if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(currentMap))
                 {
-                    if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(map))
-                    {
-                        return updatePreviousState(false);
-                    }
+                    return updatePreviousState(false);
                 }
             }
 
@@ -96,7 +101,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             }
 
             // If the bot is close to any of the human players, don't allow it to sleep
-            if (allPlayers.Any(p => Vector3.Distance(BotOwner.Position, p.Position) < QuestingBotsPluginConfig.SleepingMinDistanceToYou.Value))
+            if (allPlayers.Any(p => Vector3.Distance(BotOwner.Position, p.Position) < distanceFromHumans))
             {
                 return updatePreviousState(false);
             }
@@ -152,6 +157,25 @@ namespace SPTQuestingBots.BotLogic.Sleep
             BotTypeException shouldBeSleepless = botTypeException & QuestingBotsPluginConfig.SleeplessBotTypes.Value;
 
             return shouldBeSleepless > 0;
+        }
+
+        private int getMapSpecificHumanDistance(TarkovMaps map)
+        {
+            switch (map)
+            {
+                case TarkovMaps.Customs: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansCustoms.Value;
+                case TarkovMaps.Factory: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansFactory.Value; 
+                case TarkovMaps.Interchange: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansInterchange.Value;
+                case TarkovMaps.Labs: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansLabs.Value;
+                case TarkovMaps.Lighthouse: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansLighthouse.Value;
+                case TarkovMaps.Reserve: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansReserve.Value;
+                case TarkovMaps.Shoreline: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansShoreline.Value;
+                case TarkovMaps.Streets: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansStreets.Value;
+                case TarkovMaps.Woods: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansWoods.Value;
+                case TarkovMaps.GroundZero: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansGroundZero.Value;
+            }
+
+            return int.MaxValue;
         }
     }
 }

@@ -51,7 +51,17 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
-        public static ConfigEntry<int> SleepingMinDistanceToYou;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansGlobal;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansCustoms;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansFactory;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansInterchange;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansLabs;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansLighthouse;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansReserve;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansShoreline;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansStreets;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansWoods;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansGroundZero;
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
         public static ConfigEntry<BotTypeException> SleeplessBotTypes;
@@ -89,10 +99,31 @@ namespace SPTQuestingBots
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
             SleeplessBotTypes = Config.Bind("AI Limiter", "Bot Types that Cannot be Disabled",
                 BotTypeException.SniperScavs | BotTypeException.Rogues, "These bot types will never be disabled by the AI limiter");
-            SleepingMinDistanceToYou = Config.Bind("AI Limiter", "Distance from You (m)",
-                200, new ConfigDescription("AI will only be disabled if it's more than this distance from you", new AcceptableValueRange<int>(50, 1000)));
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
                 75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(25, 1000)));
+
+            SleepingMinDistanceToHumansGlobal = Config.Bind("AI Limiter", "Distance from Human Players (m)",
+                200, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player. This takes priority over the map-specific advanced settings.", new AcceptableValueRange<int>(50, 1000)));
+            SleepingMinDistanceToHumansCustoms = Config.Bind("AI Limiter", "Distance from Human Players on Customs (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Customs", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansFactory = Config.Bind("AI Limiter", "Distance from Human Players on Factory (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Factory", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansInterchange = Config.Bind("AI Limiter", "Distance from Human Players on Interchange (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Interchange", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansLabs = Config.Bind("AI Limiter", "Distance from Human Players on Labs (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Labs", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansLighthouse = Config.Bind("AI Limiter", "Distance from Human Players on Lighthouse (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Lighthouse", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansReserve = Config.Bind("AI Limiter", "Distance from Human Players on Reserve (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Reserve", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansShoreline = Config.Bind("AI Limiter", "Distance from Human Players on Shoreline (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Shoreline", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansStreets = Config.Bind("AI Limiter", "Distance from Human Players on Streets (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Streets", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansWoods = Config.Bind("AI Limiter", "Distance from Human Players on Woods (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Woods", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansGroundZero = Config.Bind("AI Limiter", "Distance from Human Players on GroundZero (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on GroundZero", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 false, "Show information about what each bot is doing");
