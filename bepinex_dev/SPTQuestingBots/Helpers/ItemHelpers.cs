@@ -22,6 +22,21 @@ namespace SPTQuestingBots.Helpers
             return (InventoryControllerClass)inventoryControllerField.GetValue(bot.GetPlayer);
         }
 
+        public static float GetMaxWeaponSightingRange(this BotOwner botOwner)
+        {
+            InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+
+            Weapon holsterWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Holster).ContainedItem as Weapon;
+            Weapon primaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.FirstPrimaryWeapon).ContainedItem as Weapon;
+            Weapon secondaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.SecondPrimaryWeapon).ContainedItem as Weapon;
+
+            float holsterWeaponSightingRange = holsterWeapon != null ? holsterWeapon.SightingRange : 0;
+            float primaryWeaponSightingRange = primaryWeapon != null ? primaryWeapon.SightingRange : 0;
+            float secondaryWeaponSightingRange = secondaryWeapon != null ? secondaryWeapon.SightingRange : 0;
+
+            return Math.Max(holsterWeaponSightingRange, Math.Max(primaryWeaponSightingRange, secondaryWeaponSightingRange));
+        }
+
         public static float HearingMultiplier(this BotOwner botOwner)
         {
             InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);

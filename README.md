@@ -155,7 +155,7 @@ The three major data structures are:
 Since normal AI Limit mods will disable bots that are questing (which will prevent them from exploring the map), this mod has its own AI Limiter with the following features:
 * AI Limiting must be explicitly enabled in the F12 menu. 
 * AI Limiting must be explicitly enabled for bots that are questing for each map. By default, questing bots will only be disabled on Streets. 
-* Bots will only be allowed to be disabled if they are beyond a certain distance (200m by default) from you
+* Bots will only be allowed to be disabled if they are beyond a certain distance (200m by default) from human players. There are individual map-specific distances that can be adjusted by enabling advanced settings in the F12 menu, but the global setting will take priority. In other words, the actual limiting distance is the minimum of the two (the map-specific value and the global value). By default, all map-specific distances are set to 1000m to avoid confusion when only the global setting is adjusted.  
 * Bots will only be allowed to be disabled if they are beyond a certain distance (75m by default) from other bots that are questing (and not disabled)
 
 **---------- Configuration Options in *config.json* ----------**
@@ -360,7 +360,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
 * **0.6.2** (ETA: Mid July)
-    * New AI-limiter options
     * Improvements with how Questing Bots interacts with SAIN:
         * Better transitioning between combat and questing
         * Ability to have bots avoid quests in dangerous areas of the map

@@ -244,6 +244,21 @@ namespace SPTQuestingBots.Components
                 .Select(d => d.Value);
         }
 
+        public IEnumerable<WorldInteractiveObject> FindAllWorldInteractiveObjectsNearPosition(Vector3 position, float maxDistance, EDoorState doorState)
+        {
+            return IDsForWorldInteractiveObjects
+                .Where(d => d.Value.DoorState == doorState)
+                .Where(d => Vector3.Distance(position, d.Value.transform.position) < maxDistance)
+                .Select(d => d.Value);
+        }
+
+        public IEnumerable<Door> FindAllDoorsNearPosition(Vector3 position, float maxDistance, EDoorState doorState)
+        {
+            return FindAllWorldInteractiveObjectsNearPosition(position, maxDistance, doorState)
+                .Where(o => o is Door)
+                .Select(o => o as Door);
+        }
+
         public IEnumerable<WorldInteractiveObject> FindLockedDoorsNearPosition(Vector3 position, float maxDistance, bool stillLocked = true)
         {
             Dictionary<WorldInteractiveObject, float> lockedDoorsAndDistance = new Dictionary<WorldInteractiveObject, float>();

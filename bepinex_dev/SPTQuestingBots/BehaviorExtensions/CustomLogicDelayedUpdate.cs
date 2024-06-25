@@ -218,9 +218,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public IEnumerable<Door> FindNearbyDoors(float distance)
         {
-            return BotOwner.CellData.CurrentDoorLinks()
-                .Select(d => d.Door)
-                .Where(d => Vector3.Distance(BotOwner.Position, d.transform.position) <= distance);
+            return Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindAllDoorsNearPosition(BotOwner.Position, distance, EDoorState.Open);
         }
 
         public bool TryLookToLastCorner()
