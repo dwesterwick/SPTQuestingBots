@@ -82,8 +82,8 @@
 			"min_health_legs": 50,
 			"max_overweight_percentage": 100,
 			"search_time_after_combat": {
-				"min": 10,
-				"max": 30
+				"min": 20,
+				"max": 45
 			},
 			"hearing_sensor": {
 				"enabled": true,

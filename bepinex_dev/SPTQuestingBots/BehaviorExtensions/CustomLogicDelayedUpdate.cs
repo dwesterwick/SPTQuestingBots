@@ -29,6 +29,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private GClass329 baseSteeringLogic = new GClass329();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
+        protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {

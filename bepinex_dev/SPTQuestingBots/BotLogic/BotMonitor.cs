@@ -109,6 +109,26 @@ namespace SPTQuestingBots.BotLogic
             return random.Next(min, max);
         }
 
+        public bool TrySetIgnoreHearing(float duration, bool value)
+        {
+            if (!canUseSAINInterop)
+            {
+                //LoggingController.LogWarning("SAIN Interop not detected");
+                return false;
+            }
+
+            if (!SAIN.Plugin.SAINInterop.IgnoreHearing(botOwner, value, false, duration))
+            {
+                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
+
+                return false;
+            }
+
+            LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+
+            return true;
+        }
+
         public bool WantsToUseStationaryWeapon()
         {
             if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
