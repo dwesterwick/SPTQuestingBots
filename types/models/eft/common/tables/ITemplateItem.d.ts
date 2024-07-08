@@ -1,11 +1,11 @@
-import { Ixyz } from "@spt-aki/models/eft/common/Ixyz";
+import { Ixyz } from "@spt/models/eft/common/Ixyz";
 export interface ITemplateItem {
     _id: string;
     _name: string;
     _parent: string;
-    _type: string;
+    _type: ItemType;
     _props: Props;
-    _proto: string;
+    _proto?: string;
 }
 export interface Props {
     AllowSpawnOnLocations?: any[];
@@ -37,6 +37,7 @@ export interface Props {
     IsUngivable?: boolean;
     IsUnremovable?: boolean;
     IsLockedafterEquip?: boolean;
+    IsRagfairCurrency?: boolean;
     IsSpecialSlotOnly?: boolean;
     IsStationaryWeapon?: boolean;
     QuestItem?: boolean;
@@ -63,6 +64,7 @@ export interface Props {
     DiscardingBlock?: boolean;
     DropSoundType?: string;
     RagFairCommissionModifier?: number;
+    RarityPvE?: string;
     IsAlwaysAvailableForInsurance?: boolean;
     DiscardLimit?: number;
     MaxResource?: number;
@@ -352,7 +354,8 @@ export interface Props {
     casingMass?: number;
     casingSounds?: string;
     ProjectileCount?: number;
-    PenetrationChance?: number;
+    PenetrationChanceObstacle?: number;
+    PenetrationDamageMod?: number;
     RicochetChance?: number;
     FragmentationChance?: number;
     Deterioration?: number;
@@ -412,6 +415,12 @@ export interface Props {
     LayoutName?: string;
     Lower75Prefab?: Prefab;
     MaxUsages?: number;
+    ScavKillExpPenalty?: number;
+    ScavKillExpPenaltyPVE?: number;
+    ScavKillStandingPenalty?: number;
+    ScavKillStandingPenaltyPVE?: number;
+    TradersDiscount?: number;
+    TradersDiscountPVE?: number;
 }
 export interface IHealthEffect {
     type: string;
@@ -526,4 +535,8 @@ export interface IShotsGroupSettings {
     ShotRecoilRadianRange: Ixyz;
     ShotRecoilRotationStrength: Ixyz;
     StartShotIndex: number;
+}
+export declare enum ItemType {
+    NODE = "Node",
+    ITEM = "Item"
 }

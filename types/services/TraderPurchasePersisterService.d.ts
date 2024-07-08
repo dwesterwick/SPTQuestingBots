@@ -1,11 +1,11 @@
-import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import { TraderPurchaseData } from "@spt-aki/models/eft/profile/IAkiProfile";
-import { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import { TraderPurchaseData } from "@spt/models/eft/profile/ISptProfile";
+import { ITraderConfig } from "@spt/models/spt/config/ITraderConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { RandomUtil } from "@spt/utils/RandomUtil";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 /**
  * Help with storing limited item purchases from traders in profile to persist them over server restarts
  */
@@ -24,7 +24,7 @@ export declare class TraderPurchasePersisterService {
      * @param traderId Trader to loop up purchases for
      * @returns Dict of assort id and count purchased
      */
-    getProfileTraderPurchases(sessionId: string, traderId: string): Record<string, TraderPurchaseData>;
+    getProfileTraderPurchases(sessionId: string, traderId: string): Record<string, TraderPurchaseData> | undefined;
     /**
      * Get a purchase made from a trader for requested profile before the last trader reset
      * @param sessionId Session id
@@ -32,7 +32,7 @@ export declare class TraderPurchasePersisterService {
      * @param assortId Id of assort to get data for
      * @returns TraderPurchaseData
      */
-    getProfileTraderPurchase(sessionId: string, traderId: string, assortId: string): TraderPurchaseData;
+    getProfileTraderPurchase(sessionId: string, traderId: string, assortId: string): TraderPurchaseData | undefined;
     /**
      * Remove all trader purchase records from all profiles that exist
      * @param traderId Traders id

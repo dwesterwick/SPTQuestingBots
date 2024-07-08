@@ -1,26 +1,26 @@
-import { OnLoad } from "@spt-aki/di/OnLoad";
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
-import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { IPreset } from "@spt-aki/models/eft/common/IGlobals";
-import { HandbookItem } from "@spt-aki/models/eft/common/tables/IHandbookBase";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { IBarterScheme } from "@spt-aki/models/eft/common/tables/ITrader";
-import { IRagfairConfig, IUnreasonableModPrices } from "@spt-aki/models/spt/config/IRagfairConfig";
-import { IRagfairServerPrices } from "@spt-aki/models/spt/ragfair/IRagfairServerPrices";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { OnLoad } from "@spt/di/OnLoad";
+import { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PresetHelper } from "@spt/helpers/PresetHelper";
+import { TraderHelper } from "@spt/helpers/TraderHelper";
+import { MinMax } from "@spt/models/common/MinMax";
+import { IPreset } from "@spt/models/eft/common/IGlobals";
+import { HandbookItem } from "@spt/models/eft/common/tables/IHandbookBase";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IBarterScheme } from "@spt/models/eft/common/tables/ITrader";
+import { IRagfairConfig, IUnreasonableModPrices } from "@spt/models/spt/config/IRagfairConfig";
+import { IRagfairServerPrices } from "@spt/models/spt/ragfair/IRagfairServerPrices";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 /**
  * Stores flea prices for items as well as methods to interact with them
  */
 export declare class RagfairPriceService implements OnLoad {
     protected handbookHelper: HandbookHelper;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected logger: ILogger;
     protected itemHelper: ItemHelper;
     protected presetHelper: PresetHelper;
@@ -29,10 +29,8 @@ export declare class RagfairPriceService implements OnLoad {
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
     protected ragfairConfig: IRagfairConfig;
-    protected generatedDynamicPrices: boolean;
-    protected generatedStaticPrices: boolean;
     protected prices: IRagfairServerPrices;
-    constructor(handbookHelper: HandbookHelper, databaseServer: DatabaseServer, logger: ILogger, itemHelper: ItemHelper, presetHelper: PresetHelper, traderHelper: TraderHelper, randomUtil: RandomUtil, localisationService: LocalisationService, configServer: ConfigServer);
+    constructor(handbookHelper: HandbookHelper, databaseService: DatabaseService, logger: ILogger, itemHelper: ItemHelper, presetHelper: PresetHelper, traderHelper: TraderHelper, randomUtil: RandomUtil, localisationService: LocalisationService, configServer: ConfigServer);
     /**
      * Generate static (handbook) and dynamic (prices.json) flea prices, store inside class as dictionaries
      */
@@ -41,11 +39,11 @@ export declare class RagfairPriceService implements OnLoad {
     /**
      * Iterate over all items of type "Item" in db and get template price, store in cache
      */
-    generateStaticPrices(): void;
+    refreshStaticPrices(): void;
     /**
-     * Create a dictionary and store prices from prices.json in it
+     * Copy the prices.json data into our dynamic price dictionary
      */
-    protected generateDynamicPrices(): void;
+    refreshDynamicPrices(): void;
     /**
      * Get the dynamic price for an item. If value doesn't exist, use static (handbook) value.
      * if no static value, return 1
@@ -61,7 +59,6 @@ export declare class RagfairPriceService implements OnLoad {
     getFleaPriceForOfferItems(offerItems: Item[]): number;
     /**
      * get the dynamic (flea) price for an item
-     * Grabs prices from prices.json and stores in class if none currently exist
      * @param itemTpl item template id to look up
      * @returns price in roubles
      */
@@ -74,6 +71,7 @@ export declare class RagfairPriceService implements OnLoad {
     getStaticPriceForItem(itemTpl: string): number;
     /**
      * Get prices for all items on flea, prioritize handbook prices first, use prices from prices.json if missing
+     * This will refresh the caches prior to building the output
      * @returns Dictionary of item tpls and rouble cost
      */
     getAllFleaPrices(): Record<string, number>;
@@ -99,6 +97,15 @@ export declare class RagfairPriceService implements OnLoad {
      * @returns cost of item in desired currency
      */
     getDynamicOfferPriceForOffer(offerItems: Item[], desiredCurrency: string, isPackOffer: boolean): number;
+    /**
+     * @param itemTemplateId items tpl value
+     * @param desiredCurrency Currency to return result in
+     * @param item Item object (used for weapon presets)
+     * @param offerItems
+     * @param isPackOffer
+     * @returns
+     */
+    getDynamicItemPrice(itemTemplateId: string, desiredCurrency: string, item?: Item, offerItems?: Item[], isPackOffer?: boolean): number;
     /**
      * using data from config, adjust an items price to be relative to its handbook price
      * @param handbookPrices Prices of items in handbook

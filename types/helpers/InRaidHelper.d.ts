@@ -1,30 +1,29 @@
-import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
-import { QuestHelper } from "@spt-aki/helpers/QuestHelper";
-import { IPmcData, IPostRaidPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { IQuestStatus, TraderInfo } from "@spt-aki/models/eft/common/tables/IBotBase";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { ISaveProgressRequestData } from "@spt-aki/models/eft/inRaid/ISaveProgressRequestData";
-import { IInRaidConfig } from "@spt-aki/models/spt/config/IInRaidConfig";
-import { ILostOnDeathConfig } from "@spt-aki/models/spt/config/ILostOnDeathConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { SaveServer } from "@spt-aki/servers/SaveServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { ProfileFixerService } from "@spt-aki/services/ProfileFixerService";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
-import { ProfileHelper } from "./ProfileHelper";
+import { InventoryHelper } from "@spt/helpers/InventoryHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PaymentHelper } from "@spt/helpers/PaymentHelper";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import { QuestHelper } from "@spt/helpers/QuestHelper";
+import { IPmcData, IPostRaidPmcData } from "@spt/models/eft/common/IPmcData";
+import { IQuestStatus, TraderInfo } from "@spt/models/eft/common/tables/IBotBase";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { ISaveProgressRequestData } from "@spt/models/eft/inRaid/ISaveProgressRequestData";
+import { IInRaidConfig } from "@spt/models/spt/config/IInRaidConfig";
+import { ILostOnDeathConfig } from "@spt/models/spt/config/ILostOnDeathConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { SaveServer } from "@spt/servers/SaveServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { ProfileFixerService } from "@spt/services/ProfileFixerService";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { RandomUtil } from "@spt/utils/RandomUtil";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 export declare class InRaidHelper {
     protected logger: ILogger;
     protected timeUtil: TimeUtil;
     protected saveServer: SaveServer;
-    protected jsonUtil: JsonUtil;
     protected itemHelper: ItemHelper;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected inventoryHelper: InventoryHelper;
     protected profileHelper: ProfileHelper;
     protected questHelper: QuestHelper;
@@ -33,20 +32,21 @@ export declare class InRaidHelper {
     protected profileFixerService: ProfileFixerService;
     protected configServer: ConfigServer;
     protected randomUtil: RandomUtil;
+    protected cloner: ICloner;
     protected lostOnDeathConfig: ILostOnDeathConfig;
     protected inRaidConfig: IInRaidConfig;
-    constructor(logger: ILogger, timeUtil: TimeUtil, saveServer: SaveServer, jsonUtil: JsonUtil, itemHelper: ItemHelper, databaseServer: DatabaseServer, inventoryHelper: InventoryHelper, profileHelper: ProfileHelper, questHelper: QuestHelper, paymentHelper: PaymentHelper, localisationService: LocalisationService, profileFixerService: ProfileFixerService, configServer: ConfigServer, randomUtil: RandomUtil);
+    constructor(logger: ILogger, timeUtil: TimeUtil, saveServer: SaveServer, itemHelper: ItemHelper, databaseService: DatabaseService, inventoryHelper: InventoryHelper, profileHelper: ProfileHelper, questHelper: QuestHelper, paymentHelper: PaymentHelper, localisationService: LocalisationService, profileFixerService: ProfileFixerService, configServer: ConfigServer, randomUtil: RandomUtil, cloner: ICloner);
     /**
      * Lookup quest item loss from lostOnDeath config
      * @returns True if items should be removed from inventory
      */
-    removeQuestItemsOnDeath(): boolean;
+    shouldQuestItemsBeRemovedOnDeath(): boolean;
     /**
      * Check items array and add an upd object to money with a stack count of 1
      * Single stack money items have no upd object and thus no StackObjectsCount, causing issues
      * @param items Items array to check
      */
-    addUpdToMoneyFromRaid(items: Item[]): void;
+    addStackCountToMoneyFromRaid(items: Item[]): void;
     /**
      * Reset a profile to a baseline, used post-raid
      * Reset points earned during session property
@@ -86,6 +86,7 @@ export declare class InRaidHelper {
      * @param postRaidProfile Profile sent by client with post-raid quests
      */
     protected processAlteredQuests(sessionId: string, pmcData: IPmcData, preRaidQuests: IQuestStatus[], postRaidProfile: IPostRaidPmcData): void;
+    protected handleFailRestartableQuestStatus(pmcData: IPmcData, postRaidProfile: IPostRaidPmcData, postRaidQuest: IQuestStatus): void;
     /**
      * Take body part effects from client profile and apply to server profile
      * @param saveProgressRequest post-raid request

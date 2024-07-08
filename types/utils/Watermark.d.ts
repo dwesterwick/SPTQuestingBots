@@ -1,7 +1,7 @@
-import { ICoreConfig } from "@spt-aki/models/spt/config/ICoreConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
+import { ICoreConfig } from "@spt/models/spt/config/ICoreConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { LocalisationService } from "@spt/services/LocalisationService";
 export declare class WatermarkLocale {
     protected localisationService: LocalisationService;
     protected description: string[];
@@ -16,11 +16,11 @@ export declare class Watermark {
     protected logger: ILogger;
     protected configServer: ConfigServer;
     protected localisationService: LocalisationService;
-    protected watermarkLocale?: WatermarkLocale;
-    protected akiConfig: ICoreConfig;
+    protected watermarkLocale: WatermarkLocale;
+    protected sptConfig: ICoreConfig;
     protected text: string[];
     protected versionLabel: string;
-    constructor(logger: ILogger, configServer: ConfigServer, localisationService: LocalisationService, watermarkLocale?: WatermarkLocale);
+    constructor(logger: ILogger, configServer: ConfigServer, localisationService: LocalisationService, watermarkLocale: WatermarkLocale);
     initialize(): void;
     /**
      * Get a version string (x.x.x) or (x.x.x-BLEEDINGEDGE) OR (X.X.X (18xxx))

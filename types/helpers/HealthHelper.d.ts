@@ -1,33 +1,33 @@
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { ISyncHealthRequestData } from "@spt-aki/models/eft/health/ISyncHealthRequestData";
-import { Effects, IAkiProfile } from "@spt-aki/models/eft/profile/IAkiProfile";
-import { IHealthConfig } from "@spt-aki/models/spt/config/IHealthConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { SaveServer } from "@spt-aki/servers/SaveServer";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { ISyncHealthRequestData } from "@spt/models/eft/health/ISyncHealthRequestData";
+import { Effects, ISptProfile } from "@spt/models/eft/profile/ISptProfile";
+import { IHealthConfig } from "@spt/models/spt/config/IHealthConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { SaveServer } from "@spt/servers/SaveServer";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 export declare class HealthHelper {
-    protected jsonUtil: JsonUtil;
     protected logger: ILogger;
     protected timeUtil: TimeUtil;
     protected saveServer: SaveServer;
     protected configServer: ConfigServer;
+    protected cloner: ICloner;
     protected healthConfig: IHealthConfig;
-    constructor(jsonUtil: JsonUtil, logger: ILogger, timeUtil: TimeUtil, saveServer: SaveServer, configServer: ConfigServer);
+    constructor(logger: ILogger, timeUtil: TimeUtil, saveServer: SaveServer, configServer: ConfigServer, cloner: ICloner);
     /**
      * Resets the profiles vitality/health and vitality/effects properties to their defaults
      * @param sessionID Session Id
      * @returns updated profile
      */
-    resetVitality(sessionID: string): IAkiProfile;
+    resetVitality(sessionID: string): ISptProfile;
     /**
-     * Update player profile with changes from request object
+     * Update player profile vitality values with changes from client request object
      * @param pmcData Player profile
      * @param request Heal request
      * @param sessionID Session id
-     * @param addEffects Should effects be added or removed (default - add)
-     * @param deleteExistingEffects Should all prior effects be removed before apply new ones
+     * @param addEffects Should effects be added to profile (default - true)
+     * @param deleteExistingEffects Should all prior effects be removed before apply new ones  (default - true)
      */
     saveVitality(pmcData: IPmcData, request: ISyncHealthRequestData, sessionID: string, addEffects?: boolean, deleteExistingEffects?: boolean): void;
     /**

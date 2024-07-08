@@ -1,43 +1,33 @@
-import { ContainerHelper } from "@spt-aki/helpers/ContainerHelper";
-import { DialogueHelper } from "@spt-aki/helpers/DialogueHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
-import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
-import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import { TraderAssortHelper } from "@spt-aki/helpers/TraderAssortHelper";
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { Inventory } from "@spt-aki/models/eft/common/tables/IBotBase";
-import { Item, Upd } from "@spt-aki/models/eft/common/tables/IItem";
-import { IAddItemDirectRequest } from "@spt-aki/models/eft/inventory/IAddItemDirectRequest";
-import { AddItem } from "@spt-aki/models/eft/inventory/IAddItemRequestData";
-import { IAddItemTempObject } from "@spt-aki/models/eft/inventory/IAddItemTempObject";
-import { IAddItemsDirectRequest } from "@spt-aki/models/eft/inventory/IAddItemsDirectRequest";
-import { IInventoryMergeRequestData } from "@spt-aki/models/eft/inventory/IInventoryMergeRequestData";
-import { IInventoryMoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryMoveRequestData";
-import { IInventoryRemoveRequestData } from "@spt-aki/models/eft/inventory/IInventoryRemoveRequestData";
-import { IInventorySplitRequestData } from "@spt-aki/models/eft/inventory/IInventorySplitRequestData";
-import { IInventoryTransferRequestData } from "@spt-aki/models/eft/inventory/IInventoryTransferRequestData";
-import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
-import { IInventoryConfig, RewardDetails } from "@spt-aki/models/spt/config/IInventoryConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { FenceService } from "@spt-aki/services/FenceService";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-export interface IOwnerInventoryItems {
-    /** Inventory items from source */
-    from: Item[];
-    /** Inventory items at destination */
-    to: Item[];
-    sameInventory: boolean;
-    isMail: boolean;
-}
+import { ContainerHelper } from "@spt/helpers/ContainerHelper";
+import { DialogueHelper } from "@spt/helpers/DialogueHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PaymentHelper } from "@spt/helpers/PaymentHelper";
+import { PresetHelper } from "@spt/helpers/PresetHelper";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import { TraderAssortHelper } from "@spt/helpers/TraderAssortHelper";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { Inventory } from "@spt/models/eft/common/tables/IBotBase";
+import { Item, Upd } from "@spt/models/eft/common/tables/IItem";
+import { IAddItemDirectRequest } from "@spt/models/eft/inventory/IAddItemDirectRequest";
+import { IAddItemsDirectRequest } from "@spt/models/eft/inventory/IAddItemsDirectRequest";
+import { IInventoryMergeRequestData } from "@spt/models/eft/inventory/IInventoryMergeRequestData";
+import { IInventoryMoveRequestData } from "@spt/models/eft/inventory/IInventoryMoveRequestData";
+import { IInventoryRemoveRequestData } from "@spt/models/eft/inventory/IInventoryRemoveRequestData";
+import { IInventorySplitRequestData } from "@spt/models/eft/inventory/IInventorySplitRequestData";
+import { IInventoryTransferRequestData } from "@spt/models/eft/inventory/IInventoryTransferRequestData";
+import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
+import { IInventoryConfig, RewardDetails } from "@spt/models/spt/config/IInventoryConfig";
+import { IOwnerInventoryItems } from "@spt/models/spt/inventory/IOwnerInventoryItems";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { DatabaseServer } from "@spt/servers/DatabaseServer";
+import { FenceService } from "@spt/services/FenceService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 export declare class InventoryHelper {
     protected logger: ILogger;
-    protected jsonUtil: JsonUtil;
     protected hashUtil: HashUtil;
     protected httpResponse: HttpResponseUtil;
     protected fenceService: FenceService;
@@ -51,8 +41,9 @@ export declare class InventoryHelper {
     protected presetHelper: PresetHelper;
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
+    protected cloner: ICloner;
     protected inventoryConfig: IInventoryConfig;
-    constructor(logger: ILogger, jsonUtil: JsonUtil, hashUtil: HashUtil, httpResponse: HttpResponseUtil, fenceService: FenceService, databaseServer: DatabaseServer, paymentHelper: PaymentHelper, traderAssortHelper: TraderAssortHelper, dialogueHelper: DialogueHelper, itemHelper: ItemHelper, containerHelper: ContainerHelper, profileHelper: ProfileHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer);
+    constructor(logger: ILogger, hashUtil: HashUtil, httpResponse: HttpResponseUtil, fenceService: FenceService, databaseServer: DatabaseServer, paymentHelper: PaymentHelper, traderAssortHelper: TraderAssortHelper, dialogueHelper: DialogueHelper, itemHelper: ItemHelper, containerHelper: ContainerHelper, profileHelper: ProfileHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer, cloner: ICloner);
     /**
      * Add multiple items to player stash (assuming they all fit)
      * @param sessionId Session id
@@ -113,19 +104,12 @@ export declare class InventoryHelper {
      * Find a location to place an item into inventory and place it
      * @param stashFS2D 2-dimensional representation of the container slots
      * @param sortingTableFS2D 2-dimensional representation of the sorting table slots
-     * @param itemWithChildren Item to place
-     * @param playerInventory
+     * @param itemWithChildren Item to place with children
+     * @param playerInventory Players inventory
      * @param useSortingTable Should sorting table to be used if main stash has no space
      * @param output output to send back to client
      */
     protected placeItemInInventory(stashFS2D: number[][], sortingTableFS2D: number[][], itemWithChildren: Item[], playerInventory: Inventory, useSortingTable: boolean, output: IItemEventRouterResponse): void;
-    /**
-     * Split an items stack size based on its StackMaxSize value
-     * @param assortItems Items to add to inventory
-     * @param requestItem Details of purchased item to add to inventory
-     * @param result Array split stacks are appended to
-     */
-    protected splitStackIntoSmallerChildStacks(assortItems: Item[], requestItem: AddItem, result: IAddItemTempObject[]): void;
     /**
      * Handle Remove event
      * Remove item from player inventory + insured items array
@@ -161,6 +145,14 @@ export declare class InventoryHelper {
      * @returns [width, height]
      */
     getItemSize(itemTpl: string, itemID: string, inventoryItems: Item[]): number[];
+    /**
+     * Calculates the size of an item including attachements
+     * takes into account if item is folded
+     * @param itemTpl Items template id
+     * @param itemID Items id
+     * @param inventoryItemHash Hashmap of inventory items
+     * @returns An array representing the [width, height] of the item
+     */
     protected getSizeByInventoryItemHash(itemTpl: string, itemID: string, inventoryItemHash: InventoryHelper.InventoryItemHash): number[];
     /**
      * Get a blank two-dimentional representation of a container
@@ -220,17 +212,17 @@ export declare class InventoryHelper {
      */
     protected getStashType(sessionID: string): string;
     /**
-     * Internal helper function to transfer an item from one profile to another.
-     * @param fromItems Inventory of the source (can be non-player)
+     * Internal helper function to transfer an item + children from one profile to another.
+     * @param sourceItems Inventory of the source (can be non-player)
      * @param toItems Inventory of the destination
-     * @param body Move request
+     * @param request Move request
      */
-    moveItemToProfile(fromItems: Item[], toItems: Item[], body: IInventoryMoveRequestData): void;
+    moveItemToProfile(sourceItems: Item[], toItems: Item[], request: IInventoryMoveRequestData): void;
     /**
      * Internal helper function to move item within the same profile_f.
      * @param pmcData profile to edit
      * @param inventoryItems
-     * @param moveRequest
+     * @param moveRequest client move request
      * @returns True if move was successful
      */
     moveItemInternal(pmcData: IPmcData, inventoryItems: Item[], moveRequest: IInventoryMoveRequestData): {
@@ -246,7 +238,7 @@ export declare class InventoryHelper {
     /**
      * Internal helper function to handle cartridges in inventory if any of them exist.
      */
-    protected handleCartridges(items: Item[], body: IInventoryMoveRequestData): void;
+    protected handleCartridges(items: Item[], request: IInventoryMoveRequestData): void;
     /**
      * Get details for how a random loot container should be handled, max rewards, possible reward tpls
      * @param itemTpl Container being opened

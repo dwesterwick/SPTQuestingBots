@@ -1,30 +1,30 @@
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PaymentHelper } from "@spt-aki/helpers/PaymentHelper";
-import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { IItemEventRouterResponse } from "@spt-aki/models/eft/itemEvent/IItemEventRouterResponse";
-import { IProcessBuyTradeRequestData } from "@spt-aki/models/eft/trade/IProcessBuyTradeRequestData";
-import { IProcessSellTradeRequestData } from "@spt-aki/models/eft/trade/IProcessSellTradeRequestData";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
+import { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { InventoryHelper } from "@spt/helpers/InventoryHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PaymentHelper } from "@spt/helpers/PaymentHelper";
+import { TraderHelper } from "@spt/helpers/TraderHelper";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
+import { IProcessBuyTradeRequestData } from "@spt/models/eft/trade/IProcessBuyTradeRequestData";
+import { IProcessSellTradeRequestData } from "@spt/models/eft/trade/IProcessSellTradeRequestData";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 export declare class PaymentService {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
     protected httpResponse: HttpResponseUtil;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected handbookHelper: HandbookHelper;
     protected traderHelper: TraderHelper;
     protected itemHelper: ItemHelper;
     protected inventoryHelper: InventoryHelper;
     protected localisationService: LocalisationService;
     protected paymentHelper: PaymentHelper;
-    constructor(logger: ILogger, hashUtil: HashUtil, httpResponse: HttpResponseUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, traderHelper: TraderHelper, itemHelper: ItemHelper, inventoryHelper: InventoryHelper, localisationService: LocalisationService, paymentHelper: PaymentHelper);
+    constructor(logger: ILogger, hashUtil: HashUtil, httpResponse: HttpResponseUtil, databaseService: DatabaseService, handbookHelper: HandbookHelper, traderHelper: TraderHelper, itemHelper: ItemHelper, inventoryHelper: InventoryHelper, localisationService: LocalisationService, paymentHelper: PaymentHelper);
     /**
      * Take money and insert items into return to server request
      * @param pmcData Pmc profile
@@ -60,7 +60,7 @@ export declare class PaymentService {
      */
     addPaymentToOutput(pmcData: IPmcData, currencyTpl: string, amountToPay: number, sessionID: string, output: IItemEventRouterResponse): void;
     /**
-     * Get all money stacks in inventory and prioritse items in stash
+     * Get all money stacks in inventory and prioritise items in stash
      * @param pmcData
      * @param currencyTpl
      * @param playerStashId Players stash id
@@ -84,5 +84,5 @@ export declare class PaymentService {
      * @param playerStashId Players stash id
      * @returns true if its in inventory
      */
-    protected isInStash(itemId: string, inventoryItems: Item[], playerStashId: string): boolean;
+    protected isInStash(itemId: string | undefined, inventoryItems: Item[], playerStashId: string): boolean;
 }

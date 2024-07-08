@@ -1,10 +1,10 @@
-import { BotHelper } from "@spt-aki/helpers/BotHelper";
-import { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import { EquipmentChances, Generation, GenerationData, IBotType, ModsChances } from "@spt-aki/models/eft/common/tables/IBotType";
-import { BotGenerationDetails } from "@spt-aki/models/spt/bots/BotGenerationDetails";
-import { EquipmentFilterDetails, EquipmentFilters, IAdjustmentDetails, IBotConfig, WeightingAdjustmentDetails } from "@spt-aki/models/spt/config/IBotConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import { BotHelper } from "@spt/helpers/BotHelper";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import { EquipmentChances, Generation, GenerationData, IBotType, ModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
+import { EquipmentFilterDetails, EquipmentFilters, IAdjustmentDetails, IBotConfig, WeightingAdjustmentDetails } from "@spt/models/spt/config/IBotConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
 export declare class BotEquipmentFilterService {
     protected logger: ILogger;
     protected botHelper: BotHelper;
@@ -44,35 +44,35 @@ export declare class BotEquipmentFilterService {
      * @param botEquipmentRole equipment role of bot to look up
      * @returns Dictionary of weapon type and their whitelisted scope types
      */
-    getBotWeaponSightWhitelist(botEquipmentRole: string): Record<string, string[]>;
+    getBotWeaponSightWhitelist(botEquipmentRole: string): Record<string, string[]> | undefined;
     /**
      * Get an object that contains equipment and cartridge blacklists for a specified bot type
      * @param botRole Role of the bot we want the blacklist for
      * @param playerLevel Level of the player
      * @returns EquipmentBlacklistDetails object
      */
-    getBotEquipmentBlacklist(botRole: string, playerLevel: number): EquipmentFilterDetails;
+    getBotEquipmentBlacklist(botRole: string, playerLevel: number): EquipmentFilterDetails | undefined;
     /**
      * Get the whitelist for a specific bot type that's within the players level
      * @param botRole Bot type
      * @param playerLevel Players level
      * @returns EquipmentFilterDetails object
      */
-    protected getBotEquipmentWhitelist(botRole: string, playerLevel: number): EquipmentFilterDetails;
+    protected getBotEquipmentWhitelist(botRole: string, playerLevel: number): EquipmentFilterDetails | undefined;
     /**
      * Retrieve item weighting adjustments from bot.json config based on bot level
      * @param botRole Bot type to get adjustments for
      * @param botLevel Level of bot
      * @returns Weighting adjustments for bot items
      */
-    protected getBotWeightingAdjustments(botRole: string, botLevel: number): WeightingAdjustmentDetails;
+    protected getBotWeightingAdjustments(botRole: string, botLevel: number): WeightingAdjustmentDetails | undefined;
     /**
      * Retrieve item weighting adjustments from bot.json config based on player level
      * @param botRole Bot type to get adjustments for
      * @param playerlevel Level of bot
      * @returns Weighting adjustments for bot items
      */
-    protected getBotWeightingAdjustmentsByPlayerLevel(botRole: string, playerlevel: number): WeightingAdjustmentDetails;
+    protected getBotWeightingAdjustmentsByPlayerLevel(botRole: string, playerlevel: number): WeightingAdjustmentDetails | undefined;
     /**
      * Filter bot equipment based on blacklist and whitelist from config/bot.json
      * Prioritizes whitelist first, if one is found blacklist is ignored

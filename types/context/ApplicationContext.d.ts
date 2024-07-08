@@ -1,5 +1,5 @@
-import { ContextVariable } from "@spt-aki/context/ContextVariable";
-import { ContextVariableType } from "@spt-aki/context/ContextVariableType";
+import { ContextVariable } from "@spt/context/ContextVariable";
+import { ContextVariableType } from "@spt/context/ContextVariableType";
 export declare class ApplicationContext {
     private variables;
     private static holderMaxSize;
@@ -13,8 +13,8 @@ export declare class ApplicationContext {
      * const matchInfo = this.applicationContext.getLatestValue(ContextVariableType.RAID_CONFIGURATION).getValue<IGetRaidConfigurationRequestData>();
      * ```
      */
-    getLatestValue(type: ContextVariableType): ContextVariable;
-    getValues(type: ContextVariableType): ContextVariable[];
+    getLatestValue(type: ContextVariableType): ContextVariable | undefined;
+    getValues(type: ContextVariableType): ContextVariable[] | undefined;
     addValue(type: ContextVariableType, value: any): void;
     clearValues(type: ContextVariableType): void;
 }

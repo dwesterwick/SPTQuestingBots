@@ -1,20 +1,23 @@
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { InsuredItem } from "@spt-aki/models/eft/common/tables/IBotBase";
-import { Item, Repairable } from "@spt-aki/models/eft/common/tables/IItem";
-import { IStaticAmmoDetails } from "@spt-aki/models/eft/common/tables/ILootBase";
-import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { ItemBaseClassService } from "@spt-aki/services/ItemBaseClassService";
-import { ItemFilterService } from "@spt-aki/services/ItemFilterService";
-import { LocaleService } from "@spt-aki/services/LocaleService";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { MathUtil } from "@spt-aki/utils/MathUtil";
-import { ObjectId } from "@spt-aki/utils/ObjectId";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { IStaticAmmoDetails } from "@spt/models/eft/common/ILocation";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { InsuredItem } from "@spt/models/eft/common/tables/IBotBase";
+import { Item, Repairable, Upd } from "@spt/models/eft/common/tables/IItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ItemTpl } from "@spt/models/enums/ItemTpl";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { ItemBaseClassService } from "@spt/services/ItemBaseClassService";
+import { ItemFilterService } from "@spt/services/ItemFilterService";
+import { LocaleService } from "@spt/services/LocaleService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { CompareUtil } from "@spt/utils/CompareUtil";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { JsonUtil } from "@spt/utils/JsonUtil";
+import { MathUtil } from "@spt/utils/MathUtil";
+import { ObjectId } from "@spt/utils/ObjectId";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 export declare class ItemHelper {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -22,14 +25,56 @@ export declare class ItemHelper {
     protected randomUtil: RandomUtil;
     protected objectId: ObjectId;
     protected mathUtil: MathUtil;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected handbookHelper: HandbookHelper;
     protected itemBaseClassService: ItemBaseClassService;
     protected itemFilterService: ItemFilterService;
     protected localisationService: LocalisationService;
     protected localeService: LocaleService;
+    protected compareUtil: CompareUtil;
+    protected cloner: ICloner;
     protected readonly defaultInvalidBaseTypes: string[];
-    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, randomUtil: RandomUtil, objectId: ObjectId, mathUtil: MathUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, itemBaseClassService: ItemBaseClassService, itemFilterService: ItemFilterService, localisationService: LocalisationService, localeService: LocaleService);
+    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, randomUtil: RandomUtil, objectId: ObjectId, mathUtil: MathUtil, databaseService: DatabaseService, handbookHelper: HandbookHelper, itemBaseClassService: ItemBaseClassService, itemFilterService: ItemFilterService, localisationService: LocalisationService, localeService: LocaleService, compareUtil: CompareUtil, cloner: ICloner);
+    /**
+     * Does the provided pool of items contain the desired item
+     * @param itemPool Item collection to check
+     * @param item Item to look for
+     * @param slotId OPTIONAL - slotid of desired item
+     * @returns True if pool contains item
+     */
+    hasItemWithTpl(itemPool: Item[], item: ItemTpl, slotId?: string): boolean;
+    /**
+     * Get the first item from provided pool with the desired tpl
+     * @param itemPool Item collection to search
+     * @param item Item to look for
+     * @param slotId OPTIONAL - slotid of desired item
+     * @returns Item or undefined
+     */
+    getItemFromPoolByTpl(itemPool: Item[], item: ItemTpl, slotId?: string): Item | undefined;
+    /**
+     * This method will compare two items (with all its children) and see if the are equivalent.
+     * This method will NOT compare IDs on the items
+     * @param item1 first item with all its children to compare
+     * @param item2 second item with all its children to compare
+     * @param compareUpdProperties Upd properties to compare between the items
+     * @returns true if they are the same, false if they arent
+     */
+    isSameItems(item1: Item[], item2: Item[], compareUpdProperties?: Set<string>): boolean;
+    /**
+     * This method will compare two items and see if the are equivalent.
+     * This method will NOT compare IDs on the items
+     * @param item1 first item to compare
+     * @param item2 second item to compare
+     * @param compareUpdProperties Upd properties to compare between the items
+     * @returns true if they are the same, false if they arent
+     */
+    isSameItem(item1: Item, item2: Item, compareUpdProperties?: Set<string>): boolean;
+    /**
+     * Helper method to generate a Upd based on a template
+     * @param itemTemplate the item template to generate a Upd for
+     * @returns A Upd with all the default properties set
+     */
+    generateUpdForItem(itemTemplate: ITemplateItem): Upd;
     /**
      * Checks if an id is a valid item. Valid meaning that it's an item that be stored in stash
      * @param    {string}  tpl  the template id / tpl
@@ -137,15 +182,18 @@ export declare class ItemHelper {
     /**
      * Calcualte the average quality of an item and its children
      * @param items An offers item to process
+     * @param skipArmorItemsWithoutDurability Skip over armor items without durability
      * @returns % quality modifer between 0 and 1
      */
-    getItemQualityModifierForOfferItems(items: Item[]): number;
+    getItemQualityModifierForItems(items: Item[], skipArmorItemsWithoutDurability?: boolean): number;
     /**
      * get normalized value (0-1) based on item condition
+     * Will return -1 for base armor items with 0 durability
      * @param item
-     * @returns number between 0 and 1
+     * @param skipArmorItemsWithoutDurability return -1 for armor items that have maxdurability of 0
+     * @returns Number between 0 and 1
      */
-    getItemQualityModifier(item: Item): number;
+    getItemQualityModifier(item: Item, skipArmorItemsWithoutDurability?: boolean): number;
     /**
      * Get a quality value based on a repairable items (weapon/armor) current state between current and max durability
      * @param itemDetails Db details for item we want quality value for
@@ -230,7 +278,7 @@ export declare class ItemHelper {
      * @param fastPanel Quick slot panel
      * @returns Item[]
      */
-    replaceIDs(originalItems: Item[], pmcData?: IPmcData | null, insuredItems?: InsuredItem[] | null, fastPanel?: any): Item[];
+    replaceIDs(originalItems: Item[], pmcData?: IPmcData, insuredItems?: InsuredItem[], fastPanel?: any): Item[];
     /**
      * Mark the passed in array of items as found in raid.
      * Modifies passed in items
@@ -259,9 +307,9 @@ export declare class ItemHelper {
      *
      * @param item The item to be checked
      * @param parent The parent of the item to be checked
-     * @returns True if the item is actually moddable, false if it is not, and null if the check cannot be performed.
+     * @returns True if the item is actually moddable, false if it is not, and undefined if the check cannot be performed.
      */
-    isRaidModdable(item: Item, parent: Item): boolean | null;
+    isRaidModdable(item: Item, parent: Item): boolean | undefined;
     /**
      * Retrieves the main parent item for a given attachment item.
      *
@@ -276,9 +324,9 @@ export declare class ItemHelper {
      *
      * @param itemId - The unique identifier of the item for which to find the main parent.
      * @param itemsMap - A Map containing item IDs mapped to their corresponding Item objects for quick lookup.
-     * @returns The Item object representing the top-most parent of the given item, or `null` if no such parent exists.
+     * @returns The Item object representing the top-most parent of the given item, or `undefined` if no such parent exists.
      */
-    getAttachmentMainParent(itemId: string, itemsMap: Map<string, Item>): Item | null;
+    getAttachmentMainParent(itemId: string, itemsMap: Map<string, Item>): Item | undefined;
     /**
      * Determines if an item is an attachment that is currently attached to it's parent item.
      *
@@ -299,9 +347,9 @@ export declare class ItemHelper {
      *
      * @param itemId - The unique identifier of the item for which to find the equipment parent.
      * @param itemsMap - A Map containing item IDs mapped to their corresponding Item objects for quick lookup.
-     * @returns The Item object representing the equipment parent of the given item, or `null` if no such parent exists.
+     * @returns The Item object representing the equipment parent of the given item, or `undefined` if no such parent exists.
      */
-    getEquipmentParent(itemId: string, itemsMap: Map<string, Item>): Item | null;
+    getEquipmentParent(itemId: string, itemsMap: Map<string, Item>): Item | undefined;
     /**
      * Get the inventory size of an item
      * @param items Item with children
@@ -314,7 +362,7 @@ export declare class ItemHelper {
      * @param item Db item template to look up Cartridge filter values from
      * @returns Caliber of cartridge
      */
-    getRandomCompatibleCaliberTemplateId(item: ITemplateItem): string | null;
+    getRandomCompatibleCaliberTemplateId(item: ITemplateItem): string | undefined;
     /**
      * Add cartridges to the ammo box with correct max stack sizes
      * @param ammoBox Box to add cartridges to
@@ -342,9 +390,10 @@ export declare class ItemHelper {
      * @param staticAmmoDist Cartridge distribution
      * @param caliber Caliber of cartridge to add to magazine
      * @param minSizePercent % the magazine must be filled to
+     * @param defaultCartridgeTpl Cartridge to use when none found
      * @param weapon Weapon the magazine will be used for (if passed in uses Chamber as whitelist)
      */
-    fillMagazineWithRandomCartridge(magazine: Item[], magTemplate: ITemplateItem, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, caliber?: string, minSizePercent?: number, weapon?: ITemplateItem): void;
+    fillMagazineWithRandomCartridge(magazine: Item[], magTemplate: ITemplateItem, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, caliber?: string, minSizePercent?: number, defaultCartridgeTpl?: string, weapon?: ITemplateItem): void;
     /**
      * Add child items to a magazine of a specific cartridge
      * @param magazineWithChildCartridges Magazine to add child items to
@@ -363,10 +412,11 @@ export declare class ItemHelper {
      * Chose a randomly weighted cartridge that fits
      * @param caliber Desired caliber
      * @param staticAmmoDist Cartridges and thier weights
+     * @param fallbackCartridgeTpl If a cartridge cannot be found in the above staticAmmoDist param, use this instead
      * @param cartridgeWhitelist OPTIONAL whitelist for cartridges
      * @returns Tpl of cartridge
      */
-    protected drawAmmoTpl(caliber: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, cartridgeWhitelist?: string[]): string;
+    protected drawAmmoTpl(caliber: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, fallbackCartridgeTpl: string, cartridgeWhitelist?: string[]): string | undefined;
     /**
      * Create a basic cartrige object
      * @param parentId container cartridges will be placed in
@@ -386,9 +436,14 @@ export declare class ItemHelper {
     /**
      * Get the name of an item from the locale file using the item tpl
      * @param itemTpl Tpl of item to get name of
-     * @returns Name of item
+     * @returns Full name, short name if not found
      */
     getItemName(itemTpl: string): string;
+    /**
+     * Get all item tpls with a desired base type
+     * @param desiredBaseType Item base type wanted
+     * @returns Array of tpls
+     */
     getItemTplsOfBaseType(desiredBaseType: string): string[];
     /**
      * Add child slot items to an item, chooses random child item if multiple choices exist
@@ -401,11 +456,11 @@ export declare class ItemHelper {
     addChildSlotItems(itemToAdd: Item[], itemToAddTemplate: ITemplateItem, modSpawnChanceDict?: Record<string, number>, requiredOnly?: boolean): Item[];
     /**
      * Get a compatible tpl from the array provided where it is not found in the provided incompatible mod tpls parameter
-     * @param possibleTpls Tpls to randomply choose from
+     * @param possibleTpls Tpls to randomly choose from
      * @param incompatibleModTpls Incompatible tpls to not allow
-     * @returns Chosen tpl or null
+     * @returns Chosen tpl or undefined
      */
-    getCompatibleTplFromArray(possibleTpls: string[], incompatibleModTpls: Set<string>): string;
+    getCompatibleTplFromArray(possibleTpls: string[], incompatibleModTpls: Set<string>): string | undefined;
     /**
      * Is the provided item._props.Slots._name property a plate slot
      * @param slotName Name of slot (_name) of Items Slot array

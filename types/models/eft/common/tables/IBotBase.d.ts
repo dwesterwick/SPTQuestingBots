@@ -1,11 +1,11 @@
-import { Item, Upd } from "@spt-aki/models/eft/common/tables/IItem";
-import { IPmcDataRepeatableQuest } from "@spt-aki/models/eft/common/tables/IRepeatableQuests";
-import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
-import { BonusSkillType } from "@spt-aki/models/enums/BonusSkillType";
-import { BonusType } from "@spt-aki/models/enums/BonusType";
-import { HideoutAreas } from "@spt-aki/models/enums/HideoutAreas";
-import { MemberCategory } from "@spt-aki/models/enums/MemberCategory";
-import { QuestStatus } from "@spt-aki/models/enums/QuestStatus";
+import { Item, Upd } from "@spt/models/eft/common/tables/IItem";
+import { IPmcDataRepeatableQuest } from "@spt/models/eft/common/tables/IRepeatableQuests";
+import { IRagfairOffer } from "@spt/models/eft/ragfair/IRagfairOffer";
+import { BonusSkillType } from "@spt/models/enums/BonusSkillType";
+import { BonusType } from "@spt/models/enums/BonusType";
+import { HideoutAreas } from "@spt/models/enums/HideoutAreas";
+import { MemberCategory } from "@spt/models/enums/MemberCategory";
+import { QuestStatus } from "@spt/models/enums/QuestStatus";
 export interface IBotBase {
     _id: string;
     aid: number;
@@ -35,8 +35,16 @@ export interface IBotBase {
     CoopExtractCounts: Record<string, number>;
     SurvivorClass: SurvivorClass;
     WishList: string[];
+    moneyTransferLimitData: IMoneyTransferLimits;
     /** SPT specific property used during bot generation in raid */
     sptIsPmc?: boolean;
+}
+export interface IMoneyTransferLimits {
+    /** TODO: Implement */
+    nextResetTime: number;
+    remainingLimit: number;
+    totalLimit: number;
+    resetInterval: number;
 }
 export interface ITaskConditionCounter {
     id: string;
@@ -74,6 +82,8 @@ export interface Info {
     BannedUntil: number;
     IsStreamerModeAvailable: boolean;
     lastCompletedEvent?: LastCompleted;
+    SelectedMemberCategory: number;
+    isMigratedSkills: boolean;
 }
 export interface Settings {
     Role: string;
@@ -83,7 +93,7 @@ export interface Settings {
     AggressorBonus: number;
 }
 export interface IBan {
-    type: BanType;
+    banType: BanType;
     dateTime: number;
 }
 export declare enum BanType {
@@ -107,6 +117,7 @@ export interface Health {
     Temperature: CurrentMax;
     BodyParts: BodyPartsHealth;
     UpdateTime: number;
+    Immortal?: boolean;
 }
 export interface BodyPartsHealth {
     Head: BodyPartHealth;
@@ -163,7 +174,7 @@ export interface Common extends IBaseSkill {
 export interface Mastering extends IBaseSkill {
 }
 export interface Stats {
-    Eft: IEftStats;
+    Eft?: IEftStats;
 }
 export interface IEftStats {
     CarriedQuestItems: string[];
@@ -307,6 +318,9 @@ export interface Productive {
     ProductionTime?: number;
     GivenItemsInStart?: string[];
     Interrupted?: boolean;
+    Code?: string;
+    Decoded?: boolean;
+    AvailableForFinish?: boolean;
     /** Used in hideout production.json */
     needFuelForAllProductionTime?: boolean;
     /** Used when sending data to client */
@@ -373,7 +387,7 @@ export interface IQuestStatus {
     startTime: number;
     status: QuestStatus;
     statusTimers?: Record<string, number>;
-    /** Property does not exist in live profile data, but is used by ProfileChanges.questsStatus when sent to client*/
+    /** Property does not exist in live profile data, but is used by ProfileChanges.questsStatus when sent to client */
     completedConditions?: string[];
     availableAfter?: number;
 }

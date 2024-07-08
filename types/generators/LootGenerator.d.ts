@@ -1,21 +1,20 @@
-import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
-import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
-import { IPreset } from "@spt-aki/models/eft/common/IGlobals";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
-import { ISealedAirdropContainerSettings, RewardDetails } from "@spt-aki/models/spt/config/IInventoryConfig";
-import { LootItem } from "@spt-aki/models/spt/services/LootItem";
-import { LootRequest } from "@spt-aki/models/spt/services/LootRequest";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { ItemFilterService } from "@spt-aki/services/ItemFilterService";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { RagfairLinkedItemService } from "@spt-aki/services/RagfairLinkedItemService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { InventoryHelper } from "@spt/helpers/InventoryHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PresetHelper } from "@spt/helpers/PresetHelper";
+import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
+import { IPreset } from "@spt/models/eft/common/IGlobals";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ISealedAirdropContainerSettings, RewardDetails } from "@spt/models/spt/config/IInventoryConfig";
+import { LootItem } from "@spt/models/spt/services/LootItem";
+import { LootRequest } from "@spt/models/spt/services/LootRequest";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { ItemFilterService } from "@spt/services/ItemFilterService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { RagfairLinkedItemService } from "@spt/services/RagfairLinkedItemService";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 type ItemLimit = {
     current: number;
     max: number;
@@ -23,9 +22,8 @@ type ItemLimit = {
 export declare class LootGenerator {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected randomUtil: RandomUtil;
-    protected jsonUtil: JsonUtil;
     protected itemHelper: ItemHelper;
     protected presetHelper: PresetHelper;
     protected inventoryHelper: InventoryHelper;
@@ -33,7 +31,7 @@ export declare class LootGenerator {
     protected localisationService: LocalisationService;
     protected ragfairLinkedItemService: RagfairLinkedItemService;
     protected itemFilterService: ItemFilterService;
-    constructor(logger: ILogger, hashUtil: HashUtil, databaseServer: DatabaseServer, randomUtil: RandomUtil, jsonUtil: JsonUtil, itemHelper: ItemHelper, presetHelper: PresetHelper, inventoryHelper: InventoryHelper, weightedRandomHelper: WeightedRandomHelper, localisationService: LocalisationService, ragfairLinkedItemService: RagfairLinkedItemService, itemFilterService: ItemFilterService);
+    constructor(logger: ILogger, hashUtil: HashUtil, databaseService: DatabaseService, randomUtil: RandomUtil, itemHelper: ItemHelper, presetHelper: PresetHelper, inventoryHelper: InventoryHelper, weightedRandomHelper: WeightedRandomHelper, localisationService: LocalisationService, ragfairLinkedItemService: RagfairLinkedItemService, itemFilterService: ItemFilterService);
     /**
      * Generate a list of items based on configuration options parameter
      * @param options parameters to adjust how loot is generated
@@ -41,12 +39,12 @@ export declare class LootGenerator {
      */
     createRandomLoot(options: LootRequest): LootItem[];
     /**
-     * Filter armor items by their main plates protection level
-     * @param armor Armor preset
-     * @param options Loot request options
-     * @returns True item passes checks
+     * Filter armor items by their front plates protection level - top if its a helmet
+     * @param armor Armor preset to check
+     * @param options Loot request options - armor level etc
+     * @returns True if item has desired armor level
      */
-    protected armorIsDesiredProtectionLevel(armor: IPreset, options: LootRequest): boolean;
+    protected isArmorOfDesiredProtectionLevel(armor: IPreset, options: LootRequest): boolean;
     /**
      * Construct item limit record to hold max and current item count for each item type
      * @param limits limits as defined in config
@@ -74,13 +72,13 @@ export declare class LootGenerator {
     protected getRandomisedStackCount(item: ITemplateItem, options: LootRequest): number;
     /**
      * Find a random item in items.json and add to result array
-     * @param globalDefaultPresets presets to choose from
-     * @param itemTypeCounts item limit counts
-     * @param itemBlacklist items to skip
-     * @param result array to add found preset to
+     * @param presetPool Presets to choose from
+     * @param itemTypeCounts Item limit counts
+     * @param itemBlacklist Items to skip
+     * @param result Array to add chosen preset to
      * @returns true if preset was valid and added to pool
      */
-    protected findAndAddRandomPresetToLoot(globalDefaultPresets: IPreset[], itemTypeCounts: Record<string, {
+    protected findAndAddRandomPresetToLoot(presetPool: IPreset[], itemTypeCounts: Record<string, {
         current: number;
         max: number;
     }>, itemBlacklist: string[], result: LootItem[]): boolean;
