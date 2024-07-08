@@ -215,7 +215,7 @@ namespace SPTQuestingBots.Controllers
                     }
                 }
 
-                obj = JsonConvert.DeserializeObject<T>(json, GClass1448.SerializerSettings);
+                obj = JsonConvert.DeserializeObject<T>(json, GClass1459.SerializerSettings);
 
                 return true;
             }

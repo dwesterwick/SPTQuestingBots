@@ -13,7 +13,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass460.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(GClass459.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public override void Start()

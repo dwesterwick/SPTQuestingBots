@@ -181,12 +181,12 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "gclass579_0");
-            GClass579 bossWaves = (GClass579)bossWavesField.GetValue(localGameObj);
+            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "gclass580_0");
+            BossSpawnWaveManagerClass bossWaves = (BossSpawnWaveManagerClass)bossWavesField.GetValue(localGameObj);
 
             //LoggingController.LogInfo("Found Boss Waves instance");
 
-            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(GClass579), "list_0");
+            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "list_0");
             ICollection bossWavesTimers = (ICollection)bossWavesTimersField.GetValue(bossWaves);
 
             LoggingController.LogInfo("Found Boss Waves timers (" + bossWavesTimers.Count + " timers)");
@@ -196,7 +196,7 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo questTriggerField = AccessTools.Field(typeof(GClass579), "gclass580_0");
+            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "gclass580_0");
             GClass580 questTrigger = (GClass580)questTriggerField.GetValue(bossWaves);
 
             //LoggingController.LogInfo("Found Boss Waves Quest Trigger instance");
