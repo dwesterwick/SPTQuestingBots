@@ -4,37 +4,37 @@ import eftZoneAndItemPositions from "../config/zoneAndItemQuestPositions.json";
 import { CommonUtils } from "./CommonUtils";
 
 import type { DependencyContainer } from "tsyringe";
-import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
-import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import type { IPostAkiLoadMod } from "@spt-aki/models/external/IPostAkiLoadMod";
-import type { StaticRouterModService } from "@spt-aki/services/mod/staticRouter/StaticRouterModService";
-import type { DynamicRouterModService } from "@spt-aki/services/mod/dynamicRouter/DynamicRouterModService";
-import type { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
+import type { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import type { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
+import type { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
+import type { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
+import type { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
+import type { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
 
-import type { MinMax } from "@spt-aki/models/common/MinMax";
-import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import type { LocaleService } from "@spt-aki/services/LocaleService";
-import type { QuestHelper } from "@spt-aki/helpers/QuestHelper";
-import type { ProfileHelper } from "@spt-aki/helpers/ProfileHelper";
-import type { VFS } from "@spt-aki/utils/VFS";
-import type { HttpResponseUtil } from "@spt-aki/utils/HttpResponseUtil";
-import type { RandomUtil } from "@spt-aki/utils/RandomUtil";
-import type { BotController } from "@spt-aki/controllers/BotController";
-import type { IGenerateBotsRequestData } from "@spt-aki/models/eft/bot/IGenerateBotsRequestData";
-import type { IBotBase } from "@spt-aki/models/eft/common/tables/IBotBase";
+import type { MinMax } from "@spt/models/common/MinMax";
+import type { ConfigServer } from "@spt/servers/ConfigServer";
+import type { ILogger } from "@spt/models/spt/utils/ILogger";
+import type { DatabaseServer } from "@spt/servers/DatabaseServer";
+import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import type { LocaleService } from "@spt/services/LocaleService";
+import type { QuestHelper } from "@spt/helpers/QuestHelper";
+import type { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import type { VFS } from "@spt/utils/VFS";
+import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
+import type { RandomUtil } from "@spt/utils/RandomUtil";
+import type { BotController } from "@spt/controllers/BotController";
+import type { IGenerateBotsRequestData } from "@spt/models/eft/bot/IGenerateBotsRequestData";
+import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
 
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import type { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
-import type { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
-import type { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
-import type { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
+import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
+import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
+import type { IAirdropConfig } from "@spt/models/spt/config/IAirdropConfig";
 
 const modName = "SPTQuestingBots";
 
-class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
+class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
 
@@ -57,7 +57,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
     private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
     private basePScavConversionChance: number;
 	
-    public preAkiLoad(container: DependencyContainer): void 
+    public preSptLoad(container: DependencyContainer): void 
     {
         this.logger = container.resolve<ILogger>("WinstonLogger");
         const staticRouterModService = container.resolve<StaticRouterModService>("StaticRouterModService");
@@ -81,7 +81,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
         // Game start
         // Needed to update Scav timer
-        staticRouterModService.registerStaticRouter(`StaticAkiGameStart${modName}`,
+        staticRouterModService.registerStaticRouter(`StaticSptGameStart${modName}`,
             [{
                 url: "/client/game/start",
                 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -94,10 +94,10 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
 
                     return output;
                 }
-            }], "aki"
+            }], "spt"
         );
 
-        // Apply a scalar factor to the SPT-AKI PMC conversion chances
+        // Apply a scalar factor to the SPT PMC conversion chances
         dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPMCConversionChances${modName}`,
             [{
                 url: "/QuestingBots/AdjustPMCConversionChances/",
@@ -113,7 +113,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
             }], "AdjustPMCConversionChances"
         );
 
-        // Apply a scalar factor to the SPT-AKI PScav conversion chance
+        // Apply a scalar factor to the SPT PScav conversion chance
         dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPScavChance${modName}`,
             [{
                 url: "/QuestingBots/AdjustPScavChance/",
@@ -168,12 +168,12 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         dynamicRouterModService.registerDynamicRouter(`DynamicGenerateBot${modName}`,
             [{
                 url: "/QuestingBots/GenerateBot",
-                action: (url: string, info: IGenerateBotsRequestData, sessionID: string) => 
+                action: async (url: string, info: IGenerateBotsRequestData, sessionID: string) => 
                 {
                     const urlParts = url.split("/");
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
 
-                    const bots = this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
+                    const bots = await this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
 
                     return this.httpResponseUtil.getBody(bots);
                 }
@@ -264,7 +264,7 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
     }
 	
-    public postAkiLoad(container: DependencyContainer): void
+    public postSptLoad(container: DependencyContainer): void
     {
         if (!modConfig.enabled)
         {
@@ -275,24 +275,24 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         this.removeBlacklistedBrainTypes();
 
         // If we find SWAG, MOAR or BetterSpawnsPlus, disable initial spawns
-        const preAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        const preSptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
+        if (modConfig.bot_spawns.enabled && preSptModLoader.getImportedModsNames().includes("SWAG"))
         {
             this.commonUtils.logWarning("SWAG Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
+        if (modConfig.bot_spawns.enabled && preSptModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
             this.commonUtils.logWarning("MOAR Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("PreyToLive-BetterSpawnsPlus")) 
+        if (modConfig.bot_spawns.enabled && preSptModLoader.getImportedModsNames().includes("PreyToLive-BetterSpawnsPlus")) 
         {
             this.commonUtils.logWarning("BetterSpawnsPlus Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
 
-        if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
+        if (preSptModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
         {
             this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
         }
@@ -524,9 +524,9 @@ class QuestingBots implements IPreAkiLoadMod, IPostAkiLoadMod, IPostDBLoadMod
         }
     }
 
-    private generateBots(info: IGenerateBotsRequestData, sessionID: string, shouldBePScavGroup: boolean) : IBotBase[]
+    private async generateBots(info: IGenerateBotsRequestData, sessionID: string, shouldBePScavGroup: boolean) : Promise<IBotBase[]>
     {
-        const bots = this.botController.generate(sessionID, info);
+        const bots = await this.botController.generate(sessionID, info);
 
         if (!shouldBePScavGroup)
         {
