@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using HarmonyLib;
@@ -126,11 +124,11 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Find the field that stores the list of brain layers assigned to the bot
-            Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
-            FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type AICoreStrategyAbstractClassType = typeof(AICoreStrategyAbstractClass<BotLogicDecision>);
+            FieldInfo layerListField = AICoreStrategyAbstractClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
             if (layerListField == null)
             {
-                LoggingController.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);
+                LoggingController.LogError("Could not find brain layer list in type " + AICoreStrategyAbstractClassType.FullName);
                 return emptyCollection;
             }
 

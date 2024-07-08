@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.Interactive;
-using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
@@ -26,7 +22,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private Stopwatch actionElapsedTime = new Stopwatch();
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass329 baseSteeringLogic = new GClass329();
+        private GClass327 baseSteeringLogic = new GClass327();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);

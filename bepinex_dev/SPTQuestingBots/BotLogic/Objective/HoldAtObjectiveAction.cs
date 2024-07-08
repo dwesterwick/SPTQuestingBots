@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 
@@ -15,7 +11,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass460.CreateNode(BotLogicDecision.search, BotOwner));
+            SetBaseAction(GClass459.CreateNode(BotLogicDecision.search, BotOwner));
         }
 
         public override void Start()

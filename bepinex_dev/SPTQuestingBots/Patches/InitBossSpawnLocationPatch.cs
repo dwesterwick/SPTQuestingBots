@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
 using SPTQuestingBots.Controllers;
@@ -14,7 +11,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GClass579).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
+            return typeof(GClass580).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]

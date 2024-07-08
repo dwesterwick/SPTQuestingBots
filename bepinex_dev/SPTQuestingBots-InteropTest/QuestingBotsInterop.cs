@@ -1,11 +1,7 @@
-﻿using BepInEx.Bootstrap;
-using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using BepInEx.Bootstrap;
+using HarmonyLib;
 
 namespace SPTQuestingBots
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
@@ -20,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? interactionPosition = null;
         private IResult keyGenerationResult = null;
         private KeyComponent keyComponent = null;
-        private DependencyGraph<IEasyBundle>.GClass3391 bundleLoader = null;
+        private DependencyGraph<IEasyBundle>.GClass3415 bundleLoader = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {

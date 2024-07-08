@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
@@ -52,7 +50,7 @@ namespace SPTQuestingBots.Helpers
                 multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
-            GClass2536 helmetTemplate = helmet?.Template as GClass2536;
+            GClass2550 helmetTemplate = helmet?.Template as GClass2550;
             switch (helmetTemplate?.DeafStrength)
             {
                 case EDeafStrength.Low:
@@ -91,7 +89,7 @@ namespace SPTQuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                GStruct414<GClass2782> moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
+                GStruct414<GClass2798> moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -144,7 +142,7 @@ namespace SPTQuestingBots.Helpers
                     {
                         LoggingController.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
 
-                        return new GClass2769(grid, locationInGrid);
+                        return new ItemAddressClass(grid, locationInGrid);
                     }
                 }
             }
@@ -173,7 +171,7 @@ namespace SPTQuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraph<IEasyBundle>.GClass3391 LoadBundle(this Item item)
+        public static DependencyGraph<IEasyBundle>.GClass3415 LoadBundle(this Item item)
         {
             try
             {
