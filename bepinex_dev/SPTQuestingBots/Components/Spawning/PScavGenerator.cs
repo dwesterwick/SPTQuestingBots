@@ -115,7 +115,7 @@ namespace SPTQuestingBots.Components.Spawning
                 // Set the minimum and maximum spawn times for the PScav group
                 float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
                 group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
-                group.RaidETRangeToSpawn.Max = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+                group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
 
                 return group;
             };
@@ -177,7 +177,7 @@ namespace SPTQuestingBots.Components.Spawning
                 throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
             }
 
-            float originalEscapeTime = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
+            float originalEscapeTime = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
             int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
 
             // Parse the SPT raid-time-reduction settings
@@ -253,12 +253,12 @@ namespace SPTQuestingBots.Components.Spawning
 
         private float getRaidTimeRemainingFraction()
         {
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
-                return Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
+                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
             }
 
-            return (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

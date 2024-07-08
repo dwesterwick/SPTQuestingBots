@@ -89,7 +89,7 @@ namespace SPTQuestingBots.Components.Spawning
 
                 // Set the maximum spawn time for the PMC group
                 float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
-                group.RaidETRangeToSpawn.Max = Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+                group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
 
                 return group;
             };
@@ -191,12 +191,12 @@ namespace SPTQuestingBots.Components.Spawning
 
         private float getRaidTimeRemainingFraction()
         {
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
-                return Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
+                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
             }
 
-            return (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

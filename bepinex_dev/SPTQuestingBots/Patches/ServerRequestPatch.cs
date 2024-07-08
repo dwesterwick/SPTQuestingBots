@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
@@ -59,7 +59,7 @@ namespace SPTQuestingBots.Patches
 
         public static Type FindTargetType(string methodName)
         {
-            List<Type> targetTypeOptions = Aki.Reflection.Utils.PatchConstants.EftTypes
+            List<Type> targetTypeOptions = SPT.Reflection.Utils.PatchConstants.EftTypes
                 .Where(t => t.GetMethods().Any(m => m.Name.Contains(methodName)))
                 .ToList();
 
@@ -73,12 +73,12 @@ namespace SPTQuestingBots.Patches
 
         private static float getRaidTimeRemainingFraction()
         {
-            if (Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
-                return Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
+                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
             }
 
-            return (float)Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

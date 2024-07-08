@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
+            Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
             return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -166,7 +166,7 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo wavesSpawnScenarioField = AccessTools.Field(Aki.Reflection.Utils.PatchConstants.LocalGameType, "wavesSpawnScenario_0");
+            FieldInfo wavesSpawnScenarioField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "wavesSpawnScenario_0");
             WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
 
             //LoggingController.LogInfo("Found WavesSpawnScenario instance");
@@ -181,7 +181,7 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo bossWavesField = AccessTools.Field(Aki.Reflection.Utils.PatchConstants.LocalGameType, "gclass579_0");
+            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "gclass579_0");
             GClass579 bossWaves = (GClass579)bossWavesField.GetValue(localGameObj);
 
             //LoggingController.LogInfo("Found Boss Waves instance");

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
@@ -30,7 +30,7 @@ namespace SPTQuestingBots.Patches
 
             // This only matters in Scav raids
             // TO DO: This might also matter in PMC raids if a mod adds groups that are friendly to the player
-            /*if (!Aki.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)
+            /*if (!SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)
             {
                 return true;
             }*/

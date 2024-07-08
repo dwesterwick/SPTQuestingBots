@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Helpers
 
             try
             {
-                string assemblyName = "Aki.Common";
+                string assemblyName = "SPT.Common";
                 Assembly assembly = Assembly.Load(assemblyName);
                 if (assembly == null)
                 {
