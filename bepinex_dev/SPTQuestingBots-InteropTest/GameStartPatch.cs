@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 
 namespace SPTQuestingBotsInteropTest
 {
@@ -13,7 +13,7 @@ namespace SPTQuestingBotsInteropTest
     {
         protected override MethodBase GetTargetMethod()
         {
-            Type localGameType = Aki.Reflection.Utils.PatchConstants.LocalGameType;
+            Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
             return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
         }
 

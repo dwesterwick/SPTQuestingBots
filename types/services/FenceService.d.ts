@@ -1,50 +1,67 @@
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { PresetHelper } from "@spt-aki/helpers/PresetHelper";
-import { IFenceLevel } from "@spt-aki/models/eft/common/IGlobals";
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { Item, Repairable } from "@spt-aki/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
-import { IBarterScheme, ITraderAssort } from "@spt-aki/models/eft/common/tables/ITrader";
-import { IItemDurabilityCurrentMax, ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
-import { IFenceAssortGenerationValues, IGenerationAssortValues } from "@spt-aki/models/spt/fence/IFenceAssortGenerationValues";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { PresetHelper } from "@spt/helpers/PresetHelper";
+import { IFenceLevel } from "@spt/models/eft/common/IGlobals";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { Item, Repairable } from "@spt/models/eft/common/tables/IItem";
+import { ITemplateItem, Slot } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IBarterScheme, ITraderAssort } from "@spt/models/eft/common/tables/ITrader";
+import { IItemDurabilityCurrentMax, ITraderConfig } from "@spt/models/spt/config/ITraderConfig";
+import { ICreateFenceAssortsResult } from "@spt/models/spt/fence/ICreateFenceAssortsResult";
+import { IFenceAssortGenerationValues, IGenerationAssortValues } from "@spt/models/spt/fence/IFenceAssortGenerationValues";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { RandomUtil } from "@spt/utils/RandomUtil";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 /**
  * Handle actions surrounding Fence
  * e.g. generating or refreshing assorts / get next refresh time
  */
 export declare class FenceService {
     protected logger: ILogger;
-    protected jsonUtil: JsonUtil;
     protected timeUtil: TimeUtil;
     protected randomUtil: RandomUtil;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected handbookHelper: HandbookHelper;
     protected itemHelper: ItemHelper;
     protected presetHelper: PresetHelper;
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
+    protected cloner: ICloner;
     protected traderConfig: ITraderConfig;
     /** Time when some items in assort will be replaced  */
     protected nextPartialRefreshTimestamp: number;
     /** Main assorts you see at all rep levels */
-    protected fenceAssort: ITraderAssort;
+    protected fenceAssort?: ITraderAssort;
     /** Assorts shown on a separate tab when you max out fence rep */
-    protected fenceDiscountAssort: ITraderAssort;
-    /** Hydrated on initial assort generation as part of generateFenceAssorts() */
+    protected fenceDiscountAssort?: ITraderAssort;
+    /** Desired baseline counts - Hydrated on initial assort generation as part of generateFenceAssorts() */
     protected desiredAssortCounts: IFenceAssortGenerationValues;
-    constructor(logger: ILogger, jsonUtil: JsonUtil, timeUtil: TimeUtil, randomUtil: RandomUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, itemHelper: ItemHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer);
+    protected fenceItemUpdCompareProperties: Set<string>;
+    constructor(logger: ILogger, timeUtil: TimeUtil, randomUtil: RandomUtil, databaseService: DatabaseService, handbookHelper: HandbookHelper, itemHelper: ItemHelper, presetHelper: PresetHelper, localisationService: LocalisationService, configServer: ConfigServer, cloner: ICloner);
     /**
      * Replace main fence assort with new assort
      * @param assort New assorts to replace old with
      */
     setFenceAssort(assort: ITraderAssort): void;
+    /**
+     * Replace discount fence assort with new assort
+     * @param assort New assorts to replace old with
+     */
+    setDiscountFenceAssort(assort: ITraderAssort): void;
+    /**
+     * Get main fence assort
+     * @return ITraderAssort
+     */
+    getMainFenceAssort(): ITraderAssort | undefined;
+    /**
+     * Get discount fence assort
+     * @return ITraderAssort
+     */
+    getDiscountFenceAssort(): ITraderAssort | undefined;
     /**
      * Replace high rep level fence assort with new assort
      * @param discountAssort New assorts to replace old with
@@ -57,6 +74,26 @@ export declare class FenceService {
      * @returns ITraderAssort
      */
     getFenceAssorts(pmcProfile: IPmcData): ITraderAssort;
+    /**
+     * Adds to fence assort a single item (with its children)
+     * @param items the items to add with all its childrens
+     * @param mainItem the most parent item of the array
+     */
+    addItemsToFenceAssort(items: Item[], mainItem: Item): void;
+    /**
+     * Calculates the overall price for an item (with all its children)
+     * @param itemTpl the item tpl to calculate the fence price for
+     * @param items the items (with its children) to calculate fence price for
+     * @returns the fence price of the item
+     */
+    getItemPrice(itemTpl: string, items: Item[]): number;
+    /**
+     * Calculate the overall price for an ammo box, where only one item is
+     * the ammo box itself and every other items are the bullets in that box
+     * @param items the ammo box (and all its children ammo items)
+     * @returns the price of the ammo box
+     */
+    protected getAmmoBoxPrice(items: Item[]): number;
     /**
      * Adjust all items contained inside an assort by a multiplier
      * @param assort (clone)Assort that contains items with prices to adjust
@@ -94,16 +131,22 @@ export declare class FenceService {
      */
     performPartialRefresh(): void;
     /**
+     * Handle the process of folding new assorts into existing assorts, when a new assort exists already, increment its StackObjectsCount instead
+     * @param newFenceAssorts Assorts to fold into existing fence assorts
+     * @param existingFenceAssorts Current fence assorts new assorts will be added to
+     */
+    protected updateFenceAssorts(newFenceAssorts: ICreateFenceAssortsResult, existingFenceAssorts: ITraderAssort): void;
+    /**
      * Increment fence next refresh timestamp by current timestamp + partialRefreshTimeSeconds from config
      */
     protected incrementPartialRefreshTime(): void;
     /**
-     * Compare the current fence offer count to what the config wants it to be,
-     * If value is lower add extra count to value to generate more items to fill gap
-     * @param existingItemCountToReplace count of items to generate
-     * @returns number of items to generate
+     * Get values that will hydrate the passed in assorts back to the desired counts
+     * @param assortItems Current assorts after items have been removed
+     * @param generationValues Base counts assorts should be adjusted to
+     * @returns IGenerationAssortValues object with adjustments needed to reach desired state
      */
-    protected getCountOfItemsToGenerate(): IFenceAssortGenerationValues;
+    protected getItemCountsToGenerate(assortItems: Item[], generationValues: IGenerationAssortValues): IGenerationAssortValues;
     /**
      * Delete desired number of items from assort (including children)
      * @param itemCountToReplace
@@ -112,8 +155,8 @@ export declare class FenceService {
     protected deleteRandomAssorts(itemCountToReplace: number, assort: ITraderAssort): void;
     /**
      * Choose an item at random and remove it + mods from assorts
-     * @param assort Items to remove from
-     * @param rootItems Assort root items to pick from to remove
+     * @param assort Trader assort to remove item from
+     * @param rootItems Pool of root items to pick from to remove
      */
     protected removeRandomItemFromAssorts(assort: ITraderAssort, rootItems: Item[]): void;
     /**
@@ -133,6 +176,12 @@ export declare class FenceService {
      */
     generateFenceAssorts(): void;
     /**
+     * Convert the intermediary assort data generated into format client can process
+     * @param intermediaryAssorts Generated assorts that will be converted
+     * @returns ITraderAssort
+     */
+    protected convertIntoFenceAssort(intermediaryAssorts: ICreateFenceAssortsResult): ITraderAssort;
+    /**
      * Create object that contains calculated fence assort item values to make based on config
      * Stored in this.desiredAssortCounts
      */
@@ -147,7 +196,7 @@ export declare class FenceService {
      * @param assortCount Number of assorts to generate
      * @param assorts object to add created assorts to
      */
-    protected createAssorts(itemCounts: IGenerationAssortValues, assorts: ITraderAssort, loyaltyLevel: number): void;
+    protected createAssorts(itemCounts: IGenerationAssortValues, loyaltyLevel: number): ICreateFenceAssortsResult;
     /**
      * Add item assorts to existing assort data
      * @param assortCount Number to add
@@ -156,7 +205,7 @@ export declare class FenceService {
      * @param itemTypeLimits
      * @param loyaltyLevel Loyalty level to set new item to
      */
-    protected addItemAssorts(assortCount: number, assorts: ITraderAssort, baseFenceAssortClone: ITraderAssort, itemTypeLimits: Record<string, {
+    protected addItemAssorts(assortCount: number, assorts: ICreateFenceAssortsResult, baseFenceAssortClone: ITraderAssort, itemTypeLimits: Record<string, {
         current: number;
         max: number;
     }>, loyaltyLevel: number): void;
@@ -165,10 +214,10 @@ export declare class FenceService {
      * e.g. salewa hp resource units left
      * @param rootItemBeingAdded item to look for a match against
      * @param itemDbDetails Db details of matching item
-     * @param fenceItemAssorts Items to search through
+     * @param itemsWithChildren Items to search through
      * @returns Matching assort item
      */
-    protected getMatchingItem(rootItemBeingAdded: Item, itemDbDetails: ITemplateItem, fenceItemAssorts: Item[]): Item;
+    protected getMatchingItem(rootItemBeingAdded: Item, itemDbDetails: ITemplateItem, itemsWithChildren: Item[][]): Item | undefined;
     /**
      * Should this item be forced into only 1 stack on fence
      * @param existingItem Existing item from fence assort
@@ -176,6 +225,7 @@ export declare class FenceService {
      * @returns True item should be force stacked
      */
     protected itemShouldBeForceStacked(existingItem: Item, itemDbDetails: ITemplateItem): boolean;
+    protected itemInPreventDupeCategoryList(tpl: string): boolean;
     /**
      * Adjust price of item based on what is left to buy (resource/uses left)
      * @param barterSchemes All barter scheme for item having price adjusted
@@ -189,7 +239,7 @@ export declare class FenceService {
     }>, itemTpl: string): {
         current: number;
         max: number;
-    };
+    } | undefined;
     /**
      * Find presets in base fence assort and add desired number to 'assorts' parameter
      * @param desiredWeaponPresetsCount
@@ -197,13 +247,26 @@ export declare class FenceService {
      * @param baseFenceAssort Base data to draw from
      * @param loyaltyLevel Which loyalty level is required to see/buy item
      */
-    protected addPresetsToAssort(desiredWeaponPresetsCount: number, desiredEquipmentPresetsCount: number, assorts: ITraderAssort, baseFenceAssort: ITraderAssort, loyaltyLevel: number): void;
+    protected addPresetsToAssort(desiredWeaponPresetsCount: number, desiredEquipmentPresetsCount: number, assorts: ICreateFenceAssortsResult, baseFenceAssort: ITraderAssort, loyaltyLevel: number): void;
     /**
      * Adjust plate / soft insert durability values
      * @param armor Armor item array to add mods into
      * @param itemDbDetails Armor items db template
      */
     protected randomiseArmorModDurability(armor: Item[], itemDbDetails: ITemplateItem): void;
+    /**
+     * Randomise the durability values of items on armor with a passed in slot
+     * @param softInsertSlots Slots of items to randomise
+     * @param armorItemAndMods Array of armor + inserts to get items from
+     */
+    protected randomiseArmorSoftInsertDurabilities(softInsertSlots: Slot[], armorItemAndMods: Item[]): void;
+    /**
+     * Randomise the durability values of plate items in armor
+     * Has chance to remove plate
+     * @param plateSlots Slots of items to randomise
+     * @param armorItemAndMods Array of armor + inserts to get items from
+     */
+    protected randomiseArmorInsertsDurabilities(plateSlots: Slot[], armorItemAndMods: Item[]): void;
     /**
      * Get stack size of a singular item (no mods)
      * @param itemDbDetails item being added to fence

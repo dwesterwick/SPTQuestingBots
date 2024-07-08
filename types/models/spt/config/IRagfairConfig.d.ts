@@ -1,14 +1,14 @@
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { IBaseConfig, IRunIntervalValues } from "@spt-aki/models/spt/config/IBaseConfig";
+import { MinMax } from "@spt/models/common/MinMax";
+import { IBaseConfig, IRunIntervalValues } from "@spt/models/spt/config/IBaseConfig";
 export interface IRagfairConfig extends IBaseConfig {
-    kind: "aki-ragfair";
+    kind: "spt-ragfair";
     /** How many seconds should pass before expired offers and procesed + player offers checked if sold */
     runIntervalSeconds: number;
     /** Default values used to hydrate `runIntervalSeconds` with */
     runIntervalValues: IRunIntervalValues;
     /** Player listing settings */
     sell: Sell;
-    /** Trader ids + should their assorts be listed on flea*/
+    /** Trader ids + should their assorts be listed on flea */
     traders: Record<string, boolean>;
     dynamic: Dynamic;
 }
@@ -19,7 +19,7 @@ export interface Sell {
     chance: Chance;
     /** Settings to control how long it takes for a player offer to sell */
     time: MinMax;
-    /**Seconds from clicking remove to remove offer from market */
+    /** Seconds from clicking remove to remove offer from market */
     expireSeconds: number;
 }
 export interface Chance {

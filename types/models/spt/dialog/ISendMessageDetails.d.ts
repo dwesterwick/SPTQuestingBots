@@ -1,7 +1,7 @@
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { ISystemData, IUserDialogInfo, MessageContentRagfair } from "@spt-aki/models/eft/profile/IAkiProfile";
-import { MessageType } from "@spt-aki/models/enums/MessageType";
-import { Traders } from "@spt-aki/models/enums/Traders";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { ISystemData, IUserDialogInfo, MessageContentRagfair } from "@spt/models/eft/profile/ISptProfile";
+import { MessageType } from "@spt/models/enums/MessageType";
+import { Traders } from "@spt/models/enums/Traders";
 export interface ISendMessageDetails {
     /** Player id */
     recipientId: string;
@@ -30,7 +30,17 @@ export interface ISendMessageDetails {
 }
 export interface IProfileChangeEvent {
     _id: string;
-    Type: "TraderSalesSum" | "TraderStanding" | "ProfileLevel" | "SkillPoints" | "ExamineAllItems" | "UnlockTrader";
+    Type: ProfileChangeEventType;
     value: number;
     entity?: string;
+}
+export declare enum ProfileChangeEventType {
+    TRADER_SALES_SUM = "TraderSalesSum",
+    TRADER_STANDING = "TraderStanding",
+    PROFILE_LEVEL = "ProfileLevel",
+    SKILL_POINTS = "SkillPoints",
+    EXAMINE_ALL_ITEMS = "ExamineAllItems",
+    UNLOCK_TRADER = "UnlockTrader",
+    ASSORT_UNLOCK_RULE = "AssortmentUnlockRule",
+    HIDEOUT_AREA_LEVEL = "HideoutAreaLevel"
 }

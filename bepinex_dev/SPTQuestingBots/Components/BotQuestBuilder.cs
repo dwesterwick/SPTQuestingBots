@@ -50,7 +50,7 @@ namespace SPTQuestingBots.Components
                 throw new ArgumentNullException(nameof(airdropPosition));
             }
 
-            if (!Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (!SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
             {
                 LoggingController.LogError("Airdrop chaser quest cannot be added when the raid is not in-progress");
                 return;
@@ -59,7 +59,7 @@ namespace SPTQuestingBots.Components
             Models.Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", ConfigController.Config.Questing.BotQuests.AirdropChaser);
             if (airdopChaserQuest != null)
             {
-                float raidET = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
+                float raidET = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
                 
                 airdopChaserQuest.MaxRaidET = raidET + ConfigController.Config.Questing.BotQuests.AirdropBotInterestTime;
                 BotJobAssignmentFactory.AddQuest(airdopChaserQuest);
