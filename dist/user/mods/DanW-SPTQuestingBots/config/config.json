@@ -111,7 +111,8 @@
 					"interchange": 120,
 					"laboratory": 60,
 					"tarkovstreets": 120,
-					"sandbox": 120
+					"sandbox": 120,
+					"sandbox_high": 120
 				},
 				"suspicion_cooldown_time": 7
 			},
@@ -183,7 +184,8 @@
 				"interchange": 0.7,
 				"laboratory": 0.3,
 				"tarkovstreets": 0.7,
-				"sandbox": 0.5
+				"sandbox": 0.5,
+				"sandbox_high": 0.5
 			},
 			"exfil_direction_max_angle": 90,
 			"exfil_reached_min_fraction": 0.2,
@@ -252,7 +254,8 @@
 				"interchange": 0,
 				"laboratory": 0,
 				"tarkovstreets": -4,
-				"sandbox": 0
+				"sandbox": 0,
+				"sandbox_high": 0
 			}
 		},
 		"bot_cap_adjustments" : {
@@ -280,7 +283,8 @@
 			"interchange": 8,
 			"laboratory": 9,
 			"tarkovstreets": 8,
-			"sandbox": 7
+			"sandbox": 7,
+			"sandbox_high": 7
 		},
 		"pmcs" : {
 			"enabled": true,

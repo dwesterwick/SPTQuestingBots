@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
+using EFT.Bots;
 using SPT.Reflection.Patching;
 
 namespace SPTQuestingBotsInteropTest
@@ -18,7 +20,7 @@ namespace SPTQuestingBotsInteropTest
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
+        private static void PatchPostfix(ref IEnumerator __result, object __instance, BotControllerSettings controllerSettings, ISpawnSystem spawnSystem, Callback runCallback)
         {
             if (!SPTQuestingBots.QuestingBotsInterop.IsQuestingBotsLoaded())
             {

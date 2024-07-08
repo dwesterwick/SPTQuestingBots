@@ -12,6 +12,7 @@ using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
+using EFT.Bots;
 
 namespace SPTQuestingBots.Patches
 {
@@ -30,7 +31,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
+        private static void PatchPostfix(ref IEnumerator __result, object __instance, BotControllerSettings controllerSettings, ISpawnSystem spawnSystem, Callback runCallback)
         {
             if (!IsDelayingGameStart)
             {

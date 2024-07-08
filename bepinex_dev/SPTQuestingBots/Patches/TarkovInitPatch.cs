@@ -27,7 +27,7 @@ namespace SPTQuestingBots.Patches
         {
             if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion, out string currentVersion))
             {
-                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT-AKI ";
+                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT ";
                 
                 if (MinVersion == MaxVersion)
                 {

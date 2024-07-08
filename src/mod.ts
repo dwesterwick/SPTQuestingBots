@@ -173,7 +173,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
                     const urlParts = url.split("/");
                     const pScavChance: number = Number(urlParts[urlParts.length - 1]);
 
-                    const bots = this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
+                    const bots = await this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
 
                     return this.httpResponseUtil.getBody(bots);
                 }
@@ -275,24 +275,24 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.removeBlacklistedBrainTypes();
 
         // If we find SWAG, MOAR or BetterSpawnsPlus, disable initial spawns
-        const preAkiModLoader = container.resolve<PreSptModLoader>("PreAkiModLoader");
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("SWAG"))
+        const presptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
+        if (modConfig.bot_spawns.enabled && presptModLoader.getImportedModsNames().includes("SWAG"))
         {
             this.commonUtils.logWarning("SWAG Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
+        if (modConfig.bot_spawns.enabled && presptModLoader.getImportedModsNames().includes("DewardianDev-MOAR"))
         {
             this.commonUtils.logWarning("MOAR Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
-        if (modConfig.bot_spawns.enabled && preAkiModLoader.getImportedModsNames().includes("PreyToLive-BetterSpawnsPlus")) 
+        if (modConfig.bot_spawns.enabled && presptModLoader.getImportedModsNames().includes("PreyToLive-BetterSpawnsPlus")) 
         {
             this.commonUtils.logWarning("BetterSpawnsPlus Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
 
-        if (preAkiModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
+        if (presptModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
         {
             this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
         }
@@ -477,6 +477,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.iBotConfig.maxBotCap.laboratory = Math.min(this.iBotConfig.maxBotCap.laboratory + Math.min(this.databaseTables.locations.laboratory.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.tarkovstreets = Math.min(this.iBotConfig.maxBotCap.tarkovstreets + Math.min(this.databaseTables.locations.tarkovstreets.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.sandbox = Math.min(this.iBotConfig.maxBotCap.sandbox + Math.min(this.databaseTables.locations.sandbox.base.MaxPlayers, maxAddtlBots), maxTotalBots);
+        this.iBotConfig.maxBotCap.sandbox_high = Math.min(this.iBotConfig.maxBotCap.sandbox_high + Math.min(this.databaseTables.locations.sandbox_high.base.MaxPlayers, maxAddtlBots), maxTotalBots);
         this.iBotConfig.maxBotCap.default = Math.min(this.iBotConfig.maxBotCap.default + maxAddtlBots, maxTotalBots);
 
         for (const location in this.iBotConfig.maxBotCap)
@@ -526,7 +527,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 
     private async generateBots(info: IGenerateBotsRequestData, sessionID: string, shouldBePScavGroup: boolean) : Promise<IBotBase[]>
     {
-        const bots = this.botController.generate(sessionID, info);
+        const bots = await this.botController.generate(sessionID, info);
 
         if (!shouldBePScavGroup)
         {
@@ -593,6 +594,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Original bot counts for Labs - SPT: ${this.iBotConfig.maxBotCap.laboratory}, EFT: ${this.databaseTables.locations.laboratory.base.BotMax}`);
         this.commonUtils.logInfo(`Original bot counts for Streets - SPT: ${this.iBotConfig.maxBotCap.tarkovstreets}, EFT: ${this.databaseTables.locations.tarkovstreets.base.BotMax}`);
         this.commonUtils.logInfo(`Original bot counts for Ground Zero - SPT: ${this.iBotConfig.maxBotCap.sandbox}, EFT: ${this.databaseTables.locations.sandbox.base.BotMax}`);
+        this.commonUtils.logInfo(`Original bot counts for Ground Zero (20+) - SPT: ${this.iBotConfig.maxBotCap.sandbox_high}, EFT: ${this.databaseTables.locations.sandbox_high.base.BotMax}`);
 
         if (!modConfig.bot_spawns.advanced_eft_bot_count_management.only_decrease_bot_caps || (this.iBotConfig.maxBotCap.factory4_day > this.databaseTables.locations.factory4_day.base.BotMax))
         {
@@ -638,6 +640,10 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             this.iBotConfig.maxBotCap.sandbox = this.databaseTables.locations.sandbox.base.BotMax;
         }
+        if (!modConfig.bot_spawns.advanced_eft_bot_count_management.only_decrease_bot_caps || (this.iBotConfig.maxBotCap.sandbox_high > this.databaseTables.locations.sandbox_high.base.BotMax))
+        {
+            this.iBotConfig.maxBotCap.sandbox_high = this.databaseTables.locations.sandbox_high.base.BotMax;
+        }
 
         this.iBotConfig.maxBotCap.factory4_day += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.factory4_day;
         this.iBotConfig.maxBotCap.factory4_night += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.factory4_night;
@@ -650,6 +656,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.iBotConfig.maxBotCap.laboratory += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.laboratory;
         this.iBotConfig.maxBotCap.tarkovstreets += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.tarkovstreets;
         this.iBotConfig.maxBotCap.sandbox += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.sandbox;
+        this.iBotConfig.maxBotCap.sandbox_high += modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments.sandbox_high;
 
         this.commonUtils.logInfo(`Updated bot counts for Factory Day - SPT: ${this.iBotConfig.maxBotCap.factory4_day}, EFT: ${this.databaseTables.locations.factory4_day.base.BotMax}`);
         this.commonUtils.logInfo(`Updated bot counts for Factory Night - SPT: ${this.iBotConfig.maxBotCap.factory4_night}, EFT: ${this.databaseTables.locations.factory4_night.base.BotMax}`);
@@ -662,6 +669,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Updated bot counts for Labs - SPT: ${this.iBotConfig.maxBotCap.laboratory}, EFT: ${this.databaseTables.locations.laboratory.base.BotMax}`);
         this.commonUtils.logInfo(`Updated bot counts for Streets - SPT: ${this.iBotConfig.maxBotCap.tarkovstreets}, EFT: ${this.databaseTables.locations.tarkovstreets.base.BotMax}`);
         this.commonUtils.logInfo(`Updated bot counts for Ground Zero - SPT: ${this.iBotConfig.maxBotCap.sandbox}, EFT: ${this.databaseTables.locations.sandbox.base.BotMax}`);
+        this.commonUtils.logInfo(`Updated bot counts for Ground Zero (20+) - SPT: ${this.iBotConfig.maxBotCap.sandbox_high}, EFT: ${this.databaseTables.locations.sandbox_high.base.BotMax}`);
     }
 
     private modifyNonWaveBotSpawnSettings(): void
@@ -676,7 +684,8 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Interchange : ${this.databaseTables.locations.interchange.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Labs : ${this.databaseTables.locations.laboratory.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Streets : ${this.databaseTables.locations.tarkovstreets.base.BotSpawnPeriodCheck}`);
-        this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Ground Zero : ${this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck}`);*/
+        this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Ground Zero : ${this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck}`);
+        this.commonUtils.logInfo(`Original BotSpawnPeriodCheck for Ground Zero (20+) : ${this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck}`);*/
 
         this.databaseTables.locations.factory4_day.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
         this.databaseTables.locations.factory4_night.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
@@ -689,6 +698,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseTables.locations.laboratory.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
         this.databaseTables.locations.tarkovstreets.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
         this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
+        this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
 
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Factory Day : ${this.databaseTables.locations.factory4_day.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Factory Night : ${this.databaseTables.locations.factory4_night.base.BotSpawnPeriodCheck}`);
@@ -701,6 +711,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Labs : ${this.databaseTables.locations.laboratory.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Streets : ${this.databaseTables.locations.tarkovstreets.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero : ${this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck}`);
+        this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero (20+) : ${this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck}`);
     }
 }
 
