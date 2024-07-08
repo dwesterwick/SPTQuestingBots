@@ -289,7 +289,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             // Ensure the raid is progressing before running anything
-            float timeSinceSpawning = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            float timeSinceSpawning = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
             if (timeSinceSpawning < 0.01)
             {
                 return false;
@@ -495,7 +495,7 @@ namespace SPTQuestingBots.Components.Spawning
                     }
 
                     // Check if the bot group is allowed to spawn at this time in the raid
-                    float raidET = Aki.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
+                    float raidET = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
                     if ((raidET < botGroups[i].RaidETRangeToSpawn.Min) || (raidET > botGroups[i].RaidETRangeToSpawn.Max))
                     {
                         continue;

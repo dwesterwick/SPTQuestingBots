@@ -212,8 +212,8 @@ namespace SPTQuestingBots.Helpers
 
         public static readonly WildSpawnType[] pmcSpawnTypes = new WildSpawnType[2]
         {
-            (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue,
-            (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue
+            (WildSpawnType)SPT.PrePatch.AkiBotsPrePatcher.sptUsecValue,
+            (WildSpawnType)SPT.PrePatch.AkiBotsPrePatcher.sptBearValue
         };
 
         public static bool WillBotBeAPMC(BotOwner botOwner)
@@ -237,8 +237,8 @@ namespace SPTQuestingBots.Helpers
 
         public static EPlayerSide GetSideForWildSpawnType(WildSpawnType spawnType)
         {
-            WildSpawnType sptUsec = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptUsecValue;
-            WildSpawnType sptBear = (WildSpawnType)Aki.PrePatch.AkiBotsPrePatcher.sptBearValue;
+            WildSpawnType sptUsec = (WildSpawnType)SPT.PrePatch.AkiBotsPrePatcher.sptUsecValue;
+            WildSpawnType sptBear = (WildSpawnType)SPT.PrePatch.AkiBotsPrePatcher.sptBearValue;
 
             if (spawnType == sptUsec)
             {
