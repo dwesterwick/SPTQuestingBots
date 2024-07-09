@@ -18,7 +18,7 @@ namespace SPTQuestingBotsInteropTest
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance, float startDelay)
+        private static void PatchPostfix(ref IEnumerator __result, object __instance)
         {
             if (!SPTQuestingBots.QuestingBotsInterop.IsQuestingBotsLoaded())
             {
