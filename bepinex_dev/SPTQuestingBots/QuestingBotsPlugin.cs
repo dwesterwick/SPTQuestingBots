@@ -25,8 +25,8 @@ namespace SPTQuestingBots
 
         private void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "3.8.0.0";
-            Patches.TarkovInitPatch.MaxVersion = "3.8.99.0";
+            Patches.TarkovInitPatch.MinVersion = "3.9.0.0";
+            Patches.TarkovInitPatch.MaxVersion = "3.9.0.0";
 
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;
