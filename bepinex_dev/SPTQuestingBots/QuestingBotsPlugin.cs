@@ -67,6 +67,7 @@ namespace SPTQuestingBots
                 {
                     new Patches.GameStartPatch().Enable();
                     new Patches.MatchmakerFinalCountdownUpdatePatch().Enable();
+                    new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBotsByWavePatch().Enable();
                     new Patches.ActivateBotsByWavePatch2().Enable();
                     new Patches.AddEnemyPatch().Enable();

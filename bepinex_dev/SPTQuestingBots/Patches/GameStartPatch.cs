@@ -12,7 +12,6 @@ using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
-using EFT.Bots;
 
 namespace SPTQuestingBots.Patches
 {
@@ -26,12 +25,15 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
-            return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
+            //Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
+            //return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
+
+            Type baseGameType = typeof(BaseLocalGame<EftGamePlayerOwner>);
+            return baseGameType.GetMethod("vmethod_4", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance, BotControllerSettings controllerSettings, ISpawnSystem spawnSystem, Callback runCallback)
+        private static void PatchPostfix(ref IEnumerator __result, object __instance)
         {
             if (!IsDelayingGameStart)
             {
@@ -40,27 +42,14 @@ namespace SPTQuestingBots.Patches
 
             localGameObj = __instance;
 
-            __result = addIterationsToWaitForBotGenerators(__result);
+            IEnumerator originalEnumeratorWithMessage = addMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
+            __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, waitForBotGenerators(), spawnMissedWaves());
+
             LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
 
-            if (!QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
-                return;
-            }
-
-            FieldInfo wavesSpawnScenarioField = AccessTools.Field(typeof(LocalGame), "wavesSpawnScenario_0");
-            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
-
-            if (wavesSpawnScenario?.SpawnWaves == null)
-            {
-                LoggingController.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
-
-                return;
-            }
-
-            foreach (BotWaveDataClass wave in wavesSpawnScenario.SpawnWaves.ToArray())
-            {
-                LoggingController.LogInfo("BotWaveDataClass at " + wave.Time + "s: " + wave.BotsCount + " bots of type " + wave.WildSpawnType.ToString());
+                writeSpawnMessages();
             }
         }
 
@@ -80,7 +69,13 @@ namespace SPTQuestingBots.Patches
             missedBossWaves.Add(wave);
         }
 
-        private static IEnumerator addIterationsToWaitForBotGenerators(IEnumerator originalTask)
+        private static IEnumerator addMessageAfterEnumerator(IEnumerator enumerator, string message)
+        {
+            yield return enumerator;
+            LoggingController.LogInfo(message);
+        }
+
+        private static IEnumerator waitForBotGeneratorsAndAdjustTimers()
         {
             float startTime = Time.time;
             float safetyDelay = 999;
@@ -104,6 +99,11 @@ namespace SPTQuestingBots.Patches
             //LoggingController.LogInfo("New Start Time: " + newStartTime);
             //LoggingController.LogInfo("New Timer EndTimes: " + string.Join(", ", newTimerEndTimes));
 
+            LoggingController.LogInfo("Game-start timers adjusted");
+        }
+
+        private static IEnumerator spawnMissedWaves()
+        {
             IsDelayingGameStart = false;
 
             if (missedBotWaves.Any())
@@ -126,9 +126,9 @@ namespace SPTQuestingBots.Patches
                 }
             }
 
-            yield return originalTask;
+            LoggingController.LogInfo("Spawned all missed boss waves");
 
-            LoggingController.LogInfo("Original start-game IEnumerator completed");
+            yield return null;
         }
 
         private static void updateAllTimers(IEnumerable<object> timers, float delay, float safetyDelay)
@@ -232,8 +232,9 @@ namespace SPTQuestingBots.Patches
 
                 yield return new WaitForSeconds(waitIterationDuration / 1000f);
 
-                string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s (" + BotGenerator.CurrentBotGeneratorProgress + "%)";
-                MatchmakerFinalCountdownUpdatePatch.SetText(message + (new string('.', periods)));
+                string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s";
+                MatchmakerFinalCountdownUpdatePatch.SetText(message + " (" + BotGenerator.CurrentBotGeneratorProgress + " %)" + (new string('.', periods)));
+                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(message, BotGenerator.CurrentBotGeneratorProgress / 100f);
 
                 periods++;
                 if (periods > maxPeriodsInText)
@@ -248,6 +249,25 @@ namespace SPTQuestingBots.Patches
             }
 
             MatchmakerFinalCountdownUpdatePatch.ResetText();
+            TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
+        }
+
+        private static void writeSpawnMessages()
+        {
+            FieldInfo wavesSpawnScenarioField = AccessTools.Field(typeof(LocalGame), "wavesSpawnScenario_0");
+            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
+
+            if (wavesSpawnScenario?.SpawnWaves == null)
+            {
+                LoggingController.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
+
+                return;
+            }
+
+            foreach (BotWaveDataClass wave in wavesSpawnScenario.SpawnWaves.ToArray())
+            {
+                LoggingController.LogInfo("BotWaveDataClass at " + wave.Time + "s: " + wave.BotsCount + " bots of type " + wave.WildSpawnType.ToString());
+            }
         }
     }
 }

@@ -206,6 +206,7 @@
     <Compile Include="Models\BotJobAssignment.cs" />
     <Compile Include="Models\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
+    <Compile Include="Models\EnumeratorCollection.cs" />
     <Compile Include="Models\JSONObject.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ServerRequestPatch.cs" />
     <Compile Include="Patches\CheckLookEnemyPatch.cs" />
+    <Compile Include="Patches\TimeHasComeScreenClassChangeStatusPatch.cs" />
     <Compile Include="Patches\TryToSpawnInZoneAndDelayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsExternal.cs" />
