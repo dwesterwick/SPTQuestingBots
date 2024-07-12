@@ -607,6 +607,15 @@ namespace SPTQuestingBots.Components.Spawning
                     group.Lock();
                 }
 
+                /*bool newGroup = group == null;
+
+                group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
+
+                if (newGroup)
+                {
+                    group.Lock();
+                }*/
+
                 return group;
             }
 
