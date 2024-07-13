@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
-using EFT;
-using HarmonyLib;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -101,8 +99,6 @@ namespace SPTQuestingBots
             }
 
             Logger.LogInfo("Loading QuestingBots...done.");
-
-            fixBSGCrap();
         }
 
         private void performLobotomies()
@@ -134,23 +130,6 @@ namespace SPTQuestingBots
             }
 
             return true;
-        }
-
-        private void fixBSGCrap()
-        {
-            FieldInfo botSettingsRepoField = AccessTools.Field(typeof(BotSettingsRepoAbstractClass), "dictionary_0");
-            Dictionary<WildSpawnType, GClass696> botSettingsRepo = (Dictionary<WildSpawnType, GClass696>)botSettingsRepoField.GetValue(null);
-            if (botSettingsRepo == null)
-            {
-                throw new TypeLoadException("Could not load Dictionary<WildSpawnType, GClass696> from BotSettingsRepoAbstractClass");
-            }
-
-            botSettingsRepo[WildSpawnType.pmcBEAR] = new GClass696(false, false, false, "ScavRole/PmcBot", (ETagStatus)0);
-            botSettingsRepo[WildSpawnType.pmcUSEC] = new GClass696(false, false, false, "ScavRole/PmcBot", (ETagStatus)0);
-
-            botSettingsRepoField.SetValue(null, botSettingsRepo);
-
-            LoggingController.LogInfo("Updated BotSettingsRepoAbstractClass");
         }
     }
 }
