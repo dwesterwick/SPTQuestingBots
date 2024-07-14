@@ -94,7 +94,18 @@ namespace SPTQuestingBots.Helpers
             Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(positionOutline);
         }
 
-        public static GUIStyle CreateGuiStyle()
+        public static GUIStyle CreateGuiStyleBotOverlays()
+        {
+            GUIStyle guiStyle = new GUIStyle(GUI.skin.box);
+            guiStyle.alignment = TextAnchor.MiddleLeft;
+            guiStyle.fontSize = QuestingBotsPluginConfig.QuestOverlayFontSize.Value;
+            guiStyle.margin = new RectOffset(3, 3, 3, 3);
+            guiStyle.richText = true;
+
+            return guiStyle;
+        }
+
+        public static GUIStyle CreateGuiStylePlayerCoordinates()
         {
             GUIStyle guiStyle = new GUIStyle(GUI.skin.box);
             guiStyle.alignment = TextAnchor.MiddleLeft;

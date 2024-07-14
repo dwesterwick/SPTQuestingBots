@@ -74,6 +74,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> QuestOverlayMaxDistance;
 
         public static ConfigEntry<bool> CreateQuestLocations;
+        public static ConfigEntry<bool> ShowCurrentLocation;
         public static ConfigEntry<string> QuestLocationName;
         public static ConfigEntry<KeyboardShortcut> StoreQuestLocationKey;
 
@@ -139,7 +140,9 @@ namespace SPTQuestingBots
                 16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36)));
 
             CreateQuestLocations = Config.Bind("Custom Quest Locations", "Enable Quest Location Saving",
-                false, new ConfigDescription("Allow custom quest locations to be saved", null, new ConfigurationManagerAttributes { Order = 3, IsAdvanced = true }));
+                false, new ConfigDescription("Allow custom quest locations to be saved", null, new ConfigurationManagerAttributes { Order = 4, IsAdvanced = true }));
+            ShowCurrentLocation = Config.Bind("Custom Quest Locations", "Display Current Location",
+                false, new ConfigDescription("Display your current (x,y,z) coordinates on the screen", null, new ConfigurationManagerAttributes { Order = 3, IsAdvanced = true }));
             QuestLocationName = Config.Bind("Custom Quest Locations", "Quest Location Name",
                 "Custom Quest Location", new ConfigDescription("Name of the next quest location that will be stored", null, new ConfigurationManagerAttributes { Order = 2, IsAdvanced = true }));
             StoreQuestLocationKey = Config.Bind("Custom Quest Locations", "Store New Quest Location",
