@@ -439,7 +439,7 @@ namespace SPTQuestingBots.BotLogic
         public bool IsRegrouping()
         {
             string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
-            return activeLogicName.Equals(nameof(RegroupAction));
+            return activeLogicName.Equals(nameof(BossRegroupAction));
         }
 
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)

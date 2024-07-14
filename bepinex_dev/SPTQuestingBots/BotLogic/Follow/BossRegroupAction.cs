@@ -10,11 +10,11 @@ using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
-    internal class RegroupAction : BehaviorExtensions.GoToPositionAbstractAction
+    internal class BossRegroupAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private bool wasStuck = false;
 
-        public RegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public BossRegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             SetBaseAction(GClass459.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
         }
@@ -47,7 +47,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             // determine the location of the nearest follower and the target distance to it
             Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
-            float targetDistance = (float)ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+            float targetDistance = (float)ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
             
             // Check if the bot should find its nearest follower
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)

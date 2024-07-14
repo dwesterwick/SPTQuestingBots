@@ -173,7 +173,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             if (followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000)
             {
                 objectiveManager.NotQuestingReason = Objective.NotQuestingReason.Regroup;
-                setNextAction(BotActionType.Regroup, "Regroup");
+                setNextAction(BotActionType.BossRegroup, "BossRegroup");
                 return updatePreviousState(true);
             }
 

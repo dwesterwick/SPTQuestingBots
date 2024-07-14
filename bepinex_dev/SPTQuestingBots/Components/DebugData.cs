@@ -124,9 +124,10 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                string activeLayerName = bot.Brain.ActiveLayerName();
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLabeledValue(Controllers.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
-                sb.AppendLabeledValue("Layer", bot.Brain.ActiveLayerName(), Color.magenta, Color.magenta);
+                sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
                 sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 
                 BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
@@ -147,18 +148,26 @@ namespace SPTQuestingBots.Components
                         sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
                     }
 
-                    if (botObjectiveManager.NotQuestingReason != NotQuestingReason.None)
+                    if (botObjectiveManager.NotRegroupingReason != NotQuestingReason.None)
                     {
-                        sb.AppendLabeledValue("NotQuestingReason", botObjectiveManager.NotQuestingReason.ToString(), Color.white, Color.white);
-                    }
-                    if (botObjectiveManager.NotFollowingReason != NotQuestingReason.None)
-                    {
-                        sb.AppendLabeledValue("NotFollowingReason", botObjectiveManager.NotFollowingReason.ToString(), Color.white, Color.white);
+                        sb.AppendLabeledValue("NotRegroupingReason", botObjectiveManager.NotRegroupingReason.ToString(), Color.white, Color.white);
                     }
 
-                    if (botObjectiveManager.IsQuestingAllowed)
+                    if (!activeLayerName.Contains("SAIN"))
                     {
-                        sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
+                        if (botObjectiveManager.NotQuestingReason != NotQuestingReason.None)
+                        {
+                            sb.AppendLabeledValue("NotQuestingReason", botObjectiveManager.NotQuestingReason.ToString(), Color.white, Color.white);
+                        }
+                        if (botObjectiveManager.NotFollowingReason != NotQuestingReason.None)
+                        {
+                            sb.AppendLabeledValue("NotFollowingReason", botObjectiveManager.NotFollowingReason.ToString(), Color.white, Color.white);
+                        }
+                        
+                        if (botObjectiveManager.IsQuestingAllowed)
+                        {
+                            sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
+                        }
                     }
                 }
 

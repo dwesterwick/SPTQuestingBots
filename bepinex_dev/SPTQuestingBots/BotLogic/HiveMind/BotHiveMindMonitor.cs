@@ -188,6 +188,16 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return Vector3.Distance(bot.Position, botBosses[bot].Position);
         }
 
+        public static Vector3? GetLocationOfBoss(BotOwner bot)
+        {
+            if (!HasBoss(bot))
+            {
+                return null;
+            }
+
+            return botBosses[bot].Position;
+        }
+
         public static Vector3 GetLocationOfNearestGroupMember(BotOwner bot)
         {
             IReadOnlyCollection<BotOwner> members = GetAllGroupMembers(bot);

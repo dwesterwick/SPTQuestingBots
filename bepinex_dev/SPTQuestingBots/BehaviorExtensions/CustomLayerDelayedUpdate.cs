@@ -18,7 +18,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         Ambush,
         Snipe,
         PlantItem,
-        Regroup,
+        BossRegroup,
+        FollowerRegroup,
         Sleep,
         ToggleSwitch,
         UnlockDoor,
@@ -66,7 +67,8 @@ namespace SPTQuestingBots.BehaviorExtensions
                 case BotActionType.Ambush: return new Action(typeof(BotLogic.Objective.AmbushAction), actionReason);
                 case BotActionType.Snipe: return new Action(typeof(BotLogic.Objective.SnipeAction), actionReason);
                 case BotActionType.PlantItem: return new Action(typeof(BotLogic.Objective.PlantItemAction), actionReason);
-                case BotActionType.Regroup: return new Action(typeof(BotLogic.Follow.RegroupAction), actionReason);
+                case BotActionType.BossRegroup: return new Action(typeof(BotLogic.Follow.BossRegroupAction), actionReason);
+                case BotActionType.FollowerRegroup: return new Action(typeof(BotLogic.Follow.FollowerRegroupAction), actionReason);
                 case BotActionType.Sleep: return new Action(typeof(BotLogic.Sleep.SleepingAction), actionReason);
                 case BotActionType.ToggleSwitch: return new Action(typeof(BotLogic.Objective.ToggleSwitchAction), actionReason);
                 case BotActionType.UnlockDoor: return new Action(typeof(BotLogic.Objective.UnlockDoorAction), actionReason);

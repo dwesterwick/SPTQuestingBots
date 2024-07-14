@@ -12,7 +12,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 {
     internal class BotFollowerLayer : CustomLayerForQuesting
     {
-        private double maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+        private double maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
 
         public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
@@ -57,11 +57,11 @@ namespace SPTQuestingBots.BotLogic.Follow
             // If the layer is active, run to the boss. Otherwise, allow a little more space
             if (previousState)
             {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Min;
+                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
             }
             else
             {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRange.Max;
+                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Max;
             }
 
             // Only use this layer if the bot has a boss to follow and the boss can quest
