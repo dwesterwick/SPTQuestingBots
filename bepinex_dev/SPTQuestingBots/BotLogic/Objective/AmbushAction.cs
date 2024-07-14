@@ -9,11 +9,17 @@ namespace SPTQuestingBots.BotLogic.Objective
 {
     public class AmbushAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private bool allowedToIgnoreHearing = true;
         private bool isIgnoringHearing = false;
 
         public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass460.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(GClass459.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+        }
+
+        public AmbushAction(BotOwner _BotOwner, bool _allowedToIgnoreHearing) : this(_BotOwner)
+        {
+            allowedToIgnoreHearing = _allowedToIgnoreHearing;
         }
 
         public override void Start()
@@ -34,7 +40,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             PauseActionElapsedTime();
 
             // If the bot was instructed to ignore its hearing, reverse the instruction so it can be effective in combat again
-            if (isIgnoringHearing)
+            if (allowedToIgnoreHearing && isIgnoringHearing)
             {
                 ObjectiveManager.BotMonitor.TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, false);
                 isIgnoringHearing = false;
@@ -90,7 +96,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Needed in case somebody drops the layer priorities of this mod. Without doing this, SAIN will prevent bots from staying in their ambush spots.
-            if (!isIgnoringHearing)
+            if (allowedToIgnoreHearing && !isIgnoringHearing)
             {
                 ObjectiveManager.BotMonitor.TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, true);
                 isIgnoringHearing = true;

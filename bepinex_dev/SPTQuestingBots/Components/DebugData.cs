@@ -29,7 +29,8 @@ namespace SPTQuestingBots.Components
         private Dictionary<BotOwner, OverlayData> botPathInfo = new Dictionary<BotOwner, OverlayData>();
         private Dictionary<BotOwner, GameObject> botPathMarkers = new Dictionary<BotOwner, GameObject>();
 
-        private GUIStyle guiStyle;
+        private GUIStyle guiStyleBotOverlays;
+        private GUIStyle guiStylePlayerCoordinates;
 
         public void RegisterBot(BotOwner bot)
         {
@@ -42,7 +43,11 @@ namespace SPTQuestingBots.Components
 
         private void Awake()
         {
-            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { guiStyle = DebugHelpers.CreateGuiStyle(); };
+            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) =>
+            {
+                guiStyleBotOverlays = DebugHelpers.CreateGuiStyleBotOverlays();
+                guiStylePlayerCoordinates = DebugHelpers.CreateGuiStylePlayerCoordinates();
+            };
         }
 
         private void Update()
@@ -75,9 +80,13 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            if (guiStyle == null)
+            if (guiStyleBotOverlays == null)
             {
-                guiStyle = DebugHelpers.CreateGuiStyle();
+                guiStyleBotOverlays = DebugHelpers.CreateGuiStyleBotOverlays();
+            }
+            if (guiStylePlayerCoordinates == null)
+            {
+                guiStylePlayerCoordinates = DebugHelpers.CreateGuiStylePlayerCoordinates();
             }
 
             updateStaticJobAssignmentDistances();
@@ -86,6 +95,8 @@ namespace SPTQuestingBots.Components
 
             updateBotOverlays();
             updateBotPathOverlays();
+
+            updatePlayerCoordinates();
         }
 
         private void destroyPathMarker(BotOwner bot)
@@ -286,14 +297,14 @@ namespace SPTQuestingBots.Components
                 sb.AppendLabeledValue("Distance", distanceToBot + "m", Color.white, Color.white);
                 botInfo[bot].GuiContent.text = sb.ToString();
 
-                Vector2 guiSize = guiStyle.CalcSize(botInfo[bot].GuiContent);
+                Vector2 guiSize = guiStyleBotOverlays.CalcSize(botInfo[bot].GuiContent);
                 float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
                 botInfo[bot].GuiRect = rect;
 
-                GUI.Box(botInfo[bot].GuiRect, botInfo[bot].GuiContent, guiStyle);
+                GUI.Box(botInfo[bot].GuiRect, botInfo[bot].GuiContent, guiStyleBotOverlays);
             }
         }
 
@@ -345,14 +356,14 @@ namespace SPTQuestingBots.Components
                 // Set by updateStaticJobAssignmentDistances()
                 jobAssignmentInfo[jobAssignment].GuiContent.text = jobAssignmentInfo[jobAssignment].StaticText + jobAssignmentDistances[jobAssignment];
 
-                Vector2 guiSize = guiStyle.CalcSize(jobAssignmentInfo[jobAssignment].GuiContent);
+                Vector2 guiSize = guiStyleBotOverlays.CalcSize(jobAssignmentInfo[jobAssignment].GuiContent);
                 float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
                 jobAssignmentInfo[jobAssignment].GuiRect = rect;
 
-                GUI.Box(jobAssignmentInfo[jobAssignment].GuiRect, jobAssignmentInfo[jobAssignment].GuiContent, guiStyle);
+                GUI.Box(jobAssignmentInfo[jobAssignment].GuiRect, jobAssignmentInfo[jobAssignment].GuiContent, guiStyleBotOverlays);
             }
         }
 
@@ -386,15 +397,36 @@ namespace SPTQuestingBots.Components
                 // Copy the text here in case we want to add dynamic text in the future
                 botPathInfo[bot].GuiContent.text = botPathInfo[bot].StaticText;
 
-                Vector2 guiSize = guiStyle.CalcSize(botPathInfo[bot].GuiContent);
+                Vector2 guiSize = guiStyleBotOverlays.CalcSize(botPathInfo[bot].GuiContent);
                 float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
                 botPathInfo[bot].GuiRect = rect;
 
-                GUI.Box(botPathInfo[bot].GuiRect, botPathInfo[bot].GuiContent, guiStyle);
+                GUI.Box(botPathInfo[bot].GuiRect, botPathInfo[bot].GuiContent, guiStyleBotOverlays);
             }
+        }
+
+        private void updatePlayerCoordinates()
+        {
+            if (!QuestingBotsPluginConfig.ShowCurrentLocation.Value)
+            {
+                return;
+            }
+
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (mainPlayer == null)
+            {
+                return;
+            }
+
+            string text = mainPlayer.Position.ToString();
+            GUIContent guiContent = new GUIContent(text);
+
+            Vector2 guiSize = guiStylePlayerCoordinates.CalcSize(guiContent);
+            Rect rect = new Rect(Screen.width - guiSize.x - 3, Screen.height - guiSize.y - 3, guiSize.x, guiSize.y);
+            GUI.Box(rect, guiContent, guiStylePlayerCoordinates);
         }
 
         private void loadAllPossibleJobAssignments()

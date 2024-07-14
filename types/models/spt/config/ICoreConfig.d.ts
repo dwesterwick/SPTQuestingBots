@@ -1,12 +1,13 @@
-import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
+import { IBaseConfig } from "@spt/models/spt/config/IBaseConfig";
 export interface ICoreConfig extends IBaseConfig {
-    kind: "aki-core";
-    akiVersion: string;
+    kind: "spt-core";
+    sptVersion: string;
     projectName: string;
     compatibleTarkovVersion: string;
     serverName: string;
     profileSaveIntervalSeconds: number;
     sptFriendNickname: string;
+    allowProfileWipe: boolean;
     bsgLogging: IBsgLogging;
     release: IRelease;
     fixes: IGameFixes;
@@ -15,6 +16,8 @@ export interface ICoreConfig extends IBaseConfig {
     commit?: string;
     /** Timestamp of server build */
     buildTime?: string;
+    /** Server locale keys that will be added to the bottom of the startup watermark */
+    customWatermarkLocaleKeys?: string[];
 }
 export interface IBsgLogging {
     /**
@@ -50,7 +53,7 @@ export interface IRelease {
 export interface IGameFixes {
     /** Shotguns use a different value than normal guns causing huge pellet dispersion  */
     fixShotgunDispersion: boolean;
-    /** Remove items added by mods when the mod no longer exists - can fix dead profiles stuck at game load*/
+    /** Remove items added by mods when the mod no longer exists - can fix dead profiles stuck at game load */
     removeModItemsFromProfile: boolean;
     /** Fix issues that cause the game to not start due to inventory item issues */
     fixProfileBreakingInventoryItemIssues: boolean;
@@ -64,6 +67,7 @@ export interface IChatbotFeatures {
     sptFriendEnabled: boolean;
     commandoEnabled: boolean;
     commandoFeatures: ICommandoFeatures;
+    commandUseLimits: Record<string, number>;
 }
 export interface ICommandoFeatures {
     giveCommandEnabled: boolean;

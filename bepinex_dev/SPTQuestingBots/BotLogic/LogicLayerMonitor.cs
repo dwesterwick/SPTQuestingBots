@@ -126,7 +126,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Find the field that stores the list of brain layers assigned to the bot
-            Type aICoreStrategyClassType = typeof(AICoreStrategyClass<BotLogicDecision>);
+            Type aICoreStrategyClassType = typeof(AICoreStrategyAbstractClass<BotLogicDecision>);
             FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
             if (layerListField == null)
             {

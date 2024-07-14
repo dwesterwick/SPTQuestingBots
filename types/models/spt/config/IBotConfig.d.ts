@@ -1,12 +1,12 @@
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { GenerationData } from "@spt-aki/models/eft/common/tables/IBotType";
-import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
-import { IBotDurability } from "@spt-aki/models/spt/config/IBotDurability";
+import { MinMax } from "@spt/models/common/MinMax";
+import { GenerationData } from "@spt/models/eft/common/tables/IBotType";
+import { IBaseConfig } from "@spt/models/spt/config/IBaseConfig";
+import { IBotDurability } from "@spt/models/spt/config/IBotDurability";
 export interface IBotConfig extends IBaseConfig {
-    kind: "aki-bot";
+    kind: "spt-bot";
     /** How many variants of each bot should be generated on raid start */
     presetBatch: PresetBatch;
-    /** Bot roles that should not have PMC types (sptBear/sptUsec) added as enemies to */
+    /** Bot roles that should not have PMC types (pmcBEAR/pmcUSEC) added as enemies to */
     botsToNotAddPMCsAsEnemiesTo: string[];
     /** What bot types should be classified as bosses */
     bosses: string[];
@@ -39,6 +39,16 @@ export interface IBotConfig extends IBaseConfig {
     walletLoot: IWalletLootSettings;
     /** Currency weights, Keyed by botrole / currency */
     currencyStackSize: Record<string, Record<string, Record<string, number>>>;
+    /** Tpls for low profile gas blocks */
+    lowProfileGasBlockTpls: string[];
+    /** What bottypes should be excluded from having loot generated on them (backpack/pocket/vest) does not disable food/drink/special/ */
+    disableLootOnBotTypes: string[];
+    assaultToBossConversion: IAssaultToBossConversion;
+}
+export interface IAssaultToBossConversion {
+    bossConvertEnabled: boolean;
+    bossesToConvertToWeights: Record<string, number>;
+    bossConvertMinMax: Record<string, MinMax>;
 }
 /** Number of bots to generate and store in cache on raid start per bot type */
 export interface PresetBatch {
@@ -76,8 +86,8 @@ export interface PresetBatch {
     crazyAssaultEvent: number;
     bossBoar: number;
     bossBoarSniper: number;
-    sptUsec: number;
-    sptBear: number;
+    pmcUSEC: number;
+    pmcBEAR: number;
 }
 export interface IWalletLootSettings {
     /** Chance wallets have loot in them */
@@ -167,18 +177,15 @@ export interface IAdjustmentDetails {
     add: Record<string, Record<string, number>>;
     edit: Record<string, Record<string, number>>;
 }
-export interface IArmorPlateWeights {
+export interface IArmorPlateWeights extends Record<string, any> {
     levelRange: MinMax;
-    frontPlateWeights: Record<string, number>;
-    backPlateWeights: Record<string, number>;
-    sidePlateWeights: Record<string, number>;
 }
 export interface IRandomisedResourceDetails {
     food: IRandomisedResourceValues;
     meds: IRandomisedResourceValues;
 }
 export interface IRandomisedResourceValues {
-    /** Minimum percent of item to randomized between min and max resource*/
+    /** Minimum percent of item to randomized between min and max resource */
     resourcePercent: number;
     /** Chance for randomization to not occur */
     chanceMaxResourcePercent: number;

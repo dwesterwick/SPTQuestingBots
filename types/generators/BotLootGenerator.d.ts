@@ -1,34 +1,33 @@
-import { BotWeaponGenerator } from "@spt-aki/generators/BotWeaponGenerator";
-import { BotGeneratorHelper } from "@spt-aki/helpers/BotGeneratorHelper";
-import { BotHelper } from "@spt-aki/helpers/BotHelper";
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { InventoryHelper } from "@spt-aki/helpers/InventoryHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
-import { Inventory as PmcInventory } from "@spt-aki/models/eft/common/tables/IBotBase";
-import { IBotType, Inventory, ModsChances } from "@spt-aki/models/eft/common/tables/IBotType";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt-aki/models/eft/common/tables/ITemplateItem";
-import { EquipmentSlots } from "@spt-aki/models/enums/EquipmentSlots";
-import { IItemSpawnLimitSettings } from "@spt-aki/models/spt/bots/IItemSpawnLimitSettings";
-import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
-import { IPmcConfig } from "@spt-aki/models/spt/config/IPmcConfig";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { BotLootCacheService } from "@spt-aki/services/BotLootCacheService";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
+import { BotHelper } from "@spt/helpers/BotHelper";
+import { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { InventoryHelper } from "@spt/helpers/InventoryHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
+import { Inventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
+import { IBotType, Inventory, ModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
+import { IItemSpawnLimitSettings } from "@spt/models/spt/bots/IItemSpawnLimitSettings";
+import { IBotConfig } from "@spt/models/spt/config/IBotConfig";
+import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { BotLootCacheService } from "@spt/services/BotLootCacheService";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { ICloner } from "@spt/utils/cloners/ICloner";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 export declare class BotLootGenerator {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
     protected randomUtil: RandomUtil;
     protected itemHelper: ItemHelper;
-    protected jsonUtil: JsonUtil;
     protected inventoryHelper: InventoryHelper;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected handbookHelper: HandbookHelper;
     protected botGeneratorHelper: BotGeneratorHelper;
     protected botWeaponGenerator: BotWeaponGenerator;
@@ -37,9 +36,10 @@ export declare class BotLootGenerator {
     protected botLootCacheService: BotLootCacheService;
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
+    protected cloner: ICloner;
     protected botConfig: IBotConfig;
     protected pmcConfig: IPmcConfig;
-    constructor(logger: ILogger, hashUtil: HashUtil, randomUtil: RandomUtil, itemHelper: ItemHelper, jsonUtil: JsonUtil, inventoryHelper: InventoryHelper, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, botGeneratorHelper: BotGeneratorHelper, botWeaponGenerator: BotWeaponGenerator, weightedRandomHelper: WeightedRandomHelper, botHelper: BotHelper, botLootCacheService: BotLootCacheService, localisationService: LocalisationService, configServer: ConfigServer);
+    constructor(logger: ILogger, hashUtil: HashUtil, randomUtil: RandomUtil, itemHelper: ItemHelper, inventoryHelper: InventoryHelper, databaseService: DatabaseService, handbookHelper: HandbookHelper, botGeneratorHelper: BotGeneratorHelper, botWeaponGenerator: BotWeaponGenerator, weightedRandomHelper: WeightedRandomHelper, botHelper: BotHelper, botLootCacheService: BotLootCacheService, localisationService: LocalisationService, configServer: ConfigServer, cloner: ICloner);
     protected getItemSpawnLimitsForBot(botRole: string): IItemSpawnLimitSettings;
     /**
      * Add loot to bots containers
@@ -60,7 +60,7 @@ export declare class BotLootGenerator {
     /**
      * Force healing items onto bot to ensure they can heal in-raid
      * @param botInventory Inventory to add items to
-     * @param botRole Role of bot (sptBear/sptUsec)
+     * @param botRole Role of bot (pmcBEAR/pmcUSEC)
      */
     protected addForcedMedicalItemsToPmcSecure(botInventory: PmcInventory, botRole: string): void;
     /**
@@ -82,7 +82,7 @@ export declare class BotLootGenerator {
      * @param totalValueLimitRub Total value of loot allowed in roubles
      * @param isPmc Is bot being generated for a pmc
      */
-    protected addLootFromPool(pool: Record<string, number>, equipmentSlots: string[], totalItemCount: number, inventoryToAddItemsTo: PmcInventory, botRole: string, itemSpawnLimits?: IItemSpawnLimitSettings, totalValueLimitRub?: number, isPmc?: boolean): void;
+    protected addLootFromPool(pool: Record<string, number>, equipmentSlots: string[], totalItemCount: number, inventoryToAddItemsTo: PmcInventory, botRole: string, itemSpawnLimits?: IItemSpawnLimitSettings, totalValueLimitRub?: number, isPmc?: boolean, containersIdFull?: Set<string>): void;
     protected createWalletLoot(walletId: string): Item[][];
     /**
      * Some items need child items to function, add them to the itemToAddChildrenTo array
@@ -101,7 +101,7 @@ export declare class BotLootGenerator {
      * @param botRole bots role .e.g. pmcBot
      * @param isPmc are we generating for a pmc
      */
-    protected addLooseWeaponsToInventorySlot(sessionId: string, botInventory: PmcInventory, equipmentSlot: string, templateInventory: Inventory, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number): void;
+    protected addLooseWeaponsToInventorySlot(sessionId: string, botInventory: PmcInventory, equipmentSlot: string, templateInventory: Inventory, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number, containersIdFull?: Set<string>): void;
     /**
      * Hydrate item limit array to contain items that have a limit for a specific bot type
      * All values are set to 0

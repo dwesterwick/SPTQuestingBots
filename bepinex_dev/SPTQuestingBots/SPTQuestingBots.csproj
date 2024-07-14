@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SPTQuestingBots</RootNamespace>
     <AssemblyName>SPTQuestingBots</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,21 +34,6 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\BepInEx\core\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="aki-custom">
-      <HintPath>..\..\..\..\BepInEx\plugins\spt\aki-custom.dll</HintPath>
-    </Reference>
-    <Reference Include="aki-singleplayer">
-      <HintPath>..\..\..\..\BepInEx\plugins\spt\aki-singleplayer.dll</HintPath>
-    </Reference>
-    <Reference Include="Aki.Common">
-      <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Aki.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Aki.Reflection">
-      <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Aki.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="aki_PrePatch">
-      <HintPath>..\..\..\..\BepInEx\patchers\aki_PrePatch.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -77,6 +63,21 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-common">
+      <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-custom">
+      <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-custom.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-prepatch">
+      <HintPath>..\..\..\..\BepInEx\patchers\spt-prepatch.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-reflection">
+      <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-singleplayer">
+      <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-singleplayer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -205,6 +206,7 @@
     <Compile Include="Models\BotJobAssignment.cs" />
     <Compile Include="Models\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
+    <Compile Include="Models\EnumeratorCollection.cs" />
     <Compile Include="Models\JSONObject.cs" />
     <Compile Include="Models\PathVisualizationData.cs" />
     <Compile Include="Models\Quest.cs" />
@@ -237,6 +239,7 @@
     <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ServerRequestPatch.cs" />
     <Compile Include="Patches\CheckLookEnemyPatch.cs" />
+    <Compile Include="Patches\TimeHasComeScreenClassChangeStatusPatch.cs" />
     <Compile Include="Patches\TryToSpawnInZoneAndDelayPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestingBotsExternal.cs" />

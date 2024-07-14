@@ -143,6 +143,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 SetExfiliationPointForQuesting();
             }
+
+            // Override the EFT distance that makes bots "avoid danger" when the BTR is near
+            botOwner.Settings.FileSettings.Mind.AVOID_BTR_RADIUS_SQR = ConfigController.Config.Questing.BTRRunDistance * ConfigController.Config.Questing.BTRRunDistance;
         }
 
         private void updateBotType()

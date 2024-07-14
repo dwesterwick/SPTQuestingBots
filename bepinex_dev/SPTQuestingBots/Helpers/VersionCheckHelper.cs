@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Helpers
 
             try
             {
-                string assemblyName = "Aki.Common";
+                string assemblyName = "spt-common";
                 Assembly assembly = Assembly.Load(assemblyName);
                 if (assembly == null)
                 {
@@ -40,7 +40,7 @@ namespace SPTQuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError("An exception occurred when checking the current SPT-AKI version: " + e.Message);
+                LoggingController.LogError("An exception occurred when checking the current SPT version: " + e.Message);
                 return false;
             }
 

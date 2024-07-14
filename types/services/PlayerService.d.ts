@@ -1,14 +1,14 @@
-import { IPmcData } from "@spt-aki/models/eft/common/IPmcData";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import { IPmcData } from "@spt/models/eft/common/IPmcData";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 export declare class PlayerService {
     protected logger: ILogger;
     protected timeUtil: TimeUtil;
     protected localisationService: LocalisationService;
-    protected databaseServer: DatabaseServer;
-    constructor(logger: ILogger, timeUtil: TimeUtil, localisationService: LocalisationService, databaseServer: DatabaseServer);
+    protected databaseService: DatabaseService;
+    constructor(logger: ILogger, timeUtil: TimeUtil, localisationService: LocalisationService, databaseService: DatabaseService);
     /**
      * Get level of player
      * @param pmcData Player profile

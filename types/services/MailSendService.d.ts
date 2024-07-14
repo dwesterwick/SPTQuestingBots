@@ -1,25 +1,25 @@
-import { DialogueHelper } from "@spt-aki/helpers/DialogueHelper";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
-import { NotificationSendHelper } from "@spt-aki/helpers/NotificationSendHelper";
-import { NotifierHelper } from "@spt-aki/helpers/NotifierHelper";
-import { TraderHelper } from "@spt-aki/helpers/TraderHelper";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { Dialogue, IUserDialogInfo, Message, MessageItems } from "@spt-aki/models/eft/profile/IAkiProfile";
-import { MessageType } from "@spt-aki/models/enums/MessageType";
-import { Traders } from "@spt-aki/models/enums/Traders";
-import { ISendMessageDetails } from "@spt-aki/models/spt/dialog/ISendMessageDetails";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { SaveServer } from "@spt-aki/servers/SaveServer";
-import { LocalisationService } from "@spt-aki/services/LocalisationService";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import { DialogueHelper } from "@spt/helpers/DialogueHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { NotificationSendHelper } from "@spt/helpers/NotificationSendHelper";
+import { NotifierHelper } from "@spt/helpers/NotifierHelper";
+import { TraderHelper } from "@spt/helpers/TraderHelper";
+import { Item } from "@spt/models/eft/common/tables/IItem";
+import { Dialogue, ISystemData, IUserDialogInfo, Message, MessageContentRagfair, MessageItems } from "@spt/models/eft/profile/ISptProfile";
+import { MessageType } from "@spt/models/enums/MessageType";
+import { Traders } from "@spt/models/enums/Traders";
+import { IProfileChangeEvent, ISendMessageDetails } from "@spt/models/spt/dialog/ISendMessageDetails";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { SaveServer } from "@spt/servers/SaveServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { LocalisationService } from "@spt/services/LocalisationService";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { TimeUtil } from "@spt/utils/TimeUtil";
 export declare class MailSendService {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
     protected timeUtil: TimeUtil;
     protected saveServer: SaveServer;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected notifierHelper: NotifierHelper;
     protected dialogueHelper: DialogueHelper;
     protected notificationSendHelper: NotificationSendHelper;
@@ -27,7 +27,7 @@ export declare class MailSendService {
     protected itemHelper: ItemHelper;
     protected traderHelper: TraderHelper;
     protected readonly systemSenderId = "59e7125688a45068a6249071";
-    constructor(logger: ILogger, hashUtil: HashUtil, timeUtil: TimeUtil, saveServer: SaveServer, databaseServer: DatabaseServer, notifierHelper: NotifierHelper, dialogueHelper: DialogueHelper, notificationSendHelper: NotificationSendHelper, localisationService: LocalisationService, itemHelper: ItemHelper, traderHelper: TraderHelper);
+    constructor(logger: ILogger, hashUtil: HashUtil, timeUtil: TimeUtil, saveServer: SaveServer, databaseService: DatabaseService, notifierHelper: NotifierHelper, dialogueHelper: DialogueHelper, notificationSendHelper: NotificationSendHelper, localisationService: LocalisationService, itemHelper: ItemHelper, traderHelper: TraderHelper);
     /**
      * Send a message from an NPC (e.g. prapor) to the player with or without items using direct message text, do not look up any locale
      * @param sessionId The session ID to send the message to
@@ -37,7 +37,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendDirectNpcMessageToPlayer(sessionId: string, trader: Traders, messageType: MessageType, message: string, items?: Item[], maxStorageTimeSeconds?: any, systemData?: any, ragfair?: any): void;
+    sendDirectNpcMessageToPlayer(sessionId: string, trader: Traders, messageType: MessageType, message: string, items?: Item[], maxStorageTimeSeconds?: number, systemData?: ISystemData, ragfair?: MessageContentRagfair): void;
     /**
      * Send a message from an NPC (e.g. prapor) to the player with or without items
      * @param sessionId The session ID to send the message to
@@ -47,7 +47,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendLocalisedNpcMessageToPlayer(sessionId: string, trader: Traders, messageType: MessageType, messageLocaleId: string, items?: Item[], maxStorageTimeSeconds?: any, systemData?: any, ragfair?: any): void;
+    sendLocalisedNpcMessageToPlayer(sessionId: string, trader: Traders, messageType: MessageType, messageLocaleId: string, items?: Item[], maxStorageTimeSeconds?: number, systemData?: ISystemData, ragfair?: MessageContentRagfair): void;
     /**
      * Send a message from SYSTEM to the player with or without items
      * @param sessionId The session ID to send the message to
@@ -55,7 +55,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendSystemMessageToPlayer(sessionId: string, message: string, items?: Item[], maxStorageTimeSeconds?: any): void;
+    sendSystemMessageToPlayer(sessionId: string, message: string, items?: Item[], maxStorageTimeSeconds?: number, profileChangeEvents?: IProfileChangeEvent[]): void;
     /**
      * Send a message from SYSTEM to the player with or without items with localised text
      * @param sessionId The session ID to send the message to
@@ -63,7 +63,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendLocalisedSystemMessageToPlayer(sessionId: string, messageLocaleId: string, items?: Item[], profileChangeEvents?: any[], maxStorageTimeSeconds?: any): void;
+    sendLocalisedSystemMessageToPlayer(sessionId: string, messageLocaleId: string, items?: Item[], profileChangeEvents?: IProfileChangeEvent[], maxStorageTimeSeconds?: number): void;
     /**
      * Send a USER message to a player with or without items
      * @param sessionId The session ID to send the message to
@@ -72,7 +72,7 @@ export declare class MailSendService {
      * @param items Optional items to send to player
      * @param maxStorageTimeSeconds Optional time to collect items before they expire
      */
-    sendUserMessageToPlayer(sessionId: string, senderDetails: IUserDialogInfo, message: string, items?: Item[], maxStorageTimeSeconds?: any): void;
+    sendUserMessageToPlayer(sessionId: string, senderDetails: IUserDialogInfo, message: string, items?: Item[], maxStorageTimeSeconds?: number): void;
     /**
      * Large function to send messages to players from a variety of sources (SYSTEM/NPC/USER)
      * Helper functions in this class are available to simplify common actions
@@ -99,7 +99,7 @@ export declare class MailSendService {
      * @param itemsToSendToPlayer Items to add to message
      * @param maxStorageTimeSeconds total time items are stored in mail before being deleted
      */
-    protected addRewardItemsToMessage(message: Message, itemsToSendToPlayer: MessageItems, maxStorageTimeSeconds: number): void;
+    protected addRewardItemsToMessage(message: Message, itemsToSendToPlayer: MessageItems | undefined, maxStorageTimeSeconds: number | undefined): void;
     /**
      * perform various sanitising actions on the items before they're considered ready for insertion into message
      * @param dialogType The type of the dialog that will hold the reward items being processed
@@ -125,5 +125,5 @@ export declare class MailSendService {
      * @param messageDetails
      * @returns gets an id of the individual sending it
      */
-    protected getMessageSenderIdByType(messageDetails: ISendMessageDetails): string;
+    protected getMessageSenderIdByType(messageDetails: ISendMessageDetails): string | undefined;
 }

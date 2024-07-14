@@ -1,8 +1,6 @@
-import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
+import { IBaseConfig } from "@spt/models/spt/config/IBaseConfig";
 export interface IInsuranceConfig extends IBaseConfig {
-    kind: "aki-insurance";
-    /** Insurance price multiplier */
-    insuranceMultiplier: Record<string, number>;
+    kind: "spt-insurance";
     /** Chance item is returned as insurance, keyed by trader id */
     returnChancePercent: Record<string, number>;
     /** Item slots that should never be returned as insurance */
@@ -13,4 +11,6 @@ export interface IInsuranceConfig extends IBaseConfig {
     returnTimeOverrideSeconds: number;
     /** How often server should process insurance in seconds */
     runIntervalSeconds: number;
+    minAttachmentRoublePriceToBeTaken: number;
+    chanceNoAttachmentsTakenPercent: number;
 }

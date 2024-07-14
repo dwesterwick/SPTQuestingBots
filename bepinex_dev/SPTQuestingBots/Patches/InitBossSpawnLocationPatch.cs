@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 using EFT;
 using SPTQuestingBots.Controllers;
 
@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GClass579).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
+            return typeof(BossSpawnWaveManagerClass).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]

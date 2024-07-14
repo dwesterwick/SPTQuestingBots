@@ -1,23 +1,23 @@
-import { ApplicationContext } from "@spt-aki/context/ApplicationContext";
-import { WeightedRandomHelper } from "@spt-aki/helpers/WeightedRandomHelper";
-import { ILocationBase } from "@spt-aki/models/eft/common/ILocationBase";
-import { IGetRaidTimeRequest } from "@spt-aki/models/eft/game/IGetRaidTimeRequest";
-import { ExtractChange, IGetRaidTimeResponse } from "@spt-aki/models/eft/game/IGetRaidTimeResponse";
-import { ILocationConfig, IScavRaidTimeLocationSettings, LootMultiplier } from "@spt-aki/models/spt/config/ILocationConfig";
-import { IRaidChanges } from "@spt-aki/models/spt/location/IRaidChanges";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { ApplicationContext } from "@spt/context/ApplicationContext";
+import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
+import { ILocationBase } from "@spt/models/eft/common/ILocationBase";
+import { IGetRaidTimeRequest } from "@spt/models/eft/game/IGetRaidTimeRequest";
+import { ExtractChange, IGetRaidTimeResponse } from "@spt/models/eft/game/IGetRaidTimeResponse";
+import { ILocationConfig, IScavRaidTimeLocationSettings, LootMultiplier } from "@spt/models/spt/config/ILocationConfig";
+import { IRaidChanges } from "@spt/models/spt/location/IRaidChanges";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 export declare class RaidTimeAdjustmentService {
     protected logger: ILogger;
-    protected databaseServer: DatabaseServer;
+    protected databaseService: DatabaseService;
     protected randomUtil: RandomUtil;
     protected weightedRandomHelper: WeightedRandomHelper;
     protected applicationContext: ApplicationContext;
     protected configServer: ConfigServer;
     protected locationConfig: ILocationConfig;
-    constructor(logger: ILogger, databaseServer: DatabaseServer, randomUtil: RandomUtil, weightedRandomHelper: WeightedRandomHelper, applicationContext: ApplicationContext, configServer: ConfigServer);
+    constructor(logger: ILogger, databaseService: DatabaseService, randomUtil: RandomUtil, weightedRandomHelper: WeightedRandomHelper, applicationContext: ApplicationContext, configServer: ConfigServer);
     /**
      * Make alterations to the base map data passed in
      * Loot multipliers/waves/wave start times
@@ -56,5 +56,5 @@ export declare class RaidTimeAdjustmentService {
      * @param newRaidTimeMinutes How long raid is in minutes
      * @returns List of  exit changes to send to client
      */
-    protected getExitAdjustments(mapBase: ILocationBase, newRaidTimeMinutes: number): ExtractChange[];
+    protected getExitAdjustments(mapBase: ILocationBase, newRaidTimeMinutes: number): ExtractChange[] | undefined;
 }

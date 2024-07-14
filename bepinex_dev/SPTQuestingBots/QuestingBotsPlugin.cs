@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
@@ -18,15 +19,15 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.4.3")]
     [BepInDependency("xyz.drakia.bigbrain", "0.4.0")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.6.1")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.7.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         public static string ModName { get; private set; } = "???";
 
         private void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "3.8.0.0";
-            Patches.TarkovInitPatch.MaxVersion = "3.8.99.0";
+            Patches.TarkovInitPatch.MinVersion = "3.9.0.0";
+            Patches.TarkovInitPatch.MaxVersion = "3.9.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;
@@ -67,6 +68,7 @@ namespace SPTQuestingBots
                 {
                     new Patches.GameStartPatch().Enable();
                     new Patches.MatchmakerFinalCountdownUpdatePatch().Enable();
+                    new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBotsByWavePatch().Enable();
                     new Patches.ActivateBotsByWavePatch2().Enable();
                     new Patches.AddEnemyPatch().Enable();

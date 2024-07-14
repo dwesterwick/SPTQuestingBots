@@ -1,8 +1,8 @@
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
-import { LootRequest } from "@spt-aki/models/spt/services/LootRequest";
+import { MinMax } from "@spt/models/common/MinMax";
+import { IBaseConfig } from "@spt/models/spt/config/IBaseConfig";
+import { LootRequest } from "@spt/models/spt/services/LootRequest";
 export interface ITraderConfig extends IBaseConfig {
-    kind: "aki-trader";
+    kind: "spt-trader";
     updateTime: UpdateTime[];
     purchasesAreFoundInRaid: boolean;
     /** Should trader reset times be set based on server start time (false = bsg time - on the hour) */
@@ -27,11 +27,12 @@ export interface FenceConfig {
     presetPriceMult: number;
     armorMaxDurabilityPercentMinMax: IItemDurabilityCurrentMax;
     weaponDurabilityPercentMinMax: IItemDurabilityCurrentMax;
-    chancePlateExistsInArmorPercent: number;
+    /** Keyed to plate protection level */
+    chancePlateExistsInArmorPercent: Record<string, number>;
     /** Key: item tpl */
     itemStackSizeOverrideMinMax: Record<string, MinMax>;
     itemTypeLimits: Record<string, number>;
-    /** Prevent duplicate offers of items of specific categories by parentId*/
+    /** Prevent duplicate offers of items of specific categories by parentId */
     preventDuplicateOffersOfCategory: string[];
     regenerateAssortsOnRefresh: boolean;
     /** Max rouble price before item is not listed on flea */
@@ -40,6 +41,8 @@ export interface FenceConfig {
     presetSlotsToRemoveChancePercent: Record<string, number>;
     /** Block seasonal items from appearing when season is inactive */
     blacklistSeasonalItems: boolean;
+    /** Max pen value allowed to be listed on flea - affects ammo + ammo boxes */
+    ammoMaxPenLimit: number;
     blacklist: string[];
     coopExtractGift: CoopExtractReward;
     btrDeliveryExpireHours: number;

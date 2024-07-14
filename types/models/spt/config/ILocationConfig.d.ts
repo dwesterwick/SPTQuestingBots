@@ -1,8 +1,8 @@
-import { MinMax } from "@spt-aki/models/common/MinMax";
-import { BossLocationSpawn, Wave } from "@spt-aki/models/eft/common/ILocationBase";
-import { IBaseConfig } from "@spt-aki/models/spt/config/IBaseConfig";
+import { MinMax } from "@spt/models/common/MinMax";
+import { BossLocationSpawn, Wave } from "@spt/models/eft/common/ILocationBase";
+import { IBaseConfig } from "@spt/models/spt/config/IBaseConfig";
 export interface ILocationConfig extends IBaseConfig {
-    kind: "aki-location";
+    kind: "spt-location";
     /** Waves with a min/max of the same value don't spawn any bots, bsg only spawn the difference between min and max */
     fixEmptyBotWavesSettings: IFixEmptyBotWavesSettings;
     /** Rogues are classified as bosses and spawn immediatly, this can result in no scavs spawning, delay rogues spawning to allow scavs to spawn first */
@@ -21,28 +21,30 @@ export interface ILocationConfig extends IBaseConfig {
     fitLootIntoContainerAttempts: number;
     /** Add all possible zones to each maps `OpenZones` property */
     addOpenZonesToAllMaps: boolean;
-    /** Allow addition of custom bot waves designed by SPT to be added to maps - defined in  configs/location.json.customWaves*/
+    /** Allow addition of custom bot waves designed by SPT to be added to maps - defined in  configs/location.json.customWaves */
     addCustomBotWavesToMaps: boolean;
     /** Should the limits defined inside botTypeLimits to appled to locations on game start */
     enableBotTypeLimits: boolean;
-    /** Add limits to a locations base.MinMaxBots array if enableBotTypeLimits is true*/
+    /** Add limits to a locations base.MinMaxBots array if enableBotTypeLimits is true */
     botTypeLimits: Record<string, IBotTypeLimit[]>;
     /** container randomisation settings */
     containerRandomisationSettings: IContainerRandomistionSettings;
-    /** How full must a random loose magazine be %*/
+    /** How full must a random loose magazine be % */
     minFillLooseMagazinePercent: number;
-    /** How full must a random static magazine be %*/
+    /** How full must a random static magazine be % */
     minFillStaticMagazinePercent: number;
     allowDuplicateItemsInStaticContainers: boolean;
-    /** Chance loose/static magazines have ammo in them */
+    /** Chance loose magazines have ammo in them TODO - rename to dynamicMagazineLootHasAmmoChancePercent */
     magazineLootHasAmmoChancePercent: number;
+    /** Chance static magazines have ammo in them */
+    staticMagazineLootHasAmmoChancePercent: number;
     /** Key: map, value: loose loot ids to ignore */
     looseLootBlacklist: Record<string, string[]>;
-    /** Key: map, value: settings to control how long scav raids are*/
+    /** Key: map, value: settings to control how long scav raids are */
     scavRaidTimeSettings: IScavRaidTimeSettings;
     /** Settings to adjust mods for lootable equipment in raid */
     equipmentLootSettings: IEquipmentLootSettings;
-    /** Sets the max Patrol Value of the Boxzone on the map Ground Zero*/
+    /** Sets the max Patrol Value of the Boxzone on the map Ground Zero */
     sandboxMaxPatrolvalue: number;
 }
 export interface IEquipmentLootSettings {

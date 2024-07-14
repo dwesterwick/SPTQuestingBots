@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Aki.Reflection.Patching;
+using SPT.Reflection.Patching;
 using BepInEx.Bootstrap;
 using EFT;
 using EFT.InputSystem;
@@ -27,7 +27,7 @@ namespace SPTQuestingBots.Patches
         {
             if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion, out string currentVersion))
             {
-                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT-AKI ";
+                string errorMessage = "Could not load " + QuestingBotsPlugin.ModName + " because it requires SPT ";
                 
                 if (MinVersion == MaxVersion)
                 {

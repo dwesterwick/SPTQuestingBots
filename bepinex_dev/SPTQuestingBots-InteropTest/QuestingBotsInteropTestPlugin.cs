@@ -8,7 +8,7 @@ using BepInEx;
 namespace SPTQuestingBotsInteropTest
 {
     //[BepInDependency("com.DanW.QuestingBots", "0.5.1")]
-    [BepInPlugin("com.DanW.QuestingBotsInteropTest", "DanW-QuestingBots-InteropTest", "1.0.0")]
+    [BepInPlugin("com.DanW.QuestingBotsInteropTest", "DanW-QuestingBots-InteropTest", "1.0.1")]
     public class QuestingBotsInteropTestPlugin : BaseUnityPlugin
     {
         private void Awake()

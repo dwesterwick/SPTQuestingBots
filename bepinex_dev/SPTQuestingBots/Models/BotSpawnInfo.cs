@@ -11,7 +11,7 @@ namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {
-        public GClass591 Data { get; private set; }
+        public BotCreationDataClass Data { get; private set; }
         public BotGenerator BotGenerator { get; private set; }
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
@@ -22,13 +22,13 @@ namespace SPTQuestingBots.Models
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
         public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
 
-        public BotSpawnInfo(GClass591 data, BotGenerator botGenerator)
+        public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator)
         {
             Data = data;
             BotGenerator = botGenerator;
         }
 
-        public BotSpawnInfo(GClass591 data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
+        public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
         }
@@ -78,7 +78,7 @@ namespace SPTQuestingBots.Models
             }
 
             // Create a new spawn group for the bot
-            GClass591 newData = GClass591.CreateWithoutProfile(bot.SpawnProfileData);
+            BotCreationDataClass newData = BotCreationDataClass.CreateWithoutProfile(bot.SpawnProfileData);
             newData.AddProfile(bot.Profile);
             Models.BotSpawnInfo newGroup = new BotSpawnInfo(newData, BotGenerator);
             BotGenerator.AddNewBotGroup(newGroup);

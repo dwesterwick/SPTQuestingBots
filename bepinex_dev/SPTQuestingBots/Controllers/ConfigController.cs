@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Aki.Common.Http;
+using SPT.Common.Http;
 using Newtonsoft.Json;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Models;
@@ -49,17 +49,17 @@ namespace SPTQuestingBots.Controllers
 
         public static void ReportInfoToServer(string message)
         {
-            Aki.Common.Utils.ServerLog.Info("Questing Bots", message);
+            SPT.Common.Utils.ServerLog.Info("Questing Bots", message);
         }
 
         public static void ReportWarningToServer(string message)
         {
-            Aki.Common.Utils.ServerLog.Warn("Questing Bots", message);
+            SPT.Common.Utils.ServerLog.Warn("Questing Bots", message);
         }
 
         public static void ReportErrorToServer(string message)
         {
-            Aki.Common.Utils.ServerLog.Error("Questing Bots", message);
+            SPT.Common.Utils.ServerLog.Error("Questing Bots", message);
         }
 
         public static string GetLoggingPath()
@@ -215,7 +215,7 @@ namespace SPTQuestingBots.Controllers
                     }
                 }
 
-                obj = JsonConvert.DeserializeObject<T>(json, GClass1448.SerializerSettings);
+                obj = JsonConvert.DeserializeObject<T>(json, GClass1459.SerializerSettings);
 
                 return true;
             }

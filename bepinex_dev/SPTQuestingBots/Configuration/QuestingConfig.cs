@@ -21,6 +21,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("quest_selection_timeout")]
         public float QuestSelectionTimeout { get; set; } = 2000;
 
+        [JsonProperty("btr_run_distance")]
+        public float BTRRunDistance { get; set; } = 40;
+
         [JsonProperty("allowed_bot_types_for_questing")]
         public BotTypeConfig AllowedBotTypesForQuesting { get; set; } = new BotTypeConfig();
 
