@@ -24,6 +24,7 @@
 		"bot_pathing_update_interval_ms": 100,
 		"brain_layer_priority": 26,
 		"quest_selection_timeout": 250,
+		"btr_run_distance": 10,
 		"allowed_bot_types_for_questing": {
 			"scav": false,
 			"pscav": true,

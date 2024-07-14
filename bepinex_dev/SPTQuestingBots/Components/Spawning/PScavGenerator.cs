@@ -174,7 +174,13 @@ namespace SPTQuestingBots.Components.Spawning
             string locationID = locationData.CurrentLocation.Id.ToLower();
             if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
             {
-                throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
+                LoggingController.LogError("Cannot find location " + locationID + " in Scav-raid settings data from server. Falling back to default settings.");
+                locationID = "default";
+
+                if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
+                {
+                    throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
+                }
             }
 
             float originalEscapeTime = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
