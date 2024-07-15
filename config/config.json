@@ -22,7 +22,12 @@
 	"questing": {
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
-		"brain_layer_priority": 26,
+		"brain_layer_priorities": {
+			"questing": 18,
+			"following": 19,
+			"regrouping": 26,
+			"sleeping": 99
+		},
 		"quest_selection_timeout": 250,
 		"btr_run_distance": 10,
 		"allowed_bot_types_for_questing": {
@@ -83,8 +88,8 @@
 			"min_health_legs": 50,
 			"max_overweight_percentage": 100,
 			"search_time_after_combat": {
-				"min": 20,
-				"max": 45
+				"min": 10,
+				"max": 20
 			},
 			"hearing_sensor": {
 				"enabled": true,
@@ -131,9 +136,13 @@
 				"max_wait_time": 5,
 				"min_regroup_time": 1,
 				"regroup_pause_time": 2,
-				"target_range": {
+				"target_range_questing": {
 					"min": 7,
 					"max": 12
+				},
+				"target_range_combat": {
+					"min": 20,
+					"max": 30
 				},
 				"nearest": 15,
 				"furthest": 25

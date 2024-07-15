@@ -9,8 +9,8 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (2.1.12 or later recommended)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.0 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.0.4 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.5 or later recommended)
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
@@ -19,6 +19,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **bot_spawns.enabled=true** in this mod, ensure **adjust_bot_spawn_chances.adjust_pmc_conversion_chances=false** in LTTP)
+* Fika
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
@@ -181,7 +182,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **Questing Options:**
 * **questing.enabled**: Completely enable or disable questing. 
 * **questing.bot_pathing_update_interval_ms**: The interval (in milliseconds) at which each bot will recalculate its path to its current objective. If this value is very low, performance will be impacted. If this value is very high, the bot will not react to obstacles changing as quickly (i.e. doors being unlocked). By default, this is **100** ms.
-* **questing.brain_layer_priority**: The priority number assigned to the questing "brain" layer. **Do not change this unless you know what you're doing!** By default, this is set to **26** which is higher than most EFT brain layers and higher than [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/)'s brain layers. If this is set much lower than 26, bots will prioritize other actions. If you're using [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) and you reduce this to be less than 23, bots will never quest. 
+* **questing.brain_layer_priorities.xxx**: The priority numbers assigned to the "brain" layers for this mod. **Do not change these unless you know what you're doing!**
 * **questing.quest_selection_timeout**: If a quest cannot be selected for a bot after trying for this amount of time (in seconds), the mod will give up and write an error message.
 * **questing.btr_run_distance**: Override value (in meters) for the EFT setting that makes bots "avoid danger" when they're near the BTR. The default EFT value is 40m, and the default value of this setting is **10** m.
 * **questing.allowed_bot_types_for_questing.scav**: If Scavs are allowed to quest. This is **false** by default.
@@ -251,7 +252,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_questing_requirements.max_follower_distance.max_wait_time**: The maximum time (in seconds) that a bot's followers are allowed to be too far from it before it will stop questing and regroup. This is **5** s by default. 
 * **questing.bot_questing_requirements.max_follower_distance.min_regroup_time**: The minimum time (in seconds) that a bot will be forced to regroup with its followers if it's too far from them. After this time, the bot will be allowed to patrol its area instead. This is **1** s by default. 
 * **questing.bot_questing_requirements.max_follower_distance.regroup_pause_time**: When a boss reaches its nearest follower while regrouping, it will stop regrouping for this amount of time (in seconds). After that delay, it will continue regrouping if required, or it will continue questing. This delay is to prevent bosses from standing completely still while waiting for the rest of their followers to regroup. This is **2** s by default. 
-* **questing.bot_questing_requirements.max_follower_distance.target_range.min/max**: The allowed range of distances (in meters) that followers will try to be from their boss while questing. If a follower needs to get closer to its boss, it will try to get within the **min** distance (**10** m by default) of it. After that, it will be allowed to wander up to the **max** distance (**20** m by default) from it.
+* **questing.bot_questing_requirements.max_follower_distance.target_range_questing.min/max**: The allowed range of distances (in meters) that followers will try to be from their boss while questing. If a follower needs to get closer to its boss, it will try to get within the **min** distance (**7** m by default) of it. After that, it will be allowed to wander up to the **max** distance (**12** m by default) from it.
+* **questing.bot_questing_requirements.max_follower_distance.target_range_combat.min/max**: The same as **questing.bot_questing_requirements.max_follower_distance.target_range_questing.min/max** but for when the bot's group is in combat. The default **min** distance is **20** m, and the default **max** distance is **30** m.
 * **questing.bot_questing_requirements.max_follower_distance.nearest**: If the bot has any followers, it will not be allowed to quest if its nearest follower is more than this distance (in meters) from it. This is **25** m by default. 
 * **questing.bot_questing_requirements.max_follower_distance.furthest**: If the bot has any followers, it will not be allowed to quest if its furthest follower is more than this distance (in meters) from it. This is **40** m by default. 
 * **questing.extraction_requirements.min_alive_time**: The minimum time (in seconds) a bot must wait after spawning before it will be allowed to extract. This is **60** s by default.
@@ -360,11 +362,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
-* **0.7.0** (ETA: Mid July)
-    * Update to SPT 3.9.0
 * **0.7.1** (ETA: Late July)
     * Improvements with how Questing Bots interacts with SAIN:
-        * Better transitioning between combat and questing
         * Ability to have bots avoid quests in dangerous areas of the map
     * Add the ability to require certain weapon classes for quests (i.e. do not allow a bot with only a pistol to perform a sniping quest)
 * **0.8.0** (ETA: Early September)

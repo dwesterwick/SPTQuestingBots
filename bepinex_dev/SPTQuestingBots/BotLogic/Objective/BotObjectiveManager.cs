@@ -26,6 +26,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         WaitForNextQuest,
         Regroup,
         Proximity,
+        MustHeal,
         NotAbleBodied,
         InCombat,
         GroupInCombat,
@@ -47,6 +48,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         public Vector3? LastCorner { get; set; } = null;
         public NotQuestingReason NotQuestingReason { get; set; } = NotQuestingReason.None;
         public NotQuestingReason NotFollowingReason { get; set; } = NotQuestingReason.None;
+        public NotQuestingReason NotRegroupingReason { get; set; } = NotQuestingReason.None;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;

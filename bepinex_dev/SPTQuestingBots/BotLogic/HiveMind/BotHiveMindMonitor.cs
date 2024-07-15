@@ -178,6 +178,16 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return new ReadOnlyCollection<BotOwner>(allGroupMembers);
         }
 
+        public static string GetActiveBrainLayerOfBoss(BotOwner bot)
+        {
+            if (!HasBoss(bot) || botBosses[bot].IsDead)
+            {
+                return null;
+            }
+
+            return botBosses[bot].Brain.ActiveLayerName();
+        }
+
         public static float GetDistanceToBoss(BotOwner bot)
         {
             if (!HasBoss(bot))
@@ -186,6 +196,16 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             }
 
             return Vector3.Distance(bot.Position, botBosses[bot].Position);
+        }
+
+        public static Vector3? GetLocationOfBoss(BotOwner bot)
+        {
+            if (!HasBoss(bot))
+            {
+                return null;
+            }
+
+            return botBosses[bot].Position;
         }
 
         public static Vector3 GetLocationOfNearestGroupMember(BotOwner bot)

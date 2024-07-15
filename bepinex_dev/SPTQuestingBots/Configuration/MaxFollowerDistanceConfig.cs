@@ -18,8 +18,11 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("regroup_pause_time")]
         public float RegroupPauseTime { get; set; } = 2;
 
-        [JsonProperty("target_range")]
-        public MinMaxConfig TargetRange { get; set; } = new MinMaxConfig();
+        [JsonProperty("target_range_questing")]
+        public MinMaxConfig TargetRangeQuesting { get; set; } = new MinMaxConfig();
+
+        [JsonProperty("target_range_combat")]
+        public MinMaxConfig TargetRangeCombat { get; set; } = new MinMaxConfig();
 
         [JsonProperty("nearest")]
         public float Nearest { get; set; } = 35;
