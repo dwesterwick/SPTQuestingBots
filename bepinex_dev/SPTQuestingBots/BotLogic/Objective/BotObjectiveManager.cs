@@ -26,6 +26,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         WaitForNextQuest,
         Regroup,
         Proximity,
+        MustHeal,
         NotAbleBodied,
         InCombat,
         GroupInCombat,

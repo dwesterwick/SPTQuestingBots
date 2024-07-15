@@ -68,24 +68,6 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
-            // If the layer is active, run to the boss. Otherwise, allow a little more space
-            if (previousState)
-            {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Min;
-            }
-            else
-            {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Max;
-            }
-
-            // Only enable the layer if the bot is too far from the boss
-            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
-            {
-                objectiveManager.NotRegroupingReason = Objective.NotQuestingReason.Proximity;
-                return updatePreviousState(false);
-            }
-
             float pauseRequestTime = getPauseRequestTime();
             if (pauseRequestTime > 0)
             {
@@ -109,9 +91,15 @@ namespace SPTQuestingBots.BotLogic.Follow
             }
 
             // Prioritize the bot's safety first
-            if (!IsAbleBodied())
+            if (MustHeal())
             {
-                objectiveManager.NotRegroupingReason = Objective.NotQuestingReason.NotAbleBodied;
+                if (MustHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+                {
+                    LoggingController.LogWarning("Waited " + MustHealTime + "s for " + BotOwner.GetText() + " to heal");
+                    BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
+                }
+
+                objectiveManager.NotRegroupingReason = Objective.NotQuestingReason.MustHeal;
                 return updatePreviousState(false);
             }
 
@@ -127,6 +115,24 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return updatePreviousState(false);
             }
 
+            // If the layer is active, run to the boss. Otherwise, allow a little more space
+            if (previousState)
+            {
+                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Min;
+            }
+            else
+            {
+                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Max;
+            }
+
+            // Only enable the layer if the bot is too far from the boss
+            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
+            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
+            {
+                objectiveManager.NotRegroupingReason = Objective.NotQuestingReason.Proximity;
+                return updatePreviousState(false);
+            }
+
             objectiveManager.NotRegroupingReason = Objective.NotQuestingReason.None;
             setNextAction(BotActionType.FollowerRegroup, "RegroupWithBoss");
             return updatePreviousState(true);
@@ -134,6 +140,11 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         private bool doesBossNeedHelp()
         {
+            if (BotHiveMindMonitor.GetActiveBrainLayerOfBoss(BotOwner)?.Contains("SAIN") == true)
+            {
+                return true;
+            }
+
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
                 return true;

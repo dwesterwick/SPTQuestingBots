@@ -343,7 +343,7 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        public bool IsAbleBodied(bool writeToLog)
+        public bool MustHeal(bool writeToLog)
         {
             // Check if the bot needs to heal or perform surgery
             if (botOwner.Medecine.FirstAid.Have2Do || botOwner.Medecine.SurgicalKit.HaveWork)
@@ -352,6 +352,16 @@ namespace SPTQuestingBots.BotLogic
                 {
                     LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to heal");
                 }
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsAbleBodied(bool writeToLog)
+        {
+            if (MustHeal(writeToLog))
+            {
                 return false;
             }
 

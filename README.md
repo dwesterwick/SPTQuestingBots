@@ -9,8 +9,8 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (2.1.12 or later recommended)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.0 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.0.4 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.5 or later recommended)
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
@@ -19,6 +19,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **bot_spawns.enabled=true** in this mod, ensure **adjust_bot_spawn_chances.adjust_pmc_conversion_chances=false** in LTTP)
+* Fika
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)

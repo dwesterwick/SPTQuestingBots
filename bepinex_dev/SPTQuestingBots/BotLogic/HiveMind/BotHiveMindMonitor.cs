@@ -178,6 +178,16 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return new ReadOnlyCollection<BotOwner>(allGroupMembers);
         }
 
+        public static string GetActiveBrainLayerOfBoss(BotOwner bot)
+        {
+            if (!HasBoss(bot) || botBosses[bot].IsDead)
+            {
+                return null;
+            }
+
+            return botBosses[bot].Brain.ActiveLayerName();
+        }
+
         public static float GetDistanceToBoss(BotOwner bot)
         {
             if (!HasBoss(bot))

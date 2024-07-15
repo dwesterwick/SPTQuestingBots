@@ -93,15 +93,16 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return pauseLayer();
             }
 
-            // Prevent the bot from following its boss if it needs to heal, etc. 
-            if (!IsAbleBodied())
+            // Prevent the bot from following its boss if it needs to heal
+            if (MustHeal())
             {
-                if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+                if (MustHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
                 {
+                    LoggingController.LogWarning("Waited " + MustHealTime + "s for " + BotOwner.GetText() + " to heal");
                     BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 }
 
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.NotAbleBodied;
+                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.MustHeal;
                 return updatePreviousState(false);
             }
 

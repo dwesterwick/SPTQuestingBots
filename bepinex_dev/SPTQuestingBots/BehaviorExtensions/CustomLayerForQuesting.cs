@@ -18,12 +18,15 @@ namespace SPTQuestingBots.BehaviorExtensions
         private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Min;
         private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private bool wasAbleBodied = true;
+        private bool neededToHeal = false;
         private float maxSuspiciousTime = 60;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
         private Stopwatch notAbleBodiedTimer = new Stopwatch();
+        private Stopwatch mustHealTimer = new Stopwatch();
 
         protected float NotAbleBodiedTime => notAbleBodiedTimer.ElapsedMilliseconds / 1000;
+        protected float MustHealTime => mustHealTimer.ElapsedMilliseconds / 1000;
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
         {
@@ -54,6 +57,26 @@ namespace SPTQuestingBots.BehaviorExtensions
             objectiveManager.PauseRequest = 0;
 
             return pauseTime;
+        }
+
+        protected bool MustHeal()
+        {
+            if (objectiveManager.BotMonitor.MustHeal(!neededToHeal))
+            {
+                mustHealTimer.Start();
+                neededToHeal = true;
+
+                return true;
+            }
+            if (neededToHeal)
+            {
+                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now healed.");
+            }
+
+            mustHealTimer.Reset();
+            neededToHeal = false;
+
+            return false;
         }
 
         protected bool IsAbleBodied()
@@ -99,6 +122,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 }
 
                 notAbleBodiedTimer.Stop();
+                mustHealTimer.Stop();
 
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
                 return true;
@@ -129,6 +153,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 totalSuspiciousTimer.Start();
                 notSuspiciousTimer.Reset();
                 notAbleBodiedTimer.Stop();
+                mustHealTimer.Stop();
 
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
                 return true;
