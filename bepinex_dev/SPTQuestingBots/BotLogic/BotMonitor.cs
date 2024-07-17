@@ -11,6 +11,7 @@ using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.BotLogic.Follow;
 using SPTQuestingBots.BotLogic.Objective;
+using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace SPTQuestingBots.BotLogic
         private bool hasFoundLoot = false;
         private bool canUseSAINInterop = false;
         private bool canUseLootingBotsInterop = false;
+        private int minSAINLayerPriority = -1;
         private int minTotalQuestsForExtract = int.MaxValue;
         private int minEFTQuestsForExtract = int.MaxValue;
         private float lastEnemySoundHeardTime = 0;
@@ -57,6 +59,11 @@ namespace SPTQuestingBots.BotLogic
             if (SAIN.Plugin.SAINInterop.Init())
             {
                 canUseSAINInterop = true;
+
+                minSAINLayerPriority = BrainManager.CustomLayersReadOnly
+                    .Where(l => l.Value.customLayerType.FullName.StartsWith("SAIN."))
+                    .Select(i => i.Value.customLayerPriority)
+                    .Min();
             }
             else
             {
@@ -87,9 +94,16 @@ namespace SPTQuestingBots.BotLogic
 
         public int UpdateSearchTimeAfterCombat()
         {
+            MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.WithoutSAIN;
+
+            if (minSAINLayerPriority > ConfigController.Config.Questing.BrainLayerPriorities.Questing)
+            {
+                minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.WithSAIN;
+            }
+            
             System.Random random = new System.Random();
-            int min = (int)ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Min;
-            int max = (int)ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.Max;
+            int min = (int)minMax.Min;
+            int max = (int)minMax.Max;
 
             return random.Next(min, max);
         }

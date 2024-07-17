@@ -40,7 +40,7 @@ namespace SPTQuestingBots.Configuration
         public float MaxOverweightPercentage { get; set; } = 100;
 
         [JsonProperty("search_time_after_combat")]
-        public MinMaxConfig SearchTimeAfterCombat { get; set; } = new MinMaxConfig();
+        public SearchTimeAfterCombatConfig SearchTimeAfterCombat { get; set; } = new SearchTimeAfterCombatConfig();
 
         [JsonProperty("hearing_sensor")]
         public HearingSensorConfig HearingSensor { get; set; } = new HearingSensorConfig();
