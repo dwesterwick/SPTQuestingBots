@@ -60,10 +60,21 @@ namespace SPTQuestingBots.BotLogic
             {
                 canUseSAINInterop = true;
 
-                minSAINLayerPriority = BrainManager.CustomLayersReadOnly
+                string brainName = botOwner.Brain.BaseBrain.ShortName();
+
+                IEnumerable<int> sainBrainLayerPrioritiesForBotRole = BrainManager.CustomLayersReadOnly
                     .Where(l => l.Value.customLayerType.FullName.StartsWith("SAIN."))
-                    .Select(i => i.Value.customLayerPriority)
-                    .Min();
+                    .Where(l => l.Value.CustomLayerBrains.Contains(brainName))
+                    .Select(i => i.Value.customLayerPriority);
+
+                if (sainBrainLayerPrioritiesForBotRole.Any())
+                {
+                    minSAINLayerPriority = sainBrainLayerPrioritiesForBotRole.Min();
+                }
+                else
+                {
+                    LoggingController.LogWarning("No SAIN brain layers found for brain type " + brainName);
+                }
             }
             else
             {
@@ -94,11 +105,11 @@ namespace SPTQuestingBots.BotLogic
 
         public int UpdateSearchTimeAfterCombat()
         {
-            MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.WithoutSAIN;
+            MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
 
             if (minSAINLayerPriority > ConfigController.Config.Questing.BrainLayerPriorities.Questing)
             {
-                minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.WithSAIN;
+                minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedSAIN;
             }
             
             System.Random random = new System.Random();

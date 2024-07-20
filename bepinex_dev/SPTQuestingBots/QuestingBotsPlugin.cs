@@ -17,7 +17,7 @@ namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.5.0")]
+    [BepInDependency("xyz.drakia.waypoints", "1.5.1")]
     [BepInDependency("xyz.drakia.bigbrain", "1.0.1")]
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.7.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin

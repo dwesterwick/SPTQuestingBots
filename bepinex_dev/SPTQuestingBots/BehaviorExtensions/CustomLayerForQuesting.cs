@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BehaviorExtensions
     {
         protected BotLogic.Objective.BotObjectiveManager objectiveManager { get; private set; } = null;
 
-        private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.WithoutSAIN.Min;
+        private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
         private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private bool wasAbleBodied = true;
         private bool neededToHeal = false;
