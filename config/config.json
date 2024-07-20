@@ -88,8 +88,14 @@
 			"min_health_legs": 50,
 			"max_overweight_percentage": 100,
 			"search_time_after_combat": {
-				"min": 10,
-				"max": 20
+				"prioritized_sain" : {
+					"min": 5,
+					"max": 20
+				},
+				"prioritized_questing" : {
+					"min": 20,
+					"max": 45
+				}
 			},
 			"hearing_sensor": {
 				"enabled": true,
@@ -141,8 +147,8 @@
 					"max": 12
 				},
 				"target_range_combat": {
-					"min": 20,
-					"max": 30
+					"min": 15,
+					"max": 35
 				},
 				"nearest": 15,
 				"furthest": 25

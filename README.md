@@ -19,11 +19,12 @@ You're no longer the only PMC running around placing markers and collecting ques
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **bot_spawns.enabled=true** in this mod, ensure **adjust_bot_spawn_chances.adjust_pmc_conversion_chances=false** in LTTP)
-* Fika
+* **Fika** (Requires client version 0.9.8962.33287 or later)
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [MOAR](https://hub.sp-tarkov.com/files/file/1059-moar-bots-spawning-difficulty/)
+* [Better Spawns Plus](https://hub.sp-tarkov.com/files/file/1002-better-spawns-plus/)
 
 **---------- Overview ----------**
 
@@ -71,7 +72,7 @@ When each bot spawns, this mod finds the furthest extract from them and referenc
 
 Before selecting a quest for a bot, all quests are first filtered to ensure they have at least one valid location on the map and the bot is able to accept the quest (it's not blocked by player level, etc.). Then, the following metrics are generated for every valid quest:
 1) The distance between the bot and each objective for the quest with some randomness applied (by **questing.bot_quests.distance_randomness**). This value is then normalized based on the furthest objective from the bot (for any valid quest), and finally it's multiplied by a weighting factor defined by **questing.bot_quests.distance_weighting** (1 by default).
-2) A "desirability" rating for each quest, which is the desirability rating assigned to the quest but with some randomness applied (by **questing.bot_quests.desirability_randomness**). This value is divided by 100 and then multiplied by a weighting factor defined by **questing.bot_quests.desirability_weighting** (1 by default). 
+2) A "desirability" rating for each quest, which is the desirability rating assigned to the quest but with some randomness applied (by **questing.bot_quests.desirability_randomness**). This value is divided by 100 and then multiplied by a weighting factor defined by **questing.bot_quests.desirability_weighting** (1 by default). There are modifiers that can be applied to the desirability ratings of quests including **questing.bot_quests.desirability_camping_multiplier**, **questing.bot_quests.desirability_sniping_multiplier**, and **questing.bot_quests.desirability_active_quest_multiplier**. More information about these settings can be found in the README or GitHub repo for this mod. 
 3) The angle between two vectors: the vector between the bot and its selected extract (described above), and the vector between the bot and each objective for the quest. If the quest objective is in the same direction as the bot's selected extract, this angle will be small. If the bot has to move further from its selected extract, this angle will be large. Angles that are below a certain threshold (90 deg by default) are reduced down to 0 deg. This value is divided by 180 deg minus the threshold just described (90 deg by default), and finally it's multiplied by a weighting factor defined by **questing.bot_quests.exfil_direction_weighting**, which is different for every map.
 
 These three metrics are then added together, and the result is the overall score for the corresponding quest. The quest with the highest score is assigned to the bot. If for some reason the bot is unable to perform that quest, it selects the one with the next-highest score, and so on. If no quests are available for the bot to select, this mod will first try allowing the bot to perform repeatable quests early (before the **questing.bot_questing_requirements.repeat_quest_delay** delay expires). If there are no available repeatable quests, this mod will then attempt to make the bot extract via [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/). Finally, this mod will stop assigning new quests to the bot. 
@@ -146,7 +147,7 @@ The three major data structures are:
 * Spawn chances for various group sizes are configurable. By default, solo spawns are most likely, but 2-man and 3-man groups will be commonly seen. 4-man and 5-man groups are rare but possible. 
 * EFT will assign one bot in the group to be a "boss", and the boss will select the quest to perform. All other bots in the group will follow the boss.
 * If any group members stray too far from the boss, the boss will stop questing and attempt to regroup
-* If any member of the group engages in combat, all other members will stop questing (or following) and engage in combat too. 
+* If any member of the group engages in combat or hears a suspicious noise, all other members will stop questing (or following) and engage in combat too. 
 * If the boss is allowed to sprint, so are its followers and vice versa. 
 * If the boss of a bot group dies, EFT will automatically assign a new one from the remaining members
 * Followers are only allowed to loot if they remain within a certain distance from the boss
@@ -228,7 +229,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **questing.bot_questing_requirements.min_health_stomach**: The minimum permitted health percentage of a bot's stomach or it will not be allowed to quest. This is **50%** by default.
 * **questing.bot_questing_requirements.min_health_legs**: The minimum permitted health percentage of either of a bot's legs or it will not be allowed to quest. This is **50%** by default.
 * **questing.bot_questing_requirements.max_overweight_percentage**: The maximum total weight permitted for bots (as a percentage of their overweight threshold) or they will not be allowed to quest. This is **100%** by default. 
-* **questing.bot_questing_requirements.search_time_after_combat.min/max:** Bots will not be allowed to quest until a random amount of time (in seconds) in this range has passed after combat most recently ended for them.
+* **questing.bot_questing_requirements.search_time_after_combat.xxx.min/max:** Bots will not be allowed to quest until a random amount of time (in seconds) in this range has passed after combat most recently ended for them. If SAIN's lowest brain-layer priority is greater than **questing.brain_layer_priorities.questing**, the *prioritized_sain* settings will be used (for **xxx**). Otherwise, *prioritized_questing* settings will be used. 
 * **questing.bot_questing_requirements.hearing_sensor.enabled**: If bots are allowed to stop questing due to suspicious noises. This is **true** by default.
 * **questing.bot_questing_requirements.hearing_sensor.min_corrected_sound_power**: If the "loudness" of a sound is less than this value, bots will ignore it. Currently, this results in all bots (even those wearing a headset) ignoring you if you crouch-walk at the slowest speed. This is **17** by default, and the units are unknown. 
 * **questing.bot_questing_requirements.hearing_sensor.max_distance_footsteps**: If bots hear footsteps within this distance (in meters), they will become suspicious and stop questing. This is **20** m by default. 

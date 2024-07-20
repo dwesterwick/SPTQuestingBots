@@ -156,6 +156,7 @@
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsResponse.cs" />
+    <Compile Include="Configuration\SearchTimeAfterCombatConfig.cs" />
     <Compile Include="Configuration\ServerResponseError.cs" />
     <Compile Include="Configuration\SprintingLimitationsConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
