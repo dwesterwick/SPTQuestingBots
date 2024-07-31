@@ -19,7 +19,7 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.5.1")]
     [BepInDependency("xyz.drakia.bigbrain", "1.0.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.7.0")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.7.1")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         public static string ModName { get; private set; } = "???";
@@ -46,6 +46,8 @@ namespace SPTQuestingBots
                 return;
             }
 
+            new Patches.MenuShowPatch().Enable();
+
             if (ConfigController.Config.Enabled)
             {
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
@@ -61,9 +63,6 @@ namespace SPTQuestingBots
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
 
-                // This should be fixed with SAIN 2.2.5.2, and it's only an issue with the debug version of BigBrain
-                //new Patches.BotStandbyBugFixPatch().Enable();
-                
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.GameStartPatch().Enable();

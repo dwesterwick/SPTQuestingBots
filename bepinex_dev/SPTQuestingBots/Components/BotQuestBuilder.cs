@@ -282,7 +282,18 @@ namespace SPTQuestingBots.Components
             double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.Questing.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
             quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
 
-            quest.IsActiveForPlayer = activeQuestsForPlayer.Any(q => q.Template.Id == quest.Template.Id);
+            if (quest.Template == null)
+            {
+                LoggingController.LogWarning("Quest " + quest.Name + " has a null template");
+            }
+
+            IEnumerable< QuestDataClass> activeQuestsForPlayerWithNullTemplates = activeQuestsForPlayer.Where(q => q.Template == null);
+            if (activeQuestsForPlayerWithNullTemplates.Any())
+            {
+                LoggingController.LogWarning("The following quest ID's have null templates: " + string.Join(", ", activeQuestsForPlayerWithNullTemplates.Select(q => q.Id)));
+            }
+
+            quest.IsActiveForPlayer = activeQuestsForPlayer.Any(q => q.Template?.Id == quest.Template?.Id);
             /*if (quest.IsActiveForPlayer)
             {
                 LoggingController.LogInfo("Quest " + quest.Name + " is currently active for the player");
