@@ -23,7 +23,8 @@ import type { VFS } from "@spt/utils/VFS";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
 import type { BotController } from "@spt/controllers/BotController";
-import type { IGenerateBotsRequestData } from "@spt/models/eft/bot/IGenerateBotsRequestData";
+import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
+import type { IGenerateBotsRequestData, Condition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
@@ -164,22 +165,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             }], "GetZoneAndItemQuestPositions"
         );
 
-        // Override bot generation to include PScav conversion chance
-        dynamicRouterModService.registerDynamicRouter(`DynamicGenerateBot${modName}`,
-            [{
-                url: "/QuestingBots/GenerateBot",
-                action: async (url: string, info: IGenerateBotsRequestData, sessionID: string) => 
-                {
-                    const urlParts = url.split("/");
-                    const pScavChance: number = Number(urlParts[urlParts.length - 1]);
-
-                    const bots = await this.generateBots(info, sessionID, this.randomUtil.getChance100(pScavChance));
-
-                    return this.httpResponseUtil.getBody(bots);
-                }
-            }], "GenerateBot"
-        );
-
         // Get Scav-raid settings to determine PScav conversion chances
         staticRouterModService.registerStaticRouter(`GetScavRaidSettings${modName}`,
             [{
@@ -190,6 +175,16 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
                 }
             }], "GetScavRaidSettings"
         );
+
+        // Intercept the EFT bot-generation request to include a PScav conversion chance
+        container.afterResolution("BotCallbacks", (_t, result: BotCallbacks) =>
+        {
+            result.generateBots = async (url: string, info: IGenerateBotsRequestDataWithPScavChance, sessionID: string) =>
+            {
+                const bots = await this.generateBots({ conditions: info.conditions }, sessionID, this.randomUtil.getChance100(info.PScavChance));
+                return this.httpResponseUtil.getBody(bots);
+            }
+        }, {frequency: "Always"});
     }
 	
     public postDBLoad(container: DependencyContainer): void
@@ -713,6 +708,12 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero : ${this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero (20+) : ${this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck}`);
     }
+}
+
+export interface IGenerateBotsRequestDataWithPScavChance
+{
+    conditions: Condition[];
+    PScavChance: number;
 }
 
 module.exports = { mod: new QuestingBots() }

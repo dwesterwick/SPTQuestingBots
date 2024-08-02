@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
 
@@ -52,7 +54,9 @@ namespace SPTQuestingBots.Patches
                     return;
                 }
 
-                legacyParams.Url = originalUrl.Replace(generateBotUrl, "/QuestingBots/GenerateBot/" + pScavChance);
+                Class17<List<WaveInfo>> originalParams = (Class17<List<WaveInfo>>)legacyParams.Params;
+                legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
+
                 ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
             }
         }
@@ -79,6 +83,44 @@ namespace SPTQuestingBots.Patches
             }
 
             return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+        }
+
+        internal class ModifiedParams
+        {
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+            [JsonProperty("conditions")]
+            public List<WaveInfo> Conditions { get; set; }
+
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+            [JsonProperty("PScavChance")]
+            public float PScavChance { get; set; }
+
+            public ModifiedParams()
+            {
+
+            }
+
+            public ModifiedParams(List<WaveInfo> _conditions, float _PScavChance)
+            {
+                Conditions = _conditions;
+                PScavChance = _PScavChance;
+            }
+
+            public override string ToString()
+            {
+                return JsonConvert.SerializeObject(this, Formatting.Indented);
+            }
+
+            public override int GetHashCode()
+            {
+                return 861877474 + EqualityComparer<List<WaveInfo>>.Default.GetHashCode(Conditions);
+            }
+
+            public override bool Equals(object value)
+            {
+                ModifiedParams modifiedParams = value as ModifiedParams;
+                return modifiedParams != null && EqualityComparer<List<WaveInfo>>.Default.Equals(Conditions, modifiedParams.Conditions);
+            }
         }
     }
 }
