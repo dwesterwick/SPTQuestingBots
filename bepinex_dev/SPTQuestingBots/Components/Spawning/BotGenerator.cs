@@ -52,13 +52,13 @@ namespace SPTQuestingBots.Components.Spawning
             BotTypeName = _botTypeName;
 
             MaxGeneratedBots = GetMaxGeneratedBots();
-            botGeneratorList.Add(generateAllBotsTask(GenerateBotGroup()));
+            botGeneratorList.Add(generateAllBotsTask(async () => await GenerateBotGroupTask()));
         }
 
         protected abstract int GetMaxGeneratedBots();
         protected abstract int GetNumberOfBotsAllowedToSpawn();
         protected abstract bool CanSpawnBots();
-        protected abstract Func<Task<Models.BotSpawnInfo>> GenerateBotGroup();
+        protected abstract Task<Models.BotSpawnInfo> GenerateBotGroupTask();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
         
         protected virtual void Awake()

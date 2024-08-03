@@ -39,6 +39,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("show_door_interaction_test_points")]
         public bool ShowDoorInteractionTestPoints { get; set; } = false;
 
+        [JsonProperty("friendly_pmcs")]
+        public bool FriendlyPMCs { get; set; } = false;
+
         public DebugConfig()
         {
 

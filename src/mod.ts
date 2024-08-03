@@ -256,6 +256,11 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             {
                 this.forceFullLengthScavRaids();
             }
+
+            if (modConfig.debug.friendly_pmcs)
+            {
+                this.iPmcConfig.chanceSameSideIsHostilePercent = 0;
+            }
         }
     }
 	

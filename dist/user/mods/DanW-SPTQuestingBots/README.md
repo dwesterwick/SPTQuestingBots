@@ -174,6 +174,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.
 * **debug.show_failed_paths**: If **true**, whenever a bot gets stuck its target path will be drawn in red. 
 * **debug.show_door_interaction_test_points**: If **true**, the positions tested when determining where bots should travel to unlock doors will have spherical outlines. If the a valid NavMesh position cannot be found for the test point, the outline color will be white. If a valid NavMesh position is found but the bot cannot access that point, the outline color will be yellow. If a valid NavMesh position is found and the bot can access that point, the outline color will be magenta. The position selected for the bot will be shown with a green outline. 
+* **debug.friendly_pmcs**: Make all PMC's friendly with you during PMC raids. This is **false** by default. 
 * **max_calc_time_per_frame_ms**: The maximum amount of time (in milliseconds) the mod is allowed to run quest-generation and PMC-spawning procedures per frame. By default this is set to **5** ms, and delays of <15 ms are basically imperceptible. 
 * **chance_of_being_hostile_toward_bosses.scav**: The chance that Scavs will be hostile toward all bosses on the map. This is **0%** by default.
 * **chance_of_being_hostile_toward_bosses.pscav**: The chance that player Scavs will be hostile toward all bosses on the map even if the bosses aren't hostile toward them (i.e. Rogues are not initially hostile toward player Scavs). This is **20%** by default.
@@ -349,7 +350,7 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
 * Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
-* Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations. Examples include marking the tanker at New Gas in Customs; bots will fail to find a position to mark the tanker and then nearby unlock rooms in New Gas for no reason.
+* Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 
@@ -364,8 +365,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
 
 * **0.7.1** (ETA: Late July)
-    * Improvements with how Questing Bots interacts with SAIN:
-        * Ability to have bots avoid quests in dangerous areas of the map
     * Add the ability to require certain weapon classes for quests (i.e. do not allow a bot with only a pistol to perform a sniping quest)
 * **0.8.0** (ETA: Early September)
     * Separate spawning system into a separate mod
@@ -373,6 +372,8 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
     * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
     * Add new quest type: hidden-stash running
     * Add new quest type: blood-thirsty cheater (will be disabled by default)
+    * Improvements with how Questing Bots interacts with SAIN:
+        * Ability to have bots avoid quests in dangerous areas of the map
 * **Not Planned**
     * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
 
@@ -382,5 +383,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Thanks to [DrakiaXYZ](https://hub.sp-tarkov.com/user/30839-drakiaxyz/) for creating [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/) and [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) and for all of your help with developing this mod. Also, thanks for your help with adding interop capability to [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/).
 * Thanks to [nooky](https://hub.sp-tarkov.com/user/29062-nooky/) for lots of help with testing and ensuring this mod remains compatible with [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/). 
 * Thanks to [Skwizzy](https://hub.sp-tarkov.com/user/31303-skwizzy/) for help with adding interop capability to [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/).
+* Thanks to [Solarint](https://hub.sp-tarkov.com/user/30697-solarint/) for help with improving interop capability to [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) and working with me to balance bot questing vs. combat behavior.
 * Thanks to everyone else on Discord who helped to test the many alpha releases of this mod and provided feedback to make it better. There are too many people to name, but you're all awesome. 
 * Of course, thanks to the SPT development team who made this possible in the first place. 

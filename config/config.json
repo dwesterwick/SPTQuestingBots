@@ -10,7 +10,8 @@
 		"always_have_airdrops": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
-		"show_door_interaction_test_points": false
+		"show_door_interaction_test_points": false,
+		"friendly_pmcs": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"chance_of_being_hostile_toward_bosses": {

@@ -64,35 +64,44 @@ namespace SPTQuestingBots.Components.Spawning
             return pmcCount;
         }
 
-        protected override Func<Task<Models.BotSpawnInfo>> GenerateBotGroup()
+        protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
-            return async () =>
+            System.Random random = new System.Random();
+
+            // Spawn smaller PMC groups later in raids
+            double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+
+            // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
+            int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
+            botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
+            botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+
+            // Determine the difficulty for the new bot group
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PMCs.BotDifficultyAsOnline);
+
+            // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
+            WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
+            if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.FriendlyPMCs && !SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)
             {
-                System.Random random = new System.Random();
+                ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
+                if (session.Profile.Info.Side == EPlayerSide.Usec)
+                {
+                    spawnType = WildSpawnType.pmcUSEC;
+                }
+                else if (session.Profile.Info.Side == EPlayerSide.Bear)
+                {
+                    spawnType = WildSpawnType.pmcBEAR;
+                }
+            }
 
-                // Spawn smaller PMC groups later in raids
-                double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+            Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
 
-                // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
-                botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
-                botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+            // Set the maximum spawn time for the PMC group
+            float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
+            group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
 
-                // Determine the difficulty for the new bot group
-                Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-                BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PMCs.BotDifficultyAsOnline);
-                
-                // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
-                WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
-
-                Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
-
-                // Set the maximum spawn time for the PMC group
-                float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
-                group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
-
-                return group;
-            };
+            return group;
         }
 
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)

@@ -94,31 +94,28 @@ namespace SPTQuestingBots.Components.Spawning
             return botsAllowedToSpawn;
         }
 
-        protected override Func<Task<Models.BotSpawnInfo>> GenerateBotGroup()
+        protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
-            return async () =>
-            {
-                System.Random random = new System.Random();
+            System.Random random = new System.Random();
 
-                // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-                int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
-                botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+            // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
+            int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
+            botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
 
-                // Determine the difficulty for the new bot group
-                Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-                BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PScavs.BotDifficultyAsOnline);
+            // Determine the difficulty for the new bot group
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PScavs.BotDifficultyAsOnline);
 
-                // Force the server to generate a player Scav
-                ServerRequestPatch.ForcePScavCount += botsInGroup;
-                Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
+            // Force the server to generate a player Scav
+            ServerRequestPatch.ForcePScavCount += botsInGroup;
+            Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
 
-                // Set the minimum and maximum spawn times for the PScav group
-                float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
-                group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
-                group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+            // Set the minimum and maximum spawn times for the PScav group
+            float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
+            group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
+            group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
 
-                return group;
-            };
+            return group;
         }
 
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
