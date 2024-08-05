@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
+using SPTQuestingBots.Components;
 using SPTQuestingBots.Models;
 using UnityEngine;
 
@@ -104,13 +105,14 @@ namespace SPTQuestingBots.Controllers
                     // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live.
                     // TODO: Eventually, it would be nice to keep these quests but have the bots doing them be friendly toward you until they
                     //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
+                    bool blockLighkeeperIsland = false;
                     if (locationId == "Lighthouse")
                     {
                         bool visitsIsland = objective.GetAllPositions()
                             .Where(p => p.HasValue)
-                            .Any(position => position.Value.x > 120 && position.Value.z > 325);
+                            .Any(position => Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(position.Value));
 
-                        if (visitsIsland)
+                        if (blockLighkeeperIsland && visitsIsland)
                         {
                             if (quest.TryRemoveObjective(objective))
                             {

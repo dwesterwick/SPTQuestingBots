@@ -96,6 +96,26 @@ namespace SPTQuestingBots.Components
             LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
         }
 
+        public bool IsPointOnLightkeeperIsland(Vector3 position)
+        {
+            if (CurrentLocation.Id != "Lighthouse")
+            {
+                return false;
+            }
+
+            if (position.z < 325)
+            {
+                return false;
+            }
+
+            if (position.z < 400)
+            {
+                return position.x > 110;
+            }
+
+            return position.x > 200;
+        }
+
         public void FindAllInteractiveObjects()
         {
             FindAllSwitches();

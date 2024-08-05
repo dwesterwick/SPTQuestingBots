@@ -8,13 +8,11 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
-using HarmonyLib;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using UnityEngine;
-using static RootMotion.FinalIK.IKSolver;
 
 namespace SPTQuestingBots.Components
 {
@@ -310,19 +308,19 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            // Find all quests that have objectives using this trigger
-            Quest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
-            if (matchingQuests.Length == 0)
-            {
-                //LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
-                return;
-            }
-
             // Ensure there is a collider for the trigger
             Collider triggerCollider = trigger.gameObject.GetComponent<Collider>();
             if (triggerCollider == null)
             {
                 LoggingController.LogError("Trigger " + trigger.Id + " has no collider");
+                return;
+            }
+
+            // Find all quests that have objectives using this trigger
+            Quest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
+            if (matchingQuests.Length == 0)
+            {
+                //LoggingController.LogInfo("No matching quests for trigger " + trigger.Id);
                 return;
             }
 

@@ -3075,5 +3075,42 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 20,
+        "name": "Lighthouse",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 100,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 440.89682,
+                            "y": 23.8984756,
+                            "z": 459.1224
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 7,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 440.89682,
+                            "y": 23.8984756,
+                            "z": 459.1224
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
