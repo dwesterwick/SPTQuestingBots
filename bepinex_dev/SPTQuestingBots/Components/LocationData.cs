@@ -47,6 +47,10 @@ namespace SPTQuestingBots.Components
             }
 
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
+            if (CurrentLocation.Id == "Lighthouse")
+            {
+                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<LightkeeperIslandMonitor>();
+            }
 
             UpdateMaxTotalBots();
 
@@ -103,17 +107,7 @@ namespace SPTQuestingBots.Components
                 return false;
             }
 
-            if (position.z < 325)
-            {
-                return false;
-            }
-
-            if (position.z < 400)
-            {
-                return position.x > 110;
-            }
-
-            return position.x > 200;
+            return position.z > 325 && position.x > 180;
         }
 
         public void FindAllInteractiveObjects()

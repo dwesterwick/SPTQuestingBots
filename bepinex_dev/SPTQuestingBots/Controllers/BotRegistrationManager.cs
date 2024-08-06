@@ -32,6 +32,9 @@ namespace SPTQuestingBots.Controllers
         private static List<BotsGroup> hostileGroups = new List<BotsGroup>();
         private static List<string> sleepingBotIds = new List<string>();
 
+        public static IReadOnlyList<BotOwner> PMCs => registeredPMCs.AsReadOnly();
+        public static IReadOnlyList<BotOwner> Bosses => registeredBosses.AsReadOnly();
+
         public static void Clear()
         {
             SpawnedBossWaves = 0;

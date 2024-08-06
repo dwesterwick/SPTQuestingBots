@@ -4,10 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
 using EFT;
 using SPT.Reflection.Patching;
-using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
@@ -32,16 +30,6 @@ namespace SPTQuestingBots.Patches
             {
                 if (BotRegistrationManager.IsBotSleeping(player.ProfileId))
                 {
-                    __instance.SetVisible(false);
-                    return false;
-                }
-
-                bool botIsOnIsland = Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(__instance.Owner.Position);
-                bool enemyIsOnIsland = Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(player.Position);
-
-                if (botIsOnIsland && enemyIsOnIsland)
-                {
-                    LoggingController.LogWarning(__instance.Owner.GetText() + " is ignoring " + player.GetText() + " on Lightkeeper Island");
                     __instance.SetVisible(false);
                     return false;
                 }

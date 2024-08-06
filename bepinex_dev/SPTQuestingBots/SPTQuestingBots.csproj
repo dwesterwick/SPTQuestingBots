@@ -138,6 +138,7 @@
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
     <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="Components\LightkeeperIslandMonitor.cs" />
     <Compile Include="Components\QuestPathFinder.cs" />
     <Compile Include="Components\Spawning\PScavGenerator.cs" />
     <Compile Include="Components\TarkovData.cs" />
