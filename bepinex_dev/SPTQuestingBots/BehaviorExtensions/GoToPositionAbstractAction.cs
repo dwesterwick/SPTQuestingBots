@@ -20,9 +20,11 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected bool CanSprint { get; set; } = true;
 
         private Stopwatch botIsStuckTimer = new Stopwatch();
+        private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
         private Vector3? lastBotPosition = null;
 
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
+        protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
@@ -94,6 +96,16 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool checkIfBotIsStuck()
         {
+            if
+            (
+                checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.MinTimeBeforeJumping, false)
+                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.JumpDebounceTime)
+            )
+            {
+                BotOwner.GetPlayer.MovementContext.TryJump();
+                timeSinceLastJumpTimer.Restart();
+            }
+
             return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, true);
         }
 

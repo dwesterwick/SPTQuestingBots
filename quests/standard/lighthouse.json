@@ -3083,6 +3083,13 @@
         "maxBots": 2,
         "desirability": 20,
         "name": "Lighthouse",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3098,7 +3105,7 @@
                     },
                     {
                         "stepType" : "HoldAtPosition",
-                        "maxDistance": 7,
+                        "maxDistance": 5,
                         "minElapsedTime": {
                             "min": 45,
                             "max": 120

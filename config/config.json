@@ -40,6 +40,8 @@
 		"stuck_bot_detection": {
 			"distance": 2,
 			"time": 20,
+			"min_time_before_jumping": 5,
+			"jump_debounce_time": 3,
 			"max_count": 8,
 			"follower_break_time": 10,
 			"max_not_able_bodied_time": 120
