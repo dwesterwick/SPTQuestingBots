@@ -34,6 +34,11 @@ namespace SPTQuestingBots.Models
             bot = botOwner;
         }
 
+        public void ForcePathRecalculation()
+        {
+            Status = UnityEngine.AI.NavMeshPathStatus.PathPartial;
+        }
+
         public BotPathUpdateNeededReason CheckIfUpdateIsNeeded(Vector3 target, float reachDistance = 0.5f, bool force = false)
         {
             bool requiresUpdate = false;

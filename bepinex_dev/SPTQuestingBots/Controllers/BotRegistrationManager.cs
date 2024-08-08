@@ -32,6 +32,14 @@ namespace SPTQuestingBots.Controllers
         private static List<BotsGroup> hostileGroups = new List<BotsGroup>();
         private static List<string> sleepingBotIds = new List<string>();
 
+        private static List<WildSpawnType> neverForceHostilityRoles = new List<WildSpawnType>()
+        {
+            WildSpawnType.bossZryachiy,
+            WildSpawnType.followerZryachiy,
+            WildSpawnType.gifter,
+            WildSpawnType.shooterBTR
+        };
+
         public static IReadOnlyList<BotOwner> PMCs => registeredPMCs.AsReadOnly();
         public static IReadOnlyList<BotOwner> Bosses => registeredBosses.AsReadOnly();
 
@@ -196,7 +204,7 @@ namespace SPTQuestingBots.Controllers
                     continue;
                 }
 
-                if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(boss.Brain?.BaseBrain?.ShortName()))
+                if (neverForceHostilityRoles.Contains(boss.Profile.Info.Settings.Role))
                 {
                     continue;
                 }

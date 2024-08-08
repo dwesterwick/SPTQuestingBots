@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.Components
 {
@@ -13,6 +15,7 @@ namespace SPTQuestingBots.Components
     {
         private LocationData locationData;
         private List<Player> playersOnIsland = new List<Player>();
+        private List<BotOwner> botsWithQuestsOnIsland = new List<BotOwner>();
         private Dictionary<Player, IPlayer[]> originalAllies = new Dictionary<Player, IPlayer[]>();
         private Dictionary<Player, IPlayer[]> originalEnemies = new Dictionary<Player, IPlayer[]>();
 
@@ -30,12 +33,76 @@ namespace SPTQuestingBots.Components
 
             foreach (Player player in Singleton<GameWorld>.Instance.AllAlivePlayersList)
             {
-                bool onIsland = locationData.IsPointOnLightkeeperIsland(player.Position);
+                IsPlayerOnLightkeeperIsland(player);
+            }
+        }
 
-                if (playersOnIsland.Contains(player) != onIsland)
+        public IEnumerable<BotOwner> FindZryachiyAndFollowers()
+        {
+            return Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => IsZryachiyOrFollower(b.Profile));
+        }
+
+        public bool IsZryachiyOrFollower(Profile profile)
+        {
+            return (profile.Info.Settings.Role == WildSpawnType.bossZryachiy) || (profile.Info.Settings.Role == WildSpawnType.followerZryachiy);
+        }
+
+        public bool IsPlayerOnLightkeeperIsland(Player player)
+        {
+            bool isOnIsland = locationData.IsPointOnLightkeeperIsland(player.Position);
+
+            if (IsZryachiyOrFollower(player.Profile))
+            {
+                foreach (BotOwner botWithQuestsOnIsland in botsWithQuestsOnIsland)
                 {
-                    ToggleHostility(player);
+                    formAlliancesWithZryachiyAndFollowers(botWithQuestsOnIsland);
                 }
+            }
+
+            if (playersOnIsland.Contains(player) != isOnIsland)
+            {
+                ToggleHostility(player);
+            }
+
+            return isOnIsland;
+        }
+
+        public bool IsBotObjectiveOnLightkeeperIsland(BotOwner bot)
+        {
+            BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+            if (botObjectiveManager == null)
+            {
+                return false;
+            }
+
+            Vector3? assignmentPosition = botObjectiveManager.Position;
+            if (!assignmentPosition.HasValue)
+            {
+                return false;
+            }
+
+            bool isQuestOnIsland = locationData.IsPointOnLightkeeperIsland(assignmentPosition.Value);
+            if (isQuestOnIsland)
+            {
+                botsWithQuestsOnIsland.Add(bot);
+                formAlliancesWithZryachiyAndFollowers(bot);
+            }
+
+            return isQuestOnIsland;
+        }
+
+        private void formAlliancesWithZryachiyAndFollowers(BotOwner bot)
+        {
+            foreach (BotOwner zryachiyOrFollower in FindZryachiyAndFollowers())
+            {
+                if (bot.BotsGroup.Allies.Contains(zryachiyOrFollower.GetPlayer))
+                {
+                    continue;
+                }
+
+                bot.BotsGroup.AddAlly(zryachiyOrFollower.GetPlayer);
+                LoggingController.LogInfo(bot.GetText() + "'s group is now allied with " + zryachiyOrFollower.GetText() + " because they have a quest on Lightkeeper Island");
             }
         }
 
@@ -84,25 +151,25 @@ namespace SPTQuestingBots.Components
 
                 if ((playerGroup != null) && playerGroup.Enemies.ContainsKey(otherPlayer))
                 {
-                    LoggingController.LogInfo(player.GetText() + " has paused their hostility with " + otherPlayer.GetText());
+                    LoggingController.LogInfo(player.GetText() + "'s group has paused their hostility with " + otherPlayer.GetText());
                     playerGroup.RemoveEnemy(otherPlayer);
                 }
 
                 if ((otherPlayerGroup != null) && otherPlayerGroup.Enemies.ContainsKey(player))
                 {
-                    LoggingController.LogInfo(otherPlayer.GetText() + " has paused their hostility with " + player.GetText());
+                    LoggingController.LogInfo(otherPlayer.GetText() + "'s group has paused their hostility with " + player.GetText());
                     otherPlayerGroup.RemoveEnemy(player);
                 }
 
                 if ((playerGroup != null) && !playerGroup.Allies.Contains(otherPlayer))
                 {
-                    LoggingController.LogInfo(player.GetText() + " is temporarily allied with " + otherPlayer.GetText());
+                    LoggingController.LogInfo(player.GetText() + "'s group is temporarily allied with " + otherPlayer.GetText());
                     playerGroup.AddAlly(otherPlayer);
                 }
 
-                if ((otherPlayerGroup != null) && otherPlayerGroup.Allies.Contains(player))
+                if ((otherPlayerGroup != null) && !otherPlayerGroup.Allies.Contains(player))
                 {
-                    LoggingController.LogInfo(otherPlayer.GetText() + " is temporarily allied with " + player.GetText());
+                    LoggingController.LogInfo(otherPlayer.GetText() + "'s group is temporarily allied with " + player.GetText());
                     otherPlayerGroup.AddAlly(player);
                 }
             }
@@ -125,7 +192,7 @@ namespace SPTQuestingBots.Components
 
                 if (!originalAllies[player].Contains(ally))
                 {
-                    LoggingController.LogInfo(player.GetText() + " is no longer allied with " + ally.GetText());
+                    LoggingController.LogInfo(player.GetText() + "'s group is no longer allied with " + ally.GetText());
 
                     BotOwner allyOwner = getBotOwnerForPlayer(ally);
                     if (allyOwner != null)
@@ -146,7 +213,7 @@ namespace SPTQuestingBots.Components
 
                 if (!playerGroup.Enemies.ContainsKey(enemy))
                 {
-                    LoggingController.LogInfo(player.GetText() + " has restored their hostility with " + enemy.GetText());
+                    LoggingController.LogInfo(player.GetText() + "'s group has restored their hostility with " + enemy.GetText());
                     playerGroup.AddEnemy(enemy, EBotEnemyCause.initCauseEnemy);
                 }
             }

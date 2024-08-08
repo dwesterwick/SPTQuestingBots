@@ -21,10 +21,12 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
+        private Stopwatch timeSincePathUpdateTimer = Stopwatch.StartNew();
         private Vector3? lastBotPosition = null;
 
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
+        protected double TimeSincePathUpdate => timeSincePathUpdateTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
@@ -40,6 +42,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             base.Start();
 
+            timeSinceLastJumpTimer.Restart();
             botIsStuckTimer.Start();
             BotOwner.PatrollingData.Pause();
         }
@@ -57,9 +60,16 @@ namespace SPTQuestingBots.BehaviorExtensions
             return RecalculatePath(position, 0.5f);
         }
 
-        public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist)
+        public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist, bool force = false)
         {
-            BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist);
+            // If a bot is jumping, recalculate its path after it lands
+            if (BotOwner.GetPlayer.MovementContext.PlayerAnimatorIsJumpSetted())
+            {
+                ObjectiveManager.BotPath.ForcePathRecalculation();
+                return ObjectiveManager.BotPath.Status;
+            }
+
+            BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist, force);
 
             if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
@@ -71,6 +81,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                     }*/
 
                     BotOwner.FollowPath(ObjectiveManager.BotPath, true, false);
+                    timeSincePathUpdateTimer.Restart();
                 }
             }
             else
@@ -102,8 +113,12 @@ namespace SPTQuestingBots.BehaviorExtensions
                 && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.JumpDebounceTime)
             )
             {
+                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump and recalculate path...");
+
                 BotOwner.GetPlayer.MovementContext.TryJump();
                 timeSinceLastJumpTimer.Restart();
+
+                ObjectiveManager.BotPath.ForcePathRecalculation();
             }
 
             return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, true);

@@ -609,6 +609,7 @@ namespace SPTQuestingBots.Controllers
             // Once a valid assignment is selected, assign it to the bot
             BotJobAssignment assignment = new BotJobAssignment(bot, quest, objective);
             botJobAssignments[bot.Profile.Id].Add(assignment);
+
             return assignment;
         }
 

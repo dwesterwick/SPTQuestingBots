@@ -3097,6 +3097,7 @@
                 "maxDistanceFromBot": 9999,
                 "steps": [
                     {
+                        "waitTimeAfterCompleting": 1,
                         "position" : {
                             "x": 440.89682,
                             "y": 23.8984756,
