@@ -17,7 +17,8 @@ namespace SPTQuestingBots.Controllers
     public static class ConfigController
     {
         public static Configuration.ModConfig Config { get; private set; } = null;
-        public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings = null;
+        public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings { get; private set; } = null;
+        public static float USECChance { get; private set; } = float.NaN;
         public static string ModPathRelative { get; } = "/BepInEx/plugins/DanW-SPTQuestingBots";
         public static string LoggingPath { get; private set; } = null;
 
@@ -73,6 +74,21 @@ namespace SPTQuestingBots.Controllers
             LoggingController.LogInfo("Logging path: " + LoggingPath);
 
             return LoggingPath;
+        }
+
+        public static float GetUSECChance()
+        {
+            if (USECChance != float.NaN)
+            {
+                return USECChance;
+            }
+
+            string errorMessage = "Cannot retrieve chance to make PMC's USEC's.";
+            string json = GetJson("/QuestingBots/GetUSECChance", errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.USECChanceResponse _usecChance);
+            USECChance = _usecChance.USECChance;
+            return USECChance;
         }
 
         public static Dictionary<string, Configuration.ScavRaidSettingsConfig> GetScavRaidSettings()

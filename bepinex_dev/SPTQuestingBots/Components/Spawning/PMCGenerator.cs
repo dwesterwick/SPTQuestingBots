@@ -13,6 +13,8 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public class PMCGenerator : BotGenerator
     {
+        private static System.Random random = new System.Random();
+
         // Temporarily stores spawn points for bots while trying to spawn several of them
         private List<SpawnPointParams> pendingSpawnPoints = new List<SpawnPointParams>();
 
@@ -51,7 +53,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             // Determine how many total PMC's to spawn (reduced for Scav raids)
-            System.Random random = new System.Random();
             Configuration.MinMaxConfig pmcCountRange = getPMCCount();
             int pmcCount = random.Next((int)pmcCountRange.Min, (int)pmcCountRange.Max);
 
@@ -65,8 +66,6 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
-            System.Random random = new System.Random();
-
             // Spawn smaller PMC groups later in raids
             double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
 
@@ -80,7 +79,15 @@ namespace SPTQuestingBots.Components.Spawning
             BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PMCs.BotDifficultyAsOnline);
 
             // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
-            WildSpawnType spawnType = Helpers.BotBrainHelpers.pmcSpawnTypes.Random();
+            WildSpawnType spawnType = WildSpawnType.pmcBEAR;
+            int rndNum = random.Next(1, 100);
+            if (rndNum <= ConfigController.GetUSECChance())
+            {
+                spawnType = WildSpawnType.pmcUSEC;
+            }
+            LoggingController.LogInfo("RND: " + rndNum + ", USEC Chance: " + ConfigController.GetUSECChance());
+
+            // If all PMC's need to be friendly, they all need to be the same side as you
             if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.FriendlyPMCs && !SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)
             {
                 ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();

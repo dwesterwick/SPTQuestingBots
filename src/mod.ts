@@ -176,6 +176,17 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             }], "GetScavRaidSettings"
         );
 
+        // Get the chance that a PMC will be a USEC
+        staticRouterModService.registerStaticRouter(`GetUSECChance${modName}`,
+            [{
+                url: "/QuestingBots/GetUSECChance",
+                action: async () => 
+                {
+                    return JSON.stringify({ usecChance: this.iPmcConfig.isUsec });
+                }
+            }], "GetUSECChance"
+        );
+
         // Intercept the EFT bot-generation request to include a PScav conversion chance
         container.afterResolution("BotCallbacks", (_t, result: BotCallbacks) =>
         {

@@ -210,7 +210,7 @@ namespace SPTQuestingBots.Helpers
             return list.Select(i => i.ToString()).ToList();
         }
 
-        public static readonly WildSpawnType[] pmcSpawnTypes = new WildSpawnType[2]
+        public static readonly WildSpawnType[] PMCSpawnTypes = new WildSpawnType[2]
         {
             WildSpawnType.pmcUSEC,
             WildSpawnType.pmcBEAR
@@ -220,7 +220,7 @@ namespace SPTQuestingBots.Helpers
         {
             //LoggingController.LogInfo("Spawn type for bot " + botOwner.GetText() + ": " + botOwner.Profile.Info.Settings.Role.ToString());
 
-            return pmcSpawnTypes
+            return PMCSpawnTypes
                 .Select(t => t.ToString())
                 .Contains(botOwner.Profile.Info.Settings.Role.ToString());
         }

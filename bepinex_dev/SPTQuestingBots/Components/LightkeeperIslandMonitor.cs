@@ -48,6 +48,17 @@ namespace SPTQuestingBots.Components
             return (profile.Info.Settings.Role == WildSpawnType.bossZryachiy) || (profile.Info.Settings.Role == WildSpawnType.followerZryachiy);
         }
 
+        public bool ShouldPlayerBeFriendlyWithZryachiyAndFollowers(Player player)
+        {
+            BotOwner botOwner = getBotOwnerForPlayer(player);
+            return playersOnIsland.Contains(player) || ((botOwner != null) && botsWithQuestsOnIsland.Contains(botOwner));
+        }
+
+        public bool ShouldGroupBeFriendlyWithZryachiyAndFollowers(BotsGroup group)
+        {
+            return playersOnIsland.Any(p => p.BotsGroup == group) || botsWithQuestsOnIsland.Any(b => b.BotsGroup == group);
+        }
+
         public bool IsPlayerOnLightkeeperIsland(Player player)
         {
             bool isOnIsland = locationData.IsPointOnLightkeeperIsland(player.Position);
@@ -96,13 +107,27 @@ namespace SPTQuestingBots.Components
         {
             foreach (BotOwner zryachiyOrFollower in FindZryachiyAndFollowers())
             {
-                if (bot.BotsGroup.Allies.Contains(zryachiyOrFollower.GetPlayer))
+                if (bot.BotsGroup.Enemies.ContainsKey(zryachiyOrFollower))
                 {
-                    continue;
+                    LoggingController.LogInfo(bot.GetText() + "'s group is no longer hostile toward " + zryachiyOrFollower.GetText() + " because they have a quest on Lightkeeper Island");
+                    bot.BotsGroup.RemoveEnemy(zryachiyOrFollower);
+                }
+                if (zryachiyOrFollower.BotsGroup.Enemies.ContainsKey(bot))
+                {
+                    LoggingController.LogInfo(zryachiyOrFollower.GetText() + "'s group is no longer hostile toward " + bot.GetText() + " because they have a quest on Lightkeeper Island");
+                    zryachiyOrFollower.BotsGroup.RemoveEnemy(bot);
                 }
 
-                bot.BotsGroup.AddAlly(zryachiyOrFollower.GetPlayer);
-                LoggingController.LogInfo(bot.GetText() + "'s group is now allied with " + zryachiyOrFollower.GetText() + " because they have a quest on Lightkeeper Island");
+                if (!bot.BotsGroup.Allies.Contains(zryachiyOrFollower.GetPlayer))
+                {
+                    bot.BotsGroup.AddAlly(zryachiyOrFollower.GetPlayer);
+                    LoggingController.LogInfo(bot.GetText() + "'s group is now allied with " + zryachiyOrFollower.GetText() + " because they have a quest on Lightkeeper Island");
+                }
+                if (!zryachiyOrFollower.BotsGroup.Allies.Contains(bot.GetPlayer))
+                {
+                    zryachiyOrFollower.BotsGroup.AddAlly(bot.GetPlayer);
+                    LoggingController.LogInfo(zryachiyOrFollower.GetText() + "'s group is now allied with " + bot.GetText() + " because they have a quest on Lightkeeper Island");
+                }
             }
         }
 

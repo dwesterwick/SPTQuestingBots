@@ -14,6 +14,8 @@ namespace SPTQuestingBots.Components.Spawning
 {
     public class PScavGenerator : BotGenerator
     {
+        private static System.Random random = new System.Random();
+
         private Dictionary<int, float> botSpawnSchedule = new Dictionary<int, float>();
 
         // Temporarily stores spawn points for bots while trying to spawn several of them
@@ -94,8 +96,6 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
-            System.Random random = new System.Random();
-
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
             int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
@@ -206,7 +206,6 @@ namespace SPTQuestingBots.Components.Spawning
             int maxSpawnTimeAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
 
             // Create the spawn schedule
-            System.Random random = new System.Random();
             for (int pScav = 0; pScav < totalPScavs; pScav++)
             {
                 float randomSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
