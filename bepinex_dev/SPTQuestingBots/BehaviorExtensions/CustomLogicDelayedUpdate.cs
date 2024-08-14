@@ -24,12 +24,15 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch actionElapsedTime = new Stopwatch();
+        private Stopwatch sprintDelayTimer = Stopwatch.StartNew();
+        private float sprintDelayTime = 0;
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
         private GClass327 baseSteeringLogic = new GClass327();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
+        protected bool IsSprintDelayed => sprintDelayTimer.ElapsedMilliseconds / 1000.0 - sprintDelayTime < 0;
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
@@ -121,9 +124,21 @@ namespace SPTQuestingBots.BehaviorExtensions
             baseSteeringLogic.Update(BotOwner);
         }
 
+        public void DelaySprint(float delay)
+        {
+            sprintDelayTime = delay;
+            sprintDelayTimer.Restart();
+            BotOwner.GetPlayer.EnableSprint(false);
+        }
+
         public bool IsAllowedToSprint()
         {
             if (!QuestingBotsPluginConfig.SprintingEnabled.Value)
+            {
+                return false;
+            }
+
+            if (IsSprintDelayed)
             {
                 return false;
             }

@@ -260,8 +260,10 @@ namespace SPTQuestingBots.BotLogic.Objective
 
                 if (Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
                 {
-                    LoggingController.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
-                    lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner);
+                    if (lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
+                    {
+                        LoggingController.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
+                    }
                 }
             }
         }

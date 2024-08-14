@@ -21,12 +21,12 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
-        private Stopwatch timeSincePathUpdateTimer = Stopwatch.StartNew();
+        private Stopwatch timeSinceLastVaultTimer = Stopwatch.StartNew();
         private Vector3? lastBotPosition = null;
 
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
-        protected double TimeSincePathUpdate => timeSincePathUpdateTimer.ElapsedMilliseconds / 1000.0;
+        protected double TimeSinceLastVault => timeSinceLastVaultTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
@@ -62,8 +62,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist, bool force = false)
         {
-            // If a bot is jumping, recalculate its path after it lands
-            if (BotOwner.GetPlayer.MovementContext.PlayerAnimatorIsJumpSetted())
+            // If a bot is jumping or vaulting, recalculate its path after it finishes
+            if (BotOwner.GetPlayer.MovementContext.PlayerAnimatorIsJumpSetted() || BotOwner.GetPlayer.MovementContext.PlayerAnimatorGetIsVaulting())
             {
                 ObjectiveManager.BotPath.ForcePathRecalculation();
                 return ObjectiveManager.BotPath.Status;
@@ -81,7 +81,6 @@ namespace SPTQuestingBots.BehaviorExtensions
                     }*/
 
                     BotOwner.FollowPath(ObjectiveManager.BotPath, true, false);
-                    timeSincePathUpdateTimer.Restart();
                 }
             }
             else
@@ -100,6 +99,23 @@ namespace SPTQuestingBots.BehaviorExtensions
             return pathStatus;
         }
 
+        protected void tryJump(bool useEFTMethod = true, bool force = false)
+        {
+            MovementContext movementContext = BotOwner.GetPlayer.MovementContext;
+
+            if (useEFTMethod)
+            {
+                movementContext.TryJump();
+                return;
+            }
+
+            if (movementContext.CanJump || force)
+            {
+                movementContext.method_2(1f);
+                movementContext.PlayerAnimatorEnableJump(true);
+            }
+        }
+
         protected void restartStuckTimer()
         {
             botIsStuckTimer.Restart();
@@ -107,37 +123,13 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool checkIfBotIsStuck()
         {
-            if
-            (
-                checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.MinTimeBeforeJumping, false)
-                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.JumpDebounceTime)
-            )
-            {
-                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump and recalculate path...");
-
-                BotOwner.GetPlayer.MovementContext.TryJump();
-                timeSinceLastJumpTimer.Restart();
-
-                ObjectiveManager.BotPath.ForcePathRecalculation();
-            }
-
             return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, true);
         }
 
         protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)
         {
-            if (!lastBotPosition.HasValue)
-            {
-                lastBotPosition = BotOwner.Position;
-            }
-
-            // Check if the bot has moved enough
-            float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, BotOwner.Position);
-            if (distanceFromLastUpdate > ConfigController.Config.Questing.StuckBotDetection.Distance)
-            {
-                lastBotPosition = BotOwner.Position;
-                restartStuckTimer();
-            }
+            updateBotStuckDetection();
+            tryToGetUnstuck();
 
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > stuckTime)
@@ -186,6 +178,51 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             DebugHelpers.outlinePosition(ObjectiveManager.Position.Value, color);
+        }
+
+        private void updateBotStuckDetection()
+        {
+            if (!lastBotPosition.HasValue)
+            {
+                lastBotPosition = BotOwner.Position;
+            }
+
+            // Check if the bot has moved enough
+            float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, BotOwner.Position);
+            if (distanceFromLastUpdate > ConfigController.Config.Questing.StuckBotDetection.Distance)
+            {
+                lastBotPosition = BotOwner.Position;
+                restartStuckTimer();
+            }
+        }
+
+        private void tryToGetUnstuck()
+        {
+            if
+            (
+                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.MinTimeBeforeJumping)
+                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.JumpDebounceTime)
+            )
+            {
+                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
+
+                //DelaySprint(5);
+                tryJump(false);
+                timeSinceLastJumpTimer.Restart();
+            }
+
+            if
+            (
+                (StuckTime >= 8)
+                && (TimeSinceLastVault > 4)
+            )
+            {
+                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
+
+                DelaySprint(5);
+                BotOwner.GetPlayer.MovementContext.TryVaulting();
+                timeSinceLastVaultTimer.Restart();
+            }
         }
     }
 }

@@ -121,7 +121,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             if (worldInteractiveObject == null)
             {
-                LoggingController.LogError("Door" + worldInteractiveObject.Id + " no longer exists");
+                LoggingController.LogError("Door no longer exists");
 
                 ObjectiveManager.FailObjective();
 

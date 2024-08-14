@@ -78,7 +78,7 @@ namespace SPTQuestingBots.Controllers
 
         public static float GetUSECChance()
         {
-            if (USECChance != float.NaN)
+            if (!float.IsNaN(USECChance))
             {
                 return USECChance;
             }

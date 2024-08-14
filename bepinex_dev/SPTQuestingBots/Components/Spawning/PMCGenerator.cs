@@ -71,7 +71,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
             int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
-            botsInGroup = (int)Math.Ceiling(botsInGroup * groupSizeFactor);
+            botsInGroup = (int)Math.Ceiling(botsInGroup * Math.Min(1, groupSizeFactor));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
 
             // Determine the difficulty for the new bot group
@@ -80,12 +80,10 @@ namespace SPTQuestingBots.Components.Spawning
 
             // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
             WildSpawnType spawnType = WildSpawnType.pmcBEAR;
-            int rndNum = random.Next(1, 100);
-            if (rndNum <= ConfigController.GetUSECChance())
+            if (random.Next(1, 100) <= ConfigController.GetUSECChance())
             {
                 spawnType = WildSpawnType.pmcUSEC;
             }
-            LoggingController.LogInfo("RND: " + rndNum + ", USEC Chance: " + ConfigController.GetUSECChance());
 
             // If all PMC's need to be friendly, they all need to be the same side as you
             if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.FriendlyPMCs && !SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)

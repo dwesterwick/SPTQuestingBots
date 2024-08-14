@@ -318,7 +318,7 @@ namespace SPTQuestingBots.BotLogic
             int totalQuestsCompleted = botOwner.NumberOfCompletedOrAchivedQuests();
             if (totalQuestsCompleted >= minTotalQuestsForExtract)
             {
-                LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extact.");
+                LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extract.");
                 return true;
             }
             //LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
@@ -334,7 +334,7 @@ namespace SPTQuestingBots.BotLogic
             int EFTQuestsCompleted = botOwner.NumberOfCompletedOrAchivedEFTQuests();
             if (EFTQuestsCompleted >= minEFTQuestsForExtract)
             {
-                LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extact.");
+                LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extract.");
                 return true;
             }
             //LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");

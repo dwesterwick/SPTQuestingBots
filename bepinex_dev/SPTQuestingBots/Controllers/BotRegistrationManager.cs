@@ -61,12 +61,25 @@ namespace SPTQuestingBots.Controllers
 
         public static Player GetPlayer(this IPlayer player)
         {
-            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            IEnumerable<Player> matchingPlayers = allPlayers.Where(p => p.ProfileId == player.ProfileId);
+            IEnumerable<Player> matchingPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList
+                .Where(p => p.ProfileId == player.ProfileId);
 
             if (matchingPlayers.Count() == 1)
             {
                 return matchingPlayers.First();
+            }
+
+            return null;
+        }
+
+        public static BotOwner GetBotOwner(this IPlayer player)
+        {
+            IEnumerable<BotOwner> matchingOwners = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .Where(b => b.Profile.Id == player.Profile.Id);
+
+            if (matchingOwners.Count() == 1)
+            {
+                return matchingOwners.First();
             }
 
             return null;
