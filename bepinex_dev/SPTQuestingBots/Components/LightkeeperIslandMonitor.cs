@@ -158,9 +158,32 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
+                if (!canSetAlliance(player, otherPlayer))
+                {
+                    LoggingController.LogWarning("Cannot force an alliance between a human player and Zryachiy or his followers");
+                    continue;
+                }
+
                 formAlliance(player, otherPlayer);
                 formAlliance(otherPlayer, player);
             }
+        }
+
+        private bool canSetAlliance(IPlayer player, IPlayer otherPlayer)
+        {
+            bool atLeastOneHuman = false;
+            if (!player.IsAI || !otherPlayer.IsAI)
+            {
+                atLeastOneHuman = true;
+            }
+
+            bool atLeastOneZryachiyOrFollower = false;
+            if (IsZryachiyOrFollower(player.Profile) || IsZryachiyOrFollower(otherPlayer.Profile))
+            {
+                atLeastOneZryachiyOrFollower = true;
+            }
+
+            return !(atLeastOneHuman && atLeastOneZryachiyOrFollower);
         }
 
         private void formAlliance(IPlayer iplayer, IPlayer otherIPlayer)

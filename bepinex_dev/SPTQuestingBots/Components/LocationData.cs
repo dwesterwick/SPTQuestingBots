@@ -107,7 +107,7 @@ namespace SPTQuestingBots.Components
                 return false;
             }
 
-            return position.z > 325 && position.x > 180;
+            return position.z > 325 && position.x > 183;
         }
 
         public void FindAllInteractiveObjects()
