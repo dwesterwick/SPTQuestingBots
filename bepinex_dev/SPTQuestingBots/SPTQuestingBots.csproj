@@ -231,6 +231,7 @@
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
     <Compile Include="Patches\MenuShowPatch.cs" />
+    <Compile Include="Patches\MineDirectionalShouldExplodePatch.cs" />
     <Compile Include="Patches\TarkovInitPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />

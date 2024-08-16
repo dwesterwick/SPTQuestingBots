@@ -19,6 +19,9 @@ namespace SPTQuestingBots.Components
         private Dictionary<Player, IPlayer[]> originalAllies = new Dictionary<Player, IPlayer[]>();
         private Dictionary<Player, IPlayer[]> originalEnemies = new Dictionary<Player, IPlayer[]>();
 
+        public IReadOnlyList<Player> PlayersOnLightkeeperIsland => playersOnIsland.AsReadOnly();
+        public IReadOnlyList<BotOwner> BotsWithQuestsOnLightkeeperIsland => botsWithQuestsOnIsland.AsReadOnly();
+
         private void Awake()
         {
             locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
