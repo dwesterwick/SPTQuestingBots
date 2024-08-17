@@ -83,7 +83,7 @@ namespace SPTQuestingBots.Components
                     }
                     else
                     {
-                        LoggingController.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        LoggingController.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest, true);
                     }
                 }
             }
@@ -108,7 +108,7 @@ namespace SPTQuestingBots.Components
                     }
                     else
                     {
-                        LoggingController.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        LoggingController.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest, true);
                     }
                 }
             }
@@ -135,10 +135,10 @@ namespace SPTQuestingBots.Components
             {
                 newPaths = 0;
 
-                foreach ((Vector3 from, Vector3 to) in paths.Keys)
+                foreach ((Vector3 from, Vector3 to) in paths.Keys.ToArray())
                 {
                     // Check if a combined static path can be created from this path's end point
-                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.TargetPosition == from))
+                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.TargetPosition == from).ToArray())
                     {
                         if (paths.ContainsKey((matchingPath.StartPosition, to)))
                         {
@@ -147,13 +147,18 @@ namespace SPTQuestingBots.Components
 
                         StaticPathData combinedPath = matchingPath.Append(paths[(from, to)]);
 
+                        if (combinedPath.StartPosition == combinedPath.TargetPosition)
+                        {
+                            continue;
+                        }
+
                         LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }
 
                     // Check if a combined static path can be created to this path's start point
-                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.StartPosition == to))
+                    foreach (StaticPathData matchingPath in paths.Values.Where(p => p.StartPosition == to).ToArray())
                     {
                         if (paths.ContainsKey((to, matchingPath.TargetPosition)))
                         {
@@ -161,6 +166,11 @@ namespace SPTQuestingBots.Components
                         }
 
                         StaticPathData combinedPath = paths[(from, to)].Append(matchingPath);
+
+                        if (combinedPath.StartPosition == combinedPath.TargetPosition)
+                        {
+                            continue;
+                        }
 
                         LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
