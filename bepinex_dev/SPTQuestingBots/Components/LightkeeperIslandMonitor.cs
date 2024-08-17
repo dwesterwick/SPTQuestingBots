@@ -124,6 +124,8 @@ namespace SPTQuestingBots.Components
 
         private void toggleHostility(Player player)
         {
+            SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass lighthouseProgressionClass = Singleton<GameWorld>.Instance.GetComponent<SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass>();
+
             if (playersOnIsland.Contains(player))
             {
                 LoggingController.LogInfo(player.GetText() + " has left Lightkeeper Island");
@@ -139,6 +141,8 @@ namespace SPTQuestingBots.Components
 
                     revertAlliances(otherPlayer, player);
                 }
+
+                lighthouseProgressionClass.LightkeeperFriendlyPlayerLeftIsland(player);
             }
             else
             {
@@ -146,6 +150,8 @@ namespace SPTQuestingBots.Components
                 playersOnIsland.Add(player);
 
                 setTemporaryAlliances(player);
+
+                lighthouseProgressionClass.LightkeeperFriendlyPlayerEnteredIsland(player);
             }
         }
 
@@ -223,7 +229,7 @@ namespace SPTQuestingBots.Components
 
         private void revertAlliances(Player player, Player otherPlayer = null)
         {
-            BotsGroup playerGroup = player.GetBotOwner()?.BotsGroup;
+            BotsGroup playerGroup = player?.GetBotOwner()?.BotsGroup;
             if (playerGroup == null)
             {
                 return;
@@ -231,7 +237,7 @@ namespace SPTQuestingBots.Components
 
             foreach (IPlayer ally in playerGroup.Allies.ToArray())
             {
-                if ((otherPlayer != null) && (ally.Profile.Id != otherPlayer.Profile.Id))
+                if ((otherPlayer != null) && (ally?.Profile?.Id != otherPlayer.Profile.Id))
                 {
                     continue;
                 }
@@ -252,7 +258,7 @@ namespace SPTQuestingBots.Components
 
             foreach (IPlayer enemy in originalEnemies[player])
             {
-                if ((otherPlayer != null) && (enemy.Profile.Id != otherPlayer.Profile.Id))
+                if ((otherPlayer != null) && (enemy?.Profile?.Id != otherPlayer.Profile.Id))
                 {
                     continue;
                 }

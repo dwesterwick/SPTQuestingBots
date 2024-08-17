@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPT.Reflection.Patching;
-using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Patches
@@ -43,8 +42,6 @@ namespace SPTQuestingBots.Patches
 
             if (lightkeeperIslandMonitor.BotsWithQuestsOnLightkeeperIsland.Any(b => b.Id == playerByCollider.Id))
             {
-                LoggingController.LogWarning("Disabline mine for " + playerByCollider.GetText());
-
                 __result = true;
                 return false;
             }
