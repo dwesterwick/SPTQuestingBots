@@ -3075,5 +3075,993 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": true,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 25,
+        "pmcsOnly": true,
+        "name": "Lighthouse",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 100,
+                "maxDistanceFromBot": 9999,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 440.89682,
+                            "y": 23.8984756,
+                            "z": 459.1224
+                        }
+                    },
+                    {
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 5,
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 440.89682,
+                            "y": 23.8984756,
+                            "z": 459.1224
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 20,
+        "pmcsOnly": true,
+        "name": "Lighthouse Bridge",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 267.453033,
+                            "y": 1.73768008,
+                            "z": 514.228455
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 308.4318,
+                            "y": 1.73767924,
+                            "z": 502.856567
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 313.800934,
+                            "y": 1.73835218,
+                            "z": 497.9364
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 316.405945,
+                            "y": 1.73834825,
+                            "z": 511.164856
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 327.970276,
+                            "y": 1.73834586,
+                            "z": 528.6734
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 325.440063,
+                            "y": 1.98424268,
+                            "z": 511.025452
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "maxBotsInGroup": 2,
+        "desirability": 30,
+        "pmcsOnly": true,
+        "name": "Lighthouse Conference Room",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 325.142883,
+                            "y": 5.02266359,
+                            "z": 515.765564
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 333.5572,
+                            "y": 5.0226655,
+                            "z": 521.073547
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 331.646362,
+                            "y": 5.022666,
+                            "z": 522.209
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 328.821869,
+                            "y": 5.022665,
+                            "z": 521.967163
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Lighthouse Kitchen and Workshop",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 327.895782,
+                            "y": 2.006626,
+                            "z": 518.040466
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 339.928619,
+                            "y": 1.83514166,
+                            "z": 520.608
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 344.102081,
+                            "y": 1.80634093,
+                            "z": 517.4315
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 342.0054,
+                            "y": 1.8139292,
+                            "z": 524.376953
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "maxBotsInGroup": 2,
+        "desirability": 40,
+        "pmcsOnly": true,
+        "name": "Lighthouse Bedrooms 1st Floor",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 323.9023,
+                            "y": 1.98488665,
+                            "z": 497.102173
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 320.548981,
+                            "y": 1.98516357,
+                            "z": 493.663757
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 327.6913,
+                            "y": 1.98524129,
+                            "z": 485.6235
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 322.392853,
+                            "y": 1.98534179,
+                            "z": 486.5771
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 332.019623,
+                            "y": 1.985285,
+                            "z": 484.0776
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 337.99292,
+                            "y": 1.98523,
+                            "z": 482.978058
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "maxBotsInGroup": 2,
+        "desirability": 40,
+        "pmcsOnly": true,
+        "name": "Lighthouse Bedrooms 2nd Floor",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 320.931519,
+                            "y": 4.99717569,
+                            "z": 498.214
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 319.224762,
+                            "y": 4.9971776,
+                            "z": 492.245117
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 327.38623,
+                            "y": 4.99749,
+                            "z": 485.035645
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 322.9277,
+                            "y": 4.99760866,
+                            "z": 486.9793
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 333.568268,
+                            "y": 4.997346,
+                            "z": 483.477844
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Lighthouse Garage",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 343.932648,
+                            "y": 1.69755721,
+                            "z": 474.127472
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 346.563629,
+                            "y": 0.932733536,
+                            "z": 467.769318
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 354.112122,
+                            "y": 2.36059284,
+                            "z": 455.578674
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 365.483551,
+                            "y": 1.73968315,
+                            "z": 464.464325
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 15,
+        "pmcsOnly": true,
+        "name": "Lighthouse Pier",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 402.430542,
+                            "y": 1.74543512,
+                            "z": 394.9195
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 387.20166,
+                            "y": 0.8990585,
+                            "z": 444.020447
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 410.62384,
+                            "y": 0.05420423,
+                            "z": 431.294617
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 432.7314,
+                            "y": 0.162852377,
+                            "z": 425.114532
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 375.6098,
+                            "y": 1.74045289,
+                            "z": 455.7006
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "maxBotsInGroup": 2,
+        "desirability": 35,
+        "pmcsOnly": true,
+        "name": "Lighthouse Radar Station Entrance",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 406.088745,
+                            "y": 15.562973,
+                            "z": 532.6198
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 402.1667,
+                            "y": 15.5629721,
+                            "z": 531.2873
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 398.902954,
+                            "y": 15.0000086,
+                            "z": 535.994751
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 403.379333,
+                            "y": 18.6971855,
+                            "z": 530.927368
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 411.2108,
+                            "y": 15.2194824,
+                            "z": 544.3998
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 411.0382,
+                            "y": 15.2195044,
+                            "z": 551.2034
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 408.035767,
+                            "y": 19.25386,
+                            "z": 546.216248
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 402.444061,
+                            "y": 19.25385,
+                            "z": 546.8957
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 15,
+        "pmcsOnly": true,
+        "name": "Lighthouse Radar Station Garage",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 385.2686,
+                            "y": 15.0000057,
+                            "z": 556.372559
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 379.71637,
+                            "y": 15.1089621,
+                            "z": 568.7066
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 371.960724,
+                            "y": 15.1089611,
+                            "z": 568.8093
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "maxBotsInGroup": 2,
+        "desirability": 30,
+        "pmcsOnly": true,
+        "name": "Lighthouse Radar Station",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 364.838531,
+                            "y": 12.3432713,
+                            "z": 546.495056
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 364.652649,
+                            "y": 15.4979649,
+                            "z": 553.605164
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 353.388275,
+                            "y": 15.4979649,
+                            "z": 558.6098
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 700,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 353.327332,
+                            "y": 15.4979649,
+                            "z": 549.919
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 353.61084,
+                            "y": 15.4979658,
+                            "z": 547.637268
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 35,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 2,
+        "desirability": 20,
+        "pmcsOnly": true,
+        "name": "Lighthouse Cliff Cache",
+        "waypoints" : [
+            {
+                "x": 128.662262,
+                "y": 1.65600622,
+                "z": 519.2548
+            },
+            {
+                "x": 330.679871,
+                "y": 1.73835206,
+                "z": 505.333221
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 366.773865,
+                            "y": 21.5373783,
+                            "z": 524.7454
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 361.967133,
+                            "y": 18.9340363,
+                            "z": 535.836731
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 351.88205,
+                            "y": 18.9286289,
+                            "z": 534.980652
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "isCamping": true,
+        "minLevel": 20,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "name": "Bridge Camping",
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 10,
+                "maxDistanceFromBot": 500,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 130.063156,
+                            "y": 4.92834473,
+                            "z": 390.5209
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 90,
+                            "max": 240
+                        },
+                        "position" : {
+                            "x": 130.063156,
+                            "y": 4.92834473,
+                            "z": 390.5209
+                        },
+                        "lookToPosition" : {
+                            "x": 223.047684,
+                            "y": 1.73768008,
+                            "z": 517.9813
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]

@@ -153,6 +153,7 @@
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\HearingSensorConfig.cs" />
+    <Compile Include="Configuration\LightkeeperIslandQuestsConfig.cs" />
     <Compile Include="Configuration\LimitInitialBossSpawnsConfig.cs" />
     <Compile Include="Configuration\QuestingConfig.cs" />
     <Compile Include="Configuration\ScavRaidSettingsConfig.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Configuration\SearchTimeAfterCombatConfig.cs" />
     <Compile Include="Configuration\ServerResponseError.cs" />
     <Compile Include="Configuration\SprintingLimitationsConfig.cs" />
+    <Compile Include="Configuration\StuckBotRemediesConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Configuration\USECChanceResponse.cs" />
     <Compile Include="Helpers\BotBrainHelpers.cs" />

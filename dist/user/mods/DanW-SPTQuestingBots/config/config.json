@@ -42,7 +42,14 @@
 			"time": 20,
 			"max_count": 8,
 			"follower_break_time": 10,
-			"max_not_able_bodied_time": 120
+			"max_not_able_bodied_time": 120,
+			"stuck_bot_remedies": {
+				"enabled" : true,
+				"min_time_before_jumping": 6,
+				"jump_debounce_time": 4,
+				"min_time_before_vaulting": 8,
+				"vault_debounce_time": 4
+			}
 		},
 		"unlocking_doors" : {
 			"enabled": {
@@ -206,7 +213,7 @@
 			},
 			"exfil_direction_max_angle": 90,
 			"exfil_reached_min_fraction": 0.2,
-			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent", "shooterBTR" ],
+			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy" ],
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {
@@ -222,6 +229,10 @@
 					[30, 30],
 					[40, 40]
 				]
+			},
+			"lightkeeper_island_quests" : {
+				"enabled": true,
+				"min_sain_version": "3.1.0.99"
 			},
 			"spawn_rush": {
 				"desirability": 100,

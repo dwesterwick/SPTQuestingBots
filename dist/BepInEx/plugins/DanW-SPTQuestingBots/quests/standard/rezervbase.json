@@ -201,6 +201,13 @@
         "maxBots": 3,
         "desirability": 35,
         "name": "D2 Switch",
+        "waypoints" : [
+            {
+                "x": -95.56027,
+                "y": -14.5272923,
+                "z": 37.5281944
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -208,14 +215,6 @@
                 "maxDistanceFromBot": 9999,
                 "maxRunDistance": 13,
                 "steps": [
-                    {
-                        "waitTimeAfterCompleting": 1,
-                        "position" : {
-                            "x": -128.6694,
-                            "y": -14.5232315,
-                            "z": 23.99557
-                        }
-                    },
                     {
                         "waitTimeAfterCompleting": 1,
                         "position" : {
@@ -245,6 +244,23 @@
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "D2 Area",
+        "waypoints" : [
+            {
+                "x": -80.53533,
+                "y": -15.8884859,
+                "z": 144.298065
+            },
+            {
+                "x": -27.8268414,
+                "y": 12.5911255,
+                "z": 180.3212
+            },
+            {
+                "x": -73.2474442,
+                "y": -11.7335672,
+                "z": 67.4957
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -357,6 +373,13 @@
         "maxRaidET": 300,
         "pmcsOnly": true,
         "name": "Command Center Rush",
+        "waypoints" : [
+            {
+                "x": -95.56027,
+                "y": -14.5272923,
+                "z": 37.5281944
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": false,
@@ -1747,6 +1770,13 @@
         "desirability": 40,
         "canRunBetweenObjectives": false,
         "name": "Command Center",
+        "waypoints" : [
+            {
+                "x": -95.56027,
+                "y": -14.5272923,
+                "z": 37.5281944
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3763,6 +3793,23 @@
         "desirability": 25,
         "canRunBetweenObjectives": false,
         "name": "D2 from Dome",
+        "waypoints" : [
+            {
+                "x": -80.53533,
+                "y": -15.8884859,
+                "z": 144.298065
+            },
+            {
+                "x": -27.8268414,
+                "y": 12.5911255,
+                "z": 180.3212
+            },
+            {
+                "x": -73.2474442,
+                "y": -11.7335672,
+                "z": 67.4957
+            }
+        ],
         "objectives" : [
             {
                 "repeatable": false,

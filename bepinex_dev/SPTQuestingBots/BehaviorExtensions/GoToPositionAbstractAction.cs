@@ -198,28 +198,32 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         private void tryToGetUnstuck()
         {
+            if (!ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.Enabled)
+            {
+                return;
+            }
+
             if
             (
-                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.MinTimeBeforeJumping)
-                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.JumpDebounceTime)
+                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping)
+                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.JumpDebounceTime)
             )
             {
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
 
-                //DelaySprint(5);
                 tryJump(false);
                 timeSinceLastJumpTimer.Restart();
             }
 
             if
             (
-                (StuckTime >= 8)
-                && (TimeSinceLastVault > 4)
+                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeVaulting)
+                && (TimeSinceLastVault > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.VaultDebounceTime)
             )
             {
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
 
-                DelaySprint(5);
+                //DelaySprint(5);
                 BotOwner.GetPlayer.MovementContext.TryVaulting();
                 timeSinceLastVaultTimer.Restart();
             }

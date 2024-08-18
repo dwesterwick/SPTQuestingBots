@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BepInEx.Bootstrap;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
@@ -98,6 +99,19 @@ namespace SPTQuestingBots.Controllers
 
         public static void RemoveBlacklistedQuestObjectives(string locationId)
         {
+            bool lightkeeperIslandQuestsAllowed = ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled;
+            if (lightkeeperIslandQuestsAllowed && Chainloader.PluginInfos.ContainsKey("me.sol.sain"))
+            {
+                Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
+                Version minSainVersion = new Version(ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.MinSainVersion);
+
+                if (sainVersion.CompareTo(minSainVersion) < 0)
+                {
+                    lightkeeperIslandQuestsAllowed = false;
+                    LoggingController.LogWarning("Lightkeeper Island quests are not permitted if SAIN version is below " + ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.MinSainVersion);
+                }
+            }
+
             foreach (Quest quest in allQuests.ToArray())
             {
                 foreach (QuestObjective objective in quest.AllObjectives)
@@ -105,14 +119,13 @@ namespace SPTQuestingBots.Controllers
                     // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live.
                     // TODO: Eventually, it would be nice to keep these quests but have the bots doing them be friendly toward you until they
                     //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
-                    bool blockLighkeeperIsland = false;
                     if (locationId == "Lighthouse")
                     {
                         bool visitsIsland = objective.GetAllPositions()
                             .Where(p => p.HasValue)
                             .Any(position => Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(position.Value));
 
-                        if (blockLighkeeperIsland && visitsIsland)
+                        if (!lightkeeperIslandQuestsAllowed && visitsIsland)
                         {
                             if (quest.TryRemoveObjective(objective))
                             {

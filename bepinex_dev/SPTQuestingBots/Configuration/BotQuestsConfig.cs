@@ -51,6 +51,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("eft_quests")]
         public QuestSettingsConfig EFTQuests { get; set; } = new QuestSettingsConfig();
 
+        [JsonProperty("lightkeeper_island_quests")]
+        public LightkeeperIslandQuestsConfig LightkeeperIslandQuests { get; set; } = new LightkeeperIslandQuestsConfig();
+
         [JsonProperty("spawn_rush")]
         public QuestSettingsConfig SpawnRush { get; set; } = new QuestSettingsConfig();
 

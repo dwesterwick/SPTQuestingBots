@@ -19,14 +19,14 @@ namespace SPTQuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInDependency("xyz.drakia.waypoints", "1.5.1")]
     [BepInDependency("xyz.drakia.bigbrain", "1.0.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.7.1")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.8.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         public static string ModName { get; private set; } = "???";
 
         private void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "3.9.0.0";
+            Patches.TarkovInitPatch.MinVersion = "3.9.6.0";
             Patches.TarkovInitPatch.MaxVersion = "3.9.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");

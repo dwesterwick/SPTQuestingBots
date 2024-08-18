@@ -15,12 +15,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("time")]
         public float Time { get; set; } = 20;
 
-        [JsonProperty("min_time_before_jumping")]
-        public float MinTimeBeforeJumping { get; set; } = 5;
-
-        [JsonProperty("jump_debounce_time")]
-        public float JumpDebounceTime { get; set; } = 3;
-
         [JsonProperty("max_count")]
         public int MaxCount { get; set; } = 10;
 
@@ -29,6 +23,9 @@ namespace SPTQuestingBots.Configuration
 
         [JsonProperty("max_not_able_bodied_time")]
         public float MaxNotAbleBodiedTime { get; set; } = 120;
+
+        [JsonProperty("stuck_bot_remedies")]
+        public StuckBotRemediesConfig StuckBotRemedies { get; set; } = new StuckBotRemediesConfig();
 
         public StuckBotDetectionConfig()
         {
