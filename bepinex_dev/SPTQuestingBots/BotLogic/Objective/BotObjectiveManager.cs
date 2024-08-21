@@ -251,20 +251,24 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public void SetObjective(BotJobAssignment objective)
         {
-            if (objective != assignment)
+            if (objective == assignment)
             {
-                lastAssignment = assignment;
-                assignment = objective;
+                return;
+            }
 
-                //LoggingController.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
+            lastAssignment = assignment;
+            assignment = objective;
 
-                if (Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
-                {
-                    if (lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
-                    {
-                        LoggingController.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
-                    }
-                }
+            //LoggingController.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
+
+            if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
+            {
+                return;
+            }
+
+            if (lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
+            {
+                LoggingController.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
             }
         }
 

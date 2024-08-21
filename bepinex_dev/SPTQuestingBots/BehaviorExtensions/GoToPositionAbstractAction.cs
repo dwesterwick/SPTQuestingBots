@@ -129,7 +129,6 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)
         {
             updateBotStuckDetection();
-            tryToGetUnstuck();
 
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > stuckTime)
@@ -141,6 +140,9 @@ namespace SPTQuestingBots.BehaviorExtensions
 
                 return true;
             }
+
+            // If the bot might be stuck but stuckTime hasn't been reached, see if the we can stop the bot from being stuck
+            tryToGetUnstuck();
 
             return false;
         }
@@ -203,6 +205,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
+            // Try jumping
             if
             (
                 (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping)
@@ -215,6 +218,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 timeSinceLastJumpTimer.Restart();
             }
 
+            // Try vaulting
             if
             (
                 (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeVaulting)

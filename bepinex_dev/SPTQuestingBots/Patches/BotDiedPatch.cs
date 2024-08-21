@@ -5,9 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using SPT.Reflection.Patching;
-using Comfort.Common;
 using EFT;
-using HarmonyLib;
 using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
@@ -20,10 +18,8 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(BotOwner bot)
+        private static bool PatchPrefix(BotOwner bot, BotsClass ____bots, Action<BotOwner> ___OnBotRemoved)
         {
-            //LoggingController.LogInfo("Bot " + bot.GetText() + " died. Updating BotSpawner data...");
-
             if (!bot.ShouldPlayerBeTreatedAsHuman())
             {
                 return true;
@@ -31,17 +27,11 @@ namespace SPTQuestingBots.Patches
 
             bot.IsDead = true;
 
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+            ____bots.Remove(bot);
 
-            FieldInfo botsClassField = AccessTools.Field(typeof(BotSpawner), "_bots");
-            BotsClass botsClass = (BotsClass)botsClassField.GetValue(botSpawnerClass);
-            botsClass.Remove(bot);
-
-            FieldInfo onBotRemovedField = AccessTools.Field(typeof(BotSpawner), "OnBotRemoved");
-            Action<BotOwner> onBotRemoved = (Action<BotOwner>)onBotRemovedField.GetValue(botSpawnerClass);
-            if (onBotRemoved != null)
+            if (___OnBotRemoved != null)
             {
-                onBotRemoved(bot);
+                ___OnBotRemoved(bot);
             }
 
             return false;

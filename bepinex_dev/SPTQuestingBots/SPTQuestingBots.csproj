@@ -164,12 +164,14 @@
     <Compile Include="Configuration\StuckBotRemediesConfig.cs" />
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Configuration\USECChanceResponse.cs" />
+    <Compile Include="Configuration\ZoneAndItemPositionInfoConfig.cs" />
     <Compile Include="Helpers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
     <Compile Include="Controllers\BotRegistrationManager.cs" />
     <Compile Include="Components\Spawning\BotGenerator.cs" />
     <Compile Include="Components\DebugData.cs" />
+    <Compile Include="Helpers\BotGroupHelpers.cs" />
     <Compile Include="Helpers\BotPathingHelpers.cs" />
     <Compile Include="Helpers\DebugHelpers.cs" />
     <Compile Include="Helpers\InteractiveObjectHelpers.cs" />

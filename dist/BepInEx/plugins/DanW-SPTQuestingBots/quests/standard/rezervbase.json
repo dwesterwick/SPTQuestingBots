@@ -201,6 +201,9 @@
         "maxBots": 3,
         "desirability": 35,
         "name": "D2 Switch",
+        "requiredSwitches": {
+            "autoId_00000_D2_LEVER": false
+        },
         "waypoints" : [
             {
                 "x": -95.56027,
@@ -230,6 +233,63 @@
                             "x": -116.461212,
                             "y": -14.5357466,
                             "z": 21.0227413
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "minRaidET": 420,
+        "name": "D2 Extract Switch",
+        "requiredSwitches": {
+            "autoId_00000_D2_LEVER": true,
+            "00453": false
+        },
+        "waypoints" : [
+            {
+                "x": -80.53533,
+                "y": -15.8884859,
+                "z": 144.298065
+            },
+            {
+                "x": -27.8268414,
+                "y": 12.5911255,
+                "z": 180.3212
+            },
+            {
+                "x": -73.2474442,
+                "y": -11.7335672,
+                "z": 67.4957
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 28,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -116.5,
+                            "y": -18.4,
+                            "z": 169.3
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "00453",
+                        "position" : {
+                            "x": -116.5,
+                            "y": -18.4,
+                            "z": 169.3
                         }
                     }
                 ]
@@ -333,31 +393,6 @@
                             "x": -103.348976,
                             "y": -18.40645,
                             "z": 158.996735
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": true,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 75,
-                "maxRunDistance": 28,
-                "steps": [
-                    {
-                        "waitTimeAfterCompleting": 1,
-                        "position" : {
-                            "x": -116.5,
-                            "y": -18.4,
-                            "z": 169.3
-                        }
-                    },
-                    {
-                        "stepType" : "ToggleSwitch",
-                        "switchID" : "00453",
-                        "position" : {
-                            "x": -116.5,
-                            "y": -18.4,
-                            "z": 169.3
                         }
                     }
                 ]
@@ -4693,6 +4728,208 @@
                             "x": -83.51541,
                             "y": 5.586532,
                             "z": 81.13965
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "requiredSwitches": {
+            "autoId_00000_D2_LEVER": true
+        },
+        "desirability": 20,
+        "name": "D2 Extract Camping",
+        "waypoints" : [
+            {
+                "x": -80.53533,
+                "y": -15.8884859,
+                "z": 144.298065
+            },
+            {
+                "x": -27.8268414,
+                "y": 12.5911255,
+                "z": 180.3212
+            },
+            {
+                "x": -73.2474442,
+                "y": -11.7335672,
+                "z": 67.4957
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 20,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -99.64825,
+                            "y": -18.4064484,
+                            "z": 158.186447
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 120,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -99.64825,
+                            "y": -18.4064484,
+                            "z": 158.186447
+                        },
+                        "lookToPosition" : {
+                            "x": -90.34085,
+                            "y": -19.48446,
+                            "z": 152.01239
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 10,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -89.4850845,
+                            "y": -16.2609348,
+                            "z": 154.509933
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 120,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -89.4850845,
+                            "y": -16.2609348,
+                            "z": 154.509933
+                        },
+                        "lookToPosition" : {
+                            "x": -92.74455,
+                            "y": -16.2609348,
+                            "z": 152.690384
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -82.94805,
+                            "y": -16.20588,
+                            "z": 150.744766
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 120,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -82.94805,
+                            "y": -16.20588,
+                            "z": 150.744766
+                        },
+                        "lookToPosition" : {
+                            "x": -82.5719147,
+                            "y": -15.9544868,
+                            "z": 145.723633
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "minRaidET": 300,
+        "requiredSwitches": {
+            "autoId_00000_D2_LEVER": true
+        },
+        "desirability": 20,
+        "name": "D2 Entrance Camping",
+        "waypoints" : [
+            {
+                "x": -80.53533,
+                "y": -15.8884859,
+                "z": 144.298065
+            },
+            {
+                "x": -27.8268414,
+                "y": 12.5911255,
+                "z": 180.3212
+            },
+            {
+                "x": -73.2474442,
+                "y": -11.7335672,
+                "z": 67.4957
+            }
+        ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 750,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -62.6594162,
+                            "y": -14.703867,
+                            "z": 145.106491
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 120,
+                            "max": 300
+                        },
+                        "position" : {
+                            "x": -62.6594162,
+                            "y": -14.703867,
+                            "z": 145.106491
+                        },
+                        "lookToPosition" : {
+                            "x": -80.40696,
+                            "y": -15.8884859,
+                            "z": 144.484146
                         }
                     }
                 ]

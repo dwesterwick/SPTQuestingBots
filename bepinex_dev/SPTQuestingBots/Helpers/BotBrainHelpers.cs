@@ -266,5 +266,15 @@ namespace SPTQuestingBots.Helpers
         {
             return bot.GetPlayer.ShouldPlayerBeTreatedAsHuman();
         }
+
+        public static bool IsZryachiyOrFollower(this IPlayer player)
+        {
+            return player.Profile.Info.Settings.Role.IsZryachiyOrFollower();
+        }
+
+        public static bool IsZryachiyOrFollower(this WildSpawnType role)
+        {
+            return (role == WildSpawnType.bossZryachiy) || (role == WildSpawnType.followerZryachiy);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
@@ -22,6 +23,7 @@ namespace SPTQuestingBots.Components
         public bool HaveQuestsBeenBuilt { get; private set; } = false;
 
         private CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private IReadOnlyDictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null;
         private QuestPathFinder questPathFinder = new QuestPathFinder();
         private List<string> zoneIDsInLocation = new List<string>();
         
@@ -84,7 +86,10 @@ namespace SPTQuestingBots.Components
                     Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = ConfigController.GetEFTQuestSettings();
                     LoggingController.LogInfo("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
 
-                    QuestHelpers.LoadZoneAndItemQuestPositions();
+                    zoneAndItemQuestPositions = QuestHelpers.LoadZoneAndItemQuestPositions();
+
+                    // Need to be able to override private properties
+                    BindingFlags overrideBindingFlags = JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
 
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
@@ -96,7 +101,7 @@ namespace SPTQuestingBots.Components
                         if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
                         {
                             LoggingController.LogInfo("Applying override settings for quest " + quest.Name + "...");
-                            quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id]);
+                            quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id], overrideBindingFlags);
                         }
 
                         BotJobAssignmentFactory.AddQuest(quest);
@@ -383,6 +388,15 @@ namespace SPTQuestingBots.Components
 
         private Vector3? findNavMeshPointForCollider(Collider collider, string zoneName)
         {
+            // Check if a specific position should be used for bots to get the item
+            if ((zoneAndItemQuestPositions?.ContainsKey(zoneName) == true) && (zoneAndItemQuestPositions[zoneName].Position != null))
+            {
+                Vector3 overridePosition = zoneAndItemQuestPositions[zoneName].Position.ToUnityVector3();
+                LoggingController.LogInfo("Using override position for " + zoneName);
+
+                return overridePosition;
+            }
+
             bool UseNavMeshTestPoints = true;
             Vector3 targetPosition = collider.bounds.center;
             float maxSearchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceZone;

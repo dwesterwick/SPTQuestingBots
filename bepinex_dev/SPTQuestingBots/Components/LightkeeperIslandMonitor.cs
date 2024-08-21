@@ -7,6 +7,7 @@ using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components
@@ -40,18 +41,6 @@ namespace SPTQuestingBots.Components
             }
         }
 
-        public IEnumerable<BotOwner> FindZryachiyAndFollowers()
-        {
-            return Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
-                .Where(b => IsZryachiyOrFollower(b.Profile))
-                .Where(b => !b.IsDead);
-        }
-
-        public bool IsZryachiyOrFollower(Profile profile)
-        {
-            return (profile.Info.Settings.Role == WildSpawnType.bossZryachiy) || (profile.Info.Settings.Role == WildSpawnType.followerZryachiy);
-        }
-
         public bool ShouldPlayerBeFriendlyWithZryachiyAndFollowers(IPlayer iplayer)
         {
             BotOwner botOwner = iplayer.GetBotOwner();
@@ -67,7 +56,7 @@ namespace SPTQuestingBots.Components
         {
             bool isOnIsland = locationData.IsPointOnLightkeeperIsland(player.Position);
 
-            if (IsZryachiyOrFollower(player.Profile))
+            if (player.IsZryachiyOrFollower())
             {
                 foreach (BotOwner botWithQuestsOnIsland in botsWithQuestsOnIsland.ToArray())
                 {
@@ -115,10 +104,10 @@ namespace SPTQuestingBots.Components
 
         private void formAlliancesWithZryachiyAndFollowers(BotOwner bot)
         {
-            foreach (BotOwner zryachiyOrFollower in FindZryachiyAndFollowers())
+            foreach (BotOwner zryachiyOrFollower in BotGroupHelpers.FindZryachiyAndFollowers())
             {
-                formAlliance(bot, zryachiyOrFollower);
-                formAlliance(zryachiyOrFollower, bot);
+                bot.FormAlliance(zryachiyOrFollower);
+                zryachiyOrFollower.FormAlliance(bot);
             }
         }
 
@@ -173,8 +162,8 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                formAlliance(player, otherPlayer);
-                formAlliance(otherPlayer, player);
+                player.FormAlliance(otherPlayer);
+                otherPlayer.FormAlliance(player);
             }
         }
 
@@ -187,44 +176,12 @@ namespace SPTQuestingBots.Components
             }
 
             bool atLeastOneZryachiyOrFollower = false;
-            if (IsZryachiyOrFollower(player.Profile) || IsZryachiyOrFollower(otherPlayer.Profile))
+            if (player.IsZryachiyOrFollower() || otherPlayer.IsZryachiyOrFollower())
             {
                 atLeastOneZryachiyOrFollower = true;
             }
 
             return !(atLeastOneHuman && atLeastOneZryachiyOrFollower);
-        }
-
-        private void formAlliance(IPlayer iplayer, IPlayer otherIPlayer)
-        {
-            if ((iplayer == null) || (otherIPlayer == null))
-            {
-                return;
-            }
-
-            BotsGroup playerGroup = iplayer.GetBotOwner()?.BotsGroup;
-            if (playerGroup == null)
-            {
-                return;
-            }
-
-            IPlayer[] enemyMatches = playerGroup.Enemies
-                    .Where(e => e.Key.Profile.Id == otherIPlayer.Profile.Id)
-                    .Select(e => e.Key)
-                    .ToArray();
-
-            foreach (IPlayer remainingEnemy in enemyMatches)
-            {
-                LoggingController.LogInfo(iplayer.GetText() + "'s group has paused their hostility with " + remainingEnemy.GetText());
-                playerGroup.RemoveEnemy(remainingEnemy);
-            }
-
-            Player otherPlayer = otherIPlayer.GetPlayer();
-            if (!playerGroup.Allies.Contains(otherPlayer))
-            {
-                LoggingController.LogInfo(iplayer.GetText() + "'s group is temporarily allied with " + otherPlayer.GetText());
-                playerGroup.AddAlly(otherPlayer);
-            }
         }
 
         private void revertAlliances(Player player, Player otherPlayer = null)

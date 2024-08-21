@@ -166,12 +166,12 @@
 			"min_alive_time": 60,
 			"must_extract_time_remaining": 300,
 			"total_quests": {
-				"min": 6,
-				"max": 12
+				"min": 3,
+				"max": 8
 			},
 			"EFT_quests": {
 				"min": 2,
-				"max": 5
+				"max": 4
 			}
 		},
 		"sprinting_limitations": {

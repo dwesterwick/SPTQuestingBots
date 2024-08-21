@@ -57,7 +57,7 @@ namespace SPTQuestingBots.Models
         public bool CanRunBetweenObjectives { get; set; } = true;
 
         [JsonProperty("requiredSwitches")]
-        public Dictionary<string, bool> RequiredSwitches = new Dictionary<string, bool>();
+        public Dictionary<string, bool> RequiredSwitches { get; set; } = new Dictionary<string, bool>();
 
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
@@ -66,13 +66,13 @@ namespace SPTQuestingBots.Models
         public bool IsActiveForPlayer { get; set; } = false;
 
         [JsonProperty("name")]
-        private string name = "Unnamed Quest";
+        private string name { get; set; } = "Unnamed Quest";
 
         [JsonProperty("waypoints")]
-        private SerializableVector3[] serializableWaypointPositions = new SerializableVector3[0];
+        private SerializableVector3[] serializableWaypointPositions { get; set; } = new SerializableVector3[0];
 
         [JsonProperty("objectives")]
-        private QuestObjective[] objectives = new QuestObjective[0];
+        private QuestObjective[] objectives { get; set; } = new QuestObjective[0];
 
         [JsonIgnore]
         private IList<Vector3> waypointPositions = null;

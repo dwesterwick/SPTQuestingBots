@@ -139,6 +139,12 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             ObjectiveManager.StartJobAssigment();
 
+            // Make sure the bot still needs to unlock a door
+            if (!ObjectiveManager.MustUnlockDoor)
+            {
+                return;
+            }
+
             // Check if the door is already unlocked
             if (worldInteractiveObject.DoorState != EDoorState.Locked)
             {
@@ -166,12 +172,6 @@ namespace SPTQuestingBots.BotLogic.Objective
                     restartStuckTimer();
                 }
 
-                return;
-            }
-
-            // Make sure the bot still needs to unlock a door
-            if (!ObjectiveManager.MustUnlockDoor)
-            {
                 return;
             }
 

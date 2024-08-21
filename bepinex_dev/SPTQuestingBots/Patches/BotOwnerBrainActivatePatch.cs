@@ -15,8 +15,16 @@ namespace SPTQuestingBots.Patches
 {
     public class BotOwnerBrainActivatePatch : ModulePatch
     {
+        private static FieldInfo allBotsCountField;
+        private static FieldInfo followersCountField;
+        private static FieldInfo bossesCountField;
+
         protected override MethodBase GetTargetMethod()
         {
+            allBotsCountField = AccessTools.Field(typeof(BotSpawner), "_allBotsCount");
+            followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
+            bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
+
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -94,10 +102,6 @@ namespace SPTQuestingBots.Patches
         private static void reduceBotCounts(BotOwner bot)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            FieldInfo allBotsCountField = AccessTools.Field(typeof(BotSpawner), "_allBotsCount");
-            FieldInfo followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
-            FieldInfo bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
 
             if (bot.Profile.Info.Settings.IsFollower())
             {

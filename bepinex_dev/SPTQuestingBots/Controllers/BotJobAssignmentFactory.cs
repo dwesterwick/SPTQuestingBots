@@ -99,6 +99,7 @@ namespace SPTQuestingBots.Controllers
 
         public static void RemoveBlacklistedQuestObjectives(string locationId)
         {
+            // Force Lightkeeper Island quests to be disabled if SAIN is installed but below a minimum version
             bool lightkeeperIslandQuestsAllowed = ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled;
             if (lightkeeperIslandQuestsAllowed && Chainloader.PluginInfos.ContainsKey("me.sol.sain"))
             {
@@ -116,9 +117,7 @@ namespace SPTQuestingBots.Controllers
             {
                 foreach (QuestObjective objective in quest.AllObjectives)
                 {
-                    // Remove quests on Lightkeeper island. Otherwise, PMC's will engage you there when they normally wouldn't on live.
-                    // TODO: Eventually, it would be nice to keep these quests but have the bots doing them be friendly toward you until they
-                    //       leave the island. Also, it would be nice if they need to have an encoded DSP in their inventory.
+                    // Check if Lightkeeper Island quests should be blacklisted
                     if (locationId == "Lighthouse")
                     {
                         bool visitsIsland = objective.GetAllPositions()

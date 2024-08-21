@@ -25,9 +25,6 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            //Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
-            //return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
-
             Type baseGameType = typeof(BaseLocalGame<EftGamePlayerOwner>);
             return baseGameType.GetMethod("vmethod_4", BindingFlags.Public | BindingFlags.Instance);
         }

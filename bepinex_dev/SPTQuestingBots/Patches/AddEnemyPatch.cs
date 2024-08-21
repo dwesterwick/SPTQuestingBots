@@ -36,11 +36,7 @@ namespace SPTQuestingBots.Patches
             }*/
 
             // Get the ID's of all group members
-            List<BotOwner> groupMemberList = new List<BotOwner>();
-            for (int m = 0; m < __instance.MembersCount; m++)
-            {
-                groupMemberList.Add(__instance.Member(m));
-            }
+            List<BotOwner> groupMemberList = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(__instance);
             string[] groupMemberIDs = groupMemberList.Select(m => m.Profile.Id).ToArray();
 
             //LoggingController.LogInfo("You are now an enemy of " + string.Join(", ", groupMemberIDs) + " due to reason: " + cause.ToString());
