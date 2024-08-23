@@ -167,25 +167,16 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Create a quest for PMC's to go to boss spawn locations early in the raid to hunt them
-                Quest bossHunterQuest = null;
-                IEnumerable<string> bossZones = getBossSpawnZones();
-                if (bossZones.Any())
+                Dictionary<string, List<string>> bossSpawnZones = getBossSpawnZones();
+                foreach (string boss in bossSpawnZones.Keys)
                 {
-                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossZones.Contains(s.BotZoneName ?? ""));
-                    bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter", ConfigController.Config.Questing.BotQuests.BossHunter);
-                }
-
-                if (bossHunterQuest != null)
-                {
-                    //LoggingController.LogInfo("Adding quest for hunting bosses...");
-                    bossHunterQuest.PMCsOnly = true;
-                    BotJobAssignmentFactory.AddQuest(bossHunterQuest);
-                }
-                else
-                {
-                    if (LocationScene.GetAllObjects<BotZone>(false).Count() > 1)
+                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossSpawnZones[boss].Contains(s.BotZoneName ?? ""));
+                    Quest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", ConfigController.Config.Questing.BotQuests.BossHunter);
+                    if (bossHunterQuest != null)
                     {
-                        LoggingController.LogWarning("Could not add quest for hunting bosses. This is normal if bosses do not spawn on this map. Boss zones: " + string.Join(", ", bossZones));
+                        LoggingController.LogInfo("Adding quest for hunting boss " + boss + "...");
+                        bossHunterQuest.PMCsOnly = true;
+                        BotJobAssignmentFactory.AddQuest(bossHunterQuest);
                     }
                 }
 
@@ -582,9 +573,9 @@ namespace SPTQuestingBots.Components
             return quest;
         }
 
-        private IEnumerable<string> getBossSpawnZones()
+        private Dictionary<string, List<string>> getBossSpawnZones()
         {
-            List<string> bossZones = new List<string>();
+            Dictionary<string, List<string>> bossZones = new Dictionary<string, List<string>>();
             foreach (BossLocationSpawn bossLocationSpawn in Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.BossLocationSpawn)
             {
                 if (ConfigController.Config.Questing.BotQuests.BlacklistedBossHunterBosses.Contains(bossLocationSpawn.BossName))
@@ -592,10 +583,22 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                bossZones.AddRange(bossLocationSpawn.BossZone.Split(','));
+                if (!bossZones.ContainsKey(bossLocationSpawn.BossName))
+                {
+                    bossZones.Add(bossLocationSpawn.BossName, new List<string>());
+                }
+
+                List<string> zoneNames = bossLocationSpawn.BossZone.Split(',').ToList();
+                foreach (string zoneName in zoneNames)
+                {
+                    if (!bossZones[bossLocationSpawn.BossName].Contains(zoneName))
+                    {
+                        bossZones[bossLocationSpawn.BossName].Add(zoneName);
+                    }
+                }
             }
 
-            return bossZones.Distinct();
+            return bossZones;
         }
     }
 }
