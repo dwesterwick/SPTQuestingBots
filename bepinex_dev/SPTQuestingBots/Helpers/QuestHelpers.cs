@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Helpers
 {
     public static class QuestHelpers
     {
-        private static Dictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = new Dictionary<string, Configuration.ZoneAndItemPositionInfoConfig>();
+        private static Dictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null;
         private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
@@ -46,6 +46,11 @@ namespace SPTQuestingBots.Helpers
 
         public static IReadOnlyDictionary<string, Configuration.ZoneAndItemPositionInfoConfig> LoadZoneAndItemQuestPositions()
         {
+            if (zoneAndItemQuestPositions != null)
+            {
+                return zoneAndItemQuestPositions;
+            }
+
             zoneAndItemQuestPositions = ConfigController.GetZoneAndItemPositions();
             LoggingController.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
 

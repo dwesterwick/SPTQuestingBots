@@ -19,6 +19,11 @@ namespace SPTQuestingBots.Components
 
         }
 
+        public void Clear()
+        {
+            staticPaths.Clear();
+        }
+
         public IList<StaticPathData> GetStaticPaths(Vector3 target)
         {
             IList<StaticPathData> paths = new List<StaticPathData>();
@@ -51,6 +56,11 @@ namespace SPTQuestingBots.Components
 
         private void findStaticPaths(Models.Quest quest)
         {
+            if (!quest.ValidObjectives.Any())
+            {
+                return;
+            }
+
             // Check if any waypoints have been defined for the quest
             IList<Vector3> waypoints = quest.GetWaypointPositions();
             if (waypoints.Count == 0)

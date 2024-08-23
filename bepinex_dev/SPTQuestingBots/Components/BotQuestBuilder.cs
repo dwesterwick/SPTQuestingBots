@@ -76,6 +76,8 @@ namespace SPTQuestingBots.Components
         {
             IsBuildingQuests = true;
 
+            zoneAndItemQuestPositions = QuestHelpers.LoadZoneAndItemQuestPositions();
+
             try
             {
                 if (BotJobAssignmentFactory.QuestCount == 0)
@@ -85,8 +87,6 @@ namespace SPTQuestingBots.Components
 
                     Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = ConfigController.GetEFTQuestSettings();
                     LoggingController.LogInfo("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
-
-                    zoneAndItemQuestPositions = QuestHelpers.LoadZoneAndItemQuestPositions();
 
                     // Need to be able to override private properties
                     BindingFlags overrideBindingFlags = JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;

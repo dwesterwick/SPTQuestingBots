@@ -380,21 +380,6 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * Noticeable stuttering for (possibly) several seconds when the initial PMC wave spawns if your **max_alive_bots** setting is high
 * Performance may be worse if **advanced_eft_bot_count_management.enabled=true** because EFT may be allowed to spawn more Scavs than with previous versions of this mod.
 
-**---------- Roadmap (Expect Similar Accuracy to EFT's) ----------**
-
-* **0.7.1** (ETA: Late July)
-    * Add the ability to require certain weapon classes for quests (i.e. do not allow a bot with only a pistol to perform a sniping quest)
-* **0.8.0** (ETA: Early September)
-    * Separate spawning system into a separate mod
-* **Backlog**
-    * Move initial quest-data generation to the server to protect for mods that add lots of quests (like QuestManiac)
-    * Add new quest type: hidden-stash running
-    * Add new quest type: blood-thirsty cheater (will be disabled by default)
-    * Improvements with how Questing Bots interacts with SAIN:
-        * Ability to have bots avoid quests in dangerous areas of the map
-* **Not Planned**
-    * Add waypoints to have PMC's path around dangerous spots in the map or in very open areas
-
 **---------- Credits ----------**
 
 * Thanks to [Props](https://hub.sp-tarkov.com/user/18746-props/) for sharing the code [DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) uses to spawn bots. This was the inspiration to create this mod. 
