@@ -12,6 +12,22 @@ using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Helpers
 {
+    [Flags]
+    public enum WeaponClass
+    {
+        none = 0,
+        assaultCarbine = 1,
+        assaultRifle = 2,
+        grenadeLauncher = 4,
+        machinegun = 8,
+        marksmanRifle = 16,
+        pistol = 32,
+        shotgun = 64,
+        smg = 128,
+        sniperRifle = 256,
+        specialWeapon = 512,
+    }
+
     public static class ItemHelpers
     {
         public static InventoryControllerClass GetInventoryController(this BotOwner bot)
@@ -22,7 +38,53 @@ namespace SPTQuestingBots.Helpers
             return (InventoryControllerClass)inventoryControllerField.GetValue(bot.GetPlayer);
         }
 
+        public static IEnumerable<WeaponClass> ToWeaponClasses(this IEnumerable<string> weaponClassNames)
+        {
+            return weaponClassNames.Select(n => (WeaponClass)Enum.Parse(typeof(WeaponClass), n));
+        }
+
+        public static bool HasAnyRequiredWeapon(this BotOwner botOwner, IEnumerable<WeaponClass> requiredClasses)
+        {
+            foreach (WeaponClass weaponClass in botOwner.GetEquippedWeaponClasses())
+            {
+                if (requiredClasses.Contains(weaponClass))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool HasAnyAllowedWeapon(this BotOwner botOwner, IEnumerable<WeaponClass> forbiddenClasses)
+        {
+            foreach (WeaponClass weaponClass in botOwner.GetEquippedWeaponClasses())
+            {
+                if (!forbiddenClasses.Contains(weaponClass))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static IEnumerable<WeaponClass> GetEquippedWeaponClasses(this BotOwner botOwner)
+        {
+            return botOwner.GetEquippedWeaponClassNames().ToWeaponClasses();
+        }
+
+        public static IEnumerable<string> GetEquippedWeaponClassNames(this BotOwner botOwner)
+        {
+            return botOwner.GetEquippedWeapons().Select(w => w.WeapClass);
+        }
+
         public static float GetMaxWeaponSightingRange(this BotOwner botOwner)
+        {
+            return botOwner.GetEquippedWeapons().Max(w => w.SightingRange);
+        }
+
+        public static List<Weapon> GetEquippedWeapons(this BotOwner botOwner)
         {
             InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
 
@@ -30,11 +92,12 @@ namespace SPTQuestingBots.Helpers
             Weapon primaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.FirstPrimaryWeapon).ContainedItem as Weapon;
             Weapon secondaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.SecondPrimaryWeapon).ContainedItem as Weapon;
 
-            float holsterWeaponSightingRange = holsterWeapon != null ? holsterWeapon.SightingRange : 0;
-            float primaryWeaponSightingRange = primaryWeapon != null ? primaryWeapon.SightingRange : 0;
-            float secondaryWeaponSightingRange = secondaryWeapon != null ? secondaryWeapon.SightingRange : 0;
+            List<Weapon> weapons = new List<Weapon>();
+            if (holsterWeapon != null) weapons.Add(holsterWeapon);
+            if (primaryWeapon != null) weapons.Add(primaryWeapon);
+            if (secondaryWeapon != null) weapons.Add(secondaryWeapon);
 
-            return Math.Max(holsterWeaponSightingRange, Math.Max(primaryWeaponSightingRange, secondaryWeaponSightingRange));
+            return weapons;
         }
 
         public static float HearingMultiplier(this BotOwner botOwner)

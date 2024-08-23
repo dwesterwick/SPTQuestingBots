@@ -890,6 +890,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Stage Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1314,6 +1315,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Long Road Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2172,6 +2174,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Resort Front Yard",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2233,6 +2236,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Resort Overlook",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2326,6 +2330,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Resort Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2539,6 +2544,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Chalet Outdoor Area",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4028,6 +4034,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Bridge Camping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,

@@ -99,6 +99,17 @@ The three major data structures are:
     * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **requiredSwitches**: A dictionary of the switches that must be in a specific position bot bots to perform the quest. The dictionary key is the ID of the switch, and the value is a boolean indicating if the switch must be open (actuated). If the dictionary is empty, no switches will be checked. 
+    * **forbiddenWeapons**: An array of weapon classes that cannot be used to perform this quest. In order for the bot to perform the quest, it must have at least one weapon that is not in the weapon classes listed in the array. The only available options for the array elements are (case-sensitive):
+        * assaultCarbine
+        * assaultRifle
+        * grenadeLauncher
+        * machinegun
+        * marksmanRifle
+        * pistol
+        * shotgun
+        * smg
+        * sniperRifle
+        * specialWeapon
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.
     * **waypoints**: An array of waypoints that can be used to assist bots with finding paths to the quest's objectives. Each waypoint is an (x, y, z) coordinate. 
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 

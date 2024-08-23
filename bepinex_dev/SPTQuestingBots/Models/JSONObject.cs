@@ -60,7 +60,7 @@ namespace SPTQuestingBots.Models
             {
                 try
                 {
-                    JArray array = (JArray) val;
+                    JArray array = (JArray)val;
                     val = array.ToObject(matchingProperties[0].PropertyType);
                 }
                 catch (Exception)

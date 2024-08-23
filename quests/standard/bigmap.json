@@ -49,6 +49,7 @@
         "maxRaidET": 90,
         "pmcsOnly": true,
         "name": "Marked Room Rush",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": false,
@@ -2248,6 +2249,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Construction",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2481,6 +2483,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "RUAF Crossing Camping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2561,6 +2564,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Center Crossing Camping",
+        "forbiddenWeapons" : [ "pistol" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2604,6 +2608,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Junk Bridge Crossing Camping",
+        "forbiddenWeapons" : [ "pistol" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2649,6 +2654,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Dorms 3 Story Bathroom Camping Floor 1",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2712,6 +2718,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Dorms 3 Story Bathroom Camping Floor 2",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2775,6 +2782,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Dorms 2 Story Bathroom Camping Floor 1",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2839,6 +2847,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Dorms 3 Story Roof Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2885,6 +2894,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "New Gas Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2931,6 +2941,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Crackhouse Area Sniping",
+        "forbiddenWeapons" : [ "pistol" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2977,6 +2988,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Fortress Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3214,6 +3226,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Old Gas Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3260,6 +3273,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Container Building Ambush",
+        "forbiddenWeapons" : [ "pistol" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3306,6 +3320,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Checkpoint Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3351,6 +3366,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Big Red Camping",
+        "forbiddenWeapons" : [ "pistol", "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3448,6 +3464,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Bridge Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,

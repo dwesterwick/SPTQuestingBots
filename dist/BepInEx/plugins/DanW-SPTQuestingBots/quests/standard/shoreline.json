@@ -447,6 +447,7 @@
         "desirability": 20,
         "pmcsOnly": true,
         "name": "Scav Island Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -559,6 +560,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Gas Station Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -671,6 +673,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Sniper Rock Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -773,6 +776,7 @@
         "maxBotsInGroup": 1,
         "desirability": 25,
         "name": "Radio Tower",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": false,
@@ -944,6 +948,7 @@
         "desirability": 5,
         "pmcsOnly": true,
         "name": "Weather Station Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1053,6 +1058,7 @@
         "desirability": 5,
         "pmcsOnly": true,
         "name": "Weather Station Tower Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1162,6 +1168,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Crane Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1344,6 +1351,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Pier Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1500,6 +1508,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Gas Station Sniping 2",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1600,6 +1609,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Power Station Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1736,6 +1746,7 @@
         "desirability": 20,
         "pmcsOnly": true,
         "name": "Lighthouse Extract Sniper Area Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1883,6 +1894,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Power Station Sniping 2",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1929,6 +1941,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Resort Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2948,6 +2961,7 @@
         "minRaidET": 300,
         "desirability": 10,
         "name": "Tunnel Camping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2993,6 +3007,7 @@
         "maxBotsInGroup": 1,
         "desirability": 10,
         "name": "Smuggler's Base Perimeter",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,

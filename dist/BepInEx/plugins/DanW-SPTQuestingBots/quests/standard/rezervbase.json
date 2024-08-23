@@ -51,6 +51,7 @@
         },
         "pmcsOnly": true,
         "name": "Hermetic Alarm Patrol",
+        "forbiddenWeapons" : [ "pistol" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1083,6 +1084,7 @@
         "canRunBetweenObjectives": false,
         "pmcsOnly": true,
         "name": "Dome Upper Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2221,6 +2223,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "BMP #1 Tower",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2268,6 +2271,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "South Hill Tower",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3048,6 +3052,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "South Hill Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3249,6 +3254,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "White Knight Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3489,6 +3495,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Black Knight Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3619,6 +3626,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Dome Lower Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3903,6 +3911,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Black Bishop Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -3974,6 +3983,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "White Bishop Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4113,6 +4123,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "White King Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4446,6 +4457,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Black Pawn Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4656,6 +4668,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "White Pawn Roof",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4747,6 +4760,7 @@
         },
         "desirability": 20,
         "name": "D2 Extract Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "waypoints" : [
             {
                 "x": -80.53533,
@@ -4882,6 +4896,7 @@
         },
         "desirability": 20,
         "name": "D2 Entrance Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "waypoints" : [
             {
                 "x": -80.53533,

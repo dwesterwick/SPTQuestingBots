@@ -11,6 +11,7 @@ using EFT.Game.Spawning;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
@@ -58,6 +59,9 @@ namespace SPTQuestingBots.Models
 
         [JsonProperty("requiredSwitches")]
         public Dictionary<string, bool> RequiredSwitches { get; set; } = new Dictionary<string, bool>();
+
+        [JsonProperty("forbiddenWeapons")]
+        private WeaponClass[] ForbiddenWeapons { get; set; } = new WeaponClass[0];
 
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
@@ -157,6 +161,11 @@ namespace SPTQuestingBots.Models
             float raidTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
 
             if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
+            {
+                return false;
+            }
+
+            if (!bot.HasAnyAllowedWeapon(ForbiddenWeapons))
             {
                 return false;
             }

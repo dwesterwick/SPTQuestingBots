@@ -93,6 +93,7 @@
         "minRaidET": 500,
         "desirability": 10,
         "name": "Mira Avenue Extract Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -450,6 +451,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Oasis Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -672,6 +674,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Olive Restaurant Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -821,6 +824,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "M Showroom Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1035,6 +1039,7 @@
         "maxBotsInGroup": 1,
         "desirability": 20,
         "name": "Capital Insight Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "waypoints" : [
             {
                 "x": 124.025024,
@@ -1172,6 +1177,7 @@
         "minRaidET": 400,
         "desirability": 10,
         "name": "Nakatani Tower Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1417,6 +1423,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Tarbank Upstairs Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1522,6 +1529,7 @@
         "minRaidET": 400,
         "desirability": 10,
         "name": "VEX Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1924,6 +1932,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "TerraGroup Office Upstairs Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "waypoints" : [
             {
                 "x": -40.541584,
@@ -2012,6 +2021,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "TerraGroup Office Quest Room Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "waypoints" : [
             {
                 "x": -40.541584,
@@ -2065,6 +2075,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "TerraGroup Office Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2111,6 +2122,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "TerraGroup Office Upstairs Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "waypoints" : [
             {
                 "x": -40.541584,
@@ -2509,6 +2521,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "Tarbank Stairwell Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2555,6 +2568,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "Capital Insight Stairwell Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2601,6 +2615,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "Capital Insight Cafe Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2647,6 +2662,7 @@
         "maxBotsInGroup": 1,
         "desirability": 15,
         "name": "Capital Insight Quest Room Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,

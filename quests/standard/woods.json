@@ -510,6 +510,7 @@
         "desirability": 20,
         "pmcsOnly": true,
         "name": "Sawmill Checkpoint Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -552,6 +553,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Sawmill Checkpoint Sniping 2",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -647,6 +649,7 @@
         "desirability": 30,
         "pmcsOnly": true,
         "name": "Scav House Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -861,6 +864,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Scav Town Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1731,6 +1735,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Sawmill Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1776,6 +1781,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Sawmill Beach Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1957,6 +1963,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Scav Base Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2003,6 +2010,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "RUAF Roadblock Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,

@@ -1097,6 +1097,7 @@
         "desirability": 25,
         "pmcsOnly": true,
         "name": "Medical Block Elevator Stairwell",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1140,6 +1141,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Ventilation Shaft Stairwell",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1183,6 +1185,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Parking Stairwell",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1226,6 +1229,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "NE Stairwell",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1269,6 +1273,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Central Stairwell 1",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1312,6 +1317,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Central Stairwell 2",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -1729,6 +1735,7 @@
         "maxRaidET": 300,
         "pmcsOnly": true,
         "name": "Cafeteria Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2356,6 +2363,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Medical Block Elevator Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2401,6 +2409,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Server Room Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2446,6 +2455,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Infirmary Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2491,6 +2501,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Security Office Outside Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2536,6 +2547,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "Security Office Inside Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2599,6 +2611,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Black Room Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -2644,6 +2657,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Green Room Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
             {
                 "repeatable": true,

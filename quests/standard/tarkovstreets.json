@@ -3608,6 +3608,7 @@
         "desirability": 20,
         "canRunBetweenObjectives": false,
         "name": "Primorksy 48 Bridge",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -4949,6 +4950,7 @@
         "desirability": 20,
         "pmcsOnly": true,
         "name": "Cinema Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -5871,6 +5873,7 @@
         "desirability": 10,
         "pmcsOnly": true,
         "name": "Cardinal East Courtyard Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -6132,6 +6135,7 @@
         "pmcsOnly": true,
         "canRunBetweenObjectives": false,
         "name": "Mall Second Floor Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -6180,6 +6184,7 @@
         "pmcsOnly": true,
         "canRunBetweenObjectives": false,
         "name": "Mall Third Floor Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": true,
@@ -6277,6 +6282,7 @@
         "desirability": 15,
         "pmcsOnly": true,
         "name": "World of Childhood Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
             {
                 "repeatable": false,
