@@ -272,7 +272,7 @@
 			"only_decrease_bot_caps": true,
 			"bot_cap_adjustments": {
 				"default": 0,
-				"factory4_day": 13,
+				"factory4_day": 0,
 				"factory4_night": 0,
 				"bigmap": 0,
 				"woods": 0,
