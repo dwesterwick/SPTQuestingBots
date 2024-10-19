@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{362866A9-FA28-410B-BFDD-762EEAC33708}</ProjectGuid>
+    <ProjectGuid>{42263E46-F5C4-406D-B753-7FEE2DFE6095}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPTQuestingBots_InteropTest</RootNamespace>
-    <AssemblyName>SPTQuestingBots-InteropTest</AssemblyName>
+    <RootNamespace>SPTQuestingBots_CustomBotGenExample</RootNamespace>
+    <AssemblyName>SPTQuestingBots-CustomBotGenExample</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,8 +34,7 @@
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
@@ -51,15 +49,17 @@
     <Reference Include="DissonanceVoip">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="DrakiaXYZ-BigBrain">
+      <HintPath>..\..\..\..\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
     </Reference>
     <Reference Include="spt-common">
       <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
     </Reference>
     <Reference Include="spt-reflection">
       <HintPath>..\..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="SPTQuestingBots">
+      <HintPath>..\..\..\..\BepInEx\plugins\DanW-SPTQuestingBots\SPTQuestingBots.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,11 +77,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameStartPatch.cs" />
+    <Compile Include="AddBotGeneratorPatch.cs" />
+    <Compile Include="TestBotGenerator.cs" />
     <Compile Include="LoggingController.cs" />
+    <Compile Include="ParalyzeAction.cs" />
+    <Compile Include="ParalyzeLayer.cs" />
+    <Compile Include="QuestingBotsCustomBotGenExamplePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestingBotsInterop.cs" />
-    <Compile Include="QuestingBotsInteropTestPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
