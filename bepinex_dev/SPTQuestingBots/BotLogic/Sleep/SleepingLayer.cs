@@ -106,10 +106,19 @@ namespace SPTQuestingBots.BotLogic.Sleep
                 return updatePreviousState(false);
             }
 
-            // Enumerate all other bots on the map that are alive and active
-            IEnumerable<BotOwner> allOtherBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+            // Enumerate all alive bots on the map
+            IEnumerable<BotOwner> allBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
                 .Where(b => b.BotState == EBotState.Active)
-                .Where(b => !b.IsDead)
+                .Where(b => !b.IsDead);
+
+            // Only allow bots to sleep if there are at least a certain number in total on the map
+            if (allBots.Count() <= QuestingBotsPluginConfig.MinBotsToEnableSleeping.Value)
+            {
+                return updatePreviousState(false);
+            }
+
+            // Of alive bots, enumerate all besides this one that are active
+            IEnumerable<BotOwner> allOtherBots = allBots
                 .Where(b => b.gameObject.activeSelf)
                 .Where(b => b.Id != BotOwner.Id);
 

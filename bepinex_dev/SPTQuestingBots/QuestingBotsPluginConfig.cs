@@ -65,6 +65,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToPMCs;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
         public static ConfigEntry<BotTypeException> SleeplessBotTypes;
+        public static ConfigEntry<int> MinBotsToEnableSleeping;
 
         public static ConfigEntry<bool> ShowBotInfoOverlays;
         public static ConfigEntry<bool> ShowBotPathOverlays;
@@ -100,6 +101,8 @@ namespace SPTQuestingBots
                 TarkovMaps.Streets, "Only allow AI to be disabled for bots that are questing on the selected maps");
             SleeplessBotTypes = Config.Bind("AI Limiter", "Bot Types that Cannot be Disabled",
                 BotTypeException.SniperScavs | BotTypeException.Rogues, "These bot types will never be disabled by the AI limiter");
+            MinBotsToEnableSleeping = Config.Bind("AI Limiter", "Min Bots to Enable AI Limiting",
+                15, new ConfigDescription("AI will only be disabled if there are at least this number of bots on the map", new AcceptableValueRange<int>(1, 30)));
             SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
                 75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(25, 1000)));
 
@@ -162,6 +165,7 @@ namespace SPTQuestingBots
             TarkovMapIDToEnum.Add("TarkovStreets", TarkovMaps.Streets);
             TarkovMapIDToEnum.Add("Woods", TarkovMaps.Woods);
             TarkovMapIDToEnum.Add("Sandbox", TarkovMaps.GroundZero);
+            TarkovMapIDToEnum.Add("Sandbox_high", TarkovMaps.GroundZero);
         }
 
         private static void indexWildSpawnTypeExceptions()
