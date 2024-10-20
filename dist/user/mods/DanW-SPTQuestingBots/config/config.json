@@ -232,7 +232,7 @@
 			},
 			"lightkeeper_island_quests" : {
 				"enabled": true,
-				"min_sain_version": "3.1.0.99"
+				"min_sain_version": "3.1.1.99"
 			},
 			"spawn_rush": {
 				"desirability": 100,
