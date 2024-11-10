@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using DrakiaXYZ.BigBrain.Brains;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots_CustomBotGenExample
 {
-    [BepInDependency("com.DanW.QuestingBots", "0.8.0")]
-    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.0.0")]
+    [BepInDependency("com.DanW.QuestingBots", "0.8.1")]
+    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.1.0")]
     public class QuestingBotsCustomBotGenExamplePlugin : BaseUnityPlugin
     {
         public static ConfigEntry<bool> Enabled;
@@ -25,9 +26,10 @@ namespace SPTQuestingBots_CustomBotGenExample
 
             LoggingController.Logger = Logger;
 
-            new AddBotGeneratorPatch().Enable();
             enableParalysis();
             addConfigOptions();
+
+            BotGenerator.RegisterBotGenerator<TestBotGenerator>();
 
             Logger.LogInfo("Loading QuestingBotsCustomBotGenExample...done.");
         }

@@ -77,7 +77,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddBotGeneratorPatch.cs" />
     <Compile Include="TestBotGenerator.cs" />
     <Compile Include="LoggingController.cs" />
     <Compile Include="ParalyzeAction.cs" />

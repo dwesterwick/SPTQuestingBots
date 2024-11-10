@@ -65,16 +65,6 @@ namespace SPTQuestingBots.Components
 
             if (ConfigController.Config.BotSpawns.Enabled)
             {
-                if (ConfigController.Config.BotSpawns.PMCs.Enabled)
-                {
-                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PMCGenerator>();
-                }
-
-                if (ConfigController.Config.BotSpawns.PScavs.Enabled && !CurrentLocation.DisabledForScav)
-                {
-                    Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.PScavGenerator>();
-                }
-
                 BotGenerator.RunBotGenerationTasks();
             }
 

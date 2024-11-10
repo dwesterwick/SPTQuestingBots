@@ -35,6 +35,11 @@ namespace SPTQuestingBots_CustomBotGenExample
 
         protected override void Update()
         {
+            if (!QuestingBotsCustomBotGenExamplePlugin.Enabled.Value)
+            {
+                return;
+            }
+
             // If you (optionally) override Update, you MUST call the base method for the generator to work!
             base.Update();
 

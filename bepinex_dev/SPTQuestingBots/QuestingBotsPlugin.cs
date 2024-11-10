@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
+using EFT;
 using SPTQuestingBots.Components;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
@@ -88,6 +90,17 @@ namespace SPTQuestingBots
 
                     Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");
                     ConfigController.AdjustPMCConversionChances(0, false);
+
+                    if (ConfigController.Config.BotSpawns.PMCs.Enabled)
+                    {
+                        BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();
+                        Logger.LogInfo("Enabled PMC bot generation");
+                    }
+                    if (ConfigController.Config.BotSpawns.PScavs.Enabled)
+                    {
+                        BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
+                        Logger.LogInfo("Enabled PScav bot generation");
+                    }
                 }
                 
                 // Add options to the F12 menu

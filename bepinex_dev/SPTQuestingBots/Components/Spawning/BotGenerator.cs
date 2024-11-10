@@ -39,6 +39,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         private static Task botGenerationTask = null;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
+        private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
@@ -87,6 +88,11 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             StartCoroutine(spawnBotGroups(BotGroups.ToArray()));
+        }
+
+        public static void RegisterBotGenerator<T>(bool isPScavGenerator = false) where T : BotGenerator
+        {
+            registeredBotGenerators.Add(() => Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<T>(), isPScavGenerator);
         }
 
         public static bool PlayerWantsBotsInRaid()
@@ -365,6 +371,19 @@ namespace SPTQuestingBots.Components.Spawning
 
         public static void RunBotGenerationTasks()
         {
+            RaidSettings raidSettings = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings;
+
+            foreach (Func<BotGenerator> registerBotGenerator in registeredBotGenerators.Keys)
+            {
+                // Do not enable the bot generator if it's for PScavs and the location does not allow PScavs
+                if (registeredBotGenerators[registerBotGenerator] && raidSettings.SelectedLocation.DisabledForScav)
+                {
+                    continue;
+                }
+
+                registerBotGenerator();
+            }
+
             botGenerationTask = runBotGenerationTasks();
         }
 
