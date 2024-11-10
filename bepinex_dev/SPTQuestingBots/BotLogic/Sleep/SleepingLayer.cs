@@ -131,21 +131,15 @@ namespace SPTQuestingBots.BotLogic.Sleep
                     continue;
                 }
 
-                // Get the bot's current group members
-                List<BotOwner> groupMemberList = new List<BotOwner>();
-                for (int m = 0; m < bot.BotsGroup.MembersCount; m++)
-                {
-                    groupMemberList.Add(bot.BotsGroup.Member(m));
-                }
-
                 // Ignore bots that are in the same group
+                List<BotOwner> groupMemberList = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(bot.BotsGroup);
                 if (groupMemberList.Contains(BotOwner))
                 {
                     continue;
                 }
 
                 // If a questing bot is close to this one, don't allow this one to sleep
-                if (Vector3.Distance(BotOwner.Position, bot.Position) <= QuestingBotsPluginConfig.SleepingMinDistanceToPMCs.Value)
+                if (Vector3.Distance(BotOwner.Position, bot.Position) <= QuestingBotsPluginConfig.SleepingMinDistanceToQuestingBots.Value)
                 {
                     return updatePreviousState(false);
                 }

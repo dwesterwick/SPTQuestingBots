@@ -62,7 +62,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToHumansStreets;
         public static ConfigEntry<int> SleepingMinDistanceToHumansWoods;
         public static ConfigEntry<int> SleepingMinDistanceToHumansGroundZero;
-        public static ConfigEntry<int> SleepingMinDistanceToPMCs;
+        public static ConfigEntry<int> SleepingMinDistanceToQuestingBots;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots;
         public static ConfigEntry<BotTypeException> SleeplessBotTypes;
         public static ConfigEntry<int> MinBotsToEnableSleeping;
@@ -103,8 +103,8 @@ namespace SPTQuestingBots
                 BotTypeException.SniperScavs | BotTypeException.Rogues, "These bot types will never be disabled by the AI limiter");
             MinBotsToEnableSleeping = Config.Bind("AI Limiter", "Min Bots to Enable AI Limiting",
                 15, new ConfigDescription("AI will only be disabled if there are at least this number of bots on the map", new AcceptableValueRange<int>(1, 30)));
-            SleepingMinDistanceToPMCs = Config.Bind("AI Limiter", "Distance from PMCs (m)",
-                75, new ConfigDescription("AI will only be disabled if it's more than this distance from other PMC's", new AcceptableValueRange<int>(25, 1000)));
+            SleepingMinDistanceToQuestingBots = Config.Bind("AI Limiter", "Distance from Bots That Are Questing (m)",
+                75, new ConfigDescription("AI will only be disabled if it's more than this distance from other questing bots (typically PMC's and player Scavs)", new AcceptableValueRange<int>(25, 1000)));
 
             SleepingMinDistanceToHumansGlobal = Config.Bind("AI Limiter", "Distance from Human Players (m)",
                 200, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player. This takes priority over the map-specific advanced settings.", new AcceptableValueRange<int>(50, 1000)));
@@ -173,7 +173,10 @@ namespace SPTQuestingBots
             IEnumerable<BotBrainType> sniperScavBrains = Enumerable.Empty<BotBrainType>().AddSniperScavBrain();
             IEnumerable<BotBrainType> rogueBrains = Enumerable.Empty<BotBrainType>().AddRogueBrain();
             IEnumerable<BotBrainType> raiderBrains = Enumerable.Empty<BotBrainType>().AddRaiderBrain();
-            IEnumerable<BotBrainType> bossAndFollowerBrains = Enumerable.Empty<BotBrainType>().AddAllNormalBossAndFollowerBrains();
+
+            IEnumerable<BotBrainType> bossAndFollowerBrains = Enumerable.Empty<BotBrainType>()
+                .AddAllNormalBossAndFollowerBrains()
+                .AddZryachiyAndFollowerBrains();
 
             addBrainsToExceptions(sniperScavBrains, BotTypeException.SniperScavs);
             addBrainsToExceptions(rogueBrains, BotTypeException.Rogues);
