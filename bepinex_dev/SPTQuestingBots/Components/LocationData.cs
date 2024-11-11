@@ -484,7 +484,18 @@ namespace SPTQuestingBots.Components
             return TryGetFurthestSpawnPointFromPlayers(players, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
         }
 
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(Vector3[] positions, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, float distanceFromAllPlayers = 5)
+        {
+            return TryGetFurthestSpawnPointFromPositions(positions, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
+        }
+
         public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(IEnumerable<Player> players, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
+        {
+            Vector3[] playerPositions = players.Select(p => p.Position).ToArray();
+            return TryGetFurthestSpawnPointFromPositions(playerPositions, allowedCategories, allowedSides, excludedSpawnPoints, distanceFromAllPlayers);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPositions(Vector3[] positions, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
         {
             Vector3[] allPlayerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(p => p.Position).ToArray();
             SpawnPointParams[] allSpawnPoints = GetAllValidSpawnPointParams();
@@ -519,8 +530,7 @@ namespace SPTQuestingBots.Components
             }
 
             // Get the locations of all alive bots/players on the map.
-            Vector3[] playerPositions = players.Select(s => s.Position).ToArray();
-            if (playerPositions.Length == 0)
+            if (positions.Length == 0)
             {
                 LoggingController.LogWarning("No player positions");
                 return null;
@@ -528,7 +538,7 @@ namespace SPTQuestingBots.Components
 
             //LoggingController.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
 
-            return GetFurthestSpawnPoint(playerPositions, eligibleSpawnPoints);
+            return GetFurthestSpawnPoint(positions, eligibleSpawnPoints);
         }
 
         public SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)

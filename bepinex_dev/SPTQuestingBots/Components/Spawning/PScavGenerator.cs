@@ -122,13 +122,16 @@ namespace SPTQuestingBots.Components.Spawning
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
             string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
-            IEnumerable<Player> playersToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
-                .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId));
+            Vector3[] positionsToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
+                .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId))
+                .Select(p => p.Position)
+                .Concat(pendingSpawnPoints.Select(p => p.Position.ToUnityVector3()))
+                .ToArray();
 
             // Find a spawn location for the bot group that is as far from other players and bots as possible
             SpawnPointParams[] excludedSpawnpoints = pendingSpawnPoints
                 .SelectMany(s => locationData.GetNearbySpawnPoints(s.Position, minDistanceFromOtherPlayers)).ToArray();
-            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPlayers(playersToAvoid, ESpawnCategoryMask.Player, EPlayerSideMask.All, excludedSpawnpoints, minDistanceFromOtherPlayers);
+            SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPositions(positionsToAvoid, ESpawnCategoryMask.Player, EPlayerSideMask.All, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
                 LoggingController.LogWarning("Could not find a spawn point for PScav group");
