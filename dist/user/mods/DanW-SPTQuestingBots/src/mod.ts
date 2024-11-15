@@ -302,12 +302,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             this.commonUtils.logWarning("BetterSpawnsPlus Detected. Disabling bot spawning.");
             modConfig.bot_spawns.enabled = false;
         }
-
-        if (presptModLoader.getImportedModsNames().includes("Andrudis-QuestManiac"))
-        {
-            this.commonUtils.logWarning("QuestManiac Detected. This mod is known to cause performance issues when used with QuestingBots. No support will be provided.");
-        }
-
+        
         // Make Questing Bots control PScav spawning
         if (modConfig.adjust_pscav_chance.enabled || (modConfig.bot_spawns.enabled && modConfig.bot_spawns.player_scavs.enabled))
         {
@@ -711,7 +706,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
         this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
 
-        this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Factory Day : ${this.databaseTables.locations.factory4_day.base.BotSpawnPeriodCheck}`);
+        /*this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Factory Day : ${this.databaseTables.locations.factory4_day.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Factory Night : ${this.databaseTables.locations.factory4_night.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Customs : ${this.databaseTables.locations.bigmap.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Woods : ${this.databaseTables.locations.woods.base.BotSpawnPeriodCheck}`);
@@ -722,7 +717,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Labs : ${this.databaseTables.locations.laboratory.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Streets : ${this.databaseTables.locations.tarkovstreets.base.BotSpawnPeriodCheck}`);
         this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero : ${this.databaseTables.locations.sandbox.base.BotSpawnPeriodCheck}`);
-        this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero (20+) : ${this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck}`);
+        this.commonUtils.logInfo(`Updated BotSpawnPeriodCheck for Ground Zero (20+) : ${this.databaseTables.locations.sandbox_high.base.BotSpawnPeriodCheck}`);*/
     }
 }
 

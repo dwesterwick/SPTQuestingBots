@@ -7,7 +7,7 @@
     "sptVersion": ">=3.9.6 <3.10.0",
     "loadBefore": [],
     "loadAfter": [],
-    "incompatibilities": [],
+    "incompatibilities": ["Andrudis-QuestManiac"],
     "isBundleMod": false,
     "scripts": {
         "setup": "npm i",
