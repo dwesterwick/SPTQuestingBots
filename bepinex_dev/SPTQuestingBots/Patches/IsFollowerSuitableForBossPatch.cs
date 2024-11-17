@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref bool __result, BotBoss __instance, BotOwner offer)
+        protected static bool PatchPrefix(ref bool __result, BotBoss __instance, BotOwner offer)
         {
             // EFT sometimes instructs bots ask themselves to be followers of themselves. I guess they're really lonely, so we'll allow it.  
             if (__instance.Owner.Profile.Id == offer.Profile.Id)
@@ -26,21 +26,7 @@ namespace SPTQuestingBots.Patches
                 return true;
             }
 
-            // Always allow Zryachiy's followers to join existing groups because they respawn if any are killed
-            // TODO: Is this redundant?
-            if (offer.Profile.Info.Settings.Role == WildSpawnType.followerZryachiy)
-            {
-                return true;
-            }
-
             //Controllers.LoggingController.LogInfo("Checking if " + offer.GetText() + " can be a follower for " + __instance.Owner.GetText() + "...");
-
-            // Always let bots join bosses
-            // TODO: Is this redundant?
-            if (BotRegistrationManager.IsBotABoss(__instance.Owner))
-            {
-                return true;
-            }
 
             IEnumerable<BotOwner> bossGroupMembers = Enumerable.Empty<BotOwner>();
             IEnumerable<BotOwner> offerGroupMembers = Enumerable.Empty<BotOwner>();

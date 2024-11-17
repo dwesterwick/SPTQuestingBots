@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(MatchmakerTimeHasCome.TimeHasComeScreenClass __instance, string text, float? progress = null)
+        protected static void PatchPostfix(MatchmakerTimeHasCome.TimeHasComeScreenClass __instance, string text, float? progress = null)
         {
             if (isOverridingText)
             {

@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(IAssetsManager assetsManager, InputTree inputTree)
+        protected static void PatchPostfix(IAssetsManager assetsManager, InputTree inputTree)
         {
             if (!Helpers.VersionCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion, out string currentVersion))
             {

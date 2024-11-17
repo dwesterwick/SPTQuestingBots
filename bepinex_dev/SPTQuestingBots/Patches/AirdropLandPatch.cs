@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(AirdropBox __instance)
+        protected static void PatchPostfix(AirdropBox __instance)
         {
             Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(__instance.transform.position);
         }

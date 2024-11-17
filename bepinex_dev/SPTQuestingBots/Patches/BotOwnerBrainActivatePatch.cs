@@ -29,7 +29,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(BotOwner __instance)
+        protected static void PatchPostfix(BotOwner __instance)
         {
             registerBot(__instance);
 

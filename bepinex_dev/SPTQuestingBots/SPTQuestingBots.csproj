@@ -247,7 +247,6 @@
     <Compile Include="Patches\MatchmakerFinalCountdownUpdatePatch.cs" />
     <Compile Include="Patches\OnBeenKilledByAggressorPatch.cs" />
     <Compile Include="Patches\AirdropLandPatch.cs" />
-    <Compile Include="Patches\OnGameStartedPatch.cs" />
     <Compile Include="Patches\ServerRequestPatch.cs" />
     <Compile Include="Patches\CheckLookEnemyPatch.cs" />
     <Compile Include="Patches\TimeHasComeScreenClassChangeStatusPatch.cs" />

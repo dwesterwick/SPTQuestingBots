@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref BossLocationSpawn wave)
+        protected static bool PatchPrefix(ref BossLocationSpawn wave)
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {

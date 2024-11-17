@@ -26,14 +26,14 @@ namespace SPTQuestingBots.Components
         private IReadOnlyDictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null;
         private QuestPathFinder questPathFinder = new QuestPathFinder();
         private List<string> zoneIDsInLocation = new List<string>();
-        
-        private void Awake()
+
+        protected void Awake()
         {
             Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindAllInteractiveObjects();
             StartCoroutine(LoadAllQuests());
         }
 
-        private void Update()
+        protected void Update()
         {
             
         }

@@ -20,7 +20,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(BotsGroup __instance, IPlayer person, EBotEnemyCause cause)
+        protected static bool PatchPrefix(BotsGroup __instance, IPlayer person, EBotEnemyCause cause)
         {
             // We only care about bot groups adding you as an enemy
             if (!person.IsYourPlayer)

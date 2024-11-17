@@ -23,12 +23,12 @@ namespace SPTQuestingBots.Components
         public IReadOnlyList<Player> PlayersOnLightkeeperIsland => playersOnIsland.AsReadOnly();
         public IReadOnlyList<BotOwner> BotsWithQuestsOnLightkeeperIsland => botsWithQuestsOnIsland.AsReadOnly();
 
-        private void Awake()
+        protected void Awake()
         {
             locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
         }
 
-        private void Update()
+        protected void Update()
         {
             if (!canUpdate())
             {

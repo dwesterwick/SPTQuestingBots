@@ -57,7 +57,6 @@ namespace SPTQuestingBots
                 new Patches.TarkovInitPatch().Enable();
                 new Patches.AddActivePlayerPatch().Enable();
                 new Patches.BotsControllerStopPatch().Enable();
-                new Patches.OnGameStartedPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();
                 new Patches.OnBeenKilledByAggressorPatch().Enable();

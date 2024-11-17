@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix()
+        protected static void PatchPostfix()
         {
             // Stop updating debug overlays
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.DebugData debugController))

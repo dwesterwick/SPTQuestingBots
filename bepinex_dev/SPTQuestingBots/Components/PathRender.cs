@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Components
         private Dictionary<string, Models.PathVisualizationData> paths = new Dictionary<string, Models.PathVisualizationData>();
         private object pathDictLock = new object();
 
-        private void LateUpdate()
+        protected void LateUpdate()
         {
             if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
             {

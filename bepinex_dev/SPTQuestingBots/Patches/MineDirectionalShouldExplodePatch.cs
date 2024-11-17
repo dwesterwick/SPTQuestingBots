@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref bool __result, MineDirectional __instance, Collider other)
+        protected static bool PatchPrefix(ref bool __result, MineDirectional __instance, Collider other)
         {
             if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
             {

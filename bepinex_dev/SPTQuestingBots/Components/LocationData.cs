@@ -36,7 +36,7 @@ namespace SPTQuestingBots.Components
 
         public bool IsScavRun => SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid;
 
-        private void Awake()
+        protected void Awake()
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
 
@@ -74,7 +74,7 @@ namespace SPTQuestingBots.Components
             }
         }
 
-        private void Update()
+        protected void Update()
         {
             handleCustomQuestKeypress();
         }

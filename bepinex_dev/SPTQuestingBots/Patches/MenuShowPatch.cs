@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix()
+        protected static void PatchPostfix()
         {
             if (!Singleton<SharedGameSettingsClass>.Instantiated)
             {

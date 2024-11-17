@@ -20,7 +20,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(TextMeshProUGUI ____time)
+        protected static bool PatchPrefix(TextMeshProUGUI ____time)
         {
             if (text == null)
             {

@@ -30,7 +30,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance)
+        protected static void PatchPostfix(ref IEnumerator __result, object __instance)
         {
             if (!IsDelayingGameStart)
             {

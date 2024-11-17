@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(BotWaveDataClass wave)
+        protected static bool PatchPrefix(BotWaveDataClass wave)
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {

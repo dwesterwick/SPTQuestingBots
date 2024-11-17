@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(EnemyInfo __instance, GClass521 lookAll)
+        protected static bool PatchPrefix(EnemyInfo __instance, GClass521 lookAll)
         {
             if (!QuestingBotsPluginConfig.SleepingEnabled.Value)
             {

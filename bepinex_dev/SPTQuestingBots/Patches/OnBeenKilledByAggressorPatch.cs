@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(Player __instance, Player aggressor)
+        protected static void PatchPostfix(Player __instance, Player aggressor)
         {
             string message = __instance.GetText();
             message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";

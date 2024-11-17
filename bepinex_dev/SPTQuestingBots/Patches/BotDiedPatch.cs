@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(BotOwner bot, BotsClass ____bots, Action<BotOwner> ___OnBotRemoved)
+        protected static bool PatchPrefix(BotOwner bot, BotsClass ____bots, Action<BotOwner> ___OnBotRemoved)
         {
             if (!bot.ShouldPlayerBeTreatedAsHuman())
             {

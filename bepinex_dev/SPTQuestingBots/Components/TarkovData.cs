@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Components
         private TarkovApplication tarkovApplication = null;
         private bool questsValidated = false;
 
-        private void Update()
+        protected void Update()
         {
             if (questsValidated || !ConfigController.Config.Questing.Enabled)
             {

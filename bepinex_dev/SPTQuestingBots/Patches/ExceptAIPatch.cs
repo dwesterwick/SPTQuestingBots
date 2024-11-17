@@ -24,7 +24,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref IEnumerable<IPlayer>  __result, IEnumerable<IPlayer> persons)
+        protected static bool PatchPrefix(ref IEnumerable<IPlayer>  __result, IEnumerable<IPlayer> persons)
         {
             //LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
 

@@ -41,7 +41,7 @@ namespace SPTQuestingBots.Components
             botPathInfo.Add(bot, pathOverlayData);
         }
 
-        private void Awake()
+        protected void Awake()
         {
             QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) =>
             {
@@ -50,7 +50,7 @@ namespace SPTQuestingBots.Components
             };
         }
 
-        private void Update()
+        protected void Update()
         {
             if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
@@ -73,7 +73,7 @@ namespace SPTQuestingBots.Components
             }
         }
 
-        private void OnGUI()
+        protected void OnGUI()
         {
             if ((!Singleton<GameWorld>.Instantiated) || (Camera.main == null))
             {
