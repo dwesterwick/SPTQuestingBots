@@ -203,7 +203,7 @@ namespace SPTQuestingBots.Controllers
 
                 group.AddEnemy(boss, EBotEnemyCause.addPlayer);
 
-                LoggingController.LogInfo("Group containing " + string.Join(", ", groupMembers.Select(m => m.GetText())) + " is now hostile toward " + boss.GetText());
+                //LoggingController.LogInfo("Group containing " + string.Join(", ", groupMembers.Select(m => m.GetText())) + " is now hostile toward " + boss.GetText());
             }
         }
 

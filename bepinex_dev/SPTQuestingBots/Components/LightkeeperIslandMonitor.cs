@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -95,8 +96,11 @@ namespace SPTQuestingBots.Components
             bool isQuestOnIsland = locationData.IsPointOnLightkeeperIsland(assignmentPosition.Value);
             if (isQuestOnIsland)
             {
-                botsWithQuestsOnIsland.Add(bot);
-                formAlliancesWithZryachiyAndFollowers(bot);
+                foreach (BotOwner member in bot.BotsGroup.GetAllMembers())
+                {
+                    botsWithQuestsOnIsland.Add(member);
+                    formAlliancesWithZryachiyAndFollowers(member);
+                }
             }
 
             return isQuestOnIsland;

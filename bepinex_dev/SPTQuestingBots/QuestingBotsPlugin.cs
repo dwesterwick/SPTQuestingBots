@@ -26,7 +26,7 @@ namespace SPTQuestingBots
     {
         public static string ModName { get; private set; } = "???";
 
-        private void Awake()
+        protected void Awake()
         {
             Patches.TarkovInitPatch.MinVersion = "3.9.6.0";
             Patches.TarkovInitPatch.MaxVersion = "3.9.99.0";
