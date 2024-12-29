@@ -208,7 +208,7 @@
 			},
 			"exfil_direction_max_angle": 90,
 			"exfil_reached_min_fraction": 0.2,
-			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker" ],
+			"blacklisted_boss_hunter_bosses": [ "pmcBEAR", "pmcUSEC", "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker" ],
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {

@@ -229,8 +229,7 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Models\StaticPathData.cs" />
     <Compile Include="Models\StoredQuestLocation.cs" />
-    <Compile Include="Patches\ActivateBotsByWavePatch2.cs" />
-    <Compile Include="Patches\ActivateBotsByWavePatch.cs" />
+    <Compile Include="Patches\ActivateBossesByWavePatch.cs" />
     <Compile Include="Patches\AddEnemyPatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />

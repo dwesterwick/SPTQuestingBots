@@ -118,7 +118,7 @@ namespace SPTQuestingBots.Components
 
         private void toggleHostility(Player player)
         {
-            LighthouseTraderZone lighthouseTraderZone = Singleton<GameWorld>.Instance.GetComponent<LighthouseTraderZone>();
+            //LighthouseTraderZone lighthouseTraderZone = Singleton<GameWorld>.Instance.GetComponent<LighthouseTraderZone>();
 
             if (playersOnIsland.Contains(player))
             {
@@ -136,7 +136,7 @@ namespace SPTQuestingBots.Components
                     revertAlliances(otherPlayer, player);
                 }
 
-                lighthouseTraderZone.RemovePlayer(player);
+                //lighthouseTraderZone.RemovePlayer(player);
             }
             else
             {
@@ -145,7 +145,7 @@ namespace SPTQuestingBots.Components
 
                 setTemporaryAlliances(player);
 
-                lighthouseTraderZone.AddPlayer(player);
+                //lighthouseTraderZone.AddPlayer(player);
             }
         }
 
