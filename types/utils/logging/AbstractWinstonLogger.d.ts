@@ -1,12 +1,11 @@
-/// <reference types="node" />
 import fs from "node:fs";
-import winston from "winston";
-import { Daum } from "@spt/models/eft/itemEvent/IItemEventRouterRequest";
+import { IDaum } from "@spt/models/eft/itemEvent/IItemEventRouterRequest";
 import { LogBackgroundColor } from "@spt/models/spt/logging/LogBackgroundColor";
 import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
 import { SptLogger } from "@spt/models/spt/logging/SptLogger";
 import { IAsyncQueue } from "@spt/models/spt/utils/IAsyncQueue";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
+import winston from "winston";
 export declare abstract class AbstractWinstonLogger implements ILogger {
     protected asyncQueue: IAsyncQueue;
     protected showDebugInConsole: boolean;
@@ -51,7 +50,7 @@ export declare abstract class AbstractWinstonLogger implements ILogger {
     protected getLogFrequency(): string;
     protected getLogMaxSize(): string;
     protected getLogMaxFiles(): string;
-    writeToLogFile(data: string | Daum): Promise<void>;
+    writeToLogFile(data: string | IDaum): Promise<void>;
     log(data: string | Error | Record<string, unknown>, color: string, backgroundColor?: string): Promise<void>;
     error(data: string | Record<string, unknown>): Promise<void>;
     warning(data: string | Record<string, unknown>): Promise<void>;

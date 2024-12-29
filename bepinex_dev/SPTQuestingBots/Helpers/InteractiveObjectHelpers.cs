@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Helpers
             MongoID IDGenerator = new MongoID(false);
 
             // Create a new item for the key needed to unlock the door
-            Item keyItem = Singleton<ItemFactory>.Instance.CreateItem(IDGenerator, door.KeyId, null);
+            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(IDGenerator, door.KeyId, null);
             if (keyItem == null)
             {
                 LoggingController.LogError("Cannot create key for door " + door.Id);
@@ -46,7 +46,7 @@ namespace SPTQuestingBots.Helpers
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                KeyInteractionResultClass unlockDoorInteractionResult = new KeyInteractionResultClass(key, null, true);
+                GClass3344 unlockDoorInteractionResult = new GClass3344(key, null, true);
                 if (unlockDoorInteractionResult == null)
                 {
                     throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);

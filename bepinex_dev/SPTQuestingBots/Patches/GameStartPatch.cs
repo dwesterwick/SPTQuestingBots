@@ -26,7 +26,7 @@ namespace SPTQuestingBots.Patches
         protected override MethodBase GetTargetMethod()
         {
             Type baseGameType = typeof(BaseLocalGame<EftGamePlayerOwner>);
-            return baseGameType.GetMethod("vmethod_4", BindingFlags.Public | BindingFlags.Instance);
+            return baseGameType.GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -179,12 +179,12 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "bossSpawnWaveManagerClass");
-            BossSpawnWaveManagerClass bossWaves = (BossSpawnWaveManagerClass)bossWavesField.GetValue(localGameObj);
+            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "bossSpawnScenario_0");
+            BossSpawnScenario bossWaves = (BossSpawnScenario)bossWavesField.GetValue(localGameObj);
 
             //LoggingController.LogInfo("Found Boss Waves instance");
 
-            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "list_0");
+            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnScenario), "Timers");
             ICollection bossWavesTimers = (ICollection)bossWavesTimersField.GetValue(bossWaves);
 
             LoggingController.LogInfo("Found Boss Waves timers (" + bossWavesTimers.Count + " timers)");
@@ -194,12 +194,12 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "gclass580_0");
-            GClass580 questTrigger = (GClass580)questTriggerField.GetValue(bossWaves);
+            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnScenario), "_questsSpanws");
+            GClass639 questTrigger = (GClass639)questTriggerField.GetValue(bossWaves);
 
             //LoggingController.LogInfo("Found Boss Waves Quest Trigger instance");
 
-            FieldInfo questTriggerTimerField = AccessTools.Field(typeof(GClass580), "iBotTimer");
+            FieldInfo questTriggerTimerField = AccessTools.Field(typeof(GClass639), "iBotTimer");
             object questTriggerTimer = questTriggerTimerField.GetValue(questTrigger);
 
             if (questTriggerTimer != null)

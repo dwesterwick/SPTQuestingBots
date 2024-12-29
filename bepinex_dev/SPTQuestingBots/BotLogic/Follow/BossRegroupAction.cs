@@ -16,7 +16,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public BossRegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass459.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
+            SetBaseAction(GClass507.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
         }
 
         public override void Start()

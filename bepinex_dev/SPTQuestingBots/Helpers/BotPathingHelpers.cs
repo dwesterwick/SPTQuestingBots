@@ -77,7 +77,7 @@ namespace SPTQuestingBots.Helpers
                 return false;
             }
 
-            GClass422 pathFinder = (GClass422)pathFinderField.GetValue(botMover);
+            GClass470 pathFinder = (GClass470)pathFinderField.GetValue(botMover);
             if (pathFinder == null)
             {
                 return false;

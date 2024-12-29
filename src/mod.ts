@@ -18,20 +18,18 @@ import type { DatabaseServer } from "@spt/servers/DatabaseServer";
 import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { LocaleService } from "@spt/services/LocaleService";
 import type { QuestHelper } from "@spt/helpers/QuestHelper";
-import type { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import type { VFS } from "@spt/utils/VFS";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
 import type { BotController } from "@spt/controllers/BotController";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
-import type { IGenerateBotsRequestData, Condition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
+import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
-import type { IAirdropConfig } from "@spt/models/spt/config/IAirdropConfig";
 
 const modName = "SPTQuestingBots";
 
@@ -45,7 +43,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private databaseTables: IDatabaseTables;
     private localeService: LocaleService;
     private questHelper: QuestHelper;
-    private profileHelper: ProfileHelper;
     private vfs: VFS;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
@@ -53,9 +50,8 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
-    private iAirdropConfig: IAirdropConfig;
 
-    private convertIntoPmcChanceOrig: Record<string, MinMax> = {};
+    private convertIntoPmcChanceOrig: Record<string, Record<string, MinMax>> = {};
     private basePScavConversionChance: number;
 	
     public preSptLoad(container: DependencyContainer): void 
@@ -79,24 +75,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             return;
         }
-
-        // Game start
-        // Needed to update Scav timer
-        staticRouterModService.registerStaticRouter(`StaticAkiGameStart${modName}`,
-            [{
-                url: "/client/game/start",
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                action: async (url: string, info: any, sessionId: string, output: string) => 
-                {
-                    if (modConfig.debug.enabled)
-                    {
-                        this.updateScavTimer(sessionId);
-                    }
-
-                    return output;
-                }
-            }], "aki"
-        );
 
         // Apply a scalar factor to the SPT-AKI PMC conversion chances
         dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPMCConversionChances${modName}`,
@@ -204,7 +182,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseServer = container.resolve<DatabaseServer>("DatabaseServer");
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
-        this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
         this.vfs = container.resolve<VFS>("VFS");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
@@ -213,7 +190,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
         this.iLocationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
-        this.iAirdropConfig = this.configServer.getConfig(ConfigTypes.AIRDROP);
 
         this.databaseTables = this.databaseServer.getTables();
         this.basePScavConversionChance = this.iBotConfig.chanceAssaultScavHasPlayerScavName;
@@ -228,50 +204,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             modConfig.enabled = false;
             return;
-        }
-
-        if (modConfig.debug.always_have_airdrops)
-        {
-            this.commonUtils.logInfo("Forcing airdrops to occur at the beginning of every raid...");
-
-            this.iAirdropConfig.airdropChancePercent.bigmap = 100;
-            this.iAirdropConfig.airdropChancePercent.woods = 100;
-            this.iAirdropConfig.airdropChancePercent.lighthouse = 100;
-            this.iAirdropConfig.airdropChancePercent.shoreline = 100;
-            this.iAirdropConfig.airdropChancePercent.interchange = 100;
-            this.iAirdropConfig.airdropChancePercent.reserve = 100;
-            this.iAirdropConfig.airdropChancePercent.tarkovStreets = 100;
-            this.iAirdropConfig.airdropChancePercent.sandbox = 100;
-
-            this.iAirdropConfig.airdropMinStartTimeSeconds = 5;
-            this.iAirdropConfig.airdropMaxStartTimeSeconds = 10;
-        }
-
-        // Adjust parameters to make debugging easier
-        if (modConfig.debug.enabled)
-        {
-            this.commonUtils.logInfo("Applying debug options...");
-
-            if (modConfig.debug.scav_cooldown_time < this.databaseTables.globals.config.SavagePlayCooldown)
-            {
-                this.databaseTables.globals.config.SavagePlayCooldown = modConfig.debug.scav_cooldown_time;
-            }
-
-            if (modConfig.debug.free_labs_access)
-            {
-                this.databaseTables.locations.laboratory.base.AccessKeys = [];
-                this.databaseTables.locations.laboratory.base.DisabledForScav = false;
-            }
-
-            if (modConfig.debug.full_length_scav_raids)
-            {
-                this.forceFullLengthScavRaids();
-            }
-
-            if (modConfig.debug.friendly_pmcs)
-            {
-                this.iPmcConfig.chanceSameSideIsHostilePercent = 0;
-            }
         }
     }
 	
@@ -347,59 +279,38 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.commonUtils.logInfo("Configuring game for bot spawning...done.");
     }
 
-    private updateScavTimer(sessionId: string): void
-    {
-        const pmcData = this.profileHelper.getPmcProfile(sessionId);
-        const scavData = this.profileHelper.getScavProfile(sessionId);
-		
-        if ((scavData.Info === null) || (scavData.Info === undefined))
-        {
-            this.commonUtils.logInfo("Scav profile hasn't been created yet.");
-            return;
-        }
-		
-        // In case somebody disables scav runs and later wants to enable them, we need to reset their Scav timer unless it's plausible
-        const worstCooldownFactor = this.getWorstSavageCooldownModifier();
-        if (scavData.Info.SavageLockTime - pmcData.Info.LastTimePlayedAsSavage > this.databaseTables.globals.config.SavagePlayCooldown * worstCooldownFactor * 1.1)
-        {
-            this.commonUtils.logInfo(`Resetting scav timer for sessionId=${sessionId}...`);
-            scavData.Info.SavageLockTime = 0;
-        }
-    }
-	
-    // Return the highest Scav cooldown factor from Fence's rep levels
-    private getWorstSavageCooldownModifier(): number
-    {
-        // Initialize the return value at something very low
-        let worstCooldownFactor = 0.01;
-
-        for (const level in this.databaseTables.globals.config.FenceSettings.Levels)
-        {
-            if (this.databaseTables.globals.config.FenceSettings.Levels[level].SavageCooldownModifier > worstCooldownFactor)
-                worstCooldownFactor = this.databaseTables.globals.config.FenceSettings.Levels[level].SavageCooldownModifier;
-        }
-        return worstCooldownFactor;
-    }
-
     private setOriginalPMCConversionChances(): void
     {
         // Store the default PMC-conversion chances for each bot type defined in SPT's configuration file
         let logMessage = "";
-        for (const pmcType in this.iPmcConfig.convertIntoPmcChance)
+        for (const map in this.iPmcConfig.convertIntoPmcChance)
         {
-            if (this.convertIntoPmcChanceOrig[pmcType] !== undefined)
+            logMessage += `${map} = [`;
+
+            for (const pmcType in this.iPmcConfig.convertIntoPmcChance[map])
             {
-                logMessage += `${pmcType}: already buffered, `;
-                continue;
+                if ((this.convertIntoPmcChanceOrig[map] !== undefined) && (this.convertIntoPmcChanceOrig[map][pmcType] !== undefined))
+                {
+                    logMessage += `${pmcType}: already buffered, `;
+                    continue;
+                }
+
+                const chances: MinMax = {
+                    min: this.iPmcConfig.convertIntoPmcChance[map][pmcType].min,
+                    max: this.iPmcConfig.convertIntoPmcChance[map][pmcType].max
+                }
+
+                if (this.convertIntoPmcChanceOrig[map] === undefined)
+                {
+                    this.convertIntoPmcChanceOrig[map] = {};
+                }
+
+                this.convertIntoPmcChanceOrig[map][pmcType] = chances;
+
+                logMessage += `${pmcType}: ${chances.min}-${chances.max}%, `;
             }
 
-            const chances: MinMax = {
-                min: this.iPmcConfig.convertIntoPmcChance[pmcType].min,
-                max: this.iPmcConfig.convertIntoPmcChance[pmcType].max
-            }
-            this.convertIntoPmcChanceOrig[pmcType] = chances;
-
-            logMessage += `${pmcType}: ${chances.min}-${chances.max}%, `;
+            logMessage += "], ";
         }
 
         this.commonUtils.logInfo(`Reading default PMC spawn chances: ${logMessage}`);
@@ -410,32 +321,44 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         // Adjust the chances for each applicable bot type
         let logMessage = "";
         let verified = true;
-        for (const pmcType in this.iPmcConfig.convertIntoPmcChance)
+        for (const map in this.iPmcConfig.convertIntoPmcChance)
         {
-            // Do not allow the chances to exceed 100%. Who knows what might happen...
-            const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].min * scalingFactor));
-            const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[pmcType].max * scalingFactor));
+            logMessage += `${map} = [`;
 
-            if (verify)
+            for (const pmcType in this.iPmcConfig.convertIntoPmcChance[map])
             {
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].min !== min)
+                // Do not allow the chances to exceed 100%. Who knows what might happen...
+                const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][pmcType].min * scalingFactor));
+                const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][pmcType].max * scalingFactor));
+                
+                if (verify)
                 {
-                    verified = false;
-                    break;
+                    if (this.iPmcConfig.convertIntoPmcChance[map][pmcType].min !== min)
+                    {
+                        verified = false;
+                        break;
+                    }
+    
+                    if (this.iPmcConfig.convertIntoPmcChance[map][pmcType].max !== max)
+                    {
+                        verified = false;
+                        break;
+                    }
                 }
-
-                if (this.iPmcConfig.convertIntoPmcChance[pmcType].max !== max)
+                else
                 {
-                    verified = false;
-                    break;
+                    this.iPmcConfig.convertIntoPmcChance[map][pmcType].min = min;
+                    this.iPmcConfig.convertIntoPmcChance[map][pmcType].max = max;
                 }
-            }
-            else
-            {
-                this.iPmcConfig.convertIntoPmcChance[pmcType].min = min;
-                this.iPmcConfig.convertIntoPmcChance[pmcType].max = max;
 
                 logMessage += `${pmcType}: ${min}-${max}%, `;
+            }
+
+            logMessage += "], ";
+
+            if (!verified)
+            {
+                break;
             }
         }
 
@@ -519,16 +442,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         }
 
         this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's...done. Removed entries: ${removedBrains}`);
-    }
-
-    private forceFullLengthScavRaids(): void
-    {
-        this.commonUtils.logInfo("Forcing full-length Scav raids...");
-
-        for (const map in this.iLocationConfig.scavRaidTimeSettings.maps)
-        {
-            this.iLocationConfig.scavRaidTimeSettings.maps[map].reducedChancePercent = 0;
-        }
     }
 
     private async generateBots(info: IGenerateBotsRequestData, sessionID: string, shouldBePScavGroup: boolean) : Promise<IBotBase[]>
@@ -723,7 +636,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 
 export interface IGenerateBotsRequestDataWithPScavChance
 {
-    conditions: Condition[];
+    conditions: ICondition[];
     PScavChance: number;
 }
 

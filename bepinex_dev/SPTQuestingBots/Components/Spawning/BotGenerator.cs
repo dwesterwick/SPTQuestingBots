@@ -464,7 +464,7 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     await Task.Delay(20);
 
-                    GClass592 botProfileData = new GClass592(spawnSide, spawnType, botdifficulty, 0f, null);
+                    GClass652 botProfileData = new GClass652(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
@@ -643,7 +643,7 @@ namespace SPTQuestingBots.Components.Spawning
                 // I have no idea why BSG passes a stopwatch into this call...
                 stopWatch.Start();
 
-                botSpawnerClass.method_10(bot, botSpawnInfo.Data, null, false, stopWatch);
+                botSpawnerClass.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {

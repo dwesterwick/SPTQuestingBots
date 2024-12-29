@@ -4,9 +4,9 @@ import { BotHelper } from "@spt/helpers/BotHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
-import { IBotBase, Skills, Stats } from "@spt/models/eft/common/tables/IBotBase";
+import { IBotBase, ISkills, IStats } from "@spt/models/eft/common/tables/IBotBase";
 import { IBotType } from "@spt/models/eft/common/tables/IBotType";
-import { IPlayerScavConfig, KarmaLevel } from "@spt/models/spt/config/IPlayerScavConfig";
+import { IKarmaLevel, IPlayerScavConfig } from "@spt/models/spt/config/IPlayerScavConfig";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { SaveServer } from "@spt/servers/SaveServer";
@@ -14,9 +14,9 @@ import { BotLootCacheService } from "@spt/services/BotLootCacheService";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { FenceService } from "@spt/services/FenceService";
 import { LocalisationService } from "@spt/services/LocalisationService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { RandomUtil } from "@spt/utils/RandomUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class PlayerScavGenerator {
     protected logger: ILogger;
     protected randomUtil: RandomUtil;
@@ -67,10 +67,10 @@ export declare class PlayerScavGenerator {
      * @param karmaSettings Values to modify the bot template with
      * @param baseBotNode bot template to modify according to karama level settings
      */
-    protected adjustBotTemplateWithKarmaSpecificSettings(karmaSettings: KarmaLevel, baseBotNode: IBotType): void;
-    protected getScavSkills(scavProfile: IPmcData): Skills;
-    protected getDefaultScavSkills(): Skills;
-    protected getScavStats(scavProfile: IPmcData): Stats;
+    protected adjustBotTemplateWithKarmaSpecificSettings(karmaSettings: IKarmaLevel, baseBotNode: IBotType): void;
+    protected getScavSkills(scavProfile: IPmcData): ISkills;
+    protected getDefaultScavSkills(): ISkills;
+    protected getScavStats(scavProfile: IPmcData): IStats;
     protected getScavLevel(scavProfile: IPmcData): number;
     protected getScavExperience(scavProfile: IPmcData): number;
     /**

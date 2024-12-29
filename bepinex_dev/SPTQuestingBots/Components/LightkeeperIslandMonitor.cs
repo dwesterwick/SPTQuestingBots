@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.Interactive;
 using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
@@ -117,7 +118,7 @@ namespace SPTQuestingBots.Components
 
         private void toggleHostility(Player player)
         {
-            SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass lighthouseProgressionClass = Singleton<GameWorld>.Instance.GetComponent<SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass>();
+            LighthouseTraderZone lighthouseTraderZone = Singleton<GameWorld>.Instance.GetComponent<LighthouseTraderZone>();
 
             if (playersOnIsland.Contains(player))
             {
@@ -135,7 +136,7 @@ namespace SPTQuestingBots.Components
                     revertAlliances(otherPlayer, player);
                 }
 
-                lighthouseProgressionClass.LightkeeperFriendlyPlayerLeftIsland(player);
+                lighthouseTraderZone.RemovePlayer(player);
             }
             else
             {
@@ -144,7 +145,7 @@ namespace SPTQuestingBots.Components
 
                 setTemporaryAlliances(player);
 
-                lighthouseProgressionClass.LightkeeperFriendlyPlayerEnteredIsland(player);
+                lighthouseTraderZone.AddPlayer(player);
             }
         }
 

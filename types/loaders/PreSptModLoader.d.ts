@@ -1,7 +1,6 @@
-import { DependencyContainer } from "tsyringe";
 import { ModLoadOrder } from "@spt/loaders/ModLoadOrder";
 import { ModTypeCheck } from "@spt/loaders/ModTypeCheck";
-import { ModDetails } from "@spt/models/eft/profile/ISptProfile";
+import { IModDetails } from "@spt/models/eft/profile/ISptProfile";
 import { ICoreConfig } from "@spt/models/spt/config/ICoreConfig";
 import { IModLoader } from "@spt/models/spt/mod/IModLoader";
 import { IPackageJsonData } from "@spt/models/spt/mod/IPackageJsonData";
@@ -11,6 +10,7 @@ import { LocalisationService } from "@spt/services/LocalisationService";
 import { ModCompilerService } from "@spt/services/ModCompilerService";
 import { JsonUtil } from "@spt/utils/JsonUtil";
 import { VFS } from "@spt/utils/VFS";
+import { DependencyContainer } from "tsyringe";
 export declare class PreSptModLoader implements IModLoader {
     protected logger: ILogger;
     protected vfs: VFS;
@@ -36,7 +36,7 @@ export declare class PreSptModLoader implements IModLoader {
      */
     getImportedModsNames(): string[];
     getImportedModDetails(): Record<string, IPackageJsonData>;
-    getProfileModsGroupedByModName(profileMods: ModDetails[]): ModDetails[];
+    getProfileModsGroupedByModName(profileMods: IModDetails[]): IModDetails[];
     getModPath(mod: string): string;
     protected importModsAsync(): Promise<void>;
     protected sortMods(prev: string, next: string, missingFromOrderJSON: Record<string, boolean>): number;

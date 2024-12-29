@@ -1,14 +1,14 @@
 import { HttpServerHelper } from "@spt/helpers/HttpServerHelper";
 import { BundleHashCacheService } from "@spt/services/cache/BundleHashCacheService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { JsonUtil } from "@spt/utils/JsonUtil";
 import { VFS } from "@spt/utils/VFS";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class BundleInfo {
     modpath: string;
     filename: string;
     crc: number;
     dependencies: string[];
-    constructor(modpath: string, bundle: BundleManifestEntry, bundleHash: number);
+    constructor(modpath: string, bundle: IBundleManifestEntry, bundleHash: number);
 }
 export declare class BundleLoader {
     protected httpServerHelper: HttpServerHelper;
@@ -26,10 +26,10 @@ export declare class BundleLoader {
     addBundles(modpath: string): void;
     addBundle(key: string, b: BundleInfo): void;
 }
-export interface BundleManifest {
-    manifest: BundleManifestEntry[];
+export interface IBundleManifest {
+    manifest: IBundleManifestEntry[];
 }
-export interface BundleManifestEntry {
+export interface IBundleManifestEntry {
     key: string;
     dependencyKeys: string[];
 }

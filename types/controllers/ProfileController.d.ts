@@ -7,7 +7,7 @@ import { TraderHelper } from "@spt/helpers/TraderHelper";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
 import { IMiniProfile } from "@spt/models/eft/launcher/IMiniProfile";
-import { GetProfileStatusResponseData } from "@spt/models/eft/profile/GetProfileStatusResponseData";
+import { IGetProfileStatusResponseData } from "@spt/models/eft/profile/GetProfileStatusResponseData";
 import { IGetOtherProfileRequest } from "@spt/models/eft/profile/IGetOtherProfileRequest";
 import { IGetOtherProfileResponse } from "@spt/models/eft/profile/IGetOtherProfileResponse";
 import { IGetProfileSettingsRequest } from "@spt/models/eft/profile/IGetProfileSettingsRequest";
@@ -26,9 +26,9 @@ import { LocalisationService } from "@spt/services/LocalisationService";
 import { MailSendService } from "@spt/services/MailSendService";
 import { ProfileFixerService } from "@spt/services/ProfileFixerService";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { TimeUtil } from "@spt/utils/TimeUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class ProfileController {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -117,10 +117,10 @@ export declare class ProfileController {
     /**
      * Handle client/profile/status
      */
-    getProfileStatus(sessionId: string): GetProfileStatusResponseData;
+    getProfileStatus(sessionId: string): IGetProfileStatusResponseData;
     getOtherProfile(sessionId: string, request: IGetOtherProfileRequest): IGetOtherProfileResponse;
     /**
      * Handle client/profile/settings
      */
-    setChosenProfileIcon(sessionId: string, request: IGetProfileSettingsRequest): void;
+    setChosenProfileIcon(sessionId: string, request: IGetProfileSettingsRequest): boolean;
 }

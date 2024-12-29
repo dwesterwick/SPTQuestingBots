@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BossSpawnWaveManagerClass).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
+            return typeof(BossSpawnScenario).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]

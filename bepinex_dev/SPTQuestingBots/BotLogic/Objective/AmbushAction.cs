@@ -14,7 +14,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass459.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(GClass507.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public AmbushAction(BotOwner _BotOwner, bool _allowedToIgnoreHearing) : this(_BotOwner)

@@ -11,7 +11,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     {
         public PlantItemAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass459.CreateNode(BotLogicDecision.lay, BotOwner));
+            SetBaseAction(GClass507.CreateNode(BotLogicDecision.lay, BotOwner));
         }
 
         public override void Start()

@@ -30,12 +30,12 @@ namespace SPTQuestingBots.Helpers
 
     public static class ItemHelpers
     {
-        public static InventoryControllerClass GetInventoryController(this BotOwner bot)
+        public static InventoryController GetInventoryController(this BotOwner bot)
         {
             Type playerType = typeof(Player);
 
             FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (InventoryControllerClass)inventoryControllerField.GetValue(bot.GetPlayer);
+            return (InventoryController)inventoryControllerField.GetValue(bot.GetPlayer);
         }
 
         public static IEnumerable<WeaponClass> ToWeaponClasses(this IEnumerable<string> weaponClassNames)
@@ -86,7 +86,7 @@ namespace SPTQuestingBots.Helpers
 
         public static List<Weapon> GetEquippedWeapons(this BotOwner botOwner)
         {
-            InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
 
             Weapon holsterWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Holster).ContainedItem as Weapon;
             Weapon primaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.FirstPrimaryWeapon).ContainedItem as Weapon;
@@ -102,7 +102,7 @@ namespace SPTQuestingBots.Helpers
 
         public static float HearingMultiplier(this BotOwner botOwner)
         {
-            InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
 
             Item headset = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Earpiece).ContainedItem;
             Item helmet = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Headwear).ContainedItem;
@@ -115,7 +115,7 @@ namespace SPTQuestingBots.Helpers
                 multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
-            GClass2550 helmetTemplate = helmet?.Template as GClass2550;
+            ArmoredEquipmentTemplateClass helmetTemplate = helmet?.Template as ArmoredEquipmentTemplateClass;
             switch (helmetTemplate?.DeafStrength)
             {
                 case EDeafStrength.Low:
@@ -135,7 +135,7 @@ namespace SPTQuestingBots.Helpers
         {
             try
             {
-                InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+                InventoryController inventoryControllerClass = GetInventoryController(botOwner);
 
                 // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
@@ -154,7 +154,7 @@ namespace SPTQuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                GStruct414<GClass2798> moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
+                var moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -189,14 +189,14 @@ namespace SPTQuestingBots.Helpers
             }
         }
 
-        public static ItemAddress FindLocationForItem(this BotOwner botOwner, Item item, IEnumerable<EquipmentSlot> possibleSlots, InventoryControllerClass botInventoryController)
+        public static ItemAddress FindLocationForItem(this BotOwner botOwner, Item item, IEnumerable<EquipmentSlot> possibleSlots, InventoryController botInventoryController)
         {
             foreach (EquipmentSlot slot in possibleSlots)
             {
                 //LoggingController.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
                 // Search through all grids in the equipment slot
-                SearchableItemClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as SearchableItemClass;
+                CompoundItem equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as CompoundItem;
                 foreach (StashGridClass grid in (equipmentSlot?.Grids ?? (new StashGridClass[0])))
                 {
                     //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
@@ -207,7 +207,7 @@ namespace SPTQuestingBots.Helpers
                     {
                         LoggingController.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
 
-                        return new ItemAddressClass(grid, locationInGrid);
+                        return grid.CreateItemAddress(locationInGrid);
                     }
                 }
             }
@@ -236,7 +236,7 @@ namespace SPTQuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraph<IEasyBundle>.GClass3415 LoadBundle(this Item item)
+        public static DependencyGraph<IEasyBundle>.GClass3802 LoadBundle(this Item item)
         {
             try
             {
@@ -265,7 +265,7 @@ namespace SPTQuestingBots.Helpers
         {
             try
             {
-                InventoryControllerClass inventoryControllerClass = GetInventoryController(botOwner);
+                InventoryController inventoryControllerClass = GetInventoryController(botOwner);
 
                 IEnumerable<KeyComponent> matchingKeys = inventoryControllerClass.Inventory.Equipment
                     .GetItemComponentsInChildren<KeyComponent>(false)

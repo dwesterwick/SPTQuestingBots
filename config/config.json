@@ -2,16 +2,11 @@
 	"enabled": true,
 	"debug": {
 		"enabled": true,
-		"scav_cooldown_time": 1500,
-		"full_length_scav_raids": false,
-		"free_labs_access": false,
 		"always_spawn_pmcs": false,
 		"always_spawn_pscavs": false,
-		"always_have_airdrops": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
-		"show_door_interaction_test_points": false,
-		"friendly_pmcs": false
+		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"chance_of_being_hostile_toward_bosses": {

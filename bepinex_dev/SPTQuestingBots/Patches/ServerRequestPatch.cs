@@ -54,7 +54,7 @@ namespace SPTQuestingBots.Patches
                     return;
                 }
 
-                Class17<List<WaveInfo>> originalParams = (Class17<List<WaveInfo>>)legacyParams.Params;
+                Class19<List<WaveInfo>> originalParams = (Class19<List<WaveInfo>>)legacyParams.Params;
                 legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
 
                 ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
