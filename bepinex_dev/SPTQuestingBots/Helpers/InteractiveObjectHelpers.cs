@@ -87,8 +87,8 @@ namespace SPTQuestingBots.Helpers
 
                 LoggingController.LogInfo(botOwner.GetText() + " is unlocking door " + door.Id + "...");
 
-                // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without also running
-                // ExecuteDoorInteraction
+                // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without 
+                // also running ExecuteDoorInteraction
                 door.ExecuteInteractionResult(interactionResult, botOwner.GetPlayer);
             }
             catch (Exception e)
@@ -104,10 +104,13 @@ namespace SPTQuestingBots.Helpers
         {
             if (worldInteractiveObject is Door)
             {
-                player.MovementContext.InteractWith(worldInteractiveObject, interactionResult, null);
+                // NOTE: This method MUST be used for Fika compatibility
+                player.vmethod_0(worldInteractiveObject, interactionResult, null);
             }
 
-            player.MovementContext.ExecuteInteraction(worldInteractiveObject, interactionResult);
+            // NOTE: This method MUST be used for Fika compatibility
+            // NOTE: Ideally, this should be called after a delay. However, this will require a lot of rewriting.
+            player.vmethod_1(worldInteractiveObject, interactionResult);
         }
 
         public static void ToggleSwitch(this BotOwner botOwner, WorldInteractiveObject sw, EInteractionType interactionType)
