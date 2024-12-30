@@ -97,13 +97,14 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
+        private static string sainPluginId = "me.sol.sain";
         public static void RemoveBlacklistedQuestObjectives(string locationId)
         {
             // Force Lightkeeper Island quests to be disabled if SAIN is installed but below a minimum version
             bool lightkeeperIslandQuestsAllowed = ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled;
-            if (lightkeeperIslandQuestsAllowed && Chainloader.PluginInfos.ContainsKey("me.sol.sain"))
+            if (lightkeeperIslandQuestsAllowed && Chainloader.PluginInfos.ContainsKey(sainPluginId))
             {
-                Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
+                Version sainVersion = Chainloader.PluginInfos[sainPluginId].Metadata.Version;
                 Version minSainVersion = new Version(ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.MinSainVersion);
 
                 if (sainVersion.CompareTo(minSainVersion) < 0)

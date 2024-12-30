@@ -202,6 +202,7 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
+        private static string sainPluginId = "me.sol.sain";
         public bool TryForceBotToScanLoot()
         {
             if (!canUseLootingBotsInterop)
@@ -215,7 +216,7 @@ namespace SPTQuestingBots.BotLogic
             // reduce how long bots unnecessarily spend in SAIN's layers.
             if (canUseSAINInterop)
             {
-                Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
+                Version sainVersion = Chainloader.PluginInfos[sainPluginId].Metadata.Version;
                 Version maxVersionForResettingDecisions = new Version(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxSainVersionForResettingDecisions);
                 
                 if ((sainVersion.CompareTo(maxVersionForResettingDecisions) < 0) && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))

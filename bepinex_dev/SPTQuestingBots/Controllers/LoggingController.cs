@@ -155,10 +155,5 @@ namespace SPTQuestingBots.Controllers
                 LogError(e.ToString());
             }
         }
-
-        private static string GetMessagePrefix(char messageType)
-        {
-            return "[" + messageType + "] " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + ": ";
-        }
     }
 }

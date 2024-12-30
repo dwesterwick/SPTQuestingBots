@@ -90,6 +90,15 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             Item keyItem = worldInteractiveObject.GenerateKey();
 
+            if (!keyItem.TryAddToFakeStash(BotOwner, "fake stash for spawning keys"))
+            {
+                LoggingController.LogError("Could not add key for door " + worldInteractiveObject.Id + " to fake stash for " + BotOwner.GetText());
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
+
             // If the bot is lucky enough to get the key, try to transfer it to the bot
             if (!BotOwner.TryTransferItem(keyItem))
             {

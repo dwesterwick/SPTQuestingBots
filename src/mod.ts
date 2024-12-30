@@ -30,6 +30,8 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
+import type { ILocation } from "@spt/models/eft/common/ILocation";
+import type { IBossLocationSpawn } from "@spt/models/eft/common/ILocationBase";
 
 const modName = "SPTQuestingBots";
 
@@ -251,6 +253,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         // Store the current PMC-conversion chances in case they need to be restored later
         this.setOriginalPMCConversionChances();
 
+        // Remove all of BSG's PvE-only boss waves
+        this.disablePvEBossWaves();
+
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
         this.disableCustomBossWaves();
 
@@ -371,6 +376,48 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             this.commonUtils.logError("Another mod has changed the PMC conversion chances. This mod may not work properly!");
         }
+    }
+
+    private disablePvEBossWaves(): void
+    {
+        this.commonUtils.logInfo("Disabling PvE boss waves...");
+
+        let removedWaves = 0;
+        for (const location in this.databaseTables.locations)
+        {
+            removedWaves += this.removePvEBossWavesFromLocation(this.databaseTables.locations[location]);
+        }
+
+        this.commonUtils.logInfo(`Disabled ${removedWaves} PvE boss waves`);
+    }
+
+    private removePvEBossWavesFromLocation(location : ILocation): number
+    {
+        let removedWaves = 0;
+
+        if ((location.base === undefined) || (location.base.BossLocationSpawn === undefined))
+        {
+            return removedWaves;
+        }
+
+        const modifiedBossLocationSpawn : IBossLocationSpawn[] = [];
+
+        for (const bossLocationSpawnId in location.base.BossLocationSpawn)
+        {
+            const bossLocationSpawn = location.base.BossLocationSpawn[bossLocationSpawnId];
+
+            if (bossLocationSpawn.BossName.includes("pmcBEAR") || bossLocationSpawn.BossName.includes("pmcUSEC"))
+            {
+                removedWaves++;
+                continue;
+            }
+
+            modifiedBossLocationSpawn.push(bossLocationSpawn);
+        }
+
+        location.base.BossLocationSpawn = modifiedBossLocationSpawn;
+
+        return removedWaves;
     }
 
     private disableCustomBossWaves(): void

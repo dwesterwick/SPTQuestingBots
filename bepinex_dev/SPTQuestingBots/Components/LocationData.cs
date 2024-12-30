@@ -328,9 +328,15 @@ namespace SPTQuestingBots.Components
                     .Where(s => s.Position.z < 440)
                     .ToArray();
 
-                //IEnumerable<SpawnPointParams> removedSpawnPoints = CurrentLocation.SpawnPointParams.Where(s => !validSpawnPointParams.Contains(s));
-                //string removedSpawnPointsText = string.Join(", ", removedSpawnPoints.Select(s => s.Position.ToUnityVector3().ToString()));
-                //Controllers.LoggingController.LogWarning("PMC's cannot spawn south of the cinema on Streets or their minds will be broken. Thanks, BSG! Removed spawn points: " + removedSpawnPointsText);
+                return validSpawnPointParams;
+            }
+
+            if (CurrentLocation.Id.Contains("factory"))
+            {
+                // Bots cannot enter the building from outside where the transit extract is
+                SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
+                    .Where(s => (s.Position.x < 8) || (s.Position.x > 33) || (s.Position.z < 45) || (s.Position.z > 65))
+                    .ToArray();
 
                 return validSpawnPointParams;
             }

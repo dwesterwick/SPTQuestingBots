@@ -10,6 +10,8 @@ using EFT.InventoryLogic;
 using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
+using HarmonyLib;
+using static GClass2101;
 
 namespace SPTQuestingBots.Helpers
 {
@@ -17,12 +19,8 @@ namespace SPTQuestingBots.Helpers
     {
         public static Item GenerateKey(this WorldInteractiveObject door)
         {
-            // Create an instance of the class used to generate new ID's for items
-            // TO DO: Not sure if this should use false
-            MongoID IDGenerator = new MongoID(false);
-
             // Create a new item for the key needed to unlock the door
-            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(IDGenerator, door.KeyId, null);
+            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), door.KeyId, null);
             if (keyItem == null)
             {
                 LoggingController.LogError("Cannot create key for door " + door.Id);
@@ -80,21 +78,18 @@ namespace SPTQuestingBots.Helpers
 
                 // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
 
-                Type doorOpenerType = typeof(BotDoorOpener);
-
                 botOwner.DoorOpener.Interacting = true;
 
                 float _traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 
-                FieldInfo traversingEndField = doorOpenerType.GetField("_traversingEnd", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo traversingEndField = AccessTools.Field(typeof(BotDoorOpener), "_traversingEnd");
                 traversingEndField.SetValue(botOwner.DoorOpener, _traversingEnd);
 
                 LoggingController.LogInfo(botOwner.GetText() + " is unlocking door " + door.Id + "...");
 
                 // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without also running
                 // ExecuteDoorInteraction
-                botOwner.GetPlayer.CurrentManagedState.StartDoorInteraction(door, interactionResult, null);
-                botOwner.GetPlayer.CurrentManagedState.ExecuteDoorInteraction(door, interactionResult, null, botOwner.GetPlayer);
+                door.ExecuteInteractionResult(interactionResult, botOwner.GetPlayer);
             }
             catch (Exception e)
             {
@@ -103,6 +98,16 @@ namespace SPTQuestingBots.Helpers
 
                 throw;
             }
+        }
+
+        public static void ExecuteInteractionResult(this WorldInteractiveObject worldInteractiveObject, InteractionResult interactionResult, Player player)
+        {
+            if (worldInteractiveObject is Door)
+            {
+                player.MovementContext.InteractWith(worldInteractiveObject, interactionResult, null);
+            }
+
+            player.MovementContext.ExecuteInteraction(worldInteractiveObject, interactionResult);
         }
 
         public static void ToggleSwitch(this BotOwner botOwner, WorldInteractiveObject sw, EInteractionType interactionType)
@@ -120,7 +125,7 @@ namespace SPTQuestingBots.Helpers
                     throw new InvalidOperationException("Cannot get Player object from " + botOwner.GetText());
                 }
 
-                player.MovementContext.ExecuteInteraction(sw, new InteractionResult(interactionType));
+                sw.ExecuteInteractionResult(new InteractionResult(interactionType), player);
             }
             catch (Exception e)
             {

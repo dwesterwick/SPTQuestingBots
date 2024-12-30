@@ -19,7 +19,6 @@ namespace SPTQuestingBots.Patches
     {
         public static bool IsDelayingGameStart { get; set; } = false;
 
-        private static readonly List<BotWaveDataClass> missedBotWaves = new List<BotWaveDataClass>();
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
         private static object localGameObj = null;
 
@@ -52,13 +51,7 @@ namespace SPTQuestingBots.Patches
 
         public static void ClearMissedWaves()
         {
-            missedBotWaves.Clear();
             missedBossWaves.Clear();
-        }
-
-        public static void AddMissedBotWave(BotWaveDataClass wave)
-        {
-            missedBotWaves.Add(wave);
         }
 
         public static void AddMissedBossWave(BossLocationSpawn wave)
@@ -102,16 +95,6 @@ namespace SPTQuestingBots.Patches
         private static IEnumerator spawnMissedWaves()
         {
             IsDelayingGameStart = false;
-
-            if (missedBotWaves.Any())
-            {
-                LoggingController.LogInfo("Spawning missed bot waves...");
-
-                foreach (BotWaveDataClass missedBotWave in missedBotWaves)
-                {
-                    Singleton<IBotGame>.Instance.BotsController.ActivateBotsByWave(missedBotWave);
-                }
-            }
 
             if (missedBossWaves.Any())
             {

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using EFT.Interactive;
 using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;

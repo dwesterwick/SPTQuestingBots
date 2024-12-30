@@ -15,8 +15,8 @@ namespace SPTQuestingBots.Helpers
     {
         private static FieldInfo pathControllerField = AccessTools.Field(typeof(BotMover), "_pathController");
         private static FieldInfo pathFinderField = AccessTools.Field(typeof(BotMover), "_pathFinder");
-        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass465), "vector3_0");
-        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass465), "int_0");
+        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass513), "vector3_0");
+        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass513), "int_0");
 
         public static void FollowPath(this BotOwner bot, BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {

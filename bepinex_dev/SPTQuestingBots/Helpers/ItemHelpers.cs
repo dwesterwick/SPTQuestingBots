@@ -131,11 +131,41 @@ namespace SPTQuestingBots.Helpers
             return multiplier;
         }
 
+        public static StashItemClass CreateFakeStash(InventoryController inventoryController, string stashName)
+        {
+            StashItemClass stashItemClass = Singleton<ItemFactoryClass>.Instance.CreateFakeStash(null);
+            StashGridClass stashGridClass = new StashGridClass(stashName, 15, 15, false, Array.Empty<ItemFilter>(), stashItemClass);
+            stashItemClass.Grids[0] = stashGridClass;
+            stashItemClass.CurrentAddress = inventoryController.CreateItemAddress();
+
+            return stashItemClass;
+        }
+
+        public static bool TryAddToFakeStash(this Item item, InventoryController inventoryController, string stashName)
+        {
+            StashItemClass stashItemClass = CreateFakeStash(inventoryController, stashName);
+
+            GStruct446<GClass3136> gstruct5 = stashItemClass.Grids[0].AddAnywhere(item, EErrorHandlingType.Ignore);
+            if (gstruct5.Failed)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool TryAddToFakeStash(this Item item, BotOwner botOwner, string stashName)
+        {
+            InventoryController inventoryController = GetInventoryController(botOwner);
+
+            return item.TryAddToFakeStash(inventoryController, stashName);
+        }
+
         public static bool TryTransferItem(this BotOwner botOwner, Item item)
         {
             try
             {
-                InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+                InventoryController inventoryController = GetInventoryController(botOwner);
 
                 // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
@@ -146,7 +176,7 @@ namespace SPTQuestingBots.Helpers
                 possibleSlots.AddRange(new EquipmentSlot[] { EquipmentSlot.Backpack, EquipmentSlot.TacticalVest, EquipmentSlot.ArmorVest, EquipmentSlot.Pockets });
 
                 // Try to find an available grid in the equipment slots to which the key can be transferred
-                ItemAddress locationForItem = botOwner.FindLocationForItem(item, possibleSlots, inventoryControllerClass);
+                ItemAddress locationForItem = botOwner.FindLocationForItem(item, possibleSlots, inventoryController);
                 if (locationForItem == null)
                 {
                     LoggingController.LogError("Cannot find any location to put key " + item.LocalizedName() + " for " + botOwner.GetText());
@@ -154,7 +184,7 @@ namespace SPTQuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                var moveResult = InteractionsHandlerClass.Add(item, locationForItem, inventoryControllerClass, true);
+                var moveResult = InteractionsHandlerClass.Move(item, locationForItem, inventoryController, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -176,7 +206,7 @@ namespace SPTQuestingBots.Helpers
 
                 // Execute the transation to transfer the key to the bot
                 Callback callback = new Callback(callbackAction);
-                inventoryControllerClass.TryRunNetworkTransaction(moveResult, callback);
+                inventoryController.TryRunNetworkTransaction(moveResult, callback);
 
                 return true;
             }
