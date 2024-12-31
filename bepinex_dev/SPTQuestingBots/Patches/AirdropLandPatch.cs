@@ -9,6 +9,7 @@ using Comfort.Common;
 using EFT;
 using EFT.SynchronizableObjects;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace SPTQuestingBots.Patches
 {
@@ -23,8 +24,17 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         protected static void PatchPostfix(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
         {
+            AddNavMeshObstacle(___airdropSynchronizableObject_0);
+
             Vector3 airdropPosition = ___airdropSynchronizableObject_0.transform.position;
             Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(airdropPosition);
+        }
+
+        private static void AddNavMeshObstacle(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
+        {
+            NavMeshObstacle navMeshObstacle = ___airdropSynchronizableObject_0.gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.size = ___airdropSynchronizableObject_0.CollisionCollider.bounds.size;
+            navMeshObstacle.carving = true;
         }
     }
 }

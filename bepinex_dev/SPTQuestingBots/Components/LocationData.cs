@@ -46,6 +46,11 @@ namespace SPTQuestingBots.Components
                 LoggingController.LogError("Could not retrieve current raid settings");
             }
 
+            if (ConfigController.Config.Debug.Enabled)
+            {
+                PathRender pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
+            }
+
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
             if (CurrentLocation.Id == "Lighthouse")
             {
@@ -66,11 +71,6 @@ namespace SPTQuestingBots.Components
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 BotGenerator.RunBotGenerationTasks();
-            }
-
-            if (ConfigController.Config.Debug.Enabled)
-            {
-                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
             }
         }
 
@@ -144,6 +144,13 @@ namespace SPTQuestingBots.Components
             NoPowerTip[] allNoPowerTips = FindObjectsOfType<NoPowerTip>();
             foreach (WorldInteractiveObject worldInteractiveObject in allWorldInteractiveObjects)
             {
+                // EFT has multiple WorldInteractiveObjects with the same ID on Lighthouse in SPT 3.10. Why, BSG...
+                if (IDsForWorldInteractiveObjects.ContainsKey(worldInteractiveObject.Id))
+                {
+                    LoggingController.LogWarning("Already found WorldInteractiveObject with ID " + worldInteractiveObject.Id + ". Not including the one at " + worldInteractiveObject.transform.position + ".");
+                    continue;
+                }
+
                 IDsForWorldInteractiveObjects.Add(worldInteractiveObject.Id, worldInteractiveObject);
                 //LoggingController.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
 

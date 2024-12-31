@@ -58,6 +58,16 @@ namespace SPTQuestingBots.Controllers
             return fullID.Substring(0, startChars) + "..." + fullID.Substring(fullID.Length - endChars, endChars);
         }
 
+        public static void LogDebug(string message)
+        {
+            if (!ConfigController.Config.Debug.Enabled)
+            {
+                return;
+            }
+
+            Logger.LogDebug(message);
+        }
+
         public static void LogInfo(string message)
         {
             if (!ConfigController.Config.Debug.Enabled)

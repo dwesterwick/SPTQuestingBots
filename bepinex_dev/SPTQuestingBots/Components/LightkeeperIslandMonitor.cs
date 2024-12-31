@@ -15,6 +15,8 @@ namespace SPTQuestingBots.Components
 {
     public class LightkeeperIslandMonitor : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
+        public static PhysicsTriggerHandler LightkeeperTraderZoneColliderHandler { get; set; } = null;
+
         private LocationData locationData;
         private List<Player> playersOnIsland = new List<Player>();
         private List<BotOwner> botsWithQuestsOnIsland = new List<BotOwner>();
@@ -27,6 +29,19 @@ namespace SPTQuestingBots.Components
         protected void Awake()
         {
             locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
+
+            if (LightkeeperTraderZoneColliderHandler == null)
+            {
+                throw new InvalidOperationException("LightkeeperTraderZoneColliderHandler was never initialized by LighthouseTraderZoneAwakePatch");
+            }
+
+            if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRender pathRender))
+            {
+                Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(LightkeeperTraderZoneColliderHandler.trigger.bounds);
+                Models.PathVisualizationData zoneBoundingBox = new Models.PathVisualizationData("LighthouseTraderZone", colliderBounds, Color.green);
+
+                pathRender.AddOrUpdatePath(zoneBoundingBox);
+            }
         }
 
         protected void Update()

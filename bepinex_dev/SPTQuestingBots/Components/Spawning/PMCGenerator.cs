@@ -85,20 +85,6 @@ namespace SPTQuestingBots.Components.Spawning
                 spawnType = WildSpawnType.pmcUSEC;
             }
 
-            // If all PMC's need to be friendly, they all need to be the same side as you
-            if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.FriendlyPMCs && !SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid)
-            {
-                ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
-                if (session.Profile.Info.Side == EPlayerSide.Usec)
-                {
-                    spawnType = WildSpawnType.pmcUSEC;
-                }
-                else if (session.Profile.Info.Side == EPlayerSide.Bear)
-                {
-                    spawnType = WildSpawnType.pmcBEAR;
-                }
-            }
-
             Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
 
             // Set the maximum spawn time for the PMC group

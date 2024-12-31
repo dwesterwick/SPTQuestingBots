@@ -145,8 +145,8 @@ namespace SPTQuestingBots.Helpers
         {
             StashItemClass stashItemClass = CreateFakeStash(inventoryController, stashName);
 
-            var gstruct5 = stashItemClass.Grids[0].AddAnywhere(item, EErrorHandlingType.Ignore);
-            if (gstruct5.Failed)
+            var addItemToStashOperationResult = stashItemClass.Grids[0].AddAnywhere(item, EErrorHandlingType.Ignore);
+            if (addItemToStashOperationResult.Failed)
             {
                 return false;
             }
