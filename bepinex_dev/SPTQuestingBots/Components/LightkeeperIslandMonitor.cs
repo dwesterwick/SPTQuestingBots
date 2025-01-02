@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.Interactive;
+using EFT.InventoryLogic;
 using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
@@ -35,6 +37,8 @@ namespace SPTQuestingBots.Components
                 throw new InvalidOperationException("LightkeeperTraderZoneColliderHandler was never initialized by LighthouseTraderZoneAwakePatch");
             }
 
+            LighthouseTraderZone.OnPlayerAllowStatusChanged += playerAllowStatusChanged;
+
             if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRender pathRender))
             {
                 Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(LightkeeperTraderZoneColliderHandler.trigger.bounds);
@@ -42,6 +46,11 @@ namespace SPTQuestingBots.Components
 
                 pathRender.AddOrUpdatePath(zoneBoundingBox);
             }
+        }
+
+        protected void OnDestroy()
+        {
+            LighthouseTraderZone.OnPlayerAllowStatusChanged -= playerAllowStatusChanged;
         }
 
         protected void Update()
@@ -57,6 +66,33 @@ namespace SPTQuestingBots.Components
             }
         }
 
+        private static void playerAllowStatusChanged(string profileID, bool status)
+        {
+            if (status == true)
+            {
+                return;
+            }
+
+            Player player = Singleton<GameWorld>.Instance.GetAlivePlayerByProfileID(profileID);
+            if (player.IsAI)
+            {
+                return;
+            }
+
+            if (!player.HasAGreenOrYellowDSP())
+            {
+                return;
+            }
+
+            IEnumerable<BotOwner> zryachiyAndFollowers = BotGroupHelpers.FindZryachiyAndFollowers();
+            if (!zryachiyAndFollowers.Any())
+            {
+                return;
+            }
+
+            zryachiyAndFollowers.First().BotsGroup.AddEnemy(player, EBotEnemyCause.zryachiyLogic);
+        }
+
         public bool ShouldPlayerBeFriendlyWithZryachiyAndFollowers(IPlayer iplayer)
         {
             BotOwner botOwner = iplayer.GetBotOwner();
@@ -66,6 +102,17 @@ namespace SPTQuestingBots.Components
         public bool ShouldGroupBeFriendlyWithZryachiyAndFollowers(BotsGroup group)
         {
             return playersOnIsland.Any(p => p.GetBotOwner()?.BotsGroup == group) || botsWithQuestsOnIsland.Any(b => b.BotsGroup == group);
+        }
+
+        public bool IsPointOnLightkeeperIsland(Vector3 position)
+        {
+            if (LightkeeperTraderZoneColliderHandler != null)
+            {
+                return LightkeeperTraderZoneColliderHandler.trigger.bounds.Contains(position);
+            }
+
+            LoggingController.LogWarning("LightkeeperTraderZoneColliderHandler is null. Using alternative check for position being on the island.");
+            return position.z > 325 && position.x > 183;
         }
 
         public bool IsPlayerOnLightkeeperIsland(Player player)
@@ -132,8 +179,6 @@ namespace SPTQuestingBots.Components
 
         private void toggleHostility(Player player)
         {
-            //LighthouseTraderZone lighthouseTraderZone = Singleton<GameWorld>.Instance.GetComponent<LighthouseTraderZone>();
-
             if (playersOnIsland.Contains(player))
             {
                 LoggingController.LogInfo(player.GetText() + " has left Lightkeeper Island");
@@ -149,8 +194,6 @@ namespace SPTQuestingBots.Components
 
                     revertAlliances(otherPlayer, player);
                 }
-
-                //lighthouseTraderZone.RemovePlayer(player);
             }
             else
             {
@@ -158,8 +201,6 @@ namespace SPTQuestingBots.Components
                 playersOnIsland.Add(player);
 
                 setTemporaryAlliances(player);
-
-                //lighthouseTraderZone.AddPlayer(player);
             }
         }
 

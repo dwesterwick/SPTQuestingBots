@@ -6,20 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT.Interactive;
-using EFT.InventoryLogic;
 using EFT;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
     public class LighthouseTraderZonePlayerAttackPatch : ModulePatch
     {
-        private static string lightkeeperTraderId = "638f541a29ffd1183d187f57";
-
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(LighthouseTraderZone).GetMethod("method_7", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo methodInfo = typeof(LighthouseTraderZone)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .First(m => m.GetParameters().Any(p => p.ParameterType == typeof(DamageInfoStruct)));
+
+            LoggingController.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
+
+            return methodInfo;
         }
 
         [PatchPostfix]
@@ -55,55 +59,16 @@ namespace SPTQuestingBots.Patches
 
             // If the aggressor doesn't have a DSP, there's nothing to do
             Player lastAgressorPlayer = Singleton<GameWorld>.Instance.GetAlivePlayerByProfileID(lastAgressor.ProfileId);
-            if (!lastAgressorPlayer.RecodableItemsHandler.TryToGetRecodableComponent(out RadioTransmitterRecodableComponent radioTransmitterRecodableComponent))
+            if (lastAgressorPlayer.HasAGreenOrYellowDSP())
             {
-                LoggingController.LogWarning("[DSP Not Changed] Aggressor does not have a DSP");
+                LoggingController.LogWarning("[DSP Not Changed] Aggressor does not have an encoded DSP.");
                 return;
             }
-
-            // If the aggressor's DSP isn't encoded, there's nothing to do
-            RadioTransmitterStatus currentStatus = radioTransmitterRecodableComponent.Handler.Status;
-            if ((currentStatus != RadioTransmitterStatus.Green) && (currentStatus != RadioTransmitterStatus.Yellow))
+            
+            LoggingController.LogInfo(lastAgressorPlayer.GetText() + " attacked " + player.GetText() + " on Lightkeeper Island. Updating their DSP...");
+            if (!lastAgressorPlayer.TryReduceLightkeeperStanding())
             {
-                LoggingController.LogWarning("[DSP Not Changed] Aggressor does not have an encoded DSP. DSP Status: " + currentStatus);
-                return;
-            }
-
-            LoggingController.LogInfo(lastAgressorPlayer.GetText() + " attacked " + player.GetText() + " on Lightkeeper Island. Updating his DSP...");
-            changeLightkeeperStanding(lastAgressorPlayer);
-        }
-
-        private static void changeLightkeeperStanding(Player player)
-        {
-            if (!player.Profile.TryGetTraderInfo(lightkeeperTraderId, out Profile.TraderInfo traderInfo))
-            {
-                LoggingController.LogError("[DSP Not Changed] Could not retrieve Lightkeeper TraderInfo for " + player.GetText());
-                return;
-            }
-
-            RadioTransmitterRecodableComponent radioTransmitterRecodableComponent = player.FindRadioTransmitter();
-            if (radioTransmitterRecodableComponent == null)
-            {
-                LoggingController.LogError("[DSP Not Changed] Could not retrieve DSP component for " + player.GetText());
-                return;
-            }
-
-            // From LocalPlayer.OnBeenKilledByAggressor
-            if (traderInfo.Standing > 0.009999999776482582)
-            {
-                traderInfo.SetStanding(0.009999999776482582);
-                if (radioTransmitterRecodableComponent != null)
-                {
-                    radioTransmitterRecodableComponent.SetStatus(RadioTransmitterStatus.Yellow);
-                }
-            }
-            else
-            {
-                traderInfo.SetStanding(0.0);
-                if (radioTransmitterRecodableComponent != null)
-                {
-                    radioTransmitterRecodableComponent.SetEncoded(false);
-                }
+                LoggingController.LogError("Could not update " + lastAgressorPlayer.GetText() + "'s DSP");
             }
         }
     }

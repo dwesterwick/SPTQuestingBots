@@ -26,6 +26,7 @@ namespace SPTQuestingBots.Components
 
         private readonly DateTime awakeTime = DateTime.Now;
         private GamePlayerOwner gamePlayerOwner = null;
+        private LightkeeperIslandMonitor lightkeeperIslandMonitor = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
@@ -54,7 +55,7 @@ namespace SPTQuestingBots.Components
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
             if (CurrentLocation.Id == "Lighthouse")
             {
-                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<LightkeeperIslandMonitor>();
+                lightkeeperIslandMonitor = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<LightkeeperIslandMonitor>();
             }
 
             UpdateMaxTotalBots();
@@ -92,12 +93,12 @@ namespace SPTQuestingBots.Components
 
         public bool IsPointOnLightkeeperIsland(Vector3 position)
         {
-            if (CurrentLocation.Id != "Lighthouse")
+            if (lightkeeperIslandMonitor == null)
             {
                 return false;
             }
 
-            return position.z > 325 && position.x > 183;
+            return lightkeeperIslandMonitor.IsPointOnLightkeeperIsland(position);
         }
 
         public void FindAllInteractiveObjects()
