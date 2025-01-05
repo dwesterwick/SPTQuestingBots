@@ -7,6 +7,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Patches;
 using UnityEngine;
 
@@ -241,7 +242,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         private float getMinDistanceFromOtherPlayers()
         {
-            if (getRaidTimeRemainingFraction() > 0.98)
+            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
             {
                 return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersInitial;
             }
@@ -252,16 +253,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaid;
-        }
-
-        private float getRaidTimeRemainingFraction()
-        {
-            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
-            {
-                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
-            }
-
-            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

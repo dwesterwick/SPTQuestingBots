@@ -199,9 +199,7 @@ namespace SPTQuestingBots.Patches
         {
             bool hadToWait = false;
             float waitIterationDuration = 100;
-            int maxPeriodsInText = 5;
 
-            int periods = 1;
             while (BotGenerator.RemainingBotGenerators > 0)
             {
                 if (!hadToWait)
@@ -212,15 +210,7 @@ namespace SPTQuestingBots.Patches
 
                 yield return new WaitForSeconds(waitIterationDuration / 1000f);
 
-                string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s";
-                MatchmakerFinalCountdownUpdatePatch.SetText(message + " (" + BotGenerator.CurrentBotGeneratorProgress + " %)" + (new string('.', periods)));
-                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(message, BotGenerator.CurrentBotGeneratorProgress / 100f);
-
-                periods++;
-                if (periods > maxPeriodsInText)
-                {
-                    periods = 1;
-                }
+                updateBotGenerationText("Generating " + BotGenerator.CurrentBotGeneratorType + "s", BotGenerator.CurrentBotGeneratorProgress / 100f);
             }
 
             if (hadToWait)
@@ -228,8 +218,12 @@ namespace SPTQuestingBots.Patches
                 LoggingController.LogInfo("All bot generators have finished.");
             }
 
-            MatchmakerFinalCountdownUpdatePatch.ResetText();
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
+        }
+
+        private static void updateBotGenerationText(string text, float? progress)
+        {
+            TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(text, BotGenerator.CurrentBotGeneratorProgress / 100f);
         }
 
         private static void writeSpawnMessages()

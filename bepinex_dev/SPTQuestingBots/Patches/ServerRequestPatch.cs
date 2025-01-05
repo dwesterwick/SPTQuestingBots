@@ -15,6 +15,8 @@ namespace SPTQuestingBots.Patches
     {
         public static int ForcePScavCount { get; set; } = 0;
 
+        private static readonly string botGenerationEndpoint = "/client/game/bot/generate";
+
         protected override MethodBase GetTargetMethod()
         {
             string methodName = "CreateFromLegacyParams";
@@ -28,10 +30,7 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(ref LegacyParamsStruct legacyParams)
         {
-            string originalUrl = legacyParams.Url;
-
-            string generateBotUrl = "/client/game/bot/generate";
-            if (originalUrl.EndsWith(generateBotUrl))
+            if (legacyParams.Url.EndsWith(botGenerationEndpoint))
             {
                 int pScavChance;
                 if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)

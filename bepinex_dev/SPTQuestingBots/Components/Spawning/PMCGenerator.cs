@@ -7,6 +7,7 @@ using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning
@@ -67,7 +68,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
             // Spawn smaller PMC groups later in raids
-            double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+            double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, RaidHelpers.GetRaidTimeRemainingFraction());
 
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
             int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
@@ -97,7 +98,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            EPlayerSideMask playerMask = getRaidTimeRemainingFraction() > 0.98 ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
+            EPlayerSideMask playerMask = RaidHelpers.IsBeginningOfRaid() ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
             float minDistanceFromOtherPlayers = getMinDistanceFromOtherPlayers() + 5;
 
             string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
@@ -165,7 +166,7 @@ namespace SPTQuestingBots.Components.Spawning
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs)
-            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, getRaidTimeRemainingFraction());
+            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, RaidHelpers.GetRaidTimeRemainingFraction());
             playerCountFactor *= ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayers;
 
             // Choose the number of initial PMC's to spawn
@@ -178,7 +179,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         private float getMinDistanceFromOtherPlayers()
         {
-            if (getRaidTimeRemainingFraction() > 0.98)
+            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
             {
                 return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersInitial;
             }
@@ -189,16 +190,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
-        }
-
-        private float getRaidTimeRemainingFraction()
-        {
-            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
-            {
-                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
-            }
-
-            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
         }
     }
 }

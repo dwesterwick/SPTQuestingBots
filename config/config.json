@@ -309,6 +309,12 @@
 			"sandbox": 7,
 			"sandbox_high": 7
 		},
+		"pmc_hostility_adjustments": {
+			"enabled": true,
+			"pmcs_always_hostile_against_pmcs": true,
+			"global_scav_enemy_chance": 100,
+			"pmc_enemy_roles": ["pmcBEAR", "pmcUSEC", "assault", "marksman"]
+		},
 		"pmcs" : {
 			"enabled": true,
 			"min_raid_time_remaining": 180,

@@ -10,6 +10,8 @@ import type { IAdditionalHostilitySettings, IBossLocationSpawn } from "@spt/mode
 
 export class BotUtil
 {
+    private static readonly pmcRoles = ["pmcBEAR", "pmcUSEC"];
+
     constructor(private commonUtils: CommonUtils, private databaseTables: IDatabaseTables, private iLocationConfig: ILocationConfig, private iBotConfig: IBotConfig)
     {
 
@@ -17,6 +19,11 @@ export class BotUtil
 
     public adjustAllBotHostilityChances(): void
     {
+        if (!modConfig.bot_spawns.pmc_hostility_adjustments.enabled)
+        {
+            return;
+        }
+
         this.commonUtils.logInfo("Adjusting bot hostility chances...");
 
         for (const location in this.databaseTables.locations)
@@ -38,36 +45,35 @@ export class BotUtil
             return;
         }
 
-        const pmcRoles = ["pmcBEAR", "pmcUSEC"];
-        
         for (const botType in settings)
         {
-            if (!pmcRoles.includes(settings[botType].BotRole))
+            if (!BotUtil.pmcRoles.includes(settings[botType].BotRole))
             {
                 this.commonUtils.logWarning(`Did not adjust ${settings[botType].BotRole} hostility settings on ${location.base.Name}`);
                 continue;
             }
-            
+
             this.adjustBotHostilityChances(settings[botType]);
         }
     }
 
     private adjustBotHostilityChances(settings: IAdditionalHostilitySettings): void
     {
-        const pmcEnemyRoles = ["pmcBEAR", "pmcUSEC", "assault", "marksman"];
-
-        settings.BearEnemyChance = 100;
-        settings.UsecEnemyChance = 100;
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_pmcs)
+        {
+            settings.BearEnemyChance = 100;
+            settings.UsecEnemyChance = 100;
+        }
 
         // This seems to be undefined for most maps
         if (settings.SavageEnemyChance !== undefined)
         {
-            settings.SavageEnemyChance = 100;
+            settings.SavageEnemyChance = modConfig.bot_spawns.pmc_hostility_adjustments.global_scav_enemy_chance;
         }
 
         for (const chancedEnemy in settings.ChancedEnemies)
         {
-            if (pmcEnemyRoles.includes(settings.ChancedEnemies[chancedEnemy].Role))
+            if (modConfig.bot_spawns.pmc_hostility_adjustments.pmc_enemy_roles.includes(settings.ChancedEnemies[chancedEnemy].Role))
             {
                 settings.ChancedEnemies[chancedEnemy].EnemyChance = 100;
                 continue;
@@ -106,7 +112,7 @@ export class BotUtil
         {
             const bossLocationSpawn = location.base.BossLocationSpawn[bossLocationSpawnId];
 
-            if (bossLocationSpawn.BossName.includes("pmcBEAR") || bossLocationSpawn.BossName.includes("pmcUSEC"))
+            if (BotUtil.pmcRoles.includes(bossLocationSpawn.BossName))
             {
                 removedWaves++;
                 continue;

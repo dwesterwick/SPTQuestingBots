@@ -39,6 +39,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_alive_bots")]
         public Dictionary<string, int> MaxAliveBots { get; set; } = new Dictionary<string, int>();
 
+        [JsonProperty("pmc_hostility_adjustments")]
+        public PMCHostilityAdjustmentsConfig PMCHostilityAdjustments { get; set; } = new PMCHostilityAdjustmentsConfig();
+
         [JsonProperty("pmcs")]
         public BotSpawnTypeConfig PMCs { get; set; } = new BotSpawnTypeConfig();
 

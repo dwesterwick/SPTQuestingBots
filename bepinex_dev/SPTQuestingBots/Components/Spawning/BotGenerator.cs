@@ -10,6 +10,7 @@ using Comfort.Common;
 using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Patches;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning
@@ -389,6 +390,8 @@ namespace SPTQuestingBots.Components.Spawning
 
         private static async Task runBotGenerationTasks()
         {
+            await waitForEFTBotPresetGenerator();
+
             RemainingBotGenerators = botGeneratorList.Count;
 
             foreach (Func<Task> botGeneratorCreator in botGeneratorList)
@@ -401,6 +404,15 @@ namespace SPTQuestingBots.Components.Spawning
 
             botGeneratorList.Clear();
             RemainingBotGenerators = 0;
+        }
+
+        private static async Task waitForEFTBotPresetGenerator()
+        {
+            while (TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks > 0)
+            {
+                LoggingController.LogInfo("Waiting for " + TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks + " EFT bot preset generator(s)...");
+                await Task.Delay(100);
+            }
         }
 
         private Func<Task> generateAllBotsTask(Func<Task<Models.BotSpawnInfo>> generateBotGroupAction)

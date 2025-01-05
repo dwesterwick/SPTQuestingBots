@@ -65,12 +65,12 @@ namespace SPTQuestingBots
                 new Patches.MineDirectionalShouldExplodePatch().Enable();
                 new Patches.LighthouseTraderZoneAwakePatch().Enable();
                 new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
+                new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
                 new Patches.ProcessSourceOcclusionPatch().Enable();
 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.GameStartPatch().Enable();
-                    new Patches.MatchmakerFinalCountdownUpdatePatch().Enable();
                     new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBossesByWavePatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
