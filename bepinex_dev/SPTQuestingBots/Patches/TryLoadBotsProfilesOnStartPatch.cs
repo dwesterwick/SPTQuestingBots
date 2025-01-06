@@ -18,7 +18,21 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsPresets).GetMethod("method_2", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo[] matchingMethods = typeof(BotsPresets)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetParameters().Length == 2)
+                .Where(m => m.GetParameters()[0].ParameterType == typeof(List<WaveInfo>))
+                .Where(m => m.GetParameters()[1].ParameterType == typeof(EProfilesAskingStat))
+                .ToArray();
+
+            if (matchingMethods.Length != 1)
+            {
+                throw new TypeLoadException("Could not find matching method for TryLoadBotsProfilesOnStartPatch");
+            }
+
+            LoggingController.LogInfo("Found method for TryLoadBotsProfilesOnStartPatch: " + matchingMethods[0].Name);
+
+            return matchingMethods[0];
         }
 
         [PatchPrefix]

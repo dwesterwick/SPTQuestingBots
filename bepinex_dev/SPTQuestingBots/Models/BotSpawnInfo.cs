@@ -17,10 +17,10 @@ namespace SPTQuestingBots.Models
 
         private List<BotOwner> bots = new List<BotOwner>();
 
-        public bool HasSpawned => bots.Count == Count;
         public int Count => Data?.Profiles?.Count ?? 0;
-        public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
         public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
+        public bool HasSpawned => bots.Count == Count;
+        public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
 
         public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator)
         {
@@ -31,6 +31,16 @@ namespace SPTQuestingBots.Models
         public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
+        }
+
+        public IReadOnlyCollection<Profile> GetGeneratedProfiles()
+        {
+            if (Count == 0)
+            {
+                return new Profile[0];
+            }
+
+            return Data?.Profiles?.AsReadOnly();
         }
 
         public bool ShouldBotBeBoss(BotOwner bot)
