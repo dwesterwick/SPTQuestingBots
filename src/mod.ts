@@ -341,9 +341,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             return false;
         }
-
+        
         const spawningModNames = ["SWAG", "DewardianDev-MOAR", "PreyToLive-BetterSpawnsPlus"];
-        for (const spawningModName in spawningModNames)
+        for (const spawningModName of spawningModNames)
         {
             if (importedModNames.includes(spawningModName))
             {
