@@ -74,6 +74,7 @@ namespace SPTQuestingBots
                     new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBossesByWavePatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
+                    new Patches.BotOwnerCreatePatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
                     {
