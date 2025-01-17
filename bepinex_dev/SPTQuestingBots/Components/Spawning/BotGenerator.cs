@@ -10,6 +10,7 @@ using Comfort.Common;
 using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Patches;
 using UnityEngine;
 
@@ -465,8 +466,6 @@ namespace SPTQuestingBots.Components.Spawning
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            EPlayerSide spawnSide = Helpers.BotBrainHelpers.GetSideForWildSpawnType(spawnType);
-
             LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
             Models.BotSpawnInfo botSpawnInfo = null;
@@ -476,6 +475,7 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     await Task.Delay(20);
 
+                    EPlayerSide spawnSide = spawnType.GetPlayerSide();
                     GClass652 botProfileData = new GClass652(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
@@ -601,12 +601,11 @@ namespace SPTQuestingBots.Components.Spawning
                 botSpawnInfo.Data.AddPosition(position, GetClosestCorePoint(position).Id);
             }
 
-            // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
             GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, botSpawnInfo);
-            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
-            Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
+            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = groupActionsWrapper.GetGroupAndSetEnemies;
+            Action<BotOwner> callback = groupActionsWrapper.CreateBotCallback;
 
             ibotCreator.ActivateBot(botSpawnInfo.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }
@@ -637,15 +636,10 @@ namespace SPTQuestingBots.Components.Spawning
                     group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
                     group.Lock();
                 }
-
-                /*bool newGroup = group == null;
-
-                group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-
-                if (newGroup)
+                else
                 {
-                    group.Lock();
-                }*/
+                    botSpawnerClass.method_5(bot);
+                }
 
                 return group;
             }
@@ -659,7 +653,7 @@ namespace SPTQuestingBots.Components.Spawning
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {
-                    bot.Boss.SetBoss(botSpawnInfo.Count);
+                    bot.Boss.SetBoss(botSpawnInfo.Count - 1);
                 }
 
                 LoggingController.LogInfo("Spawned bot " + bot.GetText());

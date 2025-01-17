@@ -67,6 +67,7 @@ namespace SPTQuestingBots
                 new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
                 new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
                 new Patches.ProcessSourceOcclusionPatch().Enable();
+                new Patches.IsPlayerEnemyPatch().Enable();
 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {

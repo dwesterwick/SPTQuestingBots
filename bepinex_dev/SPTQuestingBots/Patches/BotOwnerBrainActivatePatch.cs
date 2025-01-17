@@ -10,6 +10,7 @@ using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -42,11 +43,11 @@ namespace SPTQuestingBots.Patches
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
-            if (Helpers.BotBrainHelpers.WillBotBeAPMC(__instance))
+            if (__instance.WillBeAPMC())
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
             }
-            else if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
+            else if (__instance.WillBeABoss())
             {
                 Controllers.BotRegistrationManager.RegisterBoss(__instance);
             }

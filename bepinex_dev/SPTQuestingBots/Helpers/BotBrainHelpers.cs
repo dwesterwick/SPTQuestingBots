@@ -216,7 +216,7 @@ namespace SPTQuestingBots.Helpers
             WildSpawnType.pmcBEAR
         };
 
-        public static bool WillBotBeAPMC(BotOwner botOwner)
+        public static bool WillBeAPMC(this BotOwner botOwner)
         {
             //LoggingController.LogInfo("Spawn type for bot " + botOwner.GetText() + ": " + botOwner.Profile.Info.Settings.Role.ToString());
 
@@ -225,7 +225,7 @@ namespace SPTQuestingBots.Helpers
                 .Contains(botOwner.Profile.Info.Settings.Role.ToString());
         }
 
-        public static bool WillBotBeABoss(BotOwner botOwner)
+        public static bool WillBeABoss(this BotOwner botOwner)
         {
             if (botOwner.Profile.Info.Settings.Role == WildSpawnType.assaultGroup)
             {
@@ -235,7 +235,7 @@ namespace SPTQuestingBots.Helpers
             return botOwner.Profile.Info.Settings.Role.IsBoss();
         }
 
-        public static EPlayerSide GetSideForWildSpawnType(WildSpawnType spawnType)
+        public static EPlayerSide GetPlayerSide(this WildSpawnType spawnType)
         {
             if (spawnType == WildSpawnType.pmcUSEC)
             {

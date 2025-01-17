@@ -7,33 +7,31 @@ using System.Threading.Tasks;
 using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
     public class BotOwnerCreatePatch : ModulePatch
     {
+        private static FieldInfo followersField;
+
         protected override MethodBase GetTargetMethod()
         {
+            followersField = AccessTools.Field(typeof(BotBoss), "_followers");
+
             return typeof(BotOwner).GetMethod("Create", BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]
         protected static void PatchPostfix(BotOwner __result)
         {
-            if ((__result.Profile.Info.Settings.Role != WildSpawnType.pmcBEAR) && (__result.Profile.Info.Settings.Role != WildSpawnType.pmcBEAR))
+            if (!__result.WillBeAPMC())
             {
                 return;
             }
 
-            FieldInfo followersField = AccessTools.Field(typeof(BotBoss), "_followers");
-            var ____followers = followersField.GetValue(__result.Boss);
-
-            Controllers.LoggingController.LogInfo("Followers type: " + ____followers.GetType().Name);
-
+            // This needs to be set to an instance of the base "followers" class or bosses will not regularly search for new followers
             followersField.SetValue(__result.Boss, new GClass430(__result));
-            ____followers = followersField.GetValue(__result.Boss);
-
-            Controllers.LoggingController.LogInfo("Followers type after update: " + ____followers.GetType().Name);
         }
     }
 }

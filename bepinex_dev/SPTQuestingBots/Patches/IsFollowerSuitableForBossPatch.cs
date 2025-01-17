@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
 using SPTQuestingBots.Controllers;
-using System.Diagnostics;
 
 namespace SPTQuestingBots.Patches
 {

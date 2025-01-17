@@ -6,7 +6,7 @@ import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { ILocation } from "@spt/models/eft/common/ILocation";
-import type { IAdditionalHostilitySettings, IBossLocationSpawn } from "@spt/models/eft/common/ILocationBase";
+import type { IAdditionalHostilitySettings, IBossLocationSpawn, IChancedEnemy } from "@spt/models/eft/common/ILocationBase";
 
 export class BotUtil
 {
@@ -81,6 +81,42 @@ export class BotUtil
             
             // This allows Questing Bots to set boss hostilities when the bot spawns
             settings.ChancedEnemies[chancedEnemy].EnemyChance = 0;
+        }
+
+        this.addMissingPMCRolesToChancedEnemies(settings);
+    }
+
+    private addMissingPMCRolesToChancedEnemies(settings: IAdditionalHostilitySettings): void
+    {
+        for (const pmcRole of BotUtil.pmcRoles)
+        {
+            if (!modConfig.bot_spawns.pmc_hostility_adjustments.pmc_enemy_roles.includes(pmcRole))
+            {
+                continue;
+            }
+            
+            let foundRole = false;
+            for (const chancedEnemy in settings.ChancedEnemies)
+            {
+                if (settings.ChancedEnemies[chancedEnemy].Role === pmcRole)
+                {
+                    foundRole = true;
+                    break;
+                }
+            }
+
+            if (foundRole)
+            {
+                continue;
+            }
+            
+            const newEnemy : IChancedEnemy = 
+            {
+                EnemyChance: 100,
+                Role: pmcRole
+            };
+            
+            settings.ChancedEnemies.push(newEnemy);
         }
     }
 
