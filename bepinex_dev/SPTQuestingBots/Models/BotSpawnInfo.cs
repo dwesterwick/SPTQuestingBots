@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using UnityEngine;
 
 namespace SPTQuestingBots.Models
 {
@@ -17,9 +19,10 @@ namespace SPTQuestingBots.Models
 
         private List<BotOwner> bots = new List<BotOwner>();
 
-        public int Count => Data?.Profiles?.Count ?? 0;
-        public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
-        public bool HasSpawned => bots.Count == Count;
+        public int GeneratedBotCount => Data?.Profiles?.Count ?? 0;
+        public int RemainingBotsToSpawn => Math.Max(0, GeneratedBotCount - bots.Count);
+        public bool HaveAllBotsSpawned => bots.Count == GeneratedBotCount;
+        public bool AreAllAliveBotsActive => bots.Where(b => !b.IsDead).All(b => b.BotState == EBotState.Active);
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
 
         public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator)
@@ -35,7 +38,7 @@ namespace SPTQuestingBots.Models
 
         public IReadOnlyCollection<Profile> GetGeneratedProfiles()
         {
-            if (Count == 0)
+            if (GeneratedBotCount == 0)
             {
                 return new Profile[0];
             }
@@ -45,7 +48,7 @@ namespace SPTQuestingBots.Models
 
         public bool ShouldBotBeBoss(BotOwner bot)
         {
-            if (Count <= 1)
+            if (GeneratedBotCount <= 1)
             {
                 return false;
             }
@@ -58,9 +61,28 @@ namespace SPTQuestingBots.Models
             return false;
         }
 
+        public IEnumerator WaitForFollowersAndSetBoss(BotOwner bot)
+        {
+            LoggingController.LogInfo("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...");
+
+            while (!HaveAllBotsSpawned)
+            {
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            while (!AreAllAliveBotsActive)
+            {
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            LoggingController.LogInfo("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...done.");
+
+            bot.Boss.SetBoss(GeneratedBotCount - 1);
+        }
+
         public void AddBotOwner(BotOwner bot)
         {
-            if (HasSpawned)
+            if (HaveAllBotsSpawned)
             {
                 throw new InvalidOperationException("All BotOwners have already been assigned to the group");
             }
@@ -70,7 +92,7 @@ namespace SPTQuestingBots.Models
 
         public void SeparateBotOwner(BotOwner bot)
         {
-            if (!HasSpawned)
+            if (!HaveAllBotsSpawned)
             {
                 throw new InvalidOperationException("Cannot remove a BotOwner from a group that has not spawned yet");
             }

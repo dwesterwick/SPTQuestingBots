@@ -43,9 +43,9 @@ namespace SPTQuestingBots.Components.Spawning
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
         private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
 
-        public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
-        public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
-        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HasSpawned);
+        public int SpawnedGroupCount => BotGroups.Count(g => g.HaveAllBotsSpawned);
+        public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HaveAllBotsSpawned);
+        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HaveAllBotsSpawned);
         public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
         public int MaxBotsToGenerate => Math.Min(MaxAliveBots, MaxGeneratedBots - GeneratedBotCount);
         public int GeneratorProgress => 100 * GeneratedBotCount / MaxGeneratedBots;
@@ -437,7 +437,7 @@ namespace SPTQuestingBots.Components.Spawning
                         Models.BotSpawnInfo group = await generateBotGroupAction();
 
                         BotGroups.Add(group);
-                        GeneratedBotCount += group.Count;
+                        GeneratedBotCount += group.GeneratedBotCount;
                     }
 
                     LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
@@ -520,7 +520,7 @@ namespace SPTQuestingBots.Components.Spawning
                 List<Models.BotSpawnInfo> botGroupsToSpawn = new List<Models.BotSpawnInfo>();
                 for (int i = 0; i < botGroups.Length; i++)
                 {
-                    if (botGroups[i].HasSpawned)
+                    if (botGroups[i].HaveAllBotsSpawned)
                     {
                         continue;
                     }
@@ -533,7 +533,7 @@ namespace SPTQuestingBots.Components.Spawning
                     }
 
                     // Ensure there won't be too many bots on the map
-                    if (botGroupsToSpawn.Sum(g => g.Count) + botGroups[i].Count > allowedSpawns)
+                    if (botGroupsToSpawn.Sum(g => g.GeneratedBotCount) + botGroups[i].GeneratedBotCount > allowedSpawns)
                     {
                         break;
                     }
@@ -564,7 +564,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         private IEnumerator spawnBotGroup(Models.BotSpawnInfo botGroup)
         {
-            if (botGroup.HasSpawned)
+            if (botGroup.HaveAllBotsSpawned)
             {
                 //LoggingController.LogError("PMC group has already spawned.");
                 yield break;
@@ -578,7 +578,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             Vector3[] spawnPositions = GetSpawnPositionsForBotGroup(botGroup).ToArray();
-            if (spawnPositions.Length != botGroup.Count)
+            if (spawnPositions.Length != botGroup.GeneratedBotCount)
             {
                 yield break;
             }
@@ -603,7 +603,9 @@ namespace SPTQuestingBots.Components.Spawning
 
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, botSpawnInfo);
+            Action<BotOwner> setBossAction = (bot) => { StartCoroutine(botSpawnInfo.WaitForFollowersAndSetBoss(bot)); };
+
+            ActivateBotMethodsWrapper groupActionsWrapper = new ActivateBotMethodsWrapper(botSpawnerClass, botSpawnInfo, setBossAction);
             Func<BotOwner, BotZone, BotsGroup> getGroupFunction = groupActionsWrapper.GetGroupAndSetEnemies;
             Action<BotOwner> callback = groupActionsWrapper.CreateBotCallback;
 
@@ -616,17 +618,19 @@ namespace SPTQuestingBots.Components.Spawning
             return groupPoint.CorePointInGame;
         }
 
-        internal class GroupActionsWrapper
+        internal class ActivateBotMethodsWrapper
         {
             private BotsGroup group = null;
             private BotSpawner botSpawnerClass = null;
             private Models.BotSpawnInfo botSpawnInfo = null;
+            private Action<BotOwner> setBossAction = null;
             private Stopwatch stopWatch = new Stopwatch();
 
-            public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup)
+            public ActivateBotMethodsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup, Action<BotOwner> _setBossAction)
             {
                 botSpawnerClass = _botSpawnerClass;
                 botSpawnInfo = _botGroup;
+                setBossAction = _setBossAction;
             }
 
             public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
@@ -653,7 +657,7 @@ namespace SPTQuestingBots.Components.Spawning
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {
-                    bot.Boss.SetBoss(botSpawnInfo.Count - 1);
+                    setBossAction(bot);
                 }
 
                 LoggingController.LogInfo("Spawned bot " + bot.GetText());

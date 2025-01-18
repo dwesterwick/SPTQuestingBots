@@ -17,11 +17,30 @@ namespace SPTQuestingBots.Patches
             return typeof(BossGroup).GetMethod("method_0", BindingFlags.Public | BindingFlags.Instance);
         }
 
-        [PatchPostfix]
-        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers)
+        [PatchPrefix]
+        protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
         {
-            LoggingController.LogInfo("Checking for a new follower from [" + string.Join(", ", followers) + "] to replace " + boss.GetText());
-            LoggingController.LogInfo("Current boss: " + __instance.Boss?.GetText() ?? "[None]");
+            LoggingController.LogInfo("Checking for a new follower from [" + string.Join(", ", followers.Select(f => f.GetText())) + "] to replace " + boss.GetText());
+            LoggingController.LogInfo("Old boss: " + ____boss.GetText());
+
+            foreach (BotOwner follower in followers)
+            {
+                follower.BotFollower.BossToFollow = null;
+            }
+        }
+
+        [PatchPostfix]
+        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
+        {
+            foreach (BotOwner follower in followers)
+            {
+                if (follower.Boss.IamBoss)
+                {
+                    ____boss = follower;
+                }
+            }
+
+            LoggingController.LogInfo("New boss: " + ____boss.GetText());
         }
     }
 }

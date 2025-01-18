@@ -236,7 +236,6 @@
     <Compile Include="Patches\AddEnemyPatch.cs" />
     <Compile Include="Patches\BotDiedPatch.cs" />
     <Compile Include="Patches\BotOwnerBrainActivatePatch.cs" />
-    <Compile Include="Patches\BotOwnerCreatePatch.cs" />
     <Compile Include="Patches\IsPlayerEnemyPatch.cs" />
     <Compile Include="Patches\LighthouseTraderZoneAwakePatch.cs" />
     <Compile Include="Patches\LighthouseTraderZonePlayerAttackPatch.cs" />

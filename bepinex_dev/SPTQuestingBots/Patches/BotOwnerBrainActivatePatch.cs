@@ -26,7 +26,7 @@ namespace SPTQuestingBots.Patches
             followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
             bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
 
-            return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotOwner).GetMethod("method_11", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -73,23 +73,7 @@ namespace SPTQuestingBots.Patches
         {
             BotType botType = Controllers.BotRegistrationManager.GetBotType(bot);
 
-            float chance = 0;
-            if (botType == BotType.Scav)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Scav;
-            }
-            else if (botType == BotType.PScav)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PScav;
-            }
-            else if (botType == BotType.PMC)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PMC;
-            }
-            else if (botType == BotType.Boss)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Boss;
-            }
+            float chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
 
             System.Random random = new System.Random();
             if (random.Next(1, 100) <= chance)

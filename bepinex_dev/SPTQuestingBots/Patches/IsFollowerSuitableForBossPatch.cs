@@ -60,5 +60,28 @@ namespace SPTQuestingBots.Patches
             __result = false;
             return false;
         }
+
+        [PatchPostfix]
+        protected static void PatchPostfix(bool __result, BotBoss __instance, BotOwner offer, GClass430 ____followers)
+        {
+            Controllers.LoggingController.LogInfo("Checking if " + offer.GetText() + " can follow " + __instance.Owner.GetText() + ": " + __result);
+
+            if (____followers.Followers.Count >= ____followers.TargetFollowersCount)
+            {
+                Controllers.LoggingController.LogWarning(__instance.Owner.GetText() + " already has enough followers");
+            }
+            if (!BotBoss.IsFollowerSuitableForBoss(offer.Profile.Info.Settings.Role, __instance.Owner.Profile.Info.Settings.Role))
+            {
+                Controllers.LoggingController.LogWarning(offer.GetText() + " is not a suitable follower for " + __instance.Owner.GetText());
+            }
+            if (offer.BotFollower.HaveBoss)
+            {
+                Controllers.LoggingController.LogWarning(offer.GetText() + " already has a boss: " + offer.BotFollower.BossToFollow.Player().GetText());
+            }
+            if (offer.Boss.IamBoss)
+            {
+                Controllers.LoggingController.LogWarning(offer.GetText() + " is a boss");
+            }
+        }
     }
 }
