@@ -30,6 +30,24 @@ export class BotUtil
         {
             this.adjustAllBotHostilityChancesForLocation(this.databaseTables.locations[location]);
         }
+
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_scavs)
+        {
+            this.databaseTables.bots.types.assault.difficulty.easy.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assault.difficulty.normal.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assault.difficulty.hard.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assault.difficulty.impossible.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+
+            this.databaseTables.bots.types.assaultgroup.difficulty.easy.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assaultgroup.difficulty.normal.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assaultgroup.difficulty.hard.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.assaultgroup.difficulty.impossible.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+
+            this.databaseTables.bots.types.marksman.difficulty.easy.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.marksman.difficulty.normal.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.marksman.difficulty.hard.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+            this.databaseTables.bots.types.marksman.difficulty.impossible.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
+        }
     }
 
     private adjustAllBotHostilityChancesForLocation(location : ILocation): void
@@ -59,16 +77,15 @@ export class BotUtil
 
     private adjustBotHostilityChances(settings: IAdditionalHostilitySettings): void
     {
-        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_pmcs)
-        {
-            settings.BearEnemyChance = 100;
-            settings.UsecEnemyChance = 100;
-        }
-
         // This seems to be undefined for most maps
         if (settings.SavageEnemyChance !== undefined)
         {
             settings.SavageEnemyChance = modConfig.bot_spawns.pmc_hostility_adjustments.global_scav_enemy_chance;
+        }
+
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_scavs)
+        {
+            settings.SavagePlayerBehaviour = "AlwaysEnemies";
         }
 
         for (const chancedEnemy in settings.ChancedEnemies)
@@ -83,7 +100,13 @@ export class BotUtil
             settings.ChancedEnemies[chancedEnemy].EnemyChance = 0;
         }
 
-        this.addMissingPMCRolesToChancedEnemies(settings);
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_pmcs)
+        {
+            settings.BearEnemyChance = 100;
+            settings.UsecEnemyChance = 100;
+
+            this.addMissingPMCRolesToChancedEnemies(settings);
+        }
     }
 
     private addMissingPMCRolesToChancedEnemies(settings: IAdditionalHostilitySettings): void

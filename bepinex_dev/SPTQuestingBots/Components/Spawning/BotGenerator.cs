@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
@@ -621,29 +622,31 @@ namespace SPTQuestingBots.Components.Spawning
         internal class ActivateBotMethodsWrapper
         {
             private BotsGroup group = null;
-            private BotSpawner botSpawnerClass = null;
+            private BotSpawner botSpawner = null;
             private Models.BotSpawnInfo botSpawnInfo = null;
             private Action<BotOwner> setBossAction = null;
             private Stopwatch stopWatch = new Stopwatch();
 
+            private DeadBodiesController deadBodiesController;
+            private FieldInfo botSpawnerAllPlayersFieldInfo;
+
             public ActivateBotMethodsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup, Action<BotOwner> _setBossAction)
             {
-                botSpawnerClass = _botSpawnerClass;
+                botSpawner = _botSpawnerClass;
                 botSpawnInfo = _botGroup;
                 setBossAction = _setBossAction;
+
+                getBotSpawnerFields();
             }
 
             public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
             {
                 if (group == null)
                 {
-                    group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-                    group.Lock();
+                    group = createNewGroup(bot, zone);
                 }
-                else
-                {
-                    botSpawnerClass.method_5(bot);
-                }
+
+                botSpawner.method_5(bot);
 
                 return group;
             }
@@ -653,7 +656,7 @@ namespace SPTQuestingBots.Components.Spawning
                 // I have no idea why BSG passes a stopwatch into this call...
                 stopWatch.Start();
 
-                botSpawnerClass.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
+                botSpawner.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {
@@ -662,6 +665,37 @@ namespace SPTQuestingBots.Components.Spawning
 
                 LoggingController.LogInfo("Spawned bot " + bot.GetText());
                 botSpawnInfo.AddBotOwner(bot);
+            }
+
+            private void getBotSpawnerFields()
+            {
+                FieldInfo botSpawnerDeadBodiesControllerFieldInfo = AccessTools.Field(typeof(BotSpawner), "_deadBodiesController");
+                deadBodiesController = (DeadBodiesController)botSpawnerDeadBodiesControllerFieldInfo.GetValue(botSpawner);
+
+                botSpawnerAllPlayersFieldInfo = AccessTools.Field(typeof(BotSpawner), "_allPlayers");
+            }
+
+            private BotsGroup createNewGroup(BotOwner initialBot, BotZone zone)
+            {
+                List<Player> _allPlayers = (List<Player>)botSpawnerAllPlayersFieldInfo.GetValue(botSpawner);
+
+                // --- From BotsGroup.GetGroupAndSetEnemies ---
+                EPlayerSide side = initialBot.Profile.Info.Side;
+
+                List<BotOwner> list = new List<BotOwner>();
+                foreach (BotOwner botOwner in botSpawner.method_4(initialBot))
+                {
+                    list.Add(botOwner);
+                }
+
+                group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, deadBodiesController, _allPlayers, true);
+                group.TargetMembersCount = botSpawnInfo.GeneratedBotCount;
+                botSpawner.Groups.Add(zone, side, group, true);
+                // ------------------------------------------
+
+                group.Lock();
+
+                return group;
             }
         }
     }

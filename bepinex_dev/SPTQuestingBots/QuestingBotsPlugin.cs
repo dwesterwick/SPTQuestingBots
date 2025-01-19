@@ -67,15 +67,16 @@ namespace SPTQuestingBots
                 new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
                 new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
                 new Patches.ProcessSourceOcclusionPatch().Enable();
+                //new Patches.IsEnemyByChancePatch().Enable();
                 //new Patches.IsPlayerEnemyPatch().Enable();
-                new Patches.SetNewBossPatch().Enable();
-
+                
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.GameStartPatch().Enable();
                     new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBossesByWavePatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
+                    new Patches.SetNewBossPatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
                     {

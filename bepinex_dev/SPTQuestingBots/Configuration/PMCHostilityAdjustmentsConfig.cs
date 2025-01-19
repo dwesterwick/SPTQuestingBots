@@ -15,6 +15,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("pmcs_always_hostile_against_pmcs")]
         public bool PMCsAlwaysHostileAgainstPMCs { get; set; } = true;
 
+        [JsonProperty("pmcs_always_hostile_against_scavs")]
+        public bool PMCsAlwaysHostileAgainstScavs { get; set; } = true;
+
         [JsonProperty("global_scav_enemy_chance")]
         public int GlobalScavEnemyChance { get; set; } = 100;
 

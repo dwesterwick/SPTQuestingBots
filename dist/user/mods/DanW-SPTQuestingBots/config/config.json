@@ -312,8 +312,9 @@
 		"pmc_hostility_adjustments": {
 			"enabled": true,
 			"pmcs_always_hostile_against_pmcs": true,
+			"pmcs_always_hostile_against_scavs": true,
 			"global_scav_enemy_chance": 100,
-			"pmc_enemy_roles": ["pmcBEAR", "pmcUSEC", "assault", "marksman"]
+			"pmc_enemy_roles": ["pmcBEAR", "pmcUSEC", "assault", "marksman", "assaultGroup"]
 		},
 		"pmcs" : {
 			"enabled": true,
