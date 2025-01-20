@@ -65,10 +65,13 @@ namespace SPTQuestingBots
                 new Patches.MineDirectionalShouldExplodePatch().Enable();
                 new Patches.LighthouseTraderZoneAwakePatch().Enable();
                 new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
-                new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
-                new Patches.ProcessSourceOcclusionPatch().Enable();
                 //new Patches.IsEnemyByChancePatch().Enable();
                 //new Patches.IsPlayerEnemyPatch().Enable();
+
+                if (ConfigController.Config.Debug.Enabled)
+                {
+                    new Patches.ProcessSourceOcclusionPatch().Enable();
+                }
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
@@ -76,6 +79,7 @@ namespace SPTQuestingBots
                     new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
                     new Patches.ActivateBossesByWavePatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
+                    new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
                     new Patches.SetNewBossPatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
