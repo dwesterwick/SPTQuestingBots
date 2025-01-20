@@ -20,8 +20,11 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
         {
-            LoggingController.LogInfo("Checking for a new follower from [" + string.Join(", ", followers.Select(f => f.GetText())) + "] to replace " + boss.GetText());
-            LoggingController.LogInfo("Old boss: " + ____boss.GetText());
+            if (followers.Count > 0)
+            {
+                LoggingController.LogInfo("Checking for a new follower from [" + string.Join(", ", followers.Select(f => f.GetText())) + "] to replace " + boss.GetText());
+                LoggingController.LogInfo("Old boss: " + ____boss.GetText());
+            }
 
             foreach (BotOwner follower in followers)
             {
@@ -40,7 +43,10 @@ namespace SPTQuestingBots.Patches
                 }
             }
 
-            LoggingController.LogInfo("New boss: " + ____boss.GetText());
+            if (followers.Count > 0)
+            {
+                LoggingController.LogInfo("New boss: " + ____boss.GetText());
+            }
         }
     }
 }

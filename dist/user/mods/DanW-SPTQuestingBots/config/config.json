@@ -208,7 +208,7 @@
 			},
 			"exfil_direction_max_angle": 90,
 			"exfil_reached_min_fraction": 0.2,
-			"blacklisted_boss_hunter_bosses": [ "pmcBEAR", "pmcUSEC", "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker" ],
+			"blacklisted_boss_hunter_bosses": [ "pmcBEAR", "pmcUSEC", "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker", "bossPartisan" ],
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {
@@ -334,8 +334,8 @@
 			"bots_per_group_distribution" : [
 				[0.40, 1],
 				[0.80, 2],
-				[0.92, 3],
-				[0.97, 4],
+				[0.94, 3],
+				[0.98, 4],
 				[1.00, 5]
 			],
 			"bot_difficulty_as_online" : [
@@ -356,8 +356,8 @@
 			"bots_per_group_distribution" : [
 				[0.80, 1],
 				[0.90, 2],
-				[0.95, 3],
-				[0.98, 4],
+				[0.96, 3],
+				[0.99, 4],
 				[1.00, 5]
 			],
 			"bot_difficulty_as_online" : [
