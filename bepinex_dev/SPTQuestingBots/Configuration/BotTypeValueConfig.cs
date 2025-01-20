@@ -23,7 +23,6 @@ namespace SPTQuestingBots.Configuration
 
         public BotTypeValueConfig()
         {
-
         }
     }
 }

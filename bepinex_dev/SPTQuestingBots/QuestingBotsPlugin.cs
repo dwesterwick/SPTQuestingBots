@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Bootstrap;
 using DrakiaXYZ.BigBrain.Brains;
-using EFT;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
@@ -19,17 +18,17 @@ namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.5.2")]
-    [BepInDependency("xyz.drakia.bigbrain", "1.0.1")]
-    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.8.1")]
+    [BepInDependency("xyz.drakia.waypoints", "1.6.2")]
+    [BepInDependency("xyz.drakia.bigbrain", "1.2.0")]
+    [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.9.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
         public static string ModName { get; private set; } = "???";
 
         protected void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "3.9.6.0";
-            Patches.TarkovInitPatch.MaxVersion = "3.9.99.0";
+            Patches.TarkovInitPatch.MinVersion = "3.10.0.0";
+            Patches.TarkovInitPatch.MaxVersion = "3.10.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");
             LoggingController.Logger = Logger;
@@ -64,15 +63,20 @@ namespace SPTQuestingBots
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
                 new Patches.MineDirectionalShouldExplodePatch().Enable();
-
+                new Patches.LighthouseTraderZoneAwakePatch().Enable();
+                new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
+                new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
+                new Patches.ProcessSourceOcclusionPatch().Enable();
+                //new Patches.IsEnemyByChancePatch().Enable();
+                //new Patches.IsPlayerEnemyPatch().Enable();
+                
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
                     new Patches.GameStartPatch().Enable();
-                    new Patches.MatchmakerFinalCountdownUpdatePatch().Enable();
                     new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
-                    new Patches.ActivateBotsByWavePatch().Enable();
-                    new Patches.ActivateBotsByWavePatch2().Enable();
+                    new Patches.ActivateBossesByWavePatch().Enable();
                     new Patches.AddEnemyPatch().Enable();
+                    new Patches.SetNewBossPatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
                     {

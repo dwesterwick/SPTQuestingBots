@@ -4,25 +4,24 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT.UI.Matchmaker;
 using SPT.Reflection.Patching;
 
 namespace SPTQuestingBots.Patches
 {
     public class TimeHasComeScreenClassChangeStatusPatch : ModulePatch
     {
-        private static MatchmakerTimeHasCome.TimeHasComeScreenClass instance = null;
+        private static MatchmakerPlayerControllerClass instance = null;
         private static string previousText = "???";
         private static float? previousProgress = null;
         private static bool isOverridingText = false;
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(MatchmakerTimeHasCome.TimeHasComeScreenClass).GetMethod("ChangeStatus", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(MatchmakerPlayerControllerClass).GetMethod("UpdateMatchingStatus", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(MatchmakerTimeHasCome.TimeHasComeScreenClass __instance, string text, float? progress = null)
+        protected static void PatchPostfix(MatchmakerPlayerControllerClass __instance, string status, float? progress = null)
         {
             if (isOverridingText)
             {
@@ -30,34 +29,35 @@ namespace SPTQuestingBots.Patches
             }
 
             instance = __instance;
-            previousText = text;
+            previousText = status;
             previousProgress = progress;
         }
 
         public static void ChangeStatus(string text, float? progress = null)
         {
-            checkForInstance();
-
-            isOverridingText = true;
-            instance.ChangeStatus(text, progress);
-            isOverridingText = false;
+            checkForInstances();
+            changeStatus(text, progress);
         }
 
         public static void RestorePreviousStatus()
         {
-            checkForInstance();
-
-            isOverridingText = true;
-            instance.ChangeStatus(previousText, previousProgress);
-            isOverridingText = false;
+            checkForInstances();
+            changeStatus(previousText, previousProgress);
         }
 
-        private static void checkForInstance()
+        private static void checkForInstances()
         {
             if (instance == null)
             {
-                throw new InvalidOperationException("An instance of MatchmakerTimeHasCome.TimeHasComeScreenClass has not been discovered yet");
+                throw new InvalidOperationException("An instance of " + instance.GetType().Name + " has not been discovered yet");
             }
+        }
+
+        private static void changeStatus(string text, float? progress)
+        {
+            isOverridingText = true;
+            instance.UpdateMatchingStatus(text, progress);
+            isOverridingText = false;
         }
     }
 }

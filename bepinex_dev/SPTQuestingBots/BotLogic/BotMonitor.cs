@@ -149,7 +149,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+            LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
 
             return true;
         }
@@ -190,7 +190,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (LootingBots.LootingBotsInterop.TryPreventBotFromLooting(botOwner, duration))
             {
-                LoggingController.LogInfo("Preventing " + botOwner.GetText() + " from looting");
+                LoggingController.LogDebug("Preventing " + botOwner.GetText() + " from looting");
 
                 return true;
             }
@@ -202,6 +202,7 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
+        private static string sainPluginId = "me.sol.sain";
         public bool TryForceBotToScanLoot()
         {
             if (!canUseLootingBotsInterop)
@@ -215,7 +216,7 @@ namespace SPTQuestingBots.BotLogic
             // reduce how long bots unnecessarily spend in SAIN's layers.
             if (canUseSAINInterop)
             {
-                Version sainVersion = Chainloader.PluginInfos["me.sol.sain"].Metadata.Version;
+                Version sainVersion = Chainloader.PluginInfos[sainPluginId].Metadata.Version;
                 Version maxVersionForResettingDecisions = new Version(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxSainVersionForResettingDecisions);
                 
                 if ((sainVersion.CompareTo(maxVersionForResettingDecisions) < 0) && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
@@ -226,7 +227,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(botOwner))
             {
-                LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to loot now");
+                LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to loot now");
 
                 return true;
             }
@@ -253,7 +254,7 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
-            LoggingController.LogInfo("Instructing " + botOwner.GetText() + " to extract now");
+            LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to extract now");
 
             foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
             {
@@ -264,7 +265,7 @@ namespace SPTQuestingBots.BotLogic
 
                 if (SAIN.Plugin.SAINInterop.TryExtractBot(follower))
                 {
-                    LoggingController.LogInfo("Instructing follower " + follower.GetText() + " to extract now");
+                    LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
                 }
                 else
                 {
@@ -375,7 +376,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to heal");
+                    LoggingController.LogDebug("Bot " + botOwner.GetText() + " needs to heal");
                 }
                 return true;
             }
@@ -395,7 +396,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to drink");
+                    LoggingController.LogDebug("Bot " + botOwner.GetText() + " needs to drink");
                 }
                 return false;
             }
@@ -405,7 +406,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " needs to eat");
+                    LoggingController.LogDebug("Bot " + botOwner.GetText() + " needs to eat");
                 }
                 return false;
             }
@@ -429,7 +430,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " cannot heal");
+                    LoggingController.LogDebug("Bot " + botOwner.GetText() + " cannot heal");
                 }
                 return false;
             }
@@ -439,7 +440,7 @@ namespace SPTQuestingBots.BotLogic
             {
                 if (writeToLog)
                 {
-                    LoggingController.LogInfo("Bot " + botOwner.GetText() + " is overweight");
+                    LoggingController.LogDebug("Bot " + botOwner.GetText() + " is overweight");
                 }
                 return false;
             }
@@ -511,7 +512,7 @@ namespace SPTQuestingBots.BotLogic
                 {
                     if (!hasFoundLoot)
                     {
-                        LoggingController.LogInfo("Bot " + botOwner.GetText() + " has found loot");
+                        LoggingController.LogDebug("Bot " + botOwner.GetText() + " has found loot");
                     }
 
                     NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;

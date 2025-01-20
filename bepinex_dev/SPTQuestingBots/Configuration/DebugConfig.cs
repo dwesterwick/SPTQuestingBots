@@ -12,23 +12,11 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
-        [JsonProperty("scav_cooldown_time")]
-        public long ScavCooldownTime { get; set; } = 1500;
-
-        [JsonProperty("full_length_scav_raids")]
-        public bool FullLengthScavRaids { get; set; } = false;
-
-        [JsonProperty("free_labs_access")]
-        public bool FreeLabsAccess { get; set; } = false;
-
         [JsonProperty("always_spawn_pmcs")]
         public bool AlwaysSpawnPMCs { get; set; } = false;
 
         [JsonProperty("always_spawn_pscavs")]
         public bool AlwaysSpawnPScavs { get; set; } = false;
-
-        [JsonProperty("always_have_airdrops")]
-        public bool AlwaysHaveAirdrops { get; set; } = false;
 
         [JsonProperty("show_zone_outlines")]
         public bool ShowZoneOutlines { get; set; } = false;
@@ -38,9 +26,6 @@ namespace SPTQuestingBots.Configuration
 
         [JsonProperty("show_door_interaction_test_points")]
         public bool ShowDoorInteractionTestPoints { get; set; } = false;
-
-        [JsonProperty("friendly_pmcs")]
-        public bool FriendlyPMCs { get; set; } = false;
 
         public DebugConfig()
         {

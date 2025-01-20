@@ -10,12 +10,12 @@ namespace SPTQuestingBots_CustomBotGenExample
 {
     public class ParalyzeAction : CustomLogic
     {
-        protected GClass134 baseAction { get; private set; } = null;
+        protected GClass156 baseAction { get; private set; } = null;
 
         public ParalyzeAction(BotOwner _BotOwner) : base(_BotOwner)
         {
             // This doesn't quite achieve "paralysis", but it's probably good enough
-            baseAction = GClass459.CreateNode(BotLogicDecision.standBy, BotOwner);
+            baseAction = GClass507.CreateNode(BotLogicDecision.standBy, BotOwner);
             baseAction.Awake();
         }
 

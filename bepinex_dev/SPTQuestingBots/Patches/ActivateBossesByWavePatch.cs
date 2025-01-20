@@ -11,7 +11,7 @@ using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
-    public class ActivateBotsByWavePatch : ModulePatch
+    public class ActivateBossesByWavePatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {

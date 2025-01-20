@@ -10,11 +10,11 @@ import { RagfairSellHelper } from "@spt/helpers/RagfairSellHelper";
 import { RagfairSortHelper } from "@spt/helpers/RagfairSortHelper";
 import { TraderHelper } from "@spt/helpers/TraderHelper";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
-import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { ITraderAssort } from "@spt/models/eft/common/tables/ITrader";
 import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
 import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
-import { IAddOfferRequestData, Requirement } from "@spt/models/eft/ragfair/IAddOfferRequestData";
+import { IAddOfferRequestData, IRequirement } from "@spt/models/eft/ragfair/IAddOfferRequestData";
 import { IExtendOfferRequestData } from "@spt/models/eft/ragfair/IExtendOfferRequestData";
 import { IGetItemPriceResult } from "@spt/models/eft/ragfair/IGetItemPriceResult";
 import { IGetMarketPriceRequestData } from "@spt/models/eft/ragfair/IGetMarketPriceRequestData";
@@ -24,6 +24,7 @@ import { IRagfairOffer } from "@spt/models/eft/ragfair/IRagfairOffer";
 import { IRemoveOfferRequestData } from "@spt/models/eft/ragfair/IRemoveOfferRequestData";
 import { ISearchRequestData } from "@spt/models/eft/ragfair/ISearchRequestData";
 import { IProcessBuyTradeRequestData } from "@spt/models/eft/trade/IProcessBuyTradeRequestData";
+import { FleaOfferType } from "@spt/models/enums/FleaOfferType";
 import { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { EventOutputHolder } from "@spt/routers/EventOutputHolder";
@@ -136,10 +137,11 @@ export declare class RagfairController {
     update(): void;
     /**
      * Called when creating an offer on flea, fills values in top right corner
-     * @param getPriceRequest
+     * @param getPriceRequest Client request object
+     * @param ignoreTraderOffers Should trader offers be ignored in the calcualtion
      * @returns min/avg/max values for an item based on flea offers available
      */
-    getItemMinAvgMaxFleaPriceValues(getPriceRequest: IGetMarketPriceRequestData): IGetItemPriceResult;
+    getItemMinAvgMaxFleaPriceValues(getPriceRequest: IGetMarketPriceRequestData, ignoreTraderOffers?: boolean): IGetItemPriceResult;
     /**
      * List item(s) on flea for sale
      * @param pmcData Player profile
@@ -149,17 +151,56 @@ export declare class RagfairController {
      */
     addPlayerOffer(pmcData: IPmcData, offerRequest: IAddOfferRequestData, sessionID: string): IItemEventRouterResponse;
     /**
+     * Create a flea offer for a single item - uncludes an item with > 1 sized stack
+     * e.g. 1 ammo stack of 30 cartridges
+     * @param sessionID Session id
+     * @param offerRequest Offer request from client
+     * @param fullProfile Full profile of player
+     * @param output Response to send to client
+     * @returns IItemEventRouterResponse
+     */
+    protected createSingleOffer(sessionID: string, offerRequest: IAddOfferRequestData, fullProfile: ISptProfile, output: IItemEventRouterResponse): IItemEventRouterResponse;
+    /**
+     * Create a flea offer for multiples of the same item, can be single items or items with multiple in the stack
+     * e.g. 2 ammo stacks of 30 cartridges each
+     * Each item can be purchsed individually
+     * @param sessionID Session id
+     * @param offerRequest Offer request from client
+     * @param fullProfile Full profile of player
+     * @param output Response to send to client
+     * @returns IItemEventRouterResponse
+     */
+    protected createMultiOffer(sessionID: string, offerRequest: IAddOfferRequestData, fullProfile: ISptProfile, output: IItemEventRouterResponse): IItemEventRouterResponse;
+    /**
+     * Create a flea offer for multiple items, can be single items or items with multiple in the stack
+     * e.g. 2 ammo stacks of 30 cartridges each
+     * The entire package must be purchased in one go
+     * @param sessionID Session id
+     * @param offerRequest Offer request from client
+     * @param fullProfile Full profile of player
+     * @param output Response to send to client
+     * @returns IItemEventRouterResponse
+     */
+    protected createPackOffer(sessionID: string, offerRequest: IAddOfferRequestData, fullProfile: ISptProfile, output: IItemEventRouterResponse): IItemEventRouterResponse;
+    /**
+     * Given a client request, determine what type of offer is being created
+     * single/multi/pack
+     * @param offerRequest Client request
+     * @returns FleaOfferType
+     */
+    protected getOfferType(offerRequest: IAddOfferRequestData): FleaOfferType;
+    /**
      * Charge player a listing fee for using flea, pulls charge from data previously sent by client
      * @param sessionID Player id
      * @param rootItem Base item being listed (used when client tax cost not found and must be done on server)
      * @param pmcData Player profile
      * @param requirementsPriceInRub Rouble cost player chose for listing (used when client tax cost not found and must be done on server)
-     * @param itemStackCount How many items were listed in player (used when client tax cost not found and must be done on server)
+     * @param itemStackCount How many items were listed by player (used when client tax cost not found and must be done on server)
      * @param offerRequest Add offer request object from client
      * @param output IItemEventRouterResponse
      * @returns True if charging tax to player failed
      */
-    protected chargePlayerTaxFee(sessionID: string, rootItem: Item, pmcData: IPmcData, requirementsPriceInRub: number, itemStackCount: number, offerRequest: IAddOfferRequestData, output: IItemEventRouterResponse): boolean;
+    protected chargePlayerTaxFee(sessionID: string, rootItem: IItem, pmcData: IPmcData, requirementsPriceInRub: number, itemStackCount: number, offerRequest: IAddOfferRequestData, output: IItemEventRouterResponse): boolean;
     /**
      * Is the item to be listed on the flea valid
      * @param offerRequest Client offer request
@@ -172,7 +213,7 @@ export declare class RagfairController {
      * @param requirements
      * @returns Rouble price
      */
-    protected calculateRequirementsPriceInRub(requirements: Requirement[]): number;
+    protected calculateRequirementsPriceInRub(requirements: IRequirement[]): number;
     /**
      * Using item ids from flea offer request, find corresponding items from player inventory and return as array
      * @param pmcData Player profile
@@ -180,10 +221,10 @@ export declare class RagfairController {
      * @returns Array of items from player inventory
      */
     protected getItemsToListOnFleaFromInventory(pmcData: IPmcData, itemIdsFromFleaOfferRequest: string[]): {
-        items: Item[] | undefined;
+        items: IItem[][] | undefined;
         errorMessage: string | undefined;
     };
-    createPlayerOffer(sessionId: string, requirements: Requirement[], items: Item[], sellInOnePiece: boolean): IRagfairOffer;
+    createPlayerOffer(sessionId: string, requirements: IRequirement[], items: IItem[], sellInOnePiece: boolean): IRagfairOffer;
     getAllFleaPrices(): Record<string, number>;
     getStaticPrices(): Record<string, number>;
     /**

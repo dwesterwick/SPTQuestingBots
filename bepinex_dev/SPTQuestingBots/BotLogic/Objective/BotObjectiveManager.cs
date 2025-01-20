@@ -180,15 +180,11 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }
-            else
-            {
-                LoggingController.LogInfo(botOwner.GetText() + " is a " + botType.ToString());
-            }
 
             IsInitialized = true;
         }
 
-        private void Update()
+        protected void Update()
         {
             if (!Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
@@ -460,20 +456,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             return exfiltrationPoint.transform.position - botOwner.Position;
-        }
-
-        private Models.BotSpawnInfo tryFindSpawnGroup()
-        {
-            IEnumerable<BotOwner> groupMembers = Enumerable.Empty<BotOwner>();
-            foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
-            {
-                if ((botGenerator != null) && botGenerator.TryGetBotGroup(botOwner, out Models.BotSpawnInfo botSpawnInfo))
-                {
-                    return botSpawnInfo;
-                }
-            }
-
-            return null;
         }
 
         private void setInitialObjective()

@@ -5,15 +5,14 @@ import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { IHealthTreatmentRequestData } from "@spt/models/eft/health/IHealthTreatmentRequestData";
 import { IOffraidEatRequestData } from "@spt/models/eft/health/IOffraidEatRequestData";
 import { IOffraidHealRequestData } from "@spt/models/eft/health/IOffraidHealRequestData";
-import { ISyncHealthRequestData } from "@spt/models/eft/health/ISyncHealthRequestData";
 import { IWorkoutData } from "@spt/models/eft/health/IWorkoutData";
 import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { EventOutputHolder } from "@spt/routers/EventOutputHolder";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { PaymentService } from "@spt/services/PaymentService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class HealthController {
     protected logger: ILogger;
     protected eventOutputHolder: EventOutputHolder;
@@ -25,15 +24,6 @@ export declare class HealthController {
     protected healthHelper: HealthHelper;
     protected cloner: ICloner;
     constructor(logger: ILogger, eventOutputHolder: EventOutputHolder, itemHelper: ItemHelper, paymentService: PaymentService, inventoryHelper: InventoryHelper, localisationService: LocalisationService, httpResponse: HttpResponseUtil, healthHelper: HealthHelper, cloner: ICloner);
-    /**
-     * stores in-raid player health
-     * @param pmcData Player profile
-     * @param info Request data
-     * @param sessionID Player id
-     * @param addEffects Should effects found be added or removed from profile
-     * @param deleteExistingEffects Should all prior effects be removed before apply new ones
-     */
-    saveVitality(pmcData: IPmcData, info: ISyncHealthRequestData, sessionID: string, addEffects?: boolean, deleteExistingEffects?: boolean): void;
     /**
      * When healing in menu
      * @param pmcData Player profile

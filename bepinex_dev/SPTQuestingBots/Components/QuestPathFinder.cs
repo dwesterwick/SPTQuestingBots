@@ -88,7 +88,7 @@ namespace SPTQuestingBots.Components
                     StaticPathData path = new StaticPathData(from, to, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        LoggingController.LogInfo("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        LoggingController.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
                         tmpStaticPaths.Add((from, to), path);
                     }
                     else
@@ -113,7 +113,7 @@ namespace SPTQuestingBots.Components
                     StaticPathData path = new StaticPathData(waypoint, firstStepPosition, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        LoggingController.LogInfo("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        LoggingController.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
                         tmpStaticPaths.Add((waypoint, firstStepPosition), path);
                     }
                     else
@@ -162,7 +162,7 @@ namespace SPTQuestingBots.Components
                             continue;
                         }
 
-                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        LoggingController.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }
@@ -182,7 +182,7 @@ namespace SPTQuestingBots.Components
                             continue;
                         }
 
-                        LoggingController.LogInfo("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        LoggingController.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }

@@ -2,16 +2,11 @@
 	"enabled": true,
 	"debug": {
 		"enabled": true,
-		"scav_cooldown_time": 1500,
-		"full_length_scav_raids": false,
-		"free_labs_access": false,
 		"always_spawn_pmcs": false,
 		"always_spawn_pscavs": false,
-		"always_have_airdrops": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
-		"show_door_interaction_test_points": false,
-		"friendly_pmcs": false
+		"show_door_interaction_test_points": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"chance_of_being_hostile_toward_bosses": {
@@ -213,7 +208,7 @@
 			},
 			"exfil_direction_max_angle": 90,
 			"exfil_reached_min_fraction": 0.2,
-			"blacklisted_boss_hunter_bosses": [ "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker" ],
+			"blacklisted_boss_hunter_bosses": [ "pmcBEAR", "pmcUSEC", "gifter", "arenaFighterEvent", "shooterBTR", "bossZryachiy", "followerZryachiy", "skier", "peacemaker", "bossPartisan" ],
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {
@@ -301,8 +296,8 @@
 		},
 		"max_alive_bots": {
 			"default": 6,
-			"factory4_day": 5,
-			"factory4_night": 5,
+			"factory4_day": 7,
+			"factory4_night": 7,
 			"bigmap": 7,
 			"woods": 8,
 			"shoreline": 7,
@@ -313,6 +308,13 @@
 			"tarkovstreets": 8,
 			"sandbox": 7,
 			"sandbox_high": 7
+		},
+		"pmc_hostility_adjustments": {
+			"enabled": true,
+			"pmcs_always_hostile_against_pmcs": true,
+			"pmcs_always_hostile_against_scavs": true,
+			"global_scav_enemy_chance": 100,
+			"pmc_enemy_roles": ["pmcBEAR", "pmcUSEC", "assault", "marksman", "assaultGroup"]
 		},
 		"pmcs" : {
 			"enabled": true,
@@ -332,8 +334,8 @@
 			"bots_per_group_distribution" : [
 				[0.40, 1],
 				[0.80, 2],
-				[0.92, 3],
-				[0.97, 4],
+				[0.94, 3],
+				[0.98, 4],
 				[1.00, 5]
 			],
 			"bot_difficulty_as_online" : [
@@ -354,8 +356,8 @@
 			"bots_per_group_distribution" : [
 				[0.80, 1],
 				[0.90, 2],
-				[0.95, 3],
-				[0.98, 4],
+				[0.96, 3],
+				[0.99, 4],
 				[1.00, 5]
 			],
 			"bot_difficulty_as_online" : [

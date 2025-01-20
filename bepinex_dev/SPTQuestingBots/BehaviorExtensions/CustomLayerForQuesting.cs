@@ -70,7 +70,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
             if (neededToHeal)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now healed.");
+                LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is now healed.");
             }
 
             mustHealTimer.Reset();
@@ -90,7 +90,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
             if (!wasAbleBodied)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is now able-bodied.");
+                LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is now able-bodied.");
             }
 
             notAbleBodiedTimer.Reset();

@@ -1,10 +1,10 @@
 {
     "name": "SPTQuestingBots",
-    "version": "0.8.1",
+    "version": "0.9.0",
     "main": "src/mod.js",
     "license": "MIT",
     "author": "DanW",
-    "sptVersion": ">=3.9.6 <3.10.0",
+    "sptVersion": ">=3.10.0 <3.11.0",
     "loadBefore": [],
     "loadAfter": [],
     "incompatibilities": ["Andrudis-QuestManiac"],

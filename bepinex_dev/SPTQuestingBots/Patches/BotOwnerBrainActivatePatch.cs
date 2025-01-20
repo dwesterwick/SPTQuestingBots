@@ -10,6 +10,7 @@ using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -25,7 +26,7 @@ namespace SPTQuestingBots.Patches
             followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
             bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
 
-            return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotOwner).GetMethod("method_11", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -42,11 +43,11 @@ namespace SPTQuestingBots.Patches
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
             LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
-            if (Helpers.BotBrainHelpers.WillBotBeAPMC(__instance))
+            if (__instance.WillBeAPMC())
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
             }
-            else if (Helpers.BotBrainHelpers.WillBotBeABoss(__instance))
+            else if (__instance.WillBeABoss())
             {
                 Controllers.BotRegistrationManager.RegisterBoss(__instance);
             }
@@ -63,7 +64,7 @@ namespace SPTQuestingBots.Patches
 
             if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
-                LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
+                LoggingController.LogDebug("Adjusting EFT bot counts for " + __instance.GetText() + "...");
                 reduceBotCounts(__instance);
             }
         }
@@ -72,23 +73,7 @@ namespace SPTQuestingBots.Patches
         {
             BotType botType = Controllers.BotRegistrationManager.GetBotType(bot);
 
-            float chance = 0;
-            if (botType == BotType.Scav)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Scav;
-            }
-            else if (botType == BotType.PScav)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PScav;
-            }
-            else if (botType == BotType.PMC)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.PMC;
-            }
-            else if (botType == BotType.Boss)
-            {
-                chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.Boss;
-            }
+            float chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
 
             System.Random random = new System.Random();
             if (random.Next(1, 100) <= chance)

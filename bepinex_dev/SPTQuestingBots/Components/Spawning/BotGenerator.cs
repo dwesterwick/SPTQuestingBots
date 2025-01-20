@@ -5,11 +5,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
+using SPTQuestingBots.Patches;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning
@@ -41,9 +44,9 @@ namespace SPTQuestingBots.Components.Spawning
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
         private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
 
-        public int SpawnedGroupCount => BotGroups.Count(g => g.HasSpawned);
-        public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HasSpawned);
-        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HasSpawned);
+        public int SpawnedGroupCount => BotGroups.Count(g => g.HaveAllBotsSpawned);
+        public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HaveAllBotsSpawned);
+        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HaveAllBotsSpawned);
         public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
         public int MaxBotsToGenerate => Math.Min(MaxAliveBots, MaxGeneratedBots - GeneratedBotCount);
         public int GeneratorProgress => 100 * GeneratedBotCount / MaxGeneratedBots;
@@ -389,6 +392,8 @@ namespace SPTQuestingBots.Components.Spawning
 
         private static async Task runBotGenerationTasks()
         {
+            await waitForEFTBotPresetGenerator();
+
             RemainingBotGenerators = botGeneratorList.Count;
 
             foreach (Func<Task> botGeneratorCreator in botGeneratorList)
@@ -401,6 +406,15 @@ namespace SPTQuestingBots.Components.Spawning
 
             botGeneratorList.Clear();
             RemainingBotGenerators = 0;
+        }
+
+        private static async Task waitForEFTBotPresetGenerator()
+        {
+            while (TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks > 0)
+            {
+                LoggingController.LogInfo("Waiting for " + TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks + " EFT bot preset generator(s)...");
+                await Task.Delay(100);
+            }
         }
 
         private Func<Task> generateAllBotsTask(Func<Task<Models.BotSpawnInfo>> generateBotGroupAction)
@@ -424,7 +438,7 @@ namespace SPTQuestingBots.Components.Spawning
                         Models.BotSpawnInfo group = await generateBotGroupAction();
 
                         BotGroups.Add(group);
-                        GeneratedBotCount += group.Count;
+                        GeneratedBotCount += group.GeneratedBotCount;
                     }
 
                     LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
@@ -453,8 +467,6 @@ namespace SPTQuestingBots.Components.Spawning
             // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            EPlayerSide spawnSide = Helpers.BotBrainHelpers.GetSideForWildSpawnType(spawnType);
-
             LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
             Models.BotSpawnInfo botSpawnInfo = null;
@@ -464,7 +476,8 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     await Task.Delay(20);
 
-                    GClass592 botProfileData = new GClass592(spawnSide, spawnType, botdifficulty, 0f, null);
+                    EPlayerSide spawnSide = spawnType.GetPlayerSide();
+                    GClass652 botProfileData = new GClass652(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
@@ -508,7 +521,7 @@ namespace SPTQuestingBots.Components.Spawning
                 List<Models.BotSpawnInfo> botGroupsToSpawn = new List<Models.BotSpawnInfo>();
                 for (int i = 0; i < botGroups.Length; i++)
                 {
-                    if (botGroups[i].HasSpawned)
+                    if (botGroups[i].HaveAllBotsSpawned)
                     {
                         continue;
                     }
@@ -521,7 +534,7 @@ namespace SPTQuestingBots.Components.Spawning
                     }
 
                     // Ensure there won't be too many bots on the map
-                    if (botGroupsToSpawn.Sum(g => g.Count) + botGroups[i].Count > allowedSpawns)
+                    if (botGroupsToSpawn.Sum(g => g.GeneratedBotCount) + botGroups[i].GeneratedBotCount > allowedSpawns)
                     {
                         break;
                     }
@@ -552,7 +565,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         private IEnumerator spawnBotGroup(Models.BotSpawnInfo botGroup)
         {
-            if (botGroup.HasSpawned)
+            if (botGroup.HaveAllBotsSpawned)
             {
                 //LoggingController.LogError("PMC group has already spawned.");
                 yield break;
@@ -566,7 +579,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             Vector3[] spawnPositions = GetSpawnPositionsForBotGroup(botGroup).ToArray();
-            if (spawnPositions.Length != botGroup.Count)
+            if (spawnPositions.Length != botGroup.GeneratedBotCount)
             {
                 yield break;
             }
@@ -589,12 +602,13 @@ namespace SPTQuestingBots.Components.Spawning
                 botSpawnInfo.Data.AddPosition(position, GetClosestCorePoint(position).Id);
             }
 
-            // In SPT-AKI 3.7.1, this is GClass732
             IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
 
-            GroupActionsWrapper groupActionsWrapper = new GroupActionsWrapper(botSpawnerClass, botSpawnInfo);
-            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = new Func<BotOwner, BotZone, BotsGroup>(groupActionsWrapper.GetGroupAndSetEnemies);
-            Action<BotOwner> callback = new Action<BotOwner>(groupActionsWrapper.CreateBotCallback);
+            Action<BotOwner> setBossAction = (bot) => { StartCoroutine(botSpawnInfo.WaitForFollowersAndSetBoss(bot)); };
+
+            ActivateBotMethodsWrapper groupActionsWrapper = new ActivateBotMethodsWrapper(botSpawnerClass, botSpawnInfo, setBossAction);
+            Func<BotOwner, BotZone, BotsGroup> getGroupFunction = groupActionsWrapper.GetGroupAndSetEnemies;
+            Action<BotOwner> callback = groupActionsWrapper.CreateBotCallback;
 
             ibotCreator.ActivateBot(botSpawnInfo.Data, closestBotZone, false, getGroupFunction, callback, botSpawnerClass.GetCancelToken());
         }
@@ -605,35 +619,34 @@ namespace SPTQuestingBots.Components.Spawning
             return groupPoint.CorePointInGame;
         }
 
-        internal class GroupActionsWrapper
+        internal class ActivateBotMethodsWrapper
         {
             private BotsGroup group = null;
-            private BotSpawner botSpawnerClass = null;
+            private BotSpawner botSpawner = null;
             private Models.BotSpawnInfo botSpawnInfo = null;
+            private Action<BotOwner> setBossAction = null;
             private Stopwatch stopWatch = new Stopwatch();
 
-            public GroupActionsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup)
+            private DeadBodiesController deadBodiesController;
+            private FieldInfo botSpawnerAllPlayersFieldInfo;
+
+            public ActivateBotMethodsWrapper(BotSpawner _botSpawnerClass, Models.BotSpawnInfo _botGroup, Action<BotOwner> _setBossAction)
             {
-                botSpawnerClass = _botSpawnerClass;
+                botSpawner = _botSpawnerClass;
                 botSpawnInfo = _botGroup;
+                setBossAction = _setBossAction;
+
+                getBotSpawnerFields();
             }
 
             public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
             {
                 if (group == null)
                 {
-                    group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-                    group.Lock();
+                    group = createNewGroup(bot, zone);
                 }
 
-                /*bool newGroup = group == null;
-
-                group = botSpawnerClass.GetGroupAndSetEnemies(bot, zone);
-
-                if (newGroup)
-                {
-                    group.Lock();
-                }*/
+                botSpawner.method_5(bot);
 
                 return group;
             }
@@ -643,15 +656,46 @@ namespace SPTQuestingBots.Components.Spawning
                 // I have no idea why BSG passes a stopwatch into this call...
                 stopWatch.Start();
 
-                botSpawnerClass.method_10(bot, botSpawnInfo.Data, null, false, stopWatch);
+                botSpawner.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
 
                 if (botSpawnInfo.ShouldBotBeBoss(bot))
                 {
-                    bot.Boss.SetBoss(botSpawnInfo.Count);
+                    setBossAction(bot);
                 }
 
                 LoggingController.LogInfo("Spawned bot " + bot.GetText());
                 botSpawnInfo.AddBotOwner(bot);
+            }
+
+            private void getBotSpawnerFields()
+            {
+                FieldInfo botSpawnerDeadBodiesControllerFieldInfo = AccessTools.Field(typeof(BotSpawner), "_deadBodiesController");
+                deadBodiesController = (DeadBodiesController)botSpawnerDeadBodiesControllerFieldInfo.GetValue(botSpawner);
+
+                botSpawnerAllPlayersFieldInfo = AccessTools.Field(typeof(BotSpawner), "_allPlayers");
+            }
+
+            private BotsGroup createNewGroup(BotOwner initialBot, BotZone zone)
+            {
+                List<Player> _allPlayers = (List<Player>)botSpawnerAllPlayersFieldInfo.GetValue(botSpawner);
+
+                // --- From BotsGroup.GetGroupAndSetEnemies ---
+                EPlayerSide side = initialBot.Profile.Info.Side;
+
+                List<BotOwner> list = new List<BotOwner>();
+                foreach (BotOwner botOwner in botSpawner.method_4(initialBot))
+                {
+                    list.Add(botOwner);
+                }
+
+                group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, deadBodiesController, _allPlayers, true);
+                group.TargetMembersCount = botSpawnInfo.GeneratedBotCount;
+                botSpawner.Groups.Add(zone, side, group, true);
+                // ------------------------------------------
+
+                group.Lock();
+
+                return group;
             }
         }
     }

@@ -26,6 +26,7 @@ namespace SPTQuestingBots.Components
 
         private readonly DateTime awakeTime = DateTime.Now;
         private GamePlayerOwner gamePlayerOwner = null;
+        private LightkeeperIslandMonitor lightkeeperIslandMonitor = null;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
@@ -46,10 +47,15 @@ namespace SPTQuestingBots.Components
                 LoggingController.LogError("Could not retrieve current raid settings");
             }
 
+            if (ConfigController.Config.Debug.Enabled)
+            {
+                PathRender pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
+            }
+
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
             if (CurrentLocation.Id == "Lighthouse")
             {
-                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<LightkeeperIslandMonitor>();
+                lightkeeperIslandMonitor = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<LightkeeperIslandMonitor>();
             }
 
             UpdateMaxTotalBots();
@@ -66,11 +72,6 @@ namespace SPTQuestingBots.Components
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 BotGenerator.RunBotGenerationTasks();
-            }
-
-            if (ConfigController.Config.Debug.Enabled)
-            {
-                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
             }
         }
 
@@ -92,12 +93,12 @@ namespace SPTQuestingBots.Components
 
         public bool IsPointOnLightkeeperIsland(Vector3 position)
         {
-            if (CurrentLocation.Id != "Lighthouse")
+            if (lightkeeperIslandMonitor == null)
             {
                 return false;
             }
 
-            return position.z > 325 && position.x > 183;
+            return lightkeeperIslandMonitor.IsPointOnLightkeeperIsland(position);
         }
 
         public void FindAllInteractiveObjects()
@@ -144,6 +145,13 @@ namespace SPTQuestingBots.Components
             NoPowerTip[] allNoPowerTips = FindObjectsOfType<NoPowerTip>();
             foreach (WorldInteractiveObject worldInteractiveObject in allWorldInteractiveObjects)
             {
+                // EFT has multiple WorldInteractiveObjects with the same ID on Lighthouse in SPT 3.10. Why, BSG...
+                if (IDsForWorldInteractiveObjects.ContainsKey(worldInteractiveObject.Id))
+                {
+                    LoggingController.LogWarning("Already found WorldInteractiveObject with ID " + worldInteractiveObject.Id + ". Not including the one at " + worldInteractiveObject.transform.position + ".");
+                    continue;
+                }
+
                 IDsForWorldInteractiveObjects.Add(worldInteractiveObject.Id, worldInteractiveObject);
                 //LoggingController.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
 
@@ -175,7 +183,7 @@ namespace SPTQuestingBots.Components
                     }
 
                     noPowerTipsForDoors.Add(worldInteractiveObject, noPowerTip);
-                    LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
+                    LoggingController.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
                     break;
                 }
             }
@@ -328,9 +336,15 @@ namespace SPTQuestingBots.Components
                     .Where(s => s.Position.z < 440)
                     .ToArray();
 
-                //IEnumerable<SpawnPointParams> removedSpawnPoints = CurrentLocation.SpawnPointParams.Where(s => !validSpawnPointParams.Contains(s));
-                //string removedSpawnPointsText = string.Join(", ", removedSpawnPoints.Select(s => s.Position.ToUnityVector3().ToString()));
-                //Controllers.LoggingController.LogWarning("PMC's cannot spawn south of the cinema on Streets or their minds will be broken. Thanks, BSG! Removed spawn points: " + removedSpawnPointsText);
+                return validSpawnPointParams;
+            }
+
+            if (CurrentLocation.Id.Contains("factory"))
+            {
+                // Bots cannot enter the building from outside where the transit extract is
+                SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
+                    .Where(s => (s.Position.x < 8) || (s.Position.x > 33) || (s.Position.z < 45) || (s.Position.z > 65))
+                    .ToArray();
 
                 return validSpawnPointParams;
             }

@@ -14,7 +14,13 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BossSpawnWaveManagerClass).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo methodInfo = typeof(BossSpawnScenario)
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .First();
+
+            LoggingController.LogInfo("Found method for InitBossSpawnLocationPatch: " + methodInfo.Name);
+
+            return methodInfo;
         }
 
         [PatchPostfix]

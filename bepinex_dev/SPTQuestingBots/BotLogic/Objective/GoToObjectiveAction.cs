@@ -120,7 +120,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
             // Don't complete or fail the objective step if another brain layer is active
             string layerName = BotOwner.Brain.ActiveLayerName() ?? "null";
-            if (layerName != "BotObjectiveLayer")
+            if (layerName != nameof(BotObjectiveLayer))
             {
                 return true;
             }

@@ -9,8 +9,8 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.0.4 or later recommended)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.3.5 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.2.0 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.4.0 or later recommended)
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
@@ -18,7 +18,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
-* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/) (if **bot_spawns.enabled=true** in this mod, ensure **adjust_bot_spawn_chances.adjust_pmc_conversion_chances=false** in LTTP)
+* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/)
 * **Fika** (Requires client version 0.9.8962.33287 or later)
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
@@ -176,16 +176,11 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 **Main Options:**
 * **enabled**: Completely enable or disable all featues of this mod. 
 * **debug.enabled**: Enable debug mode.
-* **debug.scav_cooldown_time**: Cooldown timer (in seconds) after a Scav raid ends before you're allowed to start another one. This is **1500** by default, which is the same as the base game.
-* **debug.full_length_scav_raids**: If **true**, Scav raids will always be full-length. 
-* **debug.free_labs_access**: If **true**, Labs cards are no longer required to enter Labs, and you're also allowed to do Scav runs in Labs. 
 * **debug.always_spawn_pmcs**: If **true**, PMC's will spawn even when you select "None" for the amount of bots when starting a raid. 
 * **debug.always_spawn_pscavs**: If **true**, player Scavs will spawn even when you select "None" for the amount of bots when starting a raid. 
-* **debug.always_have_airdrops**: If **true**, an airdrop will appear at the beginning of all raids for applicable maps
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.
 * **debug.show_failed_paths**: If **true**, whenever a bot gets stuck its target path will be drawn in red. 
 * **debug.show_door_interaction_test_points**: If **true**, the positions tested when determining where bots should travel to unlock doors will have spherical outlines. If the a valid NavMesh position cannot be found for the test point, the outline color will be white. If a valid NavMesh position is found but the bot cannot access that point, the outline color will be yellow. If a valid NavMesh position is found and the bot can access that point, the outline color will be magenta. The position selected for the bot will be shown with a green outline. 
-* **debug.friendly_pmcs**: Make all PMC's friendly with you during PMC raids. This is **false** by default. 
 * **max_calc_time_per_frame_ms**: The maximum amount of time (in milliseconds) the mod is allowed to run quest-generation and PMC-spawning procedures per frame. By default this is set to **5** ms, and delays of <15 ms are basically imperceptible. 
 * **chance_of_being_hostile_toward_bosses.scav**: The chance that Scavs will be hostile toward all bosses on the map. This is **0%** by default.
 * **chance_of_being_hostile_toward_bosses.pscav**: The chance that player Scavs will be hostile toward all bosses on the map even if the bosses aren't hostile toward them (i.e. Rogues are not initially hostile toward player Scavs). This is **20%** by default.
@@ -338,6 +333,11 @@ Since normal AI Limit mods will disable bots that are questing (which will preve
 * **bot_spawns.limit_initial_boss_spawns.max_initial_bosses**: The maximum number of bosses that are allowed to spawn at the beginning of the raid (including Raiders and Rogues). After this number is reached, all remaining initial boss spawns will be canceled. If this number is too high, few Scavs will be able to spawn after the initial PMC spawns. This is **14** by default. 
 * **bot_spawns.limit_initial_boss_spawns.max_initial_rogues**: The maximum number of Rogues that are allowed to spawn at the beginning of the raid. After this number is reached, all remaining initial Rogue spawns will be canceled. If this number is too high, few Scavs will be able to spawn after the initial PMC spawns. This is **10** by default. 
 * **bot_spawns.max_alive_bots**: The maximum number of PMC's and player Scavs (combined) that can be alive at the same time on each map. This only applies to PMC's and player Scavs generated by this mod; it doesn't apply to bots spawned by other mods or for Scavs converted to PMC's or player Scavs automatically by SPT. 
+* **bot_spawns.pmc_hostility_adjustments.enabled**: If this mod should override EFT's hostility chances for PMC bots. This is **true** by default.
+* **bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_pmcs**: Makes PMC's always hostile against other PMC's. This is **true** by default.
+* **bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_scavs**: Makes PMC's always hostile against Scavs and vice versa. This is **true** by default.
+* **bot_spawns.pmc_hostility_adjustments.global_scav_enemy_chance**: Sets the global chance that PMC's will be hostile toward Scavs. However, EFT does not use this setting in many maps. This is **100** by default.
+* **bot_spawns.pmc_hostility_adjustments.pmc_enemy_roles**: Makes PMC's always hostile toward bots with these roles. 
 * **bot_spawns.pmcs.xxx**: The settings to apply to PMC spawns (see below for details).
 * **bot_spawns.player_scavs.xxx**: The settings to apply to player Scav spawns (see below for details).
 * **adjust_pscav_chance.enabled**: If the chances that Scavs are converted to player Scavs should be adjusted throughout the raid. This is only used if **bot_spawns.enabled=false** or **bot_spawns.player_scavs.enabled=false**, and it is **true** by default.

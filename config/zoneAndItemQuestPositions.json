@@ -26,5 +26,61 @@
             "y": -14.4244938,
             "z": 19.2263775
         }
+    },
+    "case_extraction" : {
+        "position" : {
+            "x": 42.1924667,
+            "y": 4.38859224,
+            "z": 40.55366
+        }
+    },
+    "Check_mine_zone_factory" : {
+        "position" : {
+            "x": 24.2944946,
+            "y": 8.121774,
+            "z": 38.7408066
+        }
+    },
+    "NosQuests_8_factory_place" : {
+        "position" : {
+            "x": 36.0028954,
+            "y": 8.146189,
+            "z": 36.1306229
+        }
+    },
+    "zone_terminator" : {
+        "position" : {
+            "x": -47.66114,
+            "y": 1.15424979,
+            "z": 61.0818634
+        }
+    },
+    "5af04c0b86f774138708f78e" : {
+        "position" : {
+            "x": 232.860977,
+            "y": -2.24337173,
+            "z": -69.8026
+        },
+        "mustUnlockNearbyDoor": true,
+        "nearbyDoorSearchRadius": 2,
+        "nearbyDoorInteractionPosition": {
+            "x": 232.860977,
+            "y": -2.24337173,
+            "z": -69.8026
+        }
+    },
+    "q14_11_jeep" : {
+        "position" : {
+            "x": 220.393372,
+            "y": -54.48967,
+            "z": -160.128143
+        }
+    },
+    "place_thx_15" : {
+        "position" : {
+            "x": 22.08353,
+            "y": -16.2700214,
+            "z": 101.368423
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace SPTQuestingBots.BotLogic
             Init(_botOwner, _layerName);
         }
 
-        private void Update()
+        protected void Update()
         {
             if ((botOwner == null) || (LayerName == null))
             {
@@ -127,7 +127,8 @@ namespace SPTQuestingBots.BotLogic
 
             // Find the field that stores the list of brain layers assigned to the bot
             Type aICoreStrategyClassType = typeof(AICoreStrategyAbstractClass<BotLogicDecision>);
-            FieldInfo layerListField = aICoreStrategyClassType.GetField("list_0", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            FieldInfo layerListField = AccessTools.Field(aICoreStrategyClassType, "list_0");
             if (layerListField == null)
             {
                 LoggingController.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);
@@ -185,6 +186,7 @@ namespace SPTQuestingBots.BotLogic
             return brainLayer.IsActive;
         }
 
+        private static string bigBrainCustomLayerWrapperTypeName = "DrakiaXYZ.BigBrain.Internal.CustomLayerWrapper";
         public static CustomLayer GetExternalCustomLayer(AICoreLayerClass<BotLogicDecision> layer)
         {
             if (layer == null)
@@ -199,7 +201,7 @@ namespace SPTQuestingBots.BotLogic
                 return null;
             }
 
-            Type customLayerWrapperType = bigBrainAssembly.GetType("DrakiaXYZ.BigBrain.Internal.CustomLayerWrapper", false);
+            Type customLayerWrapperType = bigBrainAssembly.GetType(bigBrainCustomLayerWrapperTypeName, false);
             if (customLayerWrapperType == null)
             {
                 LoggingController.LogError("Could not find CustomLayerWrapper type");

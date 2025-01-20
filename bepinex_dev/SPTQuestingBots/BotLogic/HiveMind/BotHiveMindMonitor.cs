@@ -53,7 +53,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             sensors.Clear();
         }
 
-        private void Update()
+        protected void Update()
         {
             if (!canUpdate())
             {

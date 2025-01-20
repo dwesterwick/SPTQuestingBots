@@ -86,7 +86,7 @@ namespace SPTQuestingBots.Components
                     RawQuestClass[] allQuestTemplates = ConfigController.GetAllQuestTemplates();
 
                     Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = ConfigController.GetEFTQuestSettings();
-                    LoggingController.LogInfo("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
+                    LoggingController.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
 
                     // Need to be able to override private properties
                     BindingFlags overrideBindingFlags = JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
@@ -120,6 +120,8 @@ namespace SPTQuestingBots.Components
                 // Process each of the quests created by an EFT quest template
                 yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest, activeQuests);
 
+                LoggingController.LogInfo("Searching for EFT quest locations...");
+
                 // Create quest objectives for all matching trigger colliders found in the map
                 enumeratorWithTimeLimit.Reset();
                 IEnumerable<TriggerWithId> allTriggers = FindObjectsOfType<TriggerWithId>();
@@ -129,6 +131,8 @@ namespace SPTQuestingBots.Components
                 //IEnumerable<LootItem> allLoot = FindObjectsOfType<LootItem>(); <-- this does not work for inactive quest items!
                 IEnumerable<LootItem> allItems = Singleton<GameWorld>.Instance.LootItems.Where(i => i.Item != null).Distinct(i => i.TemplateId);
                 yield return BotJobAssignmentFactory.ProcessAllQuests(QuestHelpers.LocateQuestItems, allItems);
+
+                LoggingController.LogInfo("Searching for EFT quest locations...done.");
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
@@ -331,7 +335,7 @@ namespace SPTQuestingBots.Components
             // Add a step with the NavMesh position to corresponding objectives in every quest using this zone
             foreach (Quest quest in matchingQuests)
             {
-                LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name);
+                LoggingController.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name);
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
                 objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value));
@@ -339,7 +343,7 @@ namespace SPTQuestingBots.Components
                 float? plantTime = quest.FindPlantTime(trigger.Id);
                 if (plantTime.HasValue)
                 {
-                    LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding plant time: " + plantTime.Value + "s");
+                    LoggingController.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding plant time: " + plantTime.Value + "s");
 
                     Configuration.MinMaxConfig plantTimeMinMax = new Configuration.MinMaxConfig(plantTime.Value, plantTime.Value);
                     objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
@@ -349,7 +353,7 @@ namespace SPTQuestingBots.Components
                 float? beaconTime = quest.FindBeaconTime(trigger.Id);
                 if (beaconTime.HasValue)
                 {
-                    LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding beacon time: " + beaconTime.Value + "s");
+                    LoggingController.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding beacon time: " + beaconTime.Value + "s");
 
                     objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
                 }
@@ -357,7 +361,7 @@ namespace SPTQuestingBots.Components
                 if ((quest.Template != null) && (quest.Template.QuestType == RawQuestClass.EQuestType.Elimination))
                 {
                     float searchTime = ConfigController.Config.Questing.BotQuests.EliminationQuestSearchTime;
-                    LoggingController.LogInfo("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding elimination search time: " + searchTime + "s");
+                    LoggingController.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding elimination search time: " + searchTime + "s");
 
                     objective.SetFirstWaitTimeAfterCompleting(searchTime);
                 }

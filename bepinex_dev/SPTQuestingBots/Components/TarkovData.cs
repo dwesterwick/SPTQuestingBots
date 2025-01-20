@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
@@ -52,7 +53,7 @@ namespace SPTQuestingBots.Components
                 return null;
             }
 
-            FieldInfo raidSettingsField = typeof(TarkovApplication).GetField("_raidSettings", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo raidSettingsField = AccessTools.Field(typeof(TarkovApplication), "_raidSettings");
             RaidSettings raidSettings = raidSettingsField.GetValue(tarkovApplication) as RaidSettings;
             return raidSettings;
         }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Configuration;
+using static EFT.UI.CharacterSelectionStartScreen;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -87,6 +89,19 @@ namespace SPTQuestingBots.Controllers
             return BotType.Undetermined;
         }
 
+        public static float? GetValue(this BotTypeValueConfig botTypeValueConfig, BotType botType)
+        {
+            switch (botType)
+            {
+                case BotType.Scav: return botTypeValueConfig.Scav;
+                case BotType.PScav: return botTypeValueConfig.PScav;
+                case BotType.PMC: return botTypeValueConfig.PMC;
+                case BotType.Boss: return botTypeValueConfig.Boss;
+            }
+
+            return null;
+        }
+
         public static void WriteMessageForNewBotSpawn(BotOwner botOwner)
         {
             SpawnedBotCount++;
@@ -112,7 +127,6 @@ namespace SPTQuestingBots.Controllers
         {
             if (!registeredPMCs.Contains(botOwner))
             {
-                LoggingController.LogInfo(botOwner.GetText() + " is a PMC.");
                 registeredPMCs.Add(botOwner);
             }
         }

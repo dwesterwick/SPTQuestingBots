@@ -20,7 +20,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? interactionPosition = null;
         private IResult keyGenerationResult = null;
         private KeyComponent keyComponent = null;
-        private DependencyGraph<IEasyBundle>.GClass3415 bundleLoader = null;
+        private DependencyGraph<IEasyBundle>.GClass3802 bundleLoader = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -89,6 +89,15 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             Item keyItem = worldInteractiveObject.GenerateKey();
+
+            if (!keyItem.TryAddToFakeStash(BotOwner, "fake stash for spawning keys"))
+            {
+                LoggingController.LogError("Could not add key for door " + worldInteractiveObject.Id + " to fake stash for " + BotOwner.GetText());
+
+                ObjectiveManager.FailObjective();
+
+                return;
+            }
 
             // If the bot is lucky enough to get the key, try to transfer it to the bot
             if (!BotOwner.TryTransferItem(keyItem))

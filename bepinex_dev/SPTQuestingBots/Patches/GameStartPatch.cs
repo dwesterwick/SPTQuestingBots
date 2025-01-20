@@ -19,14 +19,13 @@ namespace SPTQuestingBots.Patches
     {
         public static bool IsDelayingGameStart { get; set; } = false;
 
-        private static readonly List<BotWaveDataClass> missedBotWaves = new List<BotWaveDataClass>();
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
         private static object localGameObj = null;
 
         protected override MethodBase GetTargetMethod()
         {
             Type baseGameType = typeof(BaseLocalGame<EftGamePlayerOwner>);
-            return baseGameType.GetMethod("vmethod_4", BindingFlags.Public | BindingFlags.Instance);
+            return baseGameType.GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -52,13 +51,7 @@ namespace SPTQuestingBots.Patches
 
         public static void ClearMissedWaves()
         {
-            missedBotWaves.Clear();
             missedBossWaves.Clear();
-        }
-
-        public static void AddMissedBotWave(BotWaveDataClass wave)
-        {
-            missedBotWaves.Add(wave);
         }
 
         public static void AddMissedBossWave(BossLocationSpawn wave)
@@ -102,16 +95,6 @@ namespace SPTQuestingBots.Patches
         private static IEnumerator spawnMissedWaves()
         {
             IsDelayingGameStart = false;
-
-            if (missedBotWaves.Any())
-            {
-                LoggingController.LogInfo("Spawning missed bot waves...");
-
-                foreach (BotWaveDataClass missedBotWave in missedBotWaves)
-                {
-                    Singleton<IBotGame>.Instance.BotsController.ActivateBotsByWave(missedBotWave);
-                }
-            }
 
             if (missedBossWaves.Any())
             {
@@ -179,12 +162,12 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "bossSpawnWaveManagerClass");
-            BossSpawnWaveManagerClass bossWaves = (BossSpawnWaveManagerClass)bossWavesField.GetValue(localGameObj);
+            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "bossSpawnScenario_0");
+            BossSpawnScenario bossWaves = (BossSpawnScenario)bossWavesField.GetValue(localGameObj);
 
             //LoggingController.LogInfo("Found Boss Waves instance");
 
-            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "list_0");
+            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnScenario), "Timers");
             ICollection bossWavesTimers = (ICollection)bossWavesTimersField.GetValue(bossWaves);
 
             LoggingController.LogInfo("Found Boss Waves timers (" + bossWavesTimers.Count + " timers)");
@@ -194,12 +177,12 @@ namespace SPTQuestingBots.Patches
                 timers.Add(timer);
             }
 
-            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnWaveManagerClass), "gclass580_0");
-            GClass580 questTrigger = (GClass580)questTriggerField.GetValue(bossWaves);
+            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnScenario), "_questsSpanws");
+            GClass639 questTrigger = (GClass639)questTriggerField.GetValue(bossWaves);
 
             //LoggingController.LogInfo("Found Boss Waves Quest Trigger instance");
 
-            FieldInfo questTriggerTimerField = AccessTools.Field(typeof(GClass580), "iBotTimer");
+            FieldInfo questTriggerTimerField = AccessTools.Field(typeof(GClass639), "iBotTimer");
             object questTriggerTimer = questTriggerTimerField.GetValue(questTrigger);
 
             if (questTriggerTimer != null)
@@ -216,9 +199,7 @@ namespace SPTQuestingBots.Patches
         {
             bool hadToWait = false;
             float waitIterationDuration = 100;
-            int maxPeriodsInText = 5;
 
-            int periods = 1;
             while (BotGenerator.RemainingBotGenerators > 0)
             {
                 if (!hadToWait)
@@ -229,15 +210,7 @@ namespace SPTQuestingBots.Patches
 
                 yield return new WaitForSeconds(waitIterationDuration / 1000f);
 
-                string message = "Generating " + BotGenerator.CurrentBotGeneratorType + "s";
-                MatchmakerFinalCountdownUpdatePatch.SetText(message + " (" + BotGenerator.CurrentBotGeneratorProgress + " %)" + (new string('.', periods)));
-                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(message, BotGenerator.CurrentBotGeneratorProgress / 100f);
-
-                periods++;
-                if (periods > maxPeriodsInText)
-                {
-                    periods = 1;
-                }
+                updateBotGenerationText("Generating " + BotGenerator.CurrentBotGeneratorType + "s", BotGenerator.CurrentBotGeneratorProgress / 100f);
             }
 
             if (hadToWait)
@@ -245,8 +218,12 @@ namespace SPTQuestingBots.Patches
                 LoggingController.LogInfo("All bot generators have finished.");
             }
 
-            MatchmakerFinalCountdownUpdatePatch.ResetText();
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
+        }
+
+        private static void updateBotGenerationText(string text, float? progress)
+        {
+            TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(text, BotGenerator.CurrentBotGeneratorProgress / 100f);
         }
 
         private static void writeSpawnMessages()

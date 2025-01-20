@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.Interactive;
+using EFT.InventoryLogic;
 using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
@@ -15,6 +17,8 @@ namespace SPTQuestingBots.Components
 {
     public class LightkeeperIslandMonitor : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
+        public static PhysicsTriggerHandler LightkeeperTraderZoneColliderHandler { get; set; } = null;
+
         private LocationData locationData;
         private List<Player> playersOnIsland = new List<Player>();
         private List<BotOwner> botsWithQuestsOnIsland = new List<BotOwner>();
@@ -27,6 +31,26 @@ namespace SPTQuestingBots.Components
         protected void Awake()
         {
             locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
+
+            if (LightkeeperTraderZoneColliderHandler == null)
+            {
+                throw new InvalidOperationException("LightkeeperTraderZoneColliderHandler was never initialized by LighthouseTraderZoneAwakePatch");
+            }
+
+            LighthouseTraderZone.OnPlayerAllowStatusChanged += playerAllowStatusChanged;
+
+            if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRender pathRender))
+            {
+                Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(LightkeeperTraderZoneColliderHandler.trigger.bounds);
+                Models.PathVisualizationData zoneBoundingBox = new Models.PathVisualizationData("LighthouseTraderZone", colliderBounds, Color.green);
+
+                pathRender.AddOrUpdatePath(zoneBoundingBox);
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            LighthouseTraderZone.OnPlayerAllowStatusChanged -= playerAllowStatusChanged;
         }
 
         protected void Update()
@@ -42,6 +66,33 @@ namespace SPTQuestingBots.Components
             }
         }
 
+        private static void playerAllowStatusChanged(string profileID, bool status)
+        {
+            if (status == true)
+            {
+                return;
+            }
+
+            Player player = Singleton<GameWorld>.Instance.GetAlivePlayerByProfileID(profileID);
+            if (player.IsAI)
+            {
+                return;
+            }
+
+            if (!player.HasAGreenOrYellowDSP())
+            {
+                return;
+            }
+
+            IEnumerable<BotOwner> zryachiyAndFollowers = BotGroupHelpers.FindZryachiyAndFollowers();
+            if (!zryachiyAndFollowers.Any())
+            {
+                return;
+            }
+
+            zryachiyAndFollowers.First().BotsGroup.AddEnemy(player, EBotEnemyCause.zryachiyLogic);
+        }
+
         public bool ShouldPlayerBeFriendlyWithZryachiyAndFollowers(IPlayer iplayer)
         {
             BotOwner botOwner = iplayer.GetBotOwner();
@@ -51,6 +102,17 @@ namespace SPTQuestingBots.Components
         public bool ShouldGroupBeFriendlyWithZryachiyAndFollowers(BotsGroup group)
         {
             return playersOnIsland.Any(p => p.GetBotOwner()?.BotsGroup == group) || botsWithQuestsOnIsland.Any(b => b.BotsGroup == group);
+        }
+
+        public bool IsPointOnLightkeeperIsland(Vector3 position)
+        {
+            if (LightkeeperTraderZoneColliderHandler != null)
+            {
+                return LightkeeperTraderZoneColliderHandler.trigger.bounds.Contains(position);
+            }
+
+            LoggingController.LogWarning("LightkeeperTraderZoneColliderHandler is null. Using alternative check for position being on the island.");
+            return position.z > 325 && position.x > 183;
         }
 
         public bool IsPlayerOnLightkeeperIsland(Player player)
@@ -117,8 +179,6 @@ namespace SPTQuestingBots.Components
 
         private void toggleHostility(Player player)
         {
-            SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass lighthouseProgressionClass = Singleton<GameWorld>.Instance.GetComponent<SPT.SinglePlayer.Models.Progression.LighthouseProgressionClass>();
-
             if (playersOnIsland.Contains(player))
             {
                 LoggingController.LogInfo(player.GetText() + " has left Lightkeeper Island");
@@ -134,8 +194,6 @@ namespace SPTQuestingBots.Components
 
                     revertAlliances(otherPlayer, player);
                 }
-
-                lighthouseProgressionClass.LightkeeperFriendlyPlayerLeftIsland(player);
             }
             else
             {
@@ -143,8 +201,6 @@ namespace SPTQuestingBots.Components
                 playersOnIsland.Add(player);
 
                 setTemporaryAlliances(player);
-
-                lighthouseProgressionClass.LightkeeperFriendlyPlayerEnteredIsland(player);
             }
         }
 

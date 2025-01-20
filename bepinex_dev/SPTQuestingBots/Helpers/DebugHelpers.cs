@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Components;
-using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 using UnityEngine;
 

@@ -9,7 +9,6 @@ using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.Interactive;
-using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace SPTQuestingBots.BehaviorExtensions
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
         protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
-        protected GClass134 baseAction { get; private set; } = null;
+        protected GClass156 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
         private Stopwatch updateTimer = Stopwatch.StartNew();
@@ -28,7 +27,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private float sprintDelayTime = 0;
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass327 baseSteeringLogic = new GClass327();
+        private GClass370 baseSteeringLogic = new GClass370();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
@@ -71,7 +70,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             actionElapsedTime.Restart();
         }
 
-        public void SetBaseAction(GClass134 _baseAction)
+        public void SetBaseAction(GClass156 _baseAction)
         {
             baseAction = _baseAction;
             baseAction.Awake();

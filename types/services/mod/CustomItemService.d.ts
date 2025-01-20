@@ -1,11 +1,11 @@
 import { ItemHelper } from "@spt/helpers/ItemHelper";
-import { ITemplateItem, Props } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IProps, ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { CreateItemResult, LocaleDetails, NewItemDetails, NewItemFromCloneDetails } from "@spt/models/spt/mod/NewItemDetails";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { ItemBaseClassService } from "@spt/services/ItemBaseClassService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { HashUtil } from "@spt/utils/HashUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class CustomItemService {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
@@ -47,7 +47,7 @@ export declare class CustomItemService {
      * @param overrideProperties new properties to apply
      * @param itemClone item to update
      */
-    protected updateBaseItemPropertiesWithOverrides(overrideProperties: Props, itemClone: ITemplateItem): void;
+    protected updateBaseItemPropertiesWithOverrides(overrideProperties: IProps, itemClone: ITemplateItem): void;
     /**
      * Addd a new item object to the in-memory representation of items.json
      * @param newItemId id of the item to add to items.json

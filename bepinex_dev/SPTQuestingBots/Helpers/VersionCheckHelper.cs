@@ -10,17 +10,18 @@ namespace SPTQuestingBots.Helpers
 {
     public class VersionCheckHelper
     {
+        private static string sptCommonAssemblyName = "spt-common";
+
         public static bool IsSPTWithinVersionRange(string minVersionString, string maxVersionString, out string currentVersionString)
         {
             currentVersionString = "???";
 
             try
             {
-                string assemblyName = "spt-common";
-                Assembly assembly = Assembly.Load(assemblyName);
+                Assembly assembly = Assembly.Load(sptCommonAssemblyName);
                 if (assembly == null)
                 {
-                    LoggingController.LogError("Could not find assembly " + assemblyName);
+                    LoggingController.LogError("Could not find assembly " + sptCommonAssemblyName);
                     return false;
                 }
 

@@ -1,6 +1,7 @@
+import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { RagfairServerHelper } from "@spt/helpers/RagfairServerHelper";
-import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { IRagfairOffer } from "@spt/models/eft/ragfair/IRagfairOffer";
 import { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
@@ -9,26 +10,31 @@ import { ConfigServer } from "@spt/servers/ConfigServer";
 import { SaveServer } from "@spt/servers/SaveServer";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { LocalisationService } from "@spt/services/LocalisationService";
+import { HashUtil } from "@spt/utils/HashUtil";
 import { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import { RagfairOfferHolder } from "@spt/utils/RagfairOfferHolder";
 import { TimeUtil } from "@spt/utils/TimeUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 export declare class RagfairOfferService {
     protected logger: ILogger;
     protected timeUtil: TimeUtil;
+    protected hashUtil: HashUtil;
     protected databaseService: DatabaseService;
     protected saveServer: SaveServer;
     protected ragfairServerHelper: RagfairServerHelper;
+    protected itemHelper: ItemHelper;
     protected profileHelper: ProfileHelper;
     protected eventOutputHolder: EventOutputHolder;
     protected httpResponse: HttpResponseUtil;
     protected localisationService: LocalisationService;
     protected configServer: ConfigServer;
+    protected cloner: ICloner;
     protected playerOffersLoaded: boolean;
     /** Offer id + offer object */
     protected expiredOffers: Record<string, IRagfairOffer>;
     protected ragfairConfig: IRagfairConfig;
     protected ragfairOfferHandler: RagfairOfferHolder;
-    constructor(logger: ILogger, timeUtil: TimeUtil, databaseService: DatabaseService, saveServer: SaveServer, ragfairServerHelper: RagfairServerHelper, profileHelper: ProfileHelper, eventOutputHolder: EventOutputHolder, httpResponse: HttpResponseUtil, localisationService: LocalisationService, configServer: ConfigServer);
+    constructor(logger: ILogger, timeUtil: TimeUtil, hashUtil: HashUtil, databaseService: DatabaseService, saveServer: SaveServer, ragfairServerHelper: RagfairServerHelper, itemHelper: ItemHelper, profileHelper: ProfileHelper, eventOutputHolder: EventOutputHolder, httpResponse: HttpResponseUtil, localisationService: LocalisationService, configServer: ConfigServer, cloner: ICloner);
     /**
      * Get all offers
      * @returns IRagfairOffer array
@@ -47,7 +53,7 @@ export declare class RagfairOfferService {
      * Get an array of arrays of expired offer items + children
      * @returns Expired offer assorts
      */
-    getExpiredOfferAssorts(): Item[][];
+    getExpiredOfferAssorts(): IItem[][];
     /**
      * Clear out internal expiredOffers dictionary of all items
      */
@@ -84,4 +90,12 @@ export declare class RagfairOfferService {
      */
     protected processStaleOffer(staleOffer: IRagfairOffer): void;
     protected returnPlayerOffer(playerOffer: IRagfairOffer): void;
+    /**
+     * Flea offer items are stacked up often beyond the StackMaxSize limit
+     * Un stack the items into an array of root items and their children
+     * Will create new items equal to the
+     * @param items Offer items to unstack
+     * @returns Unstacked array of items
+     */
+    protected unstackOfferItems(items: IItem[]): IItem[];
 }
