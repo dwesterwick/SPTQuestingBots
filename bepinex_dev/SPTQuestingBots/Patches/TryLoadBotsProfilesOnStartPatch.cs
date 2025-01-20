@@ -40,7 +40,10 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(List<WaveInfo> waves, EProfilesAskingStat stat)
         {
-            LoggingController.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
+            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            {
+                LoggingController.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
+            }
 
             if (!checkedPMCConversionChance && ConfigController.Config.BotSpawns.Enabled)
             {

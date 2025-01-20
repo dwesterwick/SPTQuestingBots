@@ -34,7 +34,7 @@ namespace SPTQuestingBots.Patches
         {
             foreach (BotOwner follower in followers)
             {
-                if (follower.Boss.IamBoss)
+                if (!follower.IsDead && follower.Boss.IamBoss)
                 {
                     ____boss = follower;
                 }

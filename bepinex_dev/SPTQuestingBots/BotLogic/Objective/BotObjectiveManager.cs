@@ -180,10 +180,6 @@ namespace SPTQuestingBots.BotLogic.Objective
             {
                 LoggingController.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }
-            else
-            {
-                LoggingController.LogInfo(botOwner.GetText() + " is a " + botType.ToString());
-            }
 
             IsInitialized = true;
         }

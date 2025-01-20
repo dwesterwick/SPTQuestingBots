@@ -183,7 +183,7 @@ namespace SPTQuestingBots.Components
                     }
 
                     noPowerTipsForDoors.Add(worldInteractiveObject, noPowerTip);
-                    LoggingController.LogInfo("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
+                    LoggingController.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
                     break;
                 }
             }

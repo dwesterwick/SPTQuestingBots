@@ -64,7 +64,7 @@ namespace SPTQuestingBots.Patches
 
             if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
-                LoggingController.LogInfo("Adjusting EFT bot counts for " + __instance.GetText() + "...");
+                LoggingController.LogDebug("Adjusting EFT bot counts for " + __instance.GetText() + "...");
                 reduceBotCounts(__instance);
             }
         }

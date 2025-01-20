@@ -239,13 +239,13 @@ namespace SPTQuestingBots.Helpers
                             }
                             if (matchingDoorCount > 1)
                             {
-                                LoggingController.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                LoggingController.LogInfo("Found too many doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
                             }
                             if (matchingDoorCount == 1)
                             {
                                 doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
                                 interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
-                                LoggingController.LogInfo("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                LoggingController.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
                             }
                         }
                     }
@@ -272,7 +272,7 @@ namespace SPTQuestingBots.Helpers
                     newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
                     quest.AddObjective(newObjective);
 
-                    LoggingController.LogInfo("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                    LoggingController.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
                 }
             }
         }

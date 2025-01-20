@@ -59,7 +59,7 @@ namespace SPTQuestingBots.Patches
 
             // If the aggressor doesn't have a DSP, there's nothing to do
             Player lastAgressorPlayer = Singleton<GameWorld>.Instance.GetAlivePlayerByProfileID(lastAgressor.ProfileId);
-            if (lastAgressorPlayer.HasAGreenOrYellowDSP())
+            if (!lastAgressorPlayer.HasAGreenOrYellowDSP())
             {
                 LoggingController.LogWarning("[DSP Not Changed] Aggressor does not have an encoded DSP.");
                 return;
