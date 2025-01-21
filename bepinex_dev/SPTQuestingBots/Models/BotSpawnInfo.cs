@@ -90,35 +90,63 @@ namespace SPTQuestingBots.Models
             bots.Add(bot);
         }
 
-        public void SeparateBotOwner(BotOwner bot)
+        public void SeparateBotOwner(BotOwner botToSeparate)
         {
             if (!HaveAllBotsSpawned)
             {
                 throw new InvalidOperationException("Cannot remove a BotOwner from a group that has not spawned yet");
             }
 
-            if (!bots.Contains(bot))
+            if (!bots.Contains(botToSeparate))
             {
-                LoggingController.LogError("Cannot separate " + bot.GetText() + " from group that does not contain it");
+                LoggingController.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain it");
                 return;
             }
 
-            if (!Data.Profiles.Any(p => p == bot.Profile))
+            if (!Data.Profiles.Any(p => p == botToSeparate.Profile))
             {
-                LoggingController.LogError("Cannot separate " + bot.GetText() + " from group that does not contain its profile");
+                LoggingController.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain its profile");
                 return;
             }
 
             // Create a new spawn group for the bot
-            BotCreationDataClass newData = BotCreationDataClass.CreateWithoutProfile(bot.SpawnProfileData);
-            newData.AddProfile(bot.Profile);
+            BotCreationDataClass newData = BotCreationDataClass.CreateWithoutProfile(botToSeparate.SpawnProfileData);
+            newData.AddProfile(botToSeparate.Profile);
             Models.BotSpawnInfo newGroup = new BotSpawnInfo(newData, BotGenerator);
             BotGenerator.AddNewBotGroup(newGroup);
-            newGroup.AddBotOwner(bot);
+            newGroup.AddBotOwner(botToSeparate);
 
             // Remove the bot from this spawn group
-            Data.RemoveProfile(bot.Profile);
-            bots.Remove(bot);
+            Data.RemoveProfile(botToSeparate.Profile);
+            bots.Remove(botToSeparate);
+
+            if (botToSeparate.Boss.IamBoss && (bots.Count > 1))
+            {
+                SetNewBoss(bots.RandomElement());
+            }
+
+            // TODO: Should we split the BotsGroup too?
+        }
+
+        public void SetNewBoss(BotOwner newBoss)
+        {
+            if (bots.Count <= 1)
+            {
+                return;
+            }
+
+            if (!bots.Contains(newBoss))
+            {
+                throw new InvalidOperationException("Cannot make " + newBoss.GetText() + " the boss of a group to which he doesn't belong");
+            }
+
+            foreach (BotOwner bot in bots)
+            {
+                bot.Boss.IamBoss = false;
+                bot.BotFollower.BossToFollow = null;
+            }
+
+            newBoss.Boss.SetBoss(bots.Count - 1);
         }
     }
 }
