@@ -33,6 +33,7 @@ import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 
 const modName = "SPTQuestingBots";
+const spawningModNames = ["SWAG", "DewardianDev-MOAR", "PreyToLive-BetterSpawnsPlus", "RealPlayerSpawn"];
 
 class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 {
@@ -342,7 +343,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             return false;
         }
         
-        const spawningModNames = ["SWAG", "DewardianDev-MOAR", "PreyToLive-BetterSpawnsPlus"];
         for (const spawningModName of spawningModNames)
         {
             if (importedModNames.includes(spawningModName))
