@@ -59,68 +59,71 @@ namespace SPTQuestingBots.Helpers
 
         public static int GetMinLevel(this Quest quest)
         {
-            if (minLevelForQuest.ContainsKey(quest.Template?.Id))
+            // Null Check
+            if (quest.Template == null)
             {
-                return minLevelForQuest[quest.Template.Id];
+                return 1; 
             }
 
-            // Be default, use the minimum level set for the quest template
-            int minLevel = quest.Template?.Level ?? 0;
-
-            EQuestStatus eQuestStatus = EQuestStatus.AvailableForStart;
-            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
+            if (minLevelForQuest.TryGetValue(quest.Template.Id, out int cachedLevel))
             {
-                foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
+                return cachedLevel; 
+            }
+
+            Queue<Quest> questQueue = new Queue<Quest>();
+            Dictionary<string, int> tempLevels = new Dictionary<string, int> {{quest.Template.Id, quest.Template?.Level ?? 0}};
+
+            questQueue.Enqueue(quest);
+
+            while (questQueue.Count > 0)
+            {
+                Quest currentQuest = questQueue.Dequeue();
+                int currentMinLevel = tempLevels[currentQuest.Template.Id];
+
+                if (currentQuest.Template.Conditions?.TryGetValue(EQuestStatus.AvailableForStart, out var conditions) == true)
                 {
-                    // Check if a condition-check exists for player level. If so, use that value if it's higher than the current minimum level. 
-                    ConditionLevel conditionLevel = condition as ConditionLevel;
-                    if (conditionLevel != null)
+                    foreach (Condition condition in conditions)
                     {
-                        // TO DO: This might be needed to set maximum player levels for quests in the future, but I don't think this exists in EFT right now. 
-                        if ((conditionLevel.compareMethod != ECompareMethod.MoreOrEqual) && (conditionLevel.compareMethod != ECompareMethod.More))
+                        switch (condition)
                         {
-                            continue;
+                            case ConditionLevel conditionLevel when conditionLevel.compareMethod == ECompareMethod.MoreOrEqual || 
+                                                                    conditionLevel.compareMethod == ECompareMethod.More:
+                                if (conditionLevel.value > currentMinLevel)
+                                {
+                                    tempLevels[currentQuest.Template.Id] = (int)conditionLevel.value;
+                                }
+                                break;
+
+                            case ConditionQuest conditionQuest:
+                                string preReqQuestID = conditionQuest.target;
+                                Quest preReqQuest = BotJobAssignmentFactory.FindQuest(preReqQuestID);
+                                if (preReqQuest != null)
+                                {
+                                    if (!tempLevels.TryGetValue(preReqQuestID, out int preReqLevel))
+                                    {
+                                        preReqLevel = preReqQuest.Template?.Level ?? 0;
+                                        tempLevels[preReqQuestID] = preReqLevel;
+                                        questQueue.Enqueue(preReqQuest);
+                                    }
+                                    if (preReqLevel > currentMinLevel)
+                                    {
+                                        tempLevels[currentQuest.Template.Id] = preReqLevel;
+                                    }
+                                }
+                                else
+                                {
+                                    LoggingController.LogWarning($"Cannot find prerequisite quest {preReqQuestID} for quest {currentQuest.Name}");
+                                }
+                                break;
                         }
-
-                        if (conditionLevel.value <= minLevel)
-                        {
-                            continue;
-                        }
-
-                        minLevel = (int)conditionLevel.value;
-                    }
-
-                    // Check if another quest must be completed first. If so, use its minimum player level if it's higher than the current minimum level. 
-                    ConditionQuest conditionQuest = condition as ConditionQuest;
-                    if (conditionQuest != null)
-                    {
-                        // Find the required quest
-                        string preReqQuestID = conditionQuest.target;
-                        Quest preReqQuest = BotJobAssignmentFactory.FindQuest(preReqQuestID);
-                        if (preReqQuest == null)
-                        {
-                            LoggingController.LogWarning("Cannot find prerequisite quest " + preReqQuestID + " for quest " + quest.Name);
-                            continue;
-                        }
-
-                        // Get the minimum player level to start that quest
-                        int minLevelForPreReqQuest = preReqQuest.GetMinLevel();
-                        if (minLevelForPreReqQuest <= minLevel)
-                        {
-                            continue;
-                        }
-
-                        minLevel = minLevelForPreReqQuest;
                     }
                 }
             }
 
-            if (quest.Template != null)
-            {
-                minLevelForQuest.Add(quest.Template.Id, minLevel);
-            }
+            int finalMinLevel = tempLevels[quest.Template.Id];
+            minLevelForQuest[quest.Template.Id] = finalMinLevel;
 
-            return minLevel;
+            return finalMinLevel;
         }
 
         public static IEnumerable<string> GetAllZoneIDs(this Quest quest)
