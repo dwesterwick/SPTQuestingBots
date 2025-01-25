@@ -21,18 +21,18 @@ export class PMCConversionUtil
         {
             logMessage += `${map} = [`;
 
-            for (const pmcType in this.iPmcConfig.convertIntoPmcChance[map])
+            for (const botType in this.iPmcConfig.convertIntoPmcChance[map])
             {
-                if ((this.convertIntoPmcChanceOrig[map] !== undefined) && (this.convertIntoPmcChanceOrig[map][pmcType] !== undefined))
+                if ((this.convertIntoPmcChanceOrig[map] !== undefined) && (this.convertIntoPmcChanceOrig[map][botType] !== undefined))
                 {
-                    logMessage += `${pmcType}: already buffered, `;
+                    logMessage += `${botType}: already buffered, `;
                     continue;
                 }
 
-                this.setOriginalPMCConversionChances(map, pmcType);
+                this.setOriginalPMCConversionChances(map, botType);
 
-                const chances = this.convertIntoPmcChanceOrig[map][pmcType];
-                logMessage += `${pmcType}: ${chances.min}-${chances.max}%, `;
+                const chances = this.convertIntoPmcChanceOrig[map][botType];
+                logMessage += `${botType}: ${chances.min}-${chances.max}%, `;
             }
 
             logMessage += "], ";
@@ -41,11 +41,11 @@ export class PMCConversionUtil
         this.commonUtils.logInfo(`Reading default PMC spawn chances: ${logMessage}`);
     }
 
-    private setOriginalPMCConversionChances(map: string, pmcType: string): void
+    private setOriginalPMCConversionChances(map: string, botType: string): void
     {
         const chances: MinMax = {
-            min: this.iPmcConfig.convertIntoPmcChance[map][pmcType].min,
-            max: this.iPmcConfig.convertIntoPmcChance[map][pmcType].max
+            min: this.iPmcConfig.convertIntoPmcChance[map][botType].min,
+            max: this.iPmcConfig.convertIntoPmcChance[map][botType].max
         }
 
         if (this.convertIntoPmcChanceOrig[map] === undefined)
@@ -53,11 +53,16 @@ export class PMCConversionUtil
             this.convertIntoPmcChanceOrig[map] = {};
         }
 
-        this.convertIntoPmcChanceOrig[map][pmcType] = chances;
+        this.convertIntoPmcChanceOrig[map][botType] = chances;
     }
 
     public adjustAllPmcConversionChances(scalingFactor: number, verify: boolean): void
     {
+        if (!verify && Object.keys(this.convertIntoPmcChanceOrig).length === 0)
+        {
+            this.setAllOriginalPMCConversionChances();
+        }
+
         // Adjust the chances for each applicable bot type
         let logMessage = "";
         let verified = true;
@@ -65,12 +70,12 @@ export class PMCConversionUtil
         {
             logMessage += `${map} = [`;
 
-            for (const pmcType in this.iPmcConfig.convertIntoPmcChance[map])
+            for (const botType in this.iPmcConfig.convertIntoPmcChance[map])
             {
-                verified = verified && this.adjustAndVerifyPmcConversionChances(map, pmcType, scalingFactor, verify);
+                verified = verified && this.adjustAndVerifyPmcConversionChances(map, botType, scalingFactor, verify);
 
-                const chances = this.iPmcConfig.convertIntoPmcChance[map][pmcType];
-                logMessage += `${pmcType}: ${chances.min}-${chances.max}%, `;
+                const chances = this.iPmcConfig.convertIntoPmcChance[map][botType];
+                logMessage += `${botType}: ${chances.min}-${chances.max}%, `;
             }
 
             logMessage += "], ";
@@ -92,27 +97,38 @@ export class PMCConversionUtil
         }
     }
 
-    public adjustAndVerifyPmcConversionChances(map: string, pmcType: string, scalingFactor: number, verify: boolean): boolean
+    public adjustAndVerifyPmcConversionChances(map: string, botType: string, scalingFactor: number, verify: boolean): boolean
     {
+        if (verify)
+        {
+            if ((this.convertIntoPmcChanceOrig[map] === undefined) || (this.convertIntoPmcChanceOrig[map][botType] === undefined))
+            {
+                this.commonUtils.logWarning(`The original PMC conversion chances for ${map} and ${botType} were never cached`);
+                return false;
+            }
+        }
+
         // Do not allow the chances to exceed 100%. Who knows what might happen...
-        const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][pmcType].min * scalingFactor));
-        const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][pmcType].max * scalingFactor));
+        const min = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][botType].min * scalingFactor));
+        const max = Math.round(Math.min(100, this.convertIntoPmcChanceOrig[map][botType].max * scalingFactor));
         
         if (verify)
         {
-            if (this.iPmcConfig.convertIntoPmcChance[map][pmcType].min !== min)
+            if (this.iPmcConfig.convertIntoPmcChance[map][botType].min !== min)
             {
+                this.commonUtils.logWarning(`The minimum PMC conversion chance for ${map} and ${botType} was changed after Questing Bots's adjustment of it`);
                 return false;
             }
 
-            if (this.iPmcConfig.convertIntoPmcChance[map][pmcType].max !== max)
+            if (this.iPmcConfig.convertIntoPmcChance[map][botType].max !== max)
             {
+                this.commonUtils.logWarning(`The maximum PMC conversion chance for ${map} and ${botType} was changed after Questing Bots's adjustment of it`);
                 return false;
             }
         }
         
-        this.iPmcConfig.convertIntoPmcChance[map][pmcType].min = min;
-        this.iPmcConfig.convertIntoPmcChance[map][pmcType].max = max;
+        this.iPmcConfig.convertIntoPmcChance[map][botType].min = min;
+        this.iPmcConfig.convertIntoPmcChance[map][botType].max = max;
 
         return true;
     }

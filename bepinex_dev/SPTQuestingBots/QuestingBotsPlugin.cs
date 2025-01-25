@@ -95,9 +95,6 @@ namespace SPTQuestingBots
                         new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
                     }
 
-                    Logger.LogInfo("Bot spawning is enabled. Adjusting PMC conversion chances...");
-                    ConfigController.AdjustPMCConversionChances(0, false);
-
                     if (ConfigController.Config.BotSpawns.PMCs.Enabled)
                     {
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();
