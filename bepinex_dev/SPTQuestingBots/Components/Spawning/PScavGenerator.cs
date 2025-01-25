@@ -100,6 +100,7 @@ namespace SPTQuestingBots.Components.Spawning
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
             int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+            botsInGroup = (int)Math.Max(botsInGroup, 1);
 
             // Determine the difficulty for the new bot group
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();

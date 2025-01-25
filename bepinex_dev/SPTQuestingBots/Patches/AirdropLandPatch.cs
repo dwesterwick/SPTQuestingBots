@@ -24,6 +24,12 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         protected static void PatchPostfix(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
         {
+            // Do not run this on Fika client machines
+            if (!Helpers.RaidHelpers.IsHostRaid())
+            {
+                return;
+            }
+
             AddNavMeshObstacle(___airdropSynchronizableObject_0);
 
             Vector3 airdropPosition = ___airdropSynchronizableObject_0.transform.position;

@@ -74,6 +74,7 @@ namespace SPTQuestingBots.Components.Spawning
             int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
             botsInGroup = (int)Math.Ceiling(botsInGroup * Math.Min(1, groupSizeFactor));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
+            botsInGroup = (int)Math.Max(botsInGroup, 1);
 
             // Determine the difficulty for the new bot group
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
