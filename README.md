@@ -12,7 +12,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.2.0 or later recommended)
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.4.0 or later recommended)
 
-**Partial compatible with:**
+**Partially compatible with:**
 * [Realism](https://hub.sp-tarkov.com/files/file/606-spt-realism-mod/) (You must disable Realism's bot-spawning changes when using the Questing Bots spawning system)
 * [Please Just Fight](https://hub.sp-tarkov.com/files/file/2652-please-just-fight/) (This mod should only be used if you're not using the Questing Bots spawning system)
 
