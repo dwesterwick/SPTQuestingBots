@@ -32,7 +32,7 @@ namespace SPTQuestingBots.Patches
 
             if (!_displayedPerformanceImprovementsError && !Helpers.VersionCheckHelper.IsPerformanceImprovementsVersionCompatible() && ConfigController.Config.Enabled)
             {
-                string message = "Performance Improvements versions 0.2.1 - 0.2.3 are not compatible with Questing Bots. Please downgrade Performance Improvements to 0.2.0 or remove it to use Questing Bots.";
+                string message = "Performance Improvements versions 0.2.1 - 0.2.3 are not compatible with Questing Bots. Please upgrade Performance Improvements to 0.2.4 or newer to use with Questing Bots.";
                 LoggingController.LogErrorToServerConsole(message);
 
                 message = "Incompatible version of Performance Improvements detected";
@@ -46,7 +46,7 @@ namespace SPTQuestingBots.Patches
                 string message = "Please remove \"Please Just Fight\" while using the Questing Bots spawning system";
                 LoggingController.LogErrorToServerConsole(message);
 
-                message = "\"Please Just Fight\" not compatible with QB spawning system";
+                message = "\"Please Just Fight\" is not compatible with the QB spawning system";
                 NotificationManagerClass.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
 
                 _displayedPleaseJustFightWarning = true;

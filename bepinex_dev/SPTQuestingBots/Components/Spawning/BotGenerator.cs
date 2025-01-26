@@ -54,6 +54,7 @@ namespace SPTQuestingBots.Components.Spawning
         {
             BotTypeName = _botTypeName;
 
+            // TODO: This shouldn't be in the constructor; it should be in Awake()
             MaxGeneratedBots = GetMaxGeneratedBots();
             botGeneratorList.Add(generateAllBotsTask(async () => await GenerateBotGroupTask()));
         }
