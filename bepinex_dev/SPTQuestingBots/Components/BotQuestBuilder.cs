@@ -110,15 +110,21 @@ namespace SPTQuestingBots.Components
 
                 // Check which quests are currently active for the player
                 ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
-                QuestDataClass[] activeQuests = session.Profile.QuestsData
+                QuestDataClass[] activeQuestsForPlayer = session.Profile.QuestsData
                     .Where(q => q.Status == EFT.Quests.EQuestStatus.Started || q.Status == EFT.Quests.EQuestStatus.AvailableForFinish || q.Status == EFT.Quests.EQuestStatus.Success)
                     .ToArray();
 
                 //string activeQuestNames = string.Join(", ", activeQuests.Select(q => q.Template.Name + " (" + q.Template.Id + ")"));
                 //LoggingController.LogInfo("There are " + activeQuests.Length + " active quests for the current player: " + activeQuestNames);
 
+                IEnumerable<QuestDataClass> activeQuestsForPlayerWithNullTemplates = activeQuestsForPlayer.Where(q => q.Template == null);
+                if (activeQuestsForPlayerWithNullTemplates.Any())
+                {
+                    LoggingController.LogWarning("The following quest ID's have null templates: " + string.Join(", ", activeQuestsForPlayerWithNullTemplates.Select(q => q.Id)));
+                }
+
                 // Process each of the quests created by an EFT quest template
-                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest, activeQuests);
+                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest, activeQuestsForPlayer);
 
                 LoggingController.LogInfo("Searching for EFT quest locations...");
 
@@ -276,19 +282,23 @@ namespace SPTQuestingBots.Components
             }
 
             // Calculate the minimum and maximum player levels allowed for selecting the quest
-            quest.MinLevel = quest.GetMinLevel();
+            try
+            {
+                quest.MinLevel = quest.GetMinLevel();
+            }
+            catch (StackOverflowException)
+            {
+                LoggingController.LogErrorToServerConsole("Found a quest, \"" + quest.Name + "\", added by a custom trader mod that has a circular reference in its prerequisites. Please contact the author of that trader mod for support.");
+
+                quest.MinLevel = 1;
+            }
+
             double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.Questing.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
             quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
 
             if (quest.Template == null)
             {
                 LoggingController.LogWarning("Quest " + quest.Name + " has a null template");
-            }
-
-            IEnumerable< QuestDataClass> activeQuestsForPlayerWithNullTemplates = activeQuestsForPlayer.Where(q => q.Template == null);
-            if (activeQuestsForPlayerWithNullTemplates.Any())
-            {
-                LoggingController.LogWarning("The following quest ID's have null templates: " + string.Join(", ", activeQuestsForPlayerWithNullTemplates.Select(q => q.Id)));
             }
 
             quest.IsActiveForPlayer = activeQuestsForPlayer.Any(q => q.Template?.Id == quest.Template?.Id);
