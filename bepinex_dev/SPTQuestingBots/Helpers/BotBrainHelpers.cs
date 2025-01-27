@@ -60,6 +60,15 @@ namespace SPTQuestingBots.Helpers
             return list.Concat(new[] { new BotBrainType("PMC", WildSpawnType.pmcBot) });
         }
 
+        public static IEnumerable<BotBrainType> AddPMCBrains(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[]
+            {
+                new BotBrainType("PmcBear", WildSpawnType.pmcBEAR),
+                new BotBrainType("PmcUsec", WildSpawnType.pmcUSEC)
+            });
+        }
+
         public static IEnumerable<BotBrainType> AddKnightBrain(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[] { new BotBrainType("Knight", WildSpawnType.bossKnight) });
@@ -188,6 +197,7 @@ namespace SPTQuestingBots.Helpers
         public static IEnumerable<BotBrainType> GetAllNonSniperBrains()
         {
             return Enumerable.Empty<BotBrainType>()
+                .AddPMCBrains()
                 .AddNormalScavBrains()
                 .AddCrazyScavBrain()
                 .AddAllNormalBossAndFollowerBrains()
@@ -220,9 +230,9 @@ namespace SPTQuestingBots.Helpers
         {
             //LoggingController.LogInfo("Spawn type for bot " + botOwner.GetText() + ": " + botOwner.Profile.Info.Settings.Role.ToString());
 
-            return PMCSpawnTypes
-                .Select(t => t.ToString())
-                .Contains(botOwner.Profile.Info.Settings.Role.ToString());
+            return Enumerable.Empty<BotBrainType>()
+                .AddPMCBrains()
+                .Any(b => b.SpawnType == botOwner.Profile.Info.Settings.Role);
         }
 
         public static bool WillBeABoss(this BotOwner botOwner)
@@ -241,14 +251,12 @@ namespace SPTQuestingBots.Helpers
             {
                 return EPlayerSide.Usec;
             }
-            else if (spawnType == WildSpawnType.pmcBEAR)
+            if (spawnType == WildSpawnType.pmcBEAR)
             {
                 return EPlayerSide.Bear;
             }
-            else
-            {
-                return EPlayerSide.Savage;
-            }
+
+            return EPlayerSide.Savage;
         }
 
         public static bool ShouldPlayerBeTreatedAsHuman(this IPlayer player)
