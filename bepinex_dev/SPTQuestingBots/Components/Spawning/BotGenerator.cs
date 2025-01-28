@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using EFT.Game.Spawning;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -39,6 +40,8 @@ namespace SPTQuestingBots.Components.Spawning
         public static int CurrentBotGeneratorProgress { get; private set; } = 0;
         public static string CurrentBotGeneratorType { get; private set; } = "???";
 
+        protected List<SpawnPointParams> PendingSpawnPoints = new List<SpawnPointParams>();
+
         private static Task botGenerationTask = null;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
         private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
@@ -53,10 +56,6 @@ namespace SPTQuestingBots.Components.Spawning
         public BotGenerator(string _botTypeName)
         {
             BotTypeName = _botTypeName;
-
-            // TODO: This shouldn't be in the constructor; it should be in Awake()
-            MaxGeneratedBots = GetMaxGeneratedBots();
-            botGeneratorList.Add(generateAllBotsTask(async () => await GenerateBotGroupTask()));
         }
 
         protected abstract int GetMaxGeneratedBots();
@@ -64,14 +63,40 @@ namespace SPTQuestingBots.Components.Spawning
         protected abstract bool CanSpawnBots();
         protected abstract Task<Models.BotSpawnInfo> GenerateBotGroupTask();
         protected abstract IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup);
-        
-        protected virtual void Awake()
+
+        /// <summary>
+        /// Called whenever Unity's Awake() method runs
+        /// </summary>
+        protected abstract void Init();
+        private void Awake()
         {
-            
+            awake_Internal();
+            Init();
         }
 
-        protected virtual void Update()
+        private void awake_Internal()
         {
+            MaxGeneratedBots = GetMaxGeneratedBots();
+            botGeneratorList.Add(generateAllBotsTask(async () => await GenerateBotGroupTask()));
+        }
+
+        /// <summary>
+        /// Called whenever Unity's Update() method runs
+        /// </summary>
+        protected abstract void Refresh();
+        private void Update()
+        {
+            Refresh();
+            update_Internal();
+        }
+
+        private void update_Internal()
+        {
+            if (!IsSpawningBots)
+            {
+                PendingSpawnPoints.Clear();
+            }
+
             // Reduce the performance impact
             if (updateTimer.ElapsedMilliseconds < 50)
             {

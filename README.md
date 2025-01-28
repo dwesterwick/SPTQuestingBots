@@ -13,12 +13,12 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.4.0 or later recommended)
 
 **Partially compatible with:**
+* [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/), [Entry Point Selector](https://hub.sp-tarkov.com/files/file/2291-entry-point-selector-2-0/), and similar mods that significantly reduce spawn points (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
 * [Realism](https://hub.sp-tarkov.com/files/file/606-spt-realism-mod/) (You must disable Realism's bot-spawning changes when using the Questing Bots spawning system)
 * [Please Just Fight](https://hub.sp-tarkov.com/files/file/2652-please-just-fight/) (This mod should only be used if you're not using the Questing Bots spawning system)
 
 **NOT compatible with:**
 * [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
-* [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/), [Entry Point Selector](https://hub.sp-tarkov.com/files/file/2291-entry-point-selector-2-0/), and similar mods that significantly reduce spawn points (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
 
 **Compatible with:**
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)

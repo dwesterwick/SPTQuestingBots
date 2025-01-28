@@ -16,10 +16,9 @@ namespace SPTQuestingBots.Components.Spawning
     {
         private static System.Random random = new System.Random();
 
-        // Temporarily stores spawn points for bots while trying to spawn several of them
-        private List<SpawnPointParams> pendingSpawnPoints = new List<SpawnPointParams>();
+        public PMCGenerator() : base("PMC") { }
 
-        public PMCGenerator() : base("PMC")
+        protected override void Init()
         {
             if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
             {
@@ -32,15 +31,7 @@ namespace SPTQuestingBots.Components.Spawning
             setMaxAliveBots();
         }
 
-        protected override void Update()
-        {
-            base.Update();
-
-            if (!IsSpawningBots)
-            {
-                pendingSpawnPoints.Clear();
-            }
-        }
+        protected override void Refresh() { }
 
         protected override bool CanSpawnBots() => true;
         protected override int GetNumberOfBotsAllowedToSpawn() => BotsAllowedToSpawnForGeneratorType();
@@ -106,11 +97,11 @@ namespace SPTQuestingBots.Components.Spawning
             Vector3[] positionsToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
                 .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId))
                 .Select(p => p.Position)
-                .Concat(pendingSpawnPoints.Select(p => p.Position.ToUnityVector3()))
+                .Concat(PendingSpawnPoints.Select(p => p.Position.ToUnityVector3()))
                 .ToArray();
 
             // Find a spawn location for the bot group that is as far from other players and bots as possible
-            SpawnPointParams[] excludedSpawnpoints = pendingSpawnPoints
+            SpawnPointParams[] excludedSpawnpoints = PendingSpawnPoints
                 .SelectMany(s => locationData.GetNearbySpawnPoints(s.Position, minDistanceFromOtherPlayers)).ToArray();
             SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPositions(positionsToAvoid, ESpawnCategoryMask.Player, playerMask, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
@@ -140,7 +131,7 @@ namespace SPTQuestingBots.Components.Spawning
             // other when multiple initial PMC groups are spawned at the same time. 
             if (spawnPoint.HasValue)
             {
-                pendingSpawnPoints.Add(spawnPoint.Value);
+                PendingSpawnPoints.Add(spawnPoint.Value);
             }
 
             return spawnPositions;

@@ -12,15 +12,15 @@ using UnityEngine;
 
 namespace SPTQuestingBots_CustomBotGenExample
 {
-    [BepInDependency("com.DanW.QuestingBots", "0.8.1")]
-    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.1.0")]
+    [BepInDependency("com.DanW.QuestingBots", "0.9.0")]
+    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.2.0")]
     public class QuestingBotsCustomBotGenExamplePlugin : BaseUnityPlugin
     {
         public static ConfigEntry<bool> Enabled;
         public static ConfigEntry<KeyboardShortcut> SpawnBotKey;
         public static ConfigEntry<int> MaxAliveBots;
 
-        private void Awake()
+        protected void Awake()
         {
             Logger.LogInfo("Loading QuestingBotsCustomBotGenExample...");
 

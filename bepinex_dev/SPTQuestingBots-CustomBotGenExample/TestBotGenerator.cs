@@ -17,7 +17,9 @@ namespace SPTQuestingBots_CustomBotGenExample
         private SPTQuestingBots.Components.LocationData locationData;
         private bool botSpawnKeyPressed = false;
 
-        public TestBotGenerator() : base("TestBot")
+        public TestBotGenerator() : base("TestBot") { }
+
+        protected override void Init()
         {
             // This will be used whenever a bot spawns, so let's store a reference to it here instead of searching each time
             locationData = Singleton<GameWorld>.Instance.GetComponent<SPTQuestingBots.Components.LocationData>();
@@ -33,15 +35,12 @@ namespace SPTQuestingBots_CustomBotGenExample
 
         private void setMaxAliveBots(object sender, EventArgs e) => MaxAliveBots = QuestingBotsCustomBotGenExamplePlugin.MaxAliveBots.Value;
 
-        protected override void Update()
+        protected override void Refresh()
         {
             if (!QuestingBotsCustomBotGenExamplePlugin.Enabled.Value)
             {
                 return;
             }
-
-            // If you (optionally) override Update, you MUST call the base method for the generator to work!
-            base.Update();
 
             if (QuestingBotsCustomBotGenExamplePlugin.SpawnBotKey.Value.IsDown())
             {
