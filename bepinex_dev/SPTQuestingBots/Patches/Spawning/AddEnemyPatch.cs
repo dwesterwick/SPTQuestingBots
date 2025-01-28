@@ -10,7 +10,7 @@ using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class AddEnemyPatch : ModulePatch
     {

@@ -876,7 +876,7 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            StoredQuestLocation location = new StoredQuestLocation(QuestingBotsPluginConfig.QuestLocationName.Value, mainPlayer.Position);
+            Models.Questing.StoredQuestLocation location = new Models.Questing.StoredQuestLocation(QuestingBotsPluginConfig.QuestLocationName.Value, mainPlayer.Position);
 
             string filename = ConfigController.GetLoggingPath()
                 + CurrentLocation.Id.Replace(" ", "")

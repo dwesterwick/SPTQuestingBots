@@ -45,7 +45,7 @@ namespace SPTQuestingBots.Configuration
 
         }
 
-        public static void ApplyQuestSettingsFromConfig(Models.Quest quest, QuestSettingsConfig settings)
+        public static void ApplyQuestSettingsFromConfig(Models.Questing.Quest quest, QuestSettingsConfig settings)
         {
             quest.Desirability = settings.Desirability;
             quest.MaxBots = settings.MaxBotsPerQuest;
@@ -54,7 +54,7 @@ namespace SPTQuestingBots.Configuration
             quest.MaxLevel = settings.MaxLevel;
         }
 
-        public static void ApplyQuestSettingsFromConfig(Models.QuestObjective objective, QuestSettingsConfig settings)
+        public static void ApplyQuestSettingsFromConfig(Models.Questing.QuestObjective objective, QuestSettingsConfig settings)
         {
             objective.MinDistanceFromBot = settings.MinDistance;
             objective.MaxDistanceFromBot = settings.MaxDistance;

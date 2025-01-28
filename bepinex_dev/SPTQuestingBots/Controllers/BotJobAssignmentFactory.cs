@@ -10,7 +10,7 @@ using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Components;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Questing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Controllers

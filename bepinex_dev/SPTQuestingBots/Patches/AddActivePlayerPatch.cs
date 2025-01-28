@@ -31,8 +31,8 @@ namespace SPTQuestingBots.Patches
 
             if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {
-                GameStartPatch.ClearMissedWaves();
-                GameStartPatch.IsDelayingGameStart = true;
+                Spawning.GameStartPatch.ClearMissedWaves();
+                Spawning.GameStartPatch.IsDelayingGameStart = true;
             }
         }
     }

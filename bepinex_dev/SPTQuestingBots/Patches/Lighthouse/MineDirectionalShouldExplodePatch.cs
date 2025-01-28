@@ -9,7 +9,7 @@ using EFT;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Lighthouse
 {
     public class MineDirectionalShouldExplodePatch : ModulePatch
     {

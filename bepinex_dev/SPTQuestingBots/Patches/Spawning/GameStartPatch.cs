@@ -13,7 +13,7 @@ using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class GameStartPatch : ModulePatch
     {

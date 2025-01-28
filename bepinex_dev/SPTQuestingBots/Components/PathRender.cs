@@ -12,7 +12,7 @@ namespace SPTQuestingBots.Components
 {
     public class PathRender : MonoBehaviour
     {
-        private Dictionary<string, Models.PathVisualizationData> paths = new Dictionary<string, Models.PathVisualizationData>();
+        private Dictionary<string, Models.Pathing.PathVisualizationData> paths = new Dictionary<string, Models.Pathing.PathVisualizationData>();
         private object pathDictLock = new object();
 
         protected void LateUpdate()
@@ -46,7 +46,7 @@ namespace SPTQuestingBots.Components
             }
         }
 
-        public bool AddOrUpdatePath(Models.PathVisualizationData data, bool autoIncrementPathName = true)
+        public bool AddOrUpdatePath(Models.Pathing.PathVisualizationData data, bool autoIncrementPathName = true)
         {
             if (data == null)
             {
@@ -95,7 +95,7 @@ namespace SPTQuestingBots.Components
             return false;
         }
 
-        public bool RemovePath(Models.PathVisualizationData data)
+        public bool RemovePath(Models.Pathing.PathVisualizationData data)
         {
             if (data == null)
             {

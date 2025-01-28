@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class TimeHasComeScreenClassChangeStatusPatch : ModulePatch
     {

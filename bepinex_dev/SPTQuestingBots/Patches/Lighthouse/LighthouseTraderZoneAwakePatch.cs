@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EFT.Interactive;
 using SPT.Reflection.Patching;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Lighthouse
 {
     public class LighthouseTraderZoneAwakePatch : ModulePatch
     {

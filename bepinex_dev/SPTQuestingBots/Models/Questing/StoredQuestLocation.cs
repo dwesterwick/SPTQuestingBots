@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Questing
 {
     public class StoredQuestLocation
     {

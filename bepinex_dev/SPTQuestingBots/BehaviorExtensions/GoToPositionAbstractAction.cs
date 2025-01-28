@@ -69,11 +69,11 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return ObjectiveManager.BotPath.Status;
             }
 
-            BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist, force);
+            Models.Pathing.BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist, force);
 
             if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
-                if (updateReason != BotPathUpdateNeededReason.None)
+                if (updateReason != Models.Pathing.BotPathUpdateNeededReason.None)
                 {
                     /*if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
                     {
@@ -167,7 +167,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
 
-            Models.PathVisualizationData botPathRendering = new Models.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
+            Models.Pathing.PathVisualizationData botPathRendering = new Models.Pathing.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
             Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(botPathRendering);
         }
 

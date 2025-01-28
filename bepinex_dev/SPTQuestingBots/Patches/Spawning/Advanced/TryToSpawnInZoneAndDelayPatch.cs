@@ -9,7 +9,7 @@ using EFT;
 using EFT.Game.Spawning;
 using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning.Advanced
 {
     public class TryToSpawnInZoneAndDelayPatch : ModulePatch
     {

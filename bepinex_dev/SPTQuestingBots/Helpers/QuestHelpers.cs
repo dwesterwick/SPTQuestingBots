@@ -9,7 +9,7 @@ using EFT;
 using EFT.Quests;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Questing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Helpers
@@ -17,17 +17,17 @@ namespace SPTQuestingBots.Helpers
     public static class QuestHelpers
     {
         private static Dictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null;
-        private static Dictionary<string, int> minLevelForQuest = new Dictionary<string, int>();
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
         private static Dictionary<Condition, float?> beaconTimeForCondition = new Dictionary<Condition, float?>();
         
         public static void ClearCache()
         {
-            minLevelForQuest.Clear();
             allZoneIDsForCondition.Clear();
             plantTimeForCondition.Clear();
             beaconTimeForCondition.Clear();
+
+            QuestMinLevelFinder.ClearCache();
         }
 
         public static bool ValidateQuestFiles(string locationId)
@@ -55,72 +55,6 @@ namespace SPTQuestingBots.Helpers
             LoggingController.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
 
             return zoneAndItemQuestPositions;
-        }
-
-        public static int GetMinLevel(this Quest quest)
-        {
-            if (minLevelForQuest.ContainsKey(quest.Template?.Id))
-            {
-                return minLevelForQuest[quest.Template.Id];
-            }
-
-            // Be default, use the minimum level set for the quest template
-            int minLevel = quest.Template?.Level ?? 0;
-
-            EQuestStatus eQuestStatus = EQuestStatus.AvailableForStart;
-            if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)
-            {
-                foreach (Condition condition in quest.Template.Conditions[eQuestStatus])
-                {
-                    // Check if a condition-check exists for player level. If so, use that value if it's higher than the current minimum level. 
-                    ConditionLevel conditionLevel = condition as ConditionLevel;
-                    if (conditionLevel != null)
-                    {
-                        // TO DO: This might be needed to set maximum player levels for quests in the future, but I don't think this exists in EFT right now. 
-                        if ((conditionLevel.compareMethod != ECompareMethod.MoreOrEqual) && (conditionLevel.compareMethod != ECompareMethod.More))
-                        {
-                            continue;
-                        }
-
-                        if (conditionLevel.value <= minLevel)
-                        {
-                            continue;
-                        }
-
-                        minLevel = (int)conditionLevel.value;
-                    }
-
-                    // Check if another quest must be completed first. If so, use its minimum player level if it's higher than the current minimum level. 
-                    ConditionQuest conditionQuest = condition as ConditionQuest;
-                    if (conditionQuest != null)
-                    {
-                        // Find the required quest
-                        string preReqQuestID = conditionQuest.target;
-                        Quest preReqQuest = BotJobAssignmentFactory.FindQuest(preReqQuestID);
-                        if (preReqQuest == null)
-                        {
-                            LoggingController.LogWarning("Cannot find prerequisite quest " + preReqQuestID + " for quest " + quest.Name);
-                            continue;
-                        }
-
-                        // Get the minimum player level to start that quest
-                        int minLevelForPreReqQuest = preReqQuest.GetMinLevel();
-                        if (minLevelForPreReqQuest <= minLevel)
-                        {
-                            continue;
-                        }
-
-                        minLevel = minLevelForPreReqQuest;
-                    }
-                }
-            }
-
-            if (quest.Template != null)
-            {
-                minLevelForQuest.Add(quest.Template.Id, minLevel);
-            }
-
-            return minLevel;
         }
 
         public static IEnumerable<string> GetAllZoneIDs(this Quest quest)
@@ -217,7 +151,7 @@ namespace SPTQuestingBots.Helpers
 
                     Vector3 itemPosition = itemCollider.bounds.center;
                     string doorIDToUnlock = "";
-                    SerializableVector3 interactionPositionForDoorToUnlock = null;
+                    Models.SerializableVector3 interactionPositionForDoorToUnlock = null;
                     if (zoneAndItemQuestPositions.ContainsKey(target))
                     {
                         // Check if a specific position should be used for bots to get the item
@@ -259,7 +193,7 @@ namespace SPTQuestingBots.Helpers
                         if (ConfigController.Config.Debug.ShowZoneOutlines)
                         {
                             Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
-                            PathVisualizationData itemPositionSphere = new PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
+                            Models.Pathing.PathVisualizationData itemPositionSphere = new Models.Pathing.PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
                             Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(itemPositionSphere);
                         }
 

@@ -11,7 +11,7 @@ using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Lighthouse
 {
     public class LighthouseTraderZonePlayerAttackPatch : ModulePatch
     {

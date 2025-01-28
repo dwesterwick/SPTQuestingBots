@@ -12,7 +12,7 @@ using EFT.Game.Spawning;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Patches;
+using SPTQuestingBots.Patches.Spawning;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components.Spawning

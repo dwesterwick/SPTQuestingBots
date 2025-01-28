@@ -8,7 +8,7 @@ using EFT;
 using SPTQuestingBots.Controllers;
 using SPT.Reflection.Patching;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class SetNewBossPatch : ModulePatch
     {
@@ -20,12 +20,6 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
         {
-            /*if (followers.Count > 0)
-            {
-                LoggingController.LogInfo("Checking for a new follower from [" + string.Join(", ", followers.Select(f => f.GetText())) + "] to replace " + boss.GetText());
-                LoggingController.LogInfo("Old boss: " + ____boss.GetText());
-            }*/
-
             foreach (BotOwner follower in followers)
             {
                 follower.BotFollower.BossToFollow = null;
@@ -39,18 +33,16 @@ namespace SPTQuestingBots.Patches
 
             foreach (BotOwner follower in followers)
             {
-                //LoggingController.LogInfo(follower.GetText() + ": IsBoss=" + follower.Boss.IamBoss);
-
                 if (follower.Boss.IamBoss && (follower.Profile.Id != boss.Profile.Id))
                 {
                     ____boss = follower;
                 }
             }
 
-            /*if (followers.Count > 0)
+            if ((____boss == null) && (followers.Count > 1))
             {
-                LoggingController.LogInfo("New boss: " + ____boss.GetText());
-            }*/
+                LoggingController.LogWarning("Could not find a new boss to replace " + boss.GetText());
+            }
         }
     }
 }

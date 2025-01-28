@@ -42,7 +42,7 @@ namespace SPTQuestingBots.Components
             if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRender pathRender))
             {
                 Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(LightkeeperTraderZoneColliderHandler.trigger.bounds);
-                Models.PathVisualizationData zoneBoundingBox = new Models.PathVisualizationData("LighthouseTraderZone", colliderBounds, Color.green);
+                Models.Pathing.PathVisualizationData zoneBoundingBox = new Models.Pathing.PathVisualizationData("LighthouseTraderZone", colliderBounds, Color.green);
 
                 pathRender.AddOrUpdatePath(zoneBoundingBox);
             }

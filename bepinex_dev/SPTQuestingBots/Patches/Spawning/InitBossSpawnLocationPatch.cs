@@ -8,7 +8,7 @@ using SPT.Reflection.Patching;
 using EFT;
 using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class InitBossSpawnLocationPatch : ModulePatch
     {

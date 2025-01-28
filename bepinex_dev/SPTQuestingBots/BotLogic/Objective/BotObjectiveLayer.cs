@@ -9,7 +9,7 @@ using EFT;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Questing;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {

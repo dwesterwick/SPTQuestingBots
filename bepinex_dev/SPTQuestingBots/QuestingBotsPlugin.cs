@@ -62,11 +62,10 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                new Patches.MineDirectionalShouldExplodePatch().Enable();
-                new Patches.LighthouseTraderZoneAwakePatch().Enable();
-                new Patches.LighthouseTraderZonePlayerAttackPatch().Enable();
-                //new Patches.IsEnemyByChancePatch().Enable();
-                //new Patches.IsPlayerEnemyPatch().Enable();
+
+                new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
+                new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();
+                new Patches.Lighthouse.LighthouseTraderZonePlayerAttackPatch().Enable();
 
                 if (ConfigController.Config.Debug.Enabled)
                 {
@@ -75,24 +74,24 @@ namespace SPTQuestingBots
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
                 {
-                    new Patches.GameStartPatch().Enable();
-                    new Patches.TimeHasComeScreenClassChangeStatusPatch().Enable();
-                    new Patches.ActivateBossesByWavePatch().Enable();
-                    new Patches.AddEnemyPatch().Enable();
-                    new Patches.TryLoadBotsProfilesOnStartPatch().Enable();
-                    new Patches.SetNewBossPatch().Enable();
+                    new Patches.Spawning.GameStartPatch().Enable();
+                    new Patches.Spawning.TimeHasComeScreenClassChangeStatusPatch().Enable();
+                    new Patches.Spawning.ActivateBossesByWavePatch().Enable();
+                    new Patches.Spawning.AddEnemyPatch().Enable();
+                    new Patches.Spawning.TryLoadBotsProfilesOnStartPatch().Enable();
+                    new Patches.Spawning.SetNewBossPatch().Enable();
 
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
                     {
-                        new Patches.InitBossSpawnLocationPatch().Enable();
+                        new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
                     }
                     
                     if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled)
                     {
-                        new Patches.GetListByZonePatch().Enable();
-                        new Patches.ExceptAIPatch().Enable();
-                        new Patches.BotDiedPatch().Enable();
-                        new Patches.TryToSpawnInZoneAndDelayPatch().Enable();
+                        new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
+                        new Patches.Spawning.Advanced.ExceptAIPatch().Enable();
+                        new Patches.Spawning.Advanced.BotDiedPatch().Enable();
+                        new Patches.Spawning.Advanced.TryToSpawnInZoneAndDelayPatch().Enable();
                     }
 
                     if (ConfigController.Config.BotSpawns.PMCs.Enabled)

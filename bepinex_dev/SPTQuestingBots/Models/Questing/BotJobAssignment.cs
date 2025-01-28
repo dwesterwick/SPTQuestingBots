@@ -8,7 +8,7 @@ using EFT.Interactive;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Questing
 {
     public enum JobAssignmentStatus
     {

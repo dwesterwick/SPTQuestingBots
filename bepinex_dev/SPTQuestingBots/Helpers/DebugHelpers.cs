@@ -89,7 +89,7 @@ namespace SPTQuestingBots.Helpers
             string pathName = "Postion_" + "_" + DateTime.Now.ToFileTime();
 
             Vector3[] positionOutlinePoints = GetSpherePoints(position, radius, 10);
-            PathVisualizationData positionOutline = new PathVisualizationData(pathName, positionOutlinePoints, color);
+            Models.Pathing.PathVisualizationData positionOutline = new Models.Pathing.PathVisualizationData(pathName, positionOutlinePoints, color);
             Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(positionOutline);
         }
 

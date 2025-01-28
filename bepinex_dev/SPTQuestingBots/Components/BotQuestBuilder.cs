@@ -12,7 +12,8 @@ using EFT.Interactive;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Pathing;
+using SPTQuestingBots.Models.Questing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components
@@ -56,7 +57,7 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            Models.Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", ConfigController.Config.Questing.BotQuests.AirdropChaser);
+            Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", ConfigController.Config.Questing.BotQuests.AirdropChaser);
             if (airdopChaserQuest != null)
             {
                 float raidET = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
@@ -89,7 +90,7 @@ namespace SPTQuestingBots.Components
                     LoggingController.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
 
                     // Need to be able to override private properties
-                    BindingFlags overrideBindingFlags = JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
+                    BindingFlags overrideBindingFlags = Models.JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
 
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
@@ -154,7 +155,7 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Create a quest where initial PMC's can run to your spawn point (not directly to you).
-                Models.Quest spawnRushQuest = null;
+                Models.Questing.Quest spawnRushQuest = null;
                 SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetMainPlayerSpawnPoint();
                 if (playerSpawnPoint.HasValue)
                 {
@@ -282,16 +283,8 @@ namespace SPTQuestingBots.Components
             }
 
             // Calculate the minimum and maximum player levels allowed for selecting the quest
-            try
-            {
-                quest.MinLevel = quest.GetMinLevel();
-            }
-            catch (StackOverflowException)
-            {
-                LoggingController.LogErrorToServerConsole("Found a quest, \"" + quest.Name + "\", added by a custom trader mod that has a circular reference in its prerequisites. Please contact the author of that trader mod for support.");
-
-                quest.MinLevel = 1;
-            }
+            QuestMinLevelFinder questMinLevelFinder = new QuestMinLevelFinder(quest);
+            quest.MinLevel = questMinLevelFinder.FindMinLevel();
 
             double levelRange = ConfigController.InterpolateForFirstCol(ConfigController.Config.Questing.BotQuests.EFTQuests.LevelRange, quest.MinLevel);
             quest.MaxLevel = quest.MinLevel + (int)Math.Ceiling(levelRange);
@@ -382,11 +375,11 @@ namespace SPTQuestingBots.Components
             if (ConfigController.Config.Debug.ShowZoneOutlines)
             {
                 Vector3[] triggerColliderBounds = DebugHelpers.GetBoundingBoxPoints(triggerCollider.bounds);
-                PathVisualizationData triggerBoundingBox = new PathVisualizationData("Trigger_" + trigger.Id, triggerColliderBounds, Color.cyan);
+                Models.Pathing.PathVisualizationData triggerBoundingBox = new Models.Pathing.PathVisualizationData("Trigger_" + trigger.Id, triggerColliderBounds, Color.cyan);
                 Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(triggerBoundingBox);
 
                 Vector3[] triggerTargetPoint = DebugHelpers.GetSpherePoints(navMeshTargetPoint.Value, 0.5f, 10);
-                PathVisualizationData triggerTargetPosSphere = new PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
+                Models.Pathing.PathVisualizationData triggerTargetPosSphere = new Models.Pathing.PathVisualizationData("TriggerTargetPos_" + trigger.Id, triggerTargetPoint, Color.cyan);
                 Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(triggerTargetPosSphere);
             }
         }
@@ -463,7 +456,7 @@ namespace SPTQuestingBots.Components
             return cost;
         }
 
-        private void updateEFTQuestObjectives(Models.Quest quest)
+        private void updateEFTQuestObjectives(Models.Questing.Quest quest)
         {
             if (!quest.IsEFTQuest)
             {
@@ -502,7 +495,7 @@ namespace SPTQuestingBots.Components
             }
         }
 
-        private Models.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
+        private Models.Questing.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
         {
             if (position == null)
             {
@@ -527,10 +520,10 @@ namespace SPTQuestingBots.Components
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(questName);
+            Models.Questing.Quest quest = new Models.Questing.Quest(questName);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
-            Models.QuestObjective objective = new Models.QuestObjective(navMeshPosition.Value);
+            Models.Questing.QuestObjective objective = new Models.Questing.QuestObjective(navMeshPosition.Value);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
             objective.SetName(quest.Name + ": Objective #1");
             quest.AddObjective(objective);
@@ -538,7 +531,7 @@ namespace SPTQuestingBots.Components
             return quest;
         }
 
-        private Models.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        private Models.Questing.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
             if (spawnPoints == null)
             {
@@ -562,7 +555,7 @@ namespace SPTQuestingBots.Components
                 return null;
             }
 
-            Models.Quest quest = new Models.Quest(questName);
+            Models.Questing.Quest quest = new Models.Questing.Quest(questName);
             QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
 
             int objNum = 1;
@@ -576,7 +569,7 @@ namespace SPTQuestingBots.Components
                     continue;
                 }
 
-                Models.QuestSpawnPointObjective objective = new Models.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
+                Models.Questing.QuestSpawnPointObjective objective = new Models.Questing.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
                 objective.SetName(quest.Name + ": Objective #" + objNum);
                 quest.AddObjective(objective);

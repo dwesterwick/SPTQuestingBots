@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Pathing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components
@@ -54,7 +54,7 @@ namespace SPTQuestingBots.Components
             LoggingController.LogInfo("Finding static paths...done.");
         }
 
-        private void findStaticPaths(Models.Quest quest)
+        private void findStaticPaths(Models.Questing.Quest quest)
         {
             if (!quest.ValidObjectives.Any())
             {
@@ -99,7 +99,7 @@ namespace SPTQuestingBots.Components
             }
 
             // Check for static paths between each quest objective and each waypoint
-            foreach (QuestObjective questObjective in quest.ValidObjectives)
+            foreach (Models.Questing.QuestObjective questObjective in quest.ValidObjectives)
             {
                 Vector3 firstStepPosition = questObjective.GetFirstStepPosition().Value;
 

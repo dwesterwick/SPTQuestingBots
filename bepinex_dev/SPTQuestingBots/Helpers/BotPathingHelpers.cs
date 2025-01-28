@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using HarmonyLib;
-using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.Helpers
@@ -18,7 +17,7 @@ namespace SPTQuestingBots.Helpers
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass513), "vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass513), "int_0");
 
-        public static void FollowPath(this BotOwner bot, BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
+        public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
             // Combines _pathFinder.method_0 and GoToByWay
 

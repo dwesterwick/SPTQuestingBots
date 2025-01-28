@@ -9,7 +9,7 @@ namespace SPTQuestingBots.Configuration
         public RawQuestClass[] Templates { get; set; } = new RawQuestClass[0];
 
         [JsonProperty("quests")]
-        public Models.Quest[] Quests { get; set; } = new Models.Quest[0];
+        public Models.Questing.Quest[] Quests { get; set; } = new Models.Questing.Quest[0];
 
         [JsonProperty("settings")]
         public Dictionary<string, Dictionary<string, object>> Settings { get; set; } = new Dictionary<string, Dictionary<string, object>>();

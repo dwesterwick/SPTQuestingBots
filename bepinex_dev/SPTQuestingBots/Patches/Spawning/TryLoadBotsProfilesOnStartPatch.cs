@@ -8,7 +8,7 @@ using EFT;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning
 {
     public class TryLoadBotsProfilesOnStartPatch : ModulePatch
     {

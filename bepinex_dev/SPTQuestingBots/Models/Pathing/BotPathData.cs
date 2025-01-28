@@ -10,7 +10,7 @@ using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Pathing
 {
     public enum BotPathUpdateNeededReason
     {

@@ -14,7 +14,7 @@ using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Questing
 {
     public class Quest : JSONObject<Quest>
     {

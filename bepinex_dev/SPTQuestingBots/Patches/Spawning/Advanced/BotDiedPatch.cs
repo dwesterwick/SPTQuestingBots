@@ -8,7 +8,7 @@ using SPT.Reflection.Patching;
 using EFT;
 using SPTQuestingBots.Helpers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning.Advanced
 {
     public class BotDiedPatch : ModulePatch
     {

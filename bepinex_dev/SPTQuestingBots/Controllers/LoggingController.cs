@@ -137,7 +137,7 @@ namespace SPTQuestingBots.Controllers
             }
         }
 
-        public static void AppendQuestLocation(string filename, StoredQuestLocation location)
+        public static void AppendQuestLocation(string filename, Models.Questing.StoredQuestLocation location)
         {
             try
             {

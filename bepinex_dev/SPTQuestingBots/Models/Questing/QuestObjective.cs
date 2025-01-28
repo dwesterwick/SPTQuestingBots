@@ -10,7 +10,7 @@ using Newtonsoft.Json.Converters;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Questing
 {
     public enum LootAfterCompleting
     {

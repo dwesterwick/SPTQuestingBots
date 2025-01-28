@@ -9,7 +9,7 @@ using EFT;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Spawning.Advanced
 {
     public class ExceptAIPatch : ModulePatch
     {

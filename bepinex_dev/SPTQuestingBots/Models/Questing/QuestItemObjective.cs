@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EFT.Interactive;
 using UnityEngine;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Questing
 {
     public class QuestItemObjective : QuestObjective
     {

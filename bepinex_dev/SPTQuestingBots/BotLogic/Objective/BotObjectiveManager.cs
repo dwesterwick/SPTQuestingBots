@@ -9,7 +9,8 @@ using EFT;
 using EFT.Interactive;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Questing;
+using SPTQuestingBots.Models.Pathing;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Objective

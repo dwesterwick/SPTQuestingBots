@@ -133,9 +133,9 @@ namespace SPTQuestingBots.Controllers
             return _positions.ZoneAndItemPositions;
         }
 
-        public static IEnumerable<Quest> GetCustomQuests(string locationID)
+        public static IEnumerable<Models.Questing.Quest> GetCustomQuests(string locationID)
         {
-            Quest[] standardQuests = new Quest[0];
+            Models.Questing.Quest[] standardQuests = new Models.Questing.Quest[0];
             string filename = GetLoggingPath() + "..\\quests\\standard\\" + locationID + ".json";
             if (File.Exists(filename))
             {
@@ -153,7 +153,7 @@ namespace SPTQuestingBots.Controllers
                 }
             }
 
-            Quest[] customQuests = new Quest[0];
+            Models.Questing.Quest[] customQuests = new Models.Questing.Quest[0];
             filename = GetLoggingPath() + "..\\quests\\custom\\" + locationID + ".json";
             if (File.Exists(filename))
             {

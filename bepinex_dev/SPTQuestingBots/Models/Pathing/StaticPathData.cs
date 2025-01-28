@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using UnityEngine;
 using HarmonyLib;
 
-namespace SPTQuestingBots.Models
+namespace SPTQuestingBots.Models.Pathing
 {
     public class StaticPathData : ICloneable
     {

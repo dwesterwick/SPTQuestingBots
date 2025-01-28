@@ -67,7 +67,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot just completed its objective
             if (ObjectiveManager.IsCloseToObjective())
             {
-                if (ObjectiveManager.CurrentQuestAction == Models.QuestAction.MoveToPosition)
+                if (ObjectiveManager.CurrentQuestAction == Models.Questing.QuestAction.MoveToPosition)
                 {
                     ObjectiveManager.CompleteObjective();
                 }
@@ -113,7 +113,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             NavMeshPathStatus? pathStatus = RecalculatePath(ObjectiveManager.Position.Value);
 
             // Don't complete or fail the objective step except for the action type "MoveToPosition"
-            if (ObjectiveManager.CurrentQuestAction != Models.QuestAction.MoveToPosition)
+            if (ObjectiveManager.CurrentQuestAction != Models.Questing.QuestAction.MoveToPosition)
             {
                 return true;
             }

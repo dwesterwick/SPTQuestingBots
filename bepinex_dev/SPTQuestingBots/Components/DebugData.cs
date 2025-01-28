@@ -10,7 +10,7 @@ using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Models.Questing;
 using UnityEngine;
 using UnityEngine.AI;
 
