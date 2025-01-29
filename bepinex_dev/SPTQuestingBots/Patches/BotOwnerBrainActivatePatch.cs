@@ -34,6 +34,16 @@ namespace SPTQuestingBots.Patches
         {
             registerBot(__instance);
 
+            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            {
+                reduceBotCounts(__instance);
+            }
+
+            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
+            {
+                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
+            }
+
             // Fix for bots getting stuck in Standby when enemy PMC's are near them
             __instance.StandBy.CanDoStandBy = false;
         }
@@ -57,16 +67,17 @@ namespace SPTQuestingBots.Patches
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
 
-            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
-            {
-                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
-            }
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
-            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
-            {
-                LoggingController.LogDebug("Adjusting EFT bot counts for " + __instance.GetText() + "...");
-                reduceBotCounts(__instance);
-            }
+            botSpawnerClass.AddPlayer(__instance.GetPlayer());
+            __instance.GetPlayer().OnPlayerDead += deletePlayer;
+        }
+
+        private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfoStruct damage, EBodyPart part)
+        {
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+
+            botSpawnerClass.DeletePlayer(player.GetPlayer());
         }
 
         private static bool shouldMakeBotGroupHostileTowardAllBosses(BotOwner bot)
@@ -86,6 +97,8 @@ namespace SPTQuestingBots.Patches
 
         private static void reduceBotCounts(BotOwner bot)
         {
+            LoggingController.LogDebug("Adjusting EFT bot counts for " + bot.GetText() + "...");
+
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
             if (bot.Profile.Info.Settings.IsFollower())

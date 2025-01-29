@@ -81,6 +81,12 @@ namespace SPTQuestingBots
                     new Patches.Spawning.TryLoadBotsProfilesOnStartPatch().Enable();
                     new Patches.Spawning.SetNewBossPatch().Enable();
 
+                    //new Patches.Spawning.TrySpawnFreeInnerPatch().Enable();
+                    //new Patches.Spawning.TrySpawnFreeInnerPatch2().Enable();
+                    new Patches.Spawning.ExceptAIPatch().Enable();
+                    new Patches.Spawning.SpawnPointIsValidPatch().Enable();
+                    new Patches.Spawning.GetAllBossPlayersPatch().Enable();
+
                     if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
                     {
                         new Patches.Spawning.InitBossSpawnLocationPatch().Enable();

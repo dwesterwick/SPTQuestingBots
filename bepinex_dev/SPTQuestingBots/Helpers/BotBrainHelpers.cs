@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Models;
@@ -259,15 +260,21 @@ namespace SPTQuestingBots.Helpers
             return EPlayerSide.Savage;
         }
 
+        public static IEnumerable<Player> GetAllHumanAndSimulatedPlayers()
+        {
+            return Singleton<GameWorld>.Instance.AllAlivePlayersList.HumanAndSimulatedPlayers();
+        }
+
+        public static IEnumerable<Player> HumanAndSimulatedPlayers(this IEnumerable<Player> players) => players.HumanAndSimulatedPlayers();
+        
+        public static IEnumerable<IPlayer> HumanAndSimulatedPlayers(this IEnumerable<IPlayer> players)
+        {
+            return players.Where(p => p.ShouldPlayerBeTreatedAsHuman());
+        }
+
         public static bool ShouldPlayerBeTreatedAsHuman(this IPlayer player)
         {
-            if (!player.IsAI)
-            {
-                return true;
-            }
-
-            string[] generatedBotIDs = BotGenerator.GetAllGeneratedBotProfileIDs().ToArray();
-            return generatedBotIDs.Contains(player.Profile.Id);
+            return !player.IsAI || BotGenerator.GetAllGeneratedBotProfileIDs().Contains(player.Profile.Id);
         }
 
         public static bool ShouldPlayerBeTreatedAsHuman(this BotOwner bot)
