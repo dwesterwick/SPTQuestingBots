@@ -21,6 +21,7 @@ namespace SPTQuestingBots.Components
     public class LocationData : MonoBehaviour
     {
         public int MaxTotalBots { get; private set; } = 15;
+        public float MaxDistanceBetweenSpawnPoints { get; private set; } = float.MaxValue;
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null;
         public RaidSettings CurrentRaidSettings { get; private set; } = null;
 
@@ -73,6 +74,8 @@ namespace SPTQuestingBots.Components
             {
                 BotGenerator.RunBotGenerationTasks();
             }
+
+            calculateMaxDistanceBetweenSpawnPoints();
         }
 
         protected void Update()
@@ -845,6 +848,24 @@ namespace SPTQuestingBots.Components
 
             maxExfilPointDistance = maxDistance;
             return maxExfilPointDistance;
+        }
+
+        private void calculateMaxDistanceBetweenSpawnPoints()
+        {
+            float maxDistance = 0;
+            foreach (SpawnPointParams spawnPointParams in CurrentLocation.SpawnPointParams)
+            {
+                foreach (SpawnPointParams spawnPointParams2 in CurrentLocation.SpawnPointParams)
+                {
+                    float distance = Vector3.Distance(spawnPointParams.Position, spawnPointParams2.Position);
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                    }
+                }
+            }
+
+            MaxDistanceBetweenSpawnPoints = maxDistance;
         }
 
         private void handleCustomQuestKeypress()

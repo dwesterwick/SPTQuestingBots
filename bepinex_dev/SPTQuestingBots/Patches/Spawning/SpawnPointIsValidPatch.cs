@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Patches.Spawning
@@ -24,16 +26,27 @@ namespace SPTQuestingBots.Patches.Spawning
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(bool __result, ISpawnPoint spawnPoint, IReadOnlyCollection<IPlayer> players, float distanceSqr)
+        protected static void PatchPostfix(ref bool __result, ISpawnPoint spawnPoint, IReadOnlyCollection<IPlayer> players, float distanceSqr)
         {
             if (!__result)
             {
                 return;
             }
 
-            float minDistance = players.Select(p => Vector3.Distance(spawnPoint.Position, p.Position)).Min();
+            float maxDistanceBetweenSpawnPoints = Singleton<GameWorld>.Instance.gameObject.GetComponent<Components.LocationData>().MaxDistanceBetweenSpawnPoints;
+            float exclusionRadius = maxDistanceBetweenSpawnPoints * QuestingBotsPluginConfig.ScavSpawningExclusionRadiusMapFraction.Value;
 
-            Controllers.LoggingController.LogInfo("Allowed spawn that was " + minDistance + " from players (min=" + Math.Sqrt(distanceSqr) + ")");
+            float minDistanceFromPlayers = players.HumanAndSimulatedPlayers().Min(p => Vector3.Distance(spawnPoint.Position, p.Position));
+
+            string message = "Allowed ";
+            if (minDistanceFromPlayers  < exclusionRadius)
+            {
+                message = "Blocked ";
+                __result = false;
+            }
+
+            message += "spawn that was " + minDistanceFromPlayers + " from players (exclusionRadius=" + Math.Round(exclusionRadius, 1) + ")";
+            Controllers.LoggingController.LogInfo(message);
         }
     }
 }

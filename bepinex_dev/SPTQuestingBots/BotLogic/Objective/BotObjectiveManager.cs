@@ -56,6 +56,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private BotJobAssignment lastAssignment = null;
         private ExfiltrationPoint exfiltrationPoint = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
+        private Components.BotQuestBuilder botQuestBuilder = null;
 
         public Vector3? Position => assignment?.Position;
         public Vector3? LookToPosition => assignment?.LookToPosition;
@@ -187,7 +188,18 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         protected void Update()
         {
-            if (!Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
+            // Fix for this component not being destroyed when raids end. This can happen when exceptions are ignored while destroying bots.
+            if (!Singleton<GameWorld>.Instantiated)
+            {
+                return;
+            }
+
+            if ((botQuestBuilder == null) && !Singleton<GameWorld>.Instance.TryGetComponent(out botQuestBuilder))
+            {
+                return;
+            }
+
+            if (!botQuestBuilder.HaveQuestsBeenBuilt)
             {
                 return;
             }

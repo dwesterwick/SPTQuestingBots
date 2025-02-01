@@ -242,7 +242,6 @@
     <Compile Include="Patches\MenuShowPatch.cs" />
     <Compile Include="Patches\Lighthouse\MineDirectionalShouldExplodePatch.cs" />
     <Compile Include="Patches\ProcessSourceOcclusionPatch.cs" />
-    <Compile Include="Patches\Spawning\ExceptAIPatch.cs" />
     <Compile Include="Patches\Spawning\GetAllBossPlayersPatch.cs" />
     <Compile Include="Patches\Spawning\SetNewBossPatch.cs" />
     <Compile Include="Patches\Spawning\SpawnPointIsValidPatch.cs" />

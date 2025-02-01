@@ -26,11 +26,7 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
         [PatchPrefix]
         protected static bool PatchPrefix(ref IEnumerable<IPlayer>  __result, IEnumerable<IPlayer> persons)
         {
-            //LoggingController.LogInfo("All Players: " + string.Join(", ", persons.Select(x => x.Profile.Nickname)));
-
-            __result = persons.Where(p => p.ShouldPlayerBeTreatedAsHuman());
-
-            //LoggingController.LogInfo("Non-AI Players: " + string.Join(", ", __result.Select(x => x.Profile.Nickname)));
+            __result = persons.HumanAndSimulatedPlayers();
 
             return false;
         }

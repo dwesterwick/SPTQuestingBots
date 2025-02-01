@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
 using EFT;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models;
 using UnityEngine;
@@ -49,6 +50,8 @@ namespace SPTQuestingBots
         public static ConfigEntry<bool> SprintingEnabled;
         public static ConfigEntry<int> MinSprintingDistance;
 
+        public static ConfigEntry<float> ScavSpawningExclusionRadiusMapFraction;
+
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
         public static ConfigEntry<int> SleepingMinDistanceToHumansGlobal;
@@ -92,6 +95,12 @@ namespace SPTQuestingBots
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
             MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",
                 3, new ConfigDescription("Bots will not be allowed to sprint if they are within this distance from their objective", new AcceptableValueRange<int>(0, 75)));
+
+            if (ConfigController.Config.BotSpawns.Enabled)
+            {
+                ScavSpawningExclusionRadiusMapFraction = Config.Bind("Spawning", "Map Fraction for Scav Spawning Exclusion Radius",
+                    0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, 0.5f)));
+            }
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
                 false, "Improve FPS by minimizing CPU load for AI out of certain ranges");

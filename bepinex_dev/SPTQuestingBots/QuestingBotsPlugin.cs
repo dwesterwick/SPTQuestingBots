@@ -83,7 +83,6 @@ namespace SPTQuestingBots
 
                     //new Patches.Spawning.TrySpawnFreeInnerPatch().Enable();
                     //new Patches.Spawning.TrySpawnFreeInnerPatch2().Enable();
-                    new Patches.Spawning.ExceptAIPatch().Enable();
                     new Patches.Spawning.SpawnPointIsValidPatch().Enable();
                     new Patches.Spawning.GetAllBossPlayersPatch().Enable();
 
