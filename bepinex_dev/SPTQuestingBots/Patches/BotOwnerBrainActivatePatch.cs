@@ -26,7 +26,7 @@ namespace SPTQuestingBots.Patches
             followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
             bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
 
-            return typeof(BotOwner).GetMethod("method_11", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

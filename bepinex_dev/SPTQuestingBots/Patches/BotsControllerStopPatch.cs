@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsController).GetMethod("Stop", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsController).GetMethod(nameof(BotsController.Stop), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

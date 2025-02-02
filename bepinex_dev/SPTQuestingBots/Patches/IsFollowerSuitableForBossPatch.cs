@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotBoss).GetMethod("OfferSelf", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotBoss).GetMethod(nameof(BotBoss.OfferSelf), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

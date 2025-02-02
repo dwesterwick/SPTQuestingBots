@@ -17,7 +17,7 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
         {
             string methodName = "ExceptAI";
 
-            Type targetType = FindTargetType(methodName);
+            Type targetType = Helpers.TarkovTypeHelpers.FindTargetType(methodName);
             LoggingController.LogInfo("Found type for ExceptAIPatch: " + targetType.FullName);
 
             return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
@@ -29,20 +29,6 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
             __result = persons.HumanAndSimulatedPlayers();
 
             return false;
-        }
-
-        public static Type FindTargetType(string methodName)
-        {
-            List<Type> targetTypeOptions = SPT.Reflection.Utils.PatchConstants.EftTypes
-                .Where(t => t.GetMethods().Any(m => m.Name.Contains(methodName)))
-                .ToList();
-
-            if (targetTypeOptions.Count != 1)
-            {
-                throw new TypeLoadException("Cannot find any type containing method " + methodName);
-            }
-
-            return targetTypeOptions[0];
         }
     }
 }

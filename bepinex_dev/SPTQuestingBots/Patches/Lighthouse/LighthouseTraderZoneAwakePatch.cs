@@ -13,7 +13,7 @@ namespace SPTQuestingBots.Patches.Lighthouse
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(LighthouseTraderZone).GetMethod("Awake", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(LighthouseTraderZone).GetMethod(nameof(LighthouseTraderZone.Awake), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

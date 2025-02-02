@@ -182,6 +182,7 @@
     <Compile Include="Helpers\QuestHelpers.cs" />
     <Compile Include="Helpers\RaidHelpers.cs" />
     <Compile Include="Helpers\RecodableComponentHelpers.cs" />
+    <Compile Include="Helpers\TarkovTypeHelpers.cs" />
     <Compile Include="Helpers\VersionCheckHelper.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />

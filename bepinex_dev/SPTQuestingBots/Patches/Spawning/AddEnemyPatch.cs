@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsGroup).GetMethod("AddEnemy", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsGroup).GetMethod(nameof(BotsGroup.AddEnemy), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsClass).GetMethod("GetListByZone", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsClass).GetMethod(nameof(BotsClass.GetListByZone), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

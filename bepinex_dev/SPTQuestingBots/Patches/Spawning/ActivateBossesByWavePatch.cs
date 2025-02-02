@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Patches.Spawning
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotsController).GetMethod(
-                "ActivateBotsByWave",
+                nameof(BotsController.ActivateBotsByWave),
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 new Type[] { typeof(BossLocationSpawn) },

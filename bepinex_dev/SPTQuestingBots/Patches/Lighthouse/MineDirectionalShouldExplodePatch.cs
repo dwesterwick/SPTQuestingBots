@@ -2,20 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Patches.Lighthouse
 {
     public class MineDirectionalShouldExplodePatch : ModulePatch
     {
+        private static readonly string lighthouseMinesGameObjectName = "Directional_mines_LHZONE";
+
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(MineDirectional).GetMethod("method_1", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo methodInfo = typeof(MineDirectional)
+                .GetMethods()
+                .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(Collider) }));
+
+            Controllers.LoggingController.LogInfo("Found method for MineDirectionalShouldExplodePatch: " + methodInfo.Name);
+
+            return methodInfo;
         }
 
         [PatchPrefix]
@@ -33,7 +43,7 @@ namespace SPTQuestingBots.Patches.Lighthouse
             }
 
             IEnumerable<MineDirectional> bridgeMines = Singleton<GameWorld>.Instance.MineManager.Mines
-                .Where(mine => mine.transform.parent.gameObject.name == "Directional_mines_LHZONE");
+                .Where(mine => mine.transform.parent.gameObject.name == lighthouseMinesGameObjectName);
 
             if (!bridgeMines.Contains(__instance))
             {

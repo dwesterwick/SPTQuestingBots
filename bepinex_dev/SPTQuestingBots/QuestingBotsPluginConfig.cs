@@ -42,6 +42,8 @@ namespace SPTQuestingBots
 
     public static class QuestingBotsPluginConfig
     {
+        private static readonly float maxExclusionRadiusFactorForScavs = 0.15f;
+
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
         public static Dictionary<WildSpawnType, BotTypeException> ExceptionFlagForWildSpawnType = new Dictionary<WildSpawnType, BotTypeException>();
 
@@ -99,7 +101,7 @@ namespace SPTQuestingBots
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 ScavSpawningExclusionRadiusMapFraction = Config.Bind("Spawning", "Map Fraction for Scav Spawning Exclusion Radius",
-                    0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, 0.5f)));
+                    0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, maxExclusionRadiusFactorForScavs)));
             }
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",

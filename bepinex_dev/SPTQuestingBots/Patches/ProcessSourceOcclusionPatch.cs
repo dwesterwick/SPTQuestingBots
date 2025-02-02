@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Patches
         protected override MethodBase GetTargetMethod()
         {
             return typeof(SpatialAudioSystem).GetMethod(
-                "ProcessSourceOcclusion",
+                nameof(SpatialAudioSystem.ProcessSourceOcclusion),
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 new Type[] { typeof(IPlayer), typeof(BetterSource), typeof(bool) },

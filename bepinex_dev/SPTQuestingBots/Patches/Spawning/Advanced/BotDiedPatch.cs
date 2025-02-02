@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotSpawner).GetMethod("BotDied", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotSpawner).GetMethod(nameof(BotSpawner.BotDied), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

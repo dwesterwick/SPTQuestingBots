@@ -19,7 +19,7 @@ namespace SPTQuestingBots.Patches.Lighthouse
         {
             MethodInfo methodInfo = typeof(LighthouseTraderZone)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .First(m => m.GetParameters().Any(p => p.ParameterType == typeof(DamageInfoStruct)));
+                .First(m => m.HasAllParameterTypes(new Type[] { typeof(DamageInfoStruct) }));
 
             LoggingController.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
 

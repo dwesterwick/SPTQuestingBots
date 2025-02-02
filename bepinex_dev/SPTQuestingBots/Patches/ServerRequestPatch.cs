@@ -21,7 +21,7 @@ namespace SPTQuestingBots.Patches
         {
             string methodName = "CreateFromLegacyParams";
 
-            Type targetType = FindTargetType(methodName);
+            Type targetType = Helpers.TarkovTypeHelpers.FindTargetType(methodName);
             LoggingController.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
 
             return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
@@ -30,58 +30,33 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(ref LegacyParamsStruct legacyParams)
         {
-            if (legacyParams.Url.EndsWith(botGenerationEndpoint))
+            if (!legacyParams.Url.EndsWith(botGenerationEndpoint))
             {
-                int pScavChance;
-                if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)
-                {
-                    if (ForcePScavCount > 0)
-                    {
-                        pScavChance = 100;
-                    }
-                    else
-                    {
-                        pScavChance = 0;
-                    }
-                }
-                else if (ConfigController.Config.AdjustPScavChance.Enabled)
-                {
-                    pScavChance = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.AdjustPScavChance.ChanceVsTimeRemainingFraction, getRaidTimeRemainingFraction()));
-                }
-                else
-                {
-                    return;
-                }
-
-                Class19<List<WaveInfo>> originalParams = (Class19<List<WaveInfo>>)legacyParams.Params;
-                legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
-
-                ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
-            }
-        }
-
-        public static Type FindTargetType(string methodName)
-        {
-            List<Type> targetTypeOptions = SPT.Reflection.Utils.PatchConstants.EftTypes
-                .Where(t => t.GetMethods().Any(m => m.Name.Contains(methodName)))
-                .ToList();
-
-            if (targetTypeOptions.Count != 1)
-            {
-                throw new TypeLoadException("Cannot find any type containing method " + methodName);
+                return;
             }
 
-            return targetTypeOptions[0];
-        }
+            int pScavChance;
 
-        private static float getRaidTimeRemainingFraction()
-        {
-            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)
             {
-                return SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRaidTimeRemainingFraction();
+                pScavChance = ForcePScavCount > 0 ? 100 : 0;
+            }
+            else if (ConfigController.Config.AdjustPScavChance.Enabled)
+            {
+                double[][] chanceVsTimeRemainingFraction = ConfigController.Config.AdjustPScavChance.ChanceVsTimeRemainingFraction;
+                float remainingRaidTimeFraction = Helpers.RaidHelpers.GetRaidTimeRemainingFraction();
+
+                pScavChance = (int)Math.Round(ConfigController.InterpolateForFirstCol(chanceVsTimeRemainingFraction, remainingRaidTimeFraction));
+            }
+            else
+            {
+                return;
             }
 
-            return (float)SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+            Class19<List<WaveInfo>> originalParams = (Class19<List<WaveInfo>>)legacyParams.Params;
+            legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
+
+            ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
         }
 
         internal class ModifiedParams

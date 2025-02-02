@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches.Spawning
 {
@@ -22,9 +23,7 @@ namespace SPTQuestingBots.Patches.Spawning
         {
             MethodInfo[] matchingMethods = typeof(BotsPresets)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.GetParameters().Length == 2)
-                .Where(m => m.GetParameters()[0].ParameterType == typeof(List<WaveInfo>))
-                .Where(m => m.GetParameters()[1].ParameterType == typeof(EProfilesAskingStat))
+                .Where(m => m.HasAllParameterTypesInOrder(new Type[] { typeof(List<WaveInfo>), typeof(EProfilesAskingStat) }))
                 .ToArray();
 
             if (matchingMethods.Length != 1)

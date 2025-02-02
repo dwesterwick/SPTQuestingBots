@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsController).GetMethod("AddActivePLayer", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsController).GetMethod(nameof(BotsController.AddActivePLayer), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

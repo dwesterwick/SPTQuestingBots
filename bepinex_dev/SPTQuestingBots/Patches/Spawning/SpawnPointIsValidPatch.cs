@@ -17,11 +17,17 @@ namespace SPTQuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(GClass3300).GetMethod(
-                "IsValid",
+            string methodName = "IsValid";
+            Type[] argumentTypes = new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(GClass666) };
+
+            Type targetType = Helpers.TarkovTypeHelpers.FindTargetType(methodName, argumentTypes);
+            Controllers.LoggingController.LogInfo("Found type for SpawnPointIsValidPatch: " + targetType.FullName);
+
+            return targetType.GetMethod(
+                methodName,
                 BindingFlags.Public | BindingFlags.Static,
                 null,
-                new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(GClass666) },
+                argumentTypes,
                 null);
         }
 
@@ -37,6 +43,11 @@ namespace SPTQuestingBots.Patches.Spawning
             float exclusionRadius = maxDistanceBetweenSpawnPoints * QuestingBotsPluginConfig.ScavSpawningExclusionRadiusMapFraction.Value;
 
             float minDistanceFromPlayers = players.HumanAndSimulatedPlayers().Min(p => Vector3.Distance(spawnPoint.Position, p.Position));
+            
+            if (minDistanceFromPlayers * minDistanceFromPlayers < distanceSqr)
+            {
+                minDistanceFromPlayers = (float)Math.Sqrt(distanceSqr);
+            }
 
             string message = "Allowed ";
             if (minDistanceFromPlayers  < exclusionRadius)

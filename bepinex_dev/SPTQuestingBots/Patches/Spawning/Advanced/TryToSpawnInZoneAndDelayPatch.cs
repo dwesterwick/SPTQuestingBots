@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Patches.Spawning.Advanced
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotSpawner).GetMethod("TryToSpawnInZoneAndDelay", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotSpawner).GetMethod(nameof(BotSpawner.TryToSpawnInZoneAndDelay), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

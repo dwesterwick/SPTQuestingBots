@@ -14,7 +14,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(EnemyInfo).GetMethod("CheckLookEnemy", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(EnemyInfo).GetMethod(nameof(EnemyInfo.CheckLookEnemy), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

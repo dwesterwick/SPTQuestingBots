@@ -24,8 +24,7 @@ namespace SPTQuestingBots.Patches.Spawning
 
         protected override MethodBase GetTargetMethod()
         {
-            Type baseGameType = typeof(BaseLocalGame<EftGamePlayerOwner>);
-            return baseGameType.GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BaseLocalGame<EftGamePlayerOwner>).GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]

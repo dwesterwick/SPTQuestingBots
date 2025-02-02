@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Controllers;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches.Spawning
 {
@@ -14,7 +15,13 @@ namespace SPTQuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BossGroup).GetMethod("method_0", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo methodInfo = typeof(BossGroup)
+                .GetMethods()
+                .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(BotOwner) }));
+
+            Controllers.LoggingController.LogInfo("Found method for SetNewBossPatch: " + methodInfo.Name);
+
+            return methodInfo;
         }
 
         [PatchPrefix]
