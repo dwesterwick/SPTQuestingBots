@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Configuration;
-using static EFT.UI.CharacterSelectionStartScreen;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -78,7 +78,7 @@ namespace SPTQuestingBots.Controllers
             }
             if (botOwner.Profile.Side == EPlayerSide.Savage)
             {
-                if (botOwner.Profile.Nickname.Contains(" ("))
+                if (botOwner.Profile.WillBeAPlayerScav())
                 {
                     return BotType.PScav;
                 }

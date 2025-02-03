@@ -4,6 +4,7 @@ using System.Linq;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.Components.Spawning;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Helpers
@@ -244,6 +245,11 @@ namespace SPTQuestingBots.Helpers
             }
 
             return botOwner.Profile.Info.Settings.Role.IsBoss();
+        }
+
+        public static bool WillBeAPlayerScav(this Profile profile)
+        {
+            return profile.Nickname.Contains(" (");
         }
 
         public static EPlayerSide GetPlayerSide(this WildSpawnType spawnType)

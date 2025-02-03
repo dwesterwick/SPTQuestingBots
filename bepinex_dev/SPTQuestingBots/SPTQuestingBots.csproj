@@ -234,6 +234,8 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Models\Pathing\StaticPathData.cs" />
     <Compile Include="Models\Questing\StoredQuestLocation.cs" />
+    <Compile Include="Patches\Spawning\BotsControllerStopPatch.cs" />
+    <Compile Include="Patches\Spawning\NonWavesSpawnScenarioCreatePatch.cs" />
     <Compile Include="Patches\Spawning\ActivateBossesByWavePatch.cs" />
     <Compile Include="Patches\Spawning\AddEnemyPatch.cs" />
     <Compile Include="Patches\Spawning\Advanced\BotDiedPatch.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Patches\Spawning\GetAllBossPlayersPatch.cs" />
     <Compile Include="Patches\Spawning\SetNewBossPatch.cs" />
     <Compile Include="Patches\Spawning\SpawnPointIsValidPatch.cs" />
+    <Compile Include="Patches\Spawning\TrySpawnFreeAndDelayPatch.cs" />
     <Compile Include="Patches\Spawning\TrySpawnFreeInnerPatch.cs" />
     <Compile Include="Patches\TarkovInitPatch.cs" />
     <Compile Include="Patches\AddActivePlayerPatch.cs" />
