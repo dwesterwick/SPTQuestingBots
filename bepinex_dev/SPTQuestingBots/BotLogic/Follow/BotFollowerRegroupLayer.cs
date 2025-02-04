@@ -155,16 +155,6 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return true;
             }
 
-            /*if (BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.InCombat, BotOwner))
-            {
-                return true;
-            }
-
-            if (BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
-            {
-                return true;
-            }*/
-
             return false;
         }
     }

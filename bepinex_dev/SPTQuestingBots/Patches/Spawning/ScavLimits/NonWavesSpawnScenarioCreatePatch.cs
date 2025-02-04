@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPT.Reflection.Patching;
 
-namespace SPTQuestingBots.Patches.Spawning
+namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class NonWavesSpawnScenarioCreatePatch : ModulePatch
     {
@@ -22,15 +22,11 @@ namespace SPTQuestingBots.Patches.Spawning
         [PatchPostfix]
         protected static void PatchPostfix(NonWavesSpawnScenario __result)
         {
-            Controllers.LoggingController.LogInfo("Updating the current NonWavesSpawnScenario instance");
-
             MostRecentNonWavesSpawnScenario = __result;
         }
 
         public static void Clear()
         {
-            Controllers.LoggingController.LogInfo("The current NonWavesSpawnScenario instance is stopping");
-
             MostRecentNonWavesSpawnScenario = null;
             SpawnedScavs = 0;
         }

@@ -212,7 +212,7 @@
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {
-				"desirability": 60,
+				"desirability": 55,
 				"max_bots_per_quest": 3,
 				"chance_of_having_keys": 50,
 				"match_looting_behavior_distance": 5,
@@ -241,7 +241,7 @@
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"desirability": 40,
+				"desirability": 35,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 50,

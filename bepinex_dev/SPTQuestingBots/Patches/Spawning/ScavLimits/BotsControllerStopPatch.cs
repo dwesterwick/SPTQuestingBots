@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPT.Reflection.Patching;
 
-namespace SPTQuestingBots.Patches.Spawning
+namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class BotsControllerStopPatch : ModulePatch
     {

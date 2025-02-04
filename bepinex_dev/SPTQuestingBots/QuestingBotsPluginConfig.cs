@@ -52,9 +52,11 @@ namespace SPTQuestingBots
         public static ConfigEntry<bool> SprintingEnabled;
         public static ConfigEntry<int> MinSprintingDistance;
 
+        public static ConfigEntry<bool> ScavLimitsEnabled;
         public static ConfigEntry<float> ScavSpawningExclusionRadiusMapFraction;
         public static ConfigEntry<float> TotalScavSpawnLimitFraction;
         public static ConfigEntry<int> ScavSpawnLimitThreshold;
+        public static ConfigEntry<int> ScavMaxAliveLimit;
 
         public static ConfigEntry<bool> SleepingEnabled;
         public static ConfigEntry<bool> SleepingEnabledForQuestingBots;
@@ -102,12 +104,16 @@ namespace SPTQuestingBots
 
             if (ConfigController.Config.BotSpawns.Enabled)
             {
-                ScavSpawningExclusionRadiusMapFraction = Config.Bind("Spawning", "Map Fraction for Scav Spawning Exclusion Radius",
+                ScavLimitsEnabled = Config.Bind("Scav Spawn Restrictions", "Enable Scav Spawn Restrictions",
+                    true, "Restrict where and how frequently Scavs are allowed to spawn");
+                ScavSpawningExclusionRadiusMapFraction = Config.Bind("Scav Spawn Restrictions", "Map Fraction for Scav Spawning Exclusion Radius",
                     0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, maxExclusionRadiusFactorForScavs)));
-                TotalScavSpawnLimitFraction = Config.Bind("Spawning", "Permitted Scav Spawn Rate",
+                TotalScavSpawnLimitFraction = Config.Bind("Scav Spawn Restrictions", "Permitted Scav Spawn Rate",
                     3f, new ConfigDescription("After the Scav spawn threshold is exceeded, new ones will only be allowed to spawn so that this many of them (as a fraction of the map's BotCap) will linearly spawn throughout the raid.", new AcceptableValueRange<float>(0.5f, 10f)));
-                ScavSpawnLimitThreshold = Config.Bind("Spawning", "Threshold for Scav Spawn Rate Limit",
-                    30, new ConfigDescription("The Scav spawn rate limit will only be active after this many Scavs spawn in the raid", new AcceptableValueRange<int>(1, 99)));
+                ScavSpawnLimitThreshold = Config.Bind("Scav Spawn Restrictions", "Threshold for Scav Spawn Rate Limit",
+                    15, new ConfigDescription("The Scav spawn rate limit will only be active after this many Scavs spawn in the raid", new AcceptableValueRange<int>(1, 99)));
+                ScavMaxAliveLimit = Config.Bind("Scav Spawn Restrictions", "Max Alive Scavs",
+                    15, new ConfigDescription("The maximum number of Scavs that can be alive at the same time (including Sniper Scavs)", new AcceptableValueRange<int>(5, 25)));
             }
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",

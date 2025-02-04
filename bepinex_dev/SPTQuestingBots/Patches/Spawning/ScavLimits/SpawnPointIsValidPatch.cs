@@ -11,7 +11,7 @@ using SPT.Reflection.Patching;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 
-namespace SPTQuestingBots.Patches.Spawning
+namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class SpawnPointIsValidPatch : ModulePatch
     {
@@ -39,25 +39,30 @@ namespace SPTQuestingBots.Patches.Spawning
                 return;
             }
 
+            if (!QuestingBotsPluginConfig.ScavLimitsEnabled.Value)
+            {
+                return;
+            }
+
             float maxDistanceBetweenSpawnPoints = Singleton<GameWorld>.Instance.gameObject.GetComponent<Components.LocationData>().MaxDistanceBetweenSpawnPoints;
             float exclusionRadius = maxDistanceBetweenSpawnPoints * QuestingBotsPluginConfig.ScavSpawningExclusionRadiusMapFraction.Value;
 
             float minDistanceFromPlayers = players.HumanAndSimulatedPlayers().Min(p => Vector3.Distance(spawnPoint.Position, p.Position));
-            
+
+            // In SPT 3.10, distanceSqr is 3m, so this should never happen. However, we should check to be safe.
             if (minDistanceFromPlayers * minDistanceFromPlayers < distanceSqr)
             {
                 minDistanceFromPlayers = (float)Math.Sqrt(distanceSqr);
             }
 
-            string message = "Allowed ";
-            if (minDistanceFromPlayers  < exclusionRadius)
+            if (minDistanceFromPlayers < exclusionRadius)
             {
-                message = "Blocked ";
                 __result = false;
             }
 
+            /*string message = __result ? "Allowed " : "Blocked ";
             message += "spawn that was " + minDistanceFromPlayers + " from players (exclusionRadius=" + Math.Round(exclusionRadius, 1) + ")";
-            Controllers.LoggingController.LogInfo(message);
+            Controllers.LoggingController.LogDebug(message);*/
         }
     }
 }
