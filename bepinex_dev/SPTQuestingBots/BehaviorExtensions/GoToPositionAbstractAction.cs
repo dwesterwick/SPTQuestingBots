@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using HarmonyLib;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -53,6 +55,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
             botIsStuckTimer.Stop();
             BotOwner.PatrollingData.Unpause();
+
+            //updateBotZoneForGroup();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position)
@@ -89,14 +93,6 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             return ObjectiveManager.BotPath.Status;
-        }
-
-        public NavMeshPathStatus? RecalculatePath_OLD(Vector3 position, float reachDist)
-        {
-            // Recalculate a path to the bot's objective. This should be done cyclically in case locked doors are opened, etc.
-            NavMeshPathStatus? pathStatus = BotOwner.Mover?.GoToPoint(position, true, reachDist, false, false);
-
-            return pathStatus;
         }
 
         protected void tryJump(bool useEFTMethod = true, bool force = false)
@@ -180,6 +176,30 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             DebugHelpers.outlinePosition(ObjectiveManager.Position.Value, color);
+        }
+
+        protected void updateBotZoneForGroup(bool allowForFollowers = false)
+        {
+            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+            BotZone closestBotZone = botSpawnerClass.GetClosestZone(BotOwner.Position, out float dist);
+
+            if (BotOwner.BotsGroup.BotZone == closestBotZone)
+            {
+                return;
+            }
+
+            // Do not allow followers to set the BotZone
+            if (!allowForFollowers && !BotOwner.Boss.IamBoss && (BotOwner.BotsGroup.MembersCount > 1))
+            {
+                return;
+            }
+
+            Controllers.LoggingController.LogWarning("Changing BotZone for group containing " + BotOwner.GetText() + " from " + BotOwner.BotsGroup.BotZone.ShortName + " to " + closestBotZone.ShortName + "...");
+
+            FieldInfo botZoneField = AccessTools.Field(typeof(BotsGroup), "<BotZone>k__BackingField");
+            botZoneField.SetValue(BotOwner.BotsGroup, closestBotZone);
+
+            BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
         }
 
         private void updateBotStuckDetection()

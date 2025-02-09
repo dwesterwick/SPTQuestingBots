@@ -6,13 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using HarmonyLib;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class TrySpawnFreeAndDelayPatch : ModulePatch
     {
+        private static FieldInfo nextRetryTimeField = null;
+
         private enum ScavSpawnBlockReason
         {
             MaxAliveScavs,
@@ -29,6 +33,8 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         protected override MethodBase GetTargetMethod()
         {
+            nextRetryTimeField = AccessTools.Field(typeof(NonWavesSpawnScenario), "float_2");
+
             return typeof(BotSpawner).GetMethod(nameof(BotSpawner.TrySpawnFreeAndDelay), BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -104,6 +110,8 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
+            nextRetryTimeField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, ConfigController.Config.BotSpawns.NonWaveRetryDelayAfterBlocked);
+
             Controllers.LoggingController.LogWarning("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
             return false;
         }

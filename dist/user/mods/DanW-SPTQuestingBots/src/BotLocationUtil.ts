@@ -253,19 +253,4 @@ export class BotUtil
             this.commonUtils.logInfo(`Updated bot cap for ${location} to ${newCap} (Original SPT: ${originalSPTCap}, EFT: ${eftCap}, fixed adjustment: ${fixedAdjustment})`);
         }
     }
-
-    public modifyNonWaveBotSpawnSettings(): void
-    {
-        this.commonUtils.logInfo("Updating BotSpawnPeriodCheck for all maps...");
-
-        for (const location in this.iBotConfig.maxBotCap)
-        {
-            if ((this.databaseTables.locations[location] === undefined) || (this.databaseTables.locations[location].base === undefined))
-            {
-                continue;
-            }
-            
-            this.databaseTables.locations[location].base.BotSpawnPeriodCheck *= modConfig.bot_spawns.non_wave_bot_spawn_period_factor;
-        }
-    }
 }

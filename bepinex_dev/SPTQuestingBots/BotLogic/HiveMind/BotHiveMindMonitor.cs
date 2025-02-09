@@ -11,6 +11,7 @@ using HarmonyLib;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.HiveMind
@@ -347,14 +348,20 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
             // Dissociate the bot from its group
             BotsGroup currentGroup = bot.BotsGroup;
-            currentGroup.RemoveAlly(bot);
 
             // Create a new bot group for the bot
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(bot.Position, out float dist);
-            BotsGroup newGroup = botSpawnerClass.GetGroupAndSetEnemies(bot, closestBotZone);
+            BotsGroup newGroup = BotGroupHelpers.CreateGroup(bot, closestBotZone, 1);
             bot.BotsGroup = newGroup;
             newGroup.Lock();
+
+            // Make the bot's old group members friendly
+            List<BotOwner> oldGroupMembers = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(currentGroup);
+            foreach (BotOwner oldGroupMember in oldGroupMembers)
+            {
+                newGroup.AddAlly(oldGroupMember.GetPlayer);
+            }
         }
 
         private static void throwIfSensorNotRegistred(BotHiveMindSensorType sensorType)

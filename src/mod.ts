@@ -288,7 +288,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             this.commonUtils.logInfo("Enabling advanced_eft_bot_count_management will instruct EFT to ignore this mod's PMC's and PScavs when spawning more bots.");
             this.botUtil.useEFTBotCaps();
-            this.botUtil.modifyNonWaveBotSpawnSettings();
         }
 
         if (modConfig.bot_spawns.bot_cap_adjustments.enabled)
