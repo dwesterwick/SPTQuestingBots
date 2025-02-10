@@ -110,6 +110,8 @@ namespace SPTQuestingBots
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
                         Logger.LogInfo("Enabled PScav bot generation");
                     }
+
+                    ConfigController.AdjustPMCConversionChances(0, false);
                 }
                 
                 // Add options to the F12 menu

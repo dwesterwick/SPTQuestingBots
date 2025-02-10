@@ -63,23 +63,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         const staticRouterModService = container.resolve<StaticRouterModService>("StaticRouterModService");
         const dynamicRouterModService = container.resolve<DynamicRouterModService>("DynamicRouterModService");
 		
-        // Cache and adjust the PMC conversion chances
-        staticRouterModService.registerStaticRouter(`StaticRaidConfiguration${modName}`,
-            [{
-                url: "/client/game/start",
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                action: async (url: string, info: any, sessionId: string, output: string) => 
-                {
-                    if (modConfig.bot_spawns.enabled)
-                    {
-                        this.pmcConversionUtil.adjustAllPmcConversionChances(0, false);
-                    }
-
-                    return output;
-                }
-            }], "aki"
-        );
-
         // Get config.json settings for the bepinex plugin
         staticRouterModService.registerStaticRouter(`StaticGetConfig${modName}`,
             [{

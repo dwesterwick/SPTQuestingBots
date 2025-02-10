@@ -20,10 +20,13 @@ namespace SPTQuestingBots.Patches.Spawning
         public static bool IsDelayingGameStart { get; set; } = false;
 
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
+        private static FieldInfo wavesSpawnScenarioField = null;
         private static object localGameObj = null;
 
         protected override MethodBase GetTargetMethod()
         {
+            wavesSpawnScenarioField = AccessTools.Field(typeof(LocalGame), "wavesSpawnScenario_0");
+
             return typeof(BaseLocalGame<EftGamePlayerOwner>).GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -64,33 +67,6 @@ namespace SPTQuestingBots.Patches.Spawning
             LoggingController.LogInfo(message);
         }
 
-        private static IEnumerator waitForBotGeneratorsAndAdjustTimers()
-        {
-            float startTime = Time.time;
-            float safetyDelay = 999;
-
-            IEnumerable<object> timers = getAllTimers();
-
-            //IEnumerable<float> originalTimerEndTimes = timers.Select(t => getTimerEndTime(t));
-            //LoggingController.LogInfo("Original Start Time: " + startTime);
-            //LoggingController.LogInfo("Original Timer EndTimes: " + string.Join(", ", originalTimerEndTimes));
-
-            updateAllTimers(timers, 0, safetyDelay);
-
-            yield return waitForBotGenerators();
-
-            LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator completed");
-
-            float newStartTime = Time.time;
-            updateAllTimers(timers, newStartTime - startTime, -1 * safetyDelay);
-
-            //IEnumerable<float> newTimerEndTimes = timers.Select(t => getTimerEndTime(t));
-            //LoggingController.LogInfo("New Start Time: " + newStartTime);
-            //LoggingController.LogInfo("New Timer EndTimes: " + string.Join(", ", newTimerEndTimes));
-
-            LoggingController.LogInfo("Game-start timers adjusted");
-        }
-
         private static IEnumerator spawnMissedWaves()
         {
             IsDelayingGameStart = false;
@@ -110,90 +86,6 @@ namespace SPTQuestingBots.Patches.Spawning
             yield return null;
         }
 
-        private static void updateAllTimers(IEnumerable<object> timers, float delay, float safetyDelay)
-        {
-            foreach (object timer in timers)
-            {
-                float currentEndTime = getTimerEndTime(timer);
-                float newEndTime = currentEndTime + delay + safetyDelay;
-
-                MethodInfo restartMethod = AccessTools.Method(timer.GetType(), "Restart");
-                restartMethod.Invoke(timer, new object[] { newEndTime });
-            }
-
-            LoggingController.LogInfo("Added additional delay of " + delay + "s to " + timers.Count() + " timers");
-        }
-
-        private static float getTimerEndTime(object timer)
-        {
-            PropertyInfo endTimeProperty = AccessTools.Property(timer.GetType(), "EndTime");
-            float endTime = (float)endTimeProperty.GetValue(timer);
-
-            return endTime;
-        }
-
-        private static IEnumerable<object> getAllTimers()
-        {
-            List<object> timers = new List<object>();
-
-            FieldInfo linkedListField = AccessTools.Field(StaticManager.Instance.TimerManager.GetType(), "linkedList_0");
-            ICollection linkedList = (ICollection)linkedListField.GetValue(StaticManager.Instance.TimerManager);
-
-            LoggingController.LogInfo("Found Timer Manager LinkedList (" + linkedList.Count + " timers)");
-
-            foreach (var timer in linkedList)
-            {
-                timers.Add(timer);
-            }
-
-            FieldInfo wavesSpawnScenarioField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "wavesSpawnScenario_0");
-            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
-
-            //LoggingController.LogInfo("Found WavesSpawnScenario instance");
-
-            FieldInfo wavesSpawnScenarioTimersField = AccessTools.Field(typeof(WavesSpawnScenario), "list_0");
-            ICollection wavesSpawnScenarioTimers = (ICollection)wavesSpawnScenarioTimersField.GetValue(wavesSpawnScenario);
-
-            LoggingController.LogInfo("Found WavesSpawnScenario timers (" + wavesSpawnScenarioTimers.Count + " timers)");
-
-            foreach (var timer in wavesSpawnScenarioTimers)
-            {
-                timers.Add(timer);
-            }
-
-            FieldInfo bossWavesField = AccessTools.Field(SPT.Reflection.Utils.PatchConstants.LocalGameType, "bossSpawnScenario_0");
-            BossSpawnScenario bossWaves = (BossSpawnScenario)bossWavesField.GetValue(localGameObj);
-
-            //LoggingController.LogInfo("Found Boss Waves instance");
-
-            FieldInfo bossWavesTimersField = AccessTools.Field(typeof(BossSpawnScenario), "Timers");
-            ICollection bossWavesTimers = (ICollection)bossWavesTimersField.GetValue(bossWaves);
-
-            LoggingController.LogInfo("Found Boss Waves timers (" + bossWavesTimers.Count + " timers)");
-
-            foreach (var timer in bossWavesTimers)
-            {
-                timers.Add(timer);
-            }
-
-            FieldInfo questTriggerField = AccessTools.Field(typeof(BossSpawnScenario), "_questsSpanws");
-            GClass639 questTrigger = (GClass639)questTriggerField.GetValue(bossWaves);
-
-            //LoggingController.LogInfo("Found Boss Waves Quest Trigger instance");
-
-            FieldInfo questTriggerTimerField = AccessTools.Field(typeof(GClass639), "iBotTimer");
-            object questTriggerTimer = questTriggerTimerField.GetValue(questTrigger);
-
-            if (questTriggerTimer != null)
-            {
-                LoggingController.LogInfo("Found Boss Waves Quest Trigger timer");
-
-                timers.Add(questTriggerTimer);
-            }
-
-            return timers;
-        }
-
         private static IEnumerator waitForBotGenerators()
         {
             bool hadToWait = false;
@@ -209,7 +101,7 @@ namespace SPTQuestingBots.Patches.Spawning
 
                 yield return new WaitForSeconds(waitIterationDuration / 1000f);
 
-                updateBotGenerationText("Generating " + BotGenerator.CurrentBotGeneratorType + "s", BotGenerator.CurrentBotGeneratorProgress / 100f);
+                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus("Generating " + BotGenerator.CurrentBotGeneratorType + "s", BotGenerator.CurrentBotGeneratorProgress / 100f);
             }
 
             if (hadToWait)
@@ -220,16 +112,16 @@ namespace SPTQuestingBots.Patches.Spawning
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
         }
 
-        private static void updateBotGenerationText(string text, float? progress)
-        {
-            TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(text, BotGenerator.CurrentBotGeneratorProgress / 100f);
-        }
-
         private static void writeSpawnMessages()
         {
-            FieldInfo wavesSpawnScenarioField = AccessTools.Field(typeof(LocalGame), "wavesSpawnScenario_0");
-            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
+            if (localGameObj as LocalGame == null)
+            {
+                LoggingController.LogError("Cannot write WavesSpawnScenario spawn messages for the current BaseLocalGame because it is not a LocalGame");
 
+                return;
+            }
+
+            WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
             if (wavesSpawnScenario?.SpawnWaves == null)
             {
                 LoggingController.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
