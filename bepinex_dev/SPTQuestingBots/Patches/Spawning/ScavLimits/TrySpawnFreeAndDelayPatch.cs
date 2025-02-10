@@ -15,6 +15,8 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class TrySpawnFreeAndDelayPatch : ModulePatch
     {
+        private const float TIME_WINDOW_TO_CHECK = 60f * 5f;
+
         private static FieldInfo nextRetryTimeField = null;
 
         private enum ScavSpawnBlockReason
@@ -73,7 +75,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             }
 
             // Check if the rate limit should be used
-            if (NonWavesSpawnScenarioCreatePatch.SpawnedScavs + pendingScavCount <= QuestingBotsPluginConfig.ScavSpawnLimitThreshold.Value)
+            if (NonWavesSpawnScenarioCreatePatch.TotalSpawnedScavs + pendingScavCount <= QuestingBotsPluginConfig.ScavSpawnLimitThreshold.Value)
             {
                 return allowSpawn(pendingScavCount);
             }
@@ -84,13 +86,13 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
                 allowSpawn(pendingScavCount);
             }
 
-            float raidTimeElapsedFraction = 1f - Helpers.RaidHelpers.GetRaidTimeRemainingFraction();
-            float totalScavsAllowedToSpawn = locationData.MaxTotalBots * QuestingBotsPluginConfig.TotalScavSpawnLimitFraction.Value;
-            int totalScavsAllowedToSpawnNow = (int)Math.Round(totalScavsAllowedToSpawn * raidTimeElapsedFraction, 0);
+            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK);
+            float recentScavSpawnRate = recentlySpawnedScavs * 60f / TIME_WINDOW_TO_CHECK;
 
-            // Prevent too many total Scavs from spawning at this point in the raid
-            if (NonWavesSpawnScenarioCreatePatch.SpawnedScavs + pendingScavCount > totalScavsAllowedToSpawnNow)
+            // Prevent too many Scavs from spawning in a short period of time
+            if (recentScavSpawnRate > QuestingBotsPluginConfig.TotalScavSpawnLimit.Value)
             {
+                LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + TIME_WINDOW_TO_CHECK + "s. Rate=" + recentScavSpawnRate);
                 return blockSpawn(pendingScavCount, ScavSpawnBlockReason.ScavRateLimit);
             }
 

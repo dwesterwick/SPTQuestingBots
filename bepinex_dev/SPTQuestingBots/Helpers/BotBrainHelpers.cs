@@ -247,6 +247,8 @@ namespace SPTQuestingBots.Helpers
             return botOwner.Profile.Info.Settings.Role.IsBoss();
         }
 
+        public static bool WillBeAPlayerScav(this BotOwner bot) => bot.Profile.WillBeAPlayerScav();
+
         public static bool WillBeAPlayerScav(this Profile profile)
         {
             return profile.Nickname.Contains(" (");

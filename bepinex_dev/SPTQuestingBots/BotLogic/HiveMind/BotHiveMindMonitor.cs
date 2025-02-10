@@ -399,7 +399,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                 if (botBosses[bot].IsDead)
                 {
-                    Controllers.LoggingController.LogInfo("Boss " + botBosses[bot].GetText() + " is now dead.");
+                    Controllers.LoggingController.LogDebug("Boss " + botBosses[bot].GetText() + " is now dead.");
 
                     if (botFollowers.ContainsKey(botBosses[bot]))
                     {
@@ -453,7 +453,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                         continue;
                     }
 
-                    Controllers.LoggingController.LogInfo("Boss " + boss.GetText() + " is now dead.");
+                    Controllers.LoggingController.LogDebug("Boss " + boss.GetText() + " is now dead.");
 
                     botFollowers.Remove(boss);
                     deadBots.Add(boss);
@@ -465,7 +465,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 {
                     if (follower == null)
                     {
-                        Controllers.LoggingController.LogInfo("Removing null follower for " + boss.GetText());
+                        Controllers.LoggingController.LogWarning("Removing null follower for " + boss.GetText());
 
                         deadBots.Add(follower);
                     }
@@ -482,7 +482,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
 
                     if (follower.IsDead)
                     {
-                        Controllers.LoggingController.LogInfo("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
+                        Controllers.LoggingController.LogDebug("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
 
                         deadBots.Add(follower);
                     }

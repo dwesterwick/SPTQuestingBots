@@ -593,7 +593,7 @@ namespace SPTQuestingBots.Components
             // The furthest spawn point from all reference positions is the one that has the furthest minimum distance to all of them
             KeyValuePair<SpawnPointParams, float> selectedPoint = nearestReferencePoints.OrderBy(p => p.Value).Last();
 
-            LoggingController.LogInfo("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from other players");
+            LoggingController.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from other players");
 
             return selectedPoint.Key;
         }

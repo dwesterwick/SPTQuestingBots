@@ -44,6 +44,8 @@ namespace SPTQuestingBots.Controllers
 
         public static IReadOnlyList<BotOwner> PMCs => registeredPMCs.AsReadOnly();
         public static IReadOnlyList<BotOwner> Bosses => registeredBosses.AsReadOnly();
+        public static bool IsARegisteredPMC(this BotOwner bot) => registeredPMCs.Contains(bot);
+        public static bool IsARegisteredBoss(this BotOwner bot) => registeredBosses.Contains(bot);
 
         public static void Clear()
         {

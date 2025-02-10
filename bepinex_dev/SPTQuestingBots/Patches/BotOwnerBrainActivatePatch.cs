@@ -67,10 +67,25 @@ namespace SPTQuestingBots.Patches
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
 
+            if (__instance.IsARegisteredPMC() || __instance.WillBeAPlayerScav())
+            {
+                registerBotAsHumanPlayer(__instance);
+            }
+        }
+
+        private static void registerBotAsHumanPlayer(BotOwner __instance)
+        {
+            if (!ConfigController.Config.BotSpawns.Enabled)
+            {
+                return;
+            }
+
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
             botSpawnerClass.AddPlayer(__instance.GetPlayer());
             __instance.GetPlayer().OnPlayerDead += deletePlayer;
+
+            Controllers.LoggingController.LogWarning("Registered " + __instance.GetText() + " as a human player in EFT");
         }
 
         private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfoStruct damage, EBodyPart part)

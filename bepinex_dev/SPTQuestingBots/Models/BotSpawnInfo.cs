@@ -63,7 +63,7 @@ namespace SPTQuestingBots.Models
 
         public IEnumerator WaitForFollowersAndSetBoss(BotOwner bot)
         {
-            LoggingController.LogInfo("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...");
+            LoggingController.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...");
 
             while (!HaveAllBotsSpawned)
             {
@@ -75,7 +75,7 @@ namespace SPTQuestingBots.Models
                 yield return new WaitForSeconds(0.01f);
             }
 
-            LoggingController.LogInfo("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...done.");
+            LoggingController.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...done.");
 
             bot.Boss.SetBoss(GeneratedBotCount - 1);
         }

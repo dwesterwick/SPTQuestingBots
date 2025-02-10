@@ -473,7 +473,7 @@ namespace SPTQuestingBots.Controllers
                 if (botJobAssignments[bot.Profile.Id].Count > 1)
                 {
                     BotJobAssignment lastAssignment = botJobAssignments[bot.Profile.Id].TakeLast(2).First();
-                    LoggingController.LogInfo("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
+                    LoggingController.LogDebug("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
 
                     //double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
                     //double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);

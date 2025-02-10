@@ -12,7 +12,10 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
     public class NonWavesSpawnScenarioCreatePatch : ModulePatch
     {
         public static NonWavesSpawnScenario MostRecentNonWavesSpawnScenario { get; private set; } = null;
-        public static int SpawnedScavs { get; private set; } = 0;
+
+        private static Dictionary<float, int> spawnedScavTimes = new Dictionary<float, int>();
+
+        public static int TotalSpawnedScavs => spawnedScavTimes.Sum(x => x.Value);
 
         protected override MethodBase GetTargetMethod()
         {
@@ -28,12 +31,30 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
         public static void Clear()
         {
             MostRecentNonWavesSpawnScenario = null;
-            SpawnedScavs = 0;
+            spawnedScavTimes.Clear();
         }
 
         public static void AddSpawnedScavs(int count)
         {
-            SpawnedScavs += count;
+            float elapsedTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+
+            if (spawnedScavTimes.ContainsKey(elapsedTime))
+            {
+                spawnedScavTimes[elapsedTime] += count;
+                return;
+            }
+
+            spawnedScavTimes.Add(elapsedTime, count);
+        }
+
+        public static int GetSpawnedScavCount(float timeWindow)
+        {
+            float elapsedTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            float elapsedTimeThreshold = elapsedTime - timeWindow;
+
+            return spawnedScavTimes
+                .Where(x => x.Key >= elapsedTimeThreshold)
+                .Sum(x => x.Value);
         }
     }
 }
