@@ -27,9 +27,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("non_wave_retry_delay_after_blocked")]
         public float NonWaveRetryDelayAfterBlocked { get; set; } = 20;
 
-        [JsonProperty("advanced_eft_bot_count_management")]
-        public AdvancedEFTBotCountManagementConfig AdvancedEFTBotCountManagement { get; set; } = new AdvancedEFTBotCountManagementConfig();
-
         [JsonProperty("bot_cap_adjustments")]
         public BotCapAdjustmentsConfig BotCapAdjustments { get; set; } = new BotCapAdjustmentsConfig();
 

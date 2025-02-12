@@ -26,9 +26,7 @@ namespace SPTQuestingBots.Components.Spawning
         public int GeneratedBotCount { get; private set; } = 0;
 
         public bool WaitForInitialBossesToSpawn { get; protected set; } = true;
-        public bool RespectMaxBotCap { get; protected set; } = true;
         public int MaxAliveBots { get; protected set; } = 10;
-        public int MinOtherBotsAllowedToSpawn { get; protected set; } = -99;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
@@ -299,12 +297,6 @@ namespace SPTQuestingBots.Components.Spawning
             return new ReadOnlyCollection<BotOwner>(botFriends.ToArray());
         }
 
-        public int CountBeforeBotCapIsReached()
-        {
-            List<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList;
-            return Singleton<GameWorld>.Instance.GetComponent<LocationData>().MaxTotalBots - allPlayers.Count;
-        }
-
         public bool AllowedToSpawnBots()
         {
             if (!HasGeneratedBots || IsSpawningBots || !HasRemainingSpawns)
@@ -330,23 +322,6 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             return true;
-        }
-
-        public bool CanSpawnAdditionalBots()
-        {
-            // Ensure the total number of bots isn't too close to the bot cap for the map
-            if (RespectMaxBotCap && (CountBeforeBotCapIsReached() < MinOtherBotsAllowedToSpawn))
-            {
-                return false;
-            }
-
-            // Don't allow too many alive bots to be on the map for performance and difficulty reasons
-            if (BotsAllowedToSpawnForGeneratorType() > 0)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public bool HaveInitialBossWavesSpawned()
@@ -380,6 +355,8 @@ namespace SPTQuestingBots.Components.Spawning
 
             return aliveBots;
         }
+
+        public bool CanSpawnAdditionalBots() => BotsAllowedToSpawnForGeneratorType() > 0;
 
         public int BotsAllowedToSpawnForGeneratorType()
         {

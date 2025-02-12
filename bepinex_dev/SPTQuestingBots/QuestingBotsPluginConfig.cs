@@ -42,8 +42,6 @@ namespace SPTQuestingBots
 
     public static class QuestingBotsPluginConfig
     {
-        private static readonly float maxExclusionRadiusFactorForScavs = 0.15f;
-
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
         public static Dictionary<WildSpawnType, BotTypeException> ExceptionFlagForWildSpawnType = new Dictionary<WildSpawnType, BotTypeException>();
 
@@ -54,7 +52,7 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<bool> ScavLimitsEnabled;
         public static ConfigEntry<float> ScavSpawningExclusionRadiusMapFraction;
-        public static ConfigEntry<int> TotalScavSpawnLimit;
+        public static ConfigEntry<float> ScavSpawnRateLimit;
         public static ConfigEntry<int> ScavSpawnLimitThreshold;
         public static ConfigEntry<int> ScavMaxAliveLimit;
 
@@ -107,11 +105,11 @@ namespace SPTQuestingBots
                 ScavLimitsEnabled = Config.Bind("Scav Spawn Restrictions", "Enable Scav Spawn Restrictions",
                     true, "Restrict where and how frequently Scavs are allowed to spawn");
                 ScavSpawningExclusionRadiusMapFraction = Config.Bind("Scav Spawn Restrictions", "Map Fraction for Scav Spawning Exclusion Radius",
-                    0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, maxExclusionRadiusFactorForScavs)));
-                TotalScavSpawnLimit = Config.Bind("Scav Spawn Restrictions", "Permitted Scav Spawn Rate",
-                    5, new ConfigDescription("After the Scav spawn threshold is exceeded, only this number of Scavs will be allowed to spawn per minutes", new AcceptableValueRange<int>(1, 25)));
+                    0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, 0.15f)));
+                ScavSpawnRateLimit = Config.Bind("Scav Spawn Restrictions", "Permitted Scav Spawn Rate",
+                    3f, new ConfigDescription("After the Scav spawn threshold is exceeded, only this number of Scavs will be allowed to spawn per minute (on average)", new AcceptableValueRange<float>(0.5f, 6f)));
                 ScavSpawnLimitThreshold = Config.Bind("Scav Spawn Restrictions", "Threshold for Scav Spawn Rate Limit",
-                    15, new ConfigDescription("The Scav spawn rate limit will only be active after this many Scavs spawn in the raid", new AcceptableValueRange<int>(1, 99)));
+                    15, new ConfigDescription("The Scav spawn rate limit will only be active after this many Scavs spawn in the raid", new AcceptableValueRange<int>(1, 50)));
                 ScavMaxAliveLimit = Config.Bind("Scav Spawn Restrictions", "Max Alive Scavs",
                     15, new ConfigDescription("The maximum number of Scavs that can be alive at the same time (including Sniper Scavs)", new AcceptableValueRange<int>(5, 25)));
             }

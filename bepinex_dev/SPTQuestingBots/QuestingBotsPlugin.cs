@@ -82,6 +82,11 @@ namespace SPTQuestingBots
                     new Patches.Spawning.SetNewBossPatch().Enable();
                     new Patches.Spawning.GetAllBossPlayersPatch().Enable();
 
+                    new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
+                    new Patches.Spawning.Advanced.ExceptAIPatch().Enable();
+                    new Patches.Spawning.Advanced.BotDiedPatch().Enable();
+                    new Patches.Spawning.Advanced.TryToSpawnInZoneAndDelayPatch().Enable();
+
                     new Patches.Spawning.ScavLimits.SpawnPointIsValidPatch().Enable();
                     new Patches.Spawning.ScavLimits.TrySpawnFreeAndDelayPatch().Enable();
                     new Patches.Spawning.ScavLimits.NonWavesSpawnScenarioCreatePatch().Enable();
@@ -92,14 +97,6 @@ namespace SPTQuestingBots
                         new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
                     }
                     
-                    if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled)
-                    {
-                        new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
-                        new Patches.Spawning.Advanced.ExceptAIPatch().Enable();
-                        new Patches.Spawning.Advanced.BotDiedPatch().Enable();
-                        new Patches.Spawning.Advanced.TryToSpawnInZoneAndDelayPatch().Enable();
-                    }
-
                     if (ConfigController.Config.BotSpawns.PMCs.Enabled)
                     {
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();

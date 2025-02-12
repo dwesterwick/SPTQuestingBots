@@ -47,12 +47,20 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             spawnedScavTimes.Add(elapsedTime, count);
         }
 
-        public static int GetSpawnedScavCount(float timeWindow)
+        public static int GetSpawnedScavCount(float timeWindow, bool excludeBotsBeforeThreshold)
         {
             float elapsedTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
             float elapsedTimeThreshold = elapsedTime - timeWindow;
 
-            return spawnedScavTimes
+            IEnumerable<KeyValuePair<float, int>> scavsToCheck = spawnedScavTimes;
+
+            if (excludeBotsBeforeThreshold)
+            {
+                int initialScavs = 0;
+                scavsToCheck = scavsToCheck.SkipWhile(x => (initialScavs += x.Value) <= QuestingBotsPluginConfig.ScavSpawnLimitThreshold.Value);
+            }
+
+            return scavsToCheck
                 .Where(x => x.Key >= elapsedTimeThreshold)
                 .Sum(x => x.Value);
         }

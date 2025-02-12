@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class TrySpawnFreeAndDelayPatch : ModulePatch
     {
-        private const float TIME_WINDOW_TO_CHECK = 60f * 5f;
+        private const float TIME_WINDOW_TO_CHECK = 60f * 3f;
 
         private static FieldInfo nextRetryTimeField = null;
 
@@ -86,13 +86,12 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
                 allowSpawn(pendingScavCount);
             }
 
-            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK);
+            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK, true);
             float recentScavSpawnRate = recentlySpawnedScavs * 60f / TIME_WINDOW_TO_CHECK;
 
             // Prevent too many Scavs from spawning in a short period of time
-            if (recentScavSpawnRate > QuestingBotsPluginConfig.TotalScavSpawnLimit.Value)
+            if (recentScavSpawnRate > QuestingBotsPluginConfig.ScavSpawnRateLimit.Value)
             {
-                LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + TIME_WINDOW_TO_CHECK + "s. Rate=" + recentScavSpawnRate);
                 return blockSpawn(pendingScavCount, ScavSpawnBlockReason.ScavRateLimit);
             }
 
@@ -112,9 +111,13 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
-            nextRetryTimeField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, ConfigController.Config.BotSpawns.NonWaveRetryDelayAfterBlocked);
-
             Controllers.LoggingController.LogWarning("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
+
+            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK, true);
+            float recentScavSpawnRate = recentlySpawnedScavs * 60f / TIME_WINDOW_TO_CHECK;
+            Controllers.LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + TIME_WINDOW_TO_CHECK + "s. Rate=" + recentScavSpawnRate);
+            
+            nextRetryTimeField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, ConfigController.Config.BotSpawns.NonWaveRetryDelayAfterBlocked);
             return false;
         }
     }

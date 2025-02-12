@@ -20,7 +20,7 @@ namespace SPTQuestingBots.Patches.Lighthouse
         protected static void PatchPostfix(PhysicsTriggerHandler ___physicsTriggerHandler_0)
         {
             Components.LightkeeperIslandMonitor.LightkeeperTraderZoneColliderHandler = ___physicsTriggerHandler_0;
-            Controllers.LoggingController.LogInfo("Found collider for the Lighthouse trader zone");
+            Controllers.LoggingController.LogDebug("Found collider for the Lighthouse trader zone");
         }
     }
 }

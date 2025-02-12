@@ -34,7 +34,7 @@ namespace SPTQuestingBots.Patches
         {
             registerBot(__instance);
 
-            if (ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled && BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            if (BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
             {
                 reduceBotCounts(__instance);
             }
@@ -84,8 +84,6 @@ namespace SPTQuestingBots.Patches
 
             botSpawnerClass.AddPlayer(__instance.GetPlayer());
             __instance.GetPlayer().OnPlayerDead += deletePlayer;
-
-            Controllers.LoggingController.LogWarning("Registered " + __instance.GetText() + " as a human player in EFT");
         }
 
         private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfoStruct damage, EBodyPart part)

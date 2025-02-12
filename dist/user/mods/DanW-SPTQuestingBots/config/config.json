@@ -212,7 +212,7 @@
 			"airdrop_bot_interest_time": 420,
 			"elimination_quest_search_time": 60,
 			"eft_quests": {
-				"desirability": 55,
+				"desirability": 50,
 				"max_bots_per_quest": 3,
 				"chance_of_having_keys": 50,
 				"match_looting_behavior_distance": 5,
@@ -241,7 +241,7 @@
 				"max_bots_per_quest": 30
 			},
 			"boss_hunter": {
-				"desirability": 35,
+				"desirability": 30,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 50,
@@ -261,32 +261,24 @@
 		"delay_game_start_until_bot_gen_finishes": true,
 		"spawn_initial_bosses_first": false,
 		"non_wave_retry_delay_after_blocked": 180,
-		"advanced_eft_bot_count_management": {
-			"enabled": true,
+		"bot_cap_adjustments": {
 			"use_EFT_bot_caps": true,
 			"only_decrease_bot_caps": true,
-			"bot_cap_adjustments": {
+			"map_specific_adjustments": {
 				"default": 0,
 				"factory4_day": 0,
 				"factory4_night": 0,
 				"bigmap": 0,
 				"woods": 0,
 				"shoreline": 0,
-				"lighthouse": 4,
+				"lighthouse": 0,
 				"rezervbase": 0,
 				"interchange": 0,
 				"laboratory": 0,
-				"tarkovstreets": -4,
+				"tarkovstreets": 0,
 				"sandbox": 0,
 				"sandbox_high": 0
 			}
-		},
-		"bot_cap_adjustments" : {
-			"enabled": false,
-			"min_other_bots_allowed_to_spawn": 2,
-			"add_max_players_to_bot_cap": true,
-			"max_additional_bots": 5,
-			"max_total_bots": 26
 		},
 		"limit_initial_boss_spawns" : {
 			"enabled": true,

@@ -196,41 +196,9 @@ export class BotUtil
         this.commonUtils.logInfo("Disabling custom Scav waves...");
         this.iLocationConfig.customWaves.normal = {};
     }
-
-    public increaseBotCaps(): void
-    {
-        if (!modConfig.bot_spawns.bot_cap_adjustments.add_max_players_to_bot_cap)
-        {
-            return;
-        }
-
-        const maxAddtlBots = modConfig.bot_spawns.bot_cap_adjustments.max_additional_bots;
-        const maxTotalBots = modConfig.bot_spawns.bot_cap_adjustments.max_total_bots;
-
-        for (const location in this.iBotConfig.maxBotCap)
-        {
-            if (this.databaseTables.locations[location].base === undefined)
-            {
-                continue;
-            }
-            
-            const maxPlayers = this.databaseTables.locations[location].base.MaxPlayers;
-            this.iBotConfig.maxBotCap[location] = Math.min(this.iBotConfig.maxBotCap[location] + Math.min(maxPlayers, maxAddtlBots), maxTotalBots);
-
-            this.commonUtils.logInfo(`Changed bot cap for ${location} to: ${this.iBotConfig.maxBotCap[location]}`);
-        }
-
-        this.iBotConfig.maxBotCap.default = Math.min(this.iBotConfig.maxBotCap.default + maxAddtlBots, maxTotalBots);
-        this.commonUtils.logInfo(`Changed default bot cap to: ${this.iBotConfig.maxBotCap.default}`);
-    }
-
+    
     public useEFTBotCaps(): void
     {
-        if (!modConfig.bot_spawns.advanced_eft_bot_count_management.use_EFT_bot_caps)
-        {
-            return;
-        }
-
         for (const location in this.iBotConfig.maxBotCap)
         {
             if ((this.databaseTables.locations[location] === undefined) || (this.databaseTables.locations[location].base === undefined))
@@ -240,13 +208,14 @@ export class BotUtil
 
             const originalSPTCap = this.iBotConfig.maxBotCap[location];
             const eftCap = this.databaseTables.locations[location].base.BotMax;
+            const shouldChangeBotCap = (originalSPTCap > eftCap) || !modConfig.bot_spawns.bot_cap_adjustments.only_decrease_bot_caps;
 
-            if (!modConfig.bot_spawns.advanced_eft_bot_count_management.only_decrease_bot_caps || (originalSPTCap > eftCap))
+            if (modConfig.bot_spawns.bot_cap_adjustments.use_EFT_bot_caps && shouldChangeBotCap)
             {
                 this.iBotConfig.maxBotCap[location] = eftCap;
             }
 
-            const fixedAdjustment = modConfig.bot_spawns.advanced_eft_bot_count_management.bot_cap_adjustments[location];
+            const fixedAdjustment = modConfig.bot_spawns.bot_cap_adjustments.map_specific_adjustments[location];
             this.iBotConfig.maxBotCap[location] += fixedAdjustment;
 
             const newCap = this.iBotConfig.maxBotCap[location];

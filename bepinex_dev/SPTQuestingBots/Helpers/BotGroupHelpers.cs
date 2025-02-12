@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Helpers
 {
@@ -130,14 +128,14 @@ namespace SPTQuestingBots.Helpers
 
             foreach (IPlayer remainingEnemy in enemyMatches)
             {
-                LoggingController.LogInfo("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
+                LoggingController.LogDebug("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
                 playerGroup.RemoveEnemy(remainingEnemy);
             }
 
             Player otherPlayer = playerToAlly.GetPlayer();
             if (!playerGroup.Allies.Contains(otherPlayer))
             {
-                LoggingController.LogInfo("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
+                LoggingController.LogDebug("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
                 playerGroup.AddAlly(otherPlayer);
             }
         }

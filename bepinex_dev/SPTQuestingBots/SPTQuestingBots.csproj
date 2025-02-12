@@ -145,7 +145,6 @@
     <Compile Include="Components\TarkovData.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="Configuration\AdjustPScavChanceConfig.cs" />
-    <Compile Include="Configuration\AdvancedEFTBotCountManagementConfig.cs" />
     <Compile Include="Configuration\BotCapAdjustmentsConfig.cs" />
     <Compile Include="Configuration\BotPathingConfig.cs" />
     <Compile Include="Configuration\BotSpawnTypeConfig.cs" />

@@ -9,20 +9,14 @@ namespace SPTQuestingBots.Configuration
 {
     public class BotCapAdjustmentsConfig
     {
-        [JsonProperty("enabled")]
-        public bool Enabled { get; set; } = true;
+        [JsonProperty("use_EFT_bot_caps")]
+        public bool UseEFTBotCaps { get; set; } = true;
 
-        [JsonProperty("min_other_bots_allowed_to_spawn")]
-        public int MinOtherBotsAllowedToSpawn { get; set; } = 4;
+        [JsonProperty("only_decrease_bot_caps")]
+        public bool OnlyDecreaseBotCaps { get; set; } = true;
 
-        [JsonProperty("add_max_players_to_bot_cap")]
-        public bool AddMaxPlayersToBotCap { get; set; } = false;
-
-        [JsonProperty("max_additional_bots")]
-        public int MaxAdditionalBots { get; set; } = 10;
-
-        [JsonProperty("max_total_bots")]
-        public int MaxTotalBots { get; set; } = 40;
+        [JsonProperty("map_specific_adjustments")]
+        public Dictionary<string, int> MapSpecificAdjustments { get; set; } = new Dictionary<string, int>();
 
         public BotCapAdjustmentsConfig()
         {

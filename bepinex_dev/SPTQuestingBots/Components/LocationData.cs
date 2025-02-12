@@ -344,15 +344,25 @@ namespace SPTQuestingBots.Components
 
             if (CurrentLocation.Id.Contains("factory"))
             {
-                // Bots cannot enter the building from outside where the transit extract is
+                
                 SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
-                    .Where(s => (s.Position.x < 8) || (s.Position.x > 33) || (s.Position.z < 45) || (s.Position.z > 65))
+                    .Where(s => !isOutsideNearTransitOnFactory(s.Position) && !isInsideBrokenSiloOnFactory(s.Position))
                     .ToArray();
 
                 return validSpawnPointParams;
             }
 
             return CurrentLocation.SpawnPointParams;
+        }
+
+        private static bool isOutsideNearTransitOnFactory(Vector3 position)
+        {
+            return (position.x > 8) && (position.x < 33) && (position.z > 45) && (position.z < 65);
+        }
+
+        private static bool isInsideBrokenSiloOnFactory(Vector3 position)
+        {
+            return (position.x > -9) && (position.x < 0) && (position.z > 12) && (position.z < 20);
         }
 
         // This isn't actually used anywhere in this mod, but I left it in here because it's a pretty nifty algorithm

@@ -261,7 +261,7 @@ namespace SPTQuestingBots.Components
 
                 if (!originalAllies[player].Contains(ally))
                 {
-                    LoggingController.LogInfo(player.GetText() + "'s group is no longer allied with " + ally.GetText());
+                    LoggingController.LogDebug(player.GetText() + "'s group is no longer allied with " + ally.GetText());
 
                     BotOwner allyOwner = ally.GetBotOwner();
                     if (allyOwner != null)
@@ -282,7 +282,7 @@ namespace SPTQuestingBots.Components
 
                 if (!playerGroup.Enemies.ContainsKey(enemy))
                 {
-                    LoggingController.LogInfo(player.GetText() + "'s group has restored their hostility with " + enemy.GetText());
+                    LoggingController.LogDebug(player.GetText() + "'s group has restored their hostility with " + enemy.GetText());
                     playerGroup.AddEnemy(enemy, EBotEnemyCause.initCauseEnemy);
                 }
             }

@@ -20,13 +20,7 @@ namespace SPTQuestingBots.Components.Spawning
 
         protected override void Init()
         {
-            if (ConfigController.Config.BotSpawns.BotCapAdjustments.Enabled)
-            {
-                MinOtherBotsAllowedToSpawn = ConfigController.Config.BotSpawns.BotCapAdjustments.MinOtherBotsAllowedToSpawn;
-            }
-
             RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
-            RespectMaxBotCap = !ConfigController.Config.BotSpawns.AdvancedEFTBotCountManagement.Enabled;
 
             setMaxAliveBots();
         }
