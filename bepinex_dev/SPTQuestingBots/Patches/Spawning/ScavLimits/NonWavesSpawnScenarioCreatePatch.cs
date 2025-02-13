@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using EFT.Interactive;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
@@ -19,7 +21,13 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(NonWavesSpawnScenario).GetMethod("smethod_0", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo methodInfo = typeof(NonWavesSpawnScenario)
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .First(m => m.HasAllParameterTypes(new Type[] { typeof(AbstractGame) }));
+
+            Controllers.LoggingController.LogInfo("Found method for NonWavesSpawnScenarioCreatePatch: " + methodInfo.Name);
+
+            return methodInfo;
         }
 
         [PatchPostfix]

@@ -17,6 +17,8 @@ namespace SPTQuestingBots.Patches
         public static string MinVersion { get; set; } = "0.0.0.0";
         public static string MaxVersion { get; set; } = "999999.999999.999999.999999";
 
+        private static readonly string donutsGuid = "com.dvize.Donuts";
+
         protected override MethodBase GetTargetMethod()
         {
             return typeof(TarkovApplication).GetMethod(nameof(TarkovApplication.Init), BindingFlags.Public | BindingFlags.Instance);
@@ -51,7 +53,7 @@ namespace SPTQuestingBots.Patches
                 Chainloader.DependencyErrors.Add(errorMessage);
             }
 
-            if (ConfigController.Config.BotSpawns.Enabled && Chainloader.PluginInfos.Any(p => p.Value.Metadata.Name.ToLower().Contains("dvize.donuts")))
+            if (ConfigController.Config.BotSpawns.Enabled && Chainloader.PluginInfos.Any(p => p.Value.Metadata.GUID == donutsGuid))
             {
                 Chainloader.DependencyErrors.Add("Using Questing Bots spawns with DONUTS may result in too many spawns. Use at your own risk.");
             }

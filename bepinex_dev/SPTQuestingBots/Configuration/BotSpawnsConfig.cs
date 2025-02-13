@@ -24,8 +24,8 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("spawn_initial_bosses_first")]
         public bool SpawnInitialBossesFirst { get; set; } = true;
 
-        [JsonProperty("non_wave_retry_delay_after_blocked")]
-        public float NonWaveRetryDelayAfterBlocked { get; set; } = 20;
+        [JsonProperty("eft_new_spawn_system_adjustments")]
+        public EftNewSpawnSystemAdjustmentsConfig EftNewSpawnSystemAdjustments { get; set; } = new EftNewSpawnSystemAdjustmentsConfig();
 
         [JsonProperty("bot_cap_adjustments")]
         public BotCapAdjustmentsConfig BotCapAdjustments { get; set; } = new BotCapAdjustmentsConfig();

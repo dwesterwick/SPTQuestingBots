@@ -151,6 +151,7 @@
     <Compile Include="Configuration\BotTypeValueConfig.cs" />
     <Compile Include="Configuration\BrainLayerPrioritiesConfig.cs" />
     <Compile Include="Configuration\DistanceAngleConfig.cs" />
+    <Compile Include="Configuration\EftNewSpawnSystemAdjustmentsConfig.cs" />
     <Compile Include="Configuration\ExtractionRequirementsConfig.cs" />
     <Compile Include="Configuration\HearingSensorConfig.cs" />
     <Compile Include="Configuration\LightkeeperIslandQuestsConfig.cs" />

@@ -15,9 +15,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 {
     public class TrySpawnFreeAndDelayPatch : ModulePatch
     {
-        private const float TIME_WINDOW_TO_CHECK = 60f * 3f;
-
-        private static FieldInfo nextRetryTimeField = null;
+        private static FieldInfo nextRetryTimeDelayField = null;
 
         private enum ScavSpawnBlockReason
         {
@@ -35,7 +33,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         protected override MethodBase GetTargetMethod()
         {
-            nextRetryTimeField = AccessTools.Field(typeof(NonWavesSpawnScenario), "float_2");
+            nextRetryTimeDelayField = AccessTools.Field(typeof(NonWavesSpawnScenario), "float_2");
 
             return typeof(BotSpawner).GetMethod(nameof(BotSpawner.TrySpawnFreeAndDelay), BindingFlags.Public | BindingFlags.Instance);
         }
@@ -54,7 +52,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             }
 
             // Check how many Scavs are queued to spawn, and allow all other roles to spawn
-            int pendingScavCount = data.Profiles.Count(p => isScavProfile(p));
+            int pendingScavCount = data.Profiles.Count(p => isNormalScavProfile(p));
             if (pendingScavCount == 0)
             {
                 return allowSpawn(pendingScavCount);
@@ -68,7 +66,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             }
 
             // Ensure the maximum alive count for Scavs will not be exceeded
-            int totalAliveScavs = Singleton<GameWorld>.Instance.AllAlivePlayersList.Count(p => isScavProfile(p.Profile));
+            int totalAliveScavs = Singleton<GameWorld>.Instance.AllAlivePlayersList.Count(p => isNormalScavProfile(p.Profile));
             if (totalAliveScavs + pendingScavCount > QuestingBotsPluginConfig.ScavMaxAliveLimit.Value)
             {
                 return blockSpawn(pendingScavCount, ScavSpawnBlockReason.MaxAliveScavs);
@@ -80,17 +78,18 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
                 return allowSpawn(pendingScavCount);
             }
 
-            // The bot cap for Factory is sometimes set at 0, in which case the Scav spawn rate limit cannot be used
+            // The bot cap for Factory is sometimes set at 0, in which case the Scav spawn rate limit cannot be used (assuming the new spawning system is enabled)
             if (locationData.MaxTotalBots == 0)
             {
                 allowSpawn(pendingScavCount);
             }
 
-            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK, true);
-            float recentScavSpawnRate = recentlySpawnedScavs * 60f / TIME_WINDOW_TO_CHECK;
+            float timeWindow = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
+            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
+            float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
 
             // Prevent too many Scavs from spawning in a short period of time
-            if (recentScavSpawnRate > QuestingBotsPluginConfig.ScavSpawnRateLimit.Value)
+            if (recentScavSpawnRate >= QuestingBotsPluginConfig.ScavSpawnRateLimit.Value)
             {
                 return blockSpawn(pendingScavCount, ScavSpawnBlockReason.ScavRateLimit);
             }
@@ -98,7 +97,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             return allowSpawn(pendingScavCount);
         }
 
-        private static bool isScavProfile(Profile profile)
+        private static bool isNormalScavProfile(Profile profile)
         {
             return !profile.WillBeAPlayerScav() && scavRoles.Contains(profile.Info.Settings.Role);
         }
@@ -106,19 +105,33 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
         private static bool allowSpawn(int scavCount)
         {
             NonWavesSpawnScenarioCreatePatch.AddSpawnedScavs(scavCount);
+
+            if (scavCount > 0)
+            {
+                logScavSpawnRate();
+            }
+
             return true;
         }
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
-            Controllers.LoggingController.LogWarning("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
+            Controllers.LoggingController.LogWarning("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString(), true);
+            logScavSpawnRate();
 
-            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(TIME_WINDOW_TO_CHECK, true);
-            float recentScavSpawnRate = recentlySpawnedScavs * 60f / TIME_WINDOW_TO_CHECK;
-            Controllers.LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + TIME_WINDOW_TO_CHECK + "s. Rate=" + recentScavSpawnRate);
+            float retryDelay = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
+            nextRetryTimeDelayField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, retryDelay);
             
-            nextRetryTimeField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, ConfigController.Config.BotSpawns.NonWaveRetryDelayAfterBlocked);
             return false;
+        }
+
+        private static void logScavSpawnRate()
+        {
+            float timeWindow = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
+            int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
+            float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
+
+            Controllers.LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + timeWindow + "s. Rate=" + recentScavSpawnRate, true);
         }
     }
 }

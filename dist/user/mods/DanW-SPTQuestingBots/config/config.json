@@ -260,7 +260,10 @@
 		"spawn_retry_time": 10,
 		"delay_game_start_until_bot_gen_finishes": true,
 		"spawn_initial_bosses_first": false,
-		"non_wave_retry_delay_after_blocked": 180,
+		"eft_new_spawn_system_adjustments" : {
+			"non_wave_retry_delay_after_blocked": 180,
+			"scav_spawn_rate_time_window": 300
+		},
 		"bot_cap_adjustments": {
 			"use_EFT_bot_caps": true,
 			"only_decrease_bot_caps": true,
