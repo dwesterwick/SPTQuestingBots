@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsController).GetMethod(nameof(BotsController.AddActivePLayer), BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsController).GetMethod(nameof(BotsController.SetSettings), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
@@ -33,6 +33,8 @@ namespace SPTQuestingBots.Patches
             {
                 Spawning.GameStartPatch.ClearMissedWaves();
                 Spawning.GameStartPatch.IsDelayingGameStart = true;
+
+                LoggingController.LogInfo("Delaying the game start until bot generation finishes...");
             }
         }
     }

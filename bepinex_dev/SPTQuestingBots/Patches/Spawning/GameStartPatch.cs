@@ -35,6 +35,7 @@ namespace SPTQuestingBots.Patches.Spawning
         {
             if (!IsDelayingGameStart)
             {
+                LoggingController.LogInfo("The game start is not being delayed");
                 return;
             }
 
