@@ -127,7 +127,7 @@ namespace SPTQuestingBots.Controllers
 
                 File.WriteAllText(filename, content);
 
-                LogInfo("Writing " + logName + " log file...done.");
+                LogDebug("Writing " + logName + " log file...done.");
             }
             catch (Exception e)
             {

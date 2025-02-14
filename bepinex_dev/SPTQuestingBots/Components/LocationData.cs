@@ -91,7 +91,8 @@ namespace SPTQuestingBots.Components
             {
                 MaxTotalBots = botmax;
             }
-            LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
+            
+            //LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
         }
 
         public bool IsPointOnLightkeeperIsland(Vector3 position)
@@ -191,7 +192,7 @@ namespace SPTQuestingBots.Components
                 }
             }
 
-            LoggingController.LogInfo("Found " + areLockedDoorsUnlocked.Count + " locked doors");
+            LoggingController.LogDebug("Found " + areLockedDoorsUnlocked.Count + " locked doors");
             //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 

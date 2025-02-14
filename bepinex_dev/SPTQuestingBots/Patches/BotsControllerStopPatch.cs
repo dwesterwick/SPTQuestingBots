@@ -24,14 +24,14 @@ namespace SPTQuestingBots.Patches
             // Stop updating debug overlays
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.DebugData debugController))
             {
-                LoggingController.LogInfo("Disabling " + debugController.GetType().FullName + "...");
+                //LoggingController.LogInfo("Disabling " + debugController.GetType().FullName + "...");
                 debugController.enabled = false;
             }
 
             // Disable all bot generators
             foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
             {
-                LoggingController.LogInfo("Disabling " + botGenerator.GetType().FullName + "...");
+                //LoggingController.LogInfo("Disabling " + botGenerator.GetType().FullName + "...");
                 botGenerator.enabled = false;
             }
 

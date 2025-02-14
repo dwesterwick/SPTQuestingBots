@@ -769,7 +769,7 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            LoggingController.LogInfo("Writing quest log file...");
+            LoggingController.LogDebug("Writing quest log file...");
 
             if (allQuests.Count == 0)
             {
@@ -819,7 +819,7 @@ namespace SPTQuestingBots.Controllers
                 return;
             }
 
-            LoggingController.LogInfo("Writing bot job assignment log file...");
+            LoggingController.LogDebug("Writing bot job assignment log file...");
 
             if (botJobAssignments.Count == 0)
             {

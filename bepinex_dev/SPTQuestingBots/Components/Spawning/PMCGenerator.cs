@@ -56,7 +56,7 @@ namespace SPTQuestingBots.Components.Spawning
             double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, RaidHelpers.GetRaidTimeRemainingFraction());
 
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-            int botsInGroup = (int)Math.Round(ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
+            int botsInGroup = (int)Math.Round(ConfigController.GetValueFromTotalChanceFraction(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
             botsInGroup = (int)Math.Ceiling(botsInGroup * Math.Min(1, groupSizeFactor));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
             botsInGroup = (int)Math.Max(botsInGroup, 1);

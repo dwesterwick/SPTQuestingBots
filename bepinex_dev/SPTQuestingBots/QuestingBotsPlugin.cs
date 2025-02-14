@@ -54,7 +54,7 @@ namespace SPTQuestingBots
                 LoggingController.LogInfo("Loading QuestingBots...enabling patches...");
 
                 new Patches.TarkovInitPatch().Enable();
-                new Patches.AddActivePlayerPatch().Enable();
+                new Patches.BotsControllerSetSettingsPatch().Enable();
                 new Patches.BotsControllerStopPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();

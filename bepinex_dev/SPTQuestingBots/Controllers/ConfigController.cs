@@ -252,6 +252,8 @@ namespace SPTQuestingBots.Controllers
 
         public static double InterpolateForFirstCol(double[][] array, double value)
         {
+            validateArray(array);
+
             if (array.Length == 1)
             {
                 return array.Last()[1];
@@ -276,6 +278,48 @@ namespace SPTQuestingBots.Controllers
             }
 
             return array.Last()[1];
+        }
+
+        public static double GetValueFromTotalChanceFraction(double[][] array, double fraction)
+        {
+            validateArray(array);
+
+            if (array.Length == 1)
+            {
+                return array.Last()[1];
+            }
+
+            double chancesSum = array.Sum(x => x[1]);
+            double targetCumulativeChances = chancesSum * fraction;
+
+            int i = 0;
+            double cumulativeChances = 0;
+            while (i < array.Length)
+            {
+                cumulativeChances += array[i][1];
+
+                if (cumulativeChances > targetCumulativeChances)
+                {
+                    return array[i][0];
+                }
+
+                i++;
+            }
+
+            return array.Last()[0];
+        }
+
+        private static void validateArray(double[][] array)
+        {
+            if (array.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException("The array must have at least one row.");
+            }
+
+            if (array.Any(x => x.Length != 2))
+            {
+                throw new ArgumentOutOfRangeException("All rows in the array must have two columns.");
+            }
         }
     }
 }

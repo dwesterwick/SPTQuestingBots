@@ -29,6 +29,8 @@ namespace SPTQuestingBots.Components.Spawning
         public int MaxAliveBots { get; protected set; } = 10;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
+        protected List<SpawnPointParams> PendingSpawnPoints = new List<SpawnPointParams>();
+
         protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
         private readonly Stopwatch updateTimer = Stopwatch.StartNew();
@@ -37,8 +39,6 @@ namespace SPTQuestingBots.Components.Spawning
         public static int RemainingBotGenerators { get; private set; } = 0;
         public static int CurrentBotGeneratorProgress { get; private set; } = 0;
         public static string CurrentBotGeneratorType { get; private set; } = "???";
-
-        protected List<SpawnPointParams> PendingSpawnPoints = new List<SpawnPointParams>();
 
         private static Task botGenerationTask = null;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
@@ -509,7 +509,7 @@ namespace SPTQuestingBots.Components.Spawning
                 return raidDifficulty.ToBotDifficulty();
             }
 
-            return (BotDifficulty)Math.Round(ConfigController.InterpolateForFirstCol(difficultyChances, random.NextDouble()));
+            return (BotDifficulty)Math.Round(ConfigController.GetValueFromTotalChanceFraction(difficultyChances, random.NextDouble()));
         }
 
         private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)

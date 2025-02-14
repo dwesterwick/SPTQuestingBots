@@ -250,7 +250,7 @@
     <Compile Include="Patches\Spawning\ScavLimits\SpawnPointIsValidPatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\TrySpawnFreeAndDelayPatch.cs" />
     <Compile Include="Patches\TarkovInitPatch.cs" />
-    <Compile Include="Patches\AddActivePlayerPatch.cs" />
+    <Compile Include="Patches\BotsControllerSetSettingsPatch.cs" />
     <Compile Include="Patches\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\Spawning\Advanced\ExceptAIPatch.cs" />
     <Compile Include="Patches\Spawning\GameStartPatch.cs" />

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
-using EFT.Interactive;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Helpers;
 

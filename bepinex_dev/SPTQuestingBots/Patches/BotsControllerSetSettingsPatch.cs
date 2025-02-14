@@ -11,7 +11,7 @@ using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches
 {
-    public class AddActivePlayerPatch : ModulePatch
+    public class BotsControllerSetSettingsPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
@@ -23,7 +23,7 @@ namespace SPTQuestingBots.Patches
         {
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
             {
-                LoggingController.LogWarning("There is already a LocationData component added to the current GameWorld instance.");
+                LoggingController.LogError("There is already a LocationData component added to the current GameWorld instance.");
                 return;
             }
 
