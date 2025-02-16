@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using HarmonyLib;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Helpers
@@ -37,12 +38,7 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
-            if (botMover == null)
-            {
-                return null;
-            }
-
-            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
+            PathControllerClass pathController = botMover.GetPathController();
             if (pathController?.CurPath == null)
             {
                 return null;
@@ -55,18 +51,29 @@ namespace SPTQuestingBots.Helpers
 
         public static bool HasSameTargetPosition(this BotOwner bot, Vector3 targetPosition)
         {
-            if (bot?.Mover == null)
-            {
-                return false;
-            }
-
-            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(bot.Mover);
+            PathControllerClass pathController = bot?.Mover.GetPathController();
             if (pathController?.CurPath == null)
             {
                 return false;
             }
 
             return pathController.IsSameWay(targetPosition, bot.Position);
+        }
+
+        public static PathControllerClass GetPathController(this BotMover botMover)
+        {
+            if (botMover == null)
+            {
+                return null;
+            }
+
+            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
+            if (pathController?.CurPath == null)
+            {
+                return null;
+            }
+
+            return pathController;
         }
 
         public static bool SetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)

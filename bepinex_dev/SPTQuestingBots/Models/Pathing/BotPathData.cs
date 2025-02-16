@@ -106,7 +106,7 @@ namespace SPTQuestingBots.Models.Pathing
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
 
-                if (!requiresUpdate && Corners.Any() && (currentPath?.Any() == true) && (currentPath.Last() != Corners.Last()))
+                if (!requiresUpdate && Corners.Any() && currentPath.Any() && (currentPath.Last() != Corners.Last()))
                 {
                     // Only update the path if the bot has moved from the start position set in the currently cached path. Otherwise, the path may
                     // constantly be recalculated as brain layers are switched. 

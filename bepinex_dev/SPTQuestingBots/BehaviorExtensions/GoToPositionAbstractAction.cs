@@ -21,6 +21,8 @@ namespace SPTQuestingBots.BehaviorExtensions
     {
         protected bool CanSprint { get; set; } = true;
 
+        private static FieldInfo botZoneField = null;
+
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceLastVaultTimer = Stopwatch.StartNew();
@@ -32,7 +34,10 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
-            
+            if (botZoneField == null)
+            {
+                botZoneField = AccessTools.Field(typeof(BotsGroup), "<BotZone>k__BackingField");
+            }
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -56,7 +61,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             botIsStuckTimer.Stop();
             BotOwner.PatrollingData.Unpause();
 
-            //updateBotZoneForGroup();
+            updateBotZoneForGroup();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position)
@@ -79,11 +84,6 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 if (updateReason != Models.Pathing.BotPathUpdateNeededReason.None)
                 {
-                    /*if (!ObjectiveManager.BotMonitor.IsFollowing() && !ObjectiveManager.BotMonitor.IsRegrouping())
-                    {
-                        LoggingController.LogInfo("Set " + ObjectiveManager.BotPath.Status.ToString() + " path to " + ObjectiveManager.BotPath.TargetPosition + " for " + BotOwner.GetText() + " due to " + updateReason.ToString());
-                    }*/
-
                     BotOwner.FollowPath(ObjectiveManager.BotPath, true, false);
                 }
             }
@@ -180,6 +180,11 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected void updateBotZoneForGroup(bool allowForFollowers = false)
         {
+            if (!ConfigController.Config.Questing.UpdateBotZoneAfterStopping)
+            {
+                return;
+            }
+
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(BotOwner.Position, out float dist);
 
@@ -194,11 +199,9 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
-            Controllers.LoggingController.LogWarning("Changing BotZone for group containing " + BotOwner.GetText() + " from " + BotOwner.BotsGroup.BotZone.ShortName + " to " + closestBotZone.ShortName + "...");
+            //Controllers.LoggingController.LogWarning("Changing BotZone for group containing " + BotOwner.GetText() + " from " + BotOwner.BotsGroup.BotZone.ShortName + " to " + closestBotZone.ShortName + "...");
 
-            FieldInfo botZoneField = AccessTools.Field(typeof(BotsGroup), "<BotZone>k__BackingField");
             botZoneField.SetValue(BotOwner.BotsGroup, closestBotZone);
-
             BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
         }
 

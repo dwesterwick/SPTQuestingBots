@@ -21,6 +21,7 @@ namespace SPTQuestingBots.Models.Pathing
 
         public bool IsInitialized => TargetPosition != Vector3.positiveInfinity;
         public bool HasPath => Corners.Length > 0;
+        public float TimeSinceLastSet => Time.time - LastSetTime;
 
         public StaticPathData()
         {

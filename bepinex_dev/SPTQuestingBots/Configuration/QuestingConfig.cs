@@ -39,6 +39,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("default_wait_time_after_objective_completion")]
         public float DefaultWaitTimeAfterObjectiveCompletion { get; set; } = 10;
 
+        [JsonProperty("update_bot_zone_after_stopping")]
+        public bool UpdateBotZoneAfterStopping { get; set; } = true;
+
         [JsonProperty("wait_time_before_planting")]
         public float WaitTimeBeforePlanting { get; set; } = 1;
 

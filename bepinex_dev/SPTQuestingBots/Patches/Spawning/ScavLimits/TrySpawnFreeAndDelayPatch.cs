@@ -116,7 +116,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
-            Controllers.LoggingController.LogWarning("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString(), true);
+            Controllers.LoggingController.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
             logScavSpawnRate();
 
             float retryDelay = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
@@ -131,7 +131,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
             int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
             float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
 
-            Controllers.LoggingController.LogWarning(recentlySpawnedScavs + " Scavs have spawned in the last " + timeWindow + "s. Rate=" + recentScavSpawnRate, true);
+            Controllers.LoggingController.LogDebug(recentlySpawnedScavs + " Scavs have spawned in the last " + timeWindow + "s. Rate=" + recentScavSpawnRate);
         }
     }
 }

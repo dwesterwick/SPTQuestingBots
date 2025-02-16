@@ -63,6 +63,7 @@
 		},
 		"min_time_between_switching_objectives": 5,
 		"default_wait_time_after_objective_completion": 5,
+		"update_bot_zone_after_stopping": true,
 		"wait_time_before_planting": 1,
 		"quest_generation": {
 			"navmesh_search_distance_item": 1.5,

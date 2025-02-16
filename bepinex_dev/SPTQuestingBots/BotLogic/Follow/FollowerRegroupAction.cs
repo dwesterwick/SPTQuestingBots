@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Follow
@@ -57,6 +58,9 @@ namespace SPTQuestingBots.BotLogic.Follow
             if (mustRegroup || Vector3.Distance(BotOwner.Position, targetLocation.Value) > targetDistance)
             {
                 RecalculatePath(targetLocation.Value, targetDistance);
+
+                //Vector3 bossPosition = BotHiveMindMonitor.GetBoss(BotOwner).Position;
+                //LoggingController.LogWarning("Follower " + BotOwner.GetText() + " is regrouping. TimeSinceLastSet=" + ObjectiveManager.BotPath.TimeSinceLastSet + "s, BossPos=" + bossPosition + ", PathTarget=" + ObjectiveManager.BotPath.TargetPosition + ", EFTPathTarget=" + BotOwner.Mover.GetCurrentPathTargetPoint().Value);
             }
             else
             {
