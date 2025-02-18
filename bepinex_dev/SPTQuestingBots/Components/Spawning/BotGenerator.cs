@@ -554,9 +554,6 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     yield return spawnBotGroup(botGroup);
                 }
-
-                //LoggingController.LogInfo("Trying to spawn " + initialPMCGroupsToSpawn.Count + " initial PMC groups...done.");
-
             }
             finally
             {
@@ -587,9 +584,19 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             string spawnPositionText = string.Join(", ", spawnPositions.Select(s => s.ToString()));
-            LoggingController.LogInfo("Spawning " + BotTypeName + " group at " + spawnPositionText + "...");
+            string spawningLogMessage = "Spawning " + BotTypeName + " group at " + spawnPositionText + "...";
+            LoggingController.LogInfo(spawningLogMessage);
 
-            SpawnBots(botGroup, spawnPositions);
+            try
+            {
+                SpawnBots(botGroup, spawnPositions);
+            }
+            catch(Exception e)
+            {
+                LoggingController.LogError(spawningLogMessage + "failed!");
+                LoggingController.LogError(e.Message);
+                LoggingController.LogError(e.StackTrace);
+            }
 
             yield return null;
         }
@@ -636,32 +643,52 @@ namespace SPTQuestingBots.Components.Spawning
 
             public BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)
             {
-                if (group == null)
+                try
                 {
-                    group = BotGroupHelpers.CreateGroup(bot, zone, botSpawnInfo.GeneratedBotCount);
+                    if (group == null)
+                    {
+                        group = BotGroupHelpers.CreateGroup(bot, zone, botSpawnInfo.GeneratedBotCount);
+                    }
+
+                    BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+                    botSpawner.method_5(bot);
+
+                    return group;
                 }
-
-                BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                botSpawner.method_5(bot);
-
-                return group;
+                catch (Exception e)
+                {
+                    LoggingController.LogError("Could not set group for " + bot.GetText());
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                    throw;
+                }
             }
 
             public void CreateBotCallback(BotOwner bot)
             {
-                // I have no idea why BSG passes a stopwatch into this call...
-                stopWatch.Start();
-
-                BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                botSpawner.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
-
-                if (botSpawnInfo.ShouldBotBeBoss(bot))
+                try
                 {
-                    setBossAction(bot);
-                }
+                    // I have no idea why BSG passes a stopwatch into this call...
+                    stopWatch.Start();
 
-                LoggingController.LogInfo("Spawned bot " + bot.GetText());
-                botSpawnInfo.AddBotOwner(bot);
+                    BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+                    botSpawner.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
+
+                    if (botSpawnInfo.ShouldBotBeBoss(bot))
+                    {
+                        setBossAction(bot);
+                    }
+
+                    LoggingController.LogInfo("Spawned bot " + bot.GetText());
+                    botSpawnInfo.AddBotOwner(bot);
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError("Could not finish activation of " + bot.GetText());
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                    throw;
+                }
             }
         }
     }
