@@ -69,7 +69,9 @@ namespace SPTQuestingBots
 
                 if (ConfigController.Config.Debug.Enabled)
                 {
-                    new Patches.ProcessSourceOcclusionPatch().Enable();
+                    new Patches.Debug.ProcessSourceOcclusionPatch().Enable();
+                    new Patches.Debug.HandleFinishedTaskPatch().Enable();
+                    new Patches.Debug.HandleFinishedTaskPatch2().Enable();
                 }
                 
                 if (ConfigController.Config.BotSpawns.Enabled)

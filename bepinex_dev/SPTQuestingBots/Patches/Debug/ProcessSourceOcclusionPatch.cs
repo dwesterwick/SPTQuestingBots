@@ -9,7 +9,7 @@ using EFT;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
 
-namespace SPTQuestingBots.Patches
+namespace SPTQuestingBots.Patches.Debug
 {
     public class ProcessSourceOcclusionPatch : ModulePatch
     {

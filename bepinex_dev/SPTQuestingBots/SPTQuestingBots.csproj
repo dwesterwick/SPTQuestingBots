@@ -50,6 +50,10 @@
     <Reference Include="Comfort.Unity">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="CommonExtensions, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\CommonExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="DissonanceVoip">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
     </Reference>
@@ -234,6 +238,7 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Models\Pathing\StaticPathData.cs" />
     <Compile Include="Models\Questing\StoredQuestLocation.cs" />
+    <Compile Include="Patches\Debug\HandleFinishedTaskPatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\NonWavesSpawnScenarioCreatePatch.cs" />
     <Compile Include="Patches\Spawning\ActivateBossesByWavePatch.cs" />
@@ -244,7 +249,7 @@
     <Compile Include="Patches\Lighthouse\LighthouseTraderZonePlayerAttackPatch.cs" />
     <Compile Include="Patches\MenuShowPatch.cs" />
     <Compile Include="Patches\Lighthouse\MineDirectionalShouldExplodePatch.cs" />
-    <Compile Include="Patches\ProcessSourceOcclusionPatch.cs" />
+    <Compile Include="Patches\Debug\ProcessSourceOcclusionPatch.cs" />
     <Compile Include="Patches\Spawning\GetAllBossPlayersPatch.cs" />
     <Compile Include="Patches\Spawning\SetNewBossPatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\SpawnPointIsValidPatch.cs" />
