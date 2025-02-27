@@ -13,6 +13,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.4.0 or later recommended)
 
 **Partially compatible with:**
+* **Fika** (Requires client version 0.9.8962.33287 or later) (If you're using the Questing Bots spawning system, you must disable `Enforced Spawn Limits` in the F12 menu for Fika)
 * [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/), [Entry Point Selector](https://hub.sp-tarkov.com/files/file/2291-entry-point-selector-2-0/), and similar mods that significantly reduce spawn points (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
 * [Realism](https://hub.sp-tarkov.com/files/file/606-spt-realism-mod/) (You must disable Realism's bot-spawning changes when using the Questing Bots spawning system)
 * [Please Just Fight](https://hub.sp-tarkov.com/files/file/2652-please-just-fight/) (This mod should only be used if you're not using the Questing Bots spawning system)
@@ -24,7 +25,6 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
 * [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/)
 * [Performance Improvements](https://hub.sp-tarkov.com/files/file/2505-performance-improvements/) (Must be version 0.2.4 or newer)
-* **Fika** (Requires client version 0.9.8962.33287 or later)
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
 * [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
