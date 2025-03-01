@@ -649,11 +649,6 @@ namespace SPTQuestingBots.Components.Spawning
                     {
                         group = BotGroupHelpers.CreateGroup(bot, zone, botSpawnInfo.GeneratedBotCount);
                     }
-
-                    BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                    botSpawner.method_5(bot);
-
-                    return group;
                 }
                 catch (Exception e)
                 {
@@ -662,6 +657,20 @@ namespace SPTQuestingBots.Components.Spawning
                     LoggingController.LogError(e.StackTrace);
                     throw;
                 }
+
+                try
+                {
+                    BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
+                    botSpawner.method_5(bot);
+                }
+                catch (Exception e)
+                {
+                    LoggingController.LogError("Could not update group enemies for " + bot.GetText());
+                    LoggingController.LogError(e.Message);
+                    LoggingController.LogError(e.StackTrace);
+                }
+
+                return group;
             }
 
             public void CreateBotCallback(BotOwner bot)
@@ -678,17 +687,16 @@ namespace SPTQuestingBots.Components.Spawning
                     {
                         setBossAction(bot);
                     }
-
-                    LoggingController.LogInfo("Spawned bot " + bot.GetText());
-                    botSpawnInfo.AddBotOwner(bot);
                 }
                 catch (Exception e)
                 {
                     LoggingController.LogError("Could not finish activation of " + bot.GetText());
                     LoggingController.LogError(e.Message);
                     LoggingController.LogError(e.StackTrace);
-                    throw;
                 }
+
+                LoggingController.LogInfo("Spawned bot " + bot.GetText());
+                botSpawnInfo.AddBotOwner(bot);
             }
         }
     }
