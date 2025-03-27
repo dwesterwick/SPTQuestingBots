@@ -10,13 +10,12 @@ namespace SPTQuestingBots_CustomBotGenExample
 {
     public class ParalyzeAction : CustomLogic
     {
-        protected GClass156 baseAction { get; private set; } = null;
+        protected GClass168 baseAction { get; private set; } = null;
 
         public ParalyzeAction(BotOwner _BotOwner) : base(_BotOwner)
         {
             // This doesn't quite achieve "paralysis", but it's probably good enough
-            baseAction = GClass507.CreateNode(BotLogicDecision.standBy, BotOwner);
-            baseAction.Awake();
+            baseAction = GClass522.CreateNode(BotLogicDecision.standBy, BotOwner);
         }
 
         public override void Start()
@@ -30,9 +29,9 @@ namespace SPTQuestingBots_CustomBotGenExample
             BotOwner.PatrollingData.Unpause();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
-            baseAction.Update();
+            baseAction.UpdateNodeByMain(data);
         }
     }
 }

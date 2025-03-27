@@ -237,38 +237,6 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             return nearestMember.Position;
         }
 
-        // NOTE: This currently isn't used but it may be in the future
-        public static void AssignTargetEnemyFromGroup(BotOwner bot)
-        {
-            if (bot.Memory.HaveEnemy || bot.Memory.DangerData.HaveCloseDanger)
-            {
-                return;
-            }
-
-            ReadOnlyCollection<BotOwner> groupMembers = GetAllGroupMembers(bot);
-            //Controllers.LoggingController.LogInfo("Group members for " + bot.GetText() + ": " + string.Join(", ", groupMembers.Select(m => m.GetText()));
-
-            foreach (BotOwner member in groupMembers)
-            {
-                if (!member.isActiveAndEnabled || member.IsDead)
-                {
-                    continue;
-                }
-
-                if (!member.Memory.HaveEnemy)
-                {
-                    continue;
-                }
-
-                Controllers.LoggingController.LogInfo(member.GetText() + " informed " + bot.GetText() + " about spotted enemy " + bot.Memory.GoalEnemy.Owner.GetText());
-
-                PlaceForCheck enemyLocation = new PlaceForCheck(member.Memory.GoalEnemy.GetPositionForSearch(), PlaceForCheckType.danger);
-                bot.Memory.DangerData.SetTarget(enemyLocation, member.Memory.GoalEnemy.Owner);
-
-                return;
-            }
-        }
-
         public static void SeparateBotFromGroup(BotOwner bot)
         {
             // Not necessary if the bot is solo

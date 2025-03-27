@@ -14,7 +14,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass507.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(GClass522.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public AmbushAction(BotOwner _BotOwner, bool _allowedToIgnoreHearing) : this(_BotOwner)
@@ -47,9 +47,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
-            UpdateBaseAction();
+            UpdateBaseAction(data);
 
             // While the bot is moving to the ambush position, have it look where it's going. Once at the ambush position, have it look to the
             // a specific location if defined by the quest. Otherwise, have it look where it just came from. 

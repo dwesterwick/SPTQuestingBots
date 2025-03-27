@@ -6,16 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using HarmonyLib;
 using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Helpers
 {
     public static class BotGroupHelpers
     {
-        private static FieldInfo botSpawnerDeadBodiesControllerFieldInfo = null;
-        private static FieldInfo botSpawnerAllPlayersFieldInfo = null;
-
         public static BotsGroup CreateGroup(BotOwner initialBot, BotZone zone, int targetMembersCount)
         {
             BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
@@ -24,12 +20,12 @@ namespace SPTQuestingBots.Helpers
             EPlayerSide side = initialBot.Profile.Info.Side;
 
             List<BotOwner> list = new List<BotOwner>();
-            foreach (BotOwner botOwner in botSpawner.method_4(initialBot))
+            foreach (BotOwner botOwner in botSpawner.method_5(initialBot))
             {
                 list.Add(botOwner);
             }
 
-            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, GetDeadBodiesController(), GetAllPlayersList(), true);
+            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, botSpawner._deadBodiesController, botSpawner._allPlayers, true);
             group.TargetMembersCount = targetMembersCount;
             botSpawner.Groups.Add(zone, side, group, true);
             // ------------------------------------------
@@ -37,30 +33,6 @@ namespace SPTQuestingBots.Helpers
             group.Lock();
 
             return group;
-        }
-
-        private static DeadBodiesController GetDeadBodiesController()
-        {
-            BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            if (botSpawnerDeadBodiesControllerFieldInfo == null)
-            {
-                botSpawnerDeadBodiesControllerFieldInfo = AccessTools.Field(typeof(BotSpawner), "_deadBodiesController");
-            }
-
-            return (DeadBodiesController)botSpawnerDeadBodiesControllerFieldInfo.GetValue(botSpawner);
-        }
-
-        private static List<Player> GetAllPlayersList()
-        {
-            BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            if (botSpawnerAllPlayersFieldInfo == null)
-            {
-                botSpawnerAllPlayersFieldInfo = AccessTools.Field(typeof(BotSpawner), "_allPlayers");
-            }
-
-            return (List<Player>)botSpawnerAllPlayersFieldInfo.GetValue(botSpawner);
         }
 
         public static IEnumerable<BotOwner> FindZryachiyAndFollowers()

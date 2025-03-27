@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
-using HarmonyLib;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -16,16 +15,8 @@ namespace SPTQuestingBots.Patches
 {
     public class BotOwnerBrainActivatePatch : ModulePatch
     {
-        private static FieldInfo allBotsCountField;
-        private static FieldInfo followersCountField;
-        private static FieldInfo bossesCountField;
-
         protected override MethodBase GetTargetMethod()
         {
-            allBotsCountField = AccessTools.Field(typeof(BotSpawner), "_allBotsCount");
-            followersCountField = AccessTools.Field(typeof(BotSpawner), "_followersBotsCount");
-            bossesCountField = AccessTools.Field(typeof(BotSpawner), "_bossBotsCount");
-
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -116,17 +107,14 @@ namespace SPTQuestingBots.Patches
 
             if (bot.Profile.Info.Settings.IsFollower())
             {
-                int followersCount = (int)followersCountField.GetValue(botSpawnerClass);
-                followersCountField.SetValue(botSpawnerClass, followersCount - 1);
+                botSpawnerClass._followersBotsCount--;
             }
             else if (bot.Profile.Info.Settings.IsBoss())
             {
-                int bossesCount = (int)bossesCountField.GetValue(botSpawnerClass);
-                bossesCountField.SetValue(botSpawnerClass, bossesCount - 1);
+                botSpawnerClass._bossBotsCount--;
             }
 
-            int allBotsCount = (int)allBotsCountField.GetValue(botSpawnerClass);
-            allBotsCountField.SetValue(botSpawnerClass, allBotsCount - 1);
+            botSpawnerClass._allBotsCount--;
         }
     }
 }

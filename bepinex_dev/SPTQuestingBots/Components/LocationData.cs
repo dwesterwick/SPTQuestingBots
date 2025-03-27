@@ -86,7 +86,7 @@ namespace SPTQuestingBots.Components
         public void UpdateMaxTotalBots()
         {
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-            int botmax = (int)AccessTools.Field(typeof(BotsController), "_maxCount").GetValue(botControllerClass);
+            int botmax = botControllerClass._maxCount;
             if (botmax > 0)
             {
                 MaxTotalBots = botmax;

@@ -43,7 +43,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotOwner.PatrollingData.Unpause();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();

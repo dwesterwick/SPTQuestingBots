@@ -16,7 +16,7 @@ namespace SPTQuestingBots.BotLogic.Follow
 
         public BossRegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass507.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
+            SetBaseAction(GClass522.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
         }
 
         public override void Start()
@@ -29,7 +29,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             base.Stop();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();

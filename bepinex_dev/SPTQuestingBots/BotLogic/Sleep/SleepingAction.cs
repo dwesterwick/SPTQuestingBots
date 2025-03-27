@@ -41,7 +41,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             BotOwner.PostActivate();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
             return;
         }

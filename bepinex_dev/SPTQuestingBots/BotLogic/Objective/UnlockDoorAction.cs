@@ -20,7 +20,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         private Vector3? interactionPosition = null;
         private IResult keyGenerationResult = null;
         private KeyComponent keyComponent = null;
-        private DependencyGraph<IEasyBundle>.GClass3802 bundleLoader = null;
+        private DependencyGraphClass<IEasyBundle>.GClass3901 bundleLoader = null;
 
         public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
@@ -117,7 +117,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotOwner.PatrollingData.Unpause();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();

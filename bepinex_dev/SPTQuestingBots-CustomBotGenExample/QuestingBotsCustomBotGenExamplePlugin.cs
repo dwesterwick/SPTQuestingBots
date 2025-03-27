@@ -12,8 +12,8 @@ using UnityEngine;
 
 namespace SPTQuestingBots_CustomBotGenExample
 {
-    [BepInDependency("com.DanW.QuestingBots", "0.9.0")]
-    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.2.0")]
+    [BepInDependency("com.DanW.QuestingBots", "0.10.0")]
+    [BepInPlugin("com.DanW.QuestingBotsCustomBotGenExample", "DanW-QuestingBots-CustomBotGenExample", "1.3.0")]
     public class QuestingBotsCustomBotGenExamplePlugin : BaseUnityPlugin
     {
         public static ConfigEntry<bool> Enabled;

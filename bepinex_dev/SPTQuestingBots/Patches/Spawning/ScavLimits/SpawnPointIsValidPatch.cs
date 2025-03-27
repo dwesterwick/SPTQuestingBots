@@ -18,7 +18,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
         protected override MethodBase GetTargetMethod()
         {
             string methodName = "IsValid";
-            Type[] argumentTypes = new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(GClass666) };
+            Type[] argumentTypes = new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(GClass677) };
 
             Type targetType = Helpers.TarkovTypeHelpers.FindTargetType(methodName, argumentTypes);
             Controllers.LoggingController.LogInfo("Found type for SpawnPointIsValidPatch: " + targetType.FullName);

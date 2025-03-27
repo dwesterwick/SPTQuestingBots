@@ -11,7 +11,7 @@ namespace SPTQuestingBots.BotLogic.Objective
     {
         public PlantItemAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass507.CreateNode(BotLogicDecision.lay, BotOwner));
+            SetBaseAction(GClass522.CreateNode(BotLogicDecision.lay, BotOwner));
         }
 
         public override void Start()
@@ -28,9 +28,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotOwner.PatrollingData.Unpause();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
-            UpdateBaseAction();
+            UpdateBaseAction(data);
 
             // If the bot is travelling to its objective location, have it look where it's going. If it's at its objective location, have it
             // look where it came from because that's where threats will most likely appear. 

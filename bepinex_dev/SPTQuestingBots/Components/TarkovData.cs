@@ -53,9 +53,7 @@ namespace SPTQuestingBots.Components
                 return null;
             }
 
-            FieldInfo raidSettingsField = AccessTools.Field(typeof(TarkovApplication), "_raidSettings");
-            RaidSettings raidSettings = raidSettingsField.GetValue(tarkovApplication) as RaidSettings;
-            return raidSettings;
+            return tarkovApplication.CurrentRaidSettings;
         }
 
         public ISession GetSession()

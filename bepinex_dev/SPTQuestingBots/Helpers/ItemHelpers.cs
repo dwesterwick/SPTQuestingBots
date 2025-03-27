@@ -266,7 +266,7 @@ namespace SPTQuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraph<IEasyBundle>.GClass3802 LoadBundle(this Item item)
+        public static DependencyGraphClass<IEasyBundle>.GClass3901 LoadBundle(this Item item)
         {
             try
             {

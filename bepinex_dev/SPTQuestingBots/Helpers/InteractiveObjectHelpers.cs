@@ -11,7 +11,6 @@ using EFT;
 using SPTQuestingBots.Controllers;
 using UnityEngine;
 using HarmonyLib;
-using static GClass2101;
 
 namespace SPTQuestingBots.Helpers
 {
@@ -44,7 +43,7 @@ namespace SPTQuestingBots.Helpers
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                GClass3344 unlockDoorInteractionResult = new GClass3344(key, null, true);
+                GClass3424 unlockDoorInteractionResult = new GClass3424(key, null, true);
                 if (unlockDoorInteractionResult == null)
                 {
                     throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
@@ -79,11 +78,7 @@ namespace SPTQuestingBots.Helpers
                 // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
 
                 botOwner.DoorOpener.Interacting = true;
-
-                float _traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
-
-                FieldInfo traversingEndField = AccessTools.Field(typeof(BotDoorOpener), "_traversingEnd");
-                traversingEndField.SetValue(botOwner.DoorOpener, _traversingEnd);
+                botOwner.DoorOpener._traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 
                 LoggingController.LogInfo(botOwner.GetText() + " is unlocking door " + door.Id + "...");
 

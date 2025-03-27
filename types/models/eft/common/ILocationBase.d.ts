@@ -1,6 +1,6 @@
-import { MinMax } from "@spt/models/common/MinMax";
-import { Ixyz } from "@spt/models/eft/common/Ixyz";
-import { ISpawnpointTemplate } from "./ILooseLoot";
+import type { MinMax } from "@spt/models/common/MinMax";
+import type { Ixy, Ixyz } from "@spt/models/eft/common/Ixyz";
+import type { ISpawnpointTemplate } from "./ILooseLoot";
 export interface ILocationBase {
     AccessKeys: string[];
     AccessKeysPvE: string[];
@@ -11,23 +11,36 @@ export interface ILocationBase {
     Banners: IBanner[];
     BossLocationSpawn: IBossLocationSpawn[];
     BotAssault: number;
+    /** Weighting on how likely a bot will be Easy difficulty */
     BotEasy: number;
+    /** Weighting on how likely a bot will be Hard difficulty */
     BotHard: number;
+    /** Weighting on how likely a bot will be Impossible difficulty */
     BotImpossible: number;
     BotLocationModifier: IBotLocationModifier;
     BotMarksman: number;
+    /** Maximum Number of bots that are currently alive/loading/delayed */
     BotMax: number;
+    /** Is not used in 33420 */
     BotMaxPlayer: number;
+    /** Is not used in 33420 */
     BotMaxTimePlayer: number;
+    /** Does not even exist in the client in 33420 */
     BotMaxPvE: number;
+    /** Weighting on how likely a bot will be Normal difficulty */
     BotNormal: number;
+    /** How many bot slots that need to be open before trying to spawn new bots. */
     BotSpawnCountStep: number;
+    /** How often to check if bots are spawn-able. In seconds */
     BotSpawnPeriodCheck: number;
+    /** The bot spawn will toggle on and off in intervals of Off(Min/Max) and On(Min/Max) */
     BotSpawnTimeOffMax: number;
     BotSpawnTimeOffMin: number;
     BotSpawnTimeOnMax: number;
     BotSpawnTimeOnMin: number;
+    /** How soon bots will be allowed to spawn */
     BotStart: number;
+    /** After this long bots will no longer spawn */
     BotStop: number;
     Description: string;
     DisabledForScav: boolean;
@@ -36,6 +49,8 @@ export interface ILocationBase {
     EnableCoop: boolean;
     GlobalLootChanceModifier: number;
     GlobalLootChanceModifierPvE: number;
+    HeatmapCellSize: Ixyz;
+    HeatmapLayers: string[];
     GlobalContainerChanceModifier: number;
     IconX: number;
     IconY: number;
@@ -73,6 +88,7 @@ export interface ILocationBase {
     SpawnPointParams: ISpawnPointParam[];
     UnixDateTime: number;
     _Id: string;
+    areas: Record<string, IAreaLocationSpawn>;
     doors: any[];
     EscapeTimeLimit: number;
     EscapeTimeLimitCoop: number;
@@ -96,6 +112,22 @@ export interface ILocationBase {
     users_spawn_seconds_n2: number;
     users_summon_seconds: number;
     waves: IWave[];
+    secretExits: ISecretExit[];
+}
+export interface IAreaLocationSpawn {
+    center: Ixy;
+    infiltrationZone: string;
+    orientation: number;
+    position: Ixy;
+    sides: string[];
+    size: Ixy;
+}
+export interface ISecretExit {
+    EligibleForPMC: boolean;
+    EligibleForScav: boolean;
+    ExfiltrationTime: number;
+    Id: string;
+    Name: string;
 }
 export interface ITransit {
     activateAfterSec: string;
@@ -103,6 +135,7 @@ export interface ITransit {
     name: string;
     conditions: string;
     description: string;
+    events: boolean;
     id: number;
     location: string;
     target: string;
@@ -180,6 +213,18 @@ export interface IBotLocationModifier {
     VisibleDistance: number;
     MaxExfiltrationTime: number;
     MinExfiltrationTime: number;
+    FogVisibilityDistanceCoef: number;
+    FogVisibilitySpeedCoef: number;
+    LockSpawnCheckRadius: number;
+    LockSpawnCheckRadiusPvE: number;
+    LockSpawnStartTime: number;
+    LockSpawnStartTimePvE: number;
+    LockSpawnStepTime: number;
+    LockSpawnStepTimePvE: number;
+    NonWaveSpawnBotsLimitPerPlayer: number;
+    NonWaveSpawnBotsLimitPerPlayerPvE: number;
+    RainVisibilityDistanceCoef: number;
+    RainVisibilitySpeedCoef: number;
 }
 export interface IAdditionalHostilitySettings {
     AlwaysEnemies: string[];
@@ -281,6 +326,10 @@ export interface IWave {
 }
 export interface ILocationEvents {
     Halloween2024: IHalloween2024;
+    Khorovod: IKhorovod;
+}
+export interface IKhorovod {
+    Chance: number;
 }
 export interface IHalloween2024 {
     CrowdAttackBlockRadius: number;

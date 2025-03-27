@@ -13,8 +13,6 @@ namespace SPTQuestingBots.Helpers
 {
     public static class BotPathingHelpers
     {
-        private static FieldInfo pathControllerField = AccessTools.Field(typeof(BotMover), "_pathController");
-        private static FieldInfo pathFinderField = AccessTools.Field(typeof(BotMover), "_pathFinder");
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass513), "vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass513), "int_0");
 
@@ -67,13 +65,12 @@ namespace SPTQuestingBots.Helpers
                 return null;
             }
 
-            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
-            if (pathController?.CurPath == null)
+            if (botMover._pathController?.CurPath == null)
             {
                 return null;
             }
 
-            return pathController;
+            return botMover._pathController;
         }
 
         public static bool SetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
@@ -83,13 +80,12 @@ namespace SPTQuestingBots.Helpers
                 return false;
             }
 
-            GClass470 pathFinder = (GClass470)pathFinderField.GetValue(botMover);
-            if (pathFinder == null)
+            if (botMover._pathFinder == null)
             {
                 return false;
             }
 
-            pathFinder.SlowAtTheEnd = slowAtTheEnd;
+            botMover._pathFinder.SlowAtTheEnd = slowAtTheEnd;
             return true;
         }
 
@@ -100,13 +96,12 @@ namespace SPTQuestingBots.Helpers
                 return null;
             }
 
-            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
-            if (pathController?.CurPath == null)
+            if (botMover._pathController?.CurPath == null)
             {
                 return null;
             }
 
-            int index = (int)pathIndexField.GetValue(pathController.CurPath);
+            int index = (int)pathIndexField.GetValue(botMover._pathController.CurPath);
 
             return index;
         }
@@ -126,13 +121,12 @@ namespace SPTQuestingBots.Helpers
                 return null;
             }
 
-            PathControllerClass pathController = (PathControllerClass)pathControllerField.GetValue(botMover);
-            if (pathController?.CurPath == null)
+            if (botMover._pathController?.CurPath == null)
             {
                 return null;
             }
 
-            return pathController.CurPath?.TargetPoint?.Position;
+            return botMover._pathController.CurPath?.TargetPoint?.Position;
         }
 
         public static bool IsPathComplete(this BotMover botMover, Vector3 destination, float maxDistanceError)

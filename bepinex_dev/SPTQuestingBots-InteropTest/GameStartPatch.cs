@@ -5,8 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT.Bots;
+using EFT;
 using SPT.Reflection.Patching;
 
 namespace SPTQuestingBotsInteropTest
@@ -15,12 +14,11 @@ namespace SPTQuestingBotsInteropTest
     {
         protected override MethodBase GetTargetMethod()
         {
-            Type localGameType = SPT.Reflection.Utils.PatchConstants.LocalGameType;
-            return localGameType.GetMethod("method_18", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BaseLocalGame<EftGamePlayerOwner>).GetMethod("vmethod_5", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        private static void PatchPostfix(ref IEnumerator __result, object __instance, BotControllerSettings controllerSettings, ISpawnSystem spawnSystem, Callback runCallback)
+        protected static void PatchPostfix()
         {
             if (!SPTQuestingBots.QuestingBotsInterop.IsQuestingBotsLoaded())
             {

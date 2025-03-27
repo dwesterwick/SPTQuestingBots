@@ -105,7 +105,7 @@ namespace SPTQuestingBots.BotLogic
                 return "";
             }
 
-            AICoreActionResultStruct<BotLogicDecision> lastDecision = layer.GetDecision();
+            AICoreActionResultStruct<BotLogicDecision, GClass26> lastDecision = layer.GetDecision();
             if (lastDecision.Reason == null)
             {
                 return "";

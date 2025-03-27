@@ -15,15 +15,13 @@ namespace SPTQuestingBots.Patches.Spawning
     {
         public static List<Task<Profile[]>> GenerateBotsTasks { get; private set; } = new List<Task<Profile[]>>();
 
-        private static bool checkedPMCConversionChance = false;
-
         public static int RemainingBotGenerationTasks => GenerateBotsTasks.Count(t => !t.IsCompleted);
 
         protected override MethodBase GetTargetMethod()
         {
             MethodInfo[] matchingMethods = typeof(BotsPresets)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.HasAllParameterTypesInOrder(new Type[] { typeof(List<WaveInfo>), typeof(EProfilesAskingStat) }))
+                .Where(m => m.HasAllParameterTypesInOrder(new Type[] { typeof(List<WaveInfoClass>), typeof(EProfilesAskingStat) }))
                 .ToArray();
 
             if (matchingMethods.Length != 1)
@@ -37,24 +35,16 @@ namespace SPTQuestingBots.Patches.Spawning
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(List<WaveInfo> waves, EProfilesAskingStat stat)
+        protected static void PatchPrefix(List<WaveInfoClass> waves, EProfilesAskingStat stat)
         {
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
                 LoggingController.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
             }
-
-            if (!checkedPMCConversionChance && ConfigController.Config.BotSpawns.Enabled)
-            {
-                // Ensure the PMC-conversion chances have remained at 0%
-                ConfigController.AdjustPMCConversionChances(0, true);
-            }
-
-            checkedPMCConversionChance = true;
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(Task<Profile[]> __result, List<WaveInfo> waves, EProfilesAskingStat stat)
+        protected static void PatchPostfix(Task<Profile[]> __result, List<WaveInfoClass> waves, EProfilesAskingStat stat)
         {
             GenerateBotsTasks.Add(__result);
         }

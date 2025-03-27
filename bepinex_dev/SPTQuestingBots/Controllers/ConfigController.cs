@@ -35,11 +35,6 @@ namespace SPTQuestingBots.Controllers
             return Config;
         }
 
-        public static void AdjustPMCConversionChances(float factor, bool verify)
-        {
-            GetJson("/QuestingBots/AdjustPMCConversionChances/" + factor + "/" + verify.ToString(), "Could not adjust PMC conversion chances");
-        }
-
         public static void AdjustPScavChance(float timeRemainingFactor, bool preventPScav)
         {
             double factor = preventPScav ? 0 : InterpolateForFirstCol(Config.AdjustPScavChance.ChanceVsTimeRemainingFraction, timeRemainingFactor);
@@ -230,7 +225,7 @@ namespace SPTQuestingBots.Controllers
                     }
                 }
 
-                obj = JsonConvert.DeserializeObject<T>(json, GClass1601.SerializerSettings);
+                obj = JsonConvert.DeserializeObject<T>(json, GClass1629.SerializerSettings);
 
                 return true;
             }

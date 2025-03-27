@@ -18,7 +18,7 @@ namespace SPTQuestingBots.BehaviorExtensions
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
         protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
-        protected GClass156 baseAction { get; private set; } = null;
+        protected GClass168 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
         private Stopwatch updateTimer = Stopwatch.StartNew();
@@ -27,7 +27,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private float sprintDelayTime = 0;
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass370 baseSteeringLogic = new GClass370();
+        private GClass385 baseSteeringLogic = new GClass385();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
@@ -70,15 +70,14 @@ namespace SPTQuestingBots.BehaviorExtensions
             actionElapsedTime.Restart();
         }
 
-        public void SetBaseAction(GClass156 _baseAction)
+        public void SetBaseAction(GClass168 _baseAction)
         {
             baseAction = _baseAction;
-            baseAction.Awake();
         }
 
-        public void UpdateBaseAction()
+        public void UpdateBaseAction(GClass26 data)
         {
-            baseAction?.Update();
+            baseAction?.UpdateNodeByMain(data);
         }
 
         public void CheckMinElapsedActionTime()

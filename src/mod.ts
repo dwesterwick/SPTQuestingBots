@@ -3,7 +3,6 @@ import eftQuestSettings from "../config/eftQuestSettings.json";
 import eftZoneAndItemPositions from "../config/zoneAndItemQuestPositions.json";
 import { CommonUtils } from "./CommonUtils";
 import { BotUtil } from "./BotLocationUtil";
-import { PMCConversionUtil } from "./PMCConversionUtil";
 
 import type { DependencyContainer } from "tsyringe";
 import type { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
@@ -19,7 +18,7 @@ import type { DatabaseServer } from "@spt/servers/DatabaseServer";
 import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { LocaleService } from "@spt/services/LocaleService";
 import type { QuestHelper } from "@spt/helpers/QuestHelper";
-import type { VFS } from "@spt/utils/VFS";
+import type { FileSystemSync } from "@spt/utils/FileSystemSync";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
 import type { BotController } from "@spt/controllers/BotController";
@@ -39,7 +38,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
     private botUtil: BotUtil
-    private pmcConversionUtil : PMCConversionUtil
 
     private logger: ILogger;
     private configServer: ConfigServer;
@@ -47,7 +45,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private databaseTables: IDatabaseTables;
     private localeService: LocaleService;
     private questHelper: QuestHelper;
-    private vfs: VFS;
+    private fileSystem: FileSystemSync;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
     private botController: BotController;
@@ -78,22 +76,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             return;
         }
-
-        // Apply a scalar factor to the SPT-AKI PMC conversion chances
-        dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPMCConversionChances${modName}`,
-            [{
-                url: "/QuestingBots/AdjustPMCConversionChances/",
-                action: async (url: string) => 
-                {
-                    const urlParts = url.split("/");
-                    const factor: number = Number(urlParts[urlParts.length - 2]);
-                    const verify: boolean = JSON.parse(urlParts[urlParts.length - 1].toLowerCase());
-
-                    this.pmcConversionUtil.adjustAllPmcConversionChances(factor, verify);
-                    return JSON.stringify({ resp: "OK" });
-                }
-            }], "AdjustPMCConversionChances"
-        );
 
         // Apply a scalar factor to the SPT-AKI PScav conversion chance
         dynamicRouterModService.registerDynamicRouter(`DynamicAdjustPScavChance${modName}`,
@@ -185,7 +167,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseServer = container.resolve<DatabaseServer>("DatabaseServer");
         this.localeService = container.resolve<LocaleService>("LocaleService");
         this.questHelper = container.resolve<QuestHelper>("QuestHelper");
-        this.vfs = container.resolve<VFS>("VFS");
+        this.fileSystem = container.resolve<FileSystemSync>("FileSystemSync");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
@@ -197,7 +179,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.botUtil = new BotUtil(this.commonUtils, this.databaseTables, this.iLocationConfig, this.iBotConfig);
-        this.pmcConversionUtil = new PMCConversionUtil(this.commonUtils, this.iPmcConfig);
 
         if (!modConfig.enabled)
         {
@@ -227,8 +208,6 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 
         const presptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
         
-        this.pmcConversionUtil.removeBlacklistedBrainTypes();
-
         // Disable the Questing Bots spawning system if another spawning mod has been loaded
         if (this.shouldDisableSpawningSystem(presptModLoader.getImportedModsNames()))
         {
@@ -310,17 +289,17 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     {
         const path = `${__dirname}/..`;
 
-        if (this.vfs.exists(`${path}/quests/`))
+        if (this.fileSystem.exists(`${path}/quests/`))
         {
             this.commonUtils.logWarning("Found obsolete quests folder 'user\\mods\\DanW-SPTQuestingBots\\quests'. Only quest files in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\quests' will be used.");
         }
 
-        if (this.vfs.exists(`${path}/log/`))
+        if (this.fileSystem.exists(`${path}/log/`))
         {
             this.commonUtils.logWarning("Found obsolete log folder 'user\\mods\\DanW-SPTQuestingBots\\log'. Logs are now saved in 'BepInEx\\plugins\\DanW-SPTQuestingBots\\log'.");
         }
 
-        if (this.vfs.exists(`${path}/../../../BepInEx/plugins/SPTQuestingBots.dll`))
+        if (this.fileSystem.exists(`${path}/../../../BepInEx/plugins/SPTQuestingBots.dll`))
         {
             this.commonUtils.logError("Please remove BepInEx/plugins/SPTQuestingBots.dll from the previous version of this mod and restart the server, or it will NOT work correctly.");
         

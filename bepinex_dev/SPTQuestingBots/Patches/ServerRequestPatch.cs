@@ -53,7 +53,7 @@ namespace SPTQuestingBots.Patches
                 return;
             }
 
-            Class19<List<WaveInfo>> originalParams = (Class19<List<WaveInfo>>)legacyParams.Params;
+            Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
             legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
 
             ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
@@ -63,7 +63,7 @@ namespace SPTQuestingBots.Patches
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("conditions")]
-            public List<WaveInfo> Conditions { get; set; }
+            public List<WaveInfoClass> Conditions { get; set; }
 
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("PScavChance")]
@@ -74,7 +74,7 @@ namespace SPTQuestingBots.Patches
 
             }
 
-            public ModifiedParams(List<WaveInfo> _conditions, float _PScavChance)
+            public ModifiedParams(List<WaveInfoClass> _conditions, float _PScavChance)
             {
                 Conditions = _conditions;
                 PScavChance = _PScavChance;
@@ -87,13 +87,13 @@ namespace SPTQuestingBots.Patches
 
             public override int GetHashCode()
             {
-                return 861877474 + EqualityComparer<List<WaveInfo>>.Default.GetHashCode(Conditions);
+                return 861877474 + EqualityComparer<List<WaveInfoClass>>.Default.GetHashCode(Conditions);
             }
 
             public override bool Equals(object value)
             {
                 ModifiedParams modifiedParams = value as ModifiedParams;
-                return modifiedParams != null && EqualityComparer<List<WaveInfo>>.Default.Equals(Conditions, modifiedParams.Conditions);
+                return modifiedParams != null && EqualityComparer<List<WaveInfoClass>>.Default.Equals(Conditions, modifiedParams.Conditions);
             }
         }
     }

@@ -1,8 +1,8 @@
 import { IItemConfig } from "@spt/models/spt/config/IItemConfig";
-import { ILogger } from "@spt/models/spt/utils/ILogger";
+import type { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
-import { ICloner } from "@spt/utils/cloners/ICloner";
+import type { ICloner } from "@spt/utils/cloners/ICloner";
 /** Centralise the handling of blacklisting items, uses blacklist found in config/item.json, stores items that should not be used by players / broken items */
 export declare class ItemFilterService {
     protected logger: ILogger;
@@ -36,6 +36,11 @@ export declare class ItemFilterService {
      * @returns string array of item tpls
      */
     getItemRewardBlacklist(): string[];
+    /**
+     * Get an array of item types that should never be given as a reward to player
+     * @returns string array of item base ids
+     */
+    getItemRewardBaseTypeBlacklist(): string[];
     /**
      * Return every template id blacklisted in config/item.json
      * @returns string array of blacklisted tempalte ids

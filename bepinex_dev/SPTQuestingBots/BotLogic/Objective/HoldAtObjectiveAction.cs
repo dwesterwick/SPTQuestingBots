@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(GClass507.CreateNode(BotLogicDecision.search, BotOwner));
+            SetBaseAction(GClass522.CreateNode(BotLogicDecision.search, BotOwner));
         }
 
         public override void Start()
@@ -39,9 +39,9 @@ namespace SPTQuestingBots.BotLogic.Objective
             PauseActionElapsedTime();
         }
 
-        public override void Update()
+        public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
-            UpdateBaseAction();
+            UpdateBaseAction(data);
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())

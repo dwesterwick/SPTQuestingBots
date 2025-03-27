@@ -430,9 +430,6 @@ namespace SPTQuestingBots.Components.Spawning
 
                     LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
 
-                    // Ensure the PMC-conversion chances have remained at 0%
-                    ConfigController.AdjustPMCConversionChances(0, true);
-
                     while (GeneratedBotCount < MaxGeneratedBots)
                     {
                         CurrentBotGeneratorProgress = GeneratorProgress;
@@ -465,9 +462,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            // In SPT-AKI 3.7.1, this is GClass732
-            IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawnerClass) as IBotCreator;
+            IBotCreator ibotCreator = botSpawnerClass._botCreator;
 
             LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
@@ -479,7 +474,7 @@ namespace SPTQuestingBots.Components.Spawning
                     await Task.Delay(20);
 
                     EPlayerSide spawnSide = spawnType.GetPlayerSide();
-                    GClass652 botProfileData = new GClass652(spawnSide, spawnType, botdifficulty, 0f, null);
+                    GClass663 botProfileData = new GClass663(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
@@ -604,7 +599,7 @@ namespace SPTQuestingBots.Components.Spawning
         private void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
         {
             BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-            IBotCreator ibotCreator = AccessTools.Field(typeof(BotSpawner), "_botCreator").GetValue(botSpawner) as IBotCreator;
+            IBotCreator ibotCreator = botSpawner._botCreator;
 
             BotZone closestBotZone = botSpawner.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
@@ -661,7 +656,7 @@ namespace SPTQuestingBots.Components.Spawning
                 try
                 {
                     BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                    botSpawner.method_5(bot);
+                    botSpawner.method_4(bot);
                 }
                 catch (Exception e)
                 {

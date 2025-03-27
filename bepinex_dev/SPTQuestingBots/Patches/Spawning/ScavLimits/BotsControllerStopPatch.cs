@@ -13,7 +13,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(BotsController).GetMethod(nameof(BotsController.Stop), BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotsController).GetMethod(nameof(BotsController.StopGettingInfo), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
