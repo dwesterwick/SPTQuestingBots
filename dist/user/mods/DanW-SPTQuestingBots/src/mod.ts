@@ -178,7 +178,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
-        this.botUtil = new BotUtil(this.commonUtils, this.databaseTables, this.iLocationConfig, this.iBotConfig);
+        this.botUtil = new BotUtil(this.commonUtils, this.databaseTables, this.iLocationConfig, this.iBotConfig, this.iPmcConfig);
 
         if (!modConfig.enabled)
         {
@@ -244,6 +244,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 
         // Disable all of the extra Scavs that spawn into Factory
         this.botUtil.disableCustomScavWaves();
+
+        // Disable SPT's PMC wave generator
+        this.botUtil.disablePmcGeneratorWaves();
 
         // Use EFT's bot caps instead of SPT's
         this.botUtil.useEFTBotCaps();

@@ -315,7 +315,7 @@ namespace SPTQuestingBots.Components.Spawning
             }
 
             // Ensure the raid is progressing before running anything
-            float timeSinceSpawning = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            float timeSinceSpawning = RaidHelpers.GetSecondsSinceSpawning();
             if (timeSinceSpawning < 0.01)
             {
                 return false;
@@ -473,10 +473,11 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     await Task.Delay(20);
 
-                    EPlayerSide spawnSide = spawnType.GetPlayerSide();
+                    //EPlayerSide spawnSide = spawnType.GetPlayerSide();
+                    EPlayerSide spawnSide = EPlayerSide.Savage;
+
                     GClass663 botProfileData = new GClass663(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
-
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
                 }
                 catch (NullReferenceException nre)
@@ -524,7 +525,7 @@ namespace SPTQuestingBots.Components.Spawning
                     }
 
                     // Check if the bot group is allowed to spawn at this time in the raid
-                    float raidET = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
+                    float raidET = RaidHelpers.GetRaidElapsedSeconds();
                     if ((raidET < botGroups[i].RaidETRangeToSpawn.Min) || (raidET > botGroups[i].RaidETRangeToSpawn.Max))
                     {
                         continue;

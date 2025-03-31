@@ -76,7 +76,7 @@ namespace SPTQuestingBots.Components.Spawning
 
             // Set the maximum spawn time for the PMC group
             float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
-            group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+            group.RaidETRangeToSpawn.Max = RaidHelpers.OriginalEscapeTimeSeconds - minTimeRemaining;
 
             return group;
         }
@@ -156,7 +156,7 @@ namespace SPTQuestingBots.Components.Spawning
             playerCountFactor *= ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayers;
 
             // Choose the number of initial PMC's to spawn
-            int pmcOffset = locationData.IsScavRun ? 0 : 1;
+            int pmcOffset = RaidHelpers.IsScavRun ? 0 : 1;
             int minPlayers = (int)Math.Floor((locationData.CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
             int maxPlayers = (int)Math.Ceiling((locationData.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
 

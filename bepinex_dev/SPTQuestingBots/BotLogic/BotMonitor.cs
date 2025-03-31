@@ -291,7 +291,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // If the raid is about to end, make the bot extract
-            float remainingRaidTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetRemainingRaidSeconds();
+            float remainingRaidTime = RaidHelpers.GetRemainingRaidTimeSeconds();
             if (remainingRaidTime < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
                 LoggingController.LogInfo(botOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
@@ -299,14 +299,13 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Ensure enough time has elapsed in the raid to prevent players from getting run-throughs
-            int minSurviveTime = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.NewSurvivalTimeSeconds;
-            if (SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds() < minSurviveTime)
+            if (!RaidHelpers.MinimumSurvivalTimeExceeded())
             {
                 return false;
             }
 
             System.Random random = new System.Random();
-            float initialRaidTimeFraction = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.RaidTimeRemainingFraction;
+            float initialRaidTimeFraction = RaidHelpers.InitialRaidTimeFraction;
 
             // Select a random number of total quests the bot must complete before it's allowed to extract
             if (minTotalQuestsForExtract == int.MaxValue)

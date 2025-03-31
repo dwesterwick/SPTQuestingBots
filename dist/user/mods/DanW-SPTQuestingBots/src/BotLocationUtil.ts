@@ -6,13 +6,21 @@ import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { ILocation } from "@spt/models/eft/common/ILocation";
+import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { IAdditionalHostilitySettings, IBossLocationSpawn, IChancedEnemy } from "@spt/models/eft/common/ILocationBase";
 
 export class BotUtil
 {
     private static readonly pmcRoles = ["pmcBEAR", "pmcUSEC"];
 
-    constructor(private commonUtils: CommonUtils, private databaseTables: IDatabaseTables, private iLocationConfig: ILocationConfig, private iBotConfig: IBotConfig)
+    constructor
+    (
+        private commonUtils: CommonUtils,
+        private databaseTables: IDatabaseTables,
+        private iLocationConfig: ILocationConfig,
+        private iBotConfig: IBotConfig,
+        private iPmcConfig: IPmcConfig
+    )
     {
 
     }
@@ -145,8 +153,6 @@ export class BotUtil
 
     public disablePvEBossWaves(): void
     {
-        this.commonUtils.logInfo("Disabling PvE boss waves...");
-
         let removedWaves = 0;
         for (const location in this.databaseTables.locations)
         {
@@ -170,7 +176,7 @@ export class BotUtil
         for (const bossLocationSpawnId in location.base.BossLocationSpawn)
         {
             const bossLocationSpawn = location.base.BossLocationSpawn[bossLocationSpawnId];
-
+            
             if (BotUtil.pmcRoles.includes(bossLocationSpawn.BossName))
             {
                 removedWaves++;
@@ -187,14 +193,38 @@ export class BotUtil
 
     public disableCustomBossWaves(): void
     {
-        this.commonUtils.logInfo("Disabling custom boss waves...");
-        this.iLocationConfig.customWaves.boss = {};
+        let originalWaves = 0;
+        for (const location in this.iLocationConfig.customWaves.boss)
+        {
+            originalWaves += this.iLocationConfig.customWaves.boss[location].length;
+            this.iLocationConfig.customWaves.boss[location] = [];
+        }
+
+        this.commonUtils.logInfo(`Disabled ${originalWaves} custom boss waves`);
     }
 
     public disableCustomScavWaves(): void
     {
-        this.commonUtils.logInfo("Disabling custom Scav waves...");
-        this.iLocationConfig.customWaves.normal = {};
+        let originalWaves = 0;
+        for (const location in this.iLocationConfig.customWaves.normal)
+        {
+            originalWaves += this.iLocationConfig.customWaves.normal[location].length;
+            this.iLocationConfig.customWaves.normal[location] = [];
+        }
+
+        this.commonUtils.logInfo(`Disabled ${originalWaves} custom Scav waves`);
+    }
+
+    public disablePmcGeneratorWaves(): void
+    {
+        let originalWaves = 0;
+        for (const location in this.iPmcConfig.customPmcWaves)
+        {
+            originalWaves += this.iPmcConfig.customPmcWaves[location].length;
+            this.iPmcConfig.customPmcWaves[location] = [];
+        }
+
+        this.commonUtils.logInfo(`Disabled ${originalWaves} custom PMC waves`);
     }
     
     public useEFTBotCaps(): void
@@ -219,7 +249,11 @@ export class BotUtil
             this.iBotConfig.maxBotCap[location] += fixedAdjustment;
 
             const newCap = this.iBotConfig.maxBotCap[location];
-            this.commonUtils.logInfo(`Updated bot cap for ${location} to ${newCap} (Original SPT: ${originalSPTCap}, EFT: ${eftCap}, fixed adjustment: ${fixedAdjustment})`);
+
+            if (newCap !== originalSPTCap)
+            {
+                this.commonUtils.logInfo(`Updated bot cap for ${location} to ${newCap} (Original SPT: ${originalSPTCap}, EFT: ${eftCap}, fixed adjustment: ${fixedAdjustment})`);
+            }
         }
     }
 }

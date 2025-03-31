@@ -98,7 +98,7 @@ namespace SPTQuestingBots.Components.Spawning
             // Set the minimum and maximum spawn times for the PScav group
             float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
             group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
-            group.RaidETRangeToSpawn.Max = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds - minTimeRemaining;
+            group.RaidETRangeToSpawn.Max = RaidHelpers.OriginalEscapeTimeSeconds - minTimeRemaining;
 
             return group;
         }
@@ -168,7 +168,7 @@ namespace SPTQuestingBots.Components.Spawning
                 }
             }
 
-            float originalEscapeTime = SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.OriginalEscapeTimeSeconds;
+            float originalEscapeTime = RaidHelpers.OriginalEscapeTimeSeconds;
             int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
 
             // Parse the SPT raid-time-reduction settings

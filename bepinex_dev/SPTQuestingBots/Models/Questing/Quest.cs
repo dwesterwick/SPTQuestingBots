@@ -153,12 +153,12 @@ namespace SPTQuestingBots.Models.Questing
 
         public bool CanAssignBot(BotOwner bot)
         {
-            if (!SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (!RaidHelpers.HasRaidStarted())
             {
                 return false;
             }
 
-            float raidTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetElapsedRaidSeconds();
+            float raidTime = RaidHelpers.GetRaidElapsedSeconds();
 
             if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
             {

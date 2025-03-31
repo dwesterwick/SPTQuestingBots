@@ -36,8 +36,6 @@ namespace SPTQuestingBots.Components
         private Dictionary<WorldInteractiveObject, NoPowerTip> noPowerTipsForDoors = new Dictionary<WorldInteractiveObject, NoPowerTip>();
         private float maxExfilPointDistance = 0;
 
-        public bool IsScavRun => SPT.SinglePlayer.Utils.InRaid.RaidChangesUtil.IsScavRaid;
-
         protected void Awake()
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
@@ -897,7 +895,7 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            if (!SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.HasRaidStarted())
+            if (!RaidHelpers.HasRaidStarted())
             {
                 return;
             }

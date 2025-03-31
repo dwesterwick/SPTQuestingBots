@@ -43,7 +43,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         public static void AddSpawnedScavs(int count)
         {
-            float elapsedTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
+            float elapsedTime = RaidHelpers.GetSecondsSinceSpawning();
 
             if (spawnedScavTimes.ContainsKey(elapsedTime))
             {
@@ -56,8 +56,7 @@ namespace SPTQuestingBots.Patches.Spawning.ScavLimits
 
         public static int GetSpawnedScavCount(float timeWindow, bool excludeBotsBeforeThreshold)
         {
-            float elapsedTime = SPT.SinglePlayer.Utils.InRaid.RaidTimeUtil.GetSecondsSinceSpawning();
-            float elapsedTimeThreshold = elapsedTime - timeWindow;
+            float elapsedTimeThreshold = RaidHelpers.GetSecondsSinceSpawning() - timeWindow;
 
             IEnumerable<KeyValuePair<float, int>> scavsToCheck = spawnedScavTimes;
 
