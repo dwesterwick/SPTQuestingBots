@@ -61,7 +61,6 @@ namespace SPTQuestingBots
                 new Patches.OnBeenKilledByAggressorPatch().Enable();
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
-                new Patches.PScavProfilePatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
 
                 new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
@@ -107,6 +106,8 @@ namespace SPTQuestingBots
                     }
                     if (ConfigController.Config.BotSpawns.PScavs.Enabled)
                     {
+                        new Patches.PScavProfilePatch().Enable();
+
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
                         Logger.LogInfo("Enabled PScav bot generation");
                     }
