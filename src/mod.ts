@@ -3,6 +3,7 @@ import eftQuestSettings from "../config/eftQuestSettings.json";
 import eftZoneAndItemPositions from "../config/zoneAndItemQuestPositions.json";
 import { CommonUtils } from "./CommonUtils";
 import { BotUtil } from "./BotLocationUtil";
+import { PMCConversionUtil } from "./PMCConversionUtil";
 
 import type { DependencyContainer } from "tsyringe";
 import type { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
@@ -38,6 +39,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 {
     private commonUtils: CommonUtils
     private botUtil: BotUtil
+    private pmcConversionUtil : PMCConversionUtil
 
     private logger: ILogger;
     private configServer: ConfigServer;
@@ -179,6 +181,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.botUtil = new BotUtil(this.commonUtils, this.databaseTables, this.iLocationConfig, this.iBotConfig, this.iPmcConfig);
+        this.pmcConversionUtil = new PMCConversionUtil(this.commonUtils, this.iPmcConfig);
 
         if (!modConfig.enabled)
         {
@@ -207,6 +210,8 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         }
 
         const presptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
+        
+        this.pmcConversionUtil.removeBlacklistedBrainTypes();
         
         // Disable the Questing Bots spawning system if another spawning mod has been loaded
         if (this.shouldDisableSpawningSystem(presptModLoader.getImportedModsNames()))
