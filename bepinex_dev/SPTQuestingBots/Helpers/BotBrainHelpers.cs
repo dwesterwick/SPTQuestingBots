@@ -251,7 +251,7 @@ namespace SPTQuestingBots.Helpers
 
         public static bool WillBeAPlayerScav(this Profile profile)
         {
-            return profile.Nickname.Contains(" (");
+            return profile.Info.Settings.Role == WildSpawnType.assault && !string.IsNullOrEmpty(profile.Info.MainProfileNickname);
         }
 
         public static EPlayerSide GetPlayerSide(this WildSpawnType spawnType)

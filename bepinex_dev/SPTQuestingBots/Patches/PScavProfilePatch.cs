@@ -24,14 +24,14 @@ namespace SPTQuestingBots.Patches
                 {
                     // Filter list to only pscavs, if none - the client requests from the server
                     // Use Info.Settings.Role instead of Side. Server always return x.Side == EPlayerSide.Savage
-                    List<Profile> filteredProfiles = __instance.list_0.ApplyFilter(x => x.Info.Settings.Role == WildSpawnType.assault && x.WillBeAPlayerScav());
+                    List<Profile> filteredProfiles = __instance.list_0.ApplyFilter(x => x.WillBeAPlayerScav());
                     __result = data.ChooseProfile(filteredProfiles, withDelete);
 
                     return false;
                 }
                 else
                 {
-                    // Filter list to only scavs (No pmc nickname)
+                    // Filter list to only scavs (no pmc nickname), and Role != assault
                     List<Profile> filteredProfiles = __instance.list_0.ApplyFilter(x => (x.Info.Settings.Role == WildSpawnType.assault && !x.WillBeAPlayerScav() || x.Info.Settings.Role != WildSpawnType.assault));
                     __result = data.ChooseProfile(filteredProfiles, withDelete);
 
