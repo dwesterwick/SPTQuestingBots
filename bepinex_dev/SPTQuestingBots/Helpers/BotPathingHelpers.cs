@@ -13,8 +13,8 @@ namespace SPTQuestingBots.Helpers
 {
     public static class BotPathingHelpers
     {
-        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass513), "vector3_0");
-        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass513), "int_0");
+        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass529), "vector3_0");
+        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass529), "int_0");
 
         public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
