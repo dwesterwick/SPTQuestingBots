@@ -23,6 +23,7 @@ import type { FileSystemSync } from "@spt/utils/FileSystemSync";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
 import type { BotController } from "@spt/controllers/BotController";
+import type { BotNameService } from "@spt/services/BotNameService";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
 import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
@@ -51,6 +52,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
     private botController: BotController;
+    private botNameService: BotNameService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -173,6 +175,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
+        this.botNameService = container.resolve<BotNameService>("BotNameService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -275,19 +278,14 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             return bots;
         }
 
-        const pmcNames = [
-            ...this.databaseTables.bots.types.usec.firstName,
-            ...this.databaseTables.bots.types.bear.firstName
-        ];
-
         for (const bot in bots)
         {
-            if (info.conditions[0].Role !== "assault")
+            if (bots[bot].Info.Settings.Role !== "assault")
             {
                 continue;
             }
 
-            bots[bot].Info.Nickname = `${bots[bot].Info.Nickname} (${this.randomUtil.getArrayValue(pmcNames)})`
+            this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bots[bot]);
         }
 
         return bots;
