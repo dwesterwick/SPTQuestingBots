@@ -24,9 +24,12 @@ import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
 import type { BotController } from "@spt/controllers/BotController";
 import type { BotNameService } from "@spt/services/BotNameService";
+import type { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
 import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
 import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
+import { GameEditions } from "@spt/models/enums/GameEditions";
+import { MemberCategory } from "@spt/models/enums/MemberCategory";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
@@ -53,6 +56,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private randomUtil: RandomUtil;
     private botController: BotController;
     private botNameService: BotNameService;
+    private weightedRandomHelper: WeightedRandomHelper;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -176,6 +180,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
         this.botController = container.resolve<BotController>("BotController");
         this.botNameService = container.resolve<BotNameService>("BotNameService");
+        this.weightedRandomHelper = container.resolve<WeightedRandomHelper>("WeightedRandomHelper");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -286,6 +291,30 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             }
 
             this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bots[bot]);
+            
+            // SPT CODE - BotGenerator.setRandomisedGameVersionAndCategory(bot.Info);
+            // Choose random weighted game version for bot
+            bots[bot].Info.GameVersion = this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.gameVersionWeight);
+
+            // Choose appropriate member category value
+            switch (bots[bot].Info.GameVersion) 
+            {
+                case GameEditions.EDGE_OF_DARKNESS:
+                    bots[bot].Info.MemberCategory = MemberCategory.UNIQUE_ID;
+                    break;
+                case GameEditions.UNHEARD:
+                    bots[bot].Info.MemberCategory = MemberCategory.UNHEARD;
+                    break;
+                default:
+                    // Everyone else gets a weighted randomised category
+                    bots[bot].Info.MemberCategory = Number.parseInt(
+                        this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.accountTypeWeight),
+                        10
+                    );
+            }
+
+            // Ensure selected category matches
+            bots[bot].Info.SelectedMemberCategory = bots[bot].Info.MemberCategory;
         }
 
         return bots;
