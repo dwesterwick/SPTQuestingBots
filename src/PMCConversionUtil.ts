@@ -2,10 +2,11 @@ import modConfig from "../config/config.json";
 
 import type { CommonUtils } from "./CommonUtils";
 import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
+import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 
 export class PMCConversionUtil
 {
-    constructor(private commonUtils: CommonUtils, private iPmcConfig: IPmcConfig)
+    constructor(private commonUtils: CommonUtils, private iPmcConfig: IPmcConfig, private iBotConfig: IBotConfig)
     {
         
     }
@@ -29,13 +30,30 @@ export class PMCConversionUtil
                         continue;
                     }
 
-                    //this.commonUtils.logInfo(`Removing ${badBrains[i]} from ${pmcType} in ${map}...`);
+                    // this.commonUtils.logInfo(`Removing ${badBrains[i]} from ${pmcType} in ${map}...`);
                     delete mapBrains[badBrains[i]];
                     removedBrains++;
                 }
             }
         }
 
-        this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's...done. Removed entries: ${removedBrains}`);
+        for (const map in this.iBotConfig.playerScavBrainType)
+        {
+            const mapBrains = this.iBotConfig.playerScavBrainType[map];
+            
+            for (const i in badBrains)
+            {
+                if (mapBrains[badBrains[i]] === undefined)
+                {
+                    continue;
+                }
+
+                // this.commonUtils.logInfo(`Removing ${badBrains[i]} from playerscavs in ${map}...`);
+                delete mapBrains[badBrains[i]];
+                removedBrains++;
+            }
+        }
+
+        this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's and Player Scav's...done. Removed entries: ${removedBrains}`);
     }
 }

@@ -181,7 +181,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.databaseTables = this.databaseServer.getTables();
         this.commonUtils = new CommonUtils(this.logger, this.databaseTables, this.localeService);
         this.botUtil = new BotUtil(this.commonUtils, this.databaseTables, this.iLocationConfig, this.iBotConfig, this.iPmcConfig);
-        this.pmcConversionUtil = new PMCConversionUtil(this.commonUtils, this.iPmcConfig);
+        this.pmcConversionUtil = new PMCConversionUtil(this.commonUtils, this.iPmcConfig, this.iBotConfig);
 
         if (!modConfig.enabled)
         {
