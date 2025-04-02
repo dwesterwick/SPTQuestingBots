@@ -12,7 +12,7 @@ namespace SPTQuestingBots.Patches
         protected override MethodBase GetTargetMethod()
         {
             // BotsPresets : GClass658
-            return typeof(GClass658).GetMethod("GetNewProfile", new Type[] { typeof(BotCreationDataClass), typeof(bool) });
+            return typeof(GClass658).GetMethod(nameof(GClass658.GetNewProfile), new Type[] { typeof(BotCreationDataClass), typeof(bool) });
         }
 
         [PatchPrefix]
