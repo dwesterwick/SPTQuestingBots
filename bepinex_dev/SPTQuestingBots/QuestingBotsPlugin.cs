@@ -106,6 +106,8 @@ namespace SPTQuestingBots
                     }
                     if (ConfigController.Config.BotSpawns.PScavs.Enabled)
                     {
+                        new Patches.PScavProfilePatch().Enable();
+
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
                         Logger.LogInfo("Enabled PScav bot generation");
                     }
