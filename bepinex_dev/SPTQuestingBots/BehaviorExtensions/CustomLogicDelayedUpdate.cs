@@ -100,11 +100,11 @@ namespace SPTQuestingBots.BehaviorExtensions
             BotOwner.DoorOpener.Update();
 
             Configuration.MinMaxConfig staminaLimits = ConfigController.Config.Questing.SprintingLimitations.Stamina;
-            if (canSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > staminaLimits.Max))
+            if (canSprint && !BotOwner.Mover.NoSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > staminaLimits.Max))
             {
                 BotOwner.GetPlayer.EnableSprint(true);
             }
-            if (!canSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < staminaLimits.Min))
+            if (!canSprint || BotOwner.Mover.NoSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < staminaLimits.Min))
             {
                 BotOwner.GetPlayer.EnableSprint(false);
             }

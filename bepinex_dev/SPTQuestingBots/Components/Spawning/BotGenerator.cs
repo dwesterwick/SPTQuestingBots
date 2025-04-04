@@ -473,12 +473,16 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     await Task.Delay(20);
 
+                    // Starting with SPT 3.11, bots are cached via the client, and the client expects this to always be EPlayerSide.Savage. SPT later fixes it in a patch.
                     //EPlayerSide spawnSide = spawnType.GetPlayerSide();
                     EPlayerSide spawnSide = EPlayerSide.Savage;
 
                     GClass663 botProfileData = new GClass663(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
+
+                    string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => p.Nickname));
+                    LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...done. (" + profileListText + ")");
                 }
                 catch (NullReferenceException nre)
                 {

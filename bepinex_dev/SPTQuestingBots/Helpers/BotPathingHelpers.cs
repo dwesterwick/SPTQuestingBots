@@ -13,11 +13,17 @@ namespace SPTQuestingBots.Helpers
 {
     public static class BotPathingHelpers
     {
-        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass513), "vector3_0");
-        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass513), "int_0");
+        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass529), "vector3_0");
+        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass529), "int_0");
 
         public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
+            /*if (bot.DoorOpener.Interacting)
+            {
+                LoggingController.LogWarning("Cannot update path for " + bot.GetText() + " while it is interacting with a door");
+                return;
+            }*/
+
             // Combines _pathFinder.method_0 and GoToByWay
 
             //LoggingController.LogInfo("Updated path for " + bot.GetText());
