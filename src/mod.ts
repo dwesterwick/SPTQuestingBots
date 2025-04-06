@@ -22,6 +22,7 @@ import type { QuestHelper } from "@spt/helpers/QuestHelper";
 import type { FileSystemSync } from "@spt/utils/FileSystemSync";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
+import type { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import type { BotController } from "@spt/controllers/BotController";
 import type { BotNameService } from "@spt/services/BotNameService";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
@@ -29,6 +30,8 @@ import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/I
 import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import { GameEditions } from "@spt/models/enums/GameEditions";
+import { MemberCategory } from "@spt/models/enums/MemberCategory";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
@@ -51,6 +54,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private fileSystem: FileSystemSync;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
+    private weightedRandomHelper: WeightedRandomHelper;
     private botController: BotController;
     private botNameService: BotNameService;
     private iBotConfig: IBotConfig;
@@ -174,6 +178,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.fileSystem = container.resolve<FileSystemSync>("FileSystemSync");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
+        this.weightedRandomHelper = container.resolve<WeightedRandomHelper>("WeightedRandomHelper");
         this.botController = container.resolve<BotController>("BotController");
         this.botNameService = container.resolve<BotNameService>("BotNameService");
 
@@ -286,6 +291,30 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             }
 
             this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bots[bot]);
+            
+            /* SPT CODE - BotGenerator.setRandomisedGameVersionAndCategory(bot.Info) */
+            // Choose random weighted game version for bot
+            bots[bot].Info.GameVersion = this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.gameVersionWeight);
+
+            // Choose appropriate member category value
+            switch (bots[bot].Info.GameVersion) 
+            {
+                case GameEditions.EDGE_OF_DARKNESS:
+                    bots[bot].Info.MemberCategory = MemberCategory.UNIQUE_ID;
+                    break;
+                case GameEditions.UNHEARD:
+                    bots[bot].Info.MemberCategory = MemberCategory.UNHEARD;
+                    break;
+                default:
+                    // Everyone else gets a weighted randomised category
+                    bots[bot].Info.MemberCategory = Number.parseInt(
+                        this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.accountTypeWeight),
+                        10
+                    );
+            }
+
+            // Ensure selected category matches
+            bots[bot].Info.SelectedMemberCategory = bots[bot].Info.MemberCategory;
         }
 
         return bots;
