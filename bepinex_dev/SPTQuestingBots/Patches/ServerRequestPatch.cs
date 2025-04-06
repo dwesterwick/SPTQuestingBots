@@ -56,7 +56,7 @@ namespace SPTQuestingBots.Patches
             Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
             legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
 
-            ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
+            // ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
         }
 
         internal class ModifiedParams
