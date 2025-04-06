@@ -50,7 +50,6 @@ namespace SPTQuestingBots.BotLogic
             lootingLayerMonitor.Init(botOwner, "Looting");
 
             extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
-            extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
 
             // This is for using mounted guns, but questing bots aren't allowed to use them right now
             stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
@@ -58,6 +57,7 @@ namespace SPTQuestingBots.BotLogic
 
             if (SAIN.Plugin.SAINInterop.Init())
             {
+                extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
                 canUseSAINInterop = true;
 
                 string brainName = botOwner.Brain.BaseBrain.ShortName();
@@ -78,7 +78,11 @@ namespace SPTQuestingBots.BotLogic
             }
             else
             {
-                LoggingController.LogWarning("SAIN Interop not detected. Cannot instruct " + botOwner.GetText() + " to extract.");
+                extractLayerMonitor.Init(botOwner, "Exfiltration");
+                // Let QB handle when to exfiltrate
+                botOwner.Exfiltration._timeToExfiltration = float.MaxValue;
+
+                LoggingController.LogWarning("SAIN Interop not detected. Will instruct " + botOwner.GetText() + " to extract using native.");
             }
 
             if (LootingBots.LootingBotsInterop.Init())
@@ -243,8 +247,21 @@ namespace SPTQuestingBots.BotLogic
         {
             if (!canUseSAINInterop)
             {
-                //LoggingController.LogWarning("SAIN Interop not detected");
-                return false;
+                // Game time > _timeToExfiltration ? exfil now
+                botOwner.Exfiltration._timeToExfiltration = 0f;
+                LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to extract now");
+
+                foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
+                {
+                    if ((follower == null) || follower.IsDead)
+                    {
+                        continue;
+                    }
+                    follower.Exfiltration._timeToExfiltration = 0f;
+                    LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                }
+
+                return true;
             }
 
             if (!SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
