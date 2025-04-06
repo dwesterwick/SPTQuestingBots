@@ -2080,7 +2080,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "desirability": 20,
-        "name": "Warehouse 17",
+        "name": "Warehouse 17 Rear",
         "objectives" : [
             {
                 "repeatable": true,
@@ -3588,6 +3588,1871 @@
                             "x": -259.3982,
                             "y": 0.7883575,
                             "z": -75.15435
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "name": "Warehouse 17",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 68.529274,
+                            "y": 1.12000024,
+                            "z": -59.71363
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 64.216,
+                            "y": 1.19853282,
+                            "z": -65.63544
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 70.576355,
+                            "y": 1.15194583,
+                            "z": -66.65023
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 47.00062,
+                            "y": 1.18925023,
+                            "z": -63.3943
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.57627,
+                            "y": 1.18598258,
+                            "z": -50.96605
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 51.101162,
+                            "y": 4.43206072,
+                            "z": -45.907196
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 40.0481071,
+                            "y": 4.47745371,
+                            "z": -52.10558
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 34.5759926,
+                            "y": 4.493124,
+                            "z": -54.75905
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 42.9504166,
+                            "y": 4.461947,
+                            "z": -60.5569344
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 47.9340668,
+                            "y": 4.488666,
+                            "z": -58.8684769
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 24.9697685,
+                            "y": 4.475165,
+                            "z": -61.0031128
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 26.935133,
+                            "y": 4.489907,
+                            "z": -54.6378021
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 66.06298,
+                            "y": 7.74369526,
+                            "z": -67.51061
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 66.49403,
+                            "y": 9.016801,
+                            "z": -58.1695061
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 62.2129364,
+                            "y": 9.016801,
+                            "z": -61.2524719
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "name": "Boiler Building",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 91.95067,
+                            "y": 1.37363315,
+                            "z": -44.2229919
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 91.73952,
+                            "y": 1.38197732,
+                            "z": -60.0145836
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 93.4737,
+                            "y": 1.38197732,
+                            "z": -64.081
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 93.49845,
+                            "y": 1.38671637,
+                            "z": -67.8876
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 113.346893,
+                            "y": 1.34774268,
+                            "z": -58.8230247
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 106.7158,
+                            "y": 1.34774268,
+                            "z": -48.5351219
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 101.070709,
+                            "y": 1.36020184,
+                            "z": -42.6048965
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 113.954552,
+                            "y": 1.344945,
+                            "z": -39.49803
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 130.83754,
+                            "y": 1.34189141,
+                            "z": -65.6250458
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 101.352821,
+                            "y": 4.861507,
+                            "z": -47.8844528
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 122.399132,
+                            "y": 7.13521147,
+                            "z": -46.72534
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 117.922546,
+                            "y": 7.13521147,
+                            "z": -37.68929
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 94.9696655,
+                            "y": 7.17118263,
+                            "z": -45.4391174
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 35,
+        "name": "Boiler Building Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 400,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 94.05106,
+                            "y": 7.19466639,
+                            "z": -58.2771873
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 89.7554,
+                            "y": 7.22180033,
+                            "z": -56.7954521
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 92.65456,
+                            "y": 7.22180033,
+                            "z": -53.6603546
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 89.93688,
+                            "y": 7.22180033,
+                            "z": -53.93866
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 10,
+        "name": "Industrial Plant Silos",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 257.714966,
+                            "y": -0.7821574,
+                            "z": -11.0893326
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 260.072968,
+                            "y": 5.21607447,
+                            "z": -24.0819683
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 249.193649,
+                            "y": 5.21779728,
+                            "z": -35.17588
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 256.4247,
+                            "y": 8.508573,
+                            "z": -36.7431259
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 252.983719,
+                            "y": 11.7737761,
+                            "z": -18.386219
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 251.278519,
+                            "y": 11.7737761,
+                            "z": -36.4937
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 1,
+        "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 25,
+        "name": "Industrial Plant",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 274.998657,
+                            "y": 1.51017284,
+                            "z": -76.4526
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 268.1539,
+                            "y": 1.5380398,
+                            "z": -75.57139
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 270.511169,
+                            "y": 1.5380398,
+                            "z": -66.5951462
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 257.454224,
+                            "y": 1.529689,
+                            "z": -61.1904755
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 267.505951,
+                            "y": 5.99075031,
+                            "z": -74.61332
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 274.076782,
+                            "y": 6.42117167,
+                            "z": -34.3192253
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 275.371552,
+                            "y": 8.924059,
+                            "z": -19.2065449
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 280.942749,
+                            "y": 9.121759,
+                            "z": -15.81267
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 271.3655,
+                            "y": 8.159797,
+                            "z": -7.927193
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 268.931519,
+                            "y": 8.789104,
+                            "z": -55.93233
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 257.773163,
+                            "y": 5.850053,
+                            "z": -65.74299
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 268.4001,
+                            "y": 12.68524,
+                            "z": -58.13856
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 270.499542,
+                            "y": 12.7018623,
+                            "z": -62.4312019
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 269.6476,
+                            "y": 12.8073463,
+                            "z": -72.61168
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 268.1058,
+                            "y": 12.696126,
+                            "z": -76.39291
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Industrial Plant Sniping Top Floor",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 253.857147,
+                            "y": 12.72442,
+                            "z": -73.4128342
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 253.857147,
+                            "y": 12.72442,
+                            "z": -73.4128342
+                        },
+                        "lookToPosition" : {
+                            "x": 193.680817,
+                            "y": 1.10344481,
+                            "z": -91.75561
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 255.218048,
+                            "y": 12.7165966,
+                            "z": -69.8295746
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 255.218048,
+                            "y": 12.7165966,
+                            "z": -69.8295746
+                        },
+                        "lookToPosition" : {
+                            "x": 191.6113,
+                            "y": 1.11437166,
+                            "z": -33.0370178
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 256.606567,
+                            "y": 12.7165966,
+                            "z": -61.948204
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 256.606567,
+                            "y": 12.7165966,
+                            "z": -61.948204
+                        },
+                        "lookToPosition" : {
+                            "x": 193.680817,
+                            "y": 1.10344481,
+                            "z": -91.75561
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 258.374634,
+                            "y": 12.7165966,
+                            "z": -54.2689171
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 258.374634,
+                            "y": 12.7165966,
+                            "z": -54.2689171
+                        },
+                        "lookToPosition" : {
+                            "x": 193.680817,
+                            "y": 1.10344481,
+                            "z": -91.75561
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Industrial Plant Sniping Middle Floor",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 280.5519,
+                            "y": 9.121759,
+                            "z": -15.7298069
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 280.5519,
+                            "y": 9.121759,
+                            "z": -15.7298069
+                        },
+                        "lookToPosition" : {
+                            "x": 355.398743,
+                            "y": 1.10921526,
+                            "z": -18.28908
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": false,
+        "name": "Industrial Plant Interior Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 269.949677,
+                            "y": 8.717554,
+                            "z": -55.0560036
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -11.95243,
+                            "y": 0.0827226639,
+                            "z": -110.21579
+                        },
+                        "lookToPosition" : {
+                            "x": 273.860046,
+                            "y": 7.43475533,
+                            "z": -56.5276947
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": false,
+        "name": "Industrial Plant Exterior Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 269.721283,
+                            "y": 1.109542,
+                            "z": 6.2385025
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 269.721283,
+                            "y": 1.109542,
+                            "z": 6.2385025
+                        },
+                        "lookToPosition" : {
+                            "x": 263.289856,
+                            "y": 1.09424686,
+                            "z": 1.81765747
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Industrial Plant Silos Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 252.306274,
+                            "y": 11.7592182,
+                            "z": -37.1358223
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 252.306274,
+                            "y": 11.7592182,
+                            "z": -37.1358223
+                        },
+                        "lookToPosition" : {
+                            "x": 198.541351,
+                            "y": 1.08471763,
+                            "z": -78.1537857
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 250.0861,
+                            "y": 11.734828,
+                            "z": -29.9137268
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 250.0861,
+                            "y": 11.734828,
+                            "z": -29.9137268
+                        },
+                        "lookToPosition" : {
+                            "x": 231.318588,
+                            "y": 1.13894486,
+                            "z": -2.5403738
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 253.226517,
+                            "y": 11.74577,
+                            "z": -14.1752377
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 253.226517,
+                            "y": 11.74577,
+                            "z": -14.1752377
+                        },
+                        "lookToPosition" : {
+                            "x": 168.919647,
+                            "y": 2.96254,
+                            "z": -83.783905
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 254.587753,
+                            "y": 11.7294273,
+                            "z": -8.906923
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 254.587753,
+                            "y": 11.7294273,
+                            "z": -8.906923
+                        },
+                        "lookToPosition" : {
+                            "x": 219.003784,
+                            "y": -0.7837688,
+                            "z": 43.84088
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 263.28363,
+                            "y": 11.7083025,
+                            "z": -5.429489
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 263.28363,
+                            "y": 11.7083025,
+                            "z": -5.429489
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 263.8497,
+                            "y": 8.476963,
+                            "z": -5.958697
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 263.8497,
+                            "y": 8.476963,
+                            "z": -5.958697
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 253.956,
+                            "y": 8.496915,
+                            "z": -12.9247646
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 253.956,
+                            "y": 8.496915,
+                            "z": -12.9247646
+                        },
+                        "lookToPosition" : {
+                            "x": 226.791046,
+                            "y": 7.32628059,
+                            "z": -20.0479221
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 253.2395,
+                            "y": 8.502816,
+                            "z": -16.8088112
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 253.2395,
+                            "y": 8.502816,
+                            "z": -16.8088112
+                        },
+                        "lookToPosition" : {
+                            "x": 227.1887,
+                            "y": 1.298941,
+                            "z": 10.6550293
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 249.100021,
+                            "y": 8.447342,
+                            "z": -32.6109467
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 249.100021,
+                            "y": 8.447342,
+                            "z": -32.6109467
+                        },
+                        "lookToPosition" : {
+                            "x": 227.1887,
+                            "y": 1.298941,
+                            "z": 10.6550293
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 252.643417,
+                            "y": 8.447342,
+                            "z": -37.3040657
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 252.643417,
+                            "y": 8.447342,
+                            "z": -37.3040657
+                        },
+                        "lookToPosition" : {
+                            "x": 244.127716,
+                            "y": 1.10820067,
+                            "z": -70.91008
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 254.97963,
+                            "y": 5.17095757,
+                            "z": -7.106318
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 254.97963,
+                            "y": 5.17095757,
+                            "z": -7.106318
+                        },
+                        "lookToPosition" : {
+                            "x": 216.761429,
+                            "y": 1.35842013,
+                            "z": -1.849959
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 250.907028,
+                            "y": 5.253246,
+                            "z": -36.3092461
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 250.907028,
+                            "y": 5.253246,
+                            "z": -36.3092461
+                        },
+                        "lookToPosition" : {
+                            "x": 238.168533,
+                            "y": 1.88508081,
+                            "z": -104.6522
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Boiler Building Upstairs Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 121.843513,
+                            "y": 7.21238852,
+                            "z": -44.8152275
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 121.843513,
+                            "y": 7.21238852,
+                            "z": -44.8152275
+                        },
+                        "lookToPosition" : {
+                            "x": 177.1923,
+                            "y": 1.34380126,
+                            "z": -13.1044359
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 117.2035,
+                            "y": 7.12368727,
+                            "z": -37.647068
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 117.2035,
+                            "y": 7.12368727,
+                            "z": -37.647068
+                        },
+                        "lookToPosition" : {
+                            "x": 80.80869,
+                            "y": 1.34798336,
+                            "z": -13.2251692
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 112.00209,
+                            "y": 7.12368441,
+                            "z": -38.86489
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 112.00209,
+                            "y": 7.12368441,
+                            "z": -38.86489
+                        },
+                        "lookToPosition" : {
+                            "x": 80.80869,
+                            "y": 1.34798336,
+                            "z": -13.2251692
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 101.9579,
+                            "y": 7.12368441,
+                            "z": -41.3062668
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 101.9579,
+                            "y": 7.12368441,
+                            "z": -41.3062668
+                        },
+                        "lookToPosition" : {
+                           "x": 108.383072,
+                            "y": 1.181496,
+                            "z": 4.97027636
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 93.39097,
+                            "y": 7.175949,
+                            "z": -42.78393
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 30,
+                            "max": 120
+                        },
+                        "position" : {
+                            "x": 93.39097,
+                            "y": 7.175949,
+                            "z": -42.78393
+                        },
+                        "lookToPosition" : {
+                           "x": 108.383072,
+                            "y": 1.181496,
+                            "z": 4.97027636
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Boiler Building Downstairs Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 95.09854,
+                            "y": 1.33135664,
+                            "z": -75.57009
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 95.09854,
+                            "y": 1.33135664,
+                            "z": -75.57009
+                        },
+                        "lookToPosition" : {
+                            "x": 43.1684532,
+                            "y": 1.12144041,
+                            "z": -92.07485
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 5,
+        "pmcsOnly": true,
+        "name": "Warehouse 17 Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 33.1476822,
+                            "y": 4.467968,
+                            "z": -53.5027771
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 33.1476822,
+                            "y": 4.467968,
+                            "z": -53.5027771
+                        },
+                        "lookToPosition" : {
+                            "x": 38.3099442,
+                            "y": 1.06111491,
+                            "z": -28.5177727
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 26.3083324,
+                            "y": 4.476097,
+                            "z": -55.05817
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 26.3083324,
+                            "y": 4.476097,
+                            "z": -55.05817
+                        },
+                        "lookToPosition" : {
+                            "x": 19.9348412,
+                            "y": -1.08328843,
+                            "z": 32.6381264
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 24.7335072,
+                            "y": 4.496749,
+                            "z": -56.9123955
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 24.7335072,
+                            "y": 4.496749,
+                            "z": -56.9123955
+                        },
+                        "lookToPosition" : {
+                            "x": -74.47109,
+                            "y": 0.408416271,
+                            "z": 1.47672141
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "maxBotsInGroup": 1,
+        "desirability": 10,
+        "pmcsOnly": true,
+        "name": "Industrial Plant Silos Counter-Sniping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": 228.5874,
+                            "y": 7.3696723,
+                            "z": -12.8726206
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": 228.5874,
+                            "y": 7.3696723,
+                            "z": -12.8726206
+                        },
+                        "lookToPosition" : {
+                            "x": 251.603333,
+                            "y": 8.497094,
+                            "z": -25.27257
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isSniping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 15,
+        "pmcsOnly": false,
+        "name": "Skeleton Bush Camping",
+        "forbiddenWeapons" : [ "pistol", "shotgun" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 0,
+                        "position" : {
+                            "x": 237.11235,
+                            "y": 1.24006593,
+                            "z": 6.803322
+                        }
+                    },
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "stepType" : "HoldAtPosition",
+                        "maxDistance": 6,
+                        "minElapsedTime": {
+                            "min": 60,
+                            "max": 240
+                        },
+                        "position" : {
+                            "x": 237.11235,
+                            "y": 1.24006593,
+                            "z": 6.803322
                         }
                     }
                 ]

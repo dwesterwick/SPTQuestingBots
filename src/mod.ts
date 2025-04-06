@@ -27,7 +27,7 @@ import type { BotController } from "@spt/controllers/BotController";
 import type { BotNameService } from "@spt/services/BotNameService";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
 import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
-import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
+import type { IBotBase, IInfo } from "@spt/models/eft/common/tables/IBotBase";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { GameEditions } from "@spt/models/enums/GameEditions";
@@ -287,37 +287,54 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             if (bots[bot].Info.Settings.Role !== "assault")
             {
+                this.commonUtils.logError(`Tried generating a player Scav, but a bot with role ${bots[bot].Info.Settings.Role} was returned`);
                 continue;
             }
 
             this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bots[bot]);
-            
-            /* SPT CODE - BotGenerator.setRandomisedGameVersionAndCategory(bot.Info) */
-            // Choose random weighted game version for bot
-            bots[bot].Info.GameVersion = this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.gameVersionWeight);
-
-            // Choose appropriate member category value
-            switch (bots[bot].Info.GameVersion) 
-            {
-                case GameEditions.EDGE_OF_DARKNESS:
-                    bots[bot].Info.MemberCategory = MemberCategory.UNIQUE_ID;
-                    break;
-                case GameEditions.UNHEARD:
-                    bots[bot].Info.MemberCategory = MemberCategory.UNHEARD;
-                    break;
-                default:
-                    // Everyone else gets a weighted randomised category
-                    bots[bot].Info.MemberCategory = Number.parseInt(
-                        this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.accountTypeWeight),
-                        10
-                    );
-            }
-
-            // Ensure selected category matches
-            bots[bot].Info.SelectedMemberCategory = bots[bot].Info.MemberCategory;
+            this.setRandomisedGameVersionAndCategory(bots[bot].Info);
         }
 
         return bots;
+    }
+
+    private setRandomisedGameVersionAndCategory(botInfo : IInfo) : string
+    {
+        /* SPT CODE - BotGenerator.setRandomisedGameVersionAndCategory(bot.Info) */
+
+        // Special case
+        if (botInfo.Nickname?.toLowerCase() === "nikita")
+        {
+            botInfo.GameVersion = GameEditions.UNHEARD;
+            botInfo.MemberCategory = MemberCategory.DEVELOPER;
+
+            return botInfo.GameVersion;
+        }
+
+        // Choose random weighted game version for bot
+        botInfo.GameVersion = this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.gameVersionWeight);
+
+        // Choose appropriate member category value
+        switch (botInfo.GameVersion) 
+        {
+            case GameEditions.EDGE_OF_DARKNESS:
+                botInfo.MemberCategory = MemberCategory.UNIQUE_ID;
+                break;
+            case GameEditions.UNHEARD:
+                botInfo.MemberCategory = MemberCategory.UNHEARD;
+                break;
+            default:
+                // Everyone else gets a weighted randomised category
+                botInfo.MemberCategory = Number.parseInt(
+                    this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.accountTypeWeight),
+                    10
+                );
+        }
+
+        // Ensure selected category matches
+        botInfo.SelectedMemberCategory = botInfo.MemberCategory;
+
+        return botInfo.GameVersion;
     }
 
     private doesFileIntegrityCheckPass(): boolean
