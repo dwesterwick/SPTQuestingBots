@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using EFT;
+using HarmonyLib;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Helpers;
 
@@ -9,36 +10,27 @@ namespace SPTQuestingBots.Patches
 {
     internal class PScavProfilePatch : ModulePatch
     {
+        private static Type targetType;
+        private static FieldInfo profileListField;
+
         protected override MethodBase GetTargetMethod()
         {
-            // BotsPresets : GClass658
-            return typeof(GClass658).GetMethod("GetNewProfile", new Type[] { typeof(BotCreationDataClass), typeof(bool) });
+            targetType = typeof(BotsPresets).BaseType;
+            profileListField = AccessTools.Field(targetType, "list_0");
+
+            Controllers.LoggingController.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
+
+            return targetType.GetMethod("GetNewProfile", new Type[] { typeof(BotCreationDataClass), typeof(bool) });
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(GClass658 __instance, ref Profile __result, BotCreationDataClass data, bool withDelete)
+        protected static bool PatchPrefix(object __instance, ref Profile __result, BotCreationDataClass data, bool withDelete)
         {
-            if (__instance.list_0.Count > 0)
-            {
-                if (ServerRequestPatch.ForcePScavCount > 0)
-                {
-                    // Filter list to only pscavs, if none - the client requests from the server
-                    // Use Info.Settings.Role instead of Side. Server always return x.Side == EPlayerSide.Savage
-                    List<Profile> filteredProfiles = __instance.list_0.ApplyFilter(x => x.Info.Settings.Role == WildSpawnType.assault && x.WillBeAPlayerScav());
-                    __result = data.ChooseProfile(filteredProfiles, withDelete);
+            List<Profile> cachedProfiles = (List<Profile>)profileListField.GetValue(__instance);
+            List<Profile> matchingCachedProfiles = cachedProfiles.ApplyFilter(profile => ServerRequestPatch.ForcePScavs ^ !profile.WillBeAPlayerScav());
 
-                    return false;
-                }
-                else
-                {
-                    // Filter list to only scavs (No pmc nickname)
-                    List<Profile> filteredProfiles = __instance.list_0.ApplyFilter(x => (x.Info.Settings.Role == WildSpawnType.assault && !x.WillBeAPlayerScav() || x.Info.Settings.Role != WildSpawnType.assault));
-                    __result = data.ChooseProfile(filteredProfiles, withDelete);
+            __result = matchingCachedProfiles.Count > 0 ? data.ChooseProfile(matchingCachedProfiles, withDelete) : null;
 
-                    return false;
-                }
-            }
-            __result = null;
             return false;
         }
     }

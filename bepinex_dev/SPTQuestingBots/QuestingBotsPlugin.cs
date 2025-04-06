@@ -18,7 +18,7 @@ namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.6.9")]
+    [BepInDependency("xyz.drakia.waypoints", "1.7.0")]
     [BepInDependency("xyz.drakia.bigbrain", "1.3.2")]
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.10.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin
@@ -27,7 +27,7 @@ namespace SPTQuestingBots
 
         protected void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "3.11.0.0";
+            Patches.TarkovInitPatch.MinVersion = "3.11.2.0";
             Patches.TarkovInitPatch.MaxVersion = "3.11.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");
@@ -106,11 +106,14 @@ namespace SPTQuestingBots
                     }
                     if (ConfigController.Config.BotSpawns.PScavs.Enabled)
                     {
-                        new Patches.PScavProfilePatch().Enable();
-
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
                         Logger.LogInfo("Enabled PScav bot generation");
                     }
+                }
+
+                if ((ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled) || ConfigController.Config.AdjustPScavChance.Enabled)
+                {
+                    new Patches.PScavProfilePatch().Enable();
                 }
                 
                 // Add options to the F12 menu

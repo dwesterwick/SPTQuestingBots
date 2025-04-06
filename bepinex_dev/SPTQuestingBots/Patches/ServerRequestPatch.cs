@@ -13,7 +13,7 @@ namespace SPTQuestingBots.Patches
 {
     internal class ServerRequestPatch : ModulePatch
     {
-        public static int ForcePScavCount { get; set; } = 0;
+        public static bool ForcePScavs { get; set; } = false;
 
         private static readonly string botGenerationEndpoint = "/client/game/bot/generate";
 
@@ -39,7 +39,7 @@ namespace SPTQuestingBots.Patches
 
             if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)
             {
-                pScavChance = ForcePScavCount > 0 ? 100 : 0;
+                pScavChance = ForcePScavs ? 100 : 0;
             }
             else if (ConfigController.Config.AdjustPScavChance.Enabled)
             {
@@ -55,8 +55,6 @@ namespace SPTQuestingBots.Patches
 
             Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
             legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
-
-            // ForcePScavCount = Math.Max(0, ForcePScavCount - 1);
         }
 
         internal class ModifiedParams

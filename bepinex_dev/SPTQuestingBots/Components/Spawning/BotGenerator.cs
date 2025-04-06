@@ -479,6 +479,13 @@ namespace SPTQuestingBots.Components.Spawning
 
                     GClass663 botProfileData = new GClass663(spawnSide, spawnType, botdifficulty, 0f, null);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
+
+                    if (botSpawnData.Profiles.Count != bots)
+                    {
+                        LoggingController.LogError("Requested " + bots + " " + BotTypeName + "s but only " + botSpawnData.Profiles.Count + " were generated.");
+                        continue;
+                    }
+
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
 
                     string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => p.Nickname));

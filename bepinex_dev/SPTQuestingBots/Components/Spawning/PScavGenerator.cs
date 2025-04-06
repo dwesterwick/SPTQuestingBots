@@ -92,21 +92,14 @@ namespace SPTQuestingBots.Components.Spawning
             BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PScavs.BotDifficultyAsOnline);
 
             // Force the server to generate a player Scav
-            ServerRequestPatch.ForcePScavCount += botsInGroup;
+            ServerRequestPatch.ForcePScavs = true;
             Models.BotSpawnInfo group = await GenerateBotGroup(WildSpawnType.assault, botDifficulty, botsInGroup);
-
-            // Set back to 0, since done asking from the server
-            ServerRequestPatch.ForcePScavCount = 0;
+            ServerRequestPatch.ForcePScavs = false;
 
             // Set the minimum and maximum spawn times for the PScav group
             float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
             group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
             group.RaidETRangeToSpawn.Max = RaidHelpers.OriginalEscapeTimeSeconds - minTimeRemaining;
-
-            if (group.GeneratedBotCount != botsInGroup)
-            {
-                LoggingController.LogWarning($"PScavGenerator::GenerateBotGroupTask: Generated bots ({group.GeneratedBotCount}) not matching with requested ({botsInGroup}).");
-            }
 
             return group;
         }
