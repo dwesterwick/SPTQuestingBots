@@ -62,7 +62,7 @@ namespace SPTQuestingBots
                 new Patches.AirdropLandPatch().Enable();
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
-                new Patches.BotExtractPatch().Enable();
+                new Patches.BotDespawnPatch().Enable();
 
                 new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
                 new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();

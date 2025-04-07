@@ -6,7 +6,7 @@ using EFT;
 
 namespace SPTQuestingBots.Patches
 {
-    internal class BotExtractPatch : ModulePatch
+    internal class BotDespawnPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
@@ -16,10 +16,11 @@ namespace SPTQuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(BotOwner botOwner)
         {
-            LoggingController.LogDebug($"{botOwner.GetText()} extracted.");
-
-            botOwner.GetPlayer.gameObject.TryGetComponent<BotLogic.Objective.BotObjectiveManager>(out var objectiveManager);
-            Object.Destroy(objectiveManager);
+            if (botOwner.GetPlayer.gameObject.TryGetComponent<BotLogic.Objective.BotObjectiveManager>(out var objectiveManager))
+            {
+                LoggingController.LogDebug($"{botOwner.GetText()} was despawned; destroying BotObjectiveManager component.");
+                Object.Destroy(objectiveManager);
+            }
         }
     }
 }

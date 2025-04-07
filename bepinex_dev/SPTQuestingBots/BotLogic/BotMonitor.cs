@@ -245,7 +245,7 @@ namespace SPTQuestingBots.BotLogic
 
         public bool TryInstructBotToExtract()
         {
-            if (!canUseSAINInterop)
+            if (!canUseSAINInterop || !ConfigController.Config.Questing.ExtractionRequirements.UseSAINForExtracting)
             {
                 // Game time > _timeToExfiltration ? exfil now
                 botOwner.Exfiltration._timeToExfiltration = 0f;
