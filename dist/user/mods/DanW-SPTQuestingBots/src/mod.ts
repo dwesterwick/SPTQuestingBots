@@ -22,12 +22,16 @@ import type { QuestHelper } from "@spt/helpers/QuestHelper";
 import type { FileSystemSync } from "@spt/utils/FileSystemSync";
 import type { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 import type { RandomUtil } from "@spt/utils/RandomUtil";
+import type { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import type { BotController } from "@spt/controllers/BotController";
+import type { BotNameService } from "@spt/services/BotNameService";
 import type { BotCallbacks } from "@spt/callbacks/BotCallbacks";
 import type { IGenerateBotsRequestData, ICondition } from "@spt/models/eft/bot/IGenerateBotsRequestData";
-import type { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
+import type { IBotBase, IInfo } from "@spt/models/eft/common/tables/IBotBase";
 
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import { GameEditions } from "@spt/models/enums/GameEditions";
+import { MemberCategory } from "@spt/models/enums/MemberCategory";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
@@ -50,7 +54,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     private fileSystem: FileSystemSync;
     private httpResponseUtil: HttpResponseUtil;
     private randomUtil: RandomUtil;
+    private weightedRandomHelper: WeightedRandomHelper;
     private botController: BotController;
+    private botNameService: BotNameService;
     private iBotConfig: IBotConfig;
     private iPmcConfig: IPmcConfig;
     private iLocationConfig: ILocationConfig;
@@ -172,7 +178,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.fileSystem = container.resolve<FileSystemSync>("FileSystemSync");
         this.httpResponseUtil = container.resolve<HttpResponseUtil>("HttpResponseUtil");
         this.randomUtil = container.resolve<RandomUtil>("RandomUtil");
+        this.weightedRandomHelper = container.resolve<WeightedRandomHelper>("WeightedRandomHelper");
         this.botController = container.resolve<BotController>("BotController");
+        this.botNameService = container.resolve<BotNameService>("BotNameService");
 
         this.iBotConfig = this.configServer.getConfig(ConfigTypes.BOT);
         this.iPmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
@@ -275,22 +283,58 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
             return bots;
         }
 
-        const pmcNames = [
-            ...this.databaseTables.bots.types.usec.firstName,
-            ...this.databaseTables.bots.types.bear.firstName
-        ];
-
         for (const bot in bots)
         {
-            if (info.conditions[0].Role !== "assault")
+            if (bots[bot].Info.Settings.Role !== "assault")
             {
+                this.commonUtils.logError(`Tried generating a player Scav, but a bot with role ${bots[bot].Info.Settings.Role} was returned`);
                 continue;
             }
 
-            bots[bot].Info.Nickname = `${bots[bot].Info.Nickname} (${this.randomUtil.getArrayValue(pmcNames)})`
+            this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bots[bot]);
+            this.setRandomisedGameVersionAndCategory(bots[bot].Info);
         }
 
         return bots;
+    }
+
+    private setRandomisedGameVersionAndCategory(botInfo : IInfo) : string
+    {
+        /* SPT CODE - BotGenerator.setRandomisedGameVersionAndCategory(bot.Info) */
+
+        // Special case
+        if (botInfo.Nickname?.toLowerCase() === "nikita")
+        {
+            botInfo.GameVersion = GameEditions.UNHEARD;
+            botInfo.MemberCategory = MemberCategory.DEVELOPER;
+
+            return botInfo.GameVersion;
+        }
+
+        // Choose random weighted game version for bot
+        botInfo.GameVersion = this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.gameVersionWeight);
+
+        // Choose appropriate member category value
+        switch (botInfo.GameVersion) 
+        {
+            case GameEditions.EDGE_OF_DARKNESS:
+                botInfo.MemberCategory = MemberCategory.UNIQUE_ID;
+                break;
+            case GameEditions.UNHEARD:
+                botInfo.MemberCategory = MemberCategory.UNHEARD;
+                break;
+            default:
+                // Everyone else gets a weighted randomised category
+                botInfo.MemberCategory = Number.parseInt(
+                    this.weightedRandomHelper.getWeightedValue(this.iPmcConfig.accountTypeWeight),
+                    10
+                );
+        }
+
+        // Ensure selected category matches
+        botInfo.SelectedMemberCategory = botInfo.MemberCategory;
+
+        return botInfo.GameVersion;
     }
 
     private doesFileIntegrityCheckPass(): boolean

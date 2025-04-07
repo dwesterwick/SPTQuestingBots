@@ -15,6 +15,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2738,13 +2739,14 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 4,
-        "desirability": 35,
+        "desirability": 30,
         "name": "Containment Block Security Office",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2769,6 +2771,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -2814,6 +2817,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2842,6 +2846,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2856,6 +2861,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2870,6 +2876,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -2910,7 +2917,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "desirability": 15,
-        "pmcsOnly": true,
+        "pmcsOnly": false,
         "name": "Containment Block Power Switch Camping",
         "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
@@ -2918,6 +2925,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2956,7 +2964,7 @@
         "maxLevel": 99,
         "maxBots": 2,
         "desirability": 15,
-        "pmcsOnly": true,
+        "pmcsOnly": false,
         "name": "Containment Block Entrance Camping",
         "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
@@ -2964,6 +2972,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -2997,6 +3006,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -3030,6 +3040,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -3068,7 +3079,7 @@
         "maxLevel": 99,
         "maxBots": 1,
         "desirability": 5,
-        "pmcsOnly": true,
+        "pmcsOnly": false,
         "name": "Cargo Block Elevator Camping",
         "forbiddenWeapons" : [ "sniperRifle" ],
         "objectives" : [
@@ -3076,6 +3087,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 3,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {

@@ -3,6 +3,46 @@
         "repeatable": false,
         "minLevel": 0,
         "maxLevel": 99,
+        "maxBots": 3,
+        "desirability": 30,
+        "minRaidET": 0,
+        "requiredSwitches": {
+            "Use": false
+        },
+        "name": "Containment Block Power Switch",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -113.726326,
+                            "y": 0.119773269,
+                            "z": -435.327271
+                        }
+                    },
+                    {
+                        "stepType" : "ToggleSwitch",
+                        "switchID" : "Use",
+                        "position" : {
+                            "x": -113.726326,
+                            "y": 0.119773269,
+                            "z": -435.327271
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
         "maxBots": 4,
         "desirability": 35,
         "minRaidET": 0,
@@ -2688,6 +2728,391 @@
                             "x": -120.17894,
                             "y": 4.099987,
                             "z": -346.444977
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 4,
+        "desirability": 30,
+        "name": "Containment Block Security Office",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -121.262749,
+                            "y": 0.105088905,
+                            "z": -428.211029
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 4,
+        "desirability": 35,
+        "name": "Containment Block Bedroom",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -116.886551,
+                            "y": 0.111669935,
+                            "z": -433.949066
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -118.80751,
+                            "y": 0.101529114,
+                            "z": -437.684784
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -118.39238,
+                            "y": 0.101529114,
+                            "z": -443.832123
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -119.824341,
+                            "y": 0.101529114,
+                            "z": -444.280853
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 4,
+        "desirability": 30,
+        "name": "Containment Block Labs",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -98.92033,
+                            "y": 0.09169745,
+                            "z": -428.497345
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -94.381134,
+                            "y": 0.09169745,
+                            "z": -428.031647
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -94.49426,
+                            "y": 0.09169745,
+                            "z": -431.924866
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -93.36049,
+                            "y": 0.09490237,
+                            "z": -434.4911
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -91.67958,
+                            "y": 0.08355421,
+                            "z": -428.618439
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 14,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -86.73149,
+                            "y": 0.06937201,
+                            "z": -426.7874
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -82.8292847,
+                            "y": 0.06937128,
+                            "z": -428.546082
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -85.98061,
+                            "y": 0.06937703,
+                            "z": -430.303223
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -82.7718048,
+                            "y": 0.09490238,
+                            "z": -442.207031
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 15,
+        "pmcsOnly": false,
+        "name": "Containment Block Power Switch Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -109.340485,
+                            "y": 0.145118386,
+                            "z": -428.06427
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -109.340485,
+                            "y": 0.145118386,
+                            "z": -428.06427
+                        },
+                        "lookToPosition" : {
+                            "x": -113.457947,
+                            "y": 0.0449951142,
+                            "z": -432.1783
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 2,
+        "desirability": 15,
+        "pmcsOnly": false,
+        "name": "Containment Block Entrance Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -114.891548,
+                            "y": 0.05113797,
+                            "z": -387.2043
+                        }
+                    },
+                    {
+                        "stepType" : "Snipe",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -114.891548,
+                            "y": 0.05113797,
+                            "z": -387.2043
+                        },
+                        "lookToPosition" : {
+                            "x": -117.554565,
+                            "y": 0.101016536,
+                            "z": -421.8885
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -115.355339,
+                            "y": 0.111209832,
+                            "z": -422.5515
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -115.355339,
+                            "y": 0.111209832,
+                            "z": -422.5515
+                        },
+                        "lookToPosition" : {
+                            "x": -118.608368,
+                            "y": 0.07381995,
+                            "z": -416.615
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -120.59021,
+                            "y": 0.103561565,
+                            "z": -427.85376
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -120.59021,
+                            "y": 0.103561565,
+                            "z": -427.85376
+                        },
+                        "lookToPosition" : {
+                            "x": -116.222977,
+                            "y": 0.103565216,
+                            "z": -426.322571
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "repeatable": true,
+        "isCamping": true,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 1,
+        "desirability": 5,
+        "pmcsOnly": false,
+        "name": "Cargo Block Elevator Camping",
+        "forbiddenWeapons" : [ "sniperRifle" ],
+        "objectives" : [
+            {
+                "repeatable": true,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 3,
+                "lootAfterCompleting": "Inhibit",
+                "steps": [
+                    {
+                        "waitTimeAfterCompleting": 1,
+                        "position" : {
+                            "x": -122.727959,
+                            "y": 0.0860354,
+                            "z": -406.8608
+                        }
+                    },
+                    {
+                        "stepType" : "Ambush",
+                        "minElapsedTime": {
+                            "min": 45,
+                            "max": 180
+                        },
+                        "position" : {
+                            "x": -122.727959,
+                            "y": 0.0860354,
+                            "z": -406.8608
+                        },
+                        "lookToPosition" : {
+                            "x": -117.174385,
+                            "y": 0.008778453,
+                            "z": -412.513031
                         }
                     }
                 ]

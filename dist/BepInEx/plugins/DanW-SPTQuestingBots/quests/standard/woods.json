@@ -2046,5 +2046,96 @@
                 ]
             }
         ]
+    },
+    {
+        "repeatable": false,
+        "minLevel": 0,
+        "maxLevel": 99,
+        "maxBots": 4,
+        "desirability": 40,
+        "name": "Marked Circle Bunker",
+        "objectives" : [
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 23,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -266.793152,
+                            "y": 6.906454,
+                            "z": -405.804138
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -276.299438,
+                            "y": 7.48976946,
+                            "z": -419.067261
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -272.163818,
+                            "y": 7.482825,
+                            "z": -416.1627
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": -273.023346,
+                            "y": 7.46757364,
+                            "z": -411.3648
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -267.448944,
+                            "y": 7.502633,
+                            "z": -411.372864
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -266.996857,
+                            "y": 7.49533224,
+                            "z": -416.4676
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": -267.916138,
+                            "y": 7.49533224,
+                            "z": -419.4494
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]

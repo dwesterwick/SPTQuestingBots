@@ -75,7 +75,7 @@ export class BotUtil
         {
             if (!BotUtil.pmcRoles.includes(settings[botType].BotRole))
             {
-                this.commonUtils.logWarning(`Did not adjust ${settings[botType].BotRole} hostility settings on ${location.base.Name}`);
+                //this.commonUtils.logWarning(`Did not adjust ${settings[botType].BotRole} hostility settings on ${location.base.Name}`);
                 continue;
             }
 

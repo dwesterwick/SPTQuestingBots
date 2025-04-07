@@ -3599,13 +3599,14 @@
         "minLevel": 1,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 20,
         "name": "Warehouse 17",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3619,7 +3620,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3633,7 +3635,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3647,7 +3650,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -3661,7 +3665,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -3675,7 +3680,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3689,7 +3695,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3703,7 +3710,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3717,7 +3725,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -3731,7 +3740,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -3745,7 +3755,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3759,7 +3770,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3773,7 +3785,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3787,7 +3800,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -3812,13 +3826,14 @@
         "minLevel": 1,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 20,
         "name": "Boiler Building",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3832,7 +3847,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -3853,7 +3869,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -3867,7 +3884,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -3881,7 +3899,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -3895,7 +3914,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3909,7 +3929,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "steps": [
                     {
                         "position" : {
@@ -3923,7 +3944,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -3937,7 +3959,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -3951,7 +3974,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 16,
                 "steps": [
                     {
                         "position" : {
@@ -3965,7 +3989,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -3979,7 +4004,8 @@
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 400,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -4004,6 +4030,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 400,
+                "maxRunDistance": 7,
                 "steps": [
                     {
                         "position" : {
@@ -4049,6 +4076,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -4063,6 +4091,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -4077,6 +4106,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -4091,6 +4121,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -4105,6 +4136,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 12,
                 "steps": [
                     {
                         "position" : {
@@ -4119,6 +4151,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -4136,13 +4169,14 @@
         "minLevel": 1,
         "maxLevel": 99,
         "maxBots": 3,
-        "desirability": 25,
+        "desirability": 20,
         "name": "Industrial Plant",
         "objectives" : [
             {
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "position" : {
@@ -4157,6 +4191,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 6,
                 "steps": [
                     {
                         "position" : {
@@ -4171,6 +4206,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 14,
                 "steps": [
                     {
                         "position" : {
@@ -4185,6 +4221,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 4,
                 "steps": [
                     {
                         "position" : {
@@ -4199,6 +4236,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -4213,6 +4251,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "position" : {
@@ -4227,6 +4266,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -4241,6 +4281,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -4255,6 +4296,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -4269,6 +4311,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 16,
                 "steps": [
                     {
                         "position" : {
@@ -4283,6 +4326,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 8,
                 "steps": [
                     {
                         "position" : {
@@ -4297,6 +4341,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 18,
                 "steps": [
                     {
                         "position" : {
@@ -4311,6 +4356,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 21,
                 "steps": [
                     {
                         "position" : {
@@ -4325,6 +4371,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "position" : {
@@ -4360,6 +4407,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4393,6 +4441,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4426,6 +4475,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4459,6 +4509,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4506,6 +4557,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4552,7 +4604,8 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 18,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4599,7 +4652,8 @@
             {
                 "repeatable": true,
                 "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
+                "maxDistanceFromBot": 200,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4647,6 +4701,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4680,6 +4735,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4713,6 +4769,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 12,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4746,6 +4803,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4779,6 +4837,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 13,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 0,
@@ -4807,6 +4866,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 11,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 0,
@@ -4835,6 +4895,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4868,6 +4929,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4901,6 +4963,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4934,6 +4997,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -4967,6 +5031,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5000,6 +5065,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 6,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5047,6 +5113,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 7,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5080,6 +5147,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5113,6 +5181,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5146,6 +5215,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5179,6 +5249,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 9,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5226,6 +5297,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 4,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5273,6 +5345,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5306,6 +5379,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5339,6 +5413,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 5,
                 "lootAfterCompleting": "Inhibit",
                 "steps": [
                     {
@@ -5378,7 +5453,7 @@
         "maxBots": 2,
         "maxBotsInGroup": 1,
         "desirability": 10,
-        "pmcsOnly": true,
+        "pmcsOnly": false,
         "name": "Industrial Plant Silos Counter-Sniping",
         "forbiddenWeapons" : [ "pistol", "shotgun" ],
         "objectives" : [
@@ -5419,7 +5494,7 @@
     },
     {
         "repeatable": true,
-        "isSniping": true,
+        "isCamping": true,
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
@@ -5432,6 +5507,7 @@
                 "repeatable": true,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 300,
+                "maxRunDistance": 3,
                 "steps": [
                     {
                         "waitTimeAfterCompleting": 0,

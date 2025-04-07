@@ -2059,6 +2059,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 23,
                 "steps": [
                     {
                         "position" : {
@@ -2073,6 +2074,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 10,
                 "steps": [
                     {
                         "position" : {
@@ -2087,6 +2089,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
@@ -2101,6 +2104,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
+                "maxRunDistance": 15,
                 "steps": [
                     {
                         "position" : {
