@@ -243,7 +243,7 @@
     <Compile Include="Models\Pathing\StaticPathData.cs" />
     <Compile Include="Models\Questing\StoredQuestLocation.cs" />
     <Compile Include="Patches\Debug\HandleFinishedTaskPatch.cs" />
-    <Compile Include="Patches\BotDespawnPatch.cs" />
+    <Compile Include="Patches\ReturnToPoolPatch.cs" />
     <Compile Include="Patches\PScavProfilePatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\BotsControllerStopPatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\NonWavesSpawnScenarioCreatePatch.cs" />
