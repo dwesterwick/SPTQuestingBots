@@ -15,6 +15,7 @@ namespace SPTQuestingBots.Models
     {
         public BotCreationDataClass Data { get; private set; }
         public BotGenerator BotGenerator { get; private set; }
+        public bool HasSpawnStarted { get; set; } = false;
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
         private List<BotOwner> bots = new List<BotOwner>();

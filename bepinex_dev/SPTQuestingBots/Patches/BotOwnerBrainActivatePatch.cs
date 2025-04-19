@@ -81,7 +81,15 @@ namespace SPTQuestingBots.Patches
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
-            botSpawnerClass.DeletePlayer(player.GetPlayer());
+            try
+            {
+                botSpawnerClass.DeletePlayer(player.GetPlayer());
+            }
+            catch (Exception ex)
+            {
+                LoggingController.LogError("Could not delete player " + player.GetText() + ": " + ex.Message);
+                LoggingController.LogError(ex.StackTrace);
+            }
         }
 
         private static bool shouldMakeBotGroupHostileTowardAllBosses(BotOwner bot)
