@@ -561,6 +561,13 @@ namespace SPTQuestingBots.Components.Spawning
                 {
                     yield return spawnBotGroup(botGroup);
                 }
+
+                while (botGroupsToSpawn.Any(g => !g.HaveAllBotsSpawned))
+                {
+                    LoggingController.LogDebug($"Waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to finish spawning...");
+                    yield return new WaitForSeconds(0.5f);
+                }
+                LoggingController.LogDebug($"Waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to finish spawning...done.");
             }
             finally
             {
