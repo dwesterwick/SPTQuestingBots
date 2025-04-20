@@ -82,7 +82,7 @@ namespace SPTQuestingBots.BotLogic
                 // Let QB handle when to exfiltrate
                 botOwner.Exfiltration._timeToExfiltration = float.MaxValue;
 
-                LoggingController.LogWarning("SAIN Interop not detected. Will instruct " + botOwner.GetText() + " to extract using native.");
+                LoggingController.LogWarning("SAIN Interop not detected. Will instruct " + botOwner.GetText() + " to extract using vanilla EFT behavior.");
             }
 
             if (LootingBots.LootingBotsInterop.Init())

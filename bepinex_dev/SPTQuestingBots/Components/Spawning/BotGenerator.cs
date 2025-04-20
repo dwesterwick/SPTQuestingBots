@@ -471,7 +471,7 @@ namespace SPTQuestingBots.Components.Spawning
             {
                 try
                 {
-                    await Task.Delay(20);
+                    await Task.Delay(5);
 
                     // Starting with SPT 3.11, bots are cached via the client, and the client expects this to always be EPlayerSide.Savage. SPT later fixes it in a patch.
                     //EPlayerSide spawnSide = spawnType.GetPlayerSide();
@@ -482,7 +482,7 @@ namespace SPTQuestingBots.Components.Spawning
 
                     if (botSpawnData.Profiles.Count != bots)
                     {
-                        LoggingController.LogError("Requested " + bots + " " + BotTypeName + "s but only " + botSpawnData.Profiles.Count + " were generated.");
+                        LoggingController.LogWarning("Requested " + bots + " " + BotTypeName + "s but only " + botSpawnData.Profiles.Count + " were generated. Trying again...");
                         continue;
                     }
 
@@ -562,12 +562,19 @@ namespace SPTQuestingBots.Components.Spawning
                     yield return spawnBotGroup(botGroup);
                 }
 
-                while (botGroupsToSpawn.Any(g => !g.HaveAllBotsSpawned))
+                float timeWhenWarningWillBeShown = Time.time + 3f;
+                while (botGroupsToSpawn.Any(g => g.HasSpawnStarted && !g.HaveAllBotsSpawned))
                 {
-                    LoggingController.LogDebug($"Waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to finish spawning...");
-                    yield return new WaitForSeconds(0.5f);
+                    if (Time.time > timeWhenWarningWillBeShown)
+                    {
+                        LoggingController.LogWarning("Still waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to spawn...");
+                        timeWhenWarningWillBeShown = Time.time + 3f;
+                    }
+
+                    yield return new WaitForSeconds(0.1f);
                 }
-                LoggingController.LogDebug($"Waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to finish spawning...done.");
+
+                LoggingController.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...done.");
             }
             finally
             {
