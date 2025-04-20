@@ -175,6 +175,7 @@
     <Compile Include="Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="Configuration\USECChanceResponse.cs" />
     <Compile Include="Configuration\ZoneAndItemPositionInfoConfig.cs" />
+    <Compile Include="Controllers\BotObjectiveManagerFactory.cs" />
     <Compile Include="Helpers\BotBrainHelpers.cs" />
     <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
@@ -207,7 +208,7 @@
     <Compile Include="Configuration\MinMaxConfig.cs" />
     <Compile Include="Configuration\StuckBotDetectionConfig.cs" />
     <Compile Include="Components\BotQuestBuilder.cs" />
-    <Compile Include="BotLogic\Objective\BotObjectiveManager.cs" />
+    <Compile Include="Components\BotObjectiveManager.cs" />
     <Compile Include="BotLogic\Objective\GoToObjectiveAction.cs" />
     <Compile Include="BotLogic\Objective\BotObjectiveLayer.cs" />
     <Compile Include="Configuration\BotQuestsConfig.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Components\PathRender.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
+    <Compile Include="Models\BotSprintingController.cs" />
     <Compile Include="Models\Questing\BotJobAssignment.cs" />
     <Compile Include="Models\Pathing\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Models\SerializableVector3.cs" />
     <Compile Include="Models\Pathing\StaticPathData.cs" />
     <Compile Include="Models\Questing\StoredQuestLocation.cs" />
+    <Compile Include="Patches\BotOwnerSprintPatch.cs" />
     <Compile Include="Patches\Debug\HandleFinishedTaskPatch.cs" />
     <Compile Include="Patches\ReturnToPoolPatch.cs" />
     <Compile Include="Patches\PScavProfilePatch.cs" />

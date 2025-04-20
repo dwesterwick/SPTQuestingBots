@@ -17,7 +17,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
-        protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
+        protected Components.BotObjectiveManager ObjectiveManager { get; private set; }
         protected GClass168 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
@@ -35,7 +35,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
-            ObjectiveManager = BotLogic.Objective.BotObjectiveManager.GetObjectiveManagerForBot(botOwner);
+            ObjectiveManager = botOwner.GetOrAddObjectiveManager();
         }
 
         public CustomLogicDelayedUpdate(BotOwner botOwner, int delayInterval) : this(botOwner)
@@ -92,22 +92,17 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             // Stand up
             BotOwner.SetPose(1f);
+            BotOwner.BotLay.GetUp(true);
+
+            // Check for mines impeding the bot's path
+            BotOwner.BewarePlantedMine.Update();
 
             // Move as fast as possible
+            ObjectiveManager.BotSprintingController.ManualUpdate(canSprint);
             BotOwner.SetTargetMoveSpeed(1f);
             
             // Open doors blocking the bot's path
             BotOwner.DoorOpener.Update();
-
-            Configuration.MinMaxConfig staminaLimits = ConfigController.Config.Questing.SprintingLimitations.Stamina;
-            if (canSprint && !BotOwner.Mover.NoSprint && BotOwner.GetPlayer.Physical.CanSprint && (BotOwner.GetPlayer.Physical.Stamina.NormalValue > staminaLimits.Max))
-            {
-                BotOwner.GetPlayer.EnableSprint(true);
-            }
-            if (!canSprint || BotOwner.Mover.NoSprint || !BotOwner.GetPlayer.Physical.CanSprint || (BotOwner.GetPlayer.Physical.Stamina.NormalValue < staminaLimits.Min))
-            {
-                BotOwner.GetPlayer.EnableSprint(false);
-            }
         }
 
         public void UpdateBotSteering()

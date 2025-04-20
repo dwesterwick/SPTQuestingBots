@@ -137,7 +137,7 @@ namespace SPTQuestingBots.Components
                     sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
                     sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
 
-                    BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                    BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
                     if (botObjectiveManager != null)
                     {
                         BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
@@ -206,7 +206,7 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Check if a path has been defined for the bot by this mod
-                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
                 if ((botObjectiveManager?.BotPath == null) || !botObjectiveManager.BotPath.HasPath)
                 {
                     if (botPathMarkers.ContainsKey(bot))

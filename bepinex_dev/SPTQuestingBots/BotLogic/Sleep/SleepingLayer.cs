@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
 {
     internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
-        private Objective.BotObjectiveManager objectiveManager = null;
+        private Components.BotObjectiveManager objectiveManager = null;
 
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 250)
         {
-
+            objectiveManager = _botOwner.GetOrAddObjectiveManager();
         }
 
         public override string GetName()
@@ -55,12 +56,6 @@ namespace SPTQuestingBots.BotLogic.Sleep
             if (isSleeplessBot())
             {
                 return updatePreviousState(false);
-            }
-
-            // Check if the bot was ever allowed to quest
-            if (objectiveManager == null)
-            {
-                objectiveManager = BotOwner.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
             }
 
             // Determine the distance from human players beyond which bots will be disabled
@@ -125,7 +120,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             foreach (BotOwner bot in allOtherBots)
             {
                 // We only care about other bots that can quest
-                Objective.BotObjectiveManager otherBotObjectiveManager = bot.GetPlayer.gameObject.GetComponent<Objective.BotObjectiveManager>();
+                Components.BotObjectiveManager otherBotObjectiveManager = bot.GetObjectiveManager();
                 if (otherBotObjectiveManager?.IsQuestingAllowed != true)
                 {
                     continue;

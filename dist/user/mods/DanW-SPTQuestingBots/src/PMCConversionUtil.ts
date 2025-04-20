@@ -14,7 +14,6 @@ export class PMCConversionUtil
     public removeBlacklistedBrainTypes(): void
     {
         const badBrains = modConfig.bot_spawns.blacklisted_pmc_bot_brains;
-        this.commonUtils.logInfo("Removing blacklisted brain types from being used for PMC's...");
 
         let removedBrains = 0;
         for (const pmcType in this.iPmcConfig.pmcType)
@@ -54,6 +53,6 @@ export class PMCConversionUtil
             }
         }
 
-        this.commonUtils.logInfo(`Removing blacklisted brain types from being used for PMC's and Player Scav's...done. Removed entries: ${removedBrains}`);
+        this.commonUtils.logInfo(`Removed ${removedBrains} blacklisted brain types from being used for PMC's and Player Scav's`);
     }
 }

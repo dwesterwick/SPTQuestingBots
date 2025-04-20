@@ -63,6 +63,7 @@ namespace SPTQuestingBots
                 new Patches.ServerRequestPatch().Enable();
                 new Patches.CheckLookEnemyPatch().Enable();
                 new Patches.ReturnToPoolPatch().Enable();
+                new Patches.BotOwnerSprintPatch().Enable();
 
                 new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
                 new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();

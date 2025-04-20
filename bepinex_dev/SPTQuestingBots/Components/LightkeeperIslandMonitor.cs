@@ -143,7 +143,7 @@ namespace SPTQuestingBots.Components
 
         public bool IsBotObjectiveOnLightkeeperIsland(BotOwner bot)
         {
-            BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
             if (botObjectiveManager == null)
             {
                 return false;

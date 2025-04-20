@@ -159,6 +159,7 @@
 			}
 		},
 		"extraction_requirements": {
+			"use_sain_for_extracting": false,
 			"min_alive_time": 60,
 			"must_extract_time_remaining": 300,
 			"total_quests": {

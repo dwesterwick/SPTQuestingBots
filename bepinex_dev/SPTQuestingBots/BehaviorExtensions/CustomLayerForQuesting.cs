@@ -13,7 +13,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     internal abstract class CustomLayerForQuesting : CustomLayerDelayedUpdate
     {
-        protected BotLogic.Objective.BotObjectiveManager objectiveManager { get; private set; } = null;
+        protected Components.BotObjectiveManager objectiveManager { get; private set; } = null;
 
         private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
         private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
@@ -30,8 +30,7 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
         {
-            objectiveManager = _botOwner.GetPlayer.gameObject.GetOrAddComponent<BotLogic.Objective.BotObjectiveManager>();
-            objectiveManager.Init(_botOwner);
+            objectiveManager = _botOwner.GetOrAddObjectiveManager();
 
             updateMaxSuspiciousTime();
         }

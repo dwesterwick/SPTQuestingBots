@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BotLogic.HiveMind
 {
@@ -18,7 +19,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
         {
             Action<BotOwner> updateFromObjectiveManager = new Action<BotOwner>((bot) =>
             {
-                Objective.BotObjectiveManager objectiveManager = Objective.BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                Components.BotObjectiveManager objectiveManager = bot.GetObjectiveManager();
                 if (objectiveManager != null )
                 {
                     botState[bot] = objectiveManager.CanSprintToObjective();

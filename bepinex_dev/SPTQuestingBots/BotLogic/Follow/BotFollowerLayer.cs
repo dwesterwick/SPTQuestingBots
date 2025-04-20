@@ -44,13 +44,13 @@ namespace SPTQuestingBots.BotLogic.Follow
             // Check if somebody disabled questing in the F12 menu
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.None;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
                 return updatePreviousState(false);
             }
 
             if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.IsDead;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.IsDead;
                 return updatePreviousState(false);
             }
 
@@ -67,7 +67,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             // Only use this layer if the bot has a boss to follow and the boss can quest
             if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner))
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.None;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
                 return updatePreviousState(false);
             }
 
@@ -83,13 +83,13 @@ namespace SPTQuestingBots.BotLogic.Follow
 
             if (IsInCombat())
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.InCombat;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.InCombat;
                 return pauseLayer();
             }
 
             if (IsSuspicious())
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Suspicious;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.Suspicious;
                 return pauseLayer();
             }
 
@@ -102,7 +102,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                     BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 }
 
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.MustHeal;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.MustHeal;
                 return updatePreviousState(false);
             }
 
@@ -110,7 +110,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
             if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.Proximity;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.Proximity;
                 return updatePreviousState(false);
             }
 
@@ -124,7 +124,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                 //IReadOnlyCollection<BotOwner> groupMembers = BotHiveMindMonitor.GetAllGroupMembers(BotOwner);
                 //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.GetText())));
 
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.GroupInCombat;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.GroupInCombat;
                 return updatePreviousState(false);
             }
 
@@ -132,7 +132,7 @@ namespace SPTQuestingBots.BotLogic.Follow
             // NOTE: This check MUST be performed after checking if this bot is suspicious!
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.GroupIsSuspicious;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.GroupIsSuspicious;
                 return updatePreviousState(false);
             }
 
@@ -150,7 +150,7 @@ namespace SPTQuestingBots.BotLogic.Follow
                 || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.IsLooting())
             )
             {
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.BreakForLooting;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.BreakForLooting;
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
                 return pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
             }
@@ -164,11 +164,11 @@ namespace SPTQuestingBots.BotLogic.Follow
                 BotOwner.Mover.Stop();
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
 
-                objectiveManager.NotFollowingReason = Objective.NotQuestingReason.IsStuck;
+                objectiveManager.NotFollowingReason = Components.NotQuestingReason.IsStuck;
                 return updatePreviousState(false);
             }
 
-            objectiveManager.NotFollowingReason = Objective.NotQuestingReason.None;
+            objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
             setNextAction(BotActionType.FollowBoss, "FollowBoss");
             return updatePreviousState(true);
         }

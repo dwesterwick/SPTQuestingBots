@@ -15,7 +15,7 @@ namespace SPTQuestingBots.Models
     {
         public BotCreationDataClass Data { get; private set; }
         public BotGenerator BotGenerator { get; private set; }
-        public bool HasSpawnStarted { get; set; } = false;
+        public bool HasSpawnStarted { get; private set; } = false;
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
         private List<BotOwner> bots = new List<BotOwner>();
@@ -35,6 +35,11 @@ namespace SPTQuestingBots.Models
         public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
+        }
+
+        public void StartSpawn()
+        {
+            HasSpawnStarted = true;
         }
 
         public IReadOnlyCollection<Profile> GetGeneratedProfiles()

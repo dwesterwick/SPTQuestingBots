@@ -13,7 +13,7 @@ using SPTQuestingBots.Models.Questing;
 using SPTQuestingBots.Models.Pathing;
 using UnityEngine;
 
-namespace SPTQuestingBots.BotLogic.Objective
+namespace SPTQuestingBots.Components
 {
     public enum NotQuestingReason
     {
@@ -43,7 +43,8 @@ namespace SPTQuestingBots.BotLogic.Objective
         public bool IsQuestingAllowed { get; private set; } = false;
         public int StuckCount { get; set; } = 0;
         public float PauseRequest { get; set; } = 0;
-        public BotMonitor BotMonitor { get; private set; } = null;
+        public Models.BotSprintingController BotSprintingController { get; private set; } = null;
+        public BotLogic.BotMonitor BotMonitor { get; private set; } = null;
         public BotPathData BotPath { get; private set; } = null;
         public EFT.Interactive.Door DoorToOpen { get; set; } = null;
         public Vector3? LastCorner { get; set; } = null;
@@ -81,38 +82,6 @@ namespace SPTQuestingBots.BotLogic.Objective
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
         public void RetryPath() => assignment.HasCompletePath = true;
 
-        public static BotObjectiveManager GetObjectiveManagerForBot(BotOwner bot)
-        {
-            if (bot == null)
-            {
-                return null;
-            }
-
-            if (!bot.isActiveAndEnabled || bot.IsDead)
-            {
-                return null;
-            }
-
-            Player botPlayer = bot.GetPlayer;
-            if (botPlayer == null)
-            {
-                return null;
-            }
-
-            GameObject obj = botPlayer.gameObject;
-            if (obj == null)
-            {
-                return null;
-            }
-
-            if (obj.TryGetComponent(out BotObjectiveManager objectiveManager))
-            {
-                return objectiveManager;
-            }
-
-            return null;
-        }
-
         public override string ToString()
         {
             if (assignment.QuestAssignment != null)
@@ -133,9 +102,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             base.UpdateInterval = 200;
             botOwner = _botOwner;
 
+            if (BotSprintingController == null)
+            {
+                BotSprintingController = new Models.BotSprintingController(botOwner);
+            }
+
             if (BotMonitor == null)
             {
-                BotMonitor = new BotMonitor(botOwner);
+                BotMonitor = new BotLogic.BotMonitor(botOwner);
             }
 
             if (BotPath == null)
@@ -154,7 +128,7 @@ namespace SPTQuestingBots.BotLogic.Objective
 
         private void updateBotType()
         {
-            if (!HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
+            if (!BotLogic.HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
             {
                 LoggingController.LogError(botOwner.GetText() + " has not been registered in BotHiveMindMonitor");
             }

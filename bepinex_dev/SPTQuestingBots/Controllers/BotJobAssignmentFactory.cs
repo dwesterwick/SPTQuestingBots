@@ -533,7 +533,7 @@ namespace SPTQuestingBots.Controllers
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
         {
             // Do not select another quest objective if the bot wants to extract
-            BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
             if (botObjectiveManager?.DoesBotWantToExtract() == true)
             {
                 return null;
@@ -652,7 +652,7 @@ namespace SPTQuestingBots.Controllers
                 return null;
             }
 
-            BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
             Vector3? vectorToExfil = botObjectiveManager?.VectorToExfiltrationPointForQuesting();
 
             Dictionary<Quest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<Quest, Configuration.MinMaxConfig>();
@@ -929,7 +929,7 @@ namespace SPTQuestingBots.Controllers
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
             if (botGroupSize > botJobAssignment.QuestAssignment.MaxBotsInGroup)
             {
-                BotObjectiveManager botObjectiveManager = BotObjectiveManager.GetObjectiveManagerForBot(bot);
+                BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
 
                 if (botObjectiveManager.TryChangeObjective())
                 {

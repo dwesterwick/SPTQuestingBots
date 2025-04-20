@@ -74,6 +74,7 @@ namespace SPTQuestingBots.Components
             }
 
             calculateMaxDistanceBetweenSpawnPoints();
+            BotObjectiveManagerFactory.Clear();
         }
 
         protected void Update()

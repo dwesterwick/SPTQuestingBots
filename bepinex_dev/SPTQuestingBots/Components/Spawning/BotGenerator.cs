@@ -611,6 +611,7 @@ namespace SPTQuestingBots.Components.Spawning
             try
             {
                 SpawnBots(botGroup, spawnPositions);
+                botGroup.StartSpawn();
             }
             catch(Exception e)
             {
