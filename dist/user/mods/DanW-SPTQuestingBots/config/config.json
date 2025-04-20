@@ -19,8 +19,8 @@
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
 		"brain_layer_priorities": {
-			"questing": 18,
-			"following": 19,
+			"questing": 21,
+			"following": 22,
 			"regrouping": 26,
 			"sleeping": 99
 		},
@@ -146,6 +146,7 @@
 				"max_wait_time": 5,
 				"min_regroup_time": 1,
 				"regroup_pause_time": 2,
+				"target_position_variation_allowed": 3,
 				"target_range_questing": {
 					"min": 7,
 					"max": 12
@@ -172,6 +173,7 @@
 			}
 		},
 		"sprinting_limitations": {
+			"enable_debounce_time": 3,
 			"stamina": {
 				"min": 0.1,
 				"max": 0.5

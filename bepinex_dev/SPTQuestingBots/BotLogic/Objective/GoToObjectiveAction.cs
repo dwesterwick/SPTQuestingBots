@@ -39,6 +39,7 @@ namespace SPTQuestingBots.BotLogic.Objective
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();
+            UpdateBotMiscActions();
 
             // Don't allow expensive parts of this behavior (calculating a path to an objective) to run too often
             if (!canUpdate())

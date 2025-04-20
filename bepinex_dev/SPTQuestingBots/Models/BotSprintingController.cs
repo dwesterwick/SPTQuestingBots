@@ -15,15 +15,17 @@ namespace SPTQuestingBots.Models
 
         protected BotOwner BotOwner { get; private set; }
 
-        private Configuration.MinMaxConfig staminaLimits;
+        private static Configuration.MinMaxConfig staminaLimits;
+        private static float debounceTime;
+
         private float nextAllowedSprintTime = 0f;
-        private float debounceTime = 3f;
 
         public BotSprintingController(BotOwner botOwner)
         {
             BotOwner = botOwner;
 
             staminaLimits = ConfigController.Config.Questing.SprintingLimitations.Stamina;
+            debounceTime = ConfigController.Config.Questing.SprintingLimitations.EnableDebounceTime;
         }
 
         public void ExternalUpdate(bool value, bool withDebugCallback = true)
@@ -53,7 +55,7 @@ namespace SPTQuestingBots.Models
                 return IsSprinting;
             }
 
-            // Previous method
+            // Previous method in SPT 3.10 and below
             //BotOwner.GetPlayer.EnableSprint(value);
 
             sprint(val, withDebugCallback);

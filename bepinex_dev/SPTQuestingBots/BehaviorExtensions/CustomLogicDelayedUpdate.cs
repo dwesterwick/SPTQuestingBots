@@ -117,6 +117,11 @@ namespace SPTQuestingBots.BehaviorExtensions
             baseSteeringLogic.Update(BotOwner);
         }
 
+        public void UpdateBotMiscActions()
+        {
+            BotOwner.MagazineChecker.ManualUpdate();
+        }
+
         public void DelaySprint(float delay)
         {
             sprintDelayTime = delay;

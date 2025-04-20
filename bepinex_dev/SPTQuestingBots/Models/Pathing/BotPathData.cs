@@ -39,7 +39,7 @@ namespace SPTQuestingBots.Models.Pathing
             Status = UnityEngine.AI.NavMeshPathStatus.PathPartial;
         }
 
-        public BotPathUpdateNeededReason CheckIfUpdateIsNeeded(Vector3 target, float reachDistance = 0.5f, bool force = false)
+        public BotPathUpdateNeededReason CheckIfUpdateIsNeeded(Vector3 target, float targetVariationAllowed = 0.2f, float reachDistance = 0.5f, bool force = false)
         {
             bool requiresUpdate = false;
             BotPathUpdateNeededReason reason = BotPathUpdateNeededReason.None;
@@ -54,7 +54,8 @@ namespace SPTQuestingBots.Models.Pathing
             }
 
             // Check if a new target position has been set or if the reach distance has been modified
-            if (!requiresUpdate && ((target != TargetPosition) || (reachDistance != ReachDistance)))
+            float targetVariation = Vector3.Distance(target, TargetPosition);
+            if (!requiresUpdate && ((targetVariation > targetVariationAllowed) || (reachDistance != ReachDistance)))
             {
                 TargetPosition = target;
                 ReachDistance = reachDistance;

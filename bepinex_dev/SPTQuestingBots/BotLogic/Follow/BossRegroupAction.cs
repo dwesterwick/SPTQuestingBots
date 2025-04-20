@@ -33,6 +33,7 @@ namespace SPTQuestingBots.BotLogic.Follow
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();
+            UpdateBotMiscActions();
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
@@ -52,7 +53,8 @@ namespace SPTQuestingBots.BotLogic.Follow
             // Check if the bot should find its nearest follower
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)
             {
-                RecalculatePath(locationOfNearestGroupMember, targetDistance);
+                float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+                RecalculatePath(locationOfNearestGroupMember, allowedVariation, targetDistance);
             }
             else
             {

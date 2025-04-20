@@ -66,10 +66,10 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3 position)
         {
-            return RecalculatePath(position, 0.5f);
+            return RecalculatePath(position, 0.2f, 0.5f);
         }
 
-        public NavMeshPathStatus? RecalculatePath(Vector3 position, float reachDist, bool force = false)
+        public NavMeshPathStatus? RecalculatePath(Vector3 position, float targetVariationAllowed, float reachDist, bool force = false)
         {
             // If a bot is jumping or vaulting, recalculate its path after it finishes
             if (BotOwner.GetPlayer.MovementContext.PlayerAnimatorIsJumpSetted() || BotOwner.GetPlayer.MovementContext.PlayerAnimatorGetIsVaulting())
@@ -78,7 +78,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return ObjectiveManager.BotPath.Status;
             }
 
-            Models.Pathing.BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, reachDist, force);
+            Models.Pathing.BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position, targetVariationAllowed, reachDist, force);
 
             if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
@@ -228,6 +228,12 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
+            if (!BotOwner.GetPlayer.MovementContext.IsGrounded)
+            {
+                LoggingController.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
+                return;
+            }
+
             // Try jumping
             if
             (
@@ -237,6 +243,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
 
+                BotOwner.Mover.SetPose(1f);
                 tryJump(false);
                 timeSinceLastJumpTimer.Restart();
             }
@@ -251,6 +258,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
 
                 //DelaySprint(5);
+                BotOwner.Mover.SetPose(1f);
                 BotOwner.GetPlayer.MovementContext.TryVaulting();
                 timeSinceLastVaultTimer.Restart();
             }

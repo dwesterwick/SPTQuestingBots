@@ -126,6 +126,7 @@ namespace SPTQuestingBots.Components
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLabeledValue(Controllers.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), getColorForBotType(bot), Color.white);
+                sb.AppendLabeledValue("Brain Type", bot.Brain.BaseBrain.ShortName(), Color.white, Color.white);
 
                 if (bot.BotState != EBotState.Active)
                 {

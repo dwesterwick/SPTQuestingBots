@@ -34,6 +34,7 @@ namespace SPTQuestingBots.BotLogic.Follow
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();
+            UpdateBotMiscActions();
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
@@ -57,7 +58,8 @@ namespace SPTQuestingBots.BotLogic.Follow
             float targetDistance = (float)ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Min;
             if (mustRegroup || Vector3.Distance(BotOwner.Position, targetLocation.Value) > targetDistance)
             {
-                RecalculatePath(targetLocation.Value, targetDistance);
+                float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+                RecalculatePath(targetLocation.Value, allowedVariation, targetDistance);
 
                 //Vector3 bossPosition = BotHiveMindMonitor.GetBoss(BotOwner).Position;
                 //LoggingController.LogWarning("Follower " + BotOwner.GetText() + " is regrouping. TimeSinceLastSet=" + ObjectiveManager.BotPath.TimeSinceLastSet + "s, BossPos=" + bossPosition + ", PathTarget=" + ObjectiveManager.BotPath.TargetPosition + ", EFTPathTarget=" + BotOwner.Mover.GetCurrentPathTargetPoint().Value);

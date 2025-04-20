@@ -31,6 +31,7 @@ namespace SPTQuestingBots.BotLogic.Follow
         {
             UpdateBotMovement(CanSprint);
             UpdateBotSteering();
+            UpdateBotMiscActions();
 
             // Don't allow expensive parts of this behavior (calculating a path to an objective) to run too often
             if (!canUpdate())
@@ -44,7 +45,8 @@ namespace SPTQuestingBots.BotLogic.Follow
             CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
             CanSprint &= IsAllowedToSprint();
 
-            RecalculatePath(boss.Position);
+            float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+            RecalculatePath(boss.Position, allowedVariation, 0.5f);
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
             if (checkIfBotIsStuck())
