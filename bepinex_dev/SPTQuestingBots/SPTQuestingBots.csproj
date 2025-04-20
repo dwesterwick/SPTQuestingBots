@@ -41,9 +41,6 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\..\..\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Comfort">
       <HintPath>..\..\..\..\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
     </Reference>
@@ -228,6 +225,9 @@
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
     <Compile Include="Models\BotSprintingController.cs" />
+    <Compile Include="Models\Debug\BotPathInfoData.cs" />
+    <Compile Include="Models\Debug\BotPathMarkerData.cs" />
+    <Compile Include="Models\Debug\OverlayData.cs" />
     <Compile Include="Models\Questing\BotJobAssignment.cs" />
     <Compile Include="Models\Pathing\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />

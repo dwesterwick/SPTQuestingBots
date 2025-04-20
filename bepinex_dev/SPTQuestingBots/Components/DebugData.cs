@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BotLogic.HiveMind;
-using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using SPTQuestingBots.Models.Questing;
@@ -24,21 +23,20 @@ namespace SPTQuestingBots.Components
 
         private Dictionary<JobAssignment, double> jobAssignmentDistances = new Dictionary<JobAssignment, double>();
         private Dictionary<JobAssignment, GameObject> jobAssignmentMarkers = new Dictionary<JobAssignment, GameObject>();
-        private Dictionary<JobAssignment, OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, OverlayData>();
-        private Dictionary<BotOwner, OverlayData> botInfo = new Dictionary<BotOwner, OverlayData>();
-        private Dictionary<BotOwner, OverlayData> botPathInfo = new Dictionary<BotOwner, OverlayData>();
-        private Dictionary<BotOwner, GameObject> botPathMarkers = new Dictionary<BotOwner, GameObject>();
+        private Dictionary<JobAssignment, Models.Debug.OverlayData> jobAssignmentInfo = new Dictionary<JobAssignment, Models.Debug.OverlayData>();
+        private Dictionary<BotOwner, Models.Debug.OverlayData> botInfo = new Dictionary<BotOwner, Models.Debug.OverlayData>();
+        private Dictionary<BotOwner, Models.Debug.BotPathInfoData> botPathInfo = new Dictionary<BotOwner, Models.Debug.BotPathInfoData>();
 
         private GUIStyle guiStyleBotOverlays;
         private GUIStyle guiStylePlayerCoordinates;
 
         public void RegisterBot(BotOwner bot)
         {
-            OverlayData botOverlayData = new OverlayData();
+            Models.Debug.OverlayData botOverlayData = new Models.Debug.OverlayData();
             botInfo.Add(bot, botOverlayData);
 
-            OverlayData pathOverlayData = new OverlayData();
-            botPathInfo.Add(bot, pathOverlayData);
+            Models.Debug.BotPathInfoData pathInfoData = new Models.Debug.BotPathInfoData();
+            botPathInfo.Add(bot, pathInfoData);
         }
 
         protected void Awake()
@@ -62,15 +60,8 @@ namespace SPTQuestingBots.Components
                 loadAllPossibleJobAssignments();
             }
 
-            if (QuestingBotsPluginConfig.ShowBotInfoOverlays.Value)
-            {
-                updateBotInfo();
-            }
-
-            if (QuestingBotsPluginConfig.ShowBotPathOverlays.Value)
-            {
-                updateBotPathInfo();
-            }
+            updateBotInfo();
+            updateBotPathInfo();
         }
 
         protected void OnGUI()
@@ -97,15 +88,6 @@ namespace SPTQuestingBots.Components
             updateBotPathOverlays();
 
             updatePlayerCoordinates();
-        }
-
-        private void destroyPathMarker(BotOwner bot)
-        {
-            if (botPathMarkers.ContainsKey(bot))
-            {
-                Destroy(botPathMarkers[bot]);
-                botPathMarkers.Remove(bot);
-            }
         }
 
         private void updateBotInfo()
@@ -192,16 +174,22 @@ namespace SPTQuestingBots.Components
         {
             foreach (BotOwner bot in botPathInfo.Keys.ToArray())
             {
+                if (!showDebugData(bot, QuestingBotsPluginConfig.ShowBotPathOverlays))
+                {
+                    botPathInfo[bot].Destroy();
+                    continue;
+                }
+
                 if ((bot == null) || bot.IsDead)
                 {
+                    botPathInfo[bot].Destroy();
                     botPathInfo.Remove(bot);
-                    destroyPathMarker(bot);
-
+                    
                     continue;
                 }
 
                 // Don't update the overlay too often or performance and RAM usage will be affected
-                if (botPathInfo[bot].LastUpdateElapsedTime < 100)
+                if (botPathInfo[bot].TargetMarker.Overlay.LastUpdateElapsedTime < 100)
                 {
                     continue;
                 }
@@ -210,20 +198,14 @@ namespace SPTQuestingBots.Components
                 BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
                 if ((botObjectiveManager?.BotPath == null) || !botObjectiveManager.BotPath.HasPath)
                 {
-                    if (botPathMarkers.ContainsKey(bot))
-                    {
-                        botPathMarkers[bot].SetActive(false);
-                    }
+                    botPathInfo[bot].SetActive(false);
                     continue;
                 }
 
-                // Ensure the bot has an active quest and is not a follower
-                if (!botObjectiveManager.IsQuestingAllowed || !botObjectiveManager.IsJobAssignmentActive || BotHiveMindMonitor.HasBoss(bot))
+                // Ensure the bot is allowed to quest
+                if (!botObjectiveManager.IsQuestingAllowed)
                 {
-                    if (botPathMarkers.ContainsKey(bot))
-                    {
-                        botPathMarkers[bot].SetActive(false);
-                    }
+                    botPathInfo[bot].SetActive(false);
                     continue;
                 }
 
@@ -232,19 +214,20 @@ namespace SPTQuestingBots.Components
                 sb.AppendLabeledValue("Bot", bot.GetText(), Color.white, Color.white);
                 sb.AppendLabeledValue("Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, getColorForPathStatus(botObjectiveManager.BotPath.Status));
 
-                botPathInfo[bot].StaticText = sb.ToString();
-                botPathInfo[bot].Position = botObjectiveManager.BotPath.TargetPosition;
-                botPathInfo[bot].ResetUpdateTime();
+                botPathInfo[bot].TargetMarker.Overlay.StaticText = sb.ToString();
+                botPathInfo[bot].TargetMarker.Overlay.Position = botObjectiveManager.BotPath.TargetPosition;
+                botPathInfo[bot].TargetMarker.Overlay.ResetUpdateTime();
                 
-                if (!botPathMarkers.ContainsKey(bot))
+                if (!botPathInfo[bot].TargetMarker.HasMarker)
                 {
-                    botPathMarkers.Add(bot, DebugHelpers.CreateSphere(botPathInfo[bot].Position, markerRadius * 2, Color.green));
+                    botPathInfo[bot].TargetMarker.Marker = DebugHelpers.CreateSphere(botPathInfo[bot].TargetMarker.Overlay.Position, markerRadius * 2, Color.green);
                 }
                 else
                 {
-                    botPathMarkers[bot].transform.position = botPathInfo[bot].Position;
+                    botPathInfo[bot].TargetMarker.Marker.transform.position = botPathInfo[bot].TargetMarker.Overlay.Position;
                 }
-                botPathMarkers[bot].SetActive(true);
+
+                botPathInfo[bot].SetActive(true);
             }
         }
 
@@ -296,11 +279,6 @@ namespace SPTQuestingBots.Components
 
         private void updateBotOverlays()
         {
-            if (!QuestingBotsPluginConfig.ShowBotInfoOverlays.Value)
-            {
-                return;
-            }
-
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
             if (mainPlayer == null)
             {
@@ -309,6 +287,11 @@ namespace SPTQuestingBots.Components
 
             foreach (BotOwner bot in botInfo.Keys.ToArray())
             {
+                if (!showDebugData(bot, QuestingBotsPluginConfig.ShowBotInfoOverlays))
+                {
+                    continue;
+                }
+
                 if ((bot == null) || bot.IsDead)
                 {
                     continue;
@@ -400,11 +383,10 @@ namespace SPTQuestingBots.Components
 
         private void updateBotPathOverlays()
         {
-            foreach (BotOwner bot in botPathMarkers.Keys.ToArray())
+            foreach (BotOwner bot in botPathInfo.Keys.ToArray())
             {
-                if (!QuestingBotsPluginConfig.ShowBotPathOverlays.Value)
+                if (!showDebugData(bot, QuestingBotsPluginConfig.ShowBotPathOverlays))
                 {
-                    destroyPathMarker(bot);
                     continue;
                 }
 
@@ -414,28 +396,28 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Set by updateBotPathInfo()
-                if (!botPathMarkers[bot].activeSelf)
+                if (!botPathInfo[bot].IsActive)
                 {
                     continue;
                 }
 
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(botPathInfo[bot].Position);
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(botPathInfo[bot].TargetMarker.Overlay.Position);
                 if (screenPos.z <= 0)
                 {
                     continue;
                 }
 
                 // Copy the text here in case we want to add dynamic text in the future
-                botPathInfo[bot].GuiContent.text = botPathInfo[bot].StaticText;
+                botPathInfo[bot].TargetMarker.Overlay.GuiContent.text = botPathInfo[bot].TargetMarker.Overlay.StaticText;
 
-                Vector2 guiSize = guiStyleBotOverlays.CalcSize(botPathInfo[bot].GuiContent);
+                Vector2 guiSize = guiStyleBotOverlays.CalcSize(botPathInfo[bot].TargetMarker.Overlay.GuiContent);
                 float screenScale = GetScreenScale();
                 float x = (screenPos.x * screenScale) - (guiSize.x / 2);
                 float y = Screen.height - ((screenPos.y * screenScale) + guiSize.y);
                 Rect rect = new Rect(new Vector2(x, y), guiSize);
-                botPathInfo[bot].GuiRect = rect;
+                botPathInfo[bot].TargetMarker.Overlay.GuiRect = rect;
 
-                GUI.Box(botPathInfo[bot].GuiRect, botPathInfo[bot].GuiContent, guiStyleBotOverlays);
+                GUI.Box(botPathInfo[bot].TargetMarker.Overlay.GuiRect, botPathInfo[bot].TargetMarker.Overlay.GuiContent, guiStyleBotOverlays);
             }
         }
 
@@ -508,7 +490,7 @@ namespace SPTQuestingBots.Components
         private void addJobAssignment(JobAssignment jobAssignment, string questText, Vector3 position, Color markerColor)
         {
             Vector3 overlayPosition = position + new Vector3(0, markerRadius + 0.1f, 0);
-            OverlayData overlayData = new OverlayData(overlayPosition, questText);
+            Models.Debug.OverlayData overlayData = new Models.Debug.OverlayData(overlayPosition, questText);
 
             jobAssignmentDistances.Add(jobAssignment, float.PositiveInfinity);
             jobAssignmentMarkers.Add(jobAssignment, DebugHelpers.CreateSphere(position, markerRadius * 2, markerColor));
@@ -525,38 +507,32 @@ namespace SPTQuestingBots.Components
             return _screenScale;
         }
 
-        internal class OverlayData
+        private static bool showDebugData(BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
-            public ActorDataStruct Data { get; set; }
-            public GUIContent GuiContent { get; set; }
-            public Rect GuiRect { get; set; }
-            public Vector3 Position { get; set; }
-            public string StaticText { get; set; } = "";
-
-            private Stopwatch updateTimer = Stopwatch.StartNew();
-
-            public long LastUpdateElapsedTime => updateTimer.ElapsedMilliseconds;
-
-            public OverlayData()
+            if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
             {
-                GuiContent = new GUIContent();
-                GuiRect = new Rect();
+                // Check if overlays are enabled for questing bosses (leaders)
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasBoss(bot))
+                {
+                    return true;
+                }
+
+                // Check if overlays are enabled for questing followers
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasBoss(bot))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // Check if overlays are enabled for bots that are not questing
+                if (config.Value.HasFlag(QuestingBotType.NonQuestingBots))
+                {
+                    return true;
+                }
             }
 
-            public OverlayData(Vector3 _position) : this()
-            {
-                Position = _position;
-            }
-
-            public OverlayData(Vector3 _position, string _staticText) : this(_position)
-            {
-                StaticText = _staticText;
-            }
-
-            public void ResetUpdateTime()
-            {
-                updateTimer.Restart();
-            }
+            return false;
         }
     }
 }

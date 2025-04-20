@@ -40,6 +40,16 @@ namespace SPTQuestingBots
         All = SniperScavs | Rogues | Raiders | BossesAndFollowers,
     }
 
+    [Flags]
+    public enum QuestingBotType
+    {
+        QuestingLeaders = 1,
+        QuestingFollowers = 2,
+        NonQuestingBots = 4,
+        AllQuestingBots = QuestingLeaders | QuestingFollowers,
+        All = QuestingLeaders | QuestingFollowers | NonQuestingBots,
+    }
+
     public static class QuestingBotsPluginConfig
     {
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
@@ -74,8 +84,8 @@ namespace SPTQuestingBots
         public static ConfigEntry<BotTypeException> SleeplessBotTypes;
         public static ConfigEntry<int> MinBotsToEnableSleeping;
 
-        public static ConfigEntry<bool> ShowBotInfoOverlays;
-        public static ConfigEntry<bool> ShowBotPathOverlays;
+        public static ConfigEntry<QuestingBotType> ShowBotInfoOverlays;
+        public static ConfigEntry<QuestingBotType> ShowBotPathOverlays;
         public static ConfigEntry<bool> ShowQuestInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
         public static ConfigEntry<int> QuestOverlayFontSize;
@@ -151,9 +161,9 @@ namespace SPTQuestingBots
                 1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on GroundZero", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
-                false, "Show information about what each bot is doing");
+                QuestingBotType.All, "Show information about what each bot is doing");
             ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
-                false, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+                QuestingBotType.All, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
                 false, "Show information about every nearby quest objective location");
             ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",
