@@ -163,7 +163,7 @@ namespace SPTQuestingBots
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 QuestingBotType.All, "Show information about what each bot is doing");
             ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
-                QuestingBotType.All, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+                (QuestingBotType)0, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
                 false, "Show information about every nearby quest objective location");
             ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",

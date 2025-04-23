@@ -225,9 +225,13 @@
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
     <Compile Include="Models\BotSprintingController.cs" />
-    <Compile Include="Models\Debug\BotPathInfoData.cs" />
-    <Compile Include="Models\Debug\BotPathMarkerData.cs" />
-    <Compile Include="Models\Debug\OverlayData.cs" />
+    <Compile Include="Models\Debug\AbstractDebugGizmo.cs" />
+    <Compile Include="Models\Debug\BotInfoGizmo.cs" />
+    <Compile Include="Models\Debug\BotPathInfoGizmo.cs" />
+    <Compile Include="Models\Debug\DebugMarkerWithOverlay.cs" />
+    <Compile Include="Models\Debug\DebugOverlay.cs" />
+    <Compile Include="Models\Debug\JobAssignmentGizmo.cs" />
+    <Compile Include="Models\Debug\PlayerCoordinatesGizmo.cs" />
     <Compile Include="Models\Questing\BotJobAssignment.cs" />
     <Compile Include="Models\Pathing\BotPathData.cs" />
     <Compile Include="Models\BotSpawnInfo.cs" />

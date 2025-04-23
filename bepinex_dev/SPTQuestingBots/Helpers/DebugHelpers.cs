@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Components;
-using SPTQuestingBots.Models;
+using SPTQuestingBots.Controllers;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace SPTQuestingBots.Helpers
 {
@@ -124,6 +126,80 @@ namespace SPTQuestingBots.Helpers
             sphere.transform.localScale = new Vector3(size, size, size);
 
             return sphere;
+        }
+
+        public static Color GetDebugColor(this NavMeshPathStatus status)
+        {
+            switch (status)
+            {
+                case NavMeshPathStatus.PathComplete: return Color.green;
+                case NavMeshPathStatus.PathPartial: return Color.yellow;
+                default: return Color.red;
+            }
+        }
+
+        public static Color GetDebugColor(this EBotState botState)
+        {
+            switch (botState)
+            {
+                case EBotState.Active: return Color.green;
+                case EBotState.PreActive: return Color.yellow;
+                case EBotState.ActiveFail: return Color.red;
+                default: return Color.yellow;
+            }
+        }
+
+        public static Color GetDebugColor(this BotOwner bot)
+        {
+            if ((bot == null) || bot.IsDead)
+            {
+                return Color.white;
+            }
+
+            Color botTypeColor = Color.green;
+
+            // If you're dead, there's no reason to worry about overlay colors
+            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (mainPlayer == null)
+            {
+                return botTypeColor;
+            }
+
+            // Check if the bot doesn't like you
+            if (bot.EnemiesController?.EnemyInfos?.Any(i => i.Value.ProfileId == mainPlayer.ProfileId) == true)
+            {
+                botTypeColor = Color.red;
+            }
+
+            return botTypeColor;
+        }
+
+        public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        {
+            if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
+            {
+                // Check if overlays are enabled for questing bosses (leaders)
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasBoss(bot))
+                {
+                    return true;
+                }
+
+                // Check if overlays are enabled for questing followers
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasBoss(bot))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // Check if overlays are enabled for bots that are not questing
+                if (config.Value.HasFlag(QuestingBotType.NonQuestingBots))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
