@@ -50,6 +50,16 @@ namespace SPTQuestingBots
         All = QuestingLeaders | QuestingFollowers | NonQuestingBots,
     }
 
+    [Flags]
+    public enum BotPathOverlayType
+    {
+        QuestTarget = 1,
+        EFTTarget = 2,
+        EFTCurrentCorner = 4,
+        AllEFT = EFTTarget | EFTCurrentCorner,
+        All = QuestTarget | EFTTarget | EFTCurrentCorner,
+    }
+
     public static class QuestingBotsPluginConfig
     {
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
@@ -86,6 +96,7 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<QuestingBotType> ShowBotInfoOverlays;
         public static ConfigEntry<QuestingBotType> ShowBotPathOverlays;
+        public static ConfigEntry<BotPathOverlayType> BotPathOverlayTypes;
         public static ConfigEntry<bool> ShowQuestInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
         public static ConfigEntry<int> QuestOverlayFontSize;
@@ -164,6 +175,8 @@ namespace SPTQuestingBots
                 QuestingBotType.All, "Show information about what each bot is doing");
             ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
                 (QuestingBotType)0, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            BotPathOverlayTypes = Config.Bind("Debug", "Bot Path Overlay Types",
+                BotPathOverlayType.QuestTarget, new ConfigDescription("The types of positions that will be shown for each bot that has path overlays enabled", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",
                 false, "Show information about every nearby quest objective location");
             ShowQuestInfoForSpawnSearchQuests = Config.Bind("Debug", "Show Quest Info for Spawn-Search Quests",

@@ -28,7 +28,7 @@ namespace SPTQuestingBots.Helpers
 
             //LoggingController.LogInfo("Updated path for " + bot.GetText());
 
-            bot.Mover?.SetSlowAtTheEnd(slowAtTheEnd);
+            bot.Mover?.TrySetSlowAtTheEnd(slowAtTheEnd);
 
             if (bot.BotLay.IsLay && (botPath.DistanceToTarget > 0.2f))
             {
@@ -42,51 +42,29 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
-            PathControllerClass pathController = botMover.GetPathController();
-            if (pathController?.CurPath == null)
+            if (botMover?._pathController?.CurPath == null)
             {
-                return null;
+                return Array.Empty<Vector3>();
             }
 
-            Vector3[] path = (Vector3[])pathPointsField.GetValue(pathController.CurPath);
+            Vector3[] path = (Vector3[])pathPointsField.GetValue(botMover._pathController.CurPath);
 
             return path;
         }
 
-        public static bool HasSameTargetPosition(this BotOwner bot, Vector3 targetPosition)
+        public static bool HasSamePathTargetPosition(this BotOwner bot, Vector3 targetPosition)
         {
-            PathControllerClass pathController = bot?.Mover.GetPathController();
-            if (pathController?.CurPath == null)
+            if (bot?.Mover?._pathController == null)
             {
                 return false;
             }
 
-            return pathController.IsSameWay(targetPosition, bot.Position);
+            return bot.Mover._pathController.IsSameWay(targetPosition, bot.Position);
         }
 
-        public static PathControllerClass GetPathController(this BotMover botMover)
+        public static bool TrySetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
         {
-            if (botMover == null)
-            {
-                return null;
-            }
-
-            if (botMover._pathController?.CurPath == null)
-            {
-                return null;
-            }
-
-            return botMover._pathController;
-        }
-
-        public static bool SetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
-        {
-            if (botMover == null)
-            {
-                return false;
-            }
-
-            if (botMover._pathFinder == null)
+            if (botMover?._pathFinder == null)
             {
                 return false;
             }
@@ -95,14 +73,19 @@ namespace SPTQuestingBots.Helpers
             return true;
         }
 
-        public static int? GetCurrentCornerIndex(this BotMover botMover)
+        public static Vector3? GetCurrentPathCornerPosition(this BotMover botMover)
         {
-            if (botMover == null)
+            if (botMover?._pathController?.CurPath == null)
             {
                 return null;
             }
 
-            if (botMover._pathController?.CurPath == null)
+            return botMover._pathController.CurPath.CurrentCorner();
+        }
+
+        public static int? GetCurrentPathCornerIndex(this BotMover botMover)
+        {
+            if (botMover?._pathController?.CurPath == null)
             {
                 return null;
             }
@@ -122,12 +105,7 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3? GetCurrentPathTargetPoint(this BotMover botMover)
         {
-            if (botMover == null)
-            {
-                return null;
-            }
-
-            if (botMover._pathController?.CurPath == null)
+            if (botMover?._pathController?.CurPath == null)
             {
                 return null;
             }

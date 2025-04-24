@@ -13,6 +13,8 @@ namespace SPTQuestingBots.Models.Debug
 {
     public class JobAssignmentGizmo : AbstractDebugGizmo
     {
+        private static readonly float overlayHeightOffset = 0.1f;
+
         public DebugMarkerWithOverlay MarkerAndOverlay { get; set; }
         public double Distance { get; set; } = double.PositiveInfinity;
         public Color MarkerColor { get; private set; }
@@ -28,7 +30,8 @@ namespace SPTQuestingBots.Models.Debug
             MarkerAndOverlay = new DebugMarkerWithOverlay(UpdateGUIStyle, _markerRadius);
             MarkerAndOverlay.Overlay.StaticText = _staticText;
 
-            Vector3 overlayPosition = _position + new Vector3(0, _markerRadius + 0.1f, 0);
+            
+            Vector3 overlayPosition = _position + new Vector3(0, _markerRadius + overlayHeightOffset, 0);
             MarkerAndOverlay.Position = overlayPosition;
 
             MarkerColor = _markerColor;
@@ -43,7 +46,10 @@ namespace SPTQuestingBots.Models.Debug
             return MarkerAndOverlay.Overlay.GuiStyle;
         }
 
-        public override void Disable() { Destroy(); }
+        protected override void OnDispose()
+        {
+            Destroy();
+        }
 
         public void SetActive(bool state)
         {

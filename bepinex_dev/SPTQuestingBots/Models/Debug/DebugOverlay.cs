@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Models.Debug
 {
-    public class DebugOverlay
+    public class DebugOverlay : IDisposable
     {
         public struct GizmoPositionRequestParams
         {
@@ -41,6 +41,8 @@ namespace SPTQuestingBots.Models.Debug
         {
             StaticText = _staticText;
         }
+
+        public void Dispose() { }
 
         public void Draw(string text, Func<GizmoPositionRequestParams, Vector2> getGizmoPosition)
         {

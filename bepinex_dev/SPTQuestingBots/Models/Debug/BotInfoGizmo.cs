@@ -34,7 +34,10 @@ namespace SPTQuestingBots.Models.Debug
             return Overlay.GuiStyle;
         }
 
-        public override void Disable() { }
+        protected override void OnDispose()
+        {
+            Overlay.Dispose();
+        }
 
         protected override void OnUpdate()
         {
@@ -124,15 +127,19 @@ namespace SPTQuestingBots.Models.Debug
                 return;
             }
 
-            double distanceToBot = Math.Round(Vector3.Distance(bot.Position, mainPlayer.Position), 1);
+            Vector3 botHeadPosition = bot.Position + new Vector3(0, 1.5f, 0);
+            Overlay.Draw(addDistanceToStaticText(mainPlayer.Position), botHeadPosition);
+        }
+
+        private string addDistanceToStaticText(Vector3 sourcePosition)
+        {
+            double distanceToBot = Math.Round(Vector3.Distance(bot.Position, sourcePosition), 1);
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Overlay.StaticText);
             sb.AppendLabeledValue("Distance", distanceToBot + "m", Color.white, Color.white);
 
-            Vector3 botHeadPosition = bot.Position + new Vector3(0, 1.5f, 0);
-
-            Overlay.Draw(sb.ToString(), botHeadPosition);
+            return sb.ToString();
         }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Models.Debug
 {
-    public abstract class AbstractDebugGizmo
+    public abstract class AbstractDebugGizmo : IDisposable
     {
         public int UpdateInterval { get; set; } = 100;
 
@@ -19,12 +19,17 @@ namespace SPTQuestingBots.Models.Debug
         public AbstractDebugGizmo() { }
         public AbstractDebugGizmo(int _updateInterval) : this() { UpdateInterval = _updateInterval; }
 
-        public abstract bool ReadyToDispose();
         public abstract GUIStyle UpdateGUIStyle();
-        public abstract void Disable();
-        protected abstract void OnUpdate();
+        public abstract bool ReadyToDispose();
         public abstract void Draw();
-        
+        protected abstract void OnUpdate();
+        protected abstract void OnDispose();
+
+        public void Dispose()
+        {
+            OnDispose();
+        }
+
         public void Update()
         {
             // Don't update the overlay too often or performance and RAM usage will be affected

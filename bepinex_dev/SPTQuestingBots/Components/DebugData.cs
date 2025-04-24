@@ -24,7 +24,9 @@ namespace SPTQuestingBots.Components
         public void RegisterBot(BotOwner bot)
         {
             gizmos.Add(new Models.Debug.BotInfoGizmo(bot));
-            gizmos.Add(new Models.Debug.BotPathInfoGizmo(bot, markerRadius));
+            gizmos.Add(new Models.Debug.BotObjectivePositionMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.Debug.BotPathTargetMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.Debug.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
         }
 
         protected void Awake()
@@ -73,7 +75,7 @@ namespace SPTQuestingBots.Components
         {
             foreach (AbstractDebugGizmo gizmo in gizmos.Where(gizmo => gizmo.ReadyToDispose()))
             {
-                gizmo.Disable();
+                gizmo.Dispose();
             }
 
             gizmos.RemoveAll(gizmo => gizmo.ReadyToDispose());

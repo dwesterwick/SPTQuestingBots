@@ -11,7 +11,6 @@ using HarmonyLib;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -243,6 +242,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             {
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
 
+                BotOwner.Mover.Stop();
                 BotOwner.Mover.SetPose(1f);
                 tryJump(false);
                 timeSinceLastJumpTimer.Restart();
@@ -258,6 +258,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
 
                 //DelaySprint(5);
+                BotOwner.Mover.Stop();
                 BotOwner.Mover.SetPose(1f);
                 BotOwner.GetPlayer.MovementContext.TryVaulting();
                 timeSinceLastVaultTimer.Restart();

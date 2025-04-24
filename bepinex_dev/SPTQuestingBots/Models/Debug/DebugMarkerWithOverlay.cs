@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models.Debug
 {
-    public class DebugMarkerWithOverlay
+    public class DebugMarkerWithOverlay : IDisposable
     {
         public GameObject Marker { get; set; } = null;
         public DebugOverlay Overlay { get; set; }
@@ -28,6 +27,11 @@ namespace SPTQuestingBots.Models.Debug
         {
             Marker = _marker;
             Overlay = _overlay;
+        }
+
+        public void Dispose()
+        {
+            Destroy();
         }
 
         public void SetActive(bool state)

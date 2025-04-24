@@ -227,7 +227,10 @@
     <Compile Include="Models\BotSprintingController.cs" />
     <Compile Include="Models\Debug\AbstractDebugGizmo.cs" />
     <Compile Include="Models\Debug\BotInfoGizmo.cs" />
-    <Compile Include="Models\Debug\BotPathInfoGizmo.cs" />
+    <Compile Include="Models\Debug\AbstractBotPathMarkerGizmo.cs" />
+    <Compile Include="Models\Debug\BotPathCurrentCornerMarkerGizmo.cs" />
+    <Compile Include="Models\Debug\BotObjectivePositionMarkerGizmo.cs" />
+    <Compile Include="Models\Debug\BotPathTargetMarkerGizmo.cs" />
     <Compile Include="Models\Debug\DebugMarkerWithOverlay.cs" />
     <Compile Include="Models\Debug\DebugOverlay.cs" />
     <Compile Include="Models\Debug\JobAssignmentGizmo.cs" />

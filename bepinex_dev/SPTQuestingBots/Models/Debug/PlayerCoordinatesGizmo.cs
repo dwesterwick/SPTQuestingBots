@@ -20,7 +20,12 @@ namespace SPTQuestingBots.Models.Debug
         }
 
         public override bool ReadyToDispose() => false;
-        public override void Disable() { }
+
+        protected override void OnDispose()
+        {
+            Overlay.Dispose();
+        }
+
         protected override void OnUpdate() { }
 
         public override GUIStyle UpdateGUIStyle()

@@ -176,7 +176,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             // Check if the bot is approaching the end of its path
-            int? currentCornerIndexNullable = BotOwner.Mover.GetCurrentCornerIndex();
+            int? currentCornerIndexNullable = BotOwner.Mover.GetCurrentPathCornerIndex();
             if (!currentCornerIndexNullable.HasValue)
             {
                 return false;
