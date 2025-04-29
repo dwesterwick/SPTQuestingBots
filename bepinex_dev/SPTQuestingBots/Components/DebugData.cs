@@ -15,6 +15,7 @@ namespace SPTQuestingBots.Components
 {
     public class DebugData : MonoBehaviour
     {
+        public static List<string> BotFilter = new List<string>();
         private readonly static float markerRadius = 0.5f;
 
         private List<AbstractDebugGizmo> gizmos = new List<AbstractDebugGizmo>();
@@ -33,6 +34,13 @@ namespace SPTQuestingBots.Components
         protected void Awake()
         {
             QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { updateGuiStyles(sender, e); };
+            QuestingBotsPluginConfig.BotFilter.SettingChanged += (object sender, EventArgs e) =>
+            {
+                ValidateBotFilter(QuestingBotsPluginConfig.BotFilter.Value);
+            };
+
+            // Reset to default since filter from previous raid won't matter in the next
+            QuestingBotsPluginConfig.BotFilter.BoxedValue = "";
 
             gizmos.Add(new PlayerCoordinatesGizmo());
         }
@@ -134,6 +142,26 @@ namespace SPTQuestingBots.Components
             questText += "\nDistance: ";
 
             gizmos.Add(new JobAssignmentGizmo(jobAssignment, position, questText, markerRadius, Color.blue));
+        }
+
+        private static void ValidateBotFilter(string configString)
+        {
+            BotFilter.Clear();
+            if (configString.IsNullOrEmpty())
+                return;
+
+            string[] bounds = configString.Split(',');
+            foreach (var bound in bounds)
+            {
+                if (int.TryParse(bound, out int _))
+                {
+                    string botName = "Bot" + bound.Trim();
+                    BotFilter.Add(botName);
+                    continue;
+                }
+                //LoggingController.LogError("DebugData::ValidateBotFilter Unable to parse bot filters.");
+                BotFilter.Clear();
+            }
         }
     }
 }

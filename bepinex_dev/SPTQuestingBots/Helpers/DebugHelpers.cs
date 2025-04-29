@@ -178,6 +178,10 @@ namespace SPTQuestingBots.Helpers
 
         public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
+            // Check if filter not empty (no filter), and bot is not included in the filter
+            if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(bot.GetPlayer.name))
+                return false;
+
             if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
             {
                 // Check if overlays are enabled for questing bosses (leaders)

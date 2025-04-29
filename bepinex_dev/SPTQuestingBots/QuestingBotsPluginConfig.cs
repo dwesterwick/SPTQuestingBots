@@ -102,6 +102,7 @@ namespace SPTQuestingBots
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
         public static ConfigEntry<int> QuestOverlayFontSize;
         public static ConfigEntry<int> QuestOverlayMaxDistance;
+        public static ConfigEntry<string> BotFilter;
 
         public static ConfigEntry<bool> CreateQuestLocations;
         public static ConfigEntry<bool> ShowCurrentLocation;
@@ -187,7 +188,9 @@ namespace SPTQuestingBots
             QuestOverlayMaxDistance = Config.Bind("Debug", "Max Distance (m) to Show Quest Info",
                 100, new ConfigDescription("Quest markers and info overlays will only be shown if the objective location is within this distance from you", new AcceptableValueRange<int>(10, 300)));
             QuestOverlayFontSize = Config.Bind("Debug", "Font Size for Quest Info",
-                16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36)));
+                16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36))); 
+            BotFilter = Config.Bind("Debug", "Bot Filter",
+                "", new ConfigDescription("Show debug info only for bots listed e.g 2,4", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             CreateQuestLocations = Config.Bind("Custom Quest Locations", "Enable Quest Location Saving",
                 false, new ConfigDescription("Allow custom quest locations to be saved", null, new ConfigurationManagerAttributes { Order = 4, IsAdvanced = true }));
