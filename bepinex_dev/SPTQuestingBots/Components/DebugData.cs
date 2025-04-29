@@ -39,7 +39,9 @@ namespace SPTQuestingBots.Components
                 ValidateBotFilter(QuestingBotsPluginConfig.BotFilter.Value);
             };
 
-            ValidateBotFilter(QuestingBotsPluginConfig.BotFilter.Value);
+            // Reset to default since filter from previous raid won't matter in the next
+            QuestingBotsPluginConfig.BotFilter.BoxedValue = "";
+
             gizmos.Add(new PlayerCoordinatesGizmo());
         }
 
