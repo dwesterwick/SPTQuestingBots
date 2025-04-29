@@ -27,16 +27,17 @@ namespace SPTQuestingBots.Components
             gizmos.Add(new Models.Debug.BotObjectivePositionMarkerGizmo(bot, markerRadius));
             gizmos.Add(new Models.Debug.BotPathTargetMarkerGizmo(bot, markerRadius));
             gizmos.Add(new Models.Debug.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.Debug.BotPathVisualizationGizmo(bot, Color.magenta));
         }
 
         protected void Awake()
         {
-            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { updateGuiStyles(); };
+            QuestingBotsPluginConfig.QuestOverlayFontSize.SettingChanged += (object sender, EventArgs e) => { updateGuiStyles(sender, e); };
 
             gizmos.Add(new PlayerCoordinatesGizmo());
         }
 
-        private void updateGuiStyles() => gizmos.ForEach(gizmo => gizmo.UpdateGUIStyle());
+        private void updateGuiStyles(object sender, EventArgs e) => gizmos.ForEach(gizmo => gizmo.UpdateGUIStyle());
 
         protected void Update()
         {

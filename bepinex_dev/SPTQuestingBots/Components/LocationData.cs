@@ -48,7 +48,7 @@ namespace SPTQuestingBots.Components
 
             if (ConfigController.Config.Debug.Enabled)
             {
-                PathRender pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRender>();
+                PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
             }
 
             CurrentLocation = CurrentRaidSettings.SelectedLocation;

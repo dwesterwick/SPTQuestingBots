@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using UnityEngine;
 
@@ -53,8 +54,8 @@ namespace SPTQuestingBots.Models.Debug
 
         private Vector2 getGizmoPosition(DebugOverlay.GizmoPositionRequestParams requestParams)
         {
-            float x = requestParams.AdjustedScreenPosition.x - requestParams.GuiSize.x - 3;
-            float y = requestParams.AdjustedScreenPosition.y - requestParams.GuiSize.y - 3;
+            float x = requestParams.ScreenPosition.x - requestParams.GuiSize.x - 3;
+            float y = requestParams.ScreenPosition.y - requestParams.GuiSize.y - 3;
 
             return new Vector2(x, y);
         }

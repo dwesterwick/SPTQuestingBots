@@ -39,7 +39,7 @@ namespace SPTQuestingBots.Components
 
             LighthouseTraderZone.OnPlayerAllowStatusChanged += playerAllowStatusChanged;
 
-            if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRender pathRender))
+            if (ConfigController.Config.Debug.ShowZoneOutlines && Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out PathRenderer pathRender))
             {
                 Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(LightkeeperTraderZoneColliderHandler.trigger.bounds);
                 Models.Pathing.PathVisualizationData zoneBoundingBox = new Models.Pathing.PathVisualizationData("LighthouseTraderZone", colliderBounds, Color.green);

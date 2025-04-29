@@ -12,12 +12,14 @@ namespace SPTQuestingBots.Models.Debug
     {
         public struct GizmoPositionRequestParams
         {
-            public Vector2 AdjustedScreenPosition;
+            public Vector2 ScreenPosition;
+            public Vector2 CorrectedScreenPosition;
             public Vector2 GuiSize;
 
-            public GizmoPositionRequestParams(Vector2 adjustedScreenSize, Vector2 guiSize)
+            public GizmoPositionRequestParams(Vector2 screenPosition, Vector2 correctedScreenPosition, Vector2 guiSize)
             {
-                AdjustedScreenPosition = adjustedScreenSize;
+                ScreenPosition = screenPosition;
+                CorrectedScreenPosition = correctedScreenPosition;
                 GuiSize = guiSize;
             }
         }
@@ -71,9 +73,9 @@ namespace SPTQuestingBots.Models.Debug
             Vector2 guiSize = GuiStyle.CalcSize(GuiContent);
 
             float screenScale = getScreenScale();
-            Vector2 adjustedScreenSize = new Vector2(screenPosition.x * screenScale, screenPosition.y * screenScale);
+            Vector2 correctedScreenPosition = new Vector2(screenPosition.x * screenScale, screenPosition.y * screenScale);
 
-            Vector2 gizmoPosition = getGizmoPosition(new GizmoPositionRequestParams(adjustedScreenSize, guiSize));
+            Vector2 gizmoPosition = getGizmoPosition(new GizmoPositionRequestParams(screenPosition, correctedScreenPosition, guiSize));
 
             Rect rect = new Rect(gizmoPosition, guiSize);
             GUI.Box(rect, GuiContent, GuiStyle);
@@ -93,8 +95,8 @@ namespace SPTQuestingBots.Models.Debug
 
         private Vector2 getStandardGizmoPosition(DebugOverlay.GizmoPositionRequestParams requestParams)
         {
-            float x = requestParams.AdjustedScreenPosition.x - (requestParams.GuiSize.x / 2);
-            float y = Screen.height - (requestParams.AdjustedScreenPosition.y + requestParams.GuiSize.y);
+            float x = requestParams.CorrectedScreenPosition.x - (requestParams.GuiSize.x / 2);
+            float y = Screen.height - (requestParams.CorrectedScreenPosition.y + requestParams.GuiSize.y);
 
             return new Vector2(x, y);
         }

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Components
 {
-    public class PathRender : MonoBehaviour
+    public class PathRenderer : MonoBehaviour
     {
         private Dictionary<string, Models.Pathing.PathVisualizationData> paths = new Dictionary<string, Models.Pathing.PathVisualizationData>();
         private object pathDictLock = new object();

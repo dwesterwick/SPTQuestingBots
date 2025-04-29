@@ -163,7 +163,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             string pathName = "BotPath_" + BotOwner.Id + "_" + DateTime.Now.ToFileTime();
 
             Models.Pathing.PathVisualizationData botPathRendering = new Models.Pathing.PathVisualizationData(pathName, adjustedPathCorners.ToArray(), color);
-            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(botPathRendering);
+            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(botPathRendering);
         }
 
         protected void outlineTargetPosition(Color color)

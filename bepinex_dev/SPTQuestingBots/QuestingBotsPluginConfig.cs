@@ -96,6 +96,7 @@ namespace SPTQuestingBots
 
         public static ConfigEntry<QuestingBotType> ShowBotInfoOverlays;
         public static ConfigEntry<QuestingBotType> ShowBotPathOverlays;
+        public static ConfigEntry<QuestingBotType> ShowBotPathVisualizations;
         public static ConfigEntry<BotPathOverlayType> BotPathOverlayTypes;
         public static ConfigEntry<bool> ShowQuestInfoOverlays;
         public static ConfigEntry<bool> ShowQuestInfoForSpawnSearchQuests;
@@ -174,7 +175,9 @@ namespace SPTQuestingBots
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 QuestingBotType.All, "Show information about what each bot is doing");
             ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
-                (QuestingBotType)0, new ConfigDescription("Show the target position for each bot that is questing", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+                (QuestingBotType)0, new ConfigDescription("Create markers for Bot Path Overlay Types that bots of each selected type are following", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            ShowBotPathVisualizations = Config.Bind("Debug", "Show Bot Path Visualizations",
+                (QuestingBotType)0, new ConfigDescription("Draw the path that bots of each selected type are following", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             BotPathOverlayTypes = Config.Bind("Debug", "Bot Path Overlay Types",
                 BotPathOverlayType.QuestTarget, new ConfigDescription("The types of positions that will be shown for each bot that has path overlays enabled", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowQuestInfoOverlays = Config.Bind("Debug", "Show Quest Info Overlays",

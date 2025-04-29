@@ -221,7 +221,7 @@
     <Compile Include="Components\LocationData.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
     <Compile Include="BehaviorExtensions\MonoBehaviourDelayedUpdate.cs" />
-    <Compile Include="Components\PathRender.cs" />
+    <Compile Include="Components\PathRenderer.cs" />
     <Compile Include="CoroutineExtensions\EnumeratorWithTimeLimit.cs" />
     <Compile Include="CoroutineExtensions\MethodWithTimeLimit.cs" />
     <Compile Include="Models\BotSprintingController.cs" />
@@ -231,6 +231,7 @@
     <Compile Include="Models\Debug\BotPathCurrentCornerMarkerGizmo.cs" />
     <Compile Include="Models\Debug\BotObjectivePositionMarkerGizmo.cs" />
     <Compile Include="Models\Debug\BotPathTargetMarkerGizmo.cs" />
+    <Compile Include="Models\Debug\BotPathVisualizationGizmo.cs" />
     <Compile Include="Models\Debug\DebugMarkerWithOverlay.cs" />
     <Compile Include="Models\Debug\DebugOverlay.cs" />
     <Compile Include="Models\Debug\JobAssignmentGizmo.cs" />

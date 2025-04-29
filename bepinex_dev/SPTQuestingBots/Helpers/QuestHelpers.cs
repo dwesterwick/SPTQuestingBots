@@ -194,7 +194,7 @@ namespace SPTQuestingBots.Helpers
                         {
                             Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
                             Models.Pathing.PathVisualizationData itemPositionSphere = new Models.Pathing.PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);
-                            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(itemPositionSphere);
+                            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(itemPositionSphere);
                         }
 
                         continue;

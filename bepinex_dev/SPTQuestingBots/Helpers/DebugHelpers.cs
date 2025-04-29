@@ -15,6 +15,8 @@ namespace SPTQuestingBots.Helpers
 {
     public static class DebugHelpers
     {
+        public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.Select(point => point + offset);
+
         public static Vector3 IncreaseVector3ToMinSize(Vector3 vector, float minSize)
         {
             return new Vector3((float)Math.Max(minSize, vector.x), (float)Math.Max(minSize, vector.y), (float)Math.Max(minSize, vector.z));
@@ -92,7 +94,7 @@ namespace SPTQuestingBots.Helpers
 
             Vector3[] positionOutlinePoints = GetSpherePoints(position, radius, 10);
             Models.Pathing.PathVisualizationData positionOutline = new Models.Pathing.PathVisualizationData(pathName, positionOutlinePoints, color);
-            Singleton<GameWorld>.Instance.GetComponent<PathRender>().AddOrUpdatePath(positionOutline);
+            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(positionOutline);
         }
 
         public static GUIStyle CreateGuiStyleBotOverlays()
