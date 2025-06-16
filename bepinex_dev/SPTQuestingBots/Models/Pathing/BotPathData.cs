@@ -27,11 +27,15 @@ namespace SPTQuestingBots.Models.Pathing
         public float DistanceToTarget => Vector3.Distance(bot.Position, TargetPosition);
 
         private BotOwner bot;
-        private List<Vector3[]> previousPaths = new List<Vector3[]>();
         
         public BotPathData(BotOwner botOwner) : base()
         {
             bot = botOwner;
+        }
+
+        public void ClearPath()
+        {
+            SetCorners(new Vector3[0]);
         }
 
         public void ForcePathRecalculation()
@@ -49,7 +53,6 @@ namespace SPTQuestingBots.Models.Pathing
             if (force)
             {
                 requiresUpdate = true;
-                previousPaths.Clear();
                 reason = BotPathUpdateNeededReason.Force;
             }
 
@@ -61,7 +64,6 @@ namespace SPTQuestingBots.Models.Pathing
                 ReachDistance = reachDistance;
 
                 requiresUpdate = true;
-                previousPaths.Clear();
                 reason = BotPathUpdateNeededReason.NewTarget;
             }
 
@@ -103,6 +105,20 @@ namespace SPTQuestingBots.Models.Pathing
                 Vector3[] currentPath = bot.Mover.GetCurrentPath();
                 if (currentPath == null)
                 {
+                    requiresUpdate = true;
+                    reason = BotPathUpdateNeededReason.RefreshNeededPath;
+                }
+
+                if (!requiresUpdate && !Corners.Any())
+                {
+                    LoggingController.LogWarning(bot.GetText() + " has no cached corners. Updating path...");
+                    requiresUpdate = true;
+                    reason = BotPathUpdateNeededReason.RefreshNeededPath;
+                }
+
+                if (!requiresUpdate && Corners.Any() && !currentPath.Any())
+                {
+                    LoggingController.LogWarning(bot.GetText() + " has no path set in EFT but has cached corners. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
@@ -175,29 +191,6 @@ namespace SPTQuestingBots.Models.Pathing
                 }
             }
 
-            // TODO: This needs a lot more testing and optimization before it can be released
-            // If the current and proposed paths have already been calculated, do not update the bot's path to avoid getting stuck in infinite loops
-            /*Vector3[] newCorners = corners.Skip(1).ToArray();
-            Vector3[] currentCorners = Corners.Skip(1).ToArray();
-
-            if (previousPaths.Any(p => p.IsSamePath(newCorners)))
-            {
-                if (ignoreDuplicates && !newCorners.IsSamePath(currentCorners) && previousPaths.Any(p => p.IsSamePath(currentCorners)))
-                {
-                    LoggingController.LogWarning("Ignoring duplicate path: " + string.Join(", ", corners.Select(c => c.ToString())));
-                    LoggingController.LogWarning("Current path: " + string.Join(", ", Corners.Select(c => c.ToString())));
-                    return;
-                }
-            }
-            else
-            {
-                if (newCorners.Length > 0)
-                {
-                    //LoggingController.LogInfo("Found new path: " + string.Join(", ", corners.Select(c => c.ToString())));
-                    previousPaths.Add(newCorners);
-                }
-            }*/
-            
             SetCorners(corners);
         }
     }

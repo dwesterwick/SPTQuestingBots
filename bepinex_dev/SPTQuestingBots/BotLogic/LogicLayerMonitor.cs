@@ -27,7 +27,38 @@ namespace SPTQuestingBots.BotLogic
 
         public bool CanLayerBeUsed => layer?.IsActive == true;
         public double TimeSinceLastRequested => lastRequestedTimer.IsRunning ? lastRequestedTimer.ElapsedMilliseconds / 1000.0 : double.MaxValue;
-        
+
+        private static IReadOnlyList<Type> _QuestingBotsBrainLayers;
+        public static IReadOnlyList<Type> QuestingBotsBrainLayers
+        {
+            get
+            {
+                if ((_QuestingBotsBrainLayers == null) || (_QuestingBotsBrainLayers.Count == 0))
+                {
+                    _QuestingBotsBrainLayers = typeof(QuestingBotsPlugin).Assembly.GetTypes()
+                        .Where(type => type.IsSubclassOf(typeof(BehaviorExtensions.CustomLayerDelayedUpdate)))
+                        .ToList()
+                        .AsReadOnly();
+                }
+
+                return _QuestingBotsBrainLayers;
+            }
+        }
+
+        private static IReadOnlyList<string> _QuestingBotsBrainLayerNames;
+        public static IReadOnlyList<string> QuestingBotsBrainLayerNames
+        {
+            get
+            {
+                if ((_QuestingBotsBrainLayerNames == null) || (_QuestingBotsBrainLayerNames.Count == 0))
+                {
+                    _QuestingBotsBrainLayerNames = QuestingBotsBrainLayers.Select(x => x.Name).ToList().AsReadOnly();
+                }
+
+                return _QuestingBotsBrainLayerNames;
+            }
+        }
+
         public void Init(BotOwner _botOwner, string _layerName)
         {
             botOwner = _botOwner;

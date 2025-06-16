@@ -52,6 +52,20 @@ namespace SPTQuestingBots.Models.Pathing
             return clone;
         }
 
+        public StaticPathData GetReverse()
+        {
+            StaticPathData reverse = new StaticPathData();
+            reverse.StartPosition = TargetPosition;
+            reverse.TargetPosition = StartPosition;
+            reverse.Status = Status;
+            reverse.ReachDistance = ReachDistance;
+            reverse.Corners = Corners.Reverse().ToArray();
+            reverse.PathLength = PathLength;
+            reverse.LastSetTime = LastSetTime;
+
+            return reverse;
+        }
+
         public StaticPathData Append(StaticPathData pathToAppend)
         {
             if (pathToAppend.Corners.Length == 0)

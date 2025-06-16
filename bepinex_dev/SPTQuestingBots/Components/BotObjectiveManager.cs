@@ -259,6 +259,8 @@ namespace SPTQuestingBots.Components
         {
             assignment.Complete();
 
+            BotPath.ClearPath();
+
             float duration = (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 5;
             UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, duration);
 

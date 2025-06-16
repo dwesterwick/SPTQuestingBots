@@ -26,20 +26,29 @@ namespace SPTQuestingBots.Components
 
         public IList<StaticPathData> GetStaticPaths(Vector3 target)
         {
-            IList<StaticPathData> paths = new List<StaticPathData>();
+            IList <StaticPathData> paths = new List<StaticPathData>();
             foreach ((Vector3 from, Vector3 to) in staticPaths.Keys)
             {
-                if (to != target)
-                {
-                    continue;
-                }
-
                 if (staticPaths[(from, to)].Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
                 {
                     continue;
                 }
 
-                paths.Add(staticPaths[(from, to)]);
+                if ((from != target) && (to != target))
+                {
+                    continue;
+                }
+
+                StaticPathData matchingPath = staticPaths[(from, to)];
+                if (to != target)
+                {
+                    continue;
+
+                    //LoggingController.LogInfo("Reversing static path from " + matchingPath.StartPosition + " to " + matchingPath.TargetPosition);
+                    //matchingPath = matchingPath.GetReverse();
+                }
+
+                paths.Add(matchingPath);
             }
 
             return paths;

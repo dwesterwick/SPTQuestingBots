@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using HarmonyLib;
+using SPTQuestingBots.BotLogic;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -48,8 +49,9 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             base.Start();
 
+            resumeStuckTimer();
+
             timeSinceLastJumpTimer.Restart();
-            botIsStuckTimer.Start();
             BotOwner.PatrollingData.Pause();
         }
 
@@ -57,7 +59,8 @@ namespace SPTQuestingBots.BehaviorExtensions
         {
             base.Stop();
 
-            botIsStuckTimer.Stop();
+            pauseStuckTimer();
+
             BotOwner.PatrollingData.Unpause();
 
             updateBotZoneForGroup();
@@ -74,6 +77,14 @@ namespace SPTQuestingBots.BehaviorExtensions
             if (BotOwner.GetPlayer.MovementContext.PlayerAnimatorIsJumpSetted() || BotOwner.GetPlayer.MovementContext.PlayerAnimatorGetIsVaulting())
             {
                 ObjectiveManager.BotPath.ForcePathRecalculation();
+                return ObjectiveManager.BotPath.Status;
+            }
+
+            // Only update path data if a Questing Bots brain layer is active
+            string activeLayerName = BotOwner.Brain.ActiveLayerName();
+            if (!LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeLayerName))
+            {
+                LoggingController.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer");
                 return ObjectiveManager.BotPath.Status;
             }
 
@@ -114,6 +125,16 @@ namespace SPTQuestingBots.BehaviorExtensions
         protected void restartStuckTimer()
         {
             botIsStuckTimer.Restart();
+        }
+
+        protected void pauseStuckTimer()
+        {
+            botIsStuckTimer.Stop();
+        }
+
+        protected void resumeStuckTimer()
+        {
+            botIsStuckTimer.Start();
         }
 
         protected bool checkIfBotIsStuck()
@@ -227,12 +248,6 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return;
             }
 
-            if (!BotOwner.GetPlayer.MovementContext.IsGrounded)
-            {
-                LoggingController.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
-                return;
-            }
-
             // Try jumping
             if
             (
@@ -240,6 +255,11 @@ namespace SPTQuestingBots.BehaviorExtensions
                 && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.JumpDebounceTime)
             )
             {
+                if (!canUseStuckRemedies())
+                {
+                    return;
+                }
+
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
 
                 BotOwner.Mover.Stop();
@@ -255,6 +275,11 @@ namespace SPTQuestingBots.BehaviorExtensions
                 && (TimeSinceLastVault > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.VaultDebounceTime)
             )
             {
+                if (!canUseStuckRemedies())
+                {
+                    return;
+                }
+
                 LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
 
                 //DelaySprint(5);
@@ -263,6 +288,19 @@ namespace SPTQuestingBots.BehaviorExtensions
                 BotOwner.GetPlayer.MovementContext.TryVaulting();
                 timeSinceLastVaultTimer.Restart();
             }
+        }
+
+        private bool canUseStuckRemedies()
+        {
+            //LoggingController.LogWarning(BotOwner.GetText() + " was stuck for " + StuckTime + "s.");
+
+            if (!BotOwner.GetPlayer.MovementContext.IsGrounded)
+            {
+                LoggingController.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
+                return false;
+            }
+
+            return true;
         }
     }
 }
