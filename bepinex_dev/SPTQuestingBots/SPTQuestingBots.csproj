@@ -254,6 +254,8 @@
     <Compile Include="Models\Questing\StoredQuestLocation.cs" />
     <Compile Include="Patches\BotOwnerSprintPatch.cs" />
     <Compile Include="Patches\Debug\HandleFinishedTaskPatch.cs" />
+    <Compile Include="Patches\Debug\IsPlayerEnemyPatch.cs" />
+    <Compile Include="Patches\Spawning\BotsGroupIsPlayerEnemyPatch.cs" />
     <Compile Include="Patches\ReturnToPoolPatch.cs" />
     <Compile Include="Patches\PScavProfilePatch.cs" />
     <Compile Include="Patches\Spawning\ScavLimits\BotsControllerStopPatch.cs" />

@@ -74,6 +74,7 @@ namespace SPTQuestingBots
                     new Patches.Debug.ProcessSourceOcclusionPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch2().Enable();
+                    new Patches.Debug.IsPlayerEnemyPatch().Enable();
                 }
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
@@ -100,7 +101,12 @@ namespace SPTQuestingBots
                     {
                         new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
                     }
-                    
+
+                    if (ConfigController.Config.BotSpawns.PMCHostilityAdjustments.Enabled && ConfigController.Config.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
+                    {
+                        new Patches.Spawning.BotsGroupIsPlayerEnemyPatch().Enable();
+                    }
+
                     if (ConfigController.Config.BotSpawns.PMCs.Enabled)
                     {
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();

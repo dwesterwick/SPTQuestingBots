@@ -6,7 +6,7 @@ import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import type { ILocation } from "@spt/models/eft/common/ILocation";
-import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
+import type { IHostilitySettings, IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { IAdditionalHostilitySettings, IBossLocationSpawn, IChancedEnemy } from "@spt/models/eft/common/ILocationBase";
 
 export class BotUtil
@@ -38,6 +38,9 @@ export class BotUtil
         {
             this.adjustAllBotHostilityChancesForLocation(this.databaseTables.locations[location]);
         }
+
+        this.adjustSptPmcHostilityChances(this.iPmcConfig.hostilitySettings["pmcusec"]);
+        this.adjustSptPmcHostilityChances(this.iPmcConfig.hostilitySettings["pmcbear"]);
 
         if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_scavs)
         {
@@ -148,6 +151,31 @@ export class BotUtil
             };
             
             settings.ChancedEnemies.push(newEnemy);
+        }
+    }
+
+    private adjustSptPmcHostilityChances(settings : IHostilitySettings): void
+    {
+        settings.savageEnemyChance = modConfig.bot_spawns.pmc_hostility_adjustments.global_scav_enemy_chance;
+
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_scavs)
+        {
+            settings.savagePlayerBehaviour = "AlwaysEnemies";
+        }
+
+        for (const chancedEnemy in settings.chancedEnemies)
+        {
+            if (modConfig.bot_spawns.pmc_hostility_adjustments.pmc_enemy_roles.includes(settings.chancedEnemies[chancedEnemy].Role))
+            {
+                settings.chancedEnemies[chancedEnemy].EnemyChance = 100;
+                continue;
+            }
+        }
+
+        if (modConfig.bot_spawns.pmc_hostility_adjustments.pmcs_always_hostile_against_pmcs)
+        {
+            settings.bearEnemyChance = 100;
+            settings.usecEnemyChance = 100;
         }
     }
 
