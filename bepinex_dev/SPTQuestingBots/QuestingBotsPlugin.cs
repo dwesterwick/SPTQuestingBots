@@ -7,18 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Bootstrap;
-using DrakiaXYZ.BigBrain.Brains;
 using SPTQuestingBots.Components;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Helpers;
-using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.7.0")]
+    [BepInDependency("xyz.drakia.waypoints", "1.7.1")]
     [BepInDependency("xyz.drakia.bigbrain", "1.3.2")]
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.10.0")]
     public class QuestingBotsPlugin : BaseUnityPlugin

@@ -7059,7 +7059,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 5,
+        "desirability": 15,
         "name": "Unity Credit Bank",
         "objectives" : [
             {
@@ -7070,9 +7070,68 @@
                 "steps": [
                     {
                         "position" : {
-                            "x": 120.044136,
-                            "y": 0.25194326,
-                            "z": -21.88104
+                            "x": 73.41962,
+                            "y": 0.2624514,
+                            "z": -20.3727
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 81.9842758,
+                            "y": 0.3151919,
+                            "z": -30.0930557
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 82.41022,
+                            "y": 0.3151919,
+                            "z": -26.9457932
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 103.2137,
+                            "y": 0.3221446,
+                            "z": -26.7710037
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 106.128639,
+                            "y": 0.3221446,
+                            "z": -24.5001564
+                        }
+                    },
+                    {
+                        "position" : {
+                            "x": 106.791115,
+                            "y": 0.3221446,
+                            "z": -26.3134041
                         }
                     }
                 ]
@@ -7085,9 +7144,31 @@
                 "steps": [
                     {
                         "position" : {
+                            "x": 110.404869,
+                            "y": 0.295898855,
+                            "z": -25.8608418
+                        }
+                    },
+                    {
+                        "position" : {
                             "x": 114.29512,
                             "y": 0.251943678,
                             "z": -25.8415241
+                        }
+                    }
+                ]
+            },
+            {
+                "repeatable": false,
+                "minDistanceFromBot": 5,
+                "maxDistanceFromBot": 300,
+                "maxRunDistance": 8,
+                "steps": [
+                    {
+                        "position" : {
+                            "x": 120.044136,
+                            "y": 0.25194326,
+                            "z": -21.88104
                         }
                     }
                 ]
