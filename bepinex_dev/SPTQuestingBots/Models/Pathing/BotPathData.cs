@@ -111,14 +111,14 @@ namespace SPTQuestingBots.Models.Pathing
 
                 if (!requiresUpdate && !Corners.Any())
                 {
-                    LoggingController.LogWarning(bot.GetText() + " has no cached corners. Updating path...");
+                    //LoggingController.LogInfo(bot.GetText() + " has no cached corners. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
 
                 if (!requiresUpdate && Corners.Any() && !currentPath.Any())
                 {
-                    LoggingController.LogWarning(bot.GetText() + " has no path set in EFT but has cached corners. Updating path...");
+                    //LoggingController.LogInfo(bot.GetText() + " has no path set in EFT but has cached corners. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }

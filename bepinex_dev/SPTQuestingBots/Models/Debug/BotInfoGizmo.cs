@@ -77,7 +77,7 @@ namespace SPTQuestingBots.Models.Debug
             {
                 sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
             }
-            else if (botObjectiveManager?.IsQuestingAllowed == true)
+            else if ((botObjectiveManager?.IsQuestingAllowed == true) && !BotRegistrationManager.IsBotSleeping(bot.Profile.Id))
             {
                 BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
                 if (botJobAssignment != null)

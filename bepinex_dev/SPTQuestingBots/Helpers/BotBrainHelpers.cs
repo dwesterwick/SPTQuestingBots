@@ -17,7 +17,7 @@ namespace SPTQuestingBots.Helpers
             IEnumerable<BotBrainType> allNonSniperBrains = GetAllNonSniperBrains();
             IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
+            LoggingController.LogDebug("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), brainLayerPriorities.Sleeping);
 
             if (!ConfigController.Config.Questing.Enabled)
@@ -25,10 +25,10 @@ namespace SPTQuestingBots.Helpers
                 return;
             }
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
+            LoggingController.LogDebug("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Questing);
 
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
+            LoggingController.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), brainLayerPriorities.Following);
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allBrains.ToStringList(), brainLayerPriorities.Regrouping);
         }

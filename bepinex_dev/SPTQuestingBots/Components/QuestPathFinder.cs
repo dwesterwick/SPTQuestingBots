@@ -44,6 +44,7 @@ namespace SPTQuestingBots.Components
                 {
                     continue;
 
+                    // TODO: This doesn't seem to be required, but let's remove it after more testing
                     //LoggingController.LogInfo("Reversing static path from " + matchingPath.StartPosition + " to " + matchingPath.TargetPosition);
                     //matchingPath = matchingPath.GetReverse();
                 }

@@ -394,6 +394,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
+* Extraction via Questing Bots is only partially implemented
 
 **---------- Credits ----------**
 
