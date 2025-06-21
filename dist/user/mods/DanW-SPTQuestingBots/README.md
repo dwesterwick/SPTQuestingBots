@@ -9,8 +9,8 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.7.0 or later)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.5.1 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.3.0 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.5.2 or later recommended)
 
 **Partially compatible with:**
 * **Fika** (Requires client version 0.9.8962.33287 or later) (If you're using the Questing Bots spawning system, you must disable `Enforced Spawn Limits` in the F12 menu for Fika)
@@ -209,7 +209,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 **Questing Options:**
 * **questing.enabled**: Completely enable or disable questing. 
 * **questing.bot_pathing_update_interval_ms**: The interval (in milliseconds) at which each bot will recalculate its path to its current objective. If this value is very low, performance will be impacted. If this value is very high, the bot will not react to obstacles changing as quickly (i.e. doors being unlocked). By default, this is **100** ms.
-* **questing.brain_layer_priorities.xxx**: The priority numbers assigned to the "brain" layers for this mod. **Do not change these unless you know what you're doing!**
+* **questing.brain_layer_priorities.xxx.xxx**: The priority numbers assigned to the "brain" layers for this mod. One group is of priorities is used when SAIN is installed, and the other is used when SAIN is not installed. **Do not change these unless you know what you're doing!**
 * **questing.quest_selection_timeout**: If a quest cannot be selected for a bot after trying for this amount of time (in seconds), the mod will give up and write an error message.
 * **questing.btr_run_distance**: Override value (in meters) for the EFT setting that makes bots "avoid danger" when they're near the BTR. The default EFT value is 40m, and the default value of this setting is **10** m.
 * **questing.allowed_bot_types_for_questing.scav**: If Scavs are allowed to quest. This is **false** by default.
@@ -378,7 +378,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 **Vanilla EFT Issues in SPT 3.11:**
 * Bots sometimes "teleport" through doors
 * Bots shudder while unlocking doors
-* Bots sometimes rapidly accelerate and decelerate while moving
+* Bots sometimes rapidly accelerate and decelerate while moving (especially when following bosses)
 
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering

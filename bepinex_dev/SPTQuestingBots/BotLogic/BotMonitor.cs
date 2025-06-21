@@ -111,7 +111,7 @@ namespace SPTQuestingBots.BotLogic
         {
             MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
 
-            if (minSAINLayerPriority > ConfigController.Config.Questing.BrainLayerPriorities.Questing)
+            if (minSAINLayerPriority > ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN.Questing)
             {
                 minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedSAIN;
             }

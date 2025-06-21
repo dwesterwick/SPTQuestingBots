@@ -1,17 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Comfort.Common;
+﻿using Comfort.Common;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SPTQuestingBots.Helpers
 {
     public static class BotBrainHelpers
     {
-        //FollowerGluharAssault and FollowerGluharProtect max layer = 43
+        public static void AddQuestingBotsBrainLayers(Configuration.BrainLayerPrioritiesConfig brainLayerPriorities)
+        {
+            IEnumerable<BotBrainType> allNonSniperBrains = GetAllNonSniperBrains();
+            IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), brainLayerPriorities.Sleeping);
+
+            if (!ConfigController.Config.Questing.Enabled)
+            {
+                return;
+            }
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Questing);
+
+            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), brainLayerPriorities.Following);
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allBrains.ToStringList(), brainLayerPriorities.Regrouping);
+        }
 
         public static IEnumerable<BotBrainType> AddTestBrain(this IEnumerable<BotBrainType> list)
         {

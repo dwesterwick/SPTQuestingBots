@@ -19,10 +19,18 @@
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
 		"brain_layer_priorities": {
-			"questing": 21,
-			"following": 22,
-			"regrouping": 26,
-			"sleeping": 99
+			"with_sain" : {
+				"questing": 18,
+				"following": 19,
+				"regrouping": 26,
+				"sleeping": 99
+			},
+			"without_sain" : {
+				"questing": 21,
+				"following": 22,
+				"regrouping": 26,
+				"sleeping": 99
+			}
 		},
 		"quest_selection_timeout": 250,
 		"btr_run_distance": 10,

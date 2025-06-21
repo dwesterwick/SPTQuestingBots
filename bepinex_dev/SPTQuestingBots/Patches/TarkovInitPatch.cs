@@ -9,6 +9,7 @@ using BepInEx.Bootstrap;
 using EFT;
 using EFT.InputSystem;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
@@ -18,6 +19,7 @@ namespace SPTQuestingBots.Patches
         public static string MaxVersion { get; set; } = "999999.999999.999999.999999";
 
         private static readonly string donutsGuid = "com.dvize.Donuts";
+        private static readonly string sainGuid = "me.sol.sain";
 
         protected override MethodBase GetTargetMethod()
         {
@@ -56,6 +58,16 @@ namespace SPTQuestingBots.Patches
             if (ConfigController.Config.BotSpawns.Enabled && Chainloader.PluginInfos.Any(p => p.Value.Metadata.GUID == donutsGuid))
             {
                 Chainloader.DependencyErrors.Add("Using Questing Bots spawns with DONUTS may result in too many spawns. Use at your own risk.");
+            }
+
+            if (ConfigController.Config.Enabled && Chainloader.PluginInfos.Any(p => p.Value.Metadata.GUID == sainGuid))
+            {
+                LoggingController.LogInfo("SAIN detected. Adjusting Questing Bots brain layer priorities...");
+                BotBrainHelpers.AddQuestingBotsBrainLayers(ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN);
+            }
+            else
+            {
+                BotBrainHelpers.AddQuestingBotsBrainLayers(ConfigController.Config.Questing.BrainLayerPriorities.WithoutSAIN);
             }
         }
     }

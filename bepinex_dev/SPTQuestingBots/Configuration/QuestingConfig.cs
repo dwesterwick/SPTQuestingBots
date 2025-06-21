@@ -16,7 +16,7 @@ namespace SPTQuestingBots.Configuration
         public float BotPathingUpdateInterval { get; set; } = 100;
 
         [JsonProperty("brain_layer_priorities")]
-        public BrainLayerPrioritiesConfig BrainLayerPriorities { get; set; } = new BrainLayerPrioritiesConfig();
+        public BrainLayerPrioritiesOptionsConfig BrainLayerPriorities { get; set; } = new BrainLayerPrioritiesOptionsConfig();
 
         [JsonProperty("quest_selection_timeout")]
         public float QuestSelectionTimeout { get; set; } = 2000;

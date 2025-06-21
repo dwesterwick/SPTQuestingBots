@@ -127,33 +127,10 @@ namespace SPTQuestingBots
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
                 
-                performLobotomies();
-
                 this.GetOrAddComponent<TarkovData>();
             }
 
             Logger.LogInfo("Loading QuestingBots...done.");
-        }
-
-        private void performLobotomies()
-        {
-            IEnumerable<BotBrainType> allNonSniperBrains = BotBrainHelpers.GetAllNonSniperBrains();
-            IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
-
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriorities.Sleeping);
-
-            if (!ConfigController.Config.Questing.Enabled)
-            {
-                return;
-            }
-
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriorities.Questing);
-
-            LoggingController.LogInfo("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriorities.Following);
-            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allBrains.ToStringList(), ConfigController.Config.Questing.BrainLayerPriorities.Regrouping);
         }
 
         private bool confirmNoPreviousVersionExists()
