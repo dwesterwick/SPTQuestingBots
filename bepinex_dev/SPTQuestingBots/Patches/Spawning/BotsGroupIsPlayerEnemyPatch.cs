@@ -5,10 +5,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.Patches.Spawning
 {
@@ -41,31 +39,6 @@ namespace SPTQuestingBots.Patches.Spawning
             }
 
             return modifiedInstructions;
-        }
-
-        [PatchPostfix]
-        protected static void PatchPostfix(BotsGroup __instance, bool __result, IPlayer player)
-        {
-            if ((__instance._initialBot.Profile.Info.Settings.Role != WildSpawnType.pmcBEAR) && (__instance._initialBot.Profile.Info.Settings.Role != WildSpawnType.pmcUSEC))
-            {
-                return;
-            }
-
-            if ((player.Profile.Info.Settings.Role != WildSpawnType.pmcBEAR) && (player.Profile.Info.Settings.Role != WildSpawnType.pmcUSEC))
-            {
-                return;
-            }
-
-            string message = "[BotsGroup.IsPlayerEnemy]" + player.GetText() + "(" + player.Profile.Info.Settings.Role + ") is enemy of " + __instance._initialBot.Profile.Info.Settings.Role + " group: " + __result;
-
-            if (__result)
-            {
-                //LoggingController.LogInfo(message);
-            }
-            else
-            {
-                LoggingController.LogWarning(message);
-            }
         }
     }
 }

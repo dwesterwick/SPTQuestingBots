@@ -59,6 +59,8 @@ export class BotUtil
             this.databaseTables.bots.types.marksman.difficulty.hard.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
             this.databaseTables.bots.types.marksman.difficulty.impossible.Mind.ENEMY_BOT_TYPES = BotUtil.pmcRoles;
         }
+
+        this.commonUtils.logInfo("Adjusting bot hostility chances...done.");
     }
 
     private adjustAllBotHostilityChancesForLocation(location : ILocation): void
@@ -187,7 +189,10 @@ export class BotUtil
             removedWaves += this.removePvEBossWavesFromLocation(this.databaseTables.locations[location]);
         }
 
-        this.commonUtils.logInfo(`Disabled ${removedWaves} PvE boss waves`);
+        if (removedWaves > 0)
+        {
+            this.commonUtils.logInfo(`Disabled ${removedWaves} PvE boss waves`);
+        }
     }
 
     private removePvEBossWavesFromLocation(location : ILocation): number
@@ -219,40 +224,19 @@ export class BotUtil
         return removedWaves;
     }
 
-    public disableCustomBossWaves(): void
+    public disableBotWaves(waves: Record<string, any>, botType: string): void
     {
         let originalWaves = 0;
-        for (const location in this.iLocationConfig.customWaves.boss)
+        for (const location in waves)
         {
-            originalWaves += this.iLocationConfig.customWaves.boss[location].length;
-            this.iLocationConfig.customWaves.boss[location] = [];
+            originalWaves += waves[location].length;
+            waves[location] = [];
         }
 
-        this.commonUtils.logInfo(`Disabled ${originalWaves} custom boss waves`);
-    }
-
-    public disableCustomScavWaves(): void
-    {
-        let originalWaves = 0;
-        for (const location in this.iLocationConfig.customWaves.normal)
+        if (originalWaves > 0)
         {
-            originalWaves += this.iLocationConfig.customWaves.normal[location].length;
-            this.iLocationConfig.customWaves.normal[location] = [];
+            this.commonUtils.logInfo(`Disabled ${originalWaves} custom ${botType} waves`);
         }
-
-        this.commonUtils.logInfo(`Disabled ${originalWaves} custom Scav waves`);
-    }
-
-    public disablePmcGeneratorWaves(): void
-    {
-        let originalWaves = 0;
-        for (const location in this.iPmcConfig.customPmcWaves)
-        {
-            originalWaves += this.iPmcConfig.customPmcWaves[location].length;
-            this.iPmcConfig.customPmcWaves[location] = [];
-        }
-
-        this.commonUtils.logInfo(`Disabled ${originalWaves} custom PMC waves`);
     }
     
     public useEFTBotCaps(): void

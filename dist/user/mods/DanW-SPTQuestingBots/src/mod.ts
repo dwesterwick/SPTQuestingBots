@@ -253,22 +253,22 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         this.botUtil.disablePvEBossWaves();
 
         // Currently these are all PMC waves, which are unnecessary with PMC spawns in this mod
-        this.botUtil.disableCustomBossWaves();
+        this.botUtil.disableBotWaves(this.iLocationConfig.customWaves.boss, "boss")
 
         // Disable all of the extra Scavs that spawn into Factory
-        this.botUtil.disableCustomScavWaves();
+        this.botUtil.disableBotWaves(this.iLocationConfig.customWaves.normal, "Scav");
 
         // Disable SPT's PMC wave generator
-        this.botUtil.disablePmcGeneratorWaves();
+        this.botUtil.disableBotWaves(this.iPmcConfig.customPmcWaves, "PMC");
 
         // Use EFT's bot caps instead of SPT's
         this.botUtil.useEFTBotCaps();
 
         // If Rogues don't spawn immediately, PMC spawns will be significantly delayed
-        if (modConfig.bot_spawns.limit_initial_boss_spawns.disable_rogue_delay)
+        if (modConfig.bot_spawns.limit_initial_boss_spawns.disable_rogue_delay && (this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds > -1))
         {
-            this.commonUtils.logInfo("Removing SPT Rogue spawn delay...");
             this.iLocationConfig.rogueLighthouseSpawnTimeSettings.waitTimeSeconds = -1;
+            this.commonUtils.logInfo("Removed SPT Rogue spawn delay");
         }
 
         this.commonUtils.logInfo("Configuring game for bot spawning...done.");

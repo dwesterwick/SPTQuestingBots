@@ -71,7 +71,6 @@ namespace SPTQuestingBots
                     new Patches.Debug.ProcessSourceOcclusionPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch2().Enable();
-                    new Patches.Debug.IsPlayerEnemyPatch().Enable();
                 }
                 
                 if (ConfigController.Config.BotSpawns.Enabled)
