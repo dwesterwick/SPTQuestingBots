@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPT.Reflection.Patching;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Patches
 {
     internal class ServerRequestPatch : ModulePatch
     {
-        public static bool ForcePScavs { get; set; } = false;
-
         private static readonly string botGenerationEndpoint = "/client/game/bot/generate";
 
         protected override MethodBase GetTargetMethod()
@@ -35,26 +34,8 @@ namespace SPTQuestingBots.Patches
                 return;
             }
 
-            int pScavChance;
-
-            if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)
-            {
-                pScavChance = ForcePScavs ? 100 : 0;
-            }
-            else if (ConfigController.Config.AdjustPScavChance.Enabled)
-            {
-                double[][] chanceVsTimeRemainingFraction = ConfigController.Config.AdjustPScavChance.ChanceVsTimeRemainingFraction;
-                float remainingRaidTimeFraction = Helpers.RaidHelpers.GetRaidTimeRemainingFraction();
-
-                pScavChance = (int)Math.Round(ConfigController.InterpolateForFirstCol(chanceVsTimeRemainingFraction, remainingRaidTimeFraction));
-            }
-            else
-            {
-                return;
-            }
-
             Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
-            legacyParams.Params = new ModifiedParams(originalParams.conditions, pScavChance);
+            legacyParams.Params = new ModifiedParams(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
         }
 
         internal class ModifiedParams
@@ -64,18 +45,18 @@ namespace SPTQuestingBots.Patches
             public List<WaveInfoClass> Conditions { get; set; }
 
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            [JsonProperty("PScavChance")]
-            public float PScavChance { get; set; }
+            [JsonProperty("GeneratePScav")]
+            public bool GeneratePScav { get; set; }
 
             public ModifiedParams()
             {
 
             }
 
-            public ModifiedParams(List<WaveInfoClass> _conditions, float _PScavChance)
+            public ModifiedParams(List<WaveInfoClass> _conditions, bool _GeneratePScav)
             {
                 Conditions = _conditions;
-                PScavChance = _PScavChance;
+                GeneratePScav = _GeneratePScav;
             }
 
             public override string ToString()

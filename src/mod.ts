@@ -161,9 +161,9 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         // Intercept the EFT bot-generation request to include a PScav conversion chance
         container.afterResolution("BotCallbacks", (_t, result: BotCallbacks) =>
         {
-            result.generateBots = async (url: string, info: IGenerateBotsRequestDataWithPScavChance, sessionID: string) =>
+            result.generateBots = async (url: string, info: IGenerateBotsRequestDataWithPScavForced, sessionID: string) =>
             {
-                const bots = await this.generateBots({ conditions: info.conditions }, sessionID, this.randomUtil.getChance100(info.PScavChance));
+                const bots = await this.generateBots({ conditions: info.conditions }, sessionID, info.GeneratePScav);
                 return this.httpResponseUtil.getBody(bots);
             }
         }, {frequency: "Always"});
@@ -287,7 +287,7 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
         {
             if (bots[bot].Info.Settings.Role !== "assault")
             {
-                this.commonUtils.logError(`Tried generating a player Scav, but a bot with role ${bots[bot].Info.Settings.Role} was returned`);
+                this.commonUtils.logDebug(`Tried generating a player Scav, but a bot with role ${bots[bot].Info.Settings.Role} was returned`);
                 continue;
             }
 
@@ -450,10 +450,10 @@ class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
     }
 }
 
-export interface IGenerateBotsRequestDataWithPScavChance
+export interface IGenerateBotsRequestDataWithPScavForced
 {
     conditions: ICondition[];
-    PScavChance: number;
+    GeneratePScav: boolean;
 }
 
 module.exports = { mod: new QuestingBots() }
