@@ -41,10 +41,10 @@ namespace SPTQuestingBots.Patches.Spawning
 
             localGameObj = __instance;
 
-            IEnumerator originalEnumeratorWithMessage = addMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
+            IEnumerator originalEnumeratorWithMessage = addDebugMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
             __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, waitForBotGenerators(), spawnMissedWaves());
 
-            LoggingController.LogInfo("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
+            LoggingController.LogDebug("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
 
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
@@ -62,10 +62,10 @@ namespace SPTQuestingBots.Patches.Spawning
             missedBossWaves.Add(wave);
         }
 
-        private static IEnumerator addMessageAfterEnumerator(IEnumerator enumerator, string message)
+        private static IEnumerator addDebugMessageAfterEnumerator(IEnumerator enumerator, string message)
         {
             yield return enumerator;
-            LoggingController.LogInfo(message);
+            LoggingController.LogDebug(message);
         }
 
         private static IEnumerator spawnMissedWaves()
