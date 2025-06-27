@@ -46,10 +46,7 @@ namespace SPTQuestingBots.Components
                 LoggingController.LogError("Could not retrieve current raid settings");
             }
 
-            if (ConfigController.Config.Debug.Enabled)
-            {
-                PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
-            }
+            PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
             if (CurrentLocation.Id == "Lighthouse")

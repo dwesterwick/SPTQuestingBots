@@ -37,7 +37,7 @@ import type { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import type { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 
 const modName = "SPTQuestingBots";
-const spawningModNames = ["SWAG", "DewardianDev-MOAR", "PreyToLive-BetterSpawnsPlus", "RealPlayerSpawn"];
+const spawningModNames = ["SWAG", "DewardianDev-MOAR", "PreyToLive-BetterSpawnsPlus", "RealPlayerSpawn", "acidphantasm-botplacementsystem"];
 
 class QuestingBots implements IPreSptLoadMod, IPostSptLoadMod, IPostDBLoadMod
 {

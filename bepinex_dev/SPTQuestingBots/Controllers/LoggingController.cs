@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using Newtonsoft.Json;
-using SPTQuestingBots.Models;
 
 namespace SPTQuestingBots.Controllers
 {

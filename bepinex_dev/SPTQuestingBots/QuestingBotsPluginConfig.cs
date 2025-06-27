@@ -174,7 +174,7 @@ namespace SPTQuestingBots
                 1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on GroundZero", new AcceptableValueRange<int>(50, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
-                QuestingBotType.All, "Show information about what each bot is doing");
+                (QuestingBotType)0, "Show information about what each bot is doing");
             ShowBotPathOverlays = Config.Bind("Debug", "Show Bot Path Overlays",
                 (QuestingBotType)0, new ConfigDescription("Create markers for Bot Path Overlay Types that bots of each selected type are following", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             ShowBotPathVisualizations = Config.Bind("Debug", "Show Bot Path Visualizations",
