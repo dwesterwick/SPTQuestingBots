@@ -52,7 +52,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods
                     continue;
                 }
 
-                LoggingController.LogInfo($"Found external mod {modInfo.GUID} (version {modInfo.GetVersion()})");
+                LoggingController.LogInfo($"Found external mod {modInfo.GetName()} (version {modInfo.GetVersion()})");
 
                 if (!modInfo.IsCompatible())
                 {

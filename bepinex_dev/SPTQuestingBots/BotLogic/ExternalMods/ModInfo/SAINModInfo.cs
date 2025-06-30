@@ -16,8 +16,6 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
     {
         public override string GUID { get; } = "me.sol.sain";
 
-        public override bool CanUseInterop { get; protected set; } = false;
-
         private Dictionary<string, int> minimumBrainLayerPrioritiesForBrains = new Dictionary<string, int>();
         private Dictionary<string, MinMaxConfig> searchTimeAfterCombatForBrains = new Dictionary<string, MinMaxConfig>();
 

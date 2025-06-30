@@ -13,8 +13,6 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
     {
         public override string GUID { get; } = "me.skwizzy.lootingbots";
 
-        public override bool CanUseInterop { get; protected set; } = false;
-
         public override bool CheckInteropAvailability()
         {
             if (LootingBots.LootingBotsInterop.Init())
