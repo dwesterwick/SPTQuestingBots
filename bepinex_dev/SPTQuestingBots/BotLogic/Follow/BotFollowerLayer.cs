@@ -1,12 +1,13 @@
-﻿using System;
+﻿using EFT;
+using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using SPTQuestingBots.BotLogic.HiveMind;
+using SPTQuestingBots.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using SPTQuestingBots.BehaviorExtensions;
-using SPTQuestingBots.BotLogic.HiveMind;
-using SPTQuestingBots.Controllers;
 
 namespace SPTQuestingBots.BotLogic.Follow
 {
@@ -146,8 +147,8 @@ namespace SPTQuestingBots.BotLogic.Follow
             // Only allow looting if the bot is already looting or its boss will allow it
             if
             (
-                (bossWillAllowLooting && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
-                || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.IsLooting())
+                (bossWillAllowLooting && objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().ShouldCheckForLoot())
+                || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().IsLooting)
             )
             {
                 objectiveManager.NotFollowingReason = Components.NotQuestingReason.BreakForLooting;

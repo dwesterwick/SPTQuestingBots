@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models.Questing;
@@ -87,14 +88,14 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot wants to use a mounted weapon
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.WantsToUseStationaryWeapon())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.GetMonitor<BotMountedGunMonitor>().WantsToUseStationaryWeapon)
             {
                 objectiveManager.NotQuestingReason = Components.NotQuestingReason.StationaryWeapon;
                 return updatePreviousState(false);
             }
 
             // Check if the bot is currently extracting or wants to extract via SAIN
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.IsTryingToExtract())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.GetMonitor<BotExtractMonitor>().IsTryingToExtract)
             {
                 objectiveManager.StopQuesting();
 
@@ -150,7 +151,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             }
 
             // Check if the bot wants to loot
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldCheckForLoot(objectiveManager.BotMonitor.NextLootCheckDelay))
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().ShouldCheckForLoot())
             {
                 BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
 
@@ -160,7 +161,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
 
             // Check if the bot has wandered too far from its followers.
-            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.ShouldWaitForFollowers())
+            if (objectiveManager.IsAllowedToTakeABreak() && objectiveManager.BotMonitor.GetMonitor<BotQuestingMonitor>().ShouldWaitForFollowers)
             {
                 followersTooFarTimer.Start();
             }
@@ -258,7 +259,7 @@ namespace SPTQuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.RequestExtract:
-                    if (objectiveManager.BotMonitor.TryInstructBotToExtract())
+                    if (objectiveManager.BotMonitor.GetMonitor<BotExtractMonitor>().TryInstructBotToExtract())
                     {
                         objectiveManager.StopQuesting();
                     }

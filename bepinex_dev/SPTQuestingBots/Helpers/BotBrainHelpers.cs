@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
@@ -329,5 +330,8 @@ namespace SPTQuestingBots.Helpers
 
         public static string GetActiveLayerName(this BotOwner bot) => BrainManager.GetActiveLayer(bot)?.GetType()?.Name;
         public static string GetActiveLogicName(this BotOwner bot) => BrainManager.GetActiveLogic(bot)?.GetType()?.Name;
+
+        public static bool IsLayerActive(this BotOwner bot, string layerName) => bot.GetActiveLayerName()?.Equals(layerName) == true;
+        public static bool IsLogicActive(this BotOwner bot, string logicName) => bot.GetActiveLogicName()?.Equals(logicName) == true;
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 
@@ -17,8 +18,6 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
         private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
-        private bool wasAbleBodied = true;
-        private bool neededToHeal = false;
         private float maxSuspiciousTime = 60;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
@@ -60,47 +59,31 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         protected bool MustHeal()
         {
-            if (objectiveManager.BotMonitor.MustHeal(!neededToHeal))
+            if (objectiveManager.BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
             {
                 mustHealTimer.Start();
-                neededToHeal = true;
-
                 return true;
-            }
-            if (neededToHeal)
-            {
-                LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is now healed.");
             }
 
             mustHealTimer.Reset();
-            neededToHeal = false;
-
             return false;
         }
 
         protected bool IsAbleBodied()
         {
-            if (!objectiveManager.BotMonitor.IsAbleBodied(wasAbleBodied))
+            if (!objectiveManager.BotMonitor.GetMonitor<BotHealthMonitor>().IsAbleBodied)
             {
                 notAbleBodiedTimer.Start();
-                wasAbleBodied = false;
-
                 return false;
-            }
-            if (!wasAbleBodied)
-            {
-                LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is now able-bodied.");
             }
 
             notAbleBodiedTimer.Reset();
-            wasAbleBodied = true;
-
             return true;
         }
 
         protected bool IsInCombat()
         {
-            if (objectiveManager.BotMonitor.ShouldSearchForEnemy(searchTimeAfterCombat))
+            if (objectiveManager.BotMonitor.GetMonitor<BotCombatMonitor>().ShouldSearchForEnemy(searchTimeAfterCombat))
             {
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
                 {
@@ -116,7 +99,7 @@ namespace SPTQuestingBots.BehaviorExtensions
                         LoggingController.LogInfo(message);
                     }*/
 
-                    searchTimeAfterCombat = objectiveManager.BotMonitor.UpdateSearchTimeAfterCombat();
+                    searchTimeAfterCombat = objectiveManager.BotMonitor.GetMonitor<BotCombatMonitor>().UpdateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
 
@@ -139,14 +122,14 @@ namespace SPTQuestingBots.BehaviorExtensions
             //    LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
             //}
 
-            if (!wasSuspiciousTooLong && objectiveManager.BotMonitor.ShouldBeSuspicious(suspiciousTime))
+            if (!wasSuspiciousTooLong && objectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().ShouldBeSuspicious(suspiciousTime))
             {
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
                 {
-                    suspiciousTime = objectiveManager.BotMonitor.UpdateSuspiciousTime();
+                    suspiciousTime = objectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().UpdateSuspiciousTime();
                     //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
 
-                    objectiveManager.BotMonitor.TryPreventBotFromLooting((float)suspiciousTime);
+                    objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().TryPreventBotFromLooting((float)suspiciousTime);
                 }
 
                 totalSuspiciousTimer.Start();
