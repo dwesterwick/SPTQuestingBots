@@ -186,7 +186,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 return null;
             }
 
-            return botBosses[bot].Brain.ActiveLayerName();
+            return botBosses[bot].GetActiveLayerName();
         }
 
         public static float GetDistanceToBoss(BotOwner bot)

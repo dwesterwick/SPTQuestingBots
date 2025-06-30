@@ -2,10 +2,12 @@
 using EFT;
 using SPTQuestingBots.BotLogic.ExternalMods;
 using SPTQuestingBots.BotLogic.ExternalMods.Functions.Hearing;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +17,15 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 {
     public class BotHearingMonitor : AbstractBotMonitor
     {
+        public bool IsSuspicious { get; private set; } = false;
+
         private bool soundPlayedEventAdded = false;
         private float lastEnemySoundHeardTime = 0;
         private AbstractHearingFunction hearingFunction;
+        private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
+        private float maxSuspiciousTime = 60;
+        private Stopwatch totalSuspiciousTimer = new Stopwatch();
+        private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -34,6 +42,13 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             soundPlayedEventAdded = true;
 
             BotOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { removeSoundPlayedEvent(); };
+
+            updateMaxSuspiciousTime();
+        }
+
+        public override void Update()
+        {
+            IsSuspicious = isSuspicious();
         }
 
         public override void OnDestroy()
@@ -54,19 +69,86 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         public bool TrySetIgnoreHearing(float duration, bool value) => hearingFunction.TryIgnoreHearing(value, false, duration);
 
-        public bool ShouldBeSuspicious(double maxTimeSinceDangerSensed)
+        private bool isSuspicious()
+        {
+            bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
+            //if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
+            //{
+            //    LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
+            //}
+
+            if (!wasSuspiciousTooLong && BotMonitor.GetMonitor<BotHearingMonitor>().shouldBeSuspicious(suspiciousTime))
+            {
+                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
+                {
+                    suspiciousTime = BotMonitor.GetMonitor<BotHearingMonitor>().updateSuspiciousTime();
+                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
+
+                    BotMonitor.GetMonitor<BotLootingMonitor>().TryPreventBotFromLooting((float)suspiciousTime);
+                }
+
+                totalSuspiciousTimer.Start();
+                notSuspiciousTimer.Reset();
+
+                BotMonitor.GetMonitor<BotHealthMonitor>().PauseHealthMonitoring();
+
+                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, true);
+                return true;
+            }
+
+            if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
+            {
+                //if (wasSuspiciousTooLong)
+                //{
+                //    LoggingController.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
+                //}
+
+                totalSuspiciousTimer.Reset();
+            }
+            else
+            {
+                totalSuspiciousTimer.Stop();
+            }
+
+            notSuspiciousTimer.Start();
+
+            BotMonitor.GetMonitor<BotHealthMonitor>().ResumeHealthMonitoring();
+
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner, false);
+            return false;
+        }
+
+        private bool shouldBeSuspicious(double maxTimeSinceDangerSensed)
         {
             bool shouldBeSuspicious = (Time.time - lastEnemySoundHeardTime) < maxTimeSinceDangerSensed;
             return shouldBeSuspicious;
         }
 
-        public int UpdateSuspiciousTime()
+        private int updateSuspiciousTime()
         {
             System.Random random = new System.Random();
             int min = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
             int max = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Max;
 
             return random.Next(min, max);
+        }
+
+        private void updateMaxSuspiciousTime()
+        {
+            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+
+            if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey(locationId))
+            {
+                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime[locationId];
+            }
+            else if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey("default"))
+            {
+                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime["default"];
+            }
+            else
+            {
+                LoggingController.LogError("Could not set max suspicious time for " + BotOwner.GetText() + ". Defaulting to 60s.");
+            }
         }
 
         private void enemySoundHeard(IPlayer iplayer, Vector3 position, float power, AISoundType type)

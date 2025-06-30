@@ -16,28 +16,6 @@ using UnityEngine;
 
 namespace SPTQuestingBots.Components
 {
-    public enum NotQuestingReason
-    {
-        None,
-        Unknown,
-        QuestsNotReady,
-        Pause,
-        IsDead,
-        IsStuck,
-        CannotQuest,
-        WaitForNextQuest,
-        Regroup,
-        Proximity,
-        MustHeal,
-        NotAbleBodied,
-        InCombat,
-        GroupInCombat,
-        Suspicious,
-        GroupIsSuspicious,
-        StationaryWeapon,
-        BreakForLooting
-    }
-
     public class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         public bool IsInitialized { get; private set; } = false;
@@ -49,9 +27,6 @@ namespace SPTQuestingBots.Components
         public BotPathData BotPath { get; private set; } = null;
         public EFT.Interactive.Door DoorToOpen { get; set; } = null;
         public Vector3? LastCorner { get; set; } = null;
-        public NotQuestingReason NotQuestingReason { get; set; } = NotQuestingReason.None;
-        public NotQuestingReason NotFollowingReason { get; set; } = NotQuestingReason.None;
-        public NotQuestingReason NotRegroupingReason { get; set; } = NotQuestingReason.None;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;

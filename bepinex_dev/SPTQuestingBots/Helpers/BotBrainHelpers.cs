@@ -1,7 +1,6 @@
 ﻿using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
-using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Models;
@@ -327,6 +326,8 @@ namespace SPTQuestingBots.Helpers
         {
             return (role == WildSpawnType.bossZryachiy) || (role == WildSpawnType.followerZryachiy);
         }
+
+        public static bool IsAlive(this BotOwner bot) => (bot.BotState == EBotState.Active) && !bot.IsDead;
 
         public static string GetActiveLayerName(this BotOwner bot) => BrainManager.GetActiveLayer(bot)?.GetType()?.Name;
         public static string GetActiveLogicName(this BotOwner bot) => BrainManager.GetActiveLogic(bot)?.GetType()?.Name;

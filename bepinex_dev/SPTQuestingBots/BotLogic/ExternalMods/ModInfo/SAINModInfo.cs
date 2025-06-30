@@ -19,6 +19,8 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
         private Dictionary<string, int> minimumBrainLayerPrioritiesForBrains = new Dictionary<string, int>();
         private Dictionary<string, MinMaxConfig> searchTimeAfterCombatForBrains = new Dictionary<string, MinMaxConfig>();
 
+        public static bool IsSAINLayer(string layerName) => layerName.StartsWith("SAIN");
+
         public override bool CheckInteropAvailability()
         {
             if (SAIN.Plugin.SAINInterop.Init())

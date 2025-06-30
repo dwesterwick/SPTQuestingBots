@@ -1,8 +1,10 @@
 ﻿using EFT;
 using EFT.HealthSystem;
+using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,21 +13,58 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 {
     public class BotHealthMonitor : AbstractBotMonitor
     {
+        public bool IsMonitoringPaused { get; private set; } = false;
         public bool NeedsToHeal { get; private set; } = false;
         public bool NeedsToEatOrDrink { get; private set; } = false;
         public bool HasLowHealth { get; private set; } = false;
         public bool IsOverweight { get; private set; } = false;
         public bool IsAbleBodied { get; private set; } = false;
 
+        private Stopwatch notAbleBodiedTimer = new Stopwatch();
+        private Stopwatch mustHealTimer = new Stopwatch();
+
+        public float NotAbleBodiedTime => notAbleBodiedTimer.ElapsedMilliseconds / 1000;
+        public float NeedsToHealTime => mustHealTimer.ElapsedMilliseconds / 1000;
+
         public BotHealthMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
         public override void Update()
         {
+            if (IsMonitoringPaused)
+            {
+                return;
+            }
+
             NeedsToHeal = needsToHeal();
             NeedsToEatOrDrink = needsToEatOrDrink();
             HasLowHealth = hasLowHealth();
             IsOverweight = isOverweight();
             IsAbleBodied = isAbleBodied();
+
+            if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            {
+                BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
+                return;
+            }
+
+            if (NeedsToHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            {
+                LoggingController.LogWarning("Waited " + NeedsToHealTime + "s for " + BotOwner.GetText() + " to heal");
+                BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
+                return;
+            }
+        }
+
+        public void PauseHealthMonitoring()
+        {
+            notAbleBodiedTimer.Stop();
+            mustHealTimer.Stop();
+            IsMonitoringPaused = true;
+        }
+
+        public void ResumeHealthMonitoring()
+        {
+            IsMonitoringPaused = false;
         }
 
         private bool isAbleBodied()
@@ -36,6 +75,8 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is not able-bodied");
                 }
+
+                notAbleBodiedTimer.Start();
                 return false;
             }
 
@@ -43,6 +84,8 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             {
                 LoggingController.LogDebug("Bot " + BotOwner.GetText() + " is now able-bodied");
             }
+
+            notAbleBodiedTimer.Reset();
             return true;
         }
 
@@ -55,6 +98,8 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     LoggingController.LogDebug("Bot " + BotOwner.GetText() + " needs to heal");
                 }
+
+                mustHealTimer.Start();
                 return true;
             }
 
@@ -62,6 +107,8 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             {
                 LoggingController.LogDebug("Bot " + BotOwner.GetText() + " has finished healing");
             }
+
+            mustHealTimer.Reset();
             return false;
         }
 

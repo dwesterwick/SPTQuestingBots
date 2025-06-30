@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviorExtensions\CustomLayerForQuesting.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotQuestingDecisionMonitor.cs" />
     <Compile Include="BotLogic\BotMonitor\BotMonitorController.cs" />
     <Compile Include="BotLogic\BotMonitor\Monitors\AbstractBotMonitor.cs" />
     <Compile Include="BotLogic\BotMonitor\Monitors\BotCombatMonitor.cs" />

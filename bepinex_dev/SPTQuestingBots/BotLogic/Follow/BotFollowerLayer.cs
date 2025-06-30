@@ -1,5 +1,6 @@
 ﻿using EFT;
 using SPTQuestingBots.BehaviorExtensions;
+using SPTQuestingBots.BotLogic.BotMonitor;
 using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Controllers;
@@ -42,134 +43,12 @@ namespace SPTQuestingBots.BotLogic.Follow
                 return previousState;
             }
 
-            // Check if somebody disabled questing in the F12 menu
-            if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
+            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor.CurrentDecision != BotQuestingDecision.FollowBoss)
             {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
                 return updatePreviousState(false);
             }
 
-            if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.IsDead;
-                return updatePreviousState(false);
-            }
-
-            // If the layer is active, run to the boss. Otherwise, allow a little more space
-            if (previousState)
-            {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
-            }
-            else
-            {
-                maxDistanceFromBoss = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Max;
-            }
-
-            // Only use this layer if the bot has a boss to follow and the boss can quest
-            if (!BotHiveMindMonitor.HasBoss(BotOwner) || !BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner))
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
-                return updatePreviousState(false);
-            }
-
-            Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
-
-            float pauseRequestTime = getPauseRequestTime();
-            if (pauseRequestTime > 0)
-            {
-                LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
-
-                return pauseLayer(pauseRequestTime);
-            }
-
-            if (IsInCombat())
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.InCombat;
-                return pauseLayer();
-            }
-
-            if (IsSuspicious())
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.Suspicious;
-                return pauseLayer();
-            }
-
-            // Prevent the bot from following its boss if it needs to heal
-            if (MustHeal())
-            {
-                if (MustHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
-                {
-                    LoggingController.LogWarning("Waited " + MustHealTime + "s for " + BotOwner.GetText() + " to heal");
-                    BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
-                }
-
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.MustHeal;
-                return updatePreviousState(false);
-            }
-
-            // Only enable the layer if the bot is too far from the boss
-            float? distanceToBoss = BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-            if (!distanceToBoss.HasValue || (distanceToBoss.Value < maxDistanceFromBoss))
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.Proximity;
-                return updatePreviousState(false);
-            }
-
-            // If any group members are in combat, the bot should also be in combat
-            // NOTE: This check MUST be performed after updating this bot's combate state!
-            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
-            {
-                // WIP. Hopefully not needed with SAIN.
-                //BotHiveMindMonitor.AssignTargetEnemyFromGroup(BotOwner);
-
-                //IReadOnlyCollection<BotOwner> groupMembers = BotHiveMindMonitor.GetAllGroupMembers(BotOwner);
-                //LoggingController.LogInfo("One of the following group members is in combat: " + string.Join(", ", groupMembers.Select(g => g.GetText())));
-
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.GroupInCombat;
-                return updatePreviousState(false);
-            }
-
-            // If any group members are suspicious, the bot should also be suspicious
-            // NOTE: This check MUST be performed after checking if this bot is suspicious!
-            if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.GroupIsSuspicious;
-                return updatePreviousState(false);
-            }
-
-            // Check if enough time has elapsed since its boss last looted
-            TimeSpan timeSinceBossLastLooted = DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
-            bool bossWillAllowLooting = timeSinceBossLastLooted.TotalSeconds > ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
-
-            // Don't allow the follower to wander too far from the boss when it's looting
-            bool tooFarFromBossForLooting = BotHiveMindMonitor.GetDistanceToBoss(BotOwner) > ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
-
-            // Only allow looting if the bot is already looting or its boss will allow it
-            if
-            (
-                (bossWillAllowLooting && objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().ShouldCheckForLoot())
-                || (!tooFarFromBossForLooting && objectiveManager.BotMonitor.GetMonitor<BotLootingMonitor>().IsLooting)
-            )
-            {
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.BreakForLooting;
-                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, true);
-                return pauseLayer(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxTimeToStartLooting);
-            }
-            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, false);
-
-            // Check if the bot has been stuck too many times
-            if (objectiveManager.StuckCount >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
-            {
-                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + objectiveManager.StuckCount + " times and likely is unable to follow its boss.");
-                objectiveManager.StopQuesting();
-                BotOwner.Mover.Stop();
-                BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
-
-                objectiveManager.NotFollowingReason = Components.NotQuestingReason.IsStuck;
-                return updatePreviousState(false);
-            }
-
-            objectiveManager.NotFollowingReason = Components.NotQuestingReason.None;
             setNextAction(BotActionType.FollowBoss, "FollowBoss");
             return updatePreviousState(true);
         }

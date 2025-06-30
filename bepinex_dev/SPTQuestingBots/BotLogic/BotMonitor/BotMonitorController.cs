@@ -13,6 +13,9 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
     {
         private BotOwner botOwner;
         private Dictionary<Type, AbstractBotMonitor> monitors = new Dictionary<Type, AbstractBotMonitor>();
+        private BotQuestingDecisionMonitor questingDecisionMonitor = null;
+
+        public BotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? BotQuestingDecision.None;
 
         public BotMonitorController(BotOwner _botOwner)
         {
@@ -28,6 +31,9 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             monitors.Add(typeof(BotCombatMonitor), new BotCombatMonitor(botOwner));
             monitors.Add(typeof(BotHealthMonitor), new BotHealthMonitor(botOwner));
             monitors.Add(typeof(BotQuestingMonitor), new BotQuestingMonitor(botOwner));
+
+            questingDecisionMonitor = new BotQuestingDecisionMonitor(botOwner);
+            monitors.Add(typeof(BotQuestingDecisionMonitor), questingDecisionMonitor);
         }
 
         public T GetMonitor<T>() where T : AbstractBotMonitor
@@ -48,7 +54,19 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             monitors.Values.ExecuteForEach(monitor => monitor.Awake());
         }
 
-        protected void Update() => monitors.Values.ExecuteForEach(monitor => monitor.Update());
-        protected void OnDestroy() => monitors.Values.ExecuteForEach(monitor => monitor.OnDestroy());
+        protected void Update()
+        {
+            if (!canUpdate())
+            {
+                return;
+            }
+
+            monitors.Values.ExecuteForEach(monitor => monitor.Update());
+        }
+
+        protected void OnDestroy()
+        {
+            monitors.Values.ExecuteForEach(monitor => monitor.OnDestroy());
+        }
     }
 }
