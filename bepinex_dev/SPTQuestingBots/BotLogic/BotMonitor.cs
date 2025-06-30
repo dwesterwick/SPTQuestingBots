@@ -13,9 +13,11 @@ using SPTQuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using SPTQuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using SPTQuestingBots.BotLogic.Follow;
 using SPTQuestingBots.BotLogic.Objective;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
+using SPTQuestingBots.Models;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic
@@ -134,8 +136,13 @@ namespace SPTQuestingBots.BotLogic
                 return false;
             }
 
+            if (!BotGenerator.TryGetBotGroupFromAnyGenerator(botOwner, out BotSpawnInfo botGroup))
+            {
+                throw new InvalidOperationException("Could not retrieve BotSpawnInfo for " + botOwner.GetText());
+            }
+
             System.Random random = new System.Random();
-            float initialRaidTimeFraction = RaidHelpers.InitialRaidTimeFraction;
+            float initialRaidTimeFraction = botGroup.IsInitialSpawn ? RaidHelpers.InitialRaidTimeFraction : 1;
 
             // Select a random number of total quests the bot must complete before it's allowed to extract
             if (minTotalQuestsForExtract == int.MaxValue)

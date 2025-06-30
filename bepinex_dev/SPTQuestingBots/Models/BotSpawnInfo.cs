@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EFT;
 using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.Models
@@ -16,6 +17,7 @@ namespace SPTQuestingBots.Models
         public BotCreationDataClass Data { get; private set; }
         public BotGenerator BotGenerator { get; private set; }
         public bool HasSpawnStarted { get; private set; } = false;
+        public bool IsInitialSpawn { get; private set; } = false;
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
         private List<BotOwner> bots = new List<BotOwner>();
@@ -40,6 +42,12 @@ namespace SPTQuestingBots.Models
         public void StartSpawn()
         {
             HasSpawnStarted = true;
+
+            float secondsSinceSpawning = RaidHelpers.GetSecondsSinceSpawning();
+            if (secondsSinceSpawning < 10)
+            {
+                IsInitialSpawn = true;
+            }
         }
 
         public IReadOnlyCollection<Profile> GetGeneratedProfiles()
