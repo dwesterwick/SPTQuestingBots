@@ -326,5 +326,8 @@ namespace SPTQuestingBots.Helpers
         {
             return (role == WildSpawnType.bossZryachiy) || (role == WildSpawnType.followerZryachiy);
         }
+
+        public static string GetActiveLayerName(this BotOwner bot) => BrainManager.GetActiveLayer(bot)?.GetType()?.Name;
+        public static string GetActiveLogicName(this BotOwner bot) => BrainManager.GetActiveLogic(bot)?.GetType()?.Name;
     }
 }

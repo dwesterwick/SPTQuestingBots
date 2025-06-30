@@ -13,6 +13,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
         {
         }
 
+        public abstract bool IsTryingToExtract();
         public abstract bool TryInstructBotToExtract();
     }
 }

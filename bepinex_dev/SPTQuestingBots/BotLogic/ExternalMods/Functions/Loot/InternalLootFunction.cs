@@ -16,6 +16,16 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Loot
             
         }
 
+        public override bool IsSearchingForLoot()
+        {
+            return false;
+        }
+
+        public override bool IsLooting()
+        {
+            return false;
+        }
+
         public override bool TryPreventBotFromLooting(float duration)
         {
             return false;

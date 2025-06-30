@@ -11,7 +11,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
 {
     public class LootingBotsModInfo : AbstractExternalModInfo
     {
-        public override string GUID { get; } = "me.sol.sain";
+        public override string GUID { get; } = "me.skwizzy.lootingbots";
 
         public override bool CanUseInterop { get; protected set; } = false;
 

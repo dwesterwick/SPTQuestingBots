@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFT;
+using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.BotLogic.ExternalMods.Functions
 {
@@ -31,7 +32,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions
                 return false;
             }
 
-            string layerName = BotOwner.Brain.ActiveLayerName() ?? "null";
+            string layerName = BotOwner.GetActiveLayerName() ?? "null";
             if (layerName.Contains(layerMonitor.LayerName) || layerMonitor.IsLayerRequested())
             {
                 return true;

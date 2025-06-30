@@ -20,13 +20,15 @@ namespace SPTQuestingBots.BotLogic.ExternalMods
         public static LootingBotsModInfo LootingBotsModInfo { get; private set; } = new LootingBotsModInfo();
         public static DonutsModInfo DonutsModInfo { get; private set; } = new DonutsModInfo();
         public static PerformanceImprovementsModInfo PerformanceImprovementsModInfo { get; private set; } = new PerformanceImprovementsModInfo();
+        public static PleaseJustFightModInfo PleaseJustFightModInfo { get; private set; } = new PleaseJustFightModInfo();
 
         private static List<AbstractExternalModInfo> externalMods = new List<AbstractExternalModInfo>
         {
             SAINModInfo,
             LootingBotsModInfo,
             DonutsModInfo,
-            PerformanceImprovementsModInfo
+            PerformanceImprovementsModInfo,
+            PleaseJustFightModInfo
         };
 
         public static AbstractExtractFunction CreateExtractFunction(this BotOwner _botOwner) => SAINModInfo.CreateExtractFunction(_botOwner);
@@ -50,13 +52,18 @@ namespace SPTQuestingBots.BotLogic.ExternalMods
                     continue;
                 }
 
+                LoggingController.LogInfo($"Found external mod {modInfo.GUID} (version {modInfo.GetVersion()})");
+
                 if (!modInfo.IsCompatible())
                 {
                     Chainloader.DependencyErrors.Add(modInfo.IncompatibilityMessage);
                     continue;
                 }
 
-                modInfo.CheckInteropAvailability();
+                if (!modInfo.CheckInteropAvailability())
+                {
+                    LoggingController.LogWarning($"Interoperability for external mod {modInfo.GUID} could not be initialized");
+                }
             }
         }
     }

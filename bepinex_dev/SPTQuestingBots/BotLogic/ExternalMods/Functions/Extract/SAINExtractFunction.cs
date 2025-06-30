@@ -17,6 +17,8 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
 
         }
 
+        public override bool IsTryingToExtract() => IsMonitoredLayerActive();
+
         private bool tryExtractSingleBot(BotOwner botOwner) => SAIN.Plugin.SAINInterop.TryExtractBot(botOwner);
         private bool trySetExfilForBot(BotOwner botOwner) => SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner);
 

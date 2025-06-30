@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BepInEx.Bootstrap;
 using Comfort.Common;
-using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
 using SPTQuestingBots.BotLogic.ExternalMods;
@@ -108,12 +106,10 @@ namespace SPTQuestingBots.BotLogic
 
         public bool TrySetIgnoreHearing(float duration, bool value) => hearingFunction.TryIgnoreHearing(value, false, duration);
 
-        public bool IsTryingToExtract() => extractFunction.IsMonitoredLayerActive();
-
         public bool TryPreventBotFromLooting(float duration) => lootFunction.TryPreventBotFromLooting(duration);
-
         public bool TryForceBotToScanLoot() => lootFunction.TryForceBotToScanLoot();
 
+        public bool IsTryingToExtract() => extractFunction.IsTryingToExtract();
         public bool TryInstructBotToExtract() => extractFunction.TryInstructBotToExtract();
 
         public bool IsBotReadyToExtract()
@@ -281,29 +277,24 @@ namespace SPTQuestingBots.BotLogic
             return true;
         }
 
-        public bool IsLooting()
-        {
-            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
-            return activeLogicName.Contains("Looting");
-        }
-
-        public bool IsSearchingForLoot() => lootFunction.IsMonitoredLayerActive();
+        public bool IsLooting() => lootFunction.IsLooting();
+        public bool IsSearchingForLoot() => lootFunction.IsSearchingForLoot();
 
         public bool IsQuesting()
         {
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLayerName = botOwner.GetActiveLayerName() ?? "null";
             return activeLayerName.Equals(nameof(BotObjectiveLayer));
         }
 
         public bool IsFollowing()
         {
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLayerName = botOwner.GetActiveLayerName() ?? "null";
             return activeLayerName.Equals(nameof(BotFollowerLayer));
         }
 
         public bool IsRegrouping()
         {
-            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+            string activeLogicName = botOwner.GetActiveLogicName() ?? "null";
             return activeLogicName.Equals(nameof(BossRegroupAction));
         }
 

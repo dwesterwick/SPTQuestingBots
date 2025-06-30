@@ -13,6 +13,8 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Loot
         {
         }
 
+        public abstract bool IsSearchingForLoot();
+        public abstract bool IsLooting();
         public abstract bool TryPreventBotFromLooting(float duration);
         public abstract bool TryForceBotToScanLoot();
     }

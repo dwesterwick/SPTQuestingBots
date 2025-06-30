@@ -17,9 +17,10 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
             _botOwner.Exfiltration._timeToExfiltration = float.MaxValue;
         }
 
+        public override bool IsTryingToExtract() => BotOwner.Exfiltration.WannaLeave();
+
         public override bool TryInstructBotToExtract()
         {
-            // Game time > _timeToExfiltration ? exfil now
             tryExtractSingleBot(BotOwner);
             LoggingController.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
 
@@ -29,6 +30,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
                 {
                     continue;
                 }
+
                 tryExtractSingleBot(follower);
                 LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
             }
@@ -38,6 +40,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
 
         private bool tryExtractSingleBot(BotOwner botOwner)
         {
+            // Game time > _timeToExfiltration ? exfil now
             botOwner.Exfiltration._timeToExfiltration = 0f;
 
             return true;
