@@ -12,9 +12,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = false;
 
-        [JsonProperty("min_sain_version")]
-        public string MinSainVersion { get; set; } = "3.1.0.99";
-
         public LightkeeperIslandQuestsConfig()
         {
 

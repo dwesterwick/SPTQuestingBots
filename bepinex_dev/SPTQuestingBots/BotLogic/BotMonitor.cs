@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BepInEx.Bootstrap;
 using Comfort.Common;
-using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using EFT.HealthSystem;
+using SPTQuestingBots.BotLogic.ExternalMods;
+using SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract;
+using SPTQuestingBots.BotLogic.ExternalMods.Functions.Hearing;
+using SPTQuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using SPTQuestingBots.BotLogic.Follow;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Configuration;
@@ -23,15 +25,13 @@ namespace SPTQuestingBots.BotLogic
         public float NextLootCheckDelay { get; private set; } = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
         private BotOwner botOwner;
-        private LogicLayerMonitor lootingLayerMonitor;
-        private LogicLayerMonitor extractLayerMonitor;
         private LogicLayerMonitor stationaryWSLayerMonitor;
+        private AbstractHearingFunction hearingFunction;
+        private AbstractExtractFunction extractFunction;
+        private AbstractLootFunction lootFunction;
         private Stopwatch lootSearchTimer = new Stopwatch();
         private bool wasLooting = false;
         private bool hasFoundLoot = false;
-        private bool canUseSAINInterop = false;
-        private bool canUseLootingBotsInterop = false;
-        private int minSAINLayerPriority = -1;
         private int minTotalQuestsForExtract = int.MaxValue;
         private int minEFTQuestsForExtract = int.MaxValue;
         private float lastEnemySoundHeardTime = 0;
@@ -46,53 +46,13 @@ namespace SPTQuestingBots.BotLogic
                 botOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { Singleton<BotEventHandler>.Instance.OnSoundPlayed -= enemySoundHeard; };
             }
 
-            lootingLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
-            lootingLayerMonitor.Init(botOwner, "Looting");
-
-            extractLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
-
             // This is for using mounted guns, but questing bots aren't allowed to use them right now
             stationaryWSLayerMonitor = botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(botOwner, "StationaryWS");
 
-            if (SAIN.Plugin.SAINInterop.Init())
-            {
-                extractLayerMonitor.Init(botOwner, "SAIN ExtractLayer");
-                canUseSAINInterop = true;
-
-                string brainName = botOwner.Brain.BaseBrain.ShortName();
-
-                IEnumerable<int> sainBrainLayerPrioritiesForBotRole = BrainManager.CustomLayersReadOnly
-                    .Where(l => l.Value.customLayerType.FullName.StartsWith("SAIN."))
-                    .Where(l => l.Value.CustomLayerBrains.Contains(brainName))
-                    .Select(i => i.Value.customLayerPriority);
-
-                if (sainBrainLayerPrioritiesForBotRole.Any())
-                {
-                    minSAINLayerPriority = sainBrainLayerPrioritiesForBotRole.Min();
-                }
-                else
-                {
-                    LoggingController.LogWarning("No SAIN brain layers found for brain type " + brainName);
-                }
-            }
-            else
-            {
-                extractLayerMonitor.Init(botOwner, "Exfiltration");
-                // Let QB handle when to exfiltrate
-                botOwner.Exfiltration._timeToExfiltration = float.MaxValue;
-
-                LoggingController.LogWarning("SAIN Interop not detected. Will instruct " + botOwner.GetText() + " to extract using vanilla EFT behavior.");
-            }
-
-            if (LootingBots.LootingBotsInterop.Init())
-            {
-                canUseLootingBotsInterop = true;
-            }
-            else
-            {
-                LoggingController.LogWarning("Looting Bots Interop not detected. Cannot instruct " + botOwner.GetText() + " to loot.");
-            }
+            hearingFunction = ExternalModHandler.CreateHearingFunction(botOwner);
+            extractFunction = ExternalModHandler.CreateExtractFunction(botOwner);
+            lootFunction = ExternalModHandler.CreateLootFunction(botOwner);
         }
 
         public bool ShouldSearchForEnemy(double maxTimeSinceCombatEnded)
@@ -109,12 +69,8 @@ namespace SPTQuestingBots.BotLogic
 
         public int UpdateSearchTimeAfterCombat()
         {
-            MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
-
-            if (minSAINLayerPriority > ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN.Questing)
-            {
-                minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedSAIN;
-            }
+            string brainName = botOwner.Brain.BaseBrain.ShortName();
+            MinMaxConfig minMax = ExternalModHandler.GetSearchTimeAfterCombat(brainName);
             
             System.Random random = new System.Random();
             int min = (int)minMax.Min;
@@ -138,26 +94,6 @@ namespace SPTQuestingBots.BotLogic
             return random.Next(min, max);
         }
 
-        public bool TrySetIgnoreHearing(float duration, bool value)
-        {
-            if (!canUseSAINInterop)
-            {
-                //LoggingController.LogWarning("SAIN Interop not detected");
-                return false;
-            }
-
-            if (!SAIN.Plugin.SAINInterop.IgnoreHearing(botOwner, value, false, duration))
-            {
-                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
-
-                return false;
-            }
-
-            LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
-
-            return true;
-        }
-
         public bool WantsToUseStationaryWeapon()
         {
             if (stationaryWSLayerMonitor.CanLayerBeUsed && stationaryWSLayerMonitor.IsLayerRequested())
@@ -168,136 +104,13 @@ namespace SPTQuestingBots.BotLogic
             return false;
         }
 
-        public bool IsTryingToExtract()
-        {
-            if (!extractLayerMonitor.CanLayerBeUsed)
-            {
-                return false;
-            }
+        public bool TrySetIgnoreHearing(float duration, bool value) => hearingFunction.TryIgnoreHearing(value, false, duration);
 
-            string layerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            if (layerName.Contains(extractLayerMonitor.LayerName) || extractLayerMonitor.IsLayerRequested())
-            {
-                return true;
-            }
+        public bool TryPreventBotFromLooting(float duration) => lootFunction.TryPreventBotFromLooting(duration);
+        public bool TryForceBotToScanLoot() => lootFunction.TryForceBotToScanLoot();
 
-            return false;
-        }
-
-        public bool TryPreventBotFromLooting(float duration)
-        {
-            if (!canUseLootingBotsInterop)
-            {
-                //LoggingController.LogWarning("Looting Bots Interop not detected");
-                return false;
-            }
-
-            if (LootingBots.LootingBotsInterop.TryPreventBotFromLooting(botOwner, duration))
-            {
-                LoggingController.LogDebug("Preventing " + botOwner.GetText() + " from looting");
-
-                return true;
-            }
-            else
-            {
-                LoggingController.LogWarning("Cannot prevent " + botOwner.GetText() + " from looting. Looting Bots Interop not initialized properly or is outdated.");
-            }
-
-            return false;
-        }
-
-        private static string sainPluginId = "me.sol.sain";
-        public bool TryForceBotToScanLoot()
-        {
-            if (!canUseLootingBotsInterop)
-            {
-                //LoggingController.LogWarning("Looting Bots Interop not detected");
-                return false;
-            }
-
-            // This is required because the priority of the looting brain layers is lower than SAIN's brain layers. Without forcing bots to
-            // forget their current enemies, they will go into a combat layer, not a looting layer. However, first check SAIN's version because later releases
-            // reduce how long bots unnecessarily spend in SAIN's layers.
-            if (canUseSAINInterop)
-            {
-                Version sainVersion = Chainloader.PluginInfos[sainPluginId].Metadata.Version;
-                Version maxVersionForResettingDecisions = new Version(ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxSainVersionForResettingDecisions);
-                
-                if ((sainVersion.CompareTo(maxVersionForResettingDecisions) < 0) && !SAIN.Plugin.SAINInterop.TryResetDecisionsForBot(botOwner))
-                {
-                    LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to reset its decisions. SAIN Interop not initialized properly or is outdated.");
-                }
-            }
-
-            if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(botOwner))
-            {
-                LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to loot now");
-
-                return true;
-            }
-            else
-            {
-                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to loot. Looting Bots Interop not initialized properly or is outdated.");
-            }
-
-            return false;
-        }
-
-        public bool TryInstructBotToExtract()
-        {
-            if (!canUseSAINInterop || !ConfigController.Config.Questing.ExtractionRequirements.UseSAINForExtracting)
-            {
-                // Game time > _timeToExfiltration ? exfil now
-                botOwner.Exfiltration._timeToExfiltration = 0f;
-                LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to extract now");
-
-                foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
-                {
-                    if ((follower == null) || follower.IsDead)
-                    {
-                        continue;
-                    }
-                    follower.Exfiltration._timeToExfiltration = 0f;
-                    LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
-                }
-
-                return true;
-            }
-
-            if (!SAIN.Plugin.SAINInterop.TryExtractBot(botOwner))
-            {
-                LoggingController.LogWarning("Cannot instruct " + botOwner.GetText() + " to extract. SAIN Interop not initialized properly or is outdated.");
-
-                return false;
-            }
-
-            LoggingController.LogDebug("Instructing " + botOwner.GetText() + " to extract now");
-
-            foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
-            {
-                if ((follower == null) || follower.IsDead)
-                {
-                    continue;
-                }
-
-                if (SAIN.Plugin.SAINInterop.TryExtractBot(follower))
-                {
-                    LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
-                }
-                else
-                {
-                    LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly or is outdated.");
-                }
-            }
-
-            if (!SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner))
-            {
-                LoggingController.LogWarning("Could not find an extract for " + botOwner.GetText());
-                return false;
-            }
-
-            return true;
-        }
+        public bool IsTryingToExtract() => extractFunction.IsTryingToExtract();
+        public bool TryInstructBotToExtract() => extractFunction.TryInstructBotToExtract();
 
         public bool IsBotReadyToExtract()
         {
@@ -464,33 +277,24 @@ namespace SPTQuestingBots.BotLogic
             return true;
         }
 
-        public bool IsLooting()
-        {
-            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
-            return activeLogicName.Contains("Looting");
-        }
-
-        public bool IsSearchingForLoot()
-        {
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
-            return activeLayerName.Equals(lootingLayerMonitor.LayerName);
-        }
+        public bool IsLooting() => lootFunction.IsLooting();
+        public bool IsSearchingForLoot() => lootFunction.IsSearchingForLoot();
 
         public bool IsQuesting()
         {
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLayerName = botOwner.GetActiveLayerName() ?? "null";
             return activeLayerName.Equals(nameof(BotObjectiveLayer));
         }
 
         public bool IsFollowing()
         {
-            string activeLayerName = botOwner.Brain.ActiveLayerName() ?? "null";
+            string activeLayerName = botOwner.GetActiveLayerName() ?? "null";
             return activeLayerName.Equals(nameof(BotFollowerLayer));
         }
 
         public bool IsRegrouping()
         {
-            string activeLogicName = BrainManager.GetActiveLogic(botOwner)?.GetType()?.Name ?? "null";
+            string activeLogicName = botOwner.GetActiveLogicName() ?? "null";
             return activeLogicName.Equals(nameof(BossRegroupAction));
         }
 
@@ -502,7 +306,7 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if LootingBots is loaded
-            if (!lootingLayerMonitor.CanLayerBeUsed)
+            if (!lootFunction.CanMonitoredLayerBeUsed)
             {
                 return false;
             }
@@ -521,7 +325,7 @@ namespace SPTQuestingBots.BotLogic
             if
             (
                 (isLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
-                && (isLooting || isSearchingForLoot || lootingLayerMonitor.CanUseLayer(minTimeBetweenLooting))
+                && (isLooting || isSearchingForLoot || lootFunction.CanUseMonitoredLayer(minTimeBetweenLooting))
             )
             {
                 if (isLooting)
@@ -550,13 +354,13 @@ namespace SPTQuestingBots.BotLogic
                     wasLooting = true;
                 }
 
-                lootingLayerMonitor.RestartCanUseTimer();
+                lootFunction.ResetMonitoredLayerCanUseTimer();
                 return true;
             }
 
             if (wasLooting || hasFoundLoot)
             {
-                lootingLayerMonitor.RestartCanUseTimer();
+                lootFunction.ResetMonitoredLayerCanUseTimer();
                 //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
             }
 

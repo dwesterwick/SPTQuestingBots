@@ -147,8 +147,7 @@
 				"min_time_between_looting_events": 80,
 				"max_time_to_start_looting": 2,
 				"max_loot_scan_time": 4,
-				"max_distance_from_boss": 50,
-				"max_sain_version_for_resetting_decisions": "2.2.1.99"
+				"max_distance_from_boss": 50
 			},
 			"max_follower_distance": {
 				"max_wait_time": 5,
@@ -238,8 +237,7 @@
 				]
 			},
 			"lightkeeper_island_quests" : {
-				"enabled": true,
-				"min_sain_version": "3.1.1.99"
+				"enabled": true
 			},
 			"spawn_rush": {
 				"desirability": 100,

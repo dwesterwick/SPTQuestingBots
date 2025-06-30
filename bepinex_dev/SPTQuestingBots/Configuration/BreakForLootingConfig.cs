@@ -30,9 +30,6 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("max_distance_from_boss")]
         public float MaxDistanceFromBoss { get; set; } = 75;
 
-        [JsonProperty("max_sain_version_for_resetting_decisions")]
-        public string MaxSainVersionForResettingDecisions { get; set; } = "2.2.1.99";
-
         public BreakForLootingConfig()
         {
 

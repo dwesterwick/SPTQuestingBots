@@ -97,23 +97,8 @@ namespace SPTQuestingBots.Controllers
             return null;
         }
 
-        private static string sainPluginId = "me.sol.sain";
         public static void RemoveBlacklistedQuestObjectives(string locationId)
         {
-            // Force Lightkeeper Island quests to be disabled if SAIN is installed but below a minimum version
-            bool lightkeeperIslandQuestsAllowed = ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled;
-            if (lightkeeperIslandQuestsAllowed && Chainloader.PluginInfos.ContainsKey(sainPluginId))
-            {
-                Version sainVersion = Chainloader.PluginInfos[sainPluginId].Metadata.Version;
-                Version minSainVersion = new Version(ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.MinSainVersion);
-
-                if (sainVersion.CompareTo(minSainVersion) < 0)
-                {
-                    lightkeeperIslandQuestsAllowed = false;
-                    LoggingController.LogWarning("Lightkeeper Island quests are not permitted if SAIN version is below " + ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.MinSainVersion);
-                }
-            }
-
             foreach (Quest quest in allQuests.ToArray())
             {
                 foreach (QuestObjective objective in quest.AllObjectives)
@@ -125,7 +110,7 @@ namespace SPTQuestingBots.Controllers
                             .Where(p => p.HasValue)
                             .Any(position => Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(position.Value));
 
-                        if (!lightkeeperIslandQuestsAllowed && visitsIsland)
+                        if (visitsIsland && !ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled)
                         {
                             if (quest.TryRemoveObjective(objective))
                             {

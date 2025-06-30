@@ -122,6 +122,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviorExtensions\CustomLayerForQuesting.cs" />
+    <Compile Include="BotLogic\ExternalMods\ExternalModHandler.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\AbstractBaseExternalFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\AbstractBaseExternalFunctionWithMonitor.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Extract\AbstractExtractFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Extract\InternalExtractFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Extract\SAINExtractFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Hearing\AbstractHearingFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Hearing\InternalHearingFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Hearing\SAINHearingFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Loot\AbstractLootFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Loot\InternalLootFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\Functions\Loot\LootingBotsLootFunction.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\AbstractExternalModInfo.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\DonutsModInfo.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\LootingBotsModInfo.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\PerformanceImprovementsModInfo.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\PleaseJustFightModInfo.cs" />
+    <Compile Include="BotLogic\ExternalMods\ModInfo\SAINModInfo.cs" />
     <Compile Include="BotLogic\Follow\BotFollowerRegroupLayer.cs" />
     <Compile Include="BotLogic\Follow\FollowerRegroupAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindAbstractSensor.cs" />
@@ -135,14 +153,14 @@
     <Compile Include="BehaviorExtensions\GoToPositionAbstractAction.cs" />
     <Compile Include="BotLogic\HiveMind\BotHiveMindWantsToLootSensor.cs" />
     <Compile Include="BotLogic\Follow\BossRegroupAction.cs" />
-    <Compile Include="BotLogic\LootingBotsInterop.cs" />
+    <Compile Include="BotLogic\ExternalMods\Interop\LootingBotsInterop.cs" />
     <Compile Include="BotLogic\Objective\AmbushAction.cs" />
     <Compile Include="BotLogic\Objective\CloseNearbyDoorsAction.cs" />
     <Compile Include="BotLogic\Objective\PlantItemAction.cs" />
     <Compile Include="BotLogic\Objective\SnipeAction.cs" />
     <Compile Include="BotLogic\Objective\ToggleSwitchAction.cs" />
     <Compile Include="BotLogic\Objective\UnlockDoorAction.cs" />
-    <Compile Include="BotLogic\SAINInterop.cs" />
+    <Compile Include="BotLogic\ExternalMods\Interop\SAINInterop.cs" />
     <Compile Include="Components\LightkeeperIslandMonitor.cs" />
     <Compile Include="Components\QuestMinLevelFinder.cs" />
     <Compile Include="Components\QuestPathFinder.cs" />
@@ -190,7 +208,7 @@
     <Compile Include="Helpers\RaidHelpers.cs" />
     <Compile Include="Helpers\RecodableComponentHelpers.cs" />
     <Compile Include="Helpers\TarkovTypeHelpers.cs" />
-    <Compile Include="Helpers\VersionCheckHelper.cs" />
+    <Compile Include="Helpers\GameCompatibilityCheckHelper.cs" />
     <Compile Include="Models\BotBrainType.cs" />
     <Compile Include="BehaviorExtensions\CustomLayerDelayedUpdate.cs" />
     <Compile Include="BehaviorExtensions\CustomLogicDelayedUpdate.cs" />
