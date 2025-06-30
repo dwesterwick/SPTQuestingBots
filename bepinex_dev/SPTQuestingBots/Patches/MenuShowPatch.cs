@@ -24,28 +24,32 @@ namespace SPTQuestingBots.Patches
         [PatchPostfix]
         protected static void PatchPostfix()
         {
-            checkNvidiaReflex();
+            if (shouldShowNvidiaReflexWarning())
+            {
+                showNvidiaReflexWarning();
+            }
         }
 
-        private static void checkNvidiaReflex()
+        private static bool shouldShowNvidiaReflexWarning()
         {
             if (_displayedReflexWarning)
             {
-                return;
+                return false;
             }
 
+            // This is only an issue when using the Queting Bots spawning system
             if (!ConfigController.Config.Enabled || !ConfigController.Config.BotSpawns.Enabled)
             {
-                return;
+                return false;
             }
 
             if (!GameCompatibilityCheckHelper.IsNvidiaReflexEnabled())
             {
                 _displayedReflexWarning = false;
-                return;
+                return false;
             }
 
-            showNvidiaReflexWarning();
+            return true;
         }
 
         private static void showNvidiaReflexWarning()

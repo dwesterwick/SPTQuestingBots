@@ -317,7 +317,6 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * **questing.bot_quests.airdrop_bot_interest_time**: The time (in seconds) after an airdop lands during which bots can go to it via an "Airdrop Chaser" quest. This is **420** s by default. 
 * **questing.bot_quests.elimination_quest_search_time**: The time (in seconds) a bot will wait before selecting another quest after reaching each objective in an elimination EFT quest. This is **60** s by default. 
 * **questing.bot_quests.lightkeeper_island_quests.enabled**: If bots are able to perform quests on Lightkeeper Island. This is **true** by default.
-* **questing.bot_quests.lightkeeper_island_quests.min_sain_version**: If [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) is loaded, it must be at least this version for bots to be able to perform Lightkeeper quests. If [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) is below this version, bots may not respect alliance changes correct when they enter/exit the bridge. This is **"3.1.0.99"** by default. **Do not change this unless you know what you're doing!**
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
 * **questing.bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
 * **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest.
