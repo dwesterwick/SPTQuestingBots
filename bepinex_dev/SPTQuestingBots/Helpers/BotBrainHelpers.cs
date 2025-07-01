@@ -329,10 +329,13 @@ namespace SPTQuestingBots.Helpers
 
         public static bool IsAlive(this BotOwner bot) => (bot.BotState == EBotState.Active) && !bot.IsDead;
 
-        public static string GetActiveLayerName(this BotOwner bot) => BrainManager.GetActiveLayer(bot)?.GetType()?.Name;
-        public static string GetActiveLogicName(this BotOwner bot) => BrainManager.GetActiveLogic(bot)?.GetType()?.Name;
+        public static string GetActiveLayerName(this BotOwner bot) => bot.Brain.ActiveLayerName();
+        public static string GetActiveLogicName(this BotOwner bot) => bot.Brain.GetActiveNodeReason();
 
-        public static bool IsLayerActive(this BotOwner bot, string layerName) => bot.GetActiveLayerName()?.Equals(layerName) == true;
-        public static bool IsLogicActive(this BotOwner bot, string logicName) => bot.GetActiveLogicName()?.Equals(logicName) == true;
+        public static string GetActiveLayerTypeName(this BotOwner bot) => BrainManager.GetActiveLayer(bot)?.GetType()?.Name;
+        public static string GetActiveLogicTypeName(this BotOwner bot) => BrainManager.GetActiveLogic(bot)?.GetType()?.Name;
+
+        public static bool IsLayerActive(this BotOwner bot, string layerTypeName) => bot.GetActiveLayerTypeName()?.Equals(layerTypeName) == true;
+        public static bool IsLogicActive(this BotOwner bot, string logicTypeName) => bot.GetActiveLogicTypeName()?.Equals(logicTypeName) == true;
     }
 }

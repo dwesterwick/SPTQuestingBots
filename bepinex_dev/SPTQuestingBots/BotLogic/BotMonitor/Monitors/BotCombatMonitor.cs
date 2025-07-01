@@ -1,8 +1,10 @@
 ﻿using EFT;
 using SPTQuestingBots.BotLogic.ExternalMods;
+using SPTQuestingBots.BotLogic.ExternalMods.ModInfo;
 using SPTQuestingBots.BotLogic.HiveMind;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,47 +18,39 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
     {
         public bool IsInCombat { get; private set; } = false;
 
+        private MinMaxConfig minMaxSearchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
         private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
+        private System.Random random = new System.Random();
 
         public BotCombatMonitor(BotOwner _botOwner) : base(_botOwner) { }
+
+        public override void Start()
+        {
+            string brainName = BotOwner.Brain.BaseBrain.ShortName();
+            minMaxSearchTimeAfterCombat = ExternalModHandler.GetSearchTimeAfterCombat(brainName);
+        }
 
         public override void Update()
         {
             IsInCombat = isInCombat();
         }
 
+        public bool IsSAINLayerActive() => SAINModInfo.IsSAINLayer(BotOwner.GetActiveLayerName());
+
         private bool isInCombat()
         {
             if (shouldSearchForEnemy(searchTimeAfterCombat))
             {
-                if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.InCombat, BotOwner))
+                if (!IsInCombat)
                 {
-                    /*bool hasTarget = BotOwner.Memory.GoalTarget.HaveMainTarget();
-                    if (hasTarget)
-                    {
-                        string message = "Bot " + BotOwner.GetText() + " is in combat.";
-                        message += " Close danger: " + BotOwner.Memory.DangerData.HaveCloseDanger + ".";
-                        message += " Last Time Hit: " + BotOwner.Memory.LastTimeHit + ".";
-                        message += " Enemy Set Time: " + BotOwner.Memory.EnemySetTime + ".";
-                        message += " Last Enemy Seen Time: " + BotOwner.Memory.LastEnemyTimeSeen + ".";
-                        message += " Under Fire Time: " + BotOwner.Memory.UnderFireTime + ".";
-                        LoggingController.LogInfo(message);
-                    }*/
-
                     searchTimeAfterCombat = updateSearchTimeAfterCombat();
                     //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
 
-                BotMonitor.GetMonitor<BotHealthMonitor>().PauseHealthMonitoring();
-
-                BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, true);
-                return true;
+                return updateCombatState(true);
             }
 
-            BotMonitor.GetMonitor<BotHealthMonitor>().ResumeHealthMonitoring();
-
-            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, false);
-            return false;
+            return updateCombatState(false);
         }
 
         private bool shouldSearchForEnemy(double maxTimeSinceCombatEnded)
@@ -73,14 +67,26 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         private int updateSearchTimeAfterCombat()
         {
-            string brainName = BotOwner.Brain.BaseBrain.ShortName();
-            MinMaxConfig minMax = ExternalModHandler.GetSearchTimeAfterCombat(brainName);
-
-            System.Random random = new System.Random();
-            int min = (int)minMax.Min;
-            int max = (int)minMax.Max;
+            int min = (int)minMaxSearchTimeAfterCombat.Min;
+            int max = (int)minMaxSearchTimeAfterCombat.Max;
 
             return random.Next(min, max);
+        }
+
+        private bool updateCombatState(bool inCombat)
+        {
+            if (inCombat)
+            {
+                BotMonitor.GetMonitor<BotHealthMonitor>().PauseHealthMonitoring();
+            }
+            else
+            {
+                BotMonitor.GetMonitor<BotHealthMonitor>().ResumeHealthMonitoring();
+            }
+
+            BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.InCombat, BotOwner, inCombat);
+
+            return inCombat;
         }
     }
 }

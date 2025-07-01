@@ -24,11 +24,13 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
         FollowBoss,
         Regroup,
         Investigtate,
+        WatchForEnemies,
         StopToHeal,
         CheckForLoot,
         UseStationaryWeapon,
         Stuck,
         Quest,
+        WaitingForAssignment,
     }
 
     public class BotQuestingDecisionMonitor : AbstractBotMonitor
@@ -58,9 +60,14 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             return true;
         }
 
-        public override void Awake()
+        public override void Start()
         {
             botQuestBuilder = Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>();
+        }
+
+        public void ForceDecision(BotQuestingDecision decision)
+        {
+            CurrentDecision = decision;
         }
 
         public override void Update()
@@ -101,6 +108,11 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             if (BotMonitor.GetMonitor<BotHearingMonitor>().IsSuspicious)
             {
                 return BotQuestingDecision.Investigtate;
+            }
+
+            if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
+            {
+                return BotQuestingDecision.WatchForEnemies;
             }
 
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
@@ -179,6 +191,11 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
                 return BotQuestingDecision.Investigtate;
             }
 
+            if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
+            {
+                return BotQuestingDecision.WatchForEnemies;
+            }
+
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
             {
                 return BotQuestingDecision.StopToHeal;
@@ -217,7 +234,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             // Check if the bot needs to complete its assignment
             if (!ObjectiveManager.IsJobAssignmentActive)
             {
-                return BotQuestingDecision.None;
+                return BotQuestingDecision.WaitingForAssignment;
             }
 
             return BotQuestingDecision.Quest;

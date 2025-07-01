@@ -85,7 +85,8 @@ namespace SPTQuestingBots.Components
 
             if (BotMonitor == null)
             {
-                BotMonitor = botOwner.GetPlayer.gameObject.GetComponent<BotLogic.BotMonitor.BotMonitorController>();
+                BotMonitor = botOwner.GetPlayer.gameObject.GetOrAddComponent<BotLogic.BotMonitor.BotMonitorController>();
+                BotMonitor.Init(botOwner);
             }
 
             if (BotPath == null)
@@ -359,12 +360,18 @@ namespace SPTQuestingBots.Components
 
         public bool DoesBotWantToExtract()
         {
-            if (BotMonitor.GetMonitor<BotExtractMonitor>().IsTryingToExtract)
+            BotExtractMonitor botExtractMonitor = BotMonitor?.GetMonitor<BotExtractMonitor>();
+            if (botExtractMonitor == null)
+            {
+                return false;
+            }
+
+            if (botExtractMonitor.IsTryingToExtract)
             {
                 return true;
             }
 
-            if (BotMonitor.GetMonitor<BotExtractMonitor>().IsBotReadyToExtract && BotMonitor.GetMonitor<BotExtractMonitor>().TryInstructBotToExtract())
+            if (botExtractMonitor.IsBotReadyToExtract && botExtractMonitor.TryInstructBotToExtract())
             {
                 StopQuesting();
                 return true;

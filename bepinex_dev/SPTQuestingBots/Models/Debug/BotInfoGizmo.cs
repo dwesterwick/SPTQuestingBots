@@ -20,6 +20,8 @@ namespace SPTQuestingBots.Models.Debug
         public DebugOverlay Overlay { get; set; }
 
         private BotOwner bot;
+        private BotObjectiveManager botObjectiveManager;
+        private BotQuestingDecisionMonitor botQuestingDecisionMonitor;
 
         public BotInfoGizmo(BotOwner _bot) : base(100)
         {
@@ -47,6 +49,15 @@ namespace SPTQuestingBots.Models.Debug
                 return;
             }
 
+            if (botObjectiveManager == null)
+            {
+                botObjectiveManager = bot.GetObjectiveManager();
+            }
+            if (botQuestingDecisionMonitor == null)
+            {
+                botQuestingDecisionMonitor = botObjectiveManager?.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+            }
+
             StringBuilder sb = new StringBuilder();
             updateOverlayText(sb);
             Overlay.StaticText = sb.ToString();
@@ -63,12 +74,15 @@ namespace SPTQuestingBots.Models.Debug
                 return;
             }
 
-            string activeLayerName = bot.GetActiveLayerName();
-            sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
-            sb.AppendLabeledValue("Reason", bot.Brain.GetActiveNodeReason(), Color.white, Color.white);
+            sb.AppendLabeledValue("Layer", bot.GetActiveLayerName(), Color.magenta, Color.magenta);
+            sb.AppendLabeledValue("Reason", bot.GetActiveLogicName(), Color.white, Color.white);
 
-            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
             if (botObjectiveManager == null)
+            {
+                return;
+            }
+
+            if (BotRegistrationManager.IsBotSleeping(bot.Profile.Id))
             {
                 return;
             }
@@ -78,7 +92,7 @@ namespace SPTQuestingBots.Models.Debug
             {
                 sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
             }
-            else if ((botObjectiveManager.IsQuestingAllowed == true) && !BotRegistrationManager.IsBotSleeping(bot.Profile.Id))
+            else if (botObjectiveManager.IsQuestingAllowed)
             {
                 BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
                 if (botJobAssignment != null)
@@ -88,15 +102,33 @@ namespace SPTQuestingBots.Models.Debug
                     sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
                     sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
                 }
-
-                BotQuestingDecision currentDecision = botObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>().CurrentDecision;
-                sb.AppendLabeledValue("Current Decision", currentDecision.ToString(), Color.white, Color.white);
-
-                if ((currentDecision != BotQuestingDecision.None) && (botObjectiveManager.BotPath != null))
-                {
-                    sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
-                }
             }
+
+            if ((botQuestingDecisionMonitor == null) || !botObjectiveManager.IsQuestingAllowed)
+            {
+                return;
+            }
+
+            sb.AppendLabeledValue("Current Decision", botQuestingDecisionMonitor.CurrentDecision.ToString(), Color.white, Color.white);
+
+            if (shouldShowPathStatus(botQuestingDecisionMonitor.CurrentDecision) && (botObjectiveManager.BotPath != null))
+            {
+                sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
+            }
+        }
+
+        private bool shouldShowPathStatus(BotQuestingDecision decision)
+        {
+            switch (decision)
+            {
+                case BotQuestingDecision.Quest:
+                case BotQuestingDecision.Regroup:
+                case BotQuestingDecision.FollowBoss:
+                case BotQuestingDecision.HelpBoss:
+                    return true;
+            }
+
+            return false;
         }
 
         public override void Draw()

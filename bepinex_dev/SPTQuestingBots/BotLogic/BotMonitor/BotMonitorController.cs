@@ -1,6 +1,8 @@
 ﻿using EFT;
 using SPTQuestingBots.BehaviorExtensions;
 using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using SPTQuestingBots.Components;
+using SPTQuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +14,18 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
     public class BotMonitorController : MonoBehaviourDelayedUpdate
     {
         private BotOwner botOwner;
+        private BotObjectiveManager objectiveManager;
         private Dictionary<Type, AbstractBotMonitor> monitors = new Dictionary<Type, AbstractBotMonitor>();
         private BotQuestingDecisionMonitor questingDecisionMonitor = null;
 
         public BotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? BotQuestingDecision.None;
 
-        public BotMonitorController(BotOwner _botOwner)
+        public void Init(BotOwner _botOwner)
         {
             botOwner = _botOwner;
+            objectiveManager = botOwner.GetOrAddObjectiveManager();
+
+            addSensors();
         }
 
         private void addSensors()
@@ -36,22 +42,9 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             monitors.Add(typeof(BotQuestingDecisionMonitor), questingDecisionMonitor);
         }
 
-        public T GetMonitor<T>() where T : AbstractBotMonitor
+        protected void Start()
         {
-            Type type = typeof(T);
-            if (monitors.TryGetValue(type, out AbstractBotMonitor monitor))
-            {
-                return monitor as T;
-            }
-
-            return null;
-        }
-
-        protected void Awake()  
-        {
-            addSensors();
-
-            monitors.Values.ExecuteForEach(monitor => monitor.Awake());
+            monitors.Values.ExecuteForEach(monitor => monitor.Start());
         }
 
         protected void Update()
@@ -61,12 +54,35 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
                 return;
             }
 
+            if ((botOwner.BotState != EBotState.Active) || botOwner.IsDead)
+            {
+                return;
+            }
+
+            if (!objectiveManager.IsQuestingAllowed)
+            {
+                questingDecisionMonitor.ForceDecision(BotQuestingDecision.None);
+                return;
+            }
+
             monitors.Values.ExecuteForEach(monitor => monitor.Update());
         }
 
         protected void OnDestroy()
         {
             monitors.Values.ExecuteForEach(monitor => monitor.OnDestroy());
+        }
+
+        public T GetMonitor<T>() where T : AbstractBotMonitor
+        {
+            Type monitorType = typeof(T);
+
+            if (monitors.ContainsKey(monitorType))
+            {
+                return monitors[monitorType] as T;
+            }
+
+            return null;
         }
     }
 }

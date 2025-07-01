@@ -17,12 +17,17 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         public AbstractBotMonitor(BotOwner _botOwner)
         {
+            if (_botOwner == null)
+            {
+                throw new ArgumentNullException(nameof(_botOwner), "BotOwner cannot be null");
+            }
+
             BotOwner = _botOwner;
             ObjectiveManager = BotOwner.GetOrAddObjectiveManager();
             BotMonitor = ObjectiveManager?.BotMonitor;
         }
 
-        public virtual void Awake() { }
+        public virtual void Start() { }
 
         public virtual void Update() { }
 

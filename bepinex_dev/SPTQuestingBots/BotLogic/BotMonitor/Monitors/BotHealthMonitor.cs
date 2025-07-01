@@ -41,15 +41,42 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             IsOverweight = isOverweight();
             IsAbleBodied = isAbleBodied();
 
-            if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            if (BotOwner.BotsGroup.MembersCount > 1)
             {
+                checkIfBotShouldSeparateFromGroup();
+            }
+        }
+
+        private void checkIfBotShouldSeparateFromGroup()
+        {
+            if (NeedsToHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            {
+                LoggingController.LogWarning("Waited " + NeedsToHealTime + "s for " + BotOwner.GetText() + " to heal");
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 return;
             }
 
-            if (NeedsToHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
             {
-                LoggingController.LogWarning("Waited " + NeedsToHealTime + "s for " + BotOwner.GetText() + " to heal");
+                List<string> reasons = new List<string>();
+                if (NeedsToHeal)
+                {
+                    reasons.Add("unable to heal");
+                }
+                if (HasLowHealth)
+                {
+                    reasons.Add("low health");
+                }
+                if (NeedsToEatOrDrink)
+                {
+                    reasons.Add("hungry or thirsty");
+                }
+                if (IsOverweight)
+                {
+                    reasons.Add("overweight");
+                }
+
+                LoggingController.LogWarning("Waited " + NotAbleBodiedTime + "s for " + BotOwner.GetText() + " to be able-bodied due to: " + string.Join(", ", reasons));
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 return;
             }
@@ -69,7 +96,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         private bool isAbleBodied()
         {
-            if (!NeedsToHeal || !NeedsToEatOrDrink || !HasLowHealth || !IsOverweight)
+            if (NeedsToHeal || NeedsToEatOrDrink || HasLowHealth || IsOverweight)
             {
                 if (IsAbleBodied)
                 {

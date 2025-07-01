@@ -33,21 +33,22 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             }
         }
 
-        private BotSpawnInfo botGroup;
         private AbstractExtractFunction extractFunction;
+        float maxQuestsScalingFactor = 1;
         private int minTotalQuestsForExtract = int.MaxValue;
         private int minEFTQuestsForExtract = int.MaxValue;
         private System.Random random;
 
         public BotExtractMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
-        public override void Awake()
+        public override void Start()
         {
             random = new System.Random();
 
-            if (!BotGenerator.TryGetBotGroupFromAnyGenerator(BotOwner, out botGroup))
+            if (BotGenerator.TryGetBotGroupFromAnyGenerator(BotOwner, out BotSpawnInfo botGroup))
             {
-                throw new InvalidOperationException("Could not retrieve BotSpawnInfo for " + BotOwner.GetText());
+                maxQuestsScalingFactor = botGroup.IsInitialSpawn ? RaidHelpers.InitialRaidTimeFraction : 1;
+                LoggingController.LogInfo("Found BotSpawnInfo for " + BotOwner.GetText());
             }
 
             extractFunction = ExternalModHandler.CreateExtractFunction(BotOwner);
@@ -81,8 +82,6 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             {
                 return false;
             }
-
-            float maxQuestsScalingFactor = botGroup.IsInitialSpawn ? RaidHelpers.InitialRaidTimeFraction : 1;
 
             if (hasCompletedEnoughTotalQuests(maxQuestsScalingFactor))
             {

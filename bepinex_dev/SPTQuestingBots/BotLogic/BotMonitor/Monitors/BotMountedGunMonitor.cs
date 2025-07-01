@@ -15,7 +15,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         public BotMountedGunMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
-        public override void Awake()
+        public override void Start()
         {
             stationaryWSLayerMonitor = BotOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             stationaryWSLayerMonitor.Init(BotOwner, "StationaryWS");

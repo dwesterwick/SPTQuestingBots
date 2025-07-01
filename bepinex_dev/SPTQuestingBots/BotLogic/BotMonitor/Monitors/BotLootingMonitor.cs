@@ -30,7 +30,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
 
         public BotLootingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
-        public override void Awake()
+        public override void Start()
         {
             lootFunction = ExternalModHandler.CreateLootFunction(BotOwner);
         }

@@ -186,7 +186,7 @@ namespace SPTQuestingBots.BotLogic.HiveMind
                 return null;
             }
 
-            return botBosses[bot].GetActiveLayerName();
+            return botBosses[bot].GetActiveLayerTypeName();
         }
 
         public static float GetDistanceToBoss(BotOwner bot)
@@ -323,6 +323,8 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             BotsGroup newGroup = BotGroupHelpers.CreateGroup(bot, closestBotZone, 1);
             bot.BotsGroup = newGroup;
             newGroup.Lock();
+
+            currentGroup._members.Remove(bot);
 
             // Make the bot's old group members friendly
             List<BotOwner> oldGroupMembers = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(currentGroup);
