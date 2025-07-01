@@ -17,6 +17,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
     {
         None,
         Inactive,
+        Sleep,
         WaitForQuestData,
         Fight,
         HelpBoss,

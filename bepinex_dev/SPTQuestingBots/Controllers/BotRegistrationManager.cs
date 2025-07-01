@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using SPTQuestingBots.BotLogic.BotMonitor;
+using SPTQuestingBots.Configuration;
+using SPTQuestingBots.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using SPTQuestingBots.Configuration;
-using SPTQuestingBots.Helpers;
 
 namespace SPTQuestingBots.Controllers
 {
@@ -157,6 +158,12 @@ namespace SPTQuestingBots.Controllers
         {
             if (!sleepingBotIds.Contains(botOwner.ProfileId))
             {
+                botOwner
+                    .GetOrAddObjectiveManager()
+                    .BotMonitor
+                    .GetMonitor<BotQuestingDecisionMonitor>()
+                    .ForceDecision(BotQuestingDecision.Sleep);
+
                 sleepingBotIds.Add(botOwner.ProfileId);
             }
         }
@@ -165,6 +172,12 @@ namespace SPTQuestingBots.Controllers
         {
             if (sleepingBotIds.Contains(botOwner.ProfileId))
             {
+                botOwner
+                    .GetOrAddObjectiveManager()
+                    .BotMonitor
+                    .GetMonitor<BotQuestingDecisionMonitor>()
+                    .ForceDecision(BotQuestingDecision.None);
+
                 sleepingBotIds.Remove(botOwner.ProfileId);
             }
         }

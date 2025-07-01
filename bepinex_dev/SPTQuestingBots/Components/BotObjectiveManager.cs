@@ -173,7 +173,12 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
-            if (IsCloseToObjective())
+            bool isSleeping = BotRegistrationManager.IsBotSleeping(botOwner.Profile.Id);
+            if (isSleeping)
+            {
+                timeSpentAtObjectiveTimer.Stop();
+            }
+            else if (IsCloseToObjective())
             {
                 timeSpentAtObjectiveTimer.Start();
             }
@@ -183,7 +188,7 @@ namespace SPTQuestingBots.Components
             }
 
             // Don't allow expensive parts of this behavior (selecting an objective) to run too often
-            if (!canUpdate())
+            if (isSleeping || !canUpdate())
             {
                 return;
             }
