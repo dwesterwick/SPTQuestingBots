@@ -24,7 +24,6 @@ namespace SAIN.Plugin
 
         private static MethodInfo _ExtractBotMethod;
         private static MethodInfo _SetExfilForBotMethod;
-        private static MethodInfo _ResetDecisionsForBotMethod;
         private static MethodInfo _IsPathTowardEnemyMethod;
         private static MethodInfo _TimeSinceSenseEnemyMethod;
         private static MethodInfo _CanBotQuestMethod;
@@ -67,7 +66,6 @@ namespace SAIN.Plugin
                 {
                     _ExtractBotMethod = AccessTools.Method(_SAINExternalType, "ExtractBot");
                     _SetExfilForBotMethod = AccessTools.Method(_SAINExternalType, "TrySetExfilForBot");
-                    _ResetDecisionsForBotMethod = AccessTools.Method(_SAINExternalType, "ResetDecisionsForBot");
                     _IsPathTowardEnemyMethod = AccessTools.Method(_SAINExternalType, "IsPathTowardEnemy");
                     _TimeSinceSenseEnemyMethod = AccessTools.Method(_SAINExternalType, "TimeSinceSenseEnemy");
                     _CanBotQuestMethod = AccessTools.Method(_SAINExternalType, "CanBotQuest");
@@ -165,17 +163,6 @@ namespace SAIN.Plugin
             if (_SetExfilForBotMethod == null) return false;
 
             return (bool)_SetExfilForBotMethod.Invoke(null, new object[] { botOwner });
-        }
-
-        /**
-         * Force a bot to reset its decisions if SAIN is loaded. Return true if successful.
-         */
-        public static bool TryResetDecisionsForBot(BotOwner botOwner)
-        {
-            if (!Init()) return false;
-            if (_ResetDecisionsForBotMethod == null) return false;
-
-            return (bool)_ResetDecisionsForBotMethod.Invoke(null, new object[] { botOwner });
         }
 
         /// <summary>

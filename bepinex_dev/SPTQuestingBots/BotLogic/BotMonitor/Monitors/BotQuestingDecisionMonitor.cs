@@ -17,20 +17,20 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
     {
         None,
         Inactive,
-        WaitingForQuestData,
+        WaitForQuestData,
         Fight,
         HelpBoss,
         HelpGroup,
         FollowBoss,
         Regroup,
         Investigtate,
-        WatchForEnemies,
+        Hunt,
         StopToHeal,
         CheckForLoot,
         UseStationaryWeapon,
         Stuck,
         Quest,
-        WaitingForAssignment,
+        WaitForAssignment,
     }
 
     public class BotQuestingDecisionMonitor : AbstractBotMonitor
@@ -51,7 +51,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             (
                 CurrentDecision == BotQuestingDecision.None
                 || CurrentDecision == BotQuestingDecision.Inactive
-                || CurrentDecision == BotQuestingDecision.WaitingForQuestData
+                || CurrentDecision == BotQuestingDecision.WaitForQuestData
             )
             {
                 return false;
@@ -112,7 +112,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
             {
-                return BotQuestingDecision.WatchForEnemies;
+                return BotQuestingDecision.Hunt;
             }
 
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
@@ -165,7 +165,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (!botQuestBuilder.HaveQuestsBeenBuilt)
             {
-                return BotQuestingDecision.WaitingForQuestData;
+                return BotQuestingDecision.WaitForQuestData;
             }
 
             if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotMountedGunMonitor>().WantsToUseStationaryWeapon)
@@ -193,7 +193,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
             {
-                return BotQuestingDecision.WatchForEnemies;
+                return BotQuestingDecision.Hunt;
             }
 
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
@@ -234,7 +234,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
             // Check if the bot needs to complete its assignment
             if (!ObjectiveManager.IsJobAssignmentActive)
             {
-                return BotQuestingDecision.WaitingForAssignment;
+                return BotQuestingDecision.WaitForAssignment;
             }
 
             return BotQuestingDecision.Quest;
