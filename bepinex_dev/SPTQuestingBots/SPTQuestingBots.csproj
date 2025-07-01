@@ -122,6 +122,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviorExtensions\CustomLayerForQuesting.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotQuestingDecisionMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\BotMonitorController.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\AbstractBotMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotCombatMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotExtractMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotHealthMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotHearingMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotLootingMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotMountedGunMonitor.cs" />
+    <Compile Include="BotLogic\BotMonitor\Monitors\BotQuestingMonitor.cs" />
     <Compile Include="BotLogic\ExternalMods\ExternalModHandler.cs" />
     <Compile Include="BotLogic\ExternalMods\Functions\AbstractBaseExternalFunction.cs" />
     <Compile Include="BotLogic\ExternalMods\Functions\AbstractBaseExternalFunctionWithMonitor.cs" />
@@ -193,7 +203,6 @@
     <Compile Include="Configuration\ZoneAndItemPositionInfoConfig.cs" />
     <Compile Include="Controllers\BotObjectiveManagerFactory.cs" />
     <Compile Include="Helpers\BotBrainHelpers.cs" />
-    <Compile Include="BotLogic\BotMonitor.cs" />
     <Compile Include="Controllers\BotJobAssignmentFactory.cs" />
     <Compile Include="Controllers\BotRegistrationManager.cs" />
     <Compile Include="Components\Spawning\BotGenerator.cs" />

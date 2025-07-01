@@ -77,6 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotDecisionLoggingComponent.cs" />
+    <Compile Include="BotsControllerSetSettingsPatch.cs" />
     <Compile Include="GameStartPatch.cs" />
     <Compile Include="LoggingController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

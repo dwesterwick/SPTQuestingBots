@@ -1,4 +1,5 @@
 ﻿using BepInEx.Bootstrap;
+using EFT;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace SPTQuestingBots
         private static MethodInfo _GetRemainingBotGeneratorsMethod;
         private static MethodInfo _GetCurrentBotGeneratorProgressMethod;
         private static MethodInfo _GetCurrentBotGeneratorTypeMethod;
+        private static MethodInfo _GetCurrentDecisionMethod;
 
         /**
          * Return true if Questing Bots is loaded in the client
@@ -74,6 +76,7 @@ namespace SPTQuestingBots
                     _GetRemainingBotGeneratorsMethod = AccessTools.Method(_QuestingBotsExternalType, "GetRemainingBotGenerators");
                     _GetCurrentBotGeneratorProgressMethod = AccessTools.Method(_QuestingBotsExternalType, "GetCurrentBotGeneratorProgress");
                     _GetCurrentBotGeneratorTypeMethod = AccessTools.Method(_QuestingBotsExternalType, "GetCurrentBotGeneratorType");
+                    _GetCurrentDecisionMethod = AccessTools.Method(_QuestingBotsExternalType, "GetCurrentDecision");
                 }
             }
 
@@ -96,6 +99,19 @@ namespace SPTQuestingBots
             string currentGeneratorType = (string)_GetCurrentBotGeneratorTypeMethod.Invoke(null, new object[] { });
 
             return new QuestingBotsBotGeneratorStatus(remainingGenerators, currentGeneratorProgress, currentGeneratorType);
+        }
+
+        /**
+         * Return the status of the currently (or most recently) running Questing Bots bot generator
+         */
+        public static string GetCurrentDecision(BotOwner bot)
+        {
+            if (!Init()) return "";
+            if (_GetCurrentDecisionMethod == null) return "";
+
+            string decision = (string)_GetCurrentDecisionMethod.Invoke(null, new object[] { bot });
+
+            return decision;
         }
     }
 }

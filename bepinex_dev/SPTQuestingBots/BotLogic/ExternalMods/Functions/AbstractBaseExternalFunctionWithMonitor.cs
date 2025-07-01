@@ -32,7 +32,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions
                 return false;
             }
 
-            string layerName = BotOwner.GetActiveLayerName() ?? "null";
+            string layerName = BotOwner.GetActiveLayerTypeName() ?? "null";
             if (layerName.Contains(layerMonitor.LayerName) || layerMonitor.IsLayerRequested())
             {
                 return true;

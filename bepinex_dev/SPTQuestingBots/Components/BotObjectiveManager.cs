@@ -1,42 +1,21 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Interactive;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using SPTQuestingBots.BotLogic.HiveMind;
+using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Models.Pathing;
+using SPTQuestingBots.Models.Questing;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using EFT.Interactive;
-using SPTQuestingBots.BotLogic.HiveMind;
-using SPTQuestingBots.Controllers;
-using SPTQuestingBots.Models.Questing;
-using SPTQuestingBots.Models.Pathing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Components
 {
-    public enum NotQuestingReason
-    {
-        None,
-        Unknown,
-        QuestsNotReady,
-        Pause,
-        IsDead,
-        IsStuck,
-        CannotQuest,
-        WaitForNextQuest,
-        Regroup,
-        Proximity,
-        MustHeal,
-        NotAbleBodied,
-        InCombat,
-        GroupInCombat,
-        Suspicious,
-        GroupIsSuspicious,
-        StationaryWeapon,
-        BreakForLooting
-    }
-
     public class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         public bool IsInitialized { get; private set; } = false;
@@ -44,13 +23,10 @@ namespace SPTQuestingBots.Components
         public int StuckCount { get; set; } = 0;
         public float PauseRequest { get; set; } = 0;
         public Models.BotSprintingController BotSprintingController { get; private set; } = null;
-        public BotLogic.BotMonitor BotMonitor { get; private set; } = null;
+        public BotLogic.BotMonitor.BotMonitorController BotMonitor { get; private set; } = null;
         public BotPathData BotPath { get; private set; } = null;
         public EFT.Interactive.Door DoorToOpen { get; set; } = null;
         public Vector3? LastCorner { get; set; } = null;
-        public NotQuestingReason NotQuestingReason { get; set; } = NotQuestingReason.None;
-        public NotQuestingReason NotFollowingReason { get; set; } = NotQuestingReason.None;
-        public NotQuestingReason NotRegroupingReason { get; set; } = NotQuestingReason.None;
 
         private BotOwner botOwner = null;
         private BotJobAssignment assignment = null;
@@ -109,7 +85,8 @@ namespace SPTQuestingBots.Components
 
             if (BotMonitor == null)
             {
-                BotMonitor = new BotLogic.BotMonitor(botOwner);
+                BotMonitor = botOwner.GetPlayer.gameObject.GetOrAddComponent<BotLogic.BotMonitor.BotMonitorController>();
+                BotMonitor.Init(botOwner);
             }
 
             if (BotPath == null)
@@ -383,12 +360,18 @@ namespace SPTQuestingBots.Components
 
         public bool DoesBotWantToExtract()
         {
-            if (BotMonitor.IsTryingToExtract())
+            BotExtractMonitor botExtractMonitor = BotMonitor?.GetMonitor<BotExtractMonitor>();
+            if (botExtractMonitor == null)
+            {
+                return false;
+            }
+
+            if (botExtractMonitor.IsTryingToExtract)
             {
                 return true;
             }
 
-            if (BotMonitor.IsBotReadyToExtract() && BotMonitor.TryInstructBotToExtract())
+            if (botExtractMonitor.IsBotReadyToExtract && botExtractMonitor.TryInstructBotToExtract())
             {
                 StopQuesting();
                 return true;
@@ -402,10 +385,10 @@ namespace SPTQuestingBots.Components
             switch (behavior)
             {
                 case LootAfterCompleting.Force:
-                    BotMonitor.TryForceBotToScanLoot();
+                    BotMonitor.GetMonitor<BotLootingMonitor>().TryForceBotToScanLoot();
                     break;
                 case LootAfterCompleting.Inhibit:
-                    BotMonitor.TryPreventBotFromLooting(duration);
+                    BotMonitor.GetMonitor<BotLootingMonitor>().TryPreventBotFromLooting(duration);
                     break;
             }
         }

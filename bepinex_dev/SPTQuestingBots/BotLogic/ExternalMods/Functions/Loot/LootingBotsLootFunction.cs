@@ -24,7 +24,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Loot
 
         public override bool IsLooting()
         {
-            string activeLogicName = BotOwner.GetActiveLogicName() ?? "null";
+            string activeLogicName = BotOwner.GetActiveLogicTypeName() ?? "null";
             return activeLogicName.Contains(_lootingLogicName);
         }
 

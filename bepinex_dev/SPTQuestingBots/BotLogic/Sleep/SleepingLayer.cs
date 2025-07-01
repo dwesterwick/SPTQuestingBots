@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using SPTQuestingBots.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using SPTQuestingBots.Controllers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BotLogic.Sleep
@@ -83,7 +84,7 @@ namespace SPTQuestingBots.BotLogic.Sleep
             }
 
             // Allow bots to extract so new ones can spawn
-            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value && (objectiveManager?.BotMonitor?.IsTryingToExtract() == true))
+            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value && (objectiveManager?.BotMonitor?.GetMonitor<BotExtractMonitor>()?.IsTryingToExtract == true))
             {
                 return updatePreviousState(false);
             }

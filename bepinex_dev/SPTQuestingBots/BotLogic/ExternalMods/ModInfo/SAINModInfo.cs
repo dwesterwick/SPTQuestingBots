@@ -19,6 +19,8 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
         private Dictionary<string, int> minimumBrainLayerPrioritiesForBrains = new Dictionary<string, int>();
         private Dictionary<string, MinMaxConfig> searchTimeAfterCombatForBrains = new Dictionary<string, MinMaxConfig>();
 
+        public static bool IsSAINLayer(string layerName) => layerName.StartsWith("SAIN");
+
         public override bool CheckInteropAvailability()
         {
             if (SAIN.Plugin.SAINInterop.Init())
@@ -67,18 +69,20 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.ModInfo
             }
 
             searchTimeAfterCombatForBrains.Add(brainName, minMax);
-            return searchTimeAfterCombatForBrains[brainName];
+            return minMax;
         }
 
         public int GetMinimumLayerPriority(string brainName)
         {
-            if (minimumBrainLayerPrioritiesForBrains.TryGetValue(brainName, out int priority))
+            if (minimumBrainLayerPrioritiesForBrains.TryGetValue(brainName, out int minimumPriority))
             {
-                return priority;
+                return minimumPriority;
             }
 
-            minimumBrainLayerPrioritiesForBrains.Add(brainName, findMinimumLayerPriority(brainName));
-            return minimumBrainLayerPrioritiesForBrains[brainName];
+            minimumPriority = findMinimumLayerPriority(brainName);
+            minimumBrainLayerPrioritiesForBrains.Add(brainName, minimumPriority);
+
+            return minimumPriority;
         }
 
         private int findMinimumLayerPriority(string brainName)

@@ -26,7 +26,7 @@ namespace SPTQuestingBots
             return BotGenerator.CurrentBotGeneratorType;
         }
 
-        public static string GetCurrentDecision(BotOwner bot)
+        public static string GetCurrentDecision(this BotOwner bot)
         {
             BotQuestingDecision defaultDecision = BotQuestingDecision.None;
 

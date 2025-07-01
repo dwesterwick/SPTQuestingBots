@@ -1,16 +1,17 @@
-﻿using System;
+﻿using BepInEx.Bootstrap;
+using Comfort.Common;
+using EFT;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using SPTQuestingBots.BotLogic.Objective;
+using SPTQuestingBots.Components;
+using SPTQuestingBots.Models.Questing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BepInEx.Bootstrap;
-using Comfort.Common;
-using EFT;
-using SPTQuestingBots.BotLogic.Objective;
-using SPTQuestingBots.Components;
-using SPTQuestingBots.Models.Questing;
 using UnityEngine;
 
 namespace SPTQuestingBots.Controllers
@@ -592,7 +593,7 @@ namespace SPTQuestingBots.Controllers
                     botObjectiveManager?.StopQuesting();
 
                     // Try making the bot extract because it has nothing to do
-                    if (botObjectiveManager?.BotMonitor?.TryInstructBotToExtract() == true)
+                    if (botObjectiveManager?.BotMonitor?.GetMonitor<BotExtractMonitor>()?.TryInstructBotToExtract() == true)
                     {
                         LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
                         return null;

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EFT;
+using SPTQuestingBots.BotLogic.BotMonitor.Monitors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 
 namespace SPTQuestingBots.BotLogic.Objective
 {
@@ -42,7 +43,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // If the bot was instructed to ignore its hearing, reverse the instruction so it can be effective in combat again
             if (allowedToIgnoreHearing && isIgnoringHearing)
             {
-                ObjectiveManager.BotMonitor.TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, false);
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, false);
                 isIgnoringHearing = false;
             }
         }
@@ -98,7 +99,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Needed in case somebody drops the layer priorities of this mod. Without doing this, SAIN will prevent bots from staying in their ambush spots.
             if (allowedToIgnoreHearing && !isIgnoringHearing)
             {
-                ObjectiveManager.BotMonitor.TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, true);
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, true);
                 isIgnoringHearing = true;
             }
 

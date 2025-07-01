@@ -96,7 +96,16 @@ namespace SPTQuestingBots.BotLogic
             }
 
             // Check if the layer should be used by the bot
-            bool isRequested = layer?.ShallUseNow() == true;
+            bool isRequested = false;
+            try
+            {
+                isRequested = layer?.ShallUseNow() == true;
+            }
+            catch (Exception ex)
+            {
+                LoggingController.LogError("Exception while checking if layer " + LayerName + " should be used for bot " + botOwner.GetText() + ": " + ex.Message);
+                LoggingController.LogError(ex.StackTrace);
+            }
 
             if (isRequested)
             {
