@@ -21,7 +21,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
         WaitForQuestData,
         Fight,
         HelpBoss,
-        HelpGroup,
+        WaitForGroup,
         FollowBoss,
         Regroup,
         Investigtate,
@@ -29,7 +29,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
         StopToHeal,
         CheckForLoot,
         UseStationaryWeapon,
-        Stuck,
+        GetLost,
         Quest,
         WaitForAssignment,
     }
@@ -123,7 +123,7 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
             {
-                return BotQuestingDecision.Stuck;
+                return BotQuestingDecision.GetLost;
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().DoesBossNeedHelp && isFollowerTooFarFromBossForCombat())
@@ -138,12 +138,12 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
-                return BotQuestingDecision.HelpGroup;
+                return BotQuestingDecision.WaitForGroup;
             }
 
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
-                return BotQuestingDecision.HelpGroup;
+                return BotQuestingDecision.WaitForGroup;
             }
 
             if (BotMonitor.GetMonitor<BotLootingMonitor>().BossWillAllowLooting)
@@ -204,17 +204,17 @@ namespace SPTQuestingBots.BotLogic.BotMonitor
 
             if (allowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
-                return BotQuestingDecision.HelpGroup;
+                return BotQuestingDecision.WaitForGroup;
             }
 
             if (allowedToInvestigate() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
-                return BotQuestingDecision.HelpGroup;
+                return BotQuestingDecision.WaitForGroup;
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
             {
-                return BotQuestingDecision.Stuck;
+                return BotQuestingDecision.GetLost;
             }
 
             // Check if the bot wants to loot

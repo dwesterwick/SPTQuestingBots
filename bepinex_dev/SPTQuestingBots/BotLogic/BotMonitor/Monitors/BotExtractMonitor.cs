@@ -48,7 +48,6 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             if (BotGenerator.TryGetBotGroupFromAnyGenerator(BotOwner, out BotSpawnInfo botGroup))
             {
                 maxQuestsScalingFactor = botGroup.IsInitialSpawn ? RaidHelpers.InitialRaidTimeFraction : 1;
-                LoggingController.LogInfo("Found BotSpawnInfo for " + BotOwner.GetText());
             }
 
             extractFunction = ExternalModHandler.CreateExtractFunction(BotOwner);

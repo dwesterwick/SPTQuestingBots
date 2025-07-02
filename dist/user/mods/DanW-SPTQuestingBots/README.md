@@ -380,6 +380,9 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * Bots shudder while unlocking doors
 * Bots sometimes rapidly accelerate and decelerate while moving (especially when following bosses)
 
+**General:**
+* A flicker occurs whenever EFT spawns bots, even when the Questing Bots spawning system is disabled
+
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots tend to get trapped in certain areas. Known areas:
