@@ -6,10 +6,10 @@ You're no longer the only PMC running around placing markers and collecting ques
 
 **REQUIRES:**
 * [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/) (1.3.2 or later)
-* [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.7.0 or later)
+* [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.7.1 or later)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (3.3.0 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (4.0.3 or later recommended)
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.5.2 or later recommended)
 
 **Partially compatible with:**

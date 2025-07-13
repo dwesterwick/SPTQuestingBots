@@ -2008,7 +2008,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 500,
-                "doorIDToUnlock": "custom_Garage_00011",
+                "doorIDToUnlock": "trunk_custom_Garage_00014",
                 "fixedPositionToUnlockDoor" : {
                     "x": -261.573944,
                     "y": 0.84999454,
@@ -3546,7 +3546,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 200,
-                "doorIDToUnlock": "custom_factoryStorageZone_00007",
+                "doorIDToUnlock": "trunk_custom_factoryStorageZone_00002",
                 "fixedPositionToUnlockDoor" : {
                     "x": 343.4478,
                     "y": 1.09565461,
@@ -3576,7 +3576,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 400,
-                "doorIDToUnlock": "custom_Garage_00003",
+                "doorIDToUnlock": "trunk_custom_Garage_00003",
                 "fixedPositionToUnlockDoor" : {
                     "x": -259.3982,
                     "y": 0.7883575,

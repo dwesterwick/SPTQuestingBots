@@ -19,6 +19,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 {
     public abstract class GoToPositionAbstractAction : CustomLogicDelayedUpdate
     {
+        private const int BRAIN_LAYER_ERROR_MESSAGE_INTERVAL = 30;
+
         protected bool CanSprint { get; set; } = true;
 
         private static FieldInfo botZoneField = null;
@@ -26,11 +28,14 @@ namespace SPTQuestingBots.BehaviorExtensions
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceLastVaultTimer = Stopwatch.StartNew();
+        private Stopwatch timeSinceLastBrainLayerMessageTimer = Stopwatch.StartNew();
         private Vector3? lastBotPosition = null;
+        private bool loggedBrainLayerError = false;
 
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastVault => timeSinceLastVaultTimer.ElapsedMilliseconds / 1000.0;
+        protected double TimeSinceLastBrainLayerMessage => timeSinceLastBrainLayerMessageTimer.ElapsedMilliseconds / 1000.0;
 
         public GoToPositionAbstractAction(BotOwner _BotOwner, int delayInterval) : base(_BotOwner, delayInterval)
         {
@@ -80,11 +85,8 @@ namespace SPTQuestingBots.BehaviorExtensions
                 return ObjectiveManager.BotPath.Status;
             }
 
-            // Only update path data if a Questing Bots brain layer is active
-            string activeLayerName = BotOwner.Brain.ActiveLayerName();
-            if (!LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeLayerName))
+            if (!isAQuestingBotsBrainLayerActive())
             {
-                LoggingController.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer");
                 return ObjectiveManager.BotPath.Status;
             }
 
@@ -103,6 +105,26 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             return ObjectiveManager.BotPath.Status;
+        }
+
+        private bool isAQuestingBotsBrainLayerActive()
+        {
+            string activeLayerName = BotOwner.Brain.ActiveLayerName();
+            if (LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeLayerName))
+            {
+                loggedBrainLayerError = false;
+                return true;
+            }
+
+            if (!loggedBrainLayerError || (TimeSinceLastBrainLayerMessage >= BRAIN_LAYER_ERROR_MESSAGE_INTERVAL))
+            {
+                LoggingController.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer. This is normally caused by an exception in the update logic of another layer. Active layer name: " + activeLayerName);
+
+                loggedBrainLayerError = true;
+                timeSinceLastBrainLayerMessageTimer.Restart();
+            }
+
+            return false;
         }
 
         protected void tryJump(bool useEFTMethod = true, bool force = false)

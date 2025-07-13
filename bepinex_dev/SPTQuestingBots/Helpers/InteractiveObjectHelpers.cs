@@ -66,7 +66,7 @@ namespace SPTQuestingBots.Helpers
             }
         }
 
-        public static void UnlockDoor(this BotOwner botOwner, WorldInteractiveObject door, InteractionResult interactionResult)
+        public static void InteractWithDoor(this BotOwner botOwner, WorldInteractiveObject door, InteractionResult interactionResult)
         {
             try
             {
@@ -80,7 +80,20 @@ namespace SPTQuestingBots.Helpers
                 botOwner.DoorOpener.Interacting = true;
                 botOwner.DoorOpener._traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 
-                LoggingController.LogInfo(botOwner.GetText() + " is unlocking door " + door.Id + "...");
+                string interactionTypeText = "opening";
+                switch (interactionResult.InteractionType)
+                {
+                    case EInteractionType.Unlock:
+                        interactionTypeText = "unlocking";
+                        break;
+                    case EInteractionType.Close:
+                        interactionTypeText = "closing";
+                        break;
+                    case EInteractionType.Breach:
+                        interactionTypeText = "breaching";
+                        break;
+                }
+                LoggingController.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " door " + door.Id + "...");
 
                 // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without 
                 // also running ExecuteDoorInteraction

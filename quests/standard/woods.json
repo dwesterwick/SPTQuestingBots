@@ -483,7 +483,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 5,
                 "maxDistanceFromBot": 750,
-                "doorIDToUnlock": "woods_combined_00024",
+                "doorIDToUnlock": "trunk_woods_light_00021",
                 "fixedPositionToUnlockDoor" : {
                     "x": 231.960449,
                     "y": -2.25580788,

@@ -257,7 +257,7 @@ namespace SPTQuestingBots.BotLogic.Objective
             InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(interactionType, BotOwner, keyComponent);
 
             // Instruct the bot to unlock the door
-            BotOwner.UnlockDoor(worldInteractiveObject, interactionResult);
+            BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
 
             LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + worldInteractiveObject.Id);
 

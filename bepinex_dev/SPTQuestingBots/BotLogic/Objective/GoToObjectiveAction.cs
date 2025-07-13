@@ -68,15 +68,15 @@ namespace SPTQuestingBots.BotLogic.Objective
             // Check if the bot just completed its objective
             if (ObjectiveManager.IsCloseToObjective())
             {
-                if (ObjectiveManager.CurrentQuestAction == Models.Questing.QuestAction.MoveToPosition)
-                {
-                    ObjectiveManager.CompleteObjective();
-                }
-
                 // If a door must be opened for the objective, force the bot to open it
                 if (ObjectiveManager.DoorIDToUnlockForObjective != "")
                 {
                     ensureRequiredDoorIsOpen();
+                }
+
+                if (ObjectiveManager.CurrentQuestAction == Models.Questing.QuestAction.MoveToPosition)
+                {
+                    ObjectiveManager.CompleteObjective();
                 }
 
                 //LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
@@ -262,18 +262,17 @@ namespace SPTQuestingBots.BotLogic.Objective
             WorldInteractiveObject worldInteractiveObject = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindWorldInteractiveObjectsByID(ObjectiveManager.DoorIDToUnlockForObjective);
             if (worldInteractiveObject == null)
             {
+                LoggingController.LogError("Bot " + BotOwner.GetText() + " cannot find door " + ObjectiveManager.DoorIDToUnlockForObjective);
                 return;
             }
 
-            if (worldInteractiveObject.DoorState != EDoorState.Shut)
+            if (worldInteractiveObject.DoorState == EDoorState.Open)
             {
                 return;
             }
 
             InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(EInteractionType.Open, BotOwner);
-            worldInteractiveObject.Interact(interactionResult);
-
-            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " opened door " + worldInteractiveObject.Id);
+            BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
         }
     }
 }

@@ -1454,7 +1454,7 @@
                 "repeatable": false,
                 "minDistanceFromBot": 30,
                 "maxDistanceFromBot": 1500,
-                "doorIDToUnlock": "Lighthouse_Marina_00016",
+                "doorIDToUnlock": "_00000",
                 "fixedPositionToUnlockDoor" : {
                     "x": 91.24742,
                     "y": 7.30130768,
