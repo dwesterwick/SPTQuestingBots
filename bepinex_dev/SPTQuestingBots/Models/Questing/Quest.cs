@@ -63,6 +63,12 @@ namespace SPTQuestingBots.Models.Questing
         [JsonProperty("forbiddenWeapons")]
         private WeaponClass[] ForbiddenWeapons { get; set; } = new WeaponClass[0];
 
+        [JsonProperty("botRoleFilter")]
+        public string BotRoleFilter { get; set; } = null;
+
+        [JsonIgnore]
+        private string[] botRoleFilterValues { get; set; } = new string[0];
+
         [JsonIgnore]
         public RawQuestClass Template { get; private set; } = null;
 
@@ -170,7 +176,7 @@ namespace SPTQuestingBots.Models.Questing
                 return false;
             }
 
-            bool canAssign = (!PMCsOnly || Controllers.BotRegistrationManager.IsBotAPMC(bot))
+            bool canAssign = canAssignForBotType(bot)
                 && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime >= MinRaidET)
@@ -256,6 +262,34 @@ namespace SPTQuestingBots.Models.Questing
             }
 
             return requiredSwitch.DoorState != EDoorState.Open;
+        }
+
+        private bool canAssignForBotType(BotOwner bot)
+        {
+            if (PMCsOnly && !Controllers.BotRegistrationManager.IsBotAPMC(bot))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(BotRoleFilter))
+            {
+                return true;
+            }
+
+            if (botRoleFilterValues.Length == 0)
+            {
+                botRoleFilterValues = BotRoleFilter.Split(',')
+                    .Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToArray();
+            }
+
+            if (botRoleFilterValues.Contains(bot.Profile.Info.Settings.Role.ToString()))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

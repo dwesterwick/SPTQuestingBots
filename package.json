@@ -1,6 +1,6 @@
 {
     "name": "SPTQuestingBots",
-    "version": "0.10.2",
+    "version": "0.10.3",
     "main": "src/mod.js",
     "license": "MIT",
     "author": "DanW",

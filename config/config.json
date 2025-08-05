@@ -6,7 +6,8 @@
 		"always_spawn_pscavs": false,
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
-		"show_door_interaction_test_points": false
+		"show_door_interaction_test_points": false,
+		"allow_zero_distance_sleeping": true
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"chance_of_being_hostile_toward_bosses": {
@@ -241,6 +242,7 @@
 			},
 			"spawn_rush": {
 				"desirability": 100,
+				"pmcsOnly": true,
 				"max_bots_per_quest": 1,
 				"max_distance": 75,
 				"max_raid_ET": 30
@@ -252,6 +254,7 @@
 			},
 			"boss_hunter": {
 				"desirability": 30,
+				"pmcsOnly": true,
 				"min_level": 15,
 				"max_raid_ET": 300,
 				"min_distance": 50,

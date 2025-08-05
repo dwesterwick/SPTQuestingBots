@@ -248,13 +248,13 @@ namespace SPTQuestingBots.Helpers
             WildSpawnType.pmcBEAR
         };
 
-        public static bool WillBeAPMC(this BotOwner botOwner)
-        {
-            //LoggingController.LogInfo("Spawn type for bot " + botOwner.GetText() + ": " + botOwner.Profile.Info.Settings.Role.ToString());
+        public static bool WillBeAPMC(this BotOwner bot) => bot.Profile.WillBeAPMC();
 
+        public static bool WillBeAPMC(this Profile profile)
+        {
             return Enumerable.Empty<BotBrainType>()
                 .AddPMCBrains()
-                .Any(b => b.SpawnType == botOwner.Profile.Info.Settings.Role);
+                .Any(b => b.SpawnType == profile.Info.Settings.Role);
         }
 
         public static bool WillBeABoss(this BotOwner botOwner)

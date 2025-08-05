@@ -27,6 +27,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("show_door_interaction_test_points")]
         public bool ShowDoorInteractionTestPoints { get; set; } = false;
 
+        [JsonProperty("allow_zero_distance_sleeping")]
+        public bool AllowZeroDistanceSleeping { get; set; } = false;
+
         public DebugConfig()
         {
 

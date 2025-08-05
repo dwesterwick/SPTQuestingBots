@@ -118,6 +118,7 @@ The three major data structures are:
         * smg
         * sniperRifle
         * specialWeapon
+    * **botRoleFilter**: A comma-delimited list containing the bot roles (`WildSpawnType`s) that are allowed to select the quest. If omitted or an empty string, all bot roles can select the quest (unless limited by **pmcsOnly**).
     * **name**: The name of the quest. This doesn't have to be unique, but it's best if it is to avoid confusion when troubleshooting.
     * **waypoints**: An array of waypoints that can be used to assist bots with finding paths to the quest's objectives. Each waypoint is an (x, y, z) coordinate. 
     * **objectives**: An array of the objectives in the quest. Bots can complete objectives in any order. 
@@ -202,6 +203,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.
 * **debug.show_failed_paths**: If **true**, whenever a bot gets stuck its target path will be drawn in red. 
 * **debug.show_door_interaction_test_points**: If **true**, the positions tested when determining where bots should travel to unlock doors will have spherical outlines. If the a valid NavMesh position cannot be found for the test point, the outline color will be white. If a valid NavMesh position is found but the bot cannot access that point, the outline color will be yellow. If a valid NavMesh position is found and the bot can access that point, the outline color will be magenta. The position selected for the bot will be shown with a green outline. 
+* **allow_zero_distance_sleeping**: If the distance sliders for the built-in AI limiter are allowed to go to down to 0m. This is **false** by default. 
 * **max_calc_time_per_frame_ms**: The maximum amount of time (in milliseconds) the mod is allowed to run quest-generation and PMC-spawning procedures per frame. By default this is set to **5** ms, and delays of <15 ms are basically imperceptible. 
 * **chance_of_being_hostile_toward_bosses.scav**: The chance that Scavs will be hostile toward all bosses on the map. This is **0%** by default.
 * **chance_of_being_hostile_toward_bosses.pscav**: The chance that player Scavs will be hostile toward all bosses on the map even if the bosses aren't hostile toward them (i.e. Rogues are not initially hostile toward player Scavs). This is **20%** by default.
@@ -325,6 +327,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **Options for Each Section in *bot_quests*:**
 * **desirability**: The desirability rating (in percent) of the quest. Bots will be more likely to select quests with higher desirability ratings. 
+* **pmcsOnly**: Only PMC's will be allowed to select the quest
 * **max_bots_per_quest**: The maximum number of bots that can actively be performing each quest of that type.
 * **min_distance**: Each objective in the quest will only be selected if the bot is at least this many meters away from it.
 * **max_distance**: Each objective in the quest will only be selected if the bot is at most this many meters away from it.

@@ -167,7 +167,6 @@ namespace SPTQuestingBots.Components
                 if (spawnRushQuest != null)
                 {
                     //LoggingController.LogInfo("Adding quest for rushing your spawn point...");
-                    spawnRushQuest.PMCsOnly = true;
                     BotJobAssignmentFactory.AddQuest(spawnRushQuest);
                 }
                 else
@@ -184,7 +183,6 @@ namespace SPTQuestingBots.Components
                     if (bossHunterQuest != null)
                     {
                         LoggingController.LogInfo("Adding quest for hunting boss " + boss + "...");
-                        bossHunterQuest.PMCsOnly = true;
                         BotJobAssignmentFactory.AddQuest(bossHunterQuest);
                     }
                 }

@@ -13,6 +13,9 @@ namespace SPTQuestingBots.Configuration
         [JsonProperty("desirability")]
         public float Desirability { get; set; } = 50;
 
+        [JsonProperty("pmcsOnly")]
+        public bool PMCsOnly { get; set; } = false;
+
         [JsonProperty("max_bots_per_quest")]
         public int MaxBotsPerQuest { get; set; } = 10;
 
@@ -48,6 +51,7 @@ namespace SPTQuestingBots.Configuration
         public static void ApplyQuestSettingsFromConfig(Models.Questing.Quest quest, QuestSettingsConfig settings)
         {
             quest.Desirability = settings.Desirability;
+            quest.PMCsOnly = settings.PMCsOnly;
             quest.MaxBots = settings.MaxBotsPerQuest;
             quest.MaxRaidET = settings.MaxRaidET;
             quest.MinLevel = settings.MinLevel;
