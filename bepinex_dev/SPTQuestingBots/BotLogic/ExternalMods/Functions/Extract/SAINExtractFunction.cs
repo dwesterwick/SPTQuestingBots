@@ -10,7 +10,7 @@ namespace SPTQuestingBots.BotLogic.ExternalMods.Functions.Extract
 {
     public class SAINExtractFunction : AbstractExtractFunction
     {
-        public override string MonitoredLayerName => "SAIN ExtractLayer";
+        public override string MonitoredLayerName => "SAIN : Extract";
 
         public SAINExtractFunction(BotOwner _botOwner) : base(_botOwner)
         {

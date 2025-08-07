@@ -1,6 +1,7 @@
 ﻿using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
+using SPTQuestingBots.Components.Spawning;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
 using System;
@@ -44,6 +45,28 @@ namespace SPTQuestingBots.Patches.Spawning
             }
 
             return modifiedInstructions;
+        }
+
+        [PatchPrefix]
+        protected static bool PatchPrefix(BotsGroup __instance, ref bool __result, IPlayer player)
+        {
+            // The transpiler patch only affects the result for AI players
+            if (!player.IsAI)
+            {
+                return true;
+            }
+
+            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance._initialBot, out Models.BotSpawnInfo botSpawnInfo))
+            {
+                if (botSpawnInfo.ContainsProfile(player.Profile))
+                {
+                    // Ensure group members are not enemies
+                    __result = false;
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         [PatchPostfix]

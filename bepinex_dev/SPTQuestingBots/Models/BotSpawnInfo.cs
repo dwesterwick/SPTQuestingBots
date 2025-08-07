@@ -60,6 +60,16 @@ namespace SPTQuestingBots.Models
             return Data?.Profiles?.AsReadOnly();
         }
 
+        public bool ContainsProfile(Profile profile)
+        {
+            if (profile == null)
+            {
+                return false;
+            }
+
+            return Data?.Profiles?.Contains(profile) ?? false;
+        }
+
         public bool ShouldBotBeBoss(BotOwner bot)
         {
             if (GeneratedBotCount <= 1)
