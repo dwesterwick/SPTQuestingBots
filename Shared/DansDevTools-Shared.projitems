@@ -51,7 +51,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\MinMaxConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ModConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PMCHostilityAdjustmentsConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestDataConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestGenerationConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestingConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestSettingsConfig.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\StuckBotRemediesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\UnlockingDoorsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\USECChanceResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ZoneAndItemPositionInfoConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedConfigHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedRouterHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModInfo.cs" />

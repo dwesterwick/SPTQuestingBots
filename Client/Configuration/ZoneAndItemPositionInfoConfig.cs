@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestingBots.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,7 +12,7 @@ namespace QuestingBots.Configuration
     public class ZoneAndItemPositionInfoConfig
     {
         [DataMember(Name = "position")]
-        public SerializableVector3 Position { get; private set; } = null;
+        public SerializableVector3 Position { get; private set; } = null!;
 
         [DataMember(Name = "mustUnlockNearbyDoor")]
         public bool MustUnlockNearbyDoor { get; private set; } = false;
@@ -20,7 +21,7 @@ namespace QuestingBots.Configuration
         public float NearbyDoorSearchRadius { get; private set; } = 5;
 
         [DataMember(Name = "nearbyDoorInteractionPosition")]
-        public SerializableVector3 NearbyDoorInteractionPosition { get; private set; } = null;
+        public SerializableVector3 NearbyDoorInteractionPosition { get; private set; } = null!;
 
         public ZoneAndItemPositionInfoConfig()
         {
