@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>$(AssemblyTitle)</RootNamespace>
+    <Nullable>enable</Nullable>
+    <Version>$(Version)</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <RepositoryUrl>$(GithubRepoPath)</RepositoryUrl>
+    <Authors>$(Authors)</Authors>
+    <Title>$(AssemblyName)</Title>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="0Harmony">
+			<HintPath>..\..\..\BepInEx\core\0Harmony.dll</HintPath>
+		</Reference>
+		<Reference Include="Assembly-CSharp">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="BepInEx">
+			<HintPath>..\..\..\BepInEx\core\BepInEx.dll</HintPath>
+		</Reference>
+		<Reference Include="Comfort">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
+		</Reference>
+		<Reference Include="Comfort.Unity">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
+		</Reference>
+		<Reference Include="DissonanceVoip">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="spt-common">
+			<HintPath>..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
+		</Reference>
+		<Reference Include="spt-reflection">
+			<HintPath>..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="..\Shared\LICENSE.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Components\" />
+	  <Folder Include="Patches\" />
+	</ItemGroup>
+	<Import Project="..\Shared\DansDevTools-Shared.projitems" Label="Shared" />
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)CopyFilesAfterBuild.ps1&quot; -modName &quot;$(AssemblyTitle)&quot; -configuration &quot;$(Configuration)&quot; -relPathToSptInstall &quot;$(RelativePathToRootSPTInstall)&quot;" />
+	</Target>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)..\Shared\UpdateModInfoBeforeBuild.ps1&quot; -guid &quot;$(SPTGUID)&quot; -modName &quot;$(AssemblyTitle)&quot; -author &quot;$(Authors)&quot; -modVersion &quot;$(Version)&quot; -sptVersion &quot;$(SPTVersion)&quot; -relPathToSptInstall &quot;$(RelativePathToRootSPTInstall)&quot;" />
+	</Target>
+
+</Project>

@@ -87,7 +87,7 @@ These three metrics are then added together, and the result is the overall score
 
 **---------- How to Add Custom Quests ----------**
 
-To add custom quests to a map, first create a *user\mods\DanW-SPTQuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-SPTQuestingBots-#.#.#\quests\standard* directory (case sensitive).
+To add custom quests to a map, first create a *user\mods\DanW-QuestingBots-#.#.#\quests\custom* directory if it doesn't already exist. Then, create a file for each map for which you want to add custom quests. The file name should exactly match the corresponding file in the *user\mods\DanW-QuestingBots-#.#.#\quests\standard* directory (case sensitive).
 
 The three major data structures are:
 * **Quests**: A quest is a collection of at least one quest objective, and objectives can be placed anywhere on the map. Objectives can be completed in any order. 

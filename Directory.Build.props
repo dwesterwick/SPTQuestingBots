@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<AssemblyTitle>QuestingBots</AssemblyTitle>
+		<Authors>DanW</Authors>
+		<Version>0.11.0</Version>
+		<SPTVersion>~4.0.0</SPTVersion>
+		<SPTGUID>com.danw.questingbots</SPTGUID>
+		<GithubRepoPath>https://github.com/dwesterwick/QuestingBots</GithubRepoPath>
+		<RelativePathToRootSPTInstall>../../</RelativePathToRootSPTInstall>
+		<SPTServerDebugPath>D:\SPT\Escape from Tarkov Single Player\Source\Server\SPTarkov.Server\bin\Debug\net9.0</SPTServerDebugPath>
+	</PropertyGroup>
+</Project>

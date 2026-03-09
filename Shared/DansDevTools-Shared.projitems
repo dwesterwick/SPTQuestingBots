@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>17fbdd37-7c10-4306-b936-4b32dbfe74bc</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>QuestingBots</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Config\config.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Config\eftQuestSettings.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Config\zoneAndItemQuestPositions.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\bigmap.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\factory4_day.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\factory4_night.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\interchange.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\laboratory.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\lighthouse.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\rezervbase.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\sandbox.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\sandbox_high.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\shoreline.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\tarkovstreets.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\AdjustPScavChanceConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotCapAdjustmentsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotPathingConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotQuestingRequirementsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotQuestsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotSearchDistanceConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotSpawnsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotSpawnTypeConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotTypeConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotTypeValueConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BrainLayerPrioritiesConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BrainLayerPrioritiesOptionsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BreakForLootingConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DebugConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DistanceAngleConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\EftNewSpawnSystemAdjustmentsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ExtractionRequirementsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\HearingSensorConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LightkeeperIslandQuestsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LimitInitialBossSpawnsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LoggingPath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\MaxFollowerDistanceConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\MinMaxConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ModConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\PMCHostilityAdjustmentsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestDataConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestGenerationConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestingConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestSettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\SearchTimeAfterCombatConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ServerResponseError.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\SprintingLimitationsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\StuckBotDetectionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\StuckBotRemediesConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\UnlockingDoorsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\USECChanceResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ZoneAndItemPositionInfoConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedConfigHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedRouterHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE.txt">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)CreatePackageAfterBuild.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)UpdateModInfoBeforeBuild.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Quests\Custom\" />
+  </ItemGroup>
+</Project>
