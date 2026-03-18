@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Comfort.Common;
+using Newtonsoft.Json;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using System;
@@ -41,7 +42,7 @@ namespace QuestingBots.Utils
 
         public void LogDebug(string message)
         {
-            if (!ConfigController.Config.IsDebugEnabled())
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }
@@ -51,7 +52,7 @@ namespace QuestingBots.Utils
 
         public void LogInfo(string message, bool alwaysShow = false)
         {
-            if (!alwaysShow && !ConfigController.Config.IsDebugEnabled())
+            if (!alwaysShow && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }
@@ -61,7 +62,7 @@ namespace QuestingBots.Utils
 
         public void LogWarning(string message, bool onlyForDebug = false)
         {
-            if (onlyForDebug && !ConfigController.Config.IsDebugEnabled())
+            if (onlyForDebug && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }
@@ -71,7 +72,7 @@ namespace QuestingBots.Utils
 
         public void LogError(string message, bool onlyForDebug = false)
         {
-            if (onlyForDebug && !ConfigController.Config.IsDebugEnabled())
+            if (onlyForDebug && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }
@@ -107,9 +108,9 @@ namespace QuestingBots.Utils
         {
             try
             {
-                if (!Directory.Exists(ConfigController.LoggingPath))
+                if (!Directory.Exists(Singleton<LoggingUtil>.Instance.LoggingPath))
                 {
-                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                    Directory.CreateDirectory(Singleton<LoggingUtil>.Instance.LoggingPath);
                 }
 
                 File.WriteAllText(filename, content);
@@ -130,9 +131,9 @@ namespace QuestingBots.Utils
             {
                 string content = JsonConvert.SerializeObject(location, Formatting.Indented);
 
-                if (!Directory.Exists(ConfigController.LoggingPath))
+                if (!Directory.Exists(Singleton<LoggingUtil>.Instance.LoggingPath))
                 {
-                    Directory.CreateDirectory(ConfigController.LoggingPath);
+                    Directory.CreateDirectory(Singleton<LoggingUtil>.Instance.LoggingPath);
                 }
 
                 if (File.Exists(filename))

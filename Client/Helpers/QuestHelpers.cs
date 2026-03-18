@@ -33,7 +33,7 @@ namespace QuestingBots.Helpers
 
         public static bool ValidateQuestFiles(string locationId)
         {
-            IEnumerable<Quest> quests = ConfigController.GetCustomQuests(locationId);
+            IEnumerable<Quest> quests = Singleton<ConfigUtil>.Instance.GetCustomQuests(locationId);
 
             if (!quests.Any())
             {
@@ -52,7 +52,7 @@ namespace QuestingBots.Helpers
                 return zoneAndItemQuestPositions;
             }
 
-            zoneAndItemQuestPositions = ConfigController.GetZoneAndItemPositions();
+            zoneAndItemQuestPositions = Singleton<ConfigUtil>.Instance.GetZoneAndItemPositions();
             Singleton<LoggingUtil>.Instance.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
 
             return zoneAndItemQuestPositions;
@@ -186,12 +186,12 @@ namespace QuestingBots.Helpers
                     }
 
                     // Try to find the nearest NavMesh position next to the quest item.
-                    Vector3? navMeshTargetPoint = locationData.FindNearestNavMeshPosition(itemPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
+                    Vector3? navMeshTargetPoint = locationData.FindNearestNavMeshPosition(itemPosition, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
                         Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
 
-                        if (ConfigController.Config.Debug.ShowZoneOutlines)
+                        if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
                         {
                             Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
                             Models.Pathing.PathVisualizationData itemPositionSphere = new Models.Pathing.PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);

@@ -47,21 +47,21 @@ namespace QuestingBots.BotLogic.Follow
             CanSprint = IsAllowedToSprint();
 
             // Force the bot to regroup for a certain amount of time after starting this action
-            bool mustRegroup = ActionElpasedTime < ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
+            bool mustRegroup = ActionElpasedTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
 
             // determine the location of the nearest follower and the target distance to it
             Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
-            float targetDistance = (float)ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
+            float targetDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
             
             // Check if the bot should find its nearest follower
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)
             {
-                float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+                float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
                 RecalculatePath(locationOfNearestGroupMember, allowedVariation, targetDistance);
             }
             else
             {
-                ObjectiveManager.PauseRequest = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
+                ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
             }
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 

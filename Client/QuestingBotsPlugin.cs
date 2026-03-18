@@ -4,6 +4,7 @@ using Comfort.Common;
 using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace QuestingBots
             }
 
             Logger.LogInfo("Loading QuestingBots...getting configuration data...");
-            if (ConfigController.GetConfig() == null)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig == null)
             {
                 Chainloader.DependencyErrors.Add("Could not load " + ModInfo.MODNAME + " because it cannot communicate with the server. Please ensure the mod has been installed correctly.");
                 return;
@@ -44,7 +45,7 @@ namespace QuestingBots
 
             new Patches.MenuShowPatch().Enable();
 
-            if (ConfigController.Config.Enabled)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.IsModEnabled())
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...");
 
@@ -64,14 +65,14 @@ namespace QuestingBots
                 new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();
                 new Patches.Lighthouse.LighthouseTraderZonePlayerAttackPatch().Enable();
 
-                if (ConfigController.Config.Debug.Enabled)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
                 {
                     new Patches.Debug.ProcessSourceOcclusionPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch().Enable();
                     //new Patches.Debug.HandleFinishedTaskPatch2().Enable();
                 }
                 
-                if (ConfigController.Config.BotSpawns.Enabled)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
                 {
                     new Patches.Spawning.GameStartPatch().Enable();
                     new Patches.Spawning.TimeHasComeScreenClassChangeStatusPatch().Enable();
@@ -91,29 +92,29 @@ namespace QuestingBots
                     new Patches.Spawning.ScavLimits.NonWavesSpawnScenarioCreatePatch().Enable();
                     new Patches.Spawning.ScavLimits.BotsControllerStopPatch().Enable();
 
-                    if (ConfigController.Config.BotSpawns.SpawnInitialBossesFirst)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnInitialBossesFirst)
                     {
                         new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
                     }
 
-                    if (ConfigController.Config.BotSpawns.PMCHostilityAdjustments.Enabled && ConfigController.Config.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
                     {
                         new Patches.Spawning.BotsGroupIsPlayerEnemyPatch().Enable();
                     }
 
-                    if (ConfigController.Config.BotSpawns.PMCs.Enabled)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.Enabled)
                     {
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();
                         Singleton<LoggingUtil>.Instance.LogInfo("Enabled PMC bot generation");
                     }
-                    if (ConfigController.Config.BotSpawns.PScavs.Enabled)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
                     {
                         BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
                         Singleton<LoggingUtil>.Instance.LogInfo("Enabled PScav bot generation");
                     }
                 }
 
-                if ((ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled) || ConfigController.Config.AdjustPScavChance.Enabled)
+                if ((Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled) || Singleton<ConfigUtil>.Instance.CurrentConfig.AdjustPScavChance.Enabled)
                 {
                     new Patches.PScavProfilePatch().Enable();
                 }

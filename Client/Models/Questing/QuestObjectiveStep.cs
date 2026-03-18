@@ -30,7 +30,7 @@ namespace QuestingBots.Models.Questing
     public class QuestObjectiveStep
     {
         [JsonProperty("waitTimeAfterCompleting")]
-        public double WaitTimeAfterCompleting { get; set; } = ConfigController.Config.Questing.DefaultWaitTimeAfterObjectiveCompletion;
+        public double WaitTimeAfterCompleting { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.DefaultWaitTimeAfterObjectiveCompletion;
 
         [JsonProperty("position")]
         public SerializableVector3 SerializablePosition { get; set; } = null!;
@@ -52,7 +52,7 @@ namespace QuestingBots.Models.Questing
         public float MaxDistance { get; set; } = 5;
 
         [JsonProperty("chanceOfHavingKey")]
-        public float ChanceOfHavingKey { get; set; } = ConfigController.Config.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
+        public float ChanceOfHavingKey { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
 
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;

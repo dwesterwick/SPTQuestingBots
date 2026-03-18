@@ -54,7 +54,7 @@ namespace QuestingBots.Components
         public float DistanceFromLastObjective => (lastAssignment?.Position != null) ? Vector3.Distance(lastAssignment.Position.Value, botOwner.Position) : float.MaxValue;
 
         public bool IsCloseToObjective(float distance) => DistanceToObjective <= distance;
-        public bool IsCloseToObjective() => IsCloseToObjective(ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
+        public bool IsCloseToObjective() => IsCloseToObjective(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.OjectiveReachedIdeal);
 
         public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
@@ -102,7 +102,7 @@ namespace QuestingBots.Components
             }
 
             // Override the EFT distance that makes bots "avoid danger" when the BTR is near
-            botOwner.Settings.FileSettings.Mind.AVOID_BTR_RADIUS_SQR = ConfigController.Config.Questing.BTRRunDistance * ConfigController.Config.Questing.BTRRunDistance;
+            botOwner.Settings.FileSettings.Mind.AVOID_BTR_RADIUS_SQR = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance;
         }
 
         private void updateBotType()
@@ -114,19 +114,19 @@ namespace QuestingBots.Components
 
             BotType botType = Controllers.BotRegistrationManager.GetBotType(botOwner);
 
-            if ((botType == BotType.PMC) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PMC)
+            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PMC)
             {
                 IsQuestingAllowed = true;
             }
-            if ((botType == BotType.Boss) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Boss)
+            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Boss)
             {
                 IsQuestingAllowed = true;
             }
-            if ((botType == BotType.Scav) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.Scav)
+            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Scav)
             {
                 IsQuestingAllowed = true;
             }
-            if ((botType == BotType.PScav) && ConfigController.Config.Questing.AllowedBotTypesForQuesting.PScav)
+            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PScav)
             {
                 IsQuestingAllowed = true;
             }
@@ -204,7 +204,7 @@ namespace QuestingBots.Components
             bool? hasWaitedLongEnough = assignment?.HasWaitedLongEnoughAfterEnding();
             if (hasWaitedLongEnough.HasValue && hasWaitedLongEnough.Value)
             {
-                if (botOwner.NumberOfConsecutiveFailedAssignments() >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
+                if (botOwner.NumberOfConsecutiveFailedAssignments() >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxCount)
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning(botOwner.GetText() + " has failed too many consecutive assignments and is no longer allowed to quest.");
                     botOwner.Mover.Stop();
@@ -271,7 +271,7 @@ namespace QuestingBots.Components
         public bool TryChangeObjective()
         {
             double? timeSinceJobEnded = assignment?.TimeSinceEnded();
-            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < ConfigController.Config.Questing.MinTimeBetweenSwitchingObjectives))
+            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.MinTimeBetweenSwitchingObjectives))
             {
                 return false;
             }

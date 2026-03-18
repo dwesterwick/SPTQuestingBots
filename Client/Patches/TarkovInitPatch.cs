@@ -69,7 +69,7 @@ namespace QuestingBots.Patches
 
         private static void addQuestingBotsBrainLayers()
         {
-            if (!ConfigController.Config.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Enabled)
             {
                 return;
             }
@@ -77,11 +77,11 @@ namespace QuestingBots.Patches
             if (ExternalModHandler.SAINModInfo.IsInstalled)
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("SAIN detected. Adjusting Questing Bots brain layer priorities...");
-                BotBrainHelpers.AddQuestingBotsBrainLayers(ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN);
+                BotBrainHelpers.AddQuestingBotsBrainLayers(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BrainLayerPriorities.WithSAIN);
             }
             else
             {
-                BotBrainHelpers.AddQuestingBotsBrainLayers(ConfigController.Config.Questing.BrainLayerPriorities.WithoutSAIN);
+                BotBrainHelpers.AddQuestingBotsBrainLayers(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BrainLayerPriorities.WithoutSAIN);
             }
         }
     }

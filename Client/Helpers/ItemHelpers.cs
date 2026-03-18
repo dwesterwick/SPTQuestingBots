@@ -113,7 +113,7 @@ namespace QuestingBots.Helpers
             if (headset != null)
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a headset");
-                multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
+                multiplier *= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
             ArmoredEquipmentTemplateClass? helmetTemplate = helmet?.Template as ArmoredEquipmentTemplateClass;
@@ -121,11 +121,11 @@ namespace QuestingBots.Helpers
             {
                 case EDeafStrength.Low:
                     //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a helmet with low deaf strength");
-                    multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetLowDeaf;
+                    multiplier *= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetLowDeaf;
                     break;
                 case EDeafStrength.High:
                     //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a helmet with high deaf strength");
-                    multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetHighDeaf;
+                    multiplier *= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetHighDeaf;
                     break;
             }
 

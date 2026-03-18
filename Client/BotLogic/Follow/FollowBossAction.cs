@@ -48,7 +48,7 @@ namespace QuestingBots.BotLogic.Follow
             CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
             CanSprint &= IsAllowedToSprint();
 
-            float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+            float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
             RecalculatePath(boss.Position, allowedVariation, 0.5f);
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
@@ -61,7 +61,7 @@ namespace QuestingBots.BotLogic.Follow
                 }
                 wasStuck = true;
 
-                ObjectiveManager.PauseRequest = ConfigController.Config.Questing.StuckBotDetection.FollowerBreakTime;
+                ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.FollowerBreakTime;
                 restartStuckTimer();
             }
             else

@@ -97,7 +97,7 @@ namespace QuestingBots.Components
                         continue;
                     }
 
-                    StaticPathData path = new StaticPathData(from, to, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
+                    StaticPathData path = new StaticPathData(from, to, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
@@ -127,7 +127,7 @@ namespace QuestingBots.Components
                         continue;
                     }
 
-                    StaticPathData path = new StaticPathData(waypoint, firstStepPosition.Value, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
+                    StaticPathData path = new StaticPathData(waypoint, firstStepPosition.Value, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);

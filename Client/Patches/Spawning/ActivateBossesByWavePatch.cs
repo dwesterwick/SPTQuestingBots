@@ -49,7 +49,7 @@ namespace QuestingBots.Patches.Spawning
 
         private static bool shouldSuppressBossWave(ref BossLocationSpawn bossWave)
         {
-            if (!ConfigController.Config.BotSpawns.LimitInitialBossSpawns.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.Enabled)
             {
                 return false;
             }
@@ -64,7 +64,7 @@ namespace QuestingBots.Patches.Spawning
             if (bossWave.BossName.ToLower() == "exusec")
             {
                 // Prevent too many Rogues from spawning, or they will prevent other bots from spawning
-                if (BotRegistrationManager.SpawnedRogueCount + botCount > ConfigController.Config.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues)
+                if (BotRegistrationManager.SpawnedRogueCount + botCount > Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues)
                 {
                     BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
                     BotRegistrationManager.ZeroWaveTotalRogueCount -= botCount;
@@ -76,7 +76,7 @@ namespace QuestingBots.Patches.Spawning
 
             // Prevent too many bosses from spawning, or they will prevent other bots from spawning
             Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
-            if ((pmcGenerator != null) && (pmcGenerator.SpawnedGroupCount == 0) && (BotRegistrationManager.SpawnedBossCount + botCount > ConfigController.Config.BotSpawns.LimitInitialBossSpawns.MaxInitialBosses))
+            if ((pmcGenerator != null) && (pmcGenerator.SpawnedGroupCount == 0) && (BotRegistrationManager.SpawnedBossCount + botCount > Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.MaxInitialBosses))
             {
                 BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
 
@@ -88,7 +88,7 @@ namespace QuestingBots.Patches.Spawning
             BotRegistrationManager.SpawnedBossCount += botCount;
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + ConfigController.Config.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
                 BotRegistrationManager.SpawnedRogueCount += botCount;
             }
 

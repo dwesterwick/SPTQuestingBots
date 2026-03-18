@@ -22,7 +22,7 @@ namespace QuestingBots.Components
 
         protected void Update()
         {
-            if (questsValidated || !ConfigController.Config.Questing.Enabled)
+            if (questsValidated || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.Enabled)
             {
                 return;
             }

@@ -259,7 +259,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         private bool isFollowerTooFarFromBossForQuesting() => BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceQuesting();
         private double getFollowerTargetDistanceQuesting()
         {
-            MinMaxConfig targetFollowerRangeQuesting = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting;
+            MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting;
 
             if (CurrentDecision == BotQuestingDecision.FollowBoss)
             {
@@ -272,7 +272,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         private bool isFollowerTooFarFromBossForCombat() => BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceCombat();
         private double getFollowerTargetDistanceCombat()
         {
-            MinMaxConfig targetFollowerRangeQuesting = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat;
+            MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat;
 
             if (CurrentDecision == BotQuestingDecision.HelpBoss)
             {

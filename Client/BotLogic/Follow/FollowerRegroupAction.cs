@@ -47,7 +47,7 @@ namespace QuestingBots.BotLogic.Follow
             CanSprint = IsAllowedToSprint();
 
             // Force the bot to regroup for a certain amount of time after starting this action
-            bool mustRegroup = ActionElpasedTime < ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
+            bool mustRegroup = ActionElpasedTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
 
             // Determine where the bot should go
             Vector3? targetLocation = getTargetPosition();
@@ -57,10 +57,10 @@ namespace QuestingBots.BotLogic.Follow
             }
 
             // Check if the bot should continue regrouping
-            float targetDistance = (float)ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Min;
+            float targetDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat.Min;
             if (mustRegroup || Vector3.Distance(BotOwner.Position, targetLocation.Value) > targetDistance)
             {
-                float allowedVariation = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
+                float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
                 RecalculatePath(targetLocation.Value, allowedVariation, targetDistance);
 
                 //Vector3 bossPosition = BotHiveMindMonitor.GetBoss(BotOwner).Position;
@@ -68,7 +68,7 @@ namespace QuestingBots.BotLogic.Follow
             }
             else
             {
-                ObjectiveManager.PauseRequest = ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
+                ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
             }
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 

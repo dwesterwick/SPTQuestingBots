@@ -52,14 +52,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private void checkIfBotShouldSeparateFromGroup()
         {
-            if (NeedsToHealTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            if (NeedsToHealTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Waited " + NeedsToHealTime + "s for " + BotOwner.GetText() + " to heal");
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
                 return;
             }
 
-            if (NotAbleBodiedTime > ConfigController.Config.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
+            if (NotAbleBodiedTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxNotAbleBodiedTime)
             {
                 List<string> reasons = new List<string>();
                 if (NeedsToHeal)
@@ -145,7 +145,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool needsToEatOrDrink()
         {
             // Check if the bot needs to drink something
-            if (100f * BotOwner.HealthController.Hydration.Current / BotOwner.HealthController.Hydration.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHydration)
+            if (100f * BotOwner.HealthController.Hydration.Current / BotOwner.HealthController.Hydration.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHydration)
             {
                 if (!NeedsToEatOrDrink)
                 {
@@ -155,7 +155,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
 
             // Check if the bot needs to eat something
-            if (100f * BotOwner.HealthController.Energy.Current / BotOwner.HealthController.Energy.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinEnergy)
+            if (100f * BotOwner.HealthController.Energy.Current / BotOwner.HealthController.Energy.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinEnergy)
             {
                 if (!NeedsToEatOrDrink)
                 {
@@ -183,11 +183,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             // Check if any of the bot's body parts need to be healed
             if
             (
-                (100f * healthHead.Current / healthHead.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthHead)
-                || (100f * healthChest.Current / healthChest.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthChest)
-                || (100f * healthStomach.Current / healthStomach.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthStomach)
-                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthLegs)
-                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < ConfigController.Config.Questing.BotQuestingRequirements.MinHealthLegs)
+                (100f * healthHead.Current / healthHead.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHealthHead)
+                || (100f * healthChest.Current / healthChest.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHealthChest)
+                || (100f * healthStomach.Current / healthStomach.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHealthStomach)
+                || (100f * healthLeftLeg.Current / healthLeftLeg.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHealthLegs)
+                || (100f * healthRightLeg.Current / healthRightLeg.Maximum < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MinHealthLegs)
             )
             {
                 if (!HasLowHealth)
@@ -207,7 +207,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool isOverweight()
         {
             // Check if the bot is too overweight
-            if (100f * BotOwner.GetPlayer.Physical.Overweight > ConfigController.Config.Questing.BotQuestingRequirements.MaxOverweightPercentage)
+            if (100f * BotOwner.GetPlayer.Physical.Overweight > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxOverweightPercentage)
             {
                 if (!IsOverweight)
                 {

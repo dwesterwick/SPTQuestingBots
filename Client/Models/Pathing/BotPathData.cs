@@ -93,7 +93,7 @@ namespace QuestingBots.Models.Pathing
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.IncompletePath;
                 }
-                else if ((Status == UnityEngine.AI.NavMeshPathStatus.PathPartial) && (Time.time - LastSetTime > ConfigController.Config.Questing.BotPathing.IncompletePathRetryInterval))
+                else if ((Status == UnityEngine.AI.NavMeshPathStatus.PathPartial) && (Time.time - LastSetTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.IncompletePathRetryInterval))
                 {
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.IncompletePath;
@@ -128,7 +128,7 @@ namespace QuestingBots.Models.Pathing
                 {
                     // Only update the path if the bot has moved from the start position set in the currently cached path. Otherwise, the path may
                     // constantly be recalculated as brain layers are switched. 
-                    requiresUpdate &= distanceFromStartPosition > ConfigController.Config.Questing.BotPathing.MaxStartPositionDiscrepancy;
+                    requiresUpdate &= distanceFromStartPosition > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.MaxStartPositionDiscrepancy;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
             }

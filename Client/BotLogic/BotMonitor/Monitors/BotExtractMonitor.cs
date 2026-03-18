@@ -65,14 +65,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool isBotReadyToExtract()
         {
             // Prevent the bot from extracting too soon after it spawns
-            if (Time.time - BotOwner.ActivateTime < ConfigController.Config.Questing.ExtractionRequirements.MinAliveTime)
+            if (Time.time - BotOwner.ActivateTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.ExtractionRequirements.MinAliveTime)
             {
                 return false;
             }
 
             // If the raid is about to end, make the bot extract
             float remainingRaidTime = RaidHelpers.GetRemainingRaidTimeSeconds();
-            if (remainingRaidTime < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
+            if (remainingRaidTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
                 Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
                 return true;
@@ -102,7 +102,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             // Select a random number of total quests the bot must complete before it's allowed to extract
             if (minTotalQuestsForExtract == int.MaxValue)
             {
-                Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.TotalQuests * scalingFactor;
+                Configuration.MinMaxConfig minMax = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.ExtractionRequirements.TotalQuests * scalingFactor;
                 minTotalQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
             }
 
@@ -123,7 +123,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             // Select a random number of EFT quests the bot must complete before it's allowed to extract
             if (minEFTQuestsForExtract == int.MaxValue)
             {
-                Configuration.MinMaxConfig minMax = ConfigController.Config.Questing.ExtractionRequirements.EFTQuests * scalingFactor;
+                Configuration.MinMaxConfig minMax = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.ExtractionRequirements.EFTQuests * scalingFactor;
                 minEFTQuestsForExtract = random.Next((int)minMax.Min, (int)minMax.Max);
             }
 

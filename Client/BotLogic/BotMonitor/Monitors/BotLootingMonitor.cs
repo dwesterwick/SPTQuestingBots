@@ -19,7 +19,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
     {
         public bool IsLooting { get; private set; } = false;
         public bool IsSearchingForLoot { get; private set; } = false;
-        public float NextLootCheckDelay { get; private set; } = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+        public float NextLootCheckDelay { get; private set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
         private AbstractLootFunction lootFunction = null!;
         private Stopwatch lootSearchTimer = new Stopwatch();
@@ -28,10 +28,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool hasFoundLoot = false;
 
         public TimeSpan TimeSinceBossLastLooted => DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
-        public bool BossWillAllowLootingByTime => TimeSinceBossLastLooted.TotalSeconds > ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
-        public bool BossWillAllowLootingByDistance => BotHiveMindMonitor.GetDistanceToBoss(BotOwner) <= ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
+        public bool BossWillAllowLootingByTime => TimeSinceBossLastLooted.TotalSeconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
+        public bool BossWillAllowLootingByDistance => BotHiveMindMonitor.GetDistanceToBoss(BotOwner) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
         public bool BossWillAllowLooting => (BossWillAllowLootingByTime && ShouldCheckForLoot()) || (BossWillAllowLootingByDistance && IsLooting);
-        public bool IsForcedToSearchForLoot => forcedLootSearchTimer.IsRunning && (forcedLootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime);
+        public bool IsForcedToSearchForLoot => forcedLootSearchTimer.IsRunning && (forcedLootSearchTimer.ElapsedMilliseconds < 1000 * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime);
 
         public BotLootingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -58,7 +58,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public bool ShouldCheckForLoot() => ShouldCheckForLoot(NextLootCheckDelay);
         public bool ShouldCheckForLoot(float minTimeBetweenLooting)
         {
-            if (!ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.Enabled)
             {
                 return false;
             }
@@ -69,7 +69,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return false;
             }
 
-            NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
+            NextLootCheckDelay = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingChecks;
 
             // The following logic is used to determine if a bot is allowed to search for loot:
             //      - If LootingBots has instructed the bot to check a lootable container, allow it
@@ -79,7 +79,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             //      - The minimum amount of time between loot checks depends on whether the bot successfully found loot during the previous check
             if
             (
-                (IsLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
+                (IsLooting || (lootSearchTimer.ElapsedMilliseconds < 1000 * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime))
                 && (IsLooting || IsSearchingForLoot || lootFunction.CanUseMonitoredLayer(minTimeBetweenLooting))
             )
             {
@@ -90,7 +90,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                         Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has found loot");
                     }
 
-                    NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
+                    NextLootCheckDelay = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
                     lootSearchTimer.Reset();
                     hasFoundLoot = true;
                 }

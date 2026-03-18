@@ -39,7 +39,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 
         public override AbstractExtractFunction CreateExtractFunction(BotOwner _botOwner)
         {
-            if (!CanUseInterop || !ConfigController.Config.Questing.ExtractionRequirements.UseSAINForExtracting)
+            if (!CanUseInterop || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.ExtractionRequirements.UseSAINForExtracting)
             {
                 return base.CreateExtractFunction(_botOwner);
             }
@@ -64,10 +64,10 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
                 return searchTime;
             }
 
-            MinMaxConfig minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
-            if (GetMinimumLayerPriority(brainName) > ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN.Questing)
+            MinMaxConfig minMax = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
+            if (GetMinimumLayerPriority(brainName) > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BrainLayerPriorities.WithSAIN.Questing)
             {
-                minMax = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedSAIN;
+                minMax = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedSAIN;
             }
 
             searchTimeAfterCombatForBrains.Add(brainName, minMax);

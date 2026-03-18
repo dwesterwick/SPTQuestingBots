@@ -1,10 +1,12 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +20,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
     {
         public bool IsInCombat { get; private set; } = false;
 
-        private MinMaxConfig minMaxSearchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
-        private double searchTimeAfterCombat = ConfigController.Config.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
+        private MinMaxConfig minMaxSearchTimeAfterCombat = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting;
+        private double searchTimeAfterCombat = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.SearchTimeAfterCombat.PrioritizedQuesting.Min;
         private System.Random random = new System.Random();
 
         public BotCombatMonitor(BotOwner _botOwner) : base(_botOwner) { }

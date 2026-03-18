@@ -21,7 +21,7 @@ namespace QuestingBots.Components.Spawning
 
         protected override void Init()
         {
-            RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
+            RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
             setMaxAliveBots();
         }
@@ -34,7 +34,7 @@ namespace QuestingBots.Components.Spawning
         protected override int GetMaxGeneratedBots()
         {
             // Check if PMC's are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPMCs)
+            if (!PlayerWantsBotsInRaid() && !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AlwaysSpawnPMCs)
             {
                 return 0;
             }
@@ -54,21 +54,21 @@ namespace QuestingBots.Components.Spawning
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
             // Spawn smaller PMC groups later in raids
-            double groupSizeFactor = ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
+            double groupSizeFactor = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
 
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-            int botsInGroup = (int)Math.Round(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
+            int botsInGroup = (int)Math.Round(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
             botsInGroup = (int)Math.Ceiling(botsInGroup * Math.Min(1, groupSizeFactor));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
             botsInGroup = (int)Math.Max(botsInGroup, 1);
 
             // Determine the difficulty for the new bot group
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PMCs.BotDifficultyAsOnline);
+            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.BotDifficultyAsOnline);
 
             // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
             WildSpawnType spawnType = WildSpawnType.pmcBEAR;
-            if (random.Next(1, 100) <= ConfigController.GetUSECChance())
+            if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.USECChance)
             {
                 spawnType = WildSpawnType.pmcUSEC;
             }
@@ -76,7 +76,7 @@ namespace QuestingBots.Components.Spawning
             Models.BotSpawnInfo group = await GenerateBotGroup(spawnType, botDifficulty, botsInGroup);
 
             // Set the maximum spawn time for the PMC group
-            float minTimeRemaining = ConfigController.Config.BotSpawns.PMCs.MinRaidTimeRemaining;
+            float minTimeRemaining = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinRaidTimeRemaining;
             group.RaidETRangeToSpawn.Max = RaidHelpers.OriginalEscapeTimeSeconds - minTimeRemaining;
 
             return group;
@@ -136,13 +136,13 @@ namespace QuestingBots.Components.Spawning
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey(locationID))
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots[locationID];
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
             }
-            else if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey("default"))
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots["default"];
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
@@ -153,8 +153,8 @@ namespace QuestingBots.Components.Spawning
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs)
-            double playerCountFactor = ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
-            playerCountFactor *= ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayers;
+            double playerCountFactor = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
+            playerCountFactor *= Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayers;
 
             // Choose the number of initial PMC's to spawn
             int pmcOffset = RaidHelpers.IsScavRun ? 0 : 1;
@@ -168,15 +168,15 @@ namespace QuestingBots.Components.Spawning
         {
             if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
             {
-                return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersInitial;
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersInitial;
             }
 
             if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
             {
-                return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidFactory;
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidFactory;
             }
 
-            return ConfigController.Config.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
+            return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
         }
     }
 }

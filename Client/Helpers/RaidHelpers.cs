@@ -1,5 +1,6 @@
 ﻿using Comfort.Common;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,17 +32,17 @@ namespace QuestingBots.Helpers
 
         public static bool ShouldSpawnPScavByChance()
         {
-            if (ConfigController.Config.BotSpawns.Enabled && ConfigController.Config.BotSpawns.PScavs.Enabled)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
             {
                 return ForcePScavs;
             }
 
-            if (!ConfigController.Config.AdjustPScavChance.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.AdjustPScavChance.Enabled)
             {
                 return false;
             }
 
-            double[][] chanceVsTimeRemainingFraction = ConfigController.Config.AdjustPScavChance.ChanceVsTimeRemainingFraction;
+            double[][] chanceVsTimeRemainingFraction = Singleton<ConfigUtil>.Instance.CurrentConfig.AdjustPScavChance.ChanceVsTimeRemainingFraction;
             float remainingRaidTimeFraction = GetRaidTimeRemainingFraction();
 
             double pScavChance = chanceVsTimeRemainingFraction.InterpolateForFirstCol(remainingRaidTimeFraction);

@@ -30,7 +30,7 @@ namespace QuestingBots.Patches
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
 
-            if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {
                 Spawning.GameStartPatch.ClearMissedWaves();
                 Spawning.GameStartPatch.IsDelayingGameStart = true;

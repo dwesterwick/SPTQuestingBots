@@ -98,7 +98,7 @@ namespace QuestingBots.Models.Questing
             // Immediately plant items after reaching objective locations
             if ((step.ActionType == QuestAction.PlantItem) && (questObjectiveSteps.Length > 0))
             {
-                questObjectiveSteps.Last().WaitTimeAfterCompleting = ConfigController.Config.Questing.WaitTimeBeforePlanting;
+                questObjectiveSteps.Last().WaitTimeAfterCompleting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.WaitTimeBeforePlanting;
             }
 
             questObjectiveSteps = questObjectiveSteps.Append(step).ToArray();
@@ -160,7 +160,7 @@ namespace QuestingBots.Models.Questing
 
             foreach (QuestObjectiveStep step in questObjectiveSteps)
             {
-                float maxNavMeshDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+                float maxNavMeshDistance = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
                 if (!step.TrySnapToNavMesh(maxNavMeshDistance))
                 {
                     allSnapped = false;

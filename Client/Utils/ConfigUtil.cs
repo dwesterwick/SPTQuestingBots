@@ -1,11 +1,11 @@
 ﻿using Comfort.Common;
 using Newtonsoft.Json;
 using QuestingBots.Configuration;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using SPT.Common.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,28 +14,52 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.Utils
 {
-    internal static class ConfigUtil
+    internal class ConfigUtil
     {
-        public static Configuration.ModConfig Config { get; private set; } = null!;
-        public static Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings { get; private set; } = null!;
-        public static float USECChance { get; private set; } = float.NaN;
-
-        private static Configuration.ModConfig? _currentConfig;
-        public static Configuration.ModConfig CurrentConfig
+        private Configuration.ModConfig? _currentConfig;
+        public Configuration.ModConfig CurrentConfig
         {
             get
             {
                 if (_currentConfig == null)
                 {
-                    GetConfig();
+                    _currentConfig = GetConfig();
                 }
 
                 return _currentConfig!;
             }
         }
 
-        private static JsonSerializerSettings _serializerSettings = null!;
-        public static JsonSerializerSettings SerializerSettings
+        private float _usecChance = float.NaN;
+        public float USECChance
+        {
+            get
+            {
+                if ( _usecChance == float.NaN)
+                {
+                    _usecChance = GetUSECChance();
+                }
+
+                return _usecChance;
+            }
+        }
+
+        private Dictionary<string, Configuration.ScavRaidSettingsConfig> _scavRaidSettings = null!;
+        public Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings
+        {
+            get
+            {
+                if (_scavRaidSettings == null)
+                {
+                    _scavRaidSettings = GetScavRaidSettings();
+                }
+
+                return _scavRaidSettings;
+            }
+        }
+
+        private JsonSerializerSettings _serializerSettings = null!;
+        public JsonSerializerSettings SerializerSettings
         {
             get
             {
@@ -48,7 +72,9 @@ namespace QuestingBots.Utils
             }
         }
 
-        private static JsonSerializerSettings findSerializerSettings()
+        public ConfigUtil() { }
+
+        private JsonSerializerSettings findSerializerSettings()
         {
             string fieldName = "SerializerSettings";
             Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByField(fieldName);
@@ -63,21 +89,112 @@ namespace QuestingBots.Utils
             return jsonSerializerSettings;
         }
 
-        private static void GetConfig()
+        private Configuration.ModConfig GetConfig()
         {
             string routeName = SharedRouterHelpers.GetRoutePath("GetConfig");
+            string errorMessage = "!!!!! Cannot retrieve config.json data from the server. The mod will not work properly! !!!!!";
+            string json = GetJson(routeName, errorMessage);
 
-            string json = RequestHandler.GetJson(routeName);
-            Configuration.ModConfig? configResponse = JsonConvert.DeserializeObject<Configuration.ModConfig>(json);
-            if (configResponse == null)
+            if (!TryDeserializeObject(json, errorMessage, out Configuration.ModConfig _config))
             {
-                throw new InvalidOperationException("Could not deserialize config file");
+                return null!;
             }
 
-            _currentConfig = configResponse;
+            return _config;
         }
 
-        public static string GetJson(string endpoint, string errorMessage)
+        private float GetUSECChance()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetUSECChance");
+            string errorMessage = "Cannot retrieve chance to make PMCs USECs.";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.USECChanceResponse _usecChance);
+            return _usecChance.USECChance;
+        }
+
+        private Dictionary<string, Configuration.ScavRaidSettingsConfig> GetScavRaidSettings()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetScavRaidSettings");
+            string errorMessage = "Cannot read scav-raid settings.";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.ScavRaidSettingsResponse _response);
+            return _response.Maps;
+        }
+
+        public RawQuestClass[] GetAllQuestTemplates()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetAllQuestTemplates");
+            string errorMessage = "Cannot read quest templates.";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
+            return _templates.Templates;
+        }
+
+        public Dictionary<string, Dictionary<string, object>> GetEFTQuestSettings()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetEFTQuestSettings");
+            string errorMessage = "Cannot retrieve EFT quest settings.";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _settings);
+            return _settings.Settings;
+        }
+
+        public Dictionary<string, ZoneAndItemPositionInfoConfig> GetZoneAndItemPositions()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetZoneAndItemQuestPositions");
+            string errorMessage = "Cannot retrieve positions for quest zones and items.";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _positions);
+            return _positions.ZoneAndItemPositions;
+        }
+
+        public IEnumerable<Models.Questing.Quest> GetCustomQuests(string locationID)
+        {
+            Models.Questing.Quest[] standardQuests = new Models.Questing.Quest[0];
+            string filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\quests\\standard\\" + locationID + ".json";
+            if (File.Exists(filename))
+            {
+                string errorMessage = "Cannot read standard quests for " + locationID;
+                try
+                {
+                    string json = File.ReadAllText(filename);
+                    TryDeserializeObject(json, errorMessage, out standardQuests);
+                }
+                catch (Exception e)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
+                }
+            }
+
+            Models.Questing.Quest[] customQuests = new Models.Questing.Quest[0];
+            filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\quests\\custom\\" + locationID + ".json";
+            if (File.Exists(filename))
+            {
+                string errorMessage = "Cannot read custom quests for " + locationID;
+                try
+                {
+                    string json = File.ReadAllText(filename);
+                    TryDeserializeObject(json, errorMessage, out customQuests);
+                }
+                catch (Exception e)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
+                }
+            }
+
+            return standardQuests.Concat(customQuests);
+        }
+
+        private string GetJson(string endpoint, string errorMessage)
         {
             string json = null!;
             Exception lastException = null!;
@@ -114,7 +231,7 @@ namespace QuestingBots.Utils
             return json!;
         }
 
-        public static bool TryDeserializeObject<T>(string json, string errorMessage, out T obj)
+        private bool TryDeserializeObject<T>(string json, string errorMessage, out T obj)
         {
             try
             {

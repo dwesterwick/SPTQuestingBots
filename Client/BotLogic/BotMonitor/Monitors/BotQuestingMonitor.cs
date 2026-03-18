@@ -31,8 +31,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
         public float DistanceToBoss => BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
-        public bool NeedToRegroupWithFollowers => followersTooFarTimer.ElapsedMilliseconds > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000;
-        public bool StuckTooManyTimes => ObjectiveManager.StuckCount >= ConfigController.Config.Questing.StuckBotDetection.MaxCount;
+        public bool NeedToRegroupWithFollowers => followersTooFarTimer.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000;
+        public bool StuckTooManyTimes => ObjectiveManager.StuckCount >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxCount;
 
         public BotQuestingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -85,8 +85,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if
             (
-                followerDistances.Any(d => d > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
-                || followerDistances.All(d => d > ConfigController.Config.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+                followerDistances.Any(d => d > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+                || followerDistances.All(d => d > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
             )
             {
                 return true;

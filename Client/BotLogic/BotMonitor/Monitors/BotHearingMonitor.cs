@@ -23,7 +23,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool soundPlayedEventAdded = false;
         private float lastEnemySoundHeardTime = 0;
         private AbstractHearingFunction hearingFunction = null!;
-        private double suspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
+        private double suspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private float maxSuspiciousTime = 60;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
@@ -34,7 +34,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         {
             hearingFunction = ExternalModHandler.CreateHearingFunction(BotOwner);
 
-            if (!ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.Enabled)
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return true;
             }
 
-            if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
+            if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
             {
                 //if (wasSuspiciousTooLong)
                 //{
@@ -128,8 +128,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private int updateSuspiciousTime()
         {
             System.Random random = new System.Random();
-            int min = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
-            int max = (int)ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Max;
+            int min = (int)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
+            int max = (int)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Max;
 
             return random.Next(min, max);
         }
@@ -138,13 +138,13 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         {
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
 
-            if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey(locationId))
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey(locationId))
             {
-                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime[locationId];
+                maxSuspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime[locationId];
             }
-            else if (ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey("default"))
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime.ContainsKey("default"))
             {
-                maxSuspiciousTime = ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime["default"];
+                maxSuspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxSuspiciousTime["default"];
             }
             else
             {
@@ -174,8 +174,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             // Adjust the sound power based on the bot's loadout and the type of noise
             float adjustedPower = power * BotOwner.HearingMultiplier();
-            adjustedPower *= (type == AISoundType.step) ? ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierFootsteps : 1;
-            if (adjustedPower < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MinCorrectedSoundPower)
+            adjustedPower *= (type == AISoundType.step) ? Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierFootsteps : 1;
+            if (adjustedPower < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MinCorrectedSoundPower)
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo("Power: " + power + ", Adjusted Power: " + adjustedPower);
                 return;
@@ -202,19 +202,19 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             switch (soundType)
             {
                 case AISoundType.step:
-                    if (distance < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceFootsteps)
+                    if (distance < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceFootsteps)
                     {
                         return false;
                     }
                     break;
                 case AISoundType.gun:
-                    if (distance < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfire)
+                    if (distance < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfire)
                     {
                         return false;
                     }
                     break;
                 case AISoundType.silencedGun:
-                    if (distance < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfireSuppressed)
+                    if (distance < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.MaxDistanceGunfireSuppressed)
                     {
                         return false;
                     }

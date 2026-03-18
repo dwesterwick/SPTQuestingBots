@@ -40,7 +40,7 @@ namespace QuestingBots.Patches
             }
 
             // This is only an issue when using the Queting Bots spawning system
-            if (!ConfigController.Config.Enabled || !ConfigController.Config.BotSpawns.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Enabled || !Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {
                 return false;
             }

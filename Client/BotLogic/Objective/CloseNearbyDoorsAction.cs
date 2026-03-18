@@ -144,7 +144,7 @@ namespace QuestingBots.BotLogic.Objective
 
                 ObjectiveManager.FailObjective();
 
-                if (ConfigController.Config.Debug.ShowFailedPaths)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                 {
                     drawBotPath(Color.yellow);
                 }
@@ -214,12 +214,12 @@ namespace QuestingBots.BotLogic.Objective
             // distance. This is to force the bot to close the door from inside of its current room.
             Vector3 possibleInteractionPosition = door.transform.position;
             Vector3 vectorToBot = (BotOwner.Position - possibleInteractionPosition).normalized;
-            possibleInteractionPosition += new Vector3(0, ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset, 0);
-            possibleInteractionPosition += vectorToBot * ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+            possibleInteractionPosition += new Vector3(0, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchOffset, 0);
+            possibleInteractionPosition += vectorToBot * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
 
             // Determine the NavMesh position to which the bot should go in order to unlock the door. This is based on the possible interaction
             // position defined above. 
-            float searchRadius = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+            float searchRadius = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
             Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
             if (navMeshPosition == null)
             {
@@ -227,14 +227,14 @@ namespace QuestingBots.BotLogic.Objective
 
                 ObjectiveManager.FailObjective();
 
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
                     DebugHelpers.outlinePosition(possibleInteractionPosition, Color.yellow, searchRadius);
                 }
             }
             else
             {
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
                     DebugHelpers.outlinePosition(navMeshPosition.Value, Color.green);
                 }

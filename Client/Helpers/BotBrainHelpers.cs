@@ -21,7 +21,7 @@ namespace QuestingBots.Helpers
             Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), brainLayerPriorities.Sleeping);
 
-            if (!ConfigController.Config.Questing.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.Enabled)
             {
                 return;
             }

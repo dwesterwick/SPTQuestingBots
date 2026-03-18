@@ -85,7 +85,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
                 allowSpawn(pendingScavCount);
             }
 
-            float timeWindow = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
+            float timeWindow = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
             int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
             float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
 
@@ -120,7 +120,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
             Singleton<LoggingUtil>.Instance.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
             logScavSpawnRate();
 
-            float retryDelay = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
+            float retryDelay = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
             nextRetryTimeDelayField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, retryDelay);
             
             return false;
@@ -128,7 +128,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
         private static void logScavSpawnRate()
         {
-            float timeWindow = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
+            float timeWindow = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.EftNewSpawnSystemAdjustments.ScavSpawnRateTimeWindow;
             int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
             float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
 

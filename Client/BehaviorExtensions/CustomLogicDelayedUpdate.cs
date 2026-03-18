@@ -11,6 +11,7 @@ using EFT;
 using EFT.Interactive;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.BehaviorExtensions
@@ -147,13 +148,13 @@ namespace QuestingBots.BehaviorExtensions
             }
 
             // Disable sprinting if the bot is very close to its current destination point to prevent it from sliding into staircase corners, etc.
-            if (IsNearPathCorner(ConfigController.Config.Questing.SprintingLimitations.SharpPathCorners))
+            if (IsNearPathCorner(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.SprintingLimitations.SharpPathCorners))
             {
                 return false;
             }
 
             // Prevent bots from sliding into doors
-            if (IsNearAndMovingTowardClosedDoor(ConfigController.Config.Questing.SprintingLimitations.ApproachingClosedDoors))
+            if (IsNearAndMovingTowardClosedDoor(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.SprintingLimitations.ApproachingClosedDoors))
             {
                 return false;
             }

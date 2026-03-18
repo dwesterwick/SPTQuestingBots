@@ -24,7 +24,7 @@ namespace QuestingBots.Components.Spawning
 
         protected override void Init()
         {
-            RetryTimeSeconds = ConfigController.Config.BotSpawns.SpawnRetryTime;
+            RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
             setMaxAliveBots();
         }
@@ -34,12 +34,11 @@ namespace QuestingBots.Components.Spawning
         protected override int GetMaxGeneratedBots()
         {
             // Check if PMC's are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !ConfigController.Config.Debug.AlwaysSpawnPScavs)
+            if (!PlayerWantsBotsInRaid() && !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AlwaysSpawnPScavs)
             {
                 return 0;
             }
 
-            ConfigController.GetScavRaidSettings();
             createBotSpawnSchedule();
 
             return botSpawnSchedule.Count;
@@ -84,13 +83,13 @@ namespace QuestingBots.Components.Spawning
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-            int botsInGroup = (int)Math.Round(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
+            int botsInGroup = (int)Math.Round(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
             botsInGroup = (int)Math.Max(botsInGroup, 1);
 
             // Determine the difficulty for the new bot group
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, ConfigController.Config.BotSpawns.PScavs.BotDifficultyAsOnline);
+            BotDifficulty botDifficulty = GetBotDifficulty(locationData.CurrentRaidSettings.WavesSettings.BotDifficulty, Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.BotDifficultyAsOnline);
 
             // Force the server to generate a player Scav
             RaidHelpers.ForcePScavs = true;
@@ -98,7 +97,7 @@ namespace QuestingBots.Components.Spawning
             RaidHelpers.ForcePScavs = false;
 
             // Set the minimum and maximum spawn times for the PScav group
-            float minTimeRemaining = ConfigController.Config.BotSpawns.PScavs.MinRaidTimeRemaining;
+            float minTimeRemaining = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinRaidTimeRemaining;
             group.RaidETRangeToSpawn.Min = botSpawnSchedule[GeneratedBotCount];
             group.RaidETRangeToSpawn.Max = RaidHelpers.OriginalEscapeTimeSeconds - minTimeRemaining;
 
@@ -107,7 +106,7 @@ namespace QuestingBots.Components.Spawning
 
         protected override IEnumerable<Vector3> GetSpawnPositionsForBotGroup(Models.BotSpawnInfo botGroup)
         {
-            float minDistanceFromOtherPlayers = ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory + 5;
+            float minDistanceFromOtherPlayers = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory + 5;
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
             string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
@@ -159,28 +158,28 @@ namespace QuestingBots.Components.Spawning
             // Get the current location ID and ensure there are SPT Scav-raid raid-time-reduction settings for it
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
             string locationID = locationData.CurrentLocation.Id.ToLower();
-            if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
+            if (!Singleton<ConfigUtil>.Instance.ScavRaidSettings.ContainsKey(locationID))
             {
                 Singleton<LoggingUtil>.Instance.LogError("Cannot find location " + locationID + " in Scav-raid settings data from server. Falling back to default settings.");
                 locationID = "default";
 
-                if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
+                if (!Singleton<ConfigUtil>.Instance.ScavRaidSettings.ContainsKey(locationID))
                 {
                     throw new InvalidOperationException(locationID + " not found in Scav-raid settings data from server.");
                 }
             }
 
             float originalEscapeTime = RaidHelpers.OriginalEscapeTimeSeconds;
-            int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * ConfigController.Config.BotSpawns.PScavs.FractionOfMaxPlayers);
+            int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.FractionOfMaxPlayers);
 
             // Parse the SPT raid-time-reduction settings
             List<float> possibleSpawnTimes = new List<float>();
-            foreach (string fractionString in ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
+            foreach (string fractionString in Singleton<ConfigUtil>.Instance.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
                 try
                 {
                     float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
-                    int weight = ConfigController.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
+                    int weight = Singleton<ConfigUtil>.Instance.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
 
                     // Add the same number of entries to the List as the weight value for the reduction percentage. This makes the
                     // reduction percentage more likely to be selected when creating the spawn schedule.
@@ -195,7 +194,7 @@ namespace QuestingBots.Components.Spawning
                 }
             }
 
-            int maxSpawnTimeAdjustment = (int)Math.Round(originalEscapeTime * ConfigController.Config.BotSpawns.PScavs.TimeRandomness / 100);
+            int maxSpawnTimeAdjustment = (int)Math.Round(originalEscapeTime * Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.TimeRandomness / 100);
 
             // Create the spawn schedule
             for (int pScav = 0; pScav < totalPScavs; pScav++)
@@ -216,13 +215,13 @@ namespace QuestingBots.Components.Spawning
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey(locationID))
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots[locationID];
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
             }
-            else if (ConfigController.Config.BotSpawns.MaxAliveBots.ContainsKey("default"))
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
             {
-                MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots["default"];
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);
@@ -232,15 +231,15 @@ namespace QuestingBots.Components.Spawning
         {
             if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
             {
-                return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersInitial;
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersInitial;
             }
 
             if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
             {
-                return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory;
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory;
             }
 
-            return ConfigController.Config.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaid;
+            return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaid;
         }
     }
 }

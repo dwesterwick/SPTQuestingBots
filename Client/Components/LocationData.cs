@@ -59,14 +59,14 @@ namespace QuestingBots.Components
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
 
-            if (ConfigController.Config.Questing.Enabled)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.Enabled)
             {
                 QuestHelpers.ClearCache();
                 Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotQuestBuilder>();
                 Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
             }
 
-            if (ConfigController.Config.BotSpawns.Enabled)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {
                 BotGenerator.RunBotGenerationTasks();
             }
@@ -636,7 +636,7 @@ namespace QuestingBots.Components
             {
                 SpawnPointParams nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
 
-                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Position, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
                 if (!navMeshPosition.HasValue)
                 {
                     excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
@@ -717,8 +717,8 @@ namespace QuestingBots.Components
             Dictionary<Vector3, float> validPositions = new Dictionary<Vector3, float>();
 
             // Determine positions around the door to test
-            float searchDistance = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
-            float searchOffset = ConfigController.Config.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
+            float searchDistance = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+            float searchOffset = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchOffset;
             Vector3[] possibleInteractionPositions = new Vector3[4]
             {
                 door.transform.position + new Vector3(searchDistance, 0, 0) + new Vector3(0, searchOffset, 0),
@@ -731,14 +731,14 @@ namespace QuestingBots.Components
             foreach (Vector3 possibleInteractionPosition in possibleInteractionPositions)
             {
                 // Determine if a valid NavMesh location can be found for the position
-                Vector3? navMeshPosition = FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(possibleInteractionPosition, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                 if (!navMeshPosition.HasValue)
                 {
                     Singleton<LoggingUtil>.Instance.LogInfo("Cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
 
-                    if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                     {
-                        DebugHelpers.outlinePosition(possibleInteractionPosition, Color.white, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                        DebugHelpers.outlinePosition(possibleInteractionPosition, Color.white, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                     }
 
                     continue;
@@ -757,7 +757,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
                     DebugHelpers.outlinePosition(navMeshPosition.Value, Color.yellow);
                 }
@@ -770,7 +770,7 @@ namespace QuestingBots.Components
                 IEnumerable<Vector3> orderedPostions = validPositions.OrderBy(p => p.Value).Select(p => p.Key);
 
                 // If applicable, draw the positions in the world
-                if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
                     DebugHelpers.outlinePosition(orderedPostions.First(), Color.green);
 
@@ -914,7 +914,7 @@ namespace QuestingBots.Components
 
             Models.Questing.StoredQuestLocation location = new Models.Questing.StoredQuestLocation(QuestingBotsPluginConfig.QuestLocationName.Value, mainPlayer.Position);
 
-            string filename = ConfigController.GetLoggingPath()
+            string filename = Singleton<LoggingUtil>.Instance.LoggingPath
                 + CurrentLocation.Id.Replace(" ", "")
                 + "_"
                 + awakeTime.ToFileTimeUtc()

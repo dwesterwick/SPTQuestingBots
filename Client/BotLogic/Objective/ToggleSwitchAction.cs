@@ -115,7 +115,7 @@ namespace QuestingBots.BotLogic.Objective
 
                     ObjectiveManager.FailObjective();
 
-                    if (ConfigController.Config.Debug.ShowFailedPaths)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                     {
                         drawBotPath(Color.yellow);
                     }

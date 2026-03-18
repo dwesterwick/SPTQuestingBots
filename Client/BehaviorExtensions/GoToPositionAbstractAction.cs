@@ -167,7 +167,7 @@ namespace QuestingBots.BehaviorExtensions
 
         protected bool checkIfBotIsStuck()
         {
-            return checkIfBotIsStuck(ConfigController.Config.Questing.StuckBotDetection.Time, true);
+            return checkIfBotIsStuck(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.Time, true);
         }
 
         protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)
@@ -177,7 +177,7 @@ namespace QuestingBots.BehaviorExtensions
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > stuckTime)
             {
-                if (drawPath && ConfigController.Config.Debug.ShowFailedPaths)
+                if (drawPath && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                 {
                     drawBotPath(Color.red);
                 }
@@ -228,7 +228,7 @@ namespace QuestingBots.BehaviorExtensions
 
         protected void updateBotZoneForGroup(bool allowForFollowers = false)
         {
-            if (!ConfigController.Config.Questing.UpdateBotZoneAfterStopping)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UpdateBotZoneAfterStopping)
             {
                 return;
             }
@@ -262,7 +262,7 @@ namespace QuestingBots.BehaviorExtensions
 
             // Check if the bot has moved enough
             float distanceFromLastUpdate = Vector3.Distance(lastBotPosition.Value, BotOwner.Position);
-            if (distanceFromLastUpdate > ConfigController.Config.Questing.StuckBotDetection.Distance)
+            if (distanceFromLastUpdate > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.Distance)
             {
                 lastBotPosition = BotOwner.Position;
                 restartStuckTimer();
@@ -271,7 +271,7 @@ namespace QuestingBots.BehaviorExtensions
 
         private void tryToGetUnstuck()
         {
-            if (!ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.Enabled)
             {
                 return;
             }
@@ -279,8 +279,8 @@ namespace QuestingBots.BehaviorExtensions
             // Try jumping
             if
             (
-                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping)
-                && (TimeSinceLastJump > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.JumpDebounceTime)
+                (StuckTime >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping)
+                && (TimeSinceLastJump > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.JumpDebounceTime)
             )
             {
                 if (!canUseStuckRemedies())
@@ -299,8 +299,8 @@ namespace QuestingBots.BehaviorExtensions
             // Try vaulting
             if
             (
-                (StuckTime >= ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeVaulting)
-                && (TimeSinceLastVault > ConfigController.Config.Questing.StuckBotDetection.StuckBotRemedies.VaultDebounceTime)
+                (StuckTime >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeVaulting)
+                && (TimeSinceLastVault > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.VaultDebounceTime)
             )
             {
                 if (!canUseStuckRemedies())

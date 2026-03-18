@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots
@@ -123,7 +125,7 @@ namespace QuestingBots
             MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",
                 3, new ConfigDescription("Bots will not be allowed to sprint if they are within this distance from their objective", new AcceptableValueRange<int>(0, 75)));
 
-            if (ConfigController.Config.BotSpawns.Enabled)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {
                 ScavLimitsEnabled = Config.Bind("Scav Spawn Restrictions", "Enable Scav Spawn Restrictions",
                     true, "Restrict where and how frequently Scavs are allowed to spawn");
@@ -137,8 +139,8 @@ namespace QuestingBots
                     15, new ConfigDescription("The maximum number of Scavs that can be alive at the same time (including Sniper Scavs)", new AcceptableValueRange<int>(5, 25)));
             }
 
-            int minDistanceAILimitNormal = ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.AllowZeroDistanceSleeping ? 0 : 50;
-            int minDistanceAILimitQuesting = ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.AllowZeroDistanceSleeping ? 0 : 25;
+            int minDistanceAILimitNormal = Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AllowZeroDistanceSleeping ? 0 : 50;
+            int minDistanceAILimitQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AllowZeroDistanceSleeping ? 0 : 25;
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
                 false, "Improve FPS by minimizing CPU load for AI out of certain ranges");

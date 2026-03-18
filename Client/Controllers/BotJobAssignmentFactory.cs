@@ -20,7 +20,7 @@ namespace QuestingBots.Controllers
 {
     public static class BotJobAssignmentFactory
     {
-        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(ConfigController.Config.MaxCalcTimePerFrame);
+        private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(Singleton<ConfigUtil>.Instance.CurrentConfig.MaxCalcTimePerFrame);
         private static List<Quest> allQuests = new List<Quest>();
         private static Dictionary<string, List<BotJobAssignment>> botJobAssignments = new Dictionary<string, List<BotJobAssignment>>();
 
@@ -68,18 +68,18 @@ namespace QuestingBots.Controllers
                 objective.UpdateQuestObjectiveStepNumbers();
             }
 
-            if (quest.IsCamping && (ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier != 1))
+            if (quest.IsCamping && (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityCampingMultiplier != 1))
             {
-                float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier;
+                float newDesirability = quest.Desirability * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityCampingMultiplier;
 
                 Singleton<LoggingUtil>.Instance.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
 
                 quest.Desirability = newDesirability;
             }
 
-            if (quest.IsSniping && (ConfigController.Config.Questing.BotQuests.DesirabilitySnipingMultiplier != 1))
+            if (quest.IsSniping && (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilitySnipingMultiplier != 1))
             {
-                float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilitySnipingMultiplier;
+                float newDesirability = quest.Desirability * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilitySnipingMultiplier;
 
                 Singleton<LoggingUtil>.Instance.LogInfo("Adjusting desirability of sniping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
 
@@ -113,7 +113,7 @@ namespace QuestingBots.Controllers
                             .Where(p => p.HasValue)
                             .Any(position => Singleton<GameWorld>.Instance.GetComponent<LocationData>().IsPointOnLightkeeperIsland(position));
 
-                        if (visitsIsland && !ConfigController.Config.Questing.BotQuests.LightkeeperIslandQuests.Enabled)
+                        if (visitsIsland && !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LightkeeperIslandQuests.Enabled)
                         {
                             if (quest.TryRemoveObjective(objective))
                             {
@@ -387,7 +387,7 @@ namespace QuestingBots.Controllers
             }
 
             double? timeSinceQuestEnded = quest.ElapsedTimeWhenLastEndedForBot(bot);
-            if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.Questing.BotQuestingRequirements.RepeatQuestDelay))
+            if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.RepeatQuestDelay))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
 
@@ -439,7 +439,7 @@ namespace QuestingBots.Controllers
         public static bool HasBotBeingDoingQuestTooLong(this Quest quest, BotOwner bot, out double? time)
         {
             time = quest.ElapsedTimeSinceBotStarted(bot);
-            if (time.HasValue && (time >= ConfigController.Config.Questing.BotQuestingRequirements.MaxTimePerQuest))
+            if (time.HasValue && (time >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxTimePerQuest))
             {
                 return true;
             }
@@ -528,7 +528,7 @@ namespace QuestingBots.Controllers
             }
 
             float maxDistanceBetweenExfils = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxDistanceBetweenExfils();
-            float minDistanceToSwitchExfil = maxDistanceBetweenExfils * ConfigController.Config.Questing.BotQuests.ExfilReachedMinFraction;
+            float minDistanceToSwitchExfil = maxDistanceBetweenExfils * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilReachedMinFraction;
 
             // If the bot is close to its selected exfil (only used for quest selection), select a new one
             float? distanceToExfilPoint = botObjectiveManager?.DistanceToExfiltrationPointForQuesting();
@@ -581,7 +581,7 @@ namespace QuestingBots.Controllers
                 quest = bot.GetRandomQuest(invalidQuests);
 
                 // If a quest hasn't been found within a certain amount of time, something is wrong
-                if (timeoutMonitor.ElapsedMilliseconds > ConfigController.Config.Questing.QuestSelectionTimeout)
+                if (timeoutMonitor.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelectionTimeout)
                 {
                     // First try allowing the bot to repeat quests it already completed
                     if (bot.TryArchiveRepeatableAssignments() > 0)
@@ -677,24 +677,24 @@ namespace QuestingBots.Controllers
             // Calculate the maximum amount of "randomness" to apply to each quest
             //double distanceRange = questDistanceRanges.Max(q => q.Value.Max) - questDistanceRanges.Min(q => q.Value.Min);
             double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
-            int maxRandomDistance = (int)Math.Ceiling(maxDistance * ConfigController.Config.Questing.BotQuests.DistanceRandomness / 100.0);
-            float maxExfilAngle = ConfigController.Config.Questing.BotQuests.ExfilDirectionMaxAngle;
+            int maxRandomDistance = (int)Math.Ceiling(maxDistance * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness / 100.0);
+            float maxExfilAngle = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionMaxAngle;
 
-            int distanceRandomness = ConfigController.Config.Questing.BotQuests.DistanceRandomness;
-            int desirabilityRandomness = ConfigController.Config.Questing.BotQuests.DesirabilityRandomness;
+            int distanceRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness;
+            int desirabilityRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityRandomness;
 
-            float distanceWeighting = ConfigController.Config.Questing.BotQuests.DistanceWeighting;
-            float desirabilityWeighting = ConfigController.Config.Questing.BotQuests.DesirabilityWeighting;
+            float distanceWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceWeighting;
+            float desirabilityWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityWeighting;
             float exfilDirectionWeighting = 0;
 
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
-            if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(locationId))
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(locationId))
             {
-                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting[locationId];
+                exfilDirectionWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting[locationId];
             }
-            else if (ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey("default"))
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey("default"))
             {
-                exfilDirectionWeighting = ConfigController.Config.Questing.BotQuests.ExfilDirectionWeighting["default"];
+                exfilDirectionWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting["default"];
             }
 
             System.Random random = new System.Random();
@@ -703,7 +703,7 @@ namespace QuestingBots.Controllers
             Dictionary<Quest, float> questDesirabilityFractions = questDistanceRanges
                 .ToDictionary(o => o.Key, o => 
                 (
-                    o.Key.Desirability * (o.Key.IsActiveForPlayer ? ConfigController.Config.Questing.BotQuests.DesirabilityActiveQuestMultiplier : 1)
+                    o.Key.Desirability * (o.Key.IsActiveForPlayer ? Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityActiveQuestMultiplier : 1)
                     + random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100
                 );
             Dictionary<Quest, double> questExfilAngleFactor = questExfilAngleRanges
@@ -757,7 +757,7 @@ namespace QuestingBots.Controllers
 
         public static void WriteQuestLogFile(long timestamp)
         {
-            if (!ConfigController.Config.Debug.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled)
             {
                 return;
             }
@@ -796,7 +796,7 @@ namespace QuestingBots.Controllers
 
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
 
-            string filename = ConfigController.GetLoggingPath()
+            string filename = Singleton<LoggingUtil>.Instance.LoggingPath
                 + locationId.Replace(" ", "")
                 + "_"
                 + timestamp
@@ -807,7 +807,7 @@ namespace QuestingBots.Controllers
 
         public static void WriteBotJobAssignmentLogFile(long timestamp)
         {
-            if (!ConfigController.Config.Debug.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled)
             {
                 return;
             }
@@ -858,7 +858,7 @@ namespace QuestingBots.Controllers
 
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
 
-            string filename = ConfigController.GetLoggingPath()
+            string filename = Singleton<LoggingUtil>.Instance.LoggingPath
                 + locationId.Replace(" ", "")
                 + "_"
                 + timestamp

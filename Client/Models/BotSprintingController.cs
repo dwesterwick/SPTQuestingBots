@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models
@@ -24,8 +26,8 @@ namespace QuestingBots.Models
         {
             BotOwner = botOwner;
 
-            staminaLimits = ConfigController.Config.Questing.SprintingLimitations.Stamina;
-            debounceTime = ConfigController.Config.Questing.SprintingLimitations.EnableDebounceTime;
+            staminaLimits = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.SprintingLimitations.Stamina;
+            debounceTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.SprintingLimitations.EnableDebounceTime;
         }
 
         public void ExternalUpdate(bool value, bool withDebugCallback = true)

@@ -192,7 +192,7 @@ namespace QuestingBots.BotLogic.Objective
             // Go to the interaction location selected when the action was created
             // TO DO: Can this distance be reduced?
             float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);
-            if (distanceToTargetPosition >= ConfigController.Config.Questing.UnlockingDoors.MaxDistanceToUnlock)
+            if (distanceToTargetPosition >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.MaxDistanceToUnlock)
             {
                 NavMeshPathStatus? pathStatus = RecalculatePath(interactionPosition.Value);
 
@@ -203,7 +203,7 @@ namespace QuestingBots.BotLogic.Objective
 
                     ObjectiveManager.FailObjective();
 
-                    if (ConfigController.Config.Debug.ShowFailedPaths)
+                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                     {
                         drawBotPath(Color.yellow);
                     }
@@ -265,7 +265,7 @@ namespace QuestingBots.BotLogic.Objective
             // Report that the door has been unlocked, and wait a few seconds before allowing the bot to recalculate its path to its quest objective.
             // If the questing layer is not paused, there will not be enough time for the NavMesh to update, and the bot will fail its objective. 
             ObjectiveManager.DoorIsUnlocked();
-            ObjectiveManager.PauseRequest = ConfigController.Config.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
+            ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
             
             // Assume the door has been unlocked because bots will constantly try breaching some doors otherwise
             Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().ReportUnlockedDoor(worldInteractiveObject);

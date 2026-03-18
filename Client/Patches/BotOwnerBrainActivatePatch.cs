@@ -67,7 +67,7 @@ namespace QuestingBots.Patches
 
         private static void registerBotAsHumanPlayer(BotOwner __instance)
         {
-            if (!ConfigController.Config.BotSpawns.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace QuestingBots.Patches
         {
             BotType botType = Controllers.BotRegistrationManager.GetBotType(bot);
 
-            float chance = ConfigController.Config.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
+            float chance = Singleton<ConfigUtil>.Instance.CurrentConfig.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
 
             System.Random random = new System.Random();
             if (random.Next(1, 100) <= chance)

@@ -42,7 +42,7 @@ namespace QuestingBots.BotLogic.ExternalMods
 
         public static void CheckForExternalMods()
         {
-            if (!ConfigController.Config.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Enabled)
             {
                 return;
             }

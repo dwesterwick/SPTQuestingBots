@@ -137,7 +137,7 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if a door must be unlocked to complete proceed with the objective
-            if ((ObjectiveManager.DoorIDToUnlockForObjective != "") && (ObjectiveManager.BotPath.DistanceToTarget < ConfigController.Config.Questing.UnlockingDoors.SearchRadius))
+            if ((ObjectiveManager.DoorIDToUnlockForObjective != "") && (ObjectiveManager.BotPath.DistanceToTarget < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.SearchRadius))
             {
                 WorldInteractiveObject doorToUnlockForObjective = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindWorldInteractiveObjectsByID(ObjectiveManager.DoorIDToUnlockForObjective);
 
@@ -158,7 +158,7 @@ namespace QuestingBots.BotLogic.Objective
 
             // If the bot is far from its objective position but its path is incomplete, have it try going there anyway. Sometimes I get lost too,
             // so who am I to judge?
-            if (distanceToEndOfPath > ConfigController.Config.Questing.BotSearchDistances.MaxNavMeshPathError)
+            if (distanceToEndOfPath > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.MaxNavMeshPathError)
             {
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (ObjectiveManager.HasCompletePath)
@@ -171,13 +171,13 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if it's possible that a locked door is blocking the bot's path
-            if (missingDistance <= ConfigController.Config.Questing.UnlockingDoors.SearchRadius)
+            if (missingDistance <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.SearchRadius)
             {
                 // Check if the bot is allowed to unlock doors
                 if (ObjectiveManager.MustUnlockDoor || isAllowedToUnlockDoors())
                 {
                     // Find a door for the bot to unlock
-                    bool foundDoor = ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen(ConfigController.Config.Questing.UnlockingDoors.SearchRadius);
+                    bool foundDoor = ObjectiveManager.MustUnlockDoor || tryFindLockedDoorToOpen(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.SearchRadius);
                     Door? door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
 
                     // If there is a door for the bot to unlock, have it try doing that
@@ -192,7 +192,7 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if the bot got "close enough" to its objective
-            if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
+            if (distanceToObjective < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
                 ObjectiveManager.CompleteObjective();
@@ -213,26 +213,26 @@ namespace QuestingBots.BotLogic.Objective
         private bool isAllowedToUnlockDoors()
         {
             // Don't search for doors every cycle or too many may be selected in a short time
-            if (unlockDebounceTime < ConfigController.Config.Questing.UnlockingDoors.DebounceTime)
+            if (unlockDebounceTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DebounceTime)
             {
                 return false;
             }
 
             BotType botType = Controllers.BotRegistrationManager.GetBotType(BotOwner);
 
-            if ((botType == BotType.PMC) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PMC)
+            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PMC)
             {
                 return true;
             }
-            if ((botType == BotType.Scav) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Scav)
+            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Scav)
             {
                 return true;
             }
-            if ((botType == BotType.PScav) && ConfigController.Config.Questing.UnlockingDoors.Enabled.PScav)
+            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PScav)
             {
                 return true;
             }
-            if ((botType == BotType.Boss) && ConfigController.Config.Questing.UnlockingDoors.Enabled.Boss)
+            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Boss)
             {
                 return true;
             }

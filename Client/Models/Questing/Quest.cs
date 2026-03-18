@@ -53,7 +53,7 @@ namespace QuestingBots.Models.Questing
         public float MaxRaidET { get; set; } = float.MaxValue;
 
         [JsonProperty("maxTimeOnQuest")]
-        public float MaxTimeOnQuest { get; set; } = ConfigController.Config.Questing.BotQuestingRequirements.MaxTimePerQuest;
+        public float MaxTimeOnQuest { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxTimePerQuest;
 
         [JsonProperty("canRunBetweenObjectives")]
         public bool CanRunBetweenObjectives { get; set; } = true;
@@ -131,7 +131,7 @@ namespace QuestingBots.Models.Questing
             List<Vector3> positions = new List<Vector3>();
 
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-            float searchDistance = ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+            float searchDistance = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
 
             foreach (SerializableVector3 serializableVector3 in serializableWaypointPositions)
             {
@@ -175,8 +175,8 @@ namespace QuestingBots.Models.Questing
             }
 
             bool canAssign = canAssignForBotType(bot)
-                && ((bot.Profile.Info.Level >= MinLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
-                && ((bot.Profile.Info.Level <= MaxLevel) || !ConfigController.Config.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
+                && ((bot.Profile.Info.Level >= MinLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
+                && ((bot.Profile.Info.Level <= MaxLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && (raidTime >= MinRaidET)
                 && (raidTime <= MaxRaidET);
 
