@@ -1,10 +1,12 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.BotLogic.Follow;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.BotLogic.Objective;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,7 +58,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if (ObjectiveManager.IsQuestingAllowed && BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
             {
-                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + ObjectiveManager.StuckCount + " times and likely is unable to quest.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + ObjectiveManager.StuckCount + " times and likely is unable to quest.");
                 ObjectiveManager.StopQuesting();
                 BotOwner.Mover.Stop();
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);

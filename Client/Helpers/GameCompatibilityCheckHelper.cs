@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -32,7 +33,7 @@ namespace QuestingBots.Helpers
             currentVersionString = GetSPTVersionString();
             if (currentVersionString == null)
             {
-                LoggingController.LogErrorToServerConsole("Could not determine the current SPT version.");
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole("Could not determine the current SPT version.");
                 return false;
             }
 
@@ -69,7 +70,7 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError("An exception occurred when getting the SPT version: " + e.Message);
+                Singleton<LoggingUtil>.Instance.LogError("An exception occurred when getting the SPT version: " + e.Message);
                 return null!;
             }
         }

@@ -10,6 +10,7 @@ using SPT.Custom.CustomAI;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using UnityEngine;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Components
 {
@@ -109,7 +110,7 @@ namespace QuestingBots.Components
                 return LightkeeperTraderZoneColliderHandler.trigger.bounds.Contains(position);
             }
 
-            LoggingController.LogWarning("LightkeeperTraderZoneColliderHandler is null. Using alternative check for position being on the island.");
+            Singleton<LoggingUtil>.Instance.LogWarning("LightkeeperTraderZoneColliderHandler is null. Using alternative check for position being on the island.");
             return position.z > 325 && position.x > 183;
         }
 
@@ -179,7 +180,7 @@ namespace QuestingBots.Components
         {
             if (playersOnIsland.Contains(player))
             {
-                LoggingController.LogInfo(player.GetText() + " has left Lightkeeper Island");
+                Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has left Lightkeeper Island");
                 playersOnIsland.Remove(player);
 
                 revertAlliances(player);
@@ -195,7 +196,7 @@ namespace QuestingBots.Components
             }
             else
             {
-                LoggingController.LogInfo(player.GetText() + " has entered Lightkeeper Island");
+                Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has entered Lightkeeper Island");
                 playersOnIsland.Add(player);
 
                 setTemporaryAlliances(player);
@@ -216,7 +217,7 @@ namespace QuestingBots.Components
 
                 if (!canSetAlliance(player, otherPlayer))
                 {
-                    LoggingController.LogWarning("Cannot force an alliance between a human player and Zryachiy or his followers");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Cannot force an alliance between a human player and Zryachiy or his followers");
                     continue;
                 }
 
@@ -259,7 +260,7 @@ namespace QuestingBots.Components
 
                 if (!originalAllies[player!].Contains(ally))
                 {
-                    LoggingController.LogDebug(player!.GetText() + "'s group is no longer allied with " + ally.GetText());
+                    Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group is no longer allied with " + ally.GetText());
 
                     BotOwner allyOwner = ally.GetBotOwner();
                     if (allyOwner != null)
@@ -280,7 +281,7 @@ namespace QuestingBots.Components
 
                 if (!playerGroup.Enemies.ContainsKey(enemy))
                 {
-                    LoggingController.LogDebug(player!.GetText() + "'s group has restored their hostility with " + enemy.GetText());
+                    Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group has restored their hostility with " + enemy.GetText());
                     playerGroup.AddEnemy(enemy, EBotEnemyCause.initCauseEnemy);
                 }
             }

@@ -9,6 +9,7 @@ using EFT.Game.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Patches;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components.Spawning
@@ -83,7 +84,7 @@ namespace QuestingBots.Components.Spawning
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-            int botsInGroup = (int)Math.Round(ConfigController.GetValueFromTotalChanceFraction(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution, random.NextDouble()));
+            int botsInGroup = (int)Math.Round(ConfigController.Config.BotSpawns.PScavs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
             botsInGroup = (int)Math.Max(botsInGroup, 1);
 
@@ -122,7 +123,7 @@ namespace QuestingBots.Components.Spawning
             SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPositions(positionsToAvoid, ESpawnCategoryMask.Player, EPlayerSideMask.All, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
-                LoggingController.LogWarning("Could not find a spawn point for PScav group");
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find a spawn point for PScav group");
                 return Enumerable.Empty<Vector3>();
             }
 
@@ -132,14 +133,14 @@ namespace QuestingBots.Components.Spawning
 
             if (!spawnPositions.Any())
             {
-                LoggingController.LogError("No valid spawn positions found for spawn point " + spawnPoint.Value.Position.ToUnityVector3().ToString());
+                Singleton<LoggingUtil>.Instance.LogError("No valid spawn positions found for spawn point " + spawnPoint.Value.Position.ToUnityVector3().ToString());
                 return Enumerable.Empty<Vector3>();
             }
 
             // Ensure none of the spawn points are too close to other players or bots
             if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositions, getMinDistanceFromOtherPlayers(), out float distance))
             {
-                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
             }
 
@@ -160,7 +161,7 @@ namespace QuestingBots.Components.Spawning
             string locationID = locationData.CurrentLocation.Id.ToLower();
             if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
             {
-                LoggingController.LogError("Cannot find location " + locationID + " in Scav-raid settings data from server. Falling back to default settings.");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot find location " + locationID + " in Scav-raid settings data from server. Falling back to default settings.");
                 locationID = "default";
 
                 if (!ConfigController.ScavRaidSettings.ContainsKey(locationID))
@@ -190,7 +191,7 @@ namespace QuestingBots.Components.Spawning
                 }
                 catch (FormatException)
                 {
-                    LoggingController.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationID);
+                    Singleton<LoggingUtil>.Instance.LogError("Key \"" + fractionString + "\" could not be parsed for location " + locationID);
                 }
             }
 
@@ -208,7 +209,7 @@ namespace QuestingBots.Components.Spawning
             // Write the spawn schedule to the game console for debugging
             IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
             IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
-            LoggingController.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
+            Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
         }
 
         private void setMaxAliveBots()
@@ -224,7 +225,7 @@ namespace QuestingBots.Components.Spawning
                 MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots["default"];
             }
 
-            LoggingController.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);
+            Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
 
         private float getMinDistanceFromOtherPlayers()

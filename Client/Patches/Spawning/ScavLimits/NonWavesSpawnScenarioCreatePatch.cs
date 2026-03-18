@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using EFT;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.ScavLimits
 {
@@ -24,7 +26,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .First(m => m.HasAllParameterTypes(new Type[] { typeof(AbstractGame) }));
 
-            Controllers.LoggingController.LogInfo("Found method for NonWavesSpawnScenarioCreatePatch: " + methodInfo.Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for NonWavesSpawnScenarioCreatePatch: " + methodInfo.Name);
 
             return methodInfo;
         }

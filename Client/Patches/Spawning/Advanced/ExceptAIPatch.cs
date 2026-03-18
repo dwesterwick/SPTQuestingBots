@@ -8,6 +8,8 @@ using SPT.Reflection.Patching;
 using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.Advanced
 {
@@ -18,7 +20,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
             string methodName = "ExceptAI";
 
             Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName);
-            LoggingController.LogInfo("Found type for ExceptAIPatch: " + targetType.FullName);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ExceptAIPatch: " + targetType.FullName);
 
             return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
         }

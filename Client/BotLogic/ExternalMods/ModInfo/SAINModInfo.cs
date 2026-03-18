@@ -1,9 +1,11 @@
-﻿using DrakiaXYZ.BigBrain.Brains;
+﻿using Comfort.Common;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +31,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             }
             else
             {
-                LoggingController.LogWarning("SAIN Interop not detected. Will instruct bots to extract using vanilla EFT behavior.");
+                Singleton<LoggingUtil>.Instance.LogWarning("SAIN Interop not detected. Will instruct bots to extract using vanilla EFT behavior.");
             }
 
             return CanUseInterop;
@@ -103,7 +105,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             }
             else
             {
-                LoggingController.LogWarning("No SAIN brain layers found for brain type " + brainName);
+                Singleton<LoggingUtil>.Instance.LogWarning("No SAIN brain layers found for brain type " + brainName);
             }
 
             return -1;

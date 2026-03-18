@@ -4,7 +4,9 @@ using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.Objective;
 using QuestingBots.Components;
+using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -70,7 +72,7 @@ namespace QuestingBots.Controllers
             {
                 float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilityCampingMultiplier;
 
-                LoggingController.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
+                Singleton<LoggingUtil>.Instance.LogInfo("Adjusting desirability of camping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
 
                 quest.Desirability = newDesirability;
             }
@@ -79,7 +81,7 @@ namespace QuestingBots.Controllers
             {
                 float newDesirability = quest.Desirability * ConfigController.Config.Questing.BotQuests.DesirabilitySnipingMultiplier;
 
-                LoggingController.LogInfo("Adjusting desirability of sniping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
+                Singleton<LoggingUtil>.Instance.LogInfo("Adjusting desirability of sniping quest " + quest.ToString() + " from " + quest.Desirability + " to " + newDesirability);
 
                 quest.Desirability = newDesirability;
             }
@@ -115,11 +117,11 @@ namespace QuestingBots.Controllers
                         {
                             if (quest.TryRemoveObjective(objective))
                             {
-                                LoggingController.LogInfo("Removing quest objective on Lightkeeper island: " + objective + " for quest " + quest);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Removing quest objective on Lightkeeper island: " + objective + " for quest " + quest);
                             }
                             else
                             {
-                                LoggingController.LogError("Could not remove quest objective on Lightkeeper island: " + objective + " for quest " + quest);
+                                Singleton<LoggingUtil>.Instance.LogError("Could not remove quest objective on Lightkeeper island: " + objective + " for quest " + quest);
                             }
                         }
                     }
@@ -136,11 +138,11 @@ namespace QuestingBots.Controllers
                         {
                             if (quest.TryRemoveObjective(objective))
                             {
-                                LoggingController.LogInfo("Removing quest objective on Scav island: " + objective + " for quest " + quest);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Removing quest objective on Scav island: " + objective + " for quest " + quest);
                             }
                             else
                             {
-                                LoggingController.LogError("Could not remove quest objective on Scav island: " + objective + " for quest " + quest);
+                                Singleton<LoggingUtil>.Instance.LogError("Could not remove quest objective on Scav island: " + objective + " for quest " + quest);
                             }
                         }
                     }
@@ -148,7 +150,7 @@ namespace QuestingBots.Controllers
                     // If there are no remaining objectives, remove the quest too
                     if (quest.NumberOfObjectives == 0)
                     {
-                        LoggingController.LogInfo("Removing quest with no valid objectives: " + quest + "...");
+                        Singleton<LoggingUtil>.Instance.LogInfo("Removing quest with no valid objectives: " + quest + "...");
                         allQuests.Remove(quest);
                     }
                 }
@@ -209,7 +211,7 @@ namespace QuestingBots.Controllers
                     .Count();
             }
 
-            //LoggingController.LogInfo("Bots doing " + quest.ToString() + ": " + num);
+            //Singleton<LoggingUtil>.Instance.LogInfo("Bots doing " + quest.ToString() + ": " + num);
 
             return num;
         }
@@ -339,7 +341,7 @@ namespace QuestingBots.Controllers
             // Check if the bot is eligible to do the quest
             if (!quest.CanAssignBot(bot))
             {
-                //LoggingController.LogInfo("Cannot assign " + bot.GetText() + " to quest " + quest.ToString());
+                //Singleton<LoggingUtil>.Instance.LogInfo("Cannot assign " + bot.GetText() + " to quest " + quest.ToString());
                 return false;
             }
 
@@ -353,7 +355,7 @@ namespace QuestingBots.Controllers
             // Ensure the bot can do at least one of the objectives
             if (!quest.AllObjectives.Any(o => o.CanAssignBot(bot)))
             {
-                //LoggingController.LogInfo("Cannot assign " + bot.GetText() + " to any objectives in quest " + quest.ToString());
+                //Singleton<LoggingUtil>.Instance.LogInfo("Cannot assign " + bot.GetText() + " to any objectives in quest " + quest.ToString());
                 return false;
             }
 
@@ -387,7 +389,7 @@ namespace QuestingBots.Controllers
             double? timeSinceQuestEnded = quest.ElapsedTimeWhenLastEndedForBot(bot);
             if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= ConfigController.Config.Questing.BotQuestingRequirements.RepeatQuestDelay))
             {
-                LoggingController.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
 
                 IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
                     .Where(a => a.QuestAssignment == quest);
@@ -454,18 +456,18 @@ namespace QuestingBots.Controllers
 
             if (allowUpdate && DoesBotHaveNewJobAssignment(bot))
             {
-                LoggingController.LogInfo("Bot " + bot.GetText() + " is now doing " + botJobAssignments[bot.Profile.Id].Last().ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now doing " + botJobAssignments[bot.Profile.Id].Last().ToString());
 
                 if (botJobAssignments[bot.Profile.Id].Count > 1)
                 {
                     BotJobAssignment lastAssignment = botJobAssignments[bot.Profile.Id].TakeLast(2).First();
-                    LoggingController.LogDebug("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
+                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
 
                     //double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
                     //double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);
                     //string startedTimeText = timeSinceBotStartedQuest.HasValue ? timeSinceBotStartedQuest.Value.ToString() : "N/A";
                     //string lastFinishedTimeText = timeSinceBotLastFinishedQuest.HasValue ? timeSinceBotLastFinishedQuest.Value.ToString() : "N/A";
-                    //LoggingController.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
                 }
             }
 
@@ -476,7 +478,7 @@ namespace QuestingBots.Controllers
 
             if (allowUpdate)
             {
-                LoggingController.LogWarning("Could not get a job assignment for bot " + bot.GetText());
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not get a job assignment for bot " + bot.GetText());
             }
 
             return null!;
@@ -505,7 +507,7 @@ namespace QuestingBots.Controllers
                     return true;
                 }
 
-                //LoggingController.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
+                //Singleton<LoggingUtil>.Instance.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
             }
 
             if (bot.GetNewBotJobAssignment() != null)
@@ -547,7 +549,7 @@ namespace QuestingBots.Controllers
             // Clear the bot's assignment if it's been doing the same quest for too long
             if ((quest?.HasBotBeingDoingQuestTooLong(bot, out double? timeDoingQuest) == true) && (timeDoingQuest != null))
             {
-                LoggingController.LogInfo(bot.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
+                Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
                 quest = null;
                 objective = null;
             }
@@ -571,7 +573,7 @@ namespace QuestingBots.Controllers
                 }
                 if (quest != null)
                 {
-                    //LoggingController.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
                     invalidQuests.Add(quest);
                 }
 
@@ -584,22 +586,22 @@ namespace QuestingBots.Controllers
                     // First try allowing the bot to repeat quests it already completed
                     if (bot.TryArchiveRepeatableAssignments() > 0)
                     {
-                        LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Trying to select a repeatable quest early instead...");
+                        Singleton<LoggingUtil>.Instance.LogWarning(bot.GetText() + " cannot select any quests. Trying to select a repeatable quest early instead...");
                         continue;
                     }
 
                     // If there are still no quests available for the bot to select, give up trying to select one
-                    LoggingController.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
+                    Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
                     botObjectiveManager?.StopQuesting();
 
                     // Try making the bot extract because it has nothing to do
                     if (botObjectiveManager?.BotMonitor?.GetMonitor<BotExtractMonitor>()?.TryInstructBotToExtract() == true)
                     {
-                        LoggingController.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
+                        Singleton<LoggingUtil>.Instance.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
                         return null!;
                     }
 
-                    LoggingController.LogError(bot.GetText() + " cannot select any quests. Questing disabled.");
+                    Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " cannot select any quests. Questing disabled.");
                     return null!;
                 }
 
@@ -718,8 +720,8 @@ namespace QuestingBots.Controllers
 
             Quest selectedQuest = sortedQuests.Last();
 
-            //LoggingController.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
-            //LoggingController.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
+            //Singleton<LoggingUtil>.Instance.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
+            //Singleton<LoggingUtil>.Instance.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
 
             return selectedQuest;
         }
@@ -760,11 +762,11 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            LoggingController.LogDebug("Writing quest log file...");
+            Singleton<LoggingUtil>.Instance.LogDebug("Writing quest log file...");
 
             if (allQuests.Count == 0)
             {
-                LoggingController.LogWarning("No quests to log.");
+                Singleton<LoggingUtil>.Instance.LogWarning("No quests to log.");
                 return;
             }
 
@@ -800,7 +802,7 @@ namespace QuestingBots.Controllers
                 + timestamp
                 + "_quests.csv";
 
-            LoggingController.CreateLogFile("quest", filename, sb.ToString());
+            Singleton<LoggingUtil>.Instance.CreateLogFile("quest", filename, sb.ToString());
         }
 
         public static void WriteBotJobAssignmentLogFile(long timestamp)
@@ -810,11 +812,11 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            LoggingController.LogDebug("Writing bot job assignment log file...");
+            Singleton<LoggingUtil>.Instance.LogDebug("Writing bot job assignment log file...");
 
             if (botJobAssignments.Count == 0)
             {
-                LoggingController.LogWarning("No bot job assignments to log.");
+                Singleton<LoggingUtil>.Instance.LogWarning("No bot job assignments to log.");
                 return;
             }
 
@@ -862,7 +864,7 @@ namespace QuestingBots.Controllers
                 + timestamp
                 + "_assignments.csv";
 
-            LoggingController.CreateLogFile("bot job assignment", filename, sb.ToString());
+            Singleton<LoggingUtil>.Instance.CreateLogFile("bot job assignment", filename, sb.ToString());
         }
 
         public static IEnumerable<JobAssignment> CreateAllPossibleJobAssignments()
@@ -900,7 +902,7 @@ namespace QuestingBots.Controllers
                     Vector3? firstStepPosition = objective.GetFirstStepPosition();
                     if (!firstStepPosition.HasValue)
                     {
-                        LoggingController.LogError("First step position for " + objective + " in " + quest + " is null");
+                        Singleton<LoggingUtil>.Instance.LogError("First step position for " + objective + " in " + quest + " is null");
                         continue;
                     }
 
@@ -931,11 +933,11 @@ namespace QuestingBots.Controllers
 
                 if (botObjectiveManager.TryChangeObjective())
                 {
-                    LoggingController.LogWarning("Selected new quest for " + bot.GetText() + " because it has too many followers for its previous quest");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Selected new quest for " + bot.GetText() + " because it has too many followers for its previous quest");
                 }
                 else
                 {
-                    LoggingController.LogError("Cannot select new quest for " + bot.GetText() + ". It has too many followers for quest " + botJobAssignment.QuestAssignment.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot select new quest for " + bot.GetText() + ". It has too many followers for quest " + botJobAssignment.QuestAssignment.ToString());
                 }
             }
         }

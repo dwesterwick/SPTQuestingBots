@@ -9,6 +9,7 @@ using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -124,14 +125,14 @@ namespace QuestingBots.Models.Questing
         {
             if (SerializablePosition == null)
             {
-                LoggingController.LogError("Objective step does not have a position defined for it.");
+                Singleton<LoggingUtil>.Instance.LogError("Objective step does not have a position defined for it.");
                 return false;
             }
 
             Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(SerializablePosition.ToUnityVector3(), maxDistance);
             if (!navMeshPosition.HasValue)
             {
-                LoggingController.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
+                Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh position for " + SerializablePosition.ToUnityVector3().ToString());
                 return false;
             }
 

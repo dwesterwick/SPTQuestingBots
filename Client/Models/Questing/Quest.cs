@@ -12,6 +12,7 @@ using EFT.Interactive;
 using Newtonsoft.Json;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -143,7 +144,7 @@ namespace QuestingBots.Models.Questing
                 Vector3? navMeshPosition = locationData.FindNearestNavMeshPosition(uncorrectedPosition, searchDistance);
                 if (!navMeshPosition.HasValue)
                 {
-                    LoggingController.LogError("Cannot find NavMesh position for " + uncorrectedPosition.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh position for " + uncorrectedPosition.ToString());
                     continue;
                 }
 
@@ -239,7 +240,7 @@ namespace QuestingBots.Models.Questing
 
             if (matchingObjectives.Count() > 1)
             {
-                LoggingController.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
             }
 
             return matchingObjectives.First();

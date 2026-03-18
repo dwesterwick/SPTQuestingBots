@@ -9,6 +9,7 @@ using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Models.Debug;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -92,7 +93,7 @@ namespace QuestingBots.Components
 
         private void loadAllPossibleJobAssignments()
         {
-            LoggingController.LogInfo("Loading all possible job assignments...");
+            Singleton<LoggingUtil>.Instance.LogInfo("Loading all possible job assignments...");
 
             IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
 
@@ -122,7 +123,7 @@ namespace QuestingBots.Components
                 lastQuest = jobAssignment.QuestAssignment;
             }
 
-            LoggingController.LogInfo("Loading all possible job assignments...done (Created " + jobAssignmentGizmoCount + " markers).");
+            Singleton<LoggingUtil>.Instance.LogInfo("Loading all possible job assignments...done (Created " + jobAssignmentGizmoCount + " markers).");
         }
 
         private void addGizmosForQuestStep(JobAssignment jobAssignment, Vector3 position)
@@ -159,7 +160,7 @@ namespace QuestingBots.Components
                     BotFilter.Add(botName);
                     continue;
                 }
-                //LoggingController.LogError("DebugData::ValidateBotFilter Unable to parse bot filters.");
+                //Singleton<LoggingUtil>.Instance.LogError("DebugData::ValidateBotFilter Unable to parse bot filters.");
                 BotFilter.Clear();
             }
         }

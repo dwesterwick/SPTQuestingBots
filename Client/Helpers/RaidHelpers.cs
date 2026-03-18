@@ -44,7 +44,7 @@ namespace QuestingBots.Helpers
             double[][] chanceVsTimeRemainingFraction = ConfigController.Config.AdjustPScavChance.ChanceVsTimeRemainingFraction;
             float remainingRaidTimeFraction = GetRaidTimeRemainingFraction();
 
-            double pScavChance = ConfigController.InterpolateForFirstCol(chanceVsTimeRemainingFraction, remainingRaidTimeFraction);
+            double pScavChance = chanceVsTimeRemainingFraction.InterpolateForFirstCol(remainingRaidTimeFraction);
 
             System.Random random = new System.Random();
             if (random.NextDouble() * 100 < pScavChance)

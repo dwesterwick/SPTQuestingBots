@@ -12,6 +12,7 @@ using QuestingBots.BehaviorExtensions;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using SPT.Custom.CustomAI;
 using UnityEngine;
 
@@ -219,7 +220,7 @@ namespace QuestingBots.BotLogic.HiveMind
                 .Select(m => m.GetText());
             if (deadMemberNames.Any())
             {
-                LoggingController.LogError(bot.GetText() + " is trying to regroup with dead followers: " + string.Join(", ", deadMemberNames));
+                Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " is trying to regroup with dead followers: " + string.Join(", ", deadMemberNames));
             }
             
             if (members.Count == 0)
@@ -246,7 +247,7 @@ namespace QuestingBots.BotLogic.HiveMind
                 return;
             }
 
-            Controllers.LoggingController.LogInfo("Separating " + bot.GetText() + " from its group...");
+            Singleton<LoggingUtil>.Instance.LogInfo("Separating " + bot.GetText() + " from its group...");
 
             // Clear stored information about the bot's boss (if applicable)
             foreach (BotOwner follower in botBosses.Keys.ToArray())
@@ -313,11 +314,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
                     if (bot.BotsGroup.BossGroup == null)
                     {
-                        LoggingController.LogError("Could not set BossGroup for " + newBoss.GetText());
+                        Singleton<LoggingUtil>.Instance.LogError("Could not set BossGroup for " + newBoss.GetText());
                     }
                     else
                     {
-                        LoggingController.LogInfo("Selected a new boss for " + bot.Boss.Followers.Count + " followers: " + bot.BotsGroup.BossGroup.Boss.GetText());
+                        Singleton<LoggingUtil>.Instance.LogInfo("Selected a new boss for " + bot.Boss.Followers.Count + " followers: " + bot.BotsGroup.BossGroup.Boss.GetText());
                     }
                 }
             }
@@ -377,7 +378,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
                 if (botBosses[bot].IsDead)
                 {
-                    Controllers.LoggingController.LogDebug("Boss " + botBosses[bot].GetText() + " is now dead.");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Boss " + botBosses[bot].GetText() + " is now dead.");
 
                     if (botFollowers.ContainsKey(botBosses[bot]))
                     {
@@ -412,7 +413,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
             if (!botFollowers[boss].Contains(bot))
             {
-                Controllers.LoggingController.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
                 botFollowers[boss].Add(bot);
 
                 BotJobAssignmentFactory.CheckBotJobAssignmentValidity(boss);
@@ -431,7 +432,7 @@ namespace QuestingBots.BotLogic.HiveMind
                         continue;
                     }
 
-                    Controllers.LoggingController.LogDebug("Boss " + boss.GetText() + " is now dead.");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Boss " + boss.GetText() + " is now dead.");
 
                     botFollowers.Remove(boss!);
                     deadBots.Add(boss!);
@@ -443,7 +444,7 @@ namespace QuestingBots.BotLogic.HiveMind
                 {
                     if (follower == null)
                     {
-                        Controllers.LoggingController.LogWarning("Removing null follower for " + boss.GetText());
+                        Singleton<LoggingUtil>.Instance.LogWarning("Removing null follower for " + boss.GetText());
 
                         deadBots.Add(follower!);
                     }
@@ -460,7 +461,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
                     if (follower?.IsDead == true)
                     {
-                        Controllers.LoggingController.LogDebug("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
+                        Singleton<LoggingUtil>.Instance.LogDebug("Follower " + follower.GetText() + " for " + boss.GetText() + " is now dead.");
 
                         deadBots.Add(follower);
                     }

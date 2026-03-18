@@ -12,6 +12,7 @@ using HarmonyLib;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using UnityEngine;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -35,7 +36,7 @@ namespace QuestingBots.Patches.Spawning
         {
             if (!IsDelayingGameStart)
             {
-                LoggingController.LogInfo("The game start is not being delayed");
+                Singleton<LoggingUtil>.Instance.LogInfo("The game start is not being delayed");
                 return;
             }
 
@@ -44,7 +45,7 @@ namespace QuestingBots.Patches.Spawning
             IEnumerator originalEnumeratorWithMessage = addDebugMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
             __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, waitForBotGenerators(), spawnMissedWaves());
 
-            LoggingController.LogDebug("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
+            Singleton<LoggingUtil>.Instance.LogDebug("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
 
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
@@ -65,7 +66,7 @@ namespace QuestingBots.Patches.Spawning
         private static IEnumerator addDebugMessageAfterEnumerator(IEnumerator enumerator, string message)
         {
             yield return enumerator;
-            LoggingController.LogDebug(message);
+            Singleton<LoggingUtil>.Instance.LogDebug(message);
         }
 
         private static IEnumerator spawnMissedWaves()
@@ -74,7 +75,7 @@ namespace QuestingBots.Patches.Spawning
 
             if (missedBossWaves.Any())
             {
-                LoggingController.LogInfo("Spawning missed boss waves...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawning missed boss waves...");
 
                 foreach (BossLocationSpawn missedBossWave in missedBossWaves)
                 {
@@ -82,7 +83,7 @@ namespace QuestingBots.Patches.Spawning
                 }
             }
 
-            LoggingController.LogInfo("Spawned all missed boss waves");
+            Singleton<LoggingUtil>.Instance.LogInfo("Spawned all missed boss waves");
 
             yield return null;
         }
@@ -96,7 +97,7 @@ namespace QuestingBots.Patches.Spawning
             {
                 if (!hadToWait)
                 {
-                    LoggingController.LogInfo("Waiting for " + BotGenerator.RemainingBotGenerators + " bot generators...");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Waiting for " + BotGenerator.RemainingBotGenerators + " bot generators...");
                 }
                 hadToWait = true;
 
@@ -107,7 +108,7 @@ namespace QuestingBots.Patches.Spawning
 
             if (hadToWait)
             {
-                LoggingController.LogInfo("All bot generators have finished.");
+                Singleton<LoggingUtil>.Instance.LogInfo("All bot generators have finished.");
             }
 
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
@@ -117,7 +118,7 @@ namespace QuestingBots.Patches.Spawning
         {
             if (localGameObj as LocalGame == null)
             {
-                LoggingController.LogError("Cannot write WavesSpawnScenario spawn messages for the current BaseLocalGame because it is not a LocalGame");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot write WavesSpawnScenario spawn messages for the current BaseLocalGame because it is not a LocalGame");
 
                 return;
             }
@@ -125,14 +126,14 @@ namespace QuestingBots.Patches.Spawning
             WavesSpawnScenario wavesSpawnScenario = (WavesSpawnScenario)wavesSpawnScenarioField.GetValue(localGameObj);
             if (wavesSpawnScenario?.SpawnWaves == null)
             {
-                LoggingController.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
+                Singleton<LoggingUtil>.Instance.LogInfo("WavesSpawnScenario has no BotWaveDataClass waves");
 
                 return;
             }
 
             foreach (BotWaveDataClass wave in wavesSpawnScenario.SpawnWaves.ToArray())
             {
-                LoggingController.LogInfo("BotWaveDataClass at " + wave.Time + "s: " + wave.BotsCount + " bots of type " + wave.WildSpawnType.ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo("BotWaveDataClass at " + wave.Time + "s: " + wave.BotsCount + " bots of type " + wave.WildSpawnType.ToString());
             }
         }
     }

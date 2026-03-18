@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -162,7 +164,7 @@ namespace QuestingBots.Models.Questing
                 if (!step.TrySnapToNavMesh(maxNavMeshDistance))
                 {
                     allSnapped = false;
-                    LoggingController.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
                 }
             }
 
@@ -178,7 +180,7 @@ namespace QuestingBots.Models.Questing
                 if (!step.TryFindSwitch())
                 {
                     allFound = false;
-                    LoggingController.LogError("Unable to find switch \"" + step.SwitchID + "\" for quest objective " + ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Unable to find switch \"" + step.SwitchID + "\" for quest objective " + ToString());
                 }
             }
 
@@ -189,7 +191,7 @@ namespace QuestingBots.Models.Questing
         {
             if (questObjectiveSteps.Length == 0)
             {
-                //LoggingController.LogWarning("Quest objective " + ToString() + " has no steps.");
+                //Singleton<LoggingUtil>.Instance.LogWarning("Quest objective " + ToString() + " has no steps.");
                 return false;
             }
 
@@ -202,12 +204,12 @@ namespace QuestingBots.Models.Questing
             float distanceFromObjective = Vector3.Distance(bot.Position, position.Value);
             if (distanceFromObjective > MaxDistanceFromBot)
             {
-                //LoggingController.LogInfo("Bot is too far from " + this.ToString() + ". Distance: " + distanceFromObjective);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Bot is too far from " + this.ToString() + ". Distance: " + distanceFromObjective);
                 return false;
             }
             if (distanceFromObjective < MinDistanceFromBot)
             {
-                //LoggingController.LogInfo("Bot is too close to " + this.ToString() + ". Distance: " + distanceFromObjective);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Bot is too close to " + this.ToString() + ". Distance: " + distanceFromObjective);
                 return false;
             }
 

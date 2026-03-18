@@ -44,7 +44,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 if (!IsInCombat)
                 {
                     searchTimeAfterCombat = updateSearchTimeAfterCombat();
-                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
                 }
 
                 return updateCombatState(true);

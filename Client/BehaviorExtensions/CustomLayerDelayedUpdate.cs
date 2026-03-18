@@ -55,7 +55,7 @@ namespace QuestingBots.BehaviorExtensions
 
         public override Action GetNextAction()
         {
-            //LoggingController.LogInfo(BotOwner.GetText() + " is swtiching from " + previousAction.ToString() + " to " + nextAction.ToString());
+            //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is swtiching from " + previousAction.ToString() + " to " + nextAction.ToString());
 
             previousAction = nextAction;
 

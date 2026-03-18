@@ -8,6 +8,8 @@ using EFT.UI;
 using SPT.Reflection.Patching;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -56,7 +58,7 @@ namespace QuestingBots.Patches
         {
             string profileWarningMessage = "Using nVidia Reflex may result in long raid loading times";
             NotificationManagerClass.DisplayWarningNotification(profileWarningMessage, EFT.Communications.ENotificationDurationType.Long);
-            LoggingController.LogWarningToServerConsole(profileWarningMessage);
+            Singleton<LoggingUtil>.Instance.LogWarningToServerConsole(profileWarningMessage);
 
             _displayedReflexWarning = true;
         }

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.CoroutineExtensions
 {
@@ -86,8 +88,8 @@ namespace QuestingBots.CoroutineExtensions
                 }
                 catch (Exception ex)
                 {
-                    LoggingController.LogError("Cannot perform condition check for \"" + this.MethodName + "\".");
-                    LoggingController.LogError(ex.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot perform condition check for \"" + this.MethodName + "\".");
+                    Singleton<LoggingUtil>.Instance.LogError(ex.ToString());
                 }
 
                 yield return base.WaitForNextFrame(false);
@@ -102,7 +104,7 @@ namespace QuestingBots.CoroutineExtensions
             }
             catch (Exception ex)
             {
-                LoggingController.LogError(ex.ToString());
+                Singleton<LoggingUtil>.Instance.LogError(ex.ToString());
             }
 
             Run_Internal_End(false);
@@ -128,14 +130,14 @@ namespace QuestingBots.CoroutineExtensions
                 {
                     if (item == null)
                     {
-                        LoggingController.LogError("Item is null");
+                        Singleton<LoggingUtil>.Instance.LogError("Item is null");
                     }
                     else
                     {
-                        LoggingController.LogError("Aborting coroutine iteration for " + item.ToString());
+                        Singleton<LoggingUtil>.Instance.LogError("Aborting coroutine iteration for " + item.ToString());
                     }
 
-                    LoggingController.LogError(ex.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError(ex.ToString());
                 }
 
                 if (base.cycleTimer.ElapsedMilliseconds > base.maxTimePerIteration)
@@ -165,8 +167,8 @@ namespace QuestingBots.CoroutineExtensions
                 }
                 catch (Exception ex)
                 {
-                    LoggingController.LogError("Aborting coroutine iteration #" + repetition.ToString());
-                    LoggingController.LogError(ex.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Aborting coroutine iteration #" + repetition.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError(ex.ToString());
                 }
 
                 if (base.cycleTimer.ElapsedMilliseconds > base.maxTimePerIteration)

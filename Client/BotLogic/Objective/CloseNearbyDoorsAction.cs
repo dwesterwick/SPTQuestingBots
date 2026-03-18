@@ -8,6 +8,7 @@ using EFT;
 using EFT.Interactive;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -70,7 +71,7 @@ namespace QuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
                 }
                 wasStuck = true;
 
@@ -111,7 +112,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (targetDoor != null)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " is closing door " + targetDoor.Id + "...");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is closing door " + targetDoor.Id + "...");
 
                 BotOwner.DoorOpener.Interact(targetDoor, EInteractionType.Close);
                 nearbyDoors.Remove(targetDoor);
@@ -139,7 +140,7 @@ namespace QuestingBots.BotLogic.Objective
             //if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
             if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(position, 0.5f) != true))
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to " + position.ToString());
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to " + position.ToString());
 
                 ObjectiveManager.FailObjective();
 
@@ -161,7 +162,7 @@ namespace QuestingBots.BotLogic.Objective
                 return false;
             }
 
-            LoggingController.LogInfo(BotOwner.GetText() + " will close door " + targetDoor.Id);
+            Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " will close door " + targetDoor.Id);
 
             return true;
         }
@@ -170,7 +171,7 @@ namespace QuestingBots.BotLogic.Objective
         {
             if (ObjectiveManager.MaxDistanceForCurrentStep == null)
             {
-                LoggingController.LogError("MaxDistanceForCurrentStep is null");
+                Singleton<LoggingUtil>.Instance.LogError("MaxDistanceForCurrentStep is null");
                 return null!;
             }
 
@@ -222,7 +223,7 @@ namespace QuestingBots.BotLogic.Objective
             Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
             if (navMeshPosition == null)
             {
-                LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + door.Id);
 
                 ObjectiveManager.FailObjective();
 

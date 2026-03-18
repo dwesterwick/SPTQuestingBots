@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models
@@ -92,7 +94,7 @@ namespace QuestingBots.Models
 
         public IEnumerator WaitForFollowersAndSetBoss(BotOwner bot)
         {
-            LoggingController.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...");
+            Singleton<LoggingUtil>.Instance.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...");
 
             while (!HaveAllBotsSpawned)
             {
@@ -104,7 +106,7 @@ namespace QuestingBots.Models
                 yield return new WaitForSeconds(0.01f);
             }
 
-            LoggingController.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...done.");
+            Singleton<LoggingUtil>.Instance.LogDebug("Waiting for all bots in group to activate before making " + bot.GetText() + " the boss...done.");
 
             bot.Boss.SetBoss(GeneratedBotCount - 1);
         }
@@ -128,13 +130,13 @@ namespace QuestingBots.Models
 
             if (!bots.Contains(botToSeparate))
             {
-                LoggingController.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain it");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain it");
                 return;
             }
 
             if (!Data.Profiles.Any(p => p == botToSeparate.Profile))
             {
-                LoggingController.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain its profile");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot separate " + botToSeparate.GetText() + " from group that does not contain its profile");
                 return;
             }
 

@@ -8,6 +8,7 @@ using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -30,7 +31,7 @@ namespace QuestingBots.Patches.Spawning
             {
                 if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
                 {
-                    LoggingController.LogInfo("Allowing spawn of boss wave " + wave.BossName + "...");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Allowing spawn of boss wave " + wave.BossName + "...");
                 }
 
                 return !shouldSuppressBossWave(ref wave);
@@ -40,7 +41,7 @@ namespace QuestingBots.Patches.Spawning
 
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
-                LoggingController.LogInfo("Delaying spawn of boss wave " + wave.BossName + "...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Delaying spawn of boss wave " + wave.BossName + "...");
             }
 
             return false;
@@ -68,7 +69,7 @@ namespace QuestingBots.Patches.Spawning
                     BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
                     BotRegistrationManager.ZeroWaveTotalRogueCount -= botCount;
 
-                    LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many Rogues will be on the map");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many Rogues will be on the map");
                     return true;
                 }
             }
@@ -79,7 +80,7 @@ namespace QuestingBots.Patches.Spawning
             {
                 BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
 
-                LoggingController.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many bosses will be on the map");
+                Singleton<LoggingUtil>.Instance.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many bosses will be on the map");
                 return true;
             }
 
@@ -87,7 +88,7 @@ namespace QuestingBots.Patches.Spawning
             BotRegistrationManager.SpawnedBossCount += botCount;
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                LoggingController.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + ConfigController.Config.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + ConfigController.Config.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
                 BotRegistrationManager.SpawnedRogueCount += botCount;
             }
 
@@ -96,7 +97,7 @@ namespace QuestingBots.Patches.Spawning
             message += " for bot type " + bossWave.BossName;
             message += " with " + botCount + " total bots";
             message += "...";
-            LoggingController.LogInfo(message);
+            Singleton<LoggingUtil>.Instance.LogInfo(message);
 
             return false;
         }

@@ -4,8 +4,10 @@ using EFT.Interactive;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -107,7 +109,7 @@ namespace QuestingBots.Components
         {
             if (!BotLogic.HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
             {
-                LoggingController.LogError(botOwner.GetText() + " has not been registered in BotHiveMindMonitor");
+                Singleton<LoggingUtil>.Instance.LogError(botOwner.GetText() + " has not been registered in BotHiveMindMonitor");
             }
 
             BotType botType = Controllers.BotRegistrationManager.GetBotType(botOwner);
@@ -131,7 +133,7 @@ namespace QuestingBots.Components
 
             if (botType == BotType.Undetermined)
             {
-                LoggingController.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }
 
             IsInitialized = true;
@@ -204,7 +206,7 @@ namespace QuestingBots.Components
             {
                 if (botOwner.NumberOfConsecutiveFailedAssignments() >= ConfigController.Config.Questing.StuckBotDetection.MaxCount)
                 {
-                    LoggingController.LogWarning(botOwner.GetText() + " has failed too many consecutive assignments and is no longer allowed to quest.");
+                    Singleton<LoggingUtil>.Instance.LogWarning(botOwner.GetText() + " has failed too many consecutive assignments and is no longer allowed to quest.");
                     botOwner.Mover.Stop();
                     IsQuestingAllowed = false;
                     return;
@@ -224,7 +226,7 @@ namespace QuestingBots.Components
             lastAssignment = assignment;
             assignment = objective;
 
-            //LoggingController.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
+            //Singleton<LoggingUtil>.Instance.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
 
             if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
             {
@@ -233,7 +235,7 @@ namespace QuestingBots.Components
 
             if (lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
             {
-                LoggingController.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
+                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
             }
         }
 
@@ -251,7 +253,7 @@ namespace QuestingBots.Components
                 BotObjectiveManager followerObjectiveManager = follower.GetObjectiveManager();
                 if (followerObjectiveManager == null)
                 {
-                    LoggingController.LogError("Could not get BotObjectiveManager component for follower " + follower.GetText() + " of " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager component for follower " + follower.GetText() + " of " + botOwner.GetText());
                     continue;
                 }
 
@@ -282,7 +284,7 @@ namespace QuestingBots.Components
             }
 
             SetObjective(botOwner.GetNewBotJobAssignment());
-            LoggingController.LogInfo("Bot " + botOwner.GetText() + " is now doing " + (assignment?.ToString() ?? "[NULL]"));
+            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + (assignment?.ToString() ?? "[NULL]"));
 
             return true;
         }
@@ -300,7 +302,7 @@ namespace QuestingBots.Components
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
-            LoggingController.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
+            Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
         }
 
         public bool CanSprintToObjective()
@@ -309,19 +311,19 @@ namespace QuestingBots.Components
             {
                 if (DistanceToObjective < QuestingBotsPluginConfig.MinSprintingDistance.Value)
                 {
-                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
                     return false;
                 }
 
                 if (DistanceToObjective < assignment.QuestObjectiveAssignment.MaxRunDistance)
                 {
-                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to " + assignment.Position.ToString());
                     return false;
                 }
 
                 if (!assignment.QuestAssignment.CanRunBetweenObjectives && (assignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(botOwner) > 0))
                 {
-                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " can no longer run for quest " + targetQuest.Name);
                     return false;
                 }
             }
@@ -330,7 +332,7 @@ namespace QuestingBots.Components
             {
                 if (DistanceFromLastObjective < lastAssignment.QuestObjectiveAssignment.MaxRunDistance)
                 {
-                    //LoggingController.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to its last objective, " + assignment.Position.ToString());
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " will stop running because it's too close to its last objective, " + assignment.Position.ToString());
                     return false;
                 }
             }
@@ -428,7 +430,7 @@ namespace QuestingBots.Components
 
                 exfiltrationPoint = furthestPoint.Key;
 
-                //LoggingController.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
+                //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
             }
         }
 
@@ -457,14 +459,14 @@ namespace QuestingBots.Components
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
             if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
-                LoggingController.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 try
                 {
                     SetObjective(botOwner.GetCurrentJobAssignment());
                 }
                 catch (TimeoutException)
                 {
-                    LoggingController.LogError("Timed out when trying to select an initial objective for " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Timed out when trying to select an initial objective for " + botOwner.GetText());
                 }
             }
         }

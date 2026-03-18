@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Bootstrap;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
@@ -11,6 +12,7 @@ using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.ExternalMods
 {
@@ -52,7 +54,7 @@ namespace QuestingBots.BotLogic.ExternalMods
                     continue;
                 }
 
-                LoggingController.LogInfo($"Found external mod {modInfo.GetName()} (version {modInfo.GetVersion()})");
+                Singleton<LoggingUtil>.Instance.LogInfo($"Found external mod {modInfo.GetName()} (version {modInfo.GetVersion()})");
 
                 if (!modInfo.IsCompatible())
                 {
@@ -62,7 +64,7 @@ namespace QuestingBots.BotLogic.ExternalMods
 
                 if (!modInfo.CheckInteropAvailability())
                 {
-                    LoggingController.LogWarning($"Interoperability for external mod {modInfo.GUID} could not be initialized");
+                    Singleton<LoggingUtil>.Instance.LogWarning($"Interoperability for external mod {modInfo.GUID} could not be initialized");
                 }
             }
         }

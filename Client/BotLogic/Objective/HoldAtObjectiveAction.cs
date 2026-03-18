@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -64,7 +67,7 @@ namespace QuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
                 }
                 wasStuck = true;
 

@@ -20,13 +20,13 @@ namespace QuestingBots.Helpers
         {
             /*if (bot.DoorOpener.Interacting)
             {
-                LoggingController.LogWarning("Cannot update path for " + bot.GetText() + " while it is interacting with a door");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot update path for " + bot.GetText() + " while it is interacting with a door");
                 return;
             }*/
 
             // Combines _pathFinder.method_0 and GoToByWay
 
-            //LoggingController.LogInfo("Updated path for " + bot.GetText());
+            //Singleton<LoggingUtil>.Instance.LogInfo("Updated path for " + bot.GetText());
 
             bot.Mover?.TrySetSlowAtTheEnd(slowAtTheEnd);
 

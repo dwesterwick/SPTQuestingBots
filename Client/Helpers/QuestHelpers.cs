@@ -11,6 +11,7 @@ using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Models.Questing;
 using UnityEngine;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -36,11 +37,11 @@ namespace QuestingBots.Helpers
 
             if (!quests.Any())
             {
-                LoggingController.LogWarningToServerConsole("Could not find any non-EFT quests for " + locationId);
+                Singleton<LoggingUtil>.Instance.LogWarningToServerConsole("Could not find any non-EFT quests for " + locationId);
                 return false;
             }
 
-            LoggingController.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
             return true;
         }
 
@@ -52,7 +53,7 @@ namespace QuestingBots.Helpers
             }
 
             zoneAndItemQuestPositions = ConfigController.GetZoneAndItemPositions();
-            LoggingController.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
+            Singleton<LoggingUtil>.Instance.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
 
             return zoneAndItemQuestPositions;
         }
@@ -145,7 +146,7 @@ namespace QuestingBots.Helpers
                     Collider? itemCollider = item.GetComponent<Collider>();
                     if (itemCollider == null)
                     {
-                        LoggingController.LogError("Quest item " + item.Item.LocalizedName() + " has no collider");
+                        Singleton<LoggingUtil>.Instance.LogError("Quest item " + item.Item.LocalizedName() + " has no collider");
                         continue;
                     }
 
@@ -158,7 +159,7 @@ namespace QuestingBots.Helpers
                         if (zoneAndItemQuestPositions[target].Position != null)
                         {
                             itemPosition = zoneAndItemQuestPositions[target].Position.ToUnityVector3();
-                            LoggingController.LogInfo("Using override position for " + item.Item.LocalizedName());
+                            Singleton<LoggingUtil>.Instance.LogInfo("Using override position for " + item.Item.LocalizedName());
                         }
 
                         // Check if bots should open a specific door to get the item
@@ -169,17 +170,17 @@ namespace QuestingBots.Helpers
                             int matchingDoorCount = matchingWorldInteractiveObjects.Count();
                             if (matchingDoorCount == 0)
                             {
-                                LoggingController.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
                             }
                             if (matchingDoorCount > 1)
                             {
-                                LoggingController.LogInfo("Found too many doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Found too many doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
                             }
                             if (matchingDoorCount == 1)
                             {
                                 doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
                                 interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
-                                LoggingController.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
                             }
                         }
                     }
@@ -188,7 +189,7 @@ namespace QuestingBots.Helpers
                     Vector3? navMeshTargetPoint = locationData.FindNearestNavMeshPosition(itemPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceItem);
                     if (!navMeshTargetPoint.HasValue)
                     {
-                        LoggingController.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
+                        Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
 
                         if (ConfigController.Config.Debug.ShowZoneOutlines)
                         {
@@ -206,7 +207,7 @@ namespace QuestingBots.Helpers
                     newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
                     quest.AddObjective(newObjective);
 
-                    LoggingController.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
                 }
             }
         }

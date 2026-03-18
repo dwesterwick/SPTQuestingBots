@@ -5,6 +5,7 @@ using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -74,7 +75,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
             //if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
             //{
-            //    LoggingController.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
+            //    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
             //}
 
             if (!wasSuspiciousTooLong && BotMonitor.GetMonitor<BotHearingMonitor>().shouldBeSuspicious(suspiciousTime))
@@ -82,7 +83,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
                 {
                     suspiciousTime = BotMonitor.GetMonitor<BotHearingMonitor>().updateSuspiciousTime();
-                    //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
 
                     BotMonitor.GetMonitor<BotLootingMonitor>().TryPreventBotFromLooting((float)suspiciousTime);
                 }
@@ -100,7 +101,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 //if (wasSuspiciousTooLong)
                 //{
-                //    LoggingController.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
+                //    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
                 //}
 
                 totalSuspiciousTimer.Reset();
@@ -147,7 +148,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
             else
             {
-                LoggingController.LogError("Could not set max suspicious time for " + BotOwner.GetText() + ". Defaulting to 60s.");
+                Singleton<LoggingUtil>.Instance.LogError("Could not set max suspicious time for " + BotOwner.GetText() + ". Defaulting to 60s.");
             }
         }
 
@@ -176,7 +177,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             adjustedPower *= (type == AISoundType.step) ? ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierFootsteps : 1;
             if (adjustedPower < ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.MinCorrectedSoundPower)
             {
-                //LoggingController.LogInfo("Power: " + power + ", Adjusted Power: " + adjustedPower);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Power: " + power + ", Adjusted Power: " + adjustedPower);
                 return;
             }
 

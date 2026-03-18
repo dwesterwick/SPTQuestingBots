@@ -9,6 +9,7 @@ using EFT;
 using EFT.Interactive;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine.AI;
 
 namespace QuestingBots.BotLogic.Objective
@@ -79,7 +80,7 @@ namespace QuestingBots.BotLogic.Objective
                     ObjectiveManager.CompleteObjective();
                 }
 
-                //LoggingController.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
+                //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " reached its objective (" + ObjectiveManager + ").");
 
                 return;
             }
@@ -94,7 +95,7 @@ namespace QuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
                 }
                 wasStuck = true;
 
@@ -130,7 +131,7 @@ namespace QuestingBots.BotLogic.Objective
             //if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
             if (!pathStatus.HasValue)
             {
-                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a path to " + ObjectiveManager);
+                Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " cannot find a path to " + ObjectiveManager);
                 ObjectiveManager.FailObjective();
                 return false;
             }
@@ -162,7 +163,7 @@ namespace QuestingBots.BotLogic.Objective
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (ObjectiveManager.HasCompletePath)
                 {
-                    LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
+                    Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Trying anyway. Distance from end of path to objective: " + missingDistance);
                     ObjectiveManager.ReportIncompletePath();
                 }
 
@@ -182,7 +183,7 @@ namespace QuestingBots.BotLogic.Objective
                     // If there is a door for the bot to unlock, have it try doing that
                     if (foundDoor && (door != null))
                     {
-                        LoggingController.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
+                        Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " must unlock door " + door.Id + "...");
 
                         unlockDebounceTimer.Restart();
                         return true;
@@ -193,16 +194,16 @@ namespace QuestingBots.BotLogic.Objective
             // Check if the bot got "close enough" to its objective
             if (distanceToObjective < ConfigController.Config.Questing.BotSearchDistances.ObjectiveReachedNavMeshPathError)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Got close enough. Remaining distance to objective: " + distanceToObjective);
                 ObjectiveManager.CompleteObjective();
 
                 return true;
             }
 
-            //LoggingController.LogInfo("Distance to objective: " + distanceToObjective + ", Distance to end of path: " + distanceToEndOfPath + ", Missing distance: " + missingDistance);
+            //Singleton<LoggingUtil>.Instance.LogInfo("Distance to objective: " + distanceToObjective + ", Distance to end of path: " + distanceToEndOfPath + ", Missing distance: " + missingDistance);
 
             // If all previous checks fail, the bot is unable to reach its objective position
-            LoggingController.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
+            Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " cannot find a complete path to its objective (" + ObjectiveManager + "). Giving up. Remaining distance to objective: " + distanceToObjective);
             ObjectiveManager.FailObjective();
             ObjectiveManager.StuckCount++;
 
@@ -267,7 +268,7 @@ namespace QuestingBots.BotLogic.Objective
             WorldInteractiveObject worldInteractiveObject = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindWorldInteractiveObjectsByID(ObjectiveManager.DoorIDToUnlockForObjective);
             if (worldInteractiveObject == null)
             {
-                LoggingController.LogError("Bot " + BotOwner.GetText() + " cannot find door " + ObjectiveManager.DoorIDToUnlockForObjective);
+                Singleton<LoggingUtil>.Instance.LogError("Bot " + BotOwner.GetText() + " cannot find door " + ObjectiveManager.DoorIDToUnlockForObjective);
                 return;
             }
 

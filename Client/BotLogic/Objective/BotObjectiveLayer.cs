@@ -8,6 +8,7 @@ using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 
 namespace QuestingBots.BotLogic.Objective
@@ -56,7 +57,7 @@ namespace QuestingBots.BotLogic.Objective
             float pauseRequestTime = getPauseRequestTime();
             if (pauseRequestTime > 0)
             {
-                //LoggingController.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
                 return pauseLayer(pauseRequestTime);
             }
 

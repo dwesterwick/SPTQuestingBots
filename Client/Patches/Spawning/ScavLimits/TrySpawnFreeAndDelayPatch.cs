@@ -10,6 +10,7 @@ using HarmonyLib;
 using SPT.Reflection.Patching;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.ScavLimits
 {
@@ -116,7 +117,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
-            Controllers.LoggingController.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
+            Singleton<LoggingUtil>.Instance.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
             logScavSpawnRate();
 
             float retryDelay = ConfigController.Config.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
@@ -131,7 +132,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
             int recentlySpawnedScavs = NonWavesSpawnScenarioCreatePatch.GetSpawnedScavCount(timeWindow, true);
             float recentScavSpawnRate = recentlySpawnedScavs * 60f / timeWindow;
 
-            Controllers.LoggingController.LogDebug(recentlySpawnedScavs + " Scavs have spawned in the last " + timeWindow + "s. Rate=" + recentScavSpawnRate);
+            Singleton<LoggingUtil>.Instance.LogDebug(recentlySpawnedScavs + " Scavs have spawned in the last " + timeWindow + "s. Rate=" + recentScavSpawnRate);
         }
     }
 }

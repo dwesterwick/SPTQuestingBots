@@ -1,10 +1,12 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +74,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             float remainingRaidTime = RaidHelpers.GetRemainingRaidTimeSeconds();
             if (remainingRaidTime < ConfigController.Config.Questing.ExtractionRequirements.MustExtractTimeRemaining)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is ready to extract because the raid will be over in " + remainingRaidTime + " seconds.");
                 return true;
             }
 
@@ -108,10 +110,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             int totalQuestsCompleted = BotOwner.NumberOfCompletedOrAchivedQuests();
             if (totalQuestsCompleted >= minTotalQuestsForExtract)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extract.");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has completed " + totalQuestsCompleted + " quests and is ready to extract.");
                 return true;
             }
-            //LoggingController.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
+            //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has completed " + totalQuestsCompleted + "/" + minTotalQuestsForExtract + " quests");
 
             return false;
         }
@@ -129,10 +131,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             int EFTQuestsCompleted = BotOwner.NumberOfCompletedOrAchivedEFTQuests();
             if (EFTQuestsCompleted >= minEFTQuestsForExtract)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extract.");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has completed " + EFTQuestsCompleted + " EFT quests and is ready to extract.");
                 return true;
             }
-            //LoggingController.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");
+            //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has completed " + EFTQuestsCompleted + "/" + minEFTQuestsForExtract + " EFT quests");
 
             return false;
         }

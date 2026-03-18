@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -100,11 +102,11 @@ namespace QuestingBots.Patches.Spawning
             string message = $"Group containing bot {__instance.InitialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";
             if (!__result)
             {
-                LoggingController.LogWarning(message);
+                Singleton<LoggingUtil>.Instance.LogWarning(message);
             }
             else
             {
-                LoggingController.LogInfo(message);
+                Singleton<LoggingUtil>.Instance.LogInfo(message);
             }
         }
     }

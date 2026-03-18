@@ -196,7 +196,7 @@ namespace QuestingBots.BehaviorExtensions
             float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
             if (cornerAngle >= maxDistanceMinAngle.Angle)
             {
-                //LoggingController.LogInfo("Angle of corner for " + BotOwner.GetText() + ": " + cornerAngle);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Angle of corner for " + BotOwner.GetText() + ": " + cornerAngle);
                 return true;
             }
 
@@ -220,11 +220,11 @@ namespace QuestingBots.BehaviorExtensions
                 float doorAngle = Vector3.Angle(botMovingDirection, doorDirection);
                 if (doorAngle < maxDistanceMaxAngle.Angle)
                 {
-                    //LoggingController.LogInfo(BotOwner.GetText() + " is approaching a closed door");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is approaching a closed door");
                     return true;
                 }
 
-                //LoggingController.LogInfo(BotOwner.GetText() + " is heading at an angle of " + doorAngle + " to a closed door");
+                //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is heading at an angle of " + doorAngle + " to a closed door");
             }
 
             return false;

@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Comfort.Common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +74,7 @@ namespace QuestingBots.Models
                 }
                 catch (Exception)
                 {
-                    LoggingController.LogError("Cannot convert JArray to " + matchingProperties[0].PropertyType.FullName + " for property " + jsonPropertyName + " of type " + type.FullName);
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot convert JArray to " + matchingProperties[0].PropertyType.FullName + " for property " + jsonPropertyName + " of type " + type.FullName);
                     throw;
                 }
             }
@@ -92,14 +94,14 @@ namespace QuestingBots.Models
                 }
                 catch (Exception)
                 {
-                    LoggingController.LogError("Cannot convert JObject to " + matchingProperties[0].PropertyType.FullName + " for property " + jsonPropertyName + " of type " + type.FullName);
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot convert JObject to " + matchingProperties[0].PropertyType.FullName + " for property " + jsonPropertyName + " of type " + type.FullName);
                     throw;
                 }
             }
 
             matchingProperties[0].SetValue(this, val);
 
-            //LoggingController.LogInfo("Set value of " + jsonPropertyName + " for " + type.FullName + " object to " + val);
+            //Singleton<LoggingUtil>.Instance.LogInfo("Set value of " + jsonPropertyName + " for " + type.FullName + " object to " + val);
         }
     }
 }

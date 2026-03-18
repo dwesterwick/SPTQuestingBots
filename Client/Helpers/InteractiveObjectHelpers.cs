@@ -11,6 +11,7 @@ using EFT;
 using QuestingBots.Controllers;
 using UnityEngine;
 using HarmonyLib;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -22,7 +23,7 @@ namespace QuestingBots.Helpers
             Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), door.KeyId, null);
             if (keyItem == null)
             {
-                LoggingController.LogError("Cannot create key for door " + door.Id);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot create key for door " + door.Id);
                 return null!;
             }
 
@@ -59,8 +60,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }
@@ -93,7 +94,7 @@ namespace QuestingBots.Helpers
                         interactionTypeText = "breaching";
                         break;
                 }
-                LoggingController.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " door " + door.Id + "...");
+                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " door " + door.Id + "...");
 
                 // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without 
                 // also running ExecuteDoorInteraction
@@ -101,8 +102,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }
@@ -140,8 +141,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }

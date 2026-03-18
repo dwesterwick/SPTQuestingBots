@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -99,14 +100,14 @@ namespace QuestingBots.Components
         {
             if (data == null)
             {
-                LoggingController.LogInfo("Path data is null");
+                Singleton<LoggingUtil>.Instance.LogInfo("Path data is null");
                 return false;
             }
 
             // In case the path isn't registered, erase it anyway
             if (!RemovePath(data.PathName))
             {
-                LoggingController.LogInfo("Path " + data.PathName + " not found");
+                Singleton<LoggingUtil>.Instance.LogInfo("Path " + data.PathName + " not found");
                 data.Clear();
             }
 

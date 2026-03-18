@@ -8,6 +8,7 @@ using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -23,7 +24,7 @@ namespace QuestingBots.Patches
         {
             if (Singleton<GameWorld>.Instance.gameObject.TryGetComponent(out Components.LocationData oldLocationData))
             {
-                LoggingController.LogError("There is already a LocationData component added to the current GameWorld instance.");
+                Singleton<LoggingUtil>.Instance.LogError("There is already a LocationData component added to the current GameWorld instance.");
                 return;
             }
 
@@ -34,7 +35,7 @@ namespace QuestingBots.Patches
                 Spawning.GameStartPatch.ClearMissedWaves();
                 Spawning.GameStartPatch.IsDelayingGameStart = true;
 
-                LoggingController.LogInfo("Delaying the game start until bot generation finishes...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Delaying the game start until bot generation finishes...");
             }
         }
     }

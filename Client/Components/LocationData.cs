@@ -12,6 +12,7 @@ using HarmonyLib;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -42,7 +43,7 @@ namespace QuestingBots.Components
             CurrentRaidSettings = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetCurrentRaidSettings();
             if (CurrentRaidSettings == null)
             {
-                LoggingController.LogError("Could not retrieve current raid settings");
+                Singleton<LoggingUtil>.Instance.LogError("Could not retrieve current raid settings");
                 return;
             }
 
@@ -88,7 +89,7 @@ namespace QuestingBots.Components
                 MaxTotalBots = botmax;
             }
             
-            //LoggingController.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
+            //Singleton<LoggingUtil>.Instance.LogInfo("Max total bots on the map (" + CurrentLocation.Id + ") at the same time: " + MaxTotalBots);
         }
 
         public bool IsPointOnLightkeeperIsland(Vector3? position)
@@ -119,7 +120,7 @@ namespace QuestingBots.Components
             EFT.Interactive.Switch[] allSwitches = FindObjectsOfType<EFT.Interactive.Switch>();
             switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
             
-            //LoggingController.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
+            //Singleton<LoggingUtil>.Instance.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
 
             foreach (EFT.Interactive.Switch sw in allSwitches)
             {
@@ -129,7 +130,7 @@ namespace QuestingBots.Components
 
         private void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
-            LoggingController.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
+            Singleton<LoggingUtil>.Instance.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
         }
 
         public EFT.Interactive.Switch FindSwitch(string id)
@@ -153,23 +154,23 @@ namespace QuestingBots.Components
                 // EFT has multiple WorldInteractiveObjects with the same ID on Lighthouse in SPT 3.10. Why, BSG...
                 if (IDsForWorldInteractiveObjects.ContainsKey(worldInteractiveObject.Id))
                 {
-                    LoggingController.LogWarning("Already found WorldInteractiveObject with ID " + worldInteractiveObject.Id + ". Not including the one at " + worldInteractiveObject.transform.position + ".");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Already found WorldInteractiveObject with ID " + worldInteractiveObject.Id + ". Not including the one at " + worldInteractiveObject.transform.position + ".");
                     continue;
                 }
 
                 IDsForWorldInteractiveObjects.Add(worldInteractiveObject.Id, worldInteractiveObject);
-                //LoggingController.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
 
                 if (!worldInteractiveObject.Operatable)
                 {
-                    //LoggingController.LogInfo("Door " + door.Id + " is inoperable");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Door " + door.Id + " is inoperable");
                     continue;
                 }
 
                 Door? door = worldInteractiveObject as Door;
                 if ((door != null) && !door.CanBeBreached && (door.KeyId == ""))
                 {
-                    //LoggingController.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
                     continue;
                 }
 
@@ -188,20 +189,20 @@ namespace QuestingBots.Components
                     }
 
                     noPowerTipsForDoors.Add(worldInteractiveObject, noPowerTip);
-                    LoggingController.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
                     break;
                 }
             }
 
-            LoggingController.LogDebug("Found " + areLockedDoorsUnlocked.Count + " locked doors");
-            //LoggingController.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+            Singleton<LoggingUtil>.Instance.LogDebug("Found " + areLockedDoorsUnlocked.Count + " locked doors");
+            //Singleton<LoggingUtil>.Instance.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
         }
 
         private bool doorHasNoPowerTip(WorldInteractiveObject worldInteractiveObject, NoPowerTip noPowerTip)
         {
             if (!noPowerTip.gameObject.TryGetComponent(out BoxCollider collider))
             {
-                LoggingController.LogWarning("Could not find collider for NoPowerTip " + noPowerTip.name);
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find collider for NoPowerTip " + noPowerTip.name);
                 return false;
             }
 
@@ -221,7 +222,7 @@ namespace QuestingBots.Components
                         return true;
                     }
 
-                    //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + expandedBounds.center + " with extents " + expandedBounds.extents + ") does not surround proxy of door " + door.Id + "(" + interactiveProxy.transform.position + ")");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("NoPowerTip " + noPowerTip.name + "(" + expandedBounds.center + " with extents " + expandedBounds.extents + ") does not surround proxy of door " + door.Id + "(" + interactiveProxy.transform.position + ")");
                 }
             }
             else
@@ -238,7 +239,7 @@ namespace QuestingBots.Components
                     return true;
                 }
 
-                //LoggingController.LogInfo("NoPowerTip " + noPowerTip.name + "(" + collider.bounds.center + ") does not surround door " + door.Id + "(" + doorTestTransform.position + ")");
+                //Singleton<LoggingUtil>.Instance.LogInfo("NoPowerTip " + noPowerTip.name + "(" + collider.bounds.center + ") does not surround door " + door.Id + "(" + doorTestTransform.position + ")");
             }
 
             return false;
@@ -293,7 +294,7 @@ namespace QuestingBots.Components
                 // Check if the door has been unlocked since this method was previously called
                 if (!areLockedDoorsUnlocked[worldInteractiveObject] && (worldInteractiveObject.DoorState != EDoorState.Locked))
                 {
-                    LoggingController.LogInfo("Door " + worldInteractiveObject.Id + " is no longer locked.");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Door " + worldInteractiveObject.Id + " is no longer locked.");
                     areLockedDoorsUnlocked[worldInteractiveObject] = true;
                 }
 
@@ -407,7 +408,7 @@ namespace QuestingBots.Components
                     if (filteredRaycastHits.Any())
                     {
                         //IEnumerable<string> raycastDataText = filteredRaycastHits.Select(h => h.collider.name + " (" + h.distance + "/" + distace + ")");
-                        //LoggingController.LogInfo("Ignoring object " + item.GetType().Name + " at " + item.transform.position.ToString() + " due to raycast hits at: " + string.Join(", ", raycastDataText));
+                        //Singleton<LoggingUtil>.Instance.LogInfo("Ignoring object " + item.GetType().Name + " at " + item.transform.position.ToString() + " due to raycast hits at: " + string.Join(", ", raycastDataText));
                         continue;
                     }
                 }
@@ -550,11 +551,11 @@ namespace QuestingBots.Components
                         .Select(s => allPlayerPositions.Min(p => Vector3.Distance(s.Position, p)))
                         .Max();
 
-                    LoggingController.LogWarning("Maximum distance from other players using " + validSpawnPoints.Count() + " spawn points: " + maxDistance);
+                    Singleton<LoggingUtil>.Instance.LogWarning("Maximum distance from other players using " + validSpawnPoints.Count() + " spawn points: " + maxDistance);
                 }
                 else
                 {
-                    LoggingController.LogWarning("No valid spawn points");
+                    Singleton<LoggingUtil>.Instance.LogWarning("No valid spawn points");
                 }
 
                 return null;
@@ -563,11 +564,11 @@ namespace QuestingBots.Components
             // Get the locations of all alive bots/players on the map.
             if (positions.Length == 0)
             {
-                LoggingController.LogWarning("No player positions");
+                Singleton<LoggingUtil>.Instance.LogWarning("No player positions");
                 return null;
             }
 
-            //LoggingController.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
+            //Singleton<LoggingUtil>.Instance.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
 
             return GetFurthestSpawnPoint(positions, eligibleSpawnPoints);
         }
@@ -607,7 +608,7 @@ namespace QuestingBots.Components
             // The furthest spawn point from all reference positions is the one that has the furthest minimum distance to all of them
             KeyValuePair<SpawnPointParams, float> selectedPoint = nearestReferencePoints.OrderBy(p => p.Value).Last();
 
-            LoggingController.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from other players");
+            Singleton<LoggingUtil>.Instance.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from other players");
 
             return selectedPoint.Key;
         }
@@ -733,7 +734,7 @@ namespace QuestingBots.Components
                 Vector3? navMeshPosition = FindNearestNavMeshPosition(possibleInteractionPosition, ConfigController.Config.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                 if (!navMeshPosition.HasValue)
                 {
-                    LoggingController.LogInfo("Cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
+                    Singleton<LoggingUtil>.Instance.LogInfo("Cannot access position " + possibleInteractionPosition.ToString() + " for door " + door.Id);
 
                     if (ConfigController.Config.Debug.Enabled && ConfigController.Config.Debug.ShowDoorInteractionTestPoints)
                     {
@@ -743,7 +744,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                //LoggingController.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
+                //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is checking the accessibility of position " + navMeshPosition.Value.ToString() + " for door " + door.Id + "...");
 
                 // Try to calculate a path from the bot to the NavMesh location identified for the position
                 NavMeshPath path = new NavMeshPath();
@@ -809,7 +810,7 @@ namespace QuestingBots.Components
 
                     if (kibaOuterDoor.Any(v => v == false))
                     {
-                        LoggingController.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
+                        Singleton<LoggingUtil>.Instance.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
                         continue;
                     }
                 }
@@ -817,7 +818,7 @@ namespace QuestingBots.Components
                 // Prevent doors that require power from being unlocked before the power is turned on
                 if (noPowerTipsForDoors.ContainsKey(worldInteractiveObject) && noPowerTipsForDoors[worldInteractiveObject].isActiveAndEnabled)
                 {
-                    LoggingController.LogInfo("NoPowerTip for door " + worldInteractiveObject.Id + " is still active.");
+                    Singleton<LoggingUtil>.Instance.LogInfo("NoPowerTip for door " + worldInteractiveObject.Id + " is still active.");
                     continue;
                 }
 
@@ -828,7 +829,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                //LoggingController.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
+                //Singleton<LoggingUtil>.Instance.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
                 Vector3? interactionPosition = GetDoorInteractionPosition(worldInteractiveObject, startingPosition);
                 if (interactionPosition.HasValue)
@@ -896,7 +897,7 @@ namespace QuestingBots.Components
 
             if (QuestingBotsPluginConfig.QuestLocationName.Value.Length == 0)
             {
-                LoggingController.LogErrorToServerConsole("The name of custom quest locations cannot be an empty string. Please create a name in the F12 advanced menu.");
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole("The name of custom quest locations cannot be an empty string. Please create a name in the F12 advanced menu.");
                 return;
             }
 
@@ -919,7 +920,7 @@ namespace QuestingBots.Components
                 + awakeTime.ToFileTimeUtc()
                 + "_customQuestLocations.json";
 
-            LoggingController.AppendQuestLocation(filename, location);
+            Singleton<LoggingUtil>.Instance.AppendQuestLocationToCurrentLogFile(filename, location);
         }
     }
 }

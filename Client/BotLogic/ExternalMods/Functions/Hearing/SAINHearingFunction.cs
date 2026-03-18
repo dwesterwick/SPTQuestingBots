@@ -1,5 +1,8 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +22,12 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Hearing
         {
             if (!SAIN.Plugin.SAINInterop.IgnoreHearing(BotOwner, value, false, duration))
             {
-                LoggingController.LogWarning("Cannot instruct " + BotOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
 
                 return false;
             }
 
-            LoggingController.LogDebug("Instructing " + BotOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+            Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
 
             return true;
         }

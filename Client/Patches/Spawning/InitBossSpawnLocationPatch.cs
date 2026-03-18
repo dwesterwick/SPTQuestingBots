@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
 using QuestingBots.Controllers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -18,7 +20,7 @@ namespace QuestingBots.Patches.Spawning
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .First();
 
-            LoggingController.LogInfo("Found method for InitBossSpawnLocationPatch: " + methodInfo.Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for InitBossSpawnLocationPatch: " + methodInfo.Name);
 
             return methodInfo;
         }
@@ -37,17 +39,17 @@ namespace QuestingBots.Patches.Spawning
                 // Ignore boss waves that require some type of interaction (i.e. Raiders that only spawn when a lever is pulled)
                 if (bossWave.TriggerType != SpawnTriggerType.none)
                 {
-                    LoggingController.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
+                    Singleton<LoggingUtil>.Instance.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
                     continue;
                 }
 
-                LoggingController.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
 
                 // EFT enables Cultist boss waves during daytime raids even though they'll never spawn. For now, ignore them.
                 // TO DO: Check if they'll actually spawn based on time of day (which EFT SHOULD be doing anyway...)
                 if ((bossWave.BossType == WildSpawnType.sectantPriest) || (bossWave.BossType == WildSpawnType.sectantWarrior))
                 {
-                    LoggingController.LogWarning("sectantPriest boss waves with initial PMC spawning may cause some bosses to spawn late.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("sectantPriest boss waves with initial PMC spawning may cause some bosses to spawn late.");
                     continue;
                 }
 
@@ -63,7 +65,7 @@ namespace QuestingBots.Patches.Spawning
                 Controllers.BotRegistrationManager.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
             }
 
-            LoggingController.LogInfo("Total inital bosses and followers " + Controllers.BotRegistrationManager.ZeroWaveTotalBotCount);
+            Singleton<LoggingUtil>.Instance.LogInfo("Total inital bosses and followers " + Controllers.BotRegistrationManager.ZeroWaveTotalBotCount);
         }
     }
 }

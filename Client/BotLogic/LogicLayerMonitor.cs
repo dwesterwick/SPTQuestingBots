@@ -6,10 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using HarmonyLib;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic
@@ -103,8 +106,8 @@ namespace QuestingBots.BotLogic
             }
             catch (Exception ex)
             {
-                LoggingController.LogError("Exception while checking if layer " + LayerName + " should be used for bot " + botOwner.GetText() + ": " + ex.Message);
-                LoggingController.LogError(ex.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError("Exception while checking if layer " + LayerName + " should be used for bot " + botOwner.GetText() + ": " + ex.Message);
+                Singleton<LoggingUtil>.Instance.LogError(ex.StackTrace);
             }
 
             if (isRequested)
@@ -161,7 +164,7 @@ namespace QuestingBots.BotLogic
             // This happens sometimes, and I don't know why
             if (botOwner?.Brain?.BaseBrain == null)
             {
-                LoggingController.LogError("Invalid base brain for bot " + botOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogError("Invalid base brain for bot " + botOwner.GetText());
                 return emptyCollection;
             }
 
@@ -171,7 +174,7 @@ namespace QuestingBots.BotLogic
             FieldInfo layerListField = AccessTools.Field(aICoreStrategyClassType, "list_0");
             if (layerListField == null)
             {
-                LoggingController.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);
+                Singleton<LoggingUtil>.Instance.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);
                 return emptyCollection;
             }
 
@@ -179,7 +182,7 @@ namespace QuestingBots.BotLogic
             List<AICoreLayerClass<BotLogicDecision>> layerList = (List<AICoreLayerClass<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
             if (layerList == null)
             {
-                LoggingController.LogError("Could not retrieve brain layers for bot " + botOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogError("Could not retrieve brain layers for bot " + botOwner.GetText());
                 return emptyCollection;
             }
 
@@ -207,7 +210,7 @@ namespace QuestingBots.BotLogic
             // Check if multiple layers with the same name exist in the list
             if (matchingLayers.Count() > 1)
             {
-                LoggingController.LogWarning("Found multiple brain layers with the name \"" + layerName + "\". Returning the first match.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Found multiple brain layers with the name \"" + layerName + "\". Returning the first match.");
             }
 
             return matchingLayers.First();
@@ -219,7 +222,7 @@ namespace QuestingBots.BotLogic
             AICoreLayerClass<BotLogicDecision> brainLayer = GetBrainLayerForBot(botOwner, layerName);
             if (brainLayer == null)
             {
-                //LoggingController.LogWarning("Could not find brain layer with the name \"" + layerName + "\".");
+                //Singleton<LoggingUtil>.Instance.LogWarning("Could not find brain layer with the name \"" + layerName + "\".");
                 return false;
             }
 
@@ -237,28 +240,28 @@ namespace QuestingBots.BotLogic
             Assembly bigBrainAssembly = Assembly.GetAssembly(typeof(BrainManager));
             if (bigBrainAssembly == null)
             {
-                LoggingController.LogError("Could get the BigBrain assembly");
+                Singleton<LoggingUtil>.Instance.LogError("Could get the BigBrain assembly");
                 return null!;
             }
 
             Type customLayerWrapperType = bigBrainAssembly.GetType(bigBrainCustomLayerWrapperTypeName, false);
             if (customLayerWrapperType == null)
             {
-                LoggingController.LogError("Could not find CustomLayerWrapper type");
+                Singleton<LoggingUtil>.Instance.LogError("Could not find CustomLayerWrapper type");
                 return null!;
             }
 
             FieldInfo customLayerField = AccessTools.Field(customLayerWrapperType, "customLayer");
             if (customLayerField == null)
             {
-                LoggingController.LogError("Could not find customLayer field");
+                Singleton<LoggingUtil>.Instance.LogError("Could not find customLayer field");
                 return null!;
             }
 
             CustomLayer customLayer = (CustomLayer)customLayerField.GetValue(layer);
             if (layer == null)
             {
-                LoggingController.LogError("Could not get CustomLayer");
+                Singleton<LoggingUtil>.Instance.LogError("Could not get CustomLayer");
                 return null!;
             }
 

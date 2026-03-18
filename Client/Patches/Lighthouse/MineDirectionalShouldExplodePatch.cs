@@ -10,6 +10,7 @@ using EFT;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
 using UnityEngine;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Lighthouse
 {
@@ -23,7 +24,7 @@ namespace QuestingBots.Patches.Lighthouse
                 .GetMethods()
                 .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(Collider) }));
 
-            Controllers.LoggingController.LogInfo("Found method for MineDirectionalShouldExplodePatch: " + methodInfo.Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for MineDirectionalShouldExplodePatch: " + methodInfo.Name);
 
             return methodInfo;
         }

@@ -10,6 +10,7 @@ using EFT;
 using SPT.Reflection.Patching;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Lighthouse
 {
@@ -21,7 +22,7 @@ namespace QuestingBots.Patches.Lighthouse
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .First(m => m.HasAllParameterTypes(new Type[] { typeof(DamageInfoStruct) }));
 
-            LoggingController.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
 
             return methodInfo;
         }
@@ -53,7 +54,7 @@ namespace QuestingBots.Patches.Lighthouse
             // Ignore victims that are not on the island
             if (!___physicsTriggerHandler_0.trigger.bounds.Contains(player.Position))
             {
-                LoggingController.LogWarning("[DSP Not Changed] Victim not on the island");
+                Singleton<LoggingUtil>.Instance.LogWarning("[DSP Not Changed] Victim not on the island");
                 return;
             }
 
@@ -61,14 +62,14 @@ namespace QuestingBots.Patches.Lighthouse
             Player lastAgressorPlayer = Singleton<GameWorld>.Instance.GetAlivePlayerByProfileID(lastAgressor.ProfileId);
             if (!lastAgressorPlayer.HasAGreenOrYellowDSP())
             {
-                LoggingController.LogWarning("[DSP Not Changed] Aggressor does not have an encoded DSP.");
+                Singleton<LoggingUtil>.Instance.LogWarning("[DSP Not Changed] Aggressor does not have an encoded DSP.");
                 return;
             }
             
-            LoggingController.LogInfo(lastAgressorPlayer.GetText() + " attacked " + player.GetText() + " on Lightkeeper Island. Updating their DSP...");
+            Singleton<LoggingUtil>.Instance.LogInfo(lastAgressorPlayer.GetText() + " attacked " + player.GetText() + " on Lightkeeper Island. Updating their DSP...");
             if (!lastAgressorPlayer.TryReduceLightkeeperStanding())
             {
-                LoggingController.LogError("Could not update " + lastAgressorPlayer.GetText() + "'s DSP");
+                Singleton<LoggingUtil>.Instance.LogError("Could not update " + lastAgressorPlayer.GetText() + "'s DSP");
             }
         }
     }

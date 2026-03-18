@@ -1,6 +1,8 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             }
             else
             {
-                LoggingController.LogWarning("Looting Bots Interop not detected. Cannot instruct bots to loot.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Looting Bots Interop not detected. Cannot instruct bots to loot.");
             }
 
             return CanUseInterop;

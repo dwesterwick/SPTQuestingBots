@@ -11,6 +11,8 @@ using SPT.Reflection.Patching;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -74,7 +76,7 @@ namespace QuestingBots.Patches
 
             if (ExternalModHandler.SAINModInfo.IsInstalled)
             {
-                LoggingController.LogInfo("SAIN detected. Adjusting Questing Bots brain layer priorities...");
+                Singleton<LoggingUtil>.Instance.LogInfo("SAIN detected. Adjusting Questing Bots brain layer priorities...");
                 BotBrainHelpers.AddQuestingBotsBrainLayers(ConfigController.Config.Questing.BrainLayerPriorities.WithSAIN);
             }
             else

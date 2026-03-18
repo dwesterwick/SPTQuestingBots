@@ -8,6 +8,8 @@ using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -36,7 +38,7 @@ namespace QuestingBots.Patches
                 message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
             }
 
-            LoggingController.LogInfo(message);
+            Singleton<LoggingUtil>.Instance.LogInfo(message);
 
             // Make sure the bot doesn't have any active quests if it's dead
             Controllers.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);

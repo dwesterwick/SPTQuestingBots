@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 {
@@ -32,13 +34,13 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
         {
             if (LootingBots.LootingBotsInterop.TryPreventBotFromLooting(BotOwner, duration))
             {
-                LoggingController.LogDebug("Preventing " + BotOwner.GetText() + " from looting");
+                Singleton<LoggingUtil>.Instance.LogDebug("Preventing " + BotOwner.GetText() + " from looting");
 
                 return true;
             }
             else
             {
-                LoggingController.LogWarning("Cannot prevent " + BotOwner.GetText() + " from looting. Looting Bots Interop not initialized properly or is outdated.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot prevent " + BotOwner.GetText() + " from looting. Looting Bots Interop not initialized properly or is outdated.");
             }
 
             return false;
@@ -48,13 +50,13 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
         {
             if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(BotOwner))
             {
-                LoggingController.LogDebug("Instructing " + BotOwner.GetText() + " to loot now");
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to loot now");
 
                 return true;
             }
             else
             {
-                LoggingController.LogWarning("Cannot instruct " + BotOwner.GetText() + " to loot. Looting Bots Interop not initialized properly or is outdated.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to loot. Looting Bots Interop not initialized properly or is outdated.");
             }
 
             return false;

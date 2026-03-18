@@ -12,6 +12,7 @@ using QuestingBots.BotLogic;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -123,7 +124,7 @@ namespace QuestingBots.BehaviorExtensions
 
             if (!loggedBrainLayerError || (TimeSinceLastBrainLayerMessage >= BRAIN_LAYER_ERROR_MESSAGE_INTERVAL))
             {
-                LoggingController.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer. This is normally caused by an exception in the update logic of another layer. Active layer name: " + activeLayerName);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer. This is normally caused by an exception in the update logic of another layer. Active layer name: " + activeLayerName);
 
                 loggedBrainLayerError = true;
                 timeSinceLastBrainLayerMessageTimer.Restart();
@@ -195,11 +196,11 @@ namespace QuestingBots.BehaviorExtensions
             Vector3[]? botPath = BotOwner.Mover?.GetCurrentPath();
             if (botPath == null)
             {
-                LoggingController.LogWarning("Cannot draw null path for " + BotOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot draw null path for " + BotOwner.GetText());
                 return;
             }
 
-            //LoggingController.LogInfo("Drawing " + botPath.CalculatePathLength() + "m path with " + botPath.Length + " corners for " + BotOwner.GetText());
+            //Singleton<LoggingUtil>.Instance.LogInfo("Drawing " + botPath.CalculatePathLength() + "m path with " + botPath.Length + " corners for " + BotOwner.GetText());
 
             // The visual representation of the bot's path needs to be offset vertically so it's raised above the ground
             List<Vector3> adjustedPathCorners = new List<Vector3>();
@@ -218,7 +219,7 @@ namespace QuestingBots.BehaviorExtensions
         {
             if (!ObjectiveManager.Position.HasValue)
             {
-                LoggingController.LogError("Cannot outline null position for bot " + BotOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogError("Cannot outline null position for bot " + BotOwner.GetText());
                 return;
             }
 
@@ -246,7 +247,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            //Controllers.LoggingController.LogWarning("Changing BotZone for group containing " + BotOwner.GetText() + " from " + BotOwner.BotsGroup.BotZone.ShortName + " to " + closestBotZone.ShortName + "...");
+            //Controllers.Singleton<LoggingUtil>.Instance.LogWarning("Changing BotZone for group containing " + BotOwner.GetText() + " from " + BotOwner.BotsGroup.BotZone.ShortName + " to " + closestBotZone.ShortName + "...");
 
             botZoneField.SetValue(BotOwner.BotsGroup, closestBotZone);
             BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
@@ -287,7 +288,7 @@ namespace QuestingBots.BehaviorExtensions
                     return;
                 }
 
-                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck. Trying to jump...");
 
                 BotOwner.Mover.Stop();
                 BotOwner.Mover.SetPose(1f);
@@ -307,7 +308,7 @@ namespace QuestingBots.BehaviorExtensions
                     return;
                 }
 
-                LoggingController.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck. Trying to vault...");
 
                 //DelaySprint(5);
                 BotOwner.Mover.Stop();
@@ -319,11 +320,11 @@ namespace QuestingBots.BehaviorExtensions
 
         private bool canUseStuckRemedies()
         {
-            //LoggingController.LogWarning(BotOwner.GetText() + " was stuck for " + StuckTime + "s.");
+            //Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " was stuck for " + StuckTime + "s.");
 
             if (!BotOwner.GetPlayer.MovementContext.IsGrounded)
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
                 return false;
             }
 

@@ -7,6 +7,7 @@ using Comfort.Common;
 using EFT;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Helpers
@@ -27,7 +28,7 @@ namespace QuestingBots.Helpers
             float minExtent = Math.Min(Math.Min(bounds.size.x, bounds.size.x), bounds.size.x) / 2;
             if (minExtent < radius)
             {
-                LoggingController.LogInfo("Radius " + radius + " is larger than min bounds extent " + minExtent + " of size " + bounds.size);
+                Singleton<LoggingUtil>.Instance.LogInfo("Radius " + radius + " is larger than min bounds extent " + minExtent + " of size " + bounds.size);
 
                 return Enumerable.Empty<Vector3>();
             }
@@ -84,8 +85,8 @@ namespace QuestingBots.Helpers
 
             if (!navMeshPoints.Any())
             {
-                LoggingController.LogWarning("Could not find any NavMesh points from " + colliderTestPoints.Count() + " test points using radius " + searchRadius + "m");
-                LoggingController.LogWarning("Test points: " + string.Join(",", colliderTestPoints));
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find any NavMesh points from " + colliderTestPoints.Count() + " test points using radius " + searchRadius + "m");
+                Singleton<LoggingUtil>.Instance.LogWarning("Test points: " + string.Join(",", colliderTestPoints));
             }
 
             return navMeshPoints;

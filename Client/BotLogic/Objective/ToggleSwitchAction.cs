@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -47,7 +49,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (ObjectiveManager.GetCurrentQuestInteractiveObject() == null)
             {
-                LoggingController.LogError("Cannot toggle a null switch");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot toggle a null switch");
 
                 ObjectiveManager.FailObjective();
 
@@ -56,7 +58,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!ObjectiveManager.Position.HasValue)
             {
-                LoggingController.LogError("Cannot go to a null position");
+                Singleton<LoggingUtil>.Instance.LogError("Cannot go to a null position");
 
                 ObjectiveManager.FailObjective();
 
@@ -68,7 +70,7 @@ namespace QuestingBots.BotLogic.Objective
             // If the switch has already been toggled, there is nothing else for the bot to do
             if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Open)
             {
-                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already open");
+                Singleton<LoggingUtil>.Instance.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already open");
 
                 ObjectiveManager.CompleteObjective();
 
@@ -78,7 +80,7 @@ namespace QuestingBots.BotLogic.Objective
             // If players are unable to toggle the switch, the bot shouldn't be allowed either
             if (ObjectiveManager.GetCurrentQuestInteractiveObject().DoorState == EDoorState.Locked)
             {
-                LoggingController.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is unavailable");
+                Singleton<LoggingUtil>.Instance.LogWarning("Switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is unavailable");
 
                 ObjectiveManager.TryChangeObjective();
 
@@ -87,7 +89,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (checkIfBotIsStuck())
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while trying to toggle switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
 
                 if (ObjectiveManager.TryChangeObjective())
                 {
@@ -109,7 +111,7 @@ namespace QuestingBots.BotLogic.Objective
                 //if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
                 if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(ObjectiveManager.Position.Value, 0.5f) != true))
                 {
-                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
+                    Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
                     ObjectiveManager.FailObjective();
 
@@ -129,7 +131,7 @@ namespace QuestingBots.BotLogic.Objective
             else
             {
                 // Presumably, if somebody is interacting with the switch, there is nothing else the bot needs to do for this objective
-                LoggingController.LogWarning("Somebody is already interacting with switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
+                Singleton<LoggingUtil>.Instance.LogWarning("Somebody is already interacting with switch " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
             }
 
             ObjectiveManager.CompleteObjective();

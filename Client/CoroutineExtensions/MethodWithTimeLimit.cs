@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.CoroutineExtensions
 {
@@ -45,7 +47,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (writeConsoleMessage && !hadToWait)
             {
-                LoggingController.LogWarning(messageTextPrefix(extraDetail) + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + messageTextSuffix(), true);
             }
             hadToWait = true;
             
@@ -58,7 +60,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (writeConsoleMessage && hadToWait)
             {
-                LoggingController.LogWarning(messageTextPrefix(extraDetail) + "done." + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "done." + messageTextSuffix(), true);
             }
         }
 
@@ -67,7 +69,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (IsRunning)
             {
-                LoggingController.LogWarning(messageTextPrefix(extraDetail) + "aborted." + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "aborted." + messageTextSuffix(), true);
             }
         }
 

@@ -8,6 +8,7 @@ using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -28,7 +29,7 @@ namespace QuestingBots.Components
 
             if (Singleton<GameWorld>.Instantiated)
             {
-                LoggingController.LogErrorToServerConsole("Could not validate quest files");
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole("Could not validate quest files");
 
                 questsValidated = true;
             }
@@ -48,7 +49,7 @@ namespace QuestingBots.Components
         {
             if (getTarkovApplication() == null)
             {
-                LoggingController.LogError("Invalid Tarkov application instance");
+                Singleton<LoggingUtil>.Instance.LogError("Invalid Tarkov application instance");
                 return null!;
             }
 
@@ -59,7 +60,7 @@ namespace QuestingBots.Components
         {
             if (getTarkovApplication() == null)
             {
-                LoggingController.LogError("Invalid Tarkov application instance");
+                Singleton<LoggingUtil>.Instance.LogError("Invalid Tarkov application instance");
                 return null!;
             }
 
@@ -95,7 +96,7 @@ namespace QuestingBots.Components
 
             if (allValidated)
             {
-                LoggingController.LogInfoToServerConsole("Validated all quest files");
+                Singleton<LoggingUtil>.Instance.LogInfoToServerConsole("Validated all quest files");
             }
         }
     }

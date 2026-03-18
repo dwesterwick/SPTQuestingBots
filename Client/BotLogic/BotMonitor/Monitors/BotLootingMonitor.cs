@@ -1,8 +1,11 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -84,7 +87,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     if (!hasFoundLoot)
                     {
-                        LoggingController.LogDebug("Bot " + BotOwner.GetText() + " has found loot");
+                        Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has found loot");
                     }
 
                     NextLootCheckDelay = ConfigController.Config.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenLootingEvents;
@@ -95,7 +98,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     if (!wasLooting)
                     {
-                        //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is searching for loot...");
+                        //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is searching for loot...");
                     }
 
                     lootSearchTimer.Start();
@@ -113,7 +116,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             if (wasLooting || hasFoundLoot)
             {
                 lootFunction.ResetMonitoredLayerCanUseTimer();
-                //LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is done looting (Loot searching time: " + (lootSearchTimer.ElapsedMilliseconds / 1000.0) + ").");
             }
 
             lootSearchTimer.Reset();

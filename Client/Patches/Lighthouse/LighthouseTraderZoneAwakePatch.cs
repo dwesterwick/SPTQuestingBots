@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT.Interactive;
+using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 
 namespace QuestingBots.Patches.Lighthouse
@@ -20,7 +22,7 @@ namespace QuestingBots.Patches.Lighthouse
         protected static void PatchPostfix(PhysicsTriggerHandler ___physicsTriggerHandler_0)
         {
             Components.LightkeeperIslandMonitor.LightkeeperTraderZoneColliderHandler = ___physicsTriggerHandler_0;
-            Controllers.LoggingController.LogDebug("Found collider for the Lighthouse trader zone");
+            Singleton<LoggingUtil>.Instance.LogDebug("Found collider for the Lighthouse trader zone");
         }
     }
 }

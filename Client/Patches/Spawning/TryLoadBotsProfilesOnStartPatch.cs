@@ -8,6 +8,8 @@ using EFT;
 using SPT.Reflection.Patching;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -29,7 +31,7 @@ namespace QuestingBots.Patches.Spawning
                 throw new TypeLoadException("Could not find matching method for TryLoadBotsProfilesOnStartPatch");
             }
 
-            LoggingController.LogInfo("Found method for TryLoadBotsProfilesOnStartPatch: " + matchingMethods[0].Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for TryLoadBotsProfilesOnStartPatch: " + matchingMethods[0].Name);
 
             return matchingMethods[0];
         }
@@ -39,7 +41,7 @@ namespace QuestingBots.Patches.Spawning
         {
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
-                LoggingController.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
+                Singleton<LoggingUtil>.Instance.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
             }
         }
 

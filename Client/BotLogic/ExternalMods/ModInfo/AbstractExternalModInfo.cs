@@ -1,11 +1,13 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +53,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 
             if (matchingPlugins.Count() > 1)
             {
-                LoggingController.LogError("Found multiple instances of plugins with GUID " + GUID + ". Interoperability disabled.");
+                Singleton<LoggingUtil>.Instance.LogError("Found multiple instances of plugins with GUID " + GUID + ". Interoperability disabled.");
                 return false;
             }
 

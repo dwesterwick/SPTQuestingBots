@@ -3,6 +3,7 @@ using EFT;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,7 +123,7 @@ namespace QuestingBots.Controllers
             }
 
             message += " (" + botOwner.Side + ")";
-            LoggingController.LogInfo(message);
+            Singleton<LoggingUtil>.Instance.LogInfo(message);
         }
 
 
@@ -232,7 +233,7 @@ namespace QuestingBots.Controllers
 
                 group.AddEnemy(boss, EBotEnemyCause.addPlayer);
 
-                //LoggingController.LogInfo("Group containing " + string.Join(", ", groupMembers.Select(m => m.GetText())) + " is now hostile toward " + boss.GetText());
+                //Singleton<LoggingUtil>.Instance.LogInfo("Group containing " + string.Join(", ", groupMembers.Select(m => m.GetText())) + " is now hostile toward " + boss.GetText());
             }
         }
 

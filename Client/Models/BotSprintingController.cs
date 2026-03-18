@@ -32,7 +32,7 @@ namespace QuestingBots.Models
         {
             if (!trySprint(value, withDebugCallback))
             {
-                //LoggingController.LogWarning("Blocked request to change sprinting for " + BotOwner.GetText() + " to " + value);
+                //Singleton<LoggingUtil>.Instance.LogWarning("Blocked request to change sprinting for " + BotOwner.GetText() + " to " + value);
             }
         }
 

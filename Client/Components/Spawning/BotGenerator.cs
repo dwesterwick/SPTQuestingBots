@@ -12,6 +12,7 @@ using EFT.Game.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Patches.Spawning;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components.Spawning
@@ -413,7 +414,7 @@ namespace QuestingBots.Components.Spawning
         {
             while (TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks > 0)
             {
-                LoggingController.LogInfo("Waiting for " + TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks + " EFT bot preset generator(s)...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Waiting for " + TryLoadBotsProfilesOnStartPatch.RemainingBotGenerationTasks + " EFT bot preset generator(s)...");
                 await Task.Delay(100);
             }
         }
@@ -427,7 +428,7 @@ namespace QuestingBots.Components.Spawning
                     CurrentBotGeneratorType = BotTypeName;
                     CurrentBotGeneratorProgress = 0;
 
-                    LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
 
                     while (GeneratedBotCount < MaxGeneratedBots)
                     {
@@ -439,18 +440,18 @@ namespace QuestingBots.Components.Spawning
                         GeneratedBotCount += group.GeneratedBotCount;
                     }
 
-                    LoggingController.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
                 }
                 finally
                 {
                     if (GeneratedBotCount < MaxGeneratedBots)
                     {
-                        LoggingController.LogErrorToServerConsole("Only " + GeneratedBotCount + " of " + MaxGeneratedBots + " " + BotTypeName + "s were generated due to an error.");
+                        Singleton<LoggingUtil>.Instance.LogErrorToServerConsole("Only " + GeneratedBotCount + " of " + MaxGeneratedBots + " " + BotTypeName + "s were generated due to an error.");
                     }
 
                     HasGeneratedBots = true;
@@ -463,7 +464,7 @@ namespace QuestingBots.Components.Spawning
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             IBotCreator ibotCreator = botSpawnerClass.BotCreator;
 
-            LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
+            Singleton<LoggingUtil>.Instance.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
             Models.BotSpawnInfo botSpawnInfo = null!;
             while (botSpawnInfo == null)
@@ -481,21 +482,21 @@ namespace QuestingBots.Components.Spawning
 
                     if (botSpawnData.Profiles.Count != bots)
                     {
-                        LoggingController.LogWarning("Requested " + bots + " " + BotTypeName + "s but only " + botSpawnData.Profiles.Count + " were generated. Trying again...");
+                        Singleton<LoggingUtil>.Instance.LogWarning("Requested " + bots + " " + BotTypeName + "s but only " + botSpawnData.Profiles.Count + " were generated. Trying again...");
                         continue;
                     }
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
 
                     string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => p.Nickname));
-                    LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...done. (" + profileListText + ")");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...done. (" + profileListText + ")");
                 }
                 catch (NullReferenceException nre)
                 {
-                    LoggingController.LogWarning("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...failed. Trying again...");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...failed. Trying again...");
 
-                    LoggingController.LogError(nre.Message);
-                    LoggingController.LogError(nre.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogError(nre.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(nre.StackTrace);
 
                     continue;
                 }
@@ -515,7 +516,7 @@ namespace QuestingBots.Components.Spawning
                 return raidDifficulty.ToBotDifficulty();
             }
 
-            return (BotDifficulty)Math.Round(ConfigController.GetValueFromTotalChanceFraction(difficultyChances, random.NextDouble()));
+            return (BotDifficulty)Math.Round(difficultyChances.GetValueFromTotalChanceFraction(random.NextDouble()));
         }
 
         private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)
@@ -555,7 +556,7 @@ namespace QuestingBots.Components.Spawning
                     yield break;
                 }
 
-                LoggingController.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...");
+                Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...");
                 foreach (Models.BotSpawnInfo botGroup in botGroupsToSpawn)
                 {
                     yield return spawnBotGroup(botGroup);
@@ -566,14 +567,14 @@ namespace QuestingBots.Components.Spawning
                 {
                     if (Time.time > timeWhenWarningWillBeShown)
                     {
-                        LoggingController.LogWarning("Still waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to spawn...");
+                        Singleton<LoggingUtil>.Instance.LogWarning("Still waiting for " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s) to spawn...");
                         timeWhenWarningWillBeShown = Time.time + 3f;
                     }
 
                     yield return new WaitForSeconds(0.1f);
                 }
 
-                LoggingController.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...done.");
+                Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...done.");
             }
             finally
             {
@@ -586,14 +587,14 @@ namespace QuestingBots.Components.Spawning
         {
             if (botGroup.HaveAllBotsSpawned)
             {
-                //LoggingController.LogError("PMC group has already spawned.");
+                //Singleton<LoggingUtil>.Instance.LogError("PMC group has already spawned.");
                 yield break;
             }
 
             if (!CanSpawnAdditionalBots())
             {
                 retrySpawnTimer.Restart();
-                LoggingController.LogWarning("Cannot spawn more bots or EFT will not be able to spawn any.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn more bots or EFT will not be able to spawn any.");
                 yield break;
             }
 
@@ -605,7 +606,7 @@ namespace QuestingBots.Components.Spawning
 
             string spawnPositionText = string.Join(", ", spawnPositions.Select(s => s.ToString()));
             string spawningLogMessage = "Spawning " + BotTypeName + " group at " + spawnPositionText + "...";
-            LoggingController.LogInfo(spawningLogMessage);
+            Singleton<LoggingUtil>.Instance.LogInfo(spawningLogMessage);
 
             try
             {
@@ -614,9 +615,9 @@ namespace QuestingBots.Components.Spawning
             }
             catch(Exception e)
             {
-                LoggingController.LogError(spawningLogMessage + "failed!");
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(spawningLogMessage + "failed!");
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
             }
 
             yield return null;
@@ -673,9 +674,9 @@ namespace QuestingBots.Components.Spawning
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError("Could not set group for " + bot.GetText());
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogError("Could not set group for " + bot.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
                     throw;
                 }
 
@@ -686,9 +687,9 @@ namespace QuestingBots.Components.Spawning
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError("Could not update group enemies for " + bot.GetText());
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogError("Could not update group enemies for " + bot.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
                 }
 
                 return group;
@@ -711,12 +712,12 @@ namespace QuestingBots.Components.Spawning
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError("Could not finish activation of " + bot.GetText());
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogError("Could not finish activation of " + bot.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
                 }
 
-                LoggingController.LogInfo("Spawned bot " + bot.GetText());
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawned bot " + bot.GetText());
                 botSpawnInfo.AddBotOwner(bot);
             }
         }

@@ -10,6 +10,7 @@ using EFT.Game.Spawning;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
 using UnityEngine;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.ScavLimits
 {
@@ -21,7 +22,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
             Type[] argumentTypes = new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(GClass699) };
 
             Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName, argumentTypes);
-            Controllers.LoggingController.LogInfo("Found type for SpawnPointIsValidPatch: " + targetType.FullName);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found type for SpawnPointIsValidPatch: " + targetType.FullName);
 
             return targetType.GetMethod(
                 methodName,
@@ -62,7 +63,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
             /*string message = __result ? "Allowed " : "Blocked ";
             message += "spawn that was " + minDistanceFromPlayers + " from players (exclusionRadius=" + Math.Round(exclusionRadius, 1) + ")";
-            Controllers.LoggingController.LogDebug(message);*/
+            Controllers.Singleton<LoggingUtil>.Instance.LogDebug(message);*/
         }
     }
 }

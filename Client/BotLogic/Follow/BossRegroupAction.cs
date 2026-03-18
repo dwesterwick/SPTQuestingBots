@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic.Follow
@@ -69,7 +72,7 @@ namespace QuestingBots.BotLogic.Follow
                     IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner);
                     string followersText = string.Join(", ", followers.Select(f => f.GetText()));
 
-                    LoggingController.LogWarning("Boss " + BotOwner.GetText() + " has been waiting for his followers (" + followersText + ") for a long time...");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Boss " + BotOwner.GetText() + " has been waiting for his followers (" + followersText + ") for a long time...");
                 }
                 wasStuck = true;
 

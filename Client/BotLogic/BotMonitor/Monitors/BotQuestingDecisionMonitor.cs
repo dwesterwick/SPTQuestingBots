@@ -5,6 +5,7 @@ using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -184,7 +185,7 @@ namespace QuestingBots.BotLogic.BotMonitor
             {
                 ObjectiveManager.StopQuesting();
 
-                LoggingController.LogWarning("Bot " + BotOwner.GetText() + " wants to extract and will no longer quest.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " wants to extract and will no longer quest.");
                 return BotQuestingDecision.None;
             }
 

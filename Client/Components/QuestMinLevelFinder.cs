@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT.Quests;
 using QuestingBots.Controllers;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Components
 {
@@ -110,7 +112,7 @@ namespace QuestingBots.Components
             Quest preReqQuest = BotJobAssignmentFactory.FindQuest(conditionQuest.target);
             if (preReqQuest == null)
             {
-                LoggingController.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.Name);
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.Name);
                 return 0;
             }
 

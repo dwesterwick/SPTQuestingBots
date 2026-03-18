@@ -1,5 +1,8 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +25,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
         public override bool TryInstructBotToExtract()
         {
             tryExtractSingleBot(BotOwner);
-            LoggingController.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
+            Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
 
             foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner))
             {
@@ -32,7 +35,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
                 }
 
                 tryExtractSingleBot(follower);
-                LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
             }
 
             return true;

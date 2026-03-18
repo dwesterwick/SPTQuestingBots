@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic.Follow
@@ -62,7 +64,7 @@ namespace QuestingBots.BotLogic.Follow
                 RecalculatePath(targetLocation.Value, allowedVariation, targetDistance);
 
                 //Vector3 bossPosition = BotHiveMindMonitor.GetBoss(BotOwner).Position;
-                //LoggingController.LogWarning("Follower " + BotOwner.GetText() + " is regrouping. TimeSinceLastSet=" + ObjectiveManager.BotPath.TimeSinceLastSet + "s, BossPos=" + bossPosition + ", PathTarget=" + ObjectiveManager.BotPath.TargetPosition + ", EFTPathTarget=" + BotOwner.Mover.GetCurrentPathTargetPoint().Value);
+                //Singleton<LoggingUtil>.Instance.LogWarning("Follower " + BotOwner.GetText() + " is regrouping. TimeSinceLastSet=" + ObjectiveManager.BotPath.TimeSinceLastSet + "s, BossPos=" + bossPosition + ", PathTarget=" + ObjectiveManager.BotPath.TargetPosition + ", EFTPathTarget=" + BotOwner.Mover.GetCurrentPathTargetPoint().Value);
             }
             else
             {
@@ -74,7 +76,7 @@ namespace QuestingBots.BotLogic.Follow
             {
                 if (!wasStuck)
                 {
-                    LoggingController.LogWarning("Follower " + BotOwner.GetText() + " got stuck while trying to group with its boss");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Follower " + BotOwner.GetText() + " got stuck while trying to group with its boss");
                 }
                 wasStuck = true;
 

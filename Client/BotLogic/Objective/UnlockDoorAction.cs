@@ -11,6 +11,7 @@ using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -39,7 +40,7 @@ namespace QuestingBots.BotLogic.Objective
             {
                 if (ObjectiveManager.MustUnlockDoor)
                 {
-                    LoggingController.LogError(BotOwner.GetText() + " cannot unlock a null door. InteractiveObject=" + (ObjectiveManager.GetCurrentQuestInteractiveObject()?.Id ?? "???"));
+                    Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot unlock a null door. InteractiveObject=" + (ObjectiveManager.GetCurrentQuestInteractiveObject()?.Id ?? "???"));
 
                     ObjectiveManager.FailObjective();
                 }
@@ -55,7 +56,7 @@ namespace QuestingBots.BotLogic.Objective
             }
             if (interactionPosition == null)
             {
-                LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
 
                 ObjectiveManager.FailObjective();
 
@@ -73,7 +74,7 @@ namespace QuestingBots.BotLogic.Objective
             keyComponent = BotOwner.FindKeyComponent(worldInteractiveObject);
             if (keyComponent != null)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " already has key " + keyComponent.Item.LocalizedName() + " for door " + worldInteractiveObject.Id + "...");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " already has key " + keyComponent.Item.LocalizedName() + " for door " + worldInteractiveObject.Id + "...");
                 return;
             }
 
@@ -81,7 +82,7 @@ namespace QuestingBots.BotLogic.Objective
             System.Random random = new System.Random();
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
-                LoggingController.LogInfo(BotOwner.GetText() + " does not have the key for door " + worldInteractiveObject.Id + ". Selecting another objective...");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for door " + worldInteractiveObject.Id + ". Selecting another objective...");
 
                 ObjectiveManager.FailObjective();
 
@@ -92,7 +93,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!keyItem.TryAddToFakeStash(BotOwner, "fake stash for spawning keys"))
             {
-                LoggingController.LogError("Could not add key for door " + worldInteractiveObject.Id + " to fake stash for " + BotOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogError("Could not add key for door " + worldInteractiveObject.Id + " to fake stash for " + BotOwner.GetText());
 
                 ObjectiveManager.FailObjective();
 
@@ -102,7 +103,7 @@ namespace QuestingBots.BotLogic.Objective
             // If the bot is lucky enough to get the key, try to transfer it to the bot
             if (!BotOwner.TryTransferItem(keyItem))
             {
-                LoggingController.LogError("Could not transfer key for door " + worldInteractiveObject.Id + " to " + BotOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogError("Could not transfer key for door " + worldInteractiveObject.Id + " to " + BotOwner.GetText());
 
                 ObjectiveManager.FailObjective();
 
@@ -131,7 +132,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (worldInteractiveObject == null)
             {
-                LoggingController.LogError("Door no longer exists");
+                Singleton<LoggingUtil>.Instance.LogError("Door no longer exists");
 
                 ObjectiveManager.FailObjective();
 
@@ -140,7 +141,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!interactionPosition.HasValue)
             {
-                LoggingController.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
 
                 ObjectiveManager.FailObjective();
 
@@ -158,7 +159,7 @@ namespace QuestingBots.BotLogic.Objective
             // Check if the door is already unlocked
             if (worldInteractiveObject.DoorState != EDoorState.Locked)
             {
-                LoggingController.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
+                Singleton<LoggingUtil>.Instance.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
 
                 ObjectiveManager.DoorIsUnlocked();
 
@@ -175,7 +176,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (checkIfBotIsStuck())
             {
-                LoggingController.LogWarning(BotOwner.GetText() + " got stuck while trying to unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while trying to unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
 
                 if (ObjectiveManager.TryChangeObjective())
                 {
@@ -198,7 +199,7 @@ namespace QuestingBots.BotLogic.Objective
                 //if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
                 if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(interactionPosition.Value, 0.5f) != true))
                 {
-                    LoggingController.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
+                    Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
 
                     ObjectiveManager.FailObjective();
 
@@ -225,7 +226,7 @@ namespace QuestingBots.BotLogic.Objective
                 // Wait for the the bundle to finish loading. If the bundle has not finished loading at this point, something is likely wrong...
                 if ((bundleLoader != null) && (!bundleLoader.Finished))
                 {
-                    LoggingController.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
 
                     return;
                 }
@@ -235,11 +236,11 @@ namespace QuestingBots.BotLogic.Objective
                 {
                     if (bundleLoader != null)
                     {
-                        LoggingController.LogInfo("Releasing bundle loader...");
+                        Singleton<LoggingUtil>.Instance.LogInfo("Releasing bundle loader...");
                         bundleLoader.Release();
                     }
 
-                    LoggingController.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
                     bundleLoader = keyComponent.Item.LoadBundle();
 
                     return;
@@ -259,7 +260,7 @@ namespace QuestingBots.BotLogic.Objective
             // Instruct the bot to unlock the door
             BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
 
-            LoggingController.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + worldInteractiveObject.Id);
+            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + worldInteractiveObject.Id);
 
             // Report that the door has been unlocked, and wait a few seconds before allowing the bot to recalculate its path to its quest objective.
             // If the questing layer is not paused, there will not be enough time for the NavMesh to update, and the bot will fail its objective. 

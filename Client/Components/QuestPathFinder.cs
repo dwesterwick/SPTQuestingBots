@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using QuestingBots.Controllers;
 using QuestingBots.Models.Pathing;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -45,7 +47,7 @@ namespace QuestingBots.Components
                     continue;
 
                     // TODO: This doesn't seem to be required, but let's remove it after more testing
-                    //LoggingController.LogInfo("Reversing static path from " + matchingPath.StartPosition + " to " + matchingPath.TargetPosition);
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Reversing static path from " + matchingPath.StartPosition + " to " + matchingPath.TargetPosition);
                     //matchingPath = matchingPath.GetReverse();
                 }
 
@@ -57,11 +59,11 @@ namespace QuestingBots.Components
 
         public IEnumerator FindStaticPathsForAllQuests()
         {
-            LoggingController.LogInfo("Finding static paths...");
+            Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...");
 
             yield return BotJobAssignmentFactory.ProcessAllQuests(findStaticPaths);
 
-            LoggingController.LogInfo("Finding static paths...done.");
+            Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...done.");
         }
 
         private void findStaticPaths(Models.Questing.Quest quest)
@@ -98,12 +100,12 @@ namespace QuestingBots.Components
                     StaticPathData path = new StaticPathData(from, to, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        LoggingController.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
                         tmpStaticPaths.Add((from, to), path);
                     }
                     else
                     {
-                        LoggingController.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest, true);
+                        Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest, true);
                     }
                 }
             }
@@ -114,7 +116,7 @@ namespace QuestingBots.Components
                 Vector3? firstStepPosition = questObjective.GetFirstStepPosition();
                 if (firstStepPosition == null)
                 {
-                    LoggingController.LogError("First step position for " + questObjective + " in " + quest + " is null");
+                    Singleton<LoggingUtil>.Instance.LogError("First step position for " + questObjective + " in " + quest + " is null");
                     continue;
                 }
 
@@ -128,12 +130,12 @@ namespace QuestingBots.Components
                     StaticPathData path = new StaticPathData(waypoint, firstStepPosition.Value, ConfigController.Config.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        LoggingController.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
                         tmpStaticPaths.Add((waypoint, firstStepPosition.Value), path);
                     }
                     else
                     {
-                        LoggingController.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest, true);
+                        Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest, true);
                     }
                 }
             }
@@ -177,7 +179,7 @@ namespace QuestingBots.Components
                             continue;
                         }
 
-                        LoggingController.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }
@@ -197,7 +199,7 @@ namespace QuestingBots.Components
                             continue;
                         }
 
-                        LoggingController.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }

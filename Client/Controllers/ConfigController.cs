@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using SPT.Common.Http;
 using Newtonsoft.Json;
 using QuestingBots.Configuration;
+using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Controllers
 {
@@ -47,7 +50,7 @@ namespace QuestingBots.Controllers
 
             string fieldName = "SerializerSettings";
             Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByField(fieldName);
-            LoggingController.LogInfo("Found type for " + fieldName + ": " + targetType.FullName, true);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found type for " + fieldName + ": " + targetType.FullName, true);
 
             JsonSerializerSettings? jsonSerializerSettings = targetType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static).GetValue(null) as JsonSerializerSettings;
             if (jsonSerializerSettings != null)
@@ -58,24 +61,9 @@ namespace QuestingBots.Controllers
 
         public static void AdjustPScavChance(float timeRemainingFactor, bool preventPScav)
         {
-            double factor = preventPScav ? 0 : InterpolateForFirstCol(Config.AdjustPScavChance.ChanceVsTimeRemainingFraction, timeRemainingFactor);
+            double factor = preventPScav ? 0 : Config.AdjustPScavChance.ChanceVsTimeRemainingFraction.InterpolateForFirstCol(timeRemainingFactor);
 
             GetJson("/QuestingBots/AdjustPScavChance/" + factor, "Could not adjust PScav conversion chance");
-        }
-
-        public static void ReportInfoToServer(string message)
-        {
-            SPT.Common.Utils.ServerLog.Info("Questing Bots", message);
-        }
-
-        public static void ReportWarningToServer(string message)
-        {
-            SPT.Common.Utils.ServerLog.Warn("Questing Bots", message);
-        }
-
-        public static void ReportErrorToServer(string message)
-        {
-            SPT.Common.Utils.ServerLog.Error("Questing Bots", message);
         }
 
         public static string GetLoggingPath()
@@ -86,7 +74,7 @@ namespace QuestingBots.Controllers
             }
 
             LoggingPath = AppDomain.CurrentDomain.BaseDirectory + ModPathRelative + "/log/";
-            LoggingController.LogInfo("Logging path: " + LoggingPath);
+            Singleton<LoggingUtil>.Instance.LogInfo("Logging path: " + LoggingPath);
 
             return LoggingPath;
         }
@@ -163,9 +151,9 @@ namespace QuestingBots.Controllers
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
-                    LoggingController.LogErrorToServerConsole(errorMessage);
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
                 }
             }
 
@@ -181,9 +169,9 @@ namespace QuestingBots.Controllers
                 }
                 catch (Exception e)
                 {
-                    LoggingController.LogError(e.Message);
-                    LoggingController.LogError(e.StackTrace);
-                    LoggingController.LogErrorToServerConsole(errorMessage);
+                    Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                    Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
+                    Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
                 }
             }
 
@@ -206,7 +194,7 @@ namespace QuestingBots.Controllers
                 {
                     lastException = e;
 
-                    LoggingController.LogWarning("Could not get data for " + endpoint);
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not get data for " + endpoint);
                 }
 
                 if (json != null)
@@ -219,9 +207,9 @@ namespace QuestingBots.Controllers
 
             if (json == null)
             {
-                LoggingController.LogError(lastException.Message);
-                LoggingController.LogError(lastException.StackTrace);
-                LoggingController.LogErrorToServerConsole(errorMessage);
+                Singleton<LoggingUtil>.Instance.LogError(lastException.Message);
+                Singleton<LoggingUtil>.Instance.LogError(lastException.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
             }
 
             return json!;
@@ -257,9 +245,9 @@ namespace QuestingBots.Controllers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
-                LoggingController.LogErrorToServerConsole(errorMessage);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(errorMessage);
             }
 
             obj = default(T)!;
@@ -269,78 +257,6 @@ namespace QuestingBots.Controllers
             }
 
             return false;
-        }
-
-        public static double InterpolateForFirstCol(double[][] array, double value)
-        {
-            validateArray(array);
-
-            if (array.Length == 1)
-            {
-                return array.Last()[1];
-            }
-
-            if (value <= array[0][0])
-            {
-                return array[0][1];
-            }
-
-            for (int i = 1; i < array.Length; i++)
-            {
-                if (array[i][0] >= value)
-                {
-                    if (array[i][0] - array[i - 1][0] == 0)
-                    {
-                        return array[i][1];
-                    }
-
-                    return array[i - 1][1] + (value - array[i - 1][0]) * (array[i][1] - array[i - 1][1]) / (array[i][0] - array[i - 1][0]);
-                }
-            }
-
-            return array.Last()[1];
-        }
-
-        public static double GetValueFromTotalChanceFraction(double[][] array, double fraction)
-        {
-            validateArray(array);
-
-            if (array.Length == 1)
-            {
-                return array.Last()[1];
-            }
-
-            double chancesSum = array.Sum(x => x[1]);
-            double targetCumulativeChances = chancesSum * fraction;
-
-            int i = 0;
-            double cumulativeChances = 0;
-            while (i < array.Length)
-            {
-                cumulativeChances += array[i][1];
-
-                if (cumulativeChances > targetCumulativeChances)
-                {
-                    return array[i][0];
-                }
-
-                i++;
-            }
-
-            return array.Last()[0];
-        }
-
-        private static void validateArray(double[][] array)
-        {
-            if (array.Length == 0)
-            {
-                throw new ArgumentOutOfRangeException("The array must have at least one row.");
-            }
-
-            if (array.Any(x => x.Length != 2))
-            {
-                throw new ArgumentOutOfRangeException("All rows in the array must have two columns.");
-            }
         }
     }
 }

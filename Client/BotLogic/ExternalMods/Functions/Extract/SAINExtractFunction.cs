@@ -1,5 +1,8 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +29,12 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
         {
             if (!tryExtractSingleBot(BotOwner))
             {
-                LoggingController.LogWarning("Cannot instruct " + BotOwner.GetText() + " to extract. SAIN Interop not initialized properly or is outdated.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to extract. SAIN Interop not initialized properly or is outdated.");
 
                 return false;
             }
 
-            LoggingController.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
+            Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
 
             foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner))
             {
@@ -42,17 +45,17 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
 
                 if (tryExtractSingleBot(follower))
                 {
-                    LoggingController.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
                 }
                 else
                 {
-                    LoggingController.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly or is outdated.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly or is outdated.");
                 }
             }
 
             if (!trySetExfilForBot(BotOwner))
             {
-                LoggingController.LogWarning("Could not find an extract for " + BotOwner.GetText());
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find an extract for " + BotOwner.GetText());
                 return false;
             }
 

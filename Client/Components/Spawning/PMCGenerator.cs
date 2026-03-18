@@ -8,6 +8,7 @@ using EFT;
 using EFT.Game.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components.Spawning
@@ -45,7 +46,7 @@ namespace QuestingBots.Components.Spawning
             // There must be at least 1 PMC still in the map or PScavs will not be allowed to join in live Tarkov
             pmcCount = Math.Max(1, pmcCount);
 
-            LoggingController.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
+            Singleton<LoggingUtil>.Instance.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
 
             return pmcCount;
         }
@@ -53,10 +54,10 @@ namespace QuestingBots.Components.Spawning
         protected override async Task<Models.BotSpawnInfo> GenerateBotGroupTask()
         {
             // Spawn smaller PMC groups later in raids
-            double groupSizeFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, RaidHelpers.GetRaidTimeRemainingFraction());
+            double groupSizeFactor = ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
 
             // Determine how many bots to spawn in the group, but do not exceed the maximum number of bots allowed to spawn
-            int botsInGroup = (int)Math.Round(ConfigController.GetValueFromTotalChanceFraction(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution, random.NextDouble()));
+            int botsInGroup = (int)Math.Round(ConfigController.Config.BotSpawns.PMCs.BotsPerGroupDistribution.GetValueFromTotalChanceFraction(random.NextDouble()));
             botsInGroup = (int)Math.Ceiling(botsInGroup * Math.Min(1, groupSizeFactor));
             botsInGroup = (int)Math.Min(botsInGroup, MaxBotsToGenerate);
             botsInGroup = (int)Math.Max(botsInGroup, 1);
@@ -100,7 +101,7 @@ namespace QuestingBots.Components.Spawning
             SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPositions(positionsToAvoid, ESpawnCategoryMask.Player, playerMask, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
-                LoggingController.LogWarning("Could not find a spawn point for PMC group");
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find a spawn point for PMC group");
                 return Enumerable.Empty<Vector3>();
             }
 
@@ -110,14 +111,14 @@ namespace QuestingBots.Components.Spawning
 
             if (!spawnPositions.Any())
             {
-                LoggingController.LogError("No valid spawn positions found for spawn point " + spawnPoint.Value.Position.ToUnityVector3().ToString());
+                Singleton<LoggingUtil>.Instance.LogError("No valid spawn positions found for spawn point " + spawnPoint.Value.Position.ToUnityVector3().ToString());
                 return Enumerable.Empty<Vector3>();
             }
 
             // Ensure none of the spawn points are too close to other players or bots
             if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers(), out float distance))
             {
-                LoggingController.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
             }
 
@@ -144,7 +145,7 @@ namespace QuestingBots.Components.Spawning
                 MaxAliveBots = ConfigController.Config.BotSpawns.MaxAliveBots["default"];
             }
 
-            LoggingController.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
+            Singleton<LoggingUtil>.Instance.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
 
         private Configuration.MinMaxConfig getPMCCount()
@@ -152,7 +153,7 @@ namespace QuestingBots.Components.Spawning
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
             // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs)
-            double playerCountFactor = ConfigController.InterpolateForFirstCol(ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET, RaidHelpers.GetRaidTimeRemainingFraction());
+            double playerCountFactor = ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
             playerCountFactor *= ConfigController.Config.BotSpawns.PMCs.FractionOfMaxPlayers;
 
             // Choose the number of initial PMC's to spawn

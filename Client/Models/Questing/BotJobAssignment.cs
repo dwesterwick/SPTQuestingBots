@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -50,7 +53,7 @@ namespace QuestingBots.Models.Questing
 
             if (!TrySetNextObjectiveStep(true))
             {
-                LoggingController.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
+                Singleton<LoggingUtil>.Instance.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
             }
         }
 
@@ -107,7 +110,7 @@ namespace QuestingBots.Models.Questing
 
             if (Status != JobAssignmentStatus.Completed)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
             }
 
             Status = JobAssignmentStatus.Completed;
@@ -119,7 +122,7 @@ namespace QuestingBots.Models.Questing
 
             if (Status != JobAssignmentStatus.Failed)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
             }
 
             Status = JobAssignmentStatus.Failed;
@@ -134,7 +137,7 @@ namespace QuestingBots.Models.Questing
         {
             if (Status == JobAssignmentStatus.Active)
             {
-                LoggingController.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
 
                 Status = JobAssignmentStatus.Pending;
             }

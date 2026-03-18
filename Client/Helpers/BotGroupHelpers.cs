@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using SPT.Custom.CustomAI;
 
 namespace QuestingBots.Helpers
@@ -101,14 +102,14 @@ namespace QuestingBots.Helpers
 
             foreach (IPlayer remainingEnemy in enemyMatches)
             {
-                LoggingController.LogDebug("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
+                Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
                 playerGroup.RemoveEnemy(remainingEnemy);
             }
 
             Player otherPlayer = playerToAlly.GetPlayer();
             if (!playerGroup.Allies.Contains(otherPlayer))
             {
-                LoggingController.LogDebug("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
+                Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
                 playerGroup.AddAlly(otherPlayer);
             }
         }

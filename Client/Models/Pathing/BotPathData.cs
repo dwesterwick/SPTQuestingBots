@@ -8,6 +8,7 @@ using EFT;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Pathing
@@ -75,16 +76,16 @@ namespace QuestingBots.Models.Pathing
                     Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(bot.Position, 2);
                     if (!navMeshPosition.HasValue)
                     {
-                        LoggingController.LogError("Cannot find NavMesh position for " + bot.GetText());
+                        Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh position for " + bot.GetText());
                     }
                     else
                     {
                         float distance = Vector3.Distance(bot.Position, navMeshPosition.Value);
-                        LoggingController.LogError(bot.GetText() + " has an invalid path and is " + distance + "m from the NavMesh");
+                        Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " has an invalid path and is " + distance + "m from the NavMesh");
 
                         if (distance > 0.05)
                         {
-                            LoggingController.LogError("Teleporting " + bot.GetText() + " to nearest NavMesh position...");
+                            Singleton<LoggingUtil>.Instance.LogError("Teleporting " + bot.GetText() + " to nearest NavMesh position...");
                             bot.GetPlayer.Teleport(navMeshPosition.Value);
                         }
                     }
@@ -111,14 +112,14 @@ namespace QuestingBots.Models.Pathing
 
                 if (!requiresUpdate && !Corners.Any())
                 {
-                    //LoggingController.LogInfo(bot.GetText() + " has no cached corners. Updating path...");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no cached corners. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
 
                 if (!requiresUpdate && Corners.Any() && !currentPath.Any())
                 {
-                    //LoggingController.LogInfo(bot.GetText() + " has no path set in EFT but has cached corners. Updating path...");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no path set in EFT but has cached corners. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
@@ -165,7 +166,7 @@ namespace QuestingBots.Models.Pathing
 
                 /*if (staticPaths.Any())
                 {
-                    LoggingController.LogInfo("Testing " + staticPaths.Count() + " static paths for " + bot.GetText() + "...");
+                    Singleton<LoggingUtil>.Instance.LogInfo("Testing " + staticPaths.Count() + " static paths for " + bot.GetText() + "...");
                 }*/
 
                 foreach (StaticPathData staticPath in staticPaths)
@@ -181,10 +182,10 @@ namespace QuestingBots.Models.Pathing
                         StaticPathData combinedPath = Append(staticPath);
                         SetCorners(combinedPath.Corners);
 
-                        LoggingController.LogInfo("Using static path from " + staticPath.StartPosition + " to " + staticPath.TargetPosition + " for " + bot.GetText());
-                        //LoggingController.LogInfo("Path to Static Path: " + string.Join(", ", staticPathCorners));
-                        //LoggingController.LogInfo("Static Path: " + string.Join(", ", staticPath.Corners));
-                        //LoggingController.LogInfo("Combined Path: " + string.Join(", ", Corners));
+                        Singleton<LoggingUtil>.Instance.LogInfo("Using static path from " + staticPath.StartPosition + " to " + staticPath.TargetPosition + " for " + bot.GetText());
+                        //Singleton<LoggingUtil>.Instance.LogInfo("Path to Static Path: " + string.Join(", ", staticPathCorners));
+                        //Singleton<LoggingUtil>.Instance.LogInfo("Static Path: " + string.Join(", ", staticPath.Corners));
+                        //Singleton<LoggingUtil>.Instance.LogInfo("Combined Path: " + string.Join(", ", Corners));
 
                         return;
                     }

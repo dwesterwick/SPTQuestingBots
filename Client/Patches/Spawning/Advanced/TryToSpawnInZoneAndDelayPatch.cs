@@ -8,6 +8,8 @@ using SPT.Reflection.Patching;
 using EFT;
 using EFT.Game.Spawning;
 using QuestingBots.Controllers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.Advanced
 {
@@ -27,7 +29,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
             }
 
             IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.Nickname + "]");
-            LoggingController.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
+            Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
         }
     }
 }

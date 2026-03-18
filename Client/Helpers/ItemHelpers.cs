@@ -9,6 +9,7 @@ using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -111,7 +112,7 @@ namespace QuestingBots.Helpers
 
             if (headset != null)
             {
-                //LoggingController.LogInfo(botOwner.GetText() + " is wearing a headset");
+                //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a headset");
                 multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
@@ -119,11 +120,11 @@ namespace QuestingBots.Helpers
             switch (helmetTemplate?.DeafStrength)
             {
                 case EDeafStrength.Low:
-                    //LoggingController.LogInfo(botOwner.GetText() + " is wearing a helmet with low deaf strength");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a helmet with low deaf strength");
                     multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetLowDeaf;
                     break;
                 case EDeafStrength.High:
-                    //LoggingController.LogInfo(botOwner.GetText() + " is wearing a helmet with high deaf strength");
+                    //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is wearing a helmet with high deaf strength");
                     multiplier *= ConfigController.Config.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHelmetHighDeaf;
                     break;
             }
@@ -179,7 +180,7 @@ namespace QuestingBots.Helpers
                 ItemAddress locationForItem = botOwner.FindLocationForItem(item, possibleSlots, inventoryController);
                 if (locationForItem == null)
                 {
-                    LoggingController.LogError("Cannot find any location to put key " + item.LocalizedName() + " for " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot find any location to put key " + item.LocalizedName() + " for " + botOwner.GetText());
                     return false;
                 }
 
@@ -187,7 +188,7 @@ namespace QuestingBots.Helpers
                 var moveResult = InteractionsHandlerClass.Move(item, locationForItem, inventoryController, true);
                 if (!moveResult.Succeeded)
                 {
-                    LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
                     return false;
                 }
 
@@ -195,12 +196,12 @@ namespace QuestingBots.Helpers
                 {
                     if (result.Succeed)
                     {
-                        LoggingController.LogInfo("Moved key to inventory of " + botOwner.GetText());
+                        Singleton<LoggingUtil>.Instance.LogInfo("Moved key to inventory of " + botOwner.GetText());
                     }
 
                     if (result.Failed)
                     {
-                        LoggingController.LogError("Could not move key to inventory of " + botOwner.GetText());
+                        Singleton<LoggingUtil>.Instance.LogError("Could not move key to inventory of " + botOwner.GetText());
                     }
                 };
 
@@ -212,8 +213,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }
@@ -223,19 +224,19 @@ namespace QuestingBots.Helpers
         {
             foreach (EquipmentSlot slot in possibleSlots)
             {
-                //LoggingController.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Checking " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
                 // Search through all grids in the equipment slot
                 CompoundItem? equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as CompoundItem;
                 foreach (StashGridClass grid in (equipmentSlot?.Grids ?? (new StashGridClass[0])))
                 {
-                    //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
                     // Check if the grid has enough free space to fit the item
                     LocationInGrid locationInGrid = grid.FindFreeSpace(item);
                     if (locationInGrid != null)
                     {
-                        LoggingController.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
+                        Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
 
                         return grid.CreateItemAddress(locationInGrid);
                     }
@@ -257,8 +258,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }
@@ -284,8 +285,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }
@@ -310,8 +311,8 @@ namespace QuestingBots.Helpers
             }
             catch (Exception e)
             {
-                LoggingController.LogError(e.Message);
-                LoggingController.LogError(e.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError(e.Message);
+                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
 
                 throw;
             }

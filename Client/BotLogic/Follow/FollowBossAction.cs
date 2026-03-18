@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Follow
 {
@@ -54,7 +57,7 @@ namespace QuestingBots.BotLogic.Follow
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    LoggingController.LogWarning("Follower " + BotOwner.GetText() + " is stuck and will take a break from following.");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Follower " + BotOwner.GetText() + " is stuck and will take a break from following.");
                 }
                 wasStuck = true;
 

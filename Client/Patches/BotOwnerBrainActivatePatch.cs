@@ -10,6 +10,7 @@ using EFT;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -43,7 +44,7 @@ namespace QuestingBots.Patches
         {
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
 
-            LoggingController.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
+            Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
             if (__instance.WillBeAPMC())
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
@@ -87,8 +88,8 @@ namespace QuestingBots.Patches
             }
             catch (Exception ex)
             {
-                LoggingController.LogError("Could not delete player " + player.GetText() + ": " + ex.Message);
-                LoggingController.LogError(ex.StackTrace);
+                Singleton<LoggingUtil>.Instance.LogError("Could not delete player " + player.GetText() + ": " + ex.Message);
+                Singleton<LoggingUtil>.Instance.LogError(ex.StackTrace);
             }
         }
 
@@ -109,7 +110,7 @@ namespace QuestingBots.Patches
 
         private static void reduceBotCounts(BotOwner bot)
         {
-            LoggingController.LogDebug("Adjusting EFT bot counts for " + bot.GetText() + "...");
+            Singleton<LoggingUtil>.Instance.LogDebug("Adjusting EFT bot counts for " + bot.GetText() + "...");
 
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 

@@ -8,6 +8,8 @@ using EFT;
 using QuestingBots.Controllers;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -19,7 +21,7 @@ namespace QuestingBots.Patches.Spawning
                 .GetMethods()
                 .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(BotOwner) }));
 
-            Controllers.LoggingController.LogInfo("Found method for SetNewBossPatch: " + methodInfo.Name);
+            Singleton<LoggingUtil>.Instance.LogInfo("Found method for SetNewBossPatch: " + methodInfo.Name);
 
             return methodInfo;
         }
@@ -48,7 +50,7 @@ namespace QuestingBots.Patches.Spawning
 
             if ((____boss == null) && (followers.Count > 1))
             {
-                LoggingController.LogWarning("Could not find a new boss to replace " + boss.GetText());
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find a new boss to replace " + boss.GetText());
             }
         }
     }
