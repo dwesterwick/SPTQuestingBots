@@ -30,8 +30,8 @@ namespace QuestingBots.Utils
             }
         }
 
-        private float _usecChance = float.NaN;
-        public float USECChance
+        private double _usecChance = float.NaN;
+        public double USECChance
         {
             get
             {
@@ -103,14 +103,14 @@ namespace QuestingBots.Utils
             return _config;
         }
 
-        private float GetUSECChance()
+        private double GetUSECChance()
         {
             string routeName = SharedRouterHelpers.GetRoutePath("GetUSECChance");
             string errorMessage = "Cannot retrieve chance to make PMCs USECs.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out Configuration.USECChanceResponse _usecChance);
-            return _usecChance.USECChance;
+            TryDeserializeObject(json, errorMessage, out double _usecChance);
+            return _usecChance;
         }
 
         private Dictionary<string, Configuration.ScavRaidSettingsConfig> GetScavRaidSettings()
@@ -119,8 +119,8 @@ namespace QuestingBots.Utils
             string errorMessage = "Cannot read scav-raid settings.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out Configuration.ScavRaidSettingsResponse _response);
-            return _response.Maps;
+            TryDeserializeObject(json, errorMessage, out Dictionary<string, Configuration.ScavRaidSettingsConfig> _response);
+            return _response;
         }
 
         public RawQuestClass[] GetAllQuestTemplates()
@@ -129,8 +129,8 @@ namespace QuestingBots.Utils
             string errorMessage = "Cannot read quest templates.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _templates);
-            return _templates.Templates;
+            TryDeserializeObject(json, errorMessage, out RawQuestClass[] _templates);
+            return _templates;
         }
 
         public Dictionary<string, Dictionary<string, object>> GetEFTQuestSettings()
@@ -139,8 +139,8 @@ namespace QuestingBots.Utils
             string errorMessage = "Cannot retrieve EFT quest settings.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _settings);
-            return _settings.Settings;
+            TryDeserializeObject(json, errorMessage, out Dictionary<string, Dictionary<string, object>> _settings);
+            return _settings;
         }
 
         public Dictionary<string, ZoneAndItemPositionInfoConfig> GetZoneAndItemPositions()
@@ -149,8 +149,8 @@ namespace QuestingBots.Utils
             string errorMessage = "Cannot retrieve positions for quest zones and items.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out Configuration.QuestDataConfig _positions);
-            return _positions.ZoneAndItemPositions;
+            TryDeserializeObject(json, errorMessage, out Dictionary<string, ZoneAndItemPositionInfoConfig> _positions);
+            return _positions;
         }
 
         public IEnumerable<Models.Questing.Quest> GetCustomQuests(string locationID)

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using UnityEngine;
 
 namespace QuestingBots.Models
 {
+    [DataContract]
     public class SerializableVector3
     {
-        [JsonProperty("x")]
+        [DataMember(Name = "x")]
         public float X { get; set; } = float.NaN;
 
-        [JsonProperty("y")]
+        [DataMember(Name = "y")]
         public float Y { get; set; } = float.NaN;
 
-        [JsonProperty("z")]
+        [DataMember(Name = "z")]
         public float Z { get; set; } = float.NaN;
 
         public SerializableVector3()
@@ -29,18 +27,6 @@ namespace QuestingBots.Models
             X = x;
             Y = y;
             Z = z;
-        }
-
-        public SerializableVector3(Vector3 vector) : this()
-        {
-            X = vector.x;
-            Y = vector.y;
-            Z = vector.z;
-        }
-
-        public Vector3 ToUnityVector3()
-        {
-            return new Vector3(X, Y, Z);
         }
 
         public bool Any(float n)

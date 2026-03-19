@@ -26,6 +26,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ZoneAndItemPositionInfoConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotCapAdjustmentsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotPathingConfig.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedConfigHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedMathHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedRouterHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SerializableVector3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModInfo.cs" />
   </ItemGroup>
   <ItemGroup>

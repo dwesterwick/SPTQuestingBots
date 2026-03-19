@@ -9,6 +9,7 @@ using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using UnityEngine;
 
@@ -72,7 +73,7 @@ namespace QuestingBots.Models.Questing
 
         public QuestObjectiveStep(Vector3 position) : this()
         {
-            SerializablePosition = new SerializableVector3(position);
+            SerializablePosition = position.ToSerializableVector3();
         }
 
         public QuestObjectiveStep(Vector3 position, QuestAction actionType) : this(position)
@@ -118,7 +119,7 @@ namespace QuestingBots.Models.Questing
                 return;
             }
 
-            SerializablePosition = new SerializableVector3(position.Value);
+            SerializablePosition = position.Value.ToSerializableVector3();
         }
 
         public bool TrySnapToNavMesh(float maxDistance)
@@ -136,7 +137,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
-            SerializablePosition = new SerializableVector3(navMeshPosition.Value);
+            SerializablePosition = navMeshPosition.Value.ToSerializableVector3();
             return true;
         }
 
