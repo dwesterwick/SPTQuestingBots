@@ -18,7 +18,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(BotOwner bot, BotsClass ____bots, Action<BotOwner> ___OnBotRemoved)
+        protected static bool PatchPrefix(BotOwner bot, BotsClass ___Bots, Action<BotOwner> ___OnBotRemoved)
         {
             if (!bot.ShouldPlayerBeTreatedAsHuman())
             {
@@ -27,7 +27,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
 
             bot.IsDead = true;
 
-            ____bots.Remove(bot);
+            ___Bots.Remove(bot);
 
             if (___OnBotRemoved != null)
             {

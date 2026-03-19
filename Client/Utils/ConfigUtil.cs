@@ -156,7 +156,7 @@ namespace QuestingBots.Utils
         public IEnumerable<Models.Questing.Quest> GetCustomQuests(string locationID)
         {
             Models.Questing.Quest[] standardQuests = new Models.Questing.Quest[0];
-            string filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\quests\\standard\\" + locationID + ".json";
+            string filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\Quests\\Standard\\" + locationID + ".json";
             if (File.Exists(filename))
             {
                 string errorMessage = "Cannot read standard quests for " + locationID;
@@ -174,7 +174,7 @@ namespace QuestingBots.Utils
             }
 
             Models.Questing.Quest[] customQuests = new Models.Questing.Quest[0];
-            filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\quests\\custom\\" + locationID + ".json";
+            filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\Quests\\Custom\\" + locationID + ".json";
             if (File.Exists(filename))
             {
                 string errorMessage = "Cannot read custom quests for " + locationID;

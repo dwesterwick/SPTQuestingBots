@@ -27,7 +27,7 @@ namespace QuestingBots.Patches.Spawning
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
+        protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ___Boss_1)
         {
             foreach (BotOwner follower in followers)
             {
@@ -36,19 +36,19 @@ namespace QuestingBots.Patches.Spawning
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, ref BotOwner ____boss)
+        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, ref BotOwner ___Boss_1)
         {
-            ____boss = null!;
+            ___Boss_1 = null!;
 
             foreach (BotOwner follower in followers)
             {
                 if (follower.Boss.IamBoss && (follower.Profile.Id != boss.Profile.Id))
                 {
-                    ____boss = follower;
+                    ___Boss_1 = follower;
                 }
             }
 
-            if ((____boss == null) && (followers.Count > 1))
+            if ((___Boss_1 == null) && (followers.Count > 1))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Could not find a new boss to replace " + boss.GetText());
             }

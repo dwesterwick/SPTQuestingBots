@@ -37,6 +37,7 @@ namespace QuestingBots
             }
 
             Logger.LogInfo("Loading QuestingBots...getting configuration data...");
+            Singleton<ConfigUtil>.Create(new ConfigUtil());
             if (Singleton<ConfigUtil>.Instance.CurrentConfig == null)
             {
                 Chainloader.DependencyErrors.Add("Could not load " + ModInfo.MODNAME + " because it cannot communicate with the server. Please ensure the mod has been installed correctly.");

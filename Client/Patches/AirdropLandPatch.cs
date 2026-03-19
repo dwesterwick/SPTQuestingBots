@@ -22,7 +22,7 @@ namespace QuestingBots.Patches
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
+        protected static void PatchPostfix(AirdropSynchronizableObject ___AirdropSynchronizableObject_0)
         {
             // Do not run this on Fika client machines
             if (!Helpers.RaidHelpers.IsHostRaid())
@@ -30,9 +30,9 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            AddNavMeshObstacle(___airdropSynchronizableObject_0);
+            AddNavMeshObstacle(___AirdropSynchronizableObject_0);
 
-            Vector3 airdropPosition = ___airdropSynchronizableObject_0.transform.position;
+            Vector3 airdropPosition = ___AirdropSynchronizableObject_0.transform.position;
             Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(airdropPosition);
         }
 

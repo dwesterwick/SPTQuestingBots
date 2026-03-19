@@ -17,9 +17,9 @@ namespace QuestingBots.Patches.Spawning
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(ref List<Player> __result, List<Player> ____allPlayers)
+        protected static bool PatchPrefix(ref List<Player> __result, List<Player> ___AllPlayers)
         {
-            __result = ____allPlayers
+            __result = ___AllPlayers
                 .Where(p => !p.IsAI && (p.AIData?.IAmBoss == true))
                 .ToList();
 
