@@ -47,21 +47,5 @@ namespace QuestingBots.Configuration
         {
 
         }
-
-        public static void ApplyQuestSettingsFromConfig(Models.Questing.Quest quest, QuestSettingsConfig settings)
-        {
-            quest.Desirability = settings.Desirability;
-            quest.PMCsOnly = settings.PMCsOnly;
-            quest.MaxBots = settings.MaxBotsPerQuest;
-            quest.MaxRaidET = settings.MaxRaidET;
-            quest.MinLevel = settings.MinLevel;
-            quest.MaxLevel = settings.MaxLevel;
-        }
-
-        public static void ApplyQuestSettingsFromConfig(Models.Questing.QuestObjective objective, QuestSettingsConfig settings)
-        {
-            objective.MinDistanceFromBot = settings.MinDistance;
-            objective.MaxDistanceFromBot = settings.MaxDistance;
-        }
     }
 }

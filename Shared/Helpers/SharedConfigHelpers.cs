@@ -15,7 +15,7 @@ namespace QuestingBots.Helpers
 
         public static double InterpolateForFirstCol(this double[][] array, double value)
         {
-            validateArray(array);
+            ValidateChanceArray(array);
 
             if (array.Length == 1)
             {
@@ -45,7 +45,7 @@ namespace QuestingBots.Helpers
 
         public static double GetValueFromTotalChanceFraction(this double[][] array, double fraction)
         {
-            validateArray(array);
+            ValidateChanceArray(array);
 
             if (array.Length == 1)
             {
@@ -72,7 +72,7 @@ namespace QuestingBots.Helpers
             return array.Last()[0];
         }
 
-        private static void validateArray(double[][] array)
+        public static void ValidateChanceArray(this double[][] array, bool leftColumnMustBeInts = false)
         {
             if (array.Length == 0)
             {
@@ -82,6 +82,11 @@ namespace QuestingBots.Helpers
             if (array.Any(x => x.Length != 2))
             {
                 throw new ArgumentOutOfRangeException("All rows in the array must have two columns.");
+            }
+
+            if (leftColumnMustBeInts && array.Any(pair => !pair[0].IsAnInteger()))
+            {
+                throw new ArgumentOutOfRangeException("The left column has a floating-point number, but only integers are expected.");
             }
         }
     }

@@ -8,6 +8,12 @@ namespace QuestingBots.Helpers
 {
     public static class DatabaseHelpers
     {
+        public static List<WildSpawnType> PMCRoles { get; } = [ WildSpawnType.pmcBEAR, WildSpawnType.pmcUSEC ];
+        public static IEnumerable<string> PMCRoleNames => PMCRoles.Select(role => role.ToString());
+
+        public static List<WildSpawnType> NormalScavRoles { get; } = [WildSpawnType.assault, WildSpawnType.assaultGroup, WildSpawnType.marksman];
+        public static IEnumerable<string> NormalScavRoleNames => NormalScavRoles.Select(role => role.ToString());
+
         public static Location GetAndVerifyLocation(this DatabaseService databaseService, string locationId)
         {
             Location? location = databaseService.GetLocation(locationId);

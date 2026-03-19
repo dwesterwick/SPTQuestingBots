@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Json;
 
 namespace QuestingBots.Helpers
 {
-    public class ConfigHelpers
+    public static class ConfigHelpers
     {
         public static bool IsDataContractType<T>(T obj)
         {
@@ -12,6 +12,9 @@ namespace QuestingBots.Helpers
 
         public static string Serialize<T>(T obj)
         {
+            DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings();
+            settings.UseSimpleDictionaryFormat = true;
+
             using (MemoryStream memoryStream = new MemoryStream())
             using (StreamReader reader = new StreamReader(memoryStream))
             {
@@ -24,12 +27,15 @@ namespace QuestingBots.Helpers
 
         public static T? Deserialize<T>(string json)
         {
+            DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings();
+            settings.UseSimpleDictionaryFormat = true;
+
             using (Stream stream = new MemoryStream())
             {
                 byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
                 stream.Write(data, 0, data.Length);
                 stream.Position = 0;
-                DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(T));
+                DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(T), settings);
                 return (T?)deserializer.ReadObject(stream);
             }
         }

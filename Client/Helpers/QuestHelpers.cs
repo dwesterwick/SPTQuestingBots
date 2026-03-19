@@ -12,6 +12,7 @@ using QuestingBots.Controllers;
 using QuestingBots.Models.Questing;
 using UnityEngine;
 using QuestingBots.Utils;
+using QuestingBots.Configuration;
 
 namespace QuestingBots.Helpers
 {
@@ -29,6 +30,22 @@ namespace QuestingBots.Helpers
             beaconTimeForCondition.Clear();
 
             QuestMinLevelFinder.ClearCache();
+        }
+
+        public static void ApplyQuestSettingsFromConfig(this Models.Questing.Quest quest, QuestSettingsConfig settings)
+        {
+            quest.Desirability = settings.Desirability;
+            quest.PMCsOnly = settings.PMCsOnly;
+            quest.MaxBots = settings.MaxBotsPerQuest;
+            quest.MaxRaidET = settings.MaxRaidET;
+            quest.MinLevel = settings.MinLevel;
+            quest.MaxLevel = settings.MaxLevel;
+        }
+
+        public static void ApplyQuestSettingsFromConfig(this Models.Questing.QuestObjective objective, QuestSettingsConfig settings)
+        {
+            objective.MinDistanceFromBot = settings.MinDistance;
+            objective.MaxDistanceFromBot = settings.MaxDistance;
         }
 
         public static bool ValidateQuestFiles(string locationId)

@@ -94,8 +94,8 @@ namespace QuestingBots.Components
                     foreach (RawQuestClass questTemplate in allQuestTemplates)
                     {
                         Quest quest = new Quest(questTemplate);
-                        
-                        QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests);
+
+                        quest.ApplyQuestSettingsFromConfig(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests);
                         quest.PMCsOnly = true;
                         
                         if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
@@ -518,10 +518,10 @@ namespace QuestingBots.Components
             }
 
             Models.Questing.Quest quest = new Models.Questing.Quest(questName);
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
+            quest.ApplyQuestSettingsFromConfig(settings);
 
             Models.Questing.QuestObjective objective = new Models.Questing.QuestObjective(navMeshPosition.Value);
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
+            objective.ApplyQuestSettingsFromConfig(settings);
             objective.SetName(quest.Name + ": Objective #1");
             quest.AddObjective(objective);
 
@@ -553,7 +553,7 @@ namespace QuestingBots.Components
             }
 
             Models.Questing.Quest quest = new Models.Questing.Quest(questName);
-            QuestSettingsConfig.ApplyQuestSettingsFromConfig(quest, settings);
+            quest.ApplyQuestSettingsFromConfig(settings);
 
             int objNum = 1;
             foreach (SpawnPointParams spawnPoint in eligibleSpawnPoints)
@@ -567,7 +567,7 @@ namespace QuestingBots.Components
                 }
 
                 Models.Questing.QuestSpawnPointObjective objective = new Models.Questing.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
-                QuestSettingsConfig.ApplyQuestSettingsFromConfig(objective, settings);
+                objective.ApplyQuestSettingsFromConfig(settings);
                 objective.SetName(quest.Name + ": Objective #" + objNum);
                 quest.AddObjective(objective);
 
