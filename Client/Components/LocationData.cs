@@ -40,14 +40,18 @@ namespace QuestingBots.Components
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
 
-            CurrentRaidSettings = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetCurrentRaidSettings();
-            if (CurrentRaidSettings == null)
+            PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
+
+            if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
             {
-                Singleton<LoggingUtil>.Instance.LogError("Could not retrieve current raid settings");
-                return;
+                throw new InvalidOperationException("Could not retrieve TarkovApplication");
             }
 
-            PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
+            CurrentRaidSettings = tarkovApplication.CurrentRaidSettings;
+            if (CurrentRaidSettings == null)
+            {
+                throw new InvalidOperationException("Could not retrieve current raid settings");
+            }
 
             CurrentLocation = CurrentRaidSettings.SelectedLocation;
             if (CurrentLocation.Id == "Lighthouse")

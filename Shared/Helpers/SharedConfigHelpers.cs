@@ -15,7 +15,7 @@ namespace QuestingBots.Helpers
 
         public static double InterpolateForFirstCol(this double[][] array, double value)
         {
-            ValidateChanceArray(array);
+            ValidateArray(array);
 
             if (array.Length == 1)
             {
@@ -45,7 +45,7 @@ namespace QuestingBots.Helpers
 
         public static double GetValueFromTotalChanceFraction(this double[][] array, double fraction)
         {
-            ValidateChanceArray(array);
+            ValidateArray(array);
 
             if (array.Length == 1)
             {
@@ -72,7 +72,7 @@ namespace QuestingBots.Helpers
             return array.Last()[0];
         }
 
-        public static void ValidateChanceArray(this double[][] array, bool leftColumnMustBeInts = false)
+        public static void ValidateArray(this double[][] array, bool leftColumnMustBeInts = false)
         {
             if (array.Length == 0)
             {

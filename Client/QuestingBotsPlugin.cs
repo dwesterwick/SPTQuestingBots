@@ -122,8 +122,6 @@ namespace QuestingBots
                 
                 // Add options to the F12 menu
                 QuestingBotsPluginConfig.BuildConfigOptions(Config);
-                
-                this.GetOrAddComponent<TarkovData>();
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...done.");

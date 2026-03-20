@@ -20,7 +20,7 @@ namespace QuestingBots.Utils.ModIntegrityTests
         {
             try
             {
-                _array.ValidateChanceArray(_leftColumnMustBeInts);
+                _array.ValidateArray(_leftColumnMustBeInts);
             }
             catch(Exception ex)
             {

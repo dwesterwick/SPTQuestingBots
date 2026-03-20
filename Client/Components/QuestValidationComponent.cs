@@ -13,11 +13,10 @@ using UnityEngine;
 
 namespace QuestingBots.Components
 {
-    public class TarkovData : MonoBehaviour
+    public class QuestValidationComponent : MonoBehaviour
     {
         private static string[] ignoredLocations = new string[1] { "Terminal" };
 
-        private TarkovApplication tarkovApplication = null!;
         private bool questsValidated = false;
 
         protected void Update()
@@ -34,7 +33,12 @@ namespace QuestingBots.Components
                 questsValidated = true;
             }
 
-            LocationSettingsClass? locationSettings = GetSession()?.LocationSettings;
+            if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
+            {
+                throw new InvalidOperationException("Could not retrieve TarkovApplication");
+            }
+
+            LocationSettingsClass? locationSettings = tarkovApplication.GetClientBackEndSession()?.LocationSettings;
             if (locationSettings == null)
             {
                 return;
@@ -43,41 +47,6 @@ namespace QuestingBots.Components
             validateAllQuestFiles(locationSettings);
 
             questsValidated = true;
-        }
-
-        public RaidSettings GetCurrentRaidSettings()
-        {
-            if (getTarkovApplication() == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Invalid Tarkov application instance");
-                return null!;
-            }
-
-            return tarkovApplication.CurrentRaidSettings;
-        }
-
-        public ISession GetSession()
-        {
-            if (getTarkovApplication() == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Invalid Tarkov application instance");
-                return null!;
-            }
-
-            ISession session = tarkovApplication.GetClientBackEndSession();
-            return session;
-        }
-
-        private TarkovApplication getTarkovApplication()
-        {
-            if (tarkovApplication != null)
-            {
-                return tarkovApplication;
-            }
-
-            tarkovApplication = FindObjectOfType<TarkovApplication>();
-
-            return tarkovApplication;
         }
 
         private void validateAllQuestFiles(LocationSettingsClass locationSettings)

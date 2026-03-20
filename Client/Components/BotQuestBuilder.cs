@@ -108,8 +108,13 @@ namespace QuestingBots.Components
                     }
                 }
 
+                if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
+                {
+                    throw new InvalidOperationException("Could not retrieve TarkovApplication");
+                }
+
                 // Check which quests are currently active for the player
-                ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
+                ISession session = tarkovApplication.GetClientBackEndSession();
                 QuestDataClass[] activeQuestsForPlayer = session.Profile.QuestsData
                     .Where(q => q.Status == EFT.Quests.EQuestStatus.Started || q.Status == EFT.Quests.EQuestStatus.AvailableForFinish || q.Status == EFT.Quests.EQuestStatus.Success)
                     .ToArray();

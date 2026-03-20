@@ -1,18 +1,19 @@
-﻿using System;
+﻿using BepInEx.Bootstrap;
+using Comfort.Common;
+using EFT;
+using EFT.InputSystem;
+using QuestingBots.BotLogic.ExternalMods;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using BepInEx.Bootstrap;
-using EFT;
-using EFT.InputSystem;
-using SPT.Reflection.Patching;
-using QuestingBots.BotLogic.ExternalMods;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -27,13 +28,15 @@ namespace QuestingBots.Patches
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(IAssetsManager assetsManager, InputTree inputTree)
+        protected static void PatchPostfix(TarkovApplication __instance, IAssetsManager assetsManager, InputTree inputTree)
         {
             checkSPTVersion();
 
             ExternalModHandler.CheckForExternalMods();
 
             addQuestingBotsBrainLayers();
+
+            __instance.GetOrAddComponent<QuestValidationComponent>();
         }
 
         private static void checkSPTVersion()

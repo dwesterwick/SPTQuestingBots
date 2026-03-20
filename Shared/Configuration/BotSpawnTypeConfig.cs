@@ -25,7 +25,7 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "min_distance_from_players_during_raid_factory")]
         public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
 
-        [DataMember(Name = "fraction_of_max_players")]
+        [DataMember(Name = "fraction_of_max_players", EmitDefaultValue = false)]
         public float FractionOfMaxPlayers { get; set; } = 1;
 
         [DataMember(Name = "time_randomness")]
@@ -42,7 +42,14 @@ namespace QuestingBots.Configuration
 
         public BotSpawnTypeConfig()
         {
-
+            
         }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
+        {
+            FractionOfMaxPlayers = 1;
+        }
+
     }
 }
