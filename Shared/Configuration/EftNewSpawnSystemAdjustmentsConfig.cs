@@ -10,13 +10,19 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class EftNewSpawnSystemAdjustmentsConfig
     {
-        [DataMember(Name = "non_wave_retry_delay_after_blocked")]
+        [DataMember(Name = "non_wave_retry_delay_after_blocked", EmitDefaultValue = false, IsRequired = true)]
         public float NonWaveRetryDelayAfterBlocked { get; set; } = 20;
 
-        [DataMember(Name = "scav_spawn_rate_time_window")]
+        [DataMember(Name = "scav_spawn_rate_time_window", EmitDefaultValue = false, IsRequired = true)]
         public float ScavSpawnRateTimeWindow { get; set; } = 300;
 
         public EftNewSpawnSystemAdjustmentsConfig()
+        {
+
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
         {
 
         }

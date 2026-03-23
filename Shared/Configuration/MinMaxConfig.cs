@@ -10,10 +10,10 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class MinMaxConfig
     {
-        [DataMember(Name = "min")]
+        [DataMember(Name = "min", EmitDefaultValue = false, IsRequired = true)]
         public double Min { get; set; } = 0;
 
-        [DataMember(Name = "max")]
+        [DataMember(Name = "max", EmitDefaultValue = false, IsRequired = true)]
         public double Max { get; set; } = 100;
 
         public MinMaxConfig()
@@ -25,6 +25,12 @@ namespace QuestingBots.Configuration
         {
             Min = min;
             Max = max;
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
+        {
+
         }
 
         public static MinMaxConfig operator +(MinMaxConfig a, MinMaxConfig b)

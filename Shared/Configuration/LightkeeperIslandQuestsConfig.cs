@@ -10,10 +10,16 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class LightkeeperIslandQuestsConfig
     {
-        [DataMember(Name = "enabled")]
+        [DataMember(Name = "enabled", EmitDefaultValue = false, IsRequired = true)]
         public bool Enabled { get; set; } = false;
 
         public LightkeeperIslandQuestsConfig()
+        {
+
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
         {
 
         }

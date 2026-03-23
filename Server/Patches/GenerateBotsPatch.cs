@@ -9,6 +9,7 @@ using SPTarkov.Server.Core.Generators;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Bot;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
+using SPTarkov.Server.Core.Models.Spt.Bots;
 using SPTarkov.Server.Core.Services;
 using SPTarkov.Server.Core.Utils;
 using System.Reflection;
@@ -67,6 +68,9 @@ namespace QuestingBots.Patches
             GenerateBotsWithPScavFlagRequestData? modifiedInfo = info as GenerateBotsWithPScavFlagRequestData;
             if (modifiedInfo == null)
             {
+                LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
+                loggingUtil.Warning($"GenerateBotsRequestData was not in the expected format for Questing Bots. Falling back to default SPT behavior.");
+
                 return true;
             }
 
@@ -97,6 +101,7 @@ namespace QuestingBots.Patches
                 {
                     LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
                     loggingUtil.Info($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
+
                     continue;
                 }
 

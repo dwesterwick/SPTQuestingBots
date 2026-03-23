@@ -11,18 +11,26 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class ServerResponseError
     {
-        [DataMember(Name = "err")]
+        [DataMember(Name = "err", EmitDefaultValue = false)]
         public System.Net.HttpStatusCode StatusCode { get; set; } = System.Net.HttpStatusCode.OK;
 
-        [DataMember(Name = "errmsg")]
+        [DataMember(Name = "errmsg", EmitDefaultValue = false)]
         public string ErrorMessage { get; set; } = "";
 
-        [DataMember(Name = "data")]
+        [DataMember(Name = "data", EmitDefaultValue = false)]
         public object Data { get; set; } = null!;
 
         public ServerResponseError()
         {
 
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
+        {
+            StatusCode = System.Net.HttpStatusCode.OK;
+            ErrorMessage = "";
+            Data = null!;
         }
     }
 }

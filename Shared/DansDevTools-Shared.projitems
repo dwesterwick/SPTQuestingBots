@@ -47,7 +47,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\HearingSensorConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LightkeeperIslandQuestsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LimitInitialBossSpawnsConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LoggingPath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\MaxFollowerDistanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\MinMaxConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ModConfig.cs" />
@@ -55,15 +54,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestGenerationConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestingConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestSettingsConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\SearchTimeAfterCombatConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ServerResponseError.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\SprintingLimitationsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\StuckBotDetectionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\StuckBotRemediesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\UnlockingDoorsConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\USECChanceResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedConfigHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedMathHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedRouterHelpers.cs" />

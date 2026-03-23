@@ -10,13 +10,19 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class BrainLayerPrioritiesOptionsConfig
     {
-        [DataMember(Name = "with_sain")]
+        [DataMember(Name = "with_sain", EmitDefaultValue = false, IsRequired = true)]
         public BrainLayerPrioritiesConfig WithSAIN { get; set; } = new BrainLayerPrioritiesConfig();
 
-        [DataMember(Name = "without_sain")]
+        [DataMember(Name = "without_sain", EmitDefaultValue = false, IsRequired = true)]
         public BrainLayerPrioritiesConfig WithoutSAIN { get; set; } = new BrainLayerPrioritiesConfig();
 
         public BrainLayerPrioritiesOptionsConfig()
+        {
+
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
         {
 
         }

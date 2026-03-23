@@ -2,7 +2,9 @@
 using QuestingBots.Helpers;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Utils;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace QuestingBots.Utils
 {
@@ -14,6 +16,8 @@ namespace QuestingBots.Utils
         private const string FILENAME_ZONE_AND_ITEM_QUEST_POSITIONS = "zoneAndItemQuestPositions.json";
 
         protected virtual string ConfigFileDirectory => ServerModDirectory;
+
+        private ModHelper _modHelper;
 
         private string _serverModDirectory = null!;
         public string ServerModDirectory
@@ -70,8 +74,6 @@ namespace QuestingBots.Utils
                 return _zoneAndItemQuestPositions;
             }
         }
-
-        private ModHelper _modHelper;
 
         public ConfigUtil(ModHelper modHelper)
         {

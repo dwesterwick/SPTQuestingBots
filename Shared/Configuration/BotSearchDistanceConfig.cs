@@ -10,16 +10,22 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class BotSearchDistanceConfig
     {
-        [DataMember(Name = "objective_reached_ideal")]
+        [DataMember(Name = "objective_reached_ideal", EmitDefaultValue = false, IsRequired = true)]
         public float OjectiveReachedIdeal { get; set; } = 3;
 
-        [DataMember(Name = "objective_reached_navmesh_path_error")]
+        [DataMember(Name = "objective_reached_navmesh_path_error", EmitDefaultValue = false, IsRequired = true)]
         public float ObjectiveReachedNavMeshPathError { get; set; } = 20;
 
-        [DataMember(Name = "max_navmesh_path_error")]
+        [DataMember(Name = "max_navmesh_path_error", EmitDefaultValue = false, IsRequired = true)]
         public float MaxNavMeshPathError { get; set; } = 10;
 
         public BotSearchDistanceConfig()
+        {
+
+        }
+
+        [OnDeserializing]
+        void OnDeserializing(StreamingContext ctx)
         {
 
         }
