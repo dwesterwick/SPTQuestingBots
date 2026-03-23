@@ -10,19 +10,13 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class BotPathingConfig
     {
-        [DataMember(Name = "max_start_position_discrepancy", EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(Name = "max_start_position_discrepancy", IsRequired = true)]
         public float MaxStartPositionDiscrepancy { get; set; } = 0.5f;
 
-        [DataMember(Name = "incomplete_path_retry_interval", EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(Name = "incomplete_path_retry_interval", IsRequired = true)]
         public float IncompletePathRetryInterval { get; set; } = 5;
 
         public BotPathingConfig()
-        {
-
-        }
-
-        [OnDeserializing]
-        void OnDeserializing(StreamingContext ctx)
         {
 
         }

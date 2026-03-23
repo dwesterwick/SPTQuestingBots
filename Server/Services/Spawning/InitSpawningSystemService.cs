@@ -1,4 +1,5 @@
-﻿using QuestingBots.Helpers;
+﻿using QuestingBots.Configuration;
+using QuestingBots.Helpers;
 using QuestingBots.Services.Internal;
 using QuestingBots.Utils;
 using SPTarkov.DI.Annotations;

@@ -26,6 +26,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ZoneAndItemPositionInfoConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\AdjustPScavChanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotCapAdjustmentsConfig.cs" />
