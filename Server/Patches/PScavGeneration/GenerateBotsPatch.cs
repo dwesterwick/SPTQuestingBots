@@ -1,5 +1,4 @@
-﻿using QuestingBots.Helpers;
-using QuestingBots.Models;
+﻿using QuestingBots.Models;
 using QuestingBots.Patches.Internal;
 using QuestingBots.Utils;
 using SPTarkov.Reflection.Patching;
@@ -8,7 +7,7 @@ using SPTarkov.Server.Core.Models.Eft.Bot;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.PScavGeneration
 {
     internal class GenerateBotsPatch : AbstractPatch
     {
@@ -20,23 +19,11 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         public static void PatchPrefix(ref GenerateBotsRequestData info)
         {
-            ConfigUtil configUtil = ServiceRepository.GetService<ConfigUtil>();
-
-            if (!configUtil.CurrentConfig.IsModEnabled())
-            {
-                return;
-            }
-
-            if (!configUtil.CurrentConfig.BotSpawns.Enabled && !configUtil.CurrentConfig.AdjustPScavChance.Enabled)
-            {
-                return;
-            }
-
             GenerateBotsWithPScavFlagRequestData? modifiedInfo = info as GenerateBotsWithPScavFlagRequestData;
             if (modifiedInfo == null)
             {
                 LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-                loggingUtil.Warning($"GenerateBotsRequestData was not in the expected format for Questing Bots. Falling back to default SPT behavior.");
+                loggingUtil.Error($"GenerateBotsRequestData was not in the expected format for Questing Bots. Falling back to default SPT behavior.");
 
                 return;
             }

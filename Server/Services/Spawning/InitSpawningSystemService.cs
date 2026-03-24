@@ -35,11 +35,7 @@ namespace QuestingBots.Services.Spawning
 
         protected override void OnLoadIfModIsEnabled()
         {
-            if (ShouldDisablePlayerScavConversionChance())
-            {
-                _logger.Info("Player scav spawning will be managed by the Questing Bots spawning system");
-                _botConfig.ChanceAssaultScavHasPlayerScavName = 0;
-            }
+            EnablePlayerScavGeneration();
 
             if (!_config.CurrentConfig.BotSpawns.Enabled)
             {
@@ -52,6 +48,22 @@ namespace QuestingBots.Services.Spawning
             RemoveCustomBotWaves(_locationConfig.CustomWaves?.Normal, "Scav");
             RemoveCustomBotWaves(_pmcConfig.CustomPmcWaves, "PMC");
             UseEFTBotCaps();
+        }
+
+        private void EnablePlayerScavGeneration()
+        {
+            if (!ShouldDisablePlayerScavConversionChance())
+            {
+                return;
+            }
+
+            _logger.Info("Player scav spawning will be managed by the Questing Bots spawning system");
+
+            _botConfig.ChanceAssaultScavHasPlayerScavName = 0;
+
+            new Patches.PScavGeneration.GenerateBotsPatch().Enable();
+            new Patches.PScavGeneration.GenerateBotWavePatch().Enable();
+            new Patches.PScavGeneration.DeserializeGenerateBotsRequestDataPatch().Enable();
         }
 
         private bool ShouldDisablePlayerScavConversionChance()

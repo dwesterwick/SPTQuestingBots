@@ -1,5 +1,4 @@
 ﻿using QuestingBots.Helpers;
-using QuestingBots.Patches;
 using QuestingBots.Utils;
 using QuestingBots.Utils.ModIntegrityTests;
 using SPTarkov.DI.Annotations;
@@ -25,10 +24,6 @@ public class QuestingBots_Server : IOnLoad
 
     public Task OnLoad()
     {
-        new GenerateBotsPatch().Enable();
-        new GenerateBotWavePatch().Enable();
-        new DeserializeGenerateBotsRequestDataPatch().Enable();
-
         RunModIntegrityCheck();
 
         return Task.CompletedTask;

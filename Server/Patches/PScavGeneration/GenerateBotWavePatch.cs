@@ -1,5 +1,4 @@
-﻿using QuestingBots.Helpers;
-using QuestingBots.Models;
+﻿using QuestingBots.Models;
 using QuestingBots.Patches.Internal;
 using QuestingBots.Utils;
 using SPTarkov.Reflection.Patching;
@@ -11,7 +10,7 @@ using SPTarkov.Server.Core.Services;
 using System.Collections;
 using System.Reflection;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.PScavGeneration
 {
     public class GenerateBotWavePatch : AbstractPatch
     {
@@ -49,24 +48,12 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         public static void PatchPostfix(ref IEnumerable<BotBase?> __result, GenerateCondition generateRequest)
         {
-            ConfigUtil configUtil = ServiceRepository.GetService<ConfigUtil>();
-
-            if (!configUtil.CurrentConfig.IsModEnabled())
-            {
-                return;
-            }
-
-            if (!configUtil.CurrentConfig.BotSpawns.Enabled && !configUtil.CurrentConfig.AdjustPScavChance.Enabled)
-            {
-                return;
-            }
-
-            LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-
             GenerateConditionWithPScavFlag? modifiedCondition = generateRequest as GenerateConditionWithPScavFlag;
             if (modifiedCondition == null)
             {
+                LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
                 loggingUtil.Error($"GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
+
                 return;
             }
 
@@ -75,14 +62,16 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            __result = ConvertAllToPScav(__result);
+            __result = ConvertAllToPScav(__result, modifiedCondition.Limit);
         }
 
-        private static IEnumerable<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots)
+        private static IEnumerable<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
         {
             LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
 
-            List<BotBase> convertedBots = new List<BotBase>();
+            List<BotBase> UpdatedBots = new List<BotBase>();
+            int convertedBots = 0;
+
             foreach (BotBase? bot in bots)
             {
                 if (bot == null)
@@ -94,27 +83,35 @@ namespace QuestingBots.Patches
                 if (CanConvertToPScav(bot))
                 {
                     ConvertToPScav(bot);
+                    convertedBots++;
                 }
 
-                convertedBots.Add(bot);
+                UpdatedBots.Add(bot);
             }
 
-            return convertedBots;
+            if (convertedBots < targetCount)
+            {
+                loggingUtil.Warning($"{targetCount} player Scavs were requested, but only {convertedBots} were created");
+            }
+
+            return UpdatedBots;
         }
 
         private static bool CanConvertToPScav(BotBase bot)
         {
-            LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-
             if (bot?.Info?.Settings?.Role == null)
             {
+                LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
                 loggingUtil.Error("A bot with a null role was generated");
+
                 return false;
             }
 
             if (bot.Info.Settings.Role != "assault")
             {
-                loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
+                //LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
+                //loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
+
                 return false;
             }
 

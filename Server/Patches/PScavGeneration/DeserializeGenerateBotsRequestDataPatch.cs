@@ -5,7 +5,7 @@ using SPTarkov.Server.Core.Utils;
 using System.Reflection;
 using System.Text.Json;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.PScavGeneration
 {
     public class DeserializeGenerateBotsRequestDataPatch : AbstractPatch
     {
