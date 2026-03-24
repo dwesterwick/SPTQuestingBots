@@ -5,22 +5,26 @@ namespace QuestingBots.Patches.Internal
     internal static class ServiceRepository
     {
         private static Dictionary<Type, object> serviceRepository = new Dictionary<Type, object>();
+        private static object serviceRepositoryLock = new object();
 
         public static T GetService<T>()
         {
-            if (serviceRepository.ContainsKey(typeof(T)))
+            lock (serviceRepositoryLock)
             {
-                return (T)serviceRepository[typeof(T)];
-            }
+                if (serviceRepository.ContainsKey(typeof(T)))
+                {
+                    return (T)serviceRepository[typeof(T)];
+                }
 
-            T? service = ServiceLocator.ServiceProvider.GetService<T>();
-            if (service == null)
-            {
-                throw new InvalidOperationException($"Cannot resolve {typeof(T).Name} from ServiceProvider");
-            }
+                T? service = ServiceLocator.ServiceProvider.GetService<T>();
+                if (service == null)
+                {
+                    throw new InvalidOperationException($"Cannot resolve {typeof(T).Name} from ServiceProvider");
+                }
 
-            serviceRepository.Add(typeof(T), service);
-            return service;
+                serviceRepository.Add(typeof(T), service);
+                return service;
+            }
         }
     }
 }

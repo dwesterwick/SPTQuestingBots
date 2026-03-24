@@ -8,7 +8,7 @@ using SPTarkov.Server.Core.DI;
 namespace QuestingBots;
 
 [Injectable(TypePriority = OnLoadOrder.PreSptModLoader + QuestingBots_Server.LOAD_ORDER_OFFSET)]
-public class QuestingBots_Server
+public class QuestingBots_Server : IOnLoad
 {
     public const int LOAD_ORDER_OFFSET = 1;
 
@@ -26,6 +26,8 @@ public class QuestingBots_Server
     public Task OnLoad()
     {
         new GenerateBotsPatch().Enable();
+        new GenerateBotWavePatch().Enable();
+        new DeserializeGenerateBotsRequestDataPatch().Enable();
 
         RunModIntegrityCheck();
 

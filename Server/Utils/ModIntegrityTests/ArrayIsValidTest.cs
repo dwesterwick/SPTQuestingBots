@@ -21,6 +21,7 @@ namespace QuestingBots.Utils.ModIntegrityTests
             try
             {
                 _array.ValidateArray(_leftColumnMustBeInts);
+                Result = true;
             }
             catch(Exception ex)
             {

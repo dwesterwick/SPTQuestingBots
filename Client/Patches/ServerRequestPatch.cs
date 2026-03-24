@@ -38,6 +38,14 @@ namespace QuestingBots.Patches
 
             Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
             legacyParams.Params = new ModifiedParams(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
+
+            foreach (WaveInfoClass wave in originalParams.conditions)
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo($"Wave: {wave.Limit.ToString()} {wave.Difficulty.ToString()} {wave.Role.ToString()}");
+            }
+
+            StackTrace stackTrace = new StackTrace();
+            Singleton<LoggingUtil>.Instance.LogInfo(stackTrace.ToString());
         }
 
         internal class ModifiedParams

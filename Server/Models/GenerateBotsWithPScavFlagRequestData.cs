@@ -15,6 +15,20 @@ namespace QuestingBots.Models
 
         }
 
+        public void AddPScavFlagToConditions()
+        {
+            if (Conditions == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Conditions.Count; i++)
+            {
+                GenerateConditionWithPScavFlag modifiedCondition = new GenerateConditionWithPScavFlag(Conditions[i], GeneratePScav);
+                Conditions[i] = modifiedCondition;
+            }
+        }
+
         protected override bool PrintMembers(StringBuilder builder)
         {
             RuntimeHelpers.EnsureSufficientExecutionStack();
