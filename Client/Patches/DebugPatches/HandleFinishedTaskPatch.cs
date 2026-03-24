@@ -8,7 +8,7 @@ using Comfort.Common;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 
-namespace QuestingBots.Patches.Debug
+namespace QuestingBots.Patches.DebugPatches
 {
     public class HandleFinishedTaskPatch : AbstractHandleFinishedTaskPatch
     {

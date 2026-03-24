@@ -1,9 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
 using Comfort.Common;
-using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -51,7 +49,7 @@ namespace QuestingBots
                 Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...");
 
                 new Patches.TarkovInitPatch().Enable();
-                new Patches.BotsControllerSetSettingsPatch().Enable();
+                new Patches.BotsControllerInitPatch().Enable();
                 new Patches.BotsControllerStopPatch().Enable();
                 new Patches.BotOwnerBrainActivatePatch().Enable();
                 new Patches.IsFollowerSuitableForBossPatch().Enable();
@@ -68,11 +66,11 @@ namespace QuestingBots
 
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
                 {
-                    new Patches.Debug.ProcessSourceOcclusionPatch().Enable();
-                    //new Patches.Debug.HandleFinishedTaskPatch().Enable();
-                    //new Patches.Debug.HandleFinishedTaskPatch2().Enable();
+                    new Patches.DebugPatches.ProcessSourceOcclusionPatch().Enable();
+                    //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
+                    //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
                 }
-                
+
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
                 {
                     new Patches.Spawning.GameStartPatch().Enable();

@@ -7,7 +7,7 @@ using EFT;
 using UnityEngine.AI;
 using UnityEngine;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class BotPathCurrentCornerMarkerGizmo : AbstractBotPathMarkerGizmo
     {

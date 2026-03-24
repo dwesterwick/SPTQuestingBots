@@ -11,7 +11,7 @@ using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using UnityEngine;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class JobAssignmentGizmo : AbstractDebugGizmo
     {

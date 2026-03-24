@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
-using QuestingBots.Models.Debug;
+using QuestingBots.Models.DebugGizmos;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using UnityEngine;
@@ -21,15 +21,15 @@ namespace QuestingBots.Components
 
         private List<AbstractDebugGizmo> gizmos = new List<AbstractDebugGizmo>();
 
-        private int jobAssignmentGizmoCount => gizmos.Count(gizmo => gizmo is Models.Debug.JobAssignmentGizmo);
+        private int jobAssignmentGizmoCount => gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
         public void RegisterBot(BotOwner bot)
         {
-            gizmos.Add(new Models.Debug.BotInfoGizmo(bot));
-            gizmos.Add(new Models.Debug.BotObjectivePositionMarkerGizmo(bot, markerRadius));
-            gizmos.Add(new Models.Debug.BotPathTargetMarkerGizmo(bot, markerRadius));
-            gizmos.Add(new Models.Debug.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
-            gizmos.Add(new Models.Debug.BotPathVisualizationGizmo(bot, Color.magenta));
+            gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
+            gizmos.Add(new Models.DebugGizmos.BotObjectivePositionMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.DebugGizmos.BotPathTargetMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.DebugGizmos.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
+            gizmos.Add(new Models.DebugGizmos.BotPathVisualizationGizmo(bot, Color.magenta));
         }
 
         protected void Awake()

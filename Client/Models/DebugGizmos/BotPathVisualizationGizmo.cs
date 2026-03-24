@@ -9,7 +9,7 @@ using QuestingBots.Components;
 using QuestingBots.Helpers;
 using UnityEngine;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class BotPathVisualizationGizmo : AbstractDebugGizmo
     {

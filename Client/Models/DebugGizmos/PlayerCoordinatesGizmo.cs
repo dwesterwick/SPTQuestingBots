@@ -9,7 +9,7 @@ using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using UnityEngine;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class PlayerCoordinatesGizmo : AbstractDebugGizmo
     {

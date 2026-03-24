@@ -13,7 +13,7 @@ using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using UnityEngine;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class BotInfoGizmo : AbstractDebugGizmo
     {

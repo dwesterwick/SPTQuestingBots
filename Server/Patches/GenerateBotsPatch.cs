@@ -5,8 +5,6 @@ using QuestingBots.Utils;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Callbacks;
 using SPTarkov.Server.Core.Models.Eft.Bot;
-using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Utils;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -45,12 +43,6 @@ namespace QuestingBots.Patches
 
             modifiedInfo.AddPScavFlagToConditions();
             info = modifiedInfo;
-        }
-
-        private static string SerializeGeneratedBots(IEnumerable<BotBase?> bots)
-        {
-            HttpResponseUtil httpResponseUtil = ServiceRepository.GetService<HttpResponseUtil>();
-            return httpResponseUtil.GetBody(bots);
         }
     }
 }

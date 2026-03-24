@@ -54,6 +54,11 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return;
             }
 
+            if (objectiveManager == null)
+            {
+                return;
+            }
+
             if ((botOwner.BotState != EBotState.Active) || botOwner.IsDead)
             {
                 return;

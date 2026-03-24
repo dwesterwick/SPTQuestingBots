@@ -10,7 +10,7 @@ using QuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public abstract class AbstractBotPathMarkerGizmo : AbstractDebugGizmo
     {

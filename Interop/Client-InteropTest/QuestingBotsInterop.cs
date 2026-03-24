@@ -15,7 +15,7 @@ namespace QuestingBots
         public bool IsValid { get; private set; } = false;
         public int RemainingBotGenerators { get; private set; } = -1;
         public int CurrentBotGeneratorProgress { get; private set; } = 0;
-        public string CurrentBotGeneratorType { get; private set; } = null!;
+        public string CurrentBotGeneratorType { get; private set; } = null;
 
         public QuestingBotsBotGeneratorStatus() { }
 
@@ -34,12 +34,12 @@ namespace QuestingBots
         private static bool _QuestingBotsInteropInited = false;
 
         private static bool _IsQuestingBotsLoaded;
-        private static Type _QuestingBotsExternalType = null!;
+        private static Type _QuestingBotsExternalType;
 
-        private static MethodInfo _GetRemainingBotGeneratorsMethod = null!;
-        private static MethodInfo _GetCurrentBotGeneratorProgressMethod = null!;
-        private static MethodInfo _GetCurrentBotGeneratorTypeMethod = null!;
-        private static MethodInfo _GetCurrentDecisionMethod = null!;
+        private static MethodInfo _GetRemainingBotGeneratorsMethod;
+        private static MethodInfo _GetCurrentBotGeneratorProgressMethod;
+        private static MethodInfo _GetCurrentBotGeneratorTypeMethod;
+        private static MethodInfo _GetCurrentDecisionMethod;
 
         /**
          * Return true if Questing Bots is loaded in the client

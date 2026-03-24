@@ -34,7 +34,6 @@ namespace QuestingBots.Patches
             List<Profile> matchingCachedProfiles = cachedProfiles.ApplyFilter(profile => shouldSpawnPScav ^ !profile.WillBeAPlayerScav());
 
             __result = matchingCachedProfiles.Count > 0 ? data.ChooseProfile(matchingCachedProfiles, withDelete) : null!;
-
             return false;
         }
     }

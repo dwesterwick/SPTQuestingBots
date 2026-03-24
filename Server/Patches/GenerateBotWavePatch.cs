@@ -7,7 +7,6 @@ using SPTarkov.Server.Core.Controllers;
 using SPTarkov.Server.Core.Generators;
 using SPTarkov.Server.Core.Models.Eft.Bot;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Models.Spt.Bots;
 using SPTarkov.Server.Core.Services;
 using System.Collections;
 using System.Reflection;
@@ -71,8 +70,6 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            loggingUtil.Info($"GenerateBotWave: {modifiedCondition.Limit} {modifiedCondition.Difficulty} {modifiedCondition.Role} (PScav={modifiedCondition.GeneratePScav})");
-
             if (!modifiedCondition.GeneratePScav)
             {
                 return;
@@ -88,22 +85,40 @@ namespace QuestingBots.Patches
             List<BotBase> convertedBots = new List<BotBase>();
             foreach (BotBase? bot in bots)
             {
-                if (bot?.Info?.Settings?.Role == null)
+                if (bot == null)
                 {
-                    loggingUtil.Warning("A bot with a null role was generated");
+                    loggingUtil.Error("A null bot was generated");
                     continue;
                 }
 
-                if (bot.Info.Settings.Role != "assault")
+                if (CanConvertToPScav(bot))
                 {
-                    loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
-                    continue;
+                    ConvertToPScav(bot);
                 }
 
-                ConvertToPScav(bot);
+                convertedBots.Add(bot);
             }
 
             return convertedBots;
+        }
+
+        private static bool CanConvertToPScav(BotBase bot)
+        {
+            LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
+
+            if (bot?.Info?.Settings?.Role == null)
+            {
+                loggingUtil.Error("A bot with a null role was generated");
+                return false;
+            }
+
+            if (bot.Info.Settings.Role != "assault")
+            {
+                loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
+                return false;
+            }
+
+            return true;
         }
 
         private static void ConvertToPScav(BotBase bot)

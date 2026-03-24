@@ -8,7 +8,7 @@ using QuestingBots.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace QuestingBots.Models.Debug
+namespace QuestingBots.Models.DebugGizmos
 {
     public class BotObjectivePositionMarkerGizmo : AbstractBotPathMarkerGizmo
     {
