@@ -22,7 +22,8 @@ namespace QuestingBots.Routers
 
         public override ValueTask<string?> HandleRoute(string routeName, RequestData routerData)
         {
-            string json = ConfigHelpers.Serialize(_pmcConfig.IsUsec);
+            Configuration.ServerResponses.ServerResponse response = new Configuration.ServerResponses.ServerResponse(_pmcConfig.IsUsec);
+            string json = ConfigHelpers.Serialize(response);
             return new ValueTask<string?>(json);
         }
     }

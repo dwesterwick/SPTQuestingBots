@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
 using SPT.Common.Http;
+using SPT.Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,17 +31,17 @@ namespace QuestingBots.Utils
             }
         }
 
-        private double _usecChance = float.NaN;
-        public double USECChance
+        private double _currentUsecChance = float.NaN;
+        public double CurrentUSECChance
         {
             get
             {
-                if ( _usecChance == float.NaN)
+                if (double.IsNaN(_currentUsecChance))
                 {
-                    _usecChance = GetUSECChance();
+                    _currentUsecChance = GetUSECChance();
                 }
 
-                return _usecChance;
+                return _currentUsecChance;
             }
         }
 
@@ -109,8 +110,10 @@ namespace QuestingBots.Utils
             string errorMessage = "Cannot retrieve chance to make PMCs USECs.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out double _usecChance);
-            return _usecChance;
+            TryDeserializeObject(json, errorMessage, out Configuration.ServerResponses.ServerResponse _usecChanceResponse);
+            double userChance = double.Parse(_usecChanceResponse.Data.ToString());
+
+            return userChance;
         }
 
         private Dictionary<string, Configuration.ScavRaidSettingsConfig> GetScavRaidSettings()
@@ -243,7 +246,7 @@ namespace QuestingBots.Utils
                 // Check if the server failed to provide a valid response
                 if (!json.StartsWith("["))
                 {
-                    ServerResponseError? serverResponse = JsonConvert.DeserializeObject<ServerResponseError>(json);
+                    Configuration.ServerResponses.ServerResponse? serverResponse = JsonConvert.DeserializeObject<Configuration.ServerResponses.ServerResponse>(json);
                     if (serverResponse == null)
                     {
                         throw new System.Net.WebException("Could not deserialize server response");

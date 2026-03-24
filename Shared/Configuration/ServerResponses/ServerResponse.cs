@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.Configuration
+namespace QuestingBots.Configuration.ServerResponses
 {
     [DataContract]
-    public class ServerResponseError
+    public class ServerResponse
     {
         [DataMember(Name = "err")]
         public System.Net.HttpStatusCode StatusCode { get; set; } = System.Net.HttpStatusCode.OK;
@@ -20,9 +20,14 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "data")]
         public object Data { get; set; } = null!;
 
-        public ServerResponseError()
+        public ServerResponse()
         {
 
+        }
+
+        public ServerResponse(object data) : this()
+        {
+            Data = data;
         }
     }
 }

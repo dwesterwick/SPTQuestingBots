@@ -68,7 +68,7 @@ namespace QuestingBots.Components.Spawning
 
             // Randomly select the PMC faction (BEAR or USEC) for all of the bots in the group
             WildSpawnType spawnType = WildSpawnType.pmcBEAR;
-            if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.USECChance)
+            if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.CurrentUSECChance)
             {
                 spawnType = WildSpawnType.pmcUSEC;
             }
