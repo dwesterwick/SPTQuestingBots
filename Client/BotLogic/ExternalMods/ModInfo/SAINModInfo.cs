@@ -25,7 +25,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 
         public override bool CheckInteropAvailability()
         {
-            if (SAIN.Plugin.SAINInterop.Init())
+            if (SAIN.Interop.SAINInterop.Init())
             {
                 CanUseInterop = true;
             }

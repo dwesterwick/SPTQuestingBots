@@ -431,6 +431,13 @@ namespace QuestingBots.Components
                 return null;
             }
 
+            // Fika Headless client does not have a MainPlayer
+            // TODO: Find an alternative?
+            if (Singleton<GameWorld>.Instance.MainPlayer == null)
+            {
+                return null;
+            }
+
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
         }
 

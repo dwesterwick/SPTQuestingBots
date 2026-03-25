@@ -103,7 +103,7 @@ namespace QuestingBots.BehaviorExtensions
             BotOwner.SetTargetMoveSpeed(1f);
             
             // Open doors blocking the bot's path
-            BotOwner.DoorOpener.ManualUpdate();
+            BotOwner.DoorOpener.UpdateDoorInteractionStatus();
         }
 
         public void UpdateBotSteering()

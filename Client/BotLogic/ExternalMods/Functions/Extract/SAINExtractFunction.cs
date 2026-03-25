@@ -22,8 +22,8 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
 
         public override bool IsTryingToExtract() => IsMonitoredLayerActive();
 
-        private bool tryExtractSingleBot(BotOwner botOwner) => SAIN.Plugin.SAINInterop.TryExtractBot(botOwner);
-        private bool trySetExfilForBot(BotOwner botOwner) => SAIN.Plugin.SAINInterop.TrySetExfilForBot(botOwner);
+        private bool tryExtractSingleBot(BotOwner botOwner) => SAIN.Interop.SAINInterop.TryExtractBot(botOwner);
+        private bool trySetExfilForBot(BotOwner botOwner) => SAIN.Interop.SAINInterop.TrySetExfilForBot(botOwner);
 
         public override bool TryInstructBotToExtract()
         {

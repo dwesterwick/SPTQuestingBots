@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SAIN.Plugin
+namespace SAIN.Interop
 {
     internal static class SAINInterop
     {
@@ -59,7 +59,7 @@ namespace SAIN.Plugin
             {
                 _SAINInteropInited = true;
 
-                _SAINExternalType = Type.GetType("SAIN.Plugin.External, SAIN");
+                _SAINExternalType = Type.GetType("SAIN.Interop.SAINExternal, SAIN");
 
                 // Only try to get the methods if we have the type
                 if (_SAINExternalType != null)
