@@ -26,10 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SPTarkov.Common" Version="4.0.0" />
-    <PackageReference Include="SPTarkov.DI" Version="4.0.0" />
-    <PackageReference Include="SPTarkov.Reflection" Version="4.0.0" />
-    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.0" />
+    <PackageReference Include="SPTarkov.Common" Version="4.0.2" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.2" />
+    <PackageReference Include="SPTarkov.Reflection" Version="4.0.2" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.2" />
   </ItemGroup>
 
   <Import Project="..\Shared\DansDevTools-Shared.projitems" Label="Shared" />

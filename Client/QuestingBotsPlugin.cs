@@ -23,7 +23,7 @@ namespace QuestingBots
     {
         protected void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "4.0.0.0";
+            Patches.TarkovInitPatch.MinVersion = "4.0.2.0";
             Patches.TarkovInitPatch.MaxVersion = "4.0.99.0";
 
             Logger.LogInfo("Loading QuestingBots...");
