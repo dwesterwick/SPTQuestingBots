@@ -23,6 +23,8 @@ namespace QuestingBots.BotLogic.ExternalMods
         public static DonutsModInfo DonutsModInfo { get; private set; } = new DonutsModInfo();
         public static PerformanceImprovementsModInfo PerformanceImprovementsModInfo { get; private set; } = new PerformanceImprovementsModInfo();
         public static PleaseJustFightModInfo PleaseJustFightModInfo { get; private set; } = new PleaseJustFightModInfo();
+        public static FikaModInfo FikaModInfo { get; private set; } = new FikaModInfo();
+        public static HeadlessModInfo HeadlessModInfo { get; private set; } = new HeadlessModInfo();
 
         private static List<AbstractExternalModInfo> externalMods = new List<AbstractExternalModInfo>
         {
@@ -30,7 +32,9 @@ namespace QuestingBots.BotLogic.ExternalMods
             LootingBotsModInfo,
             DonutsModInfo,
             PerformanceImprovementsModInfo,
-            PleaseJustFightModInfo
+            PleaseJustFightModInfo,
+            FikaModInfo,
+            HeadlessModInfo
         };
 
         public static AbstractExtractFunction CreateExtractFunction(this BotOwner _botOwner) => SAINModInfo.CreateExtractFunction(_botOwner);
