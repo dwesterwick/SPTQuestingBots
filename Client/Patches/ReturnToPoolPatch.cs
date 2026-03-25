@@ -20,6 +20,10 @@ namespace QuestingBots.Patches
             {
                 UnityEngine.Object.Destroy(objectiveManager);
             }
+            if (gameObject.TryGetComponent<BotLogic.BotMonitor.BotMonitorController>(out var botMonitorController))
+            {
+                UnityEngine.Object.Destroy(botMonitorController);
+            }
         }
     }
 }
