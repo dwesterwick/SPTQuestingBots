@@ -20,7 +20,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Hearing
 
         public override bool TryIgnoreHearing(bool value, bool ignoreUnderFire, float duration = 0)
         {
-            if (!SAIN.Plugin.SAINInterop.IgnoreHearing(BotOwner, value, false, duration))
+            if (!SAIN.Interop.SAINInterop.IgnoreHearing(BotOwner, value, false, duration))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
 
