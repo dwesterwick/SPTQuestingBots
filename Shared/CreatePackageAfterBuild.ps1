@@ -52,16 +52,22 @@ catch
 Write-Host ('Packaging {0} v{1}...copying files...' -f $modName, $modVersion)
 
 $configFileAbsolute = Join-Path $PSScriptRoot 'Config\config.json'
+$eftQuestSettingsFileAbsolute = Join-Path $PSScriptRoot 'Config\eftQuestSettings.json'
+$zoneAndItemQuestPositionsFileAbsolute = Join-Path $PSScriptRoot 'Config\zoneAndItemQuestPositions.json'
 $serverLibraryAbsolute = Join-Path $PSScriptRoot ('..\Server\bin\Release\{0}-Server\{0}-Server.dll' -f $modName)
 
 $clientLibraryAbsolute = Join-Path $PSScriptRoot ('..\Client\bin\Release\netstandard2.1\{0}-Client.dll' -f $modName)
+$questFilesAbsolute = Join-Path $PSScriptRoot 'Quests\'
 
 try
 {
     Copy-Item -Path $configFileAbsolute -Destination $serverFolderAbsolute -errorAction stop | Out-Null
+    Copy-Item -Path $eftQuestSettingsFileAbsolute -Destination $serverFolderAbsolute -errorAction stop | Out-Null
+    Copy-Item -Path $zoneAndItemQuestPositionsFileAbsolute -Destination $serverFolderAbsolute -errorAction stop | Out-Null
     Copy-Item -Path $serverLibraryAbsolute -Destination $serverFolderAbsolute -errorAction stop | Out-Null
 
     Copy-Item -Path $clientLibraryAbsolute -Destination $clientFolderAbsolute -errorAction stop | Out-Null
+    Copy-Item -Path $questFilesAbsolute -Destination $clientFolderAbsolute -Recurse -errorAction stop | Out-Null
 }
 catch
 {
