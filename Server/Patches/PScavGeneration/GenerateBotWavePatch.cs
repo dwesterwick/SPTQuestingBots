@@ -9,6 +9,8 @@ using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Services;
 using System.Collections;
 using System.Reflection;
+using System.Text.Json;
+using SPTarkov.Server.Core.Models.Spt.Bots;
 
 namespace QuestingBots.Patches.PScavGeneration
 {
@@ -46,10 +48,9 @@ namespace QuestingBots.Patches.PScavGeneration
         }
 
         [PatchPostfix]
-        public static void PatchPostfix(ref IEnumerable<BotBase?> __result, GenerateCondition generateRequest)
+        public static void PatchPostfix(ref IEnumerable<BotBase?> __result, GenerateCondition generateRequest, BotGenerationDetails botGenerationDetails)
         {
-            GenerateConditionWithPScavFlag? modifiedCondition = generateRequest as GenerateConditionWithPScavFlag;
-            if (modifiedCondition == null)
+            if (!generateRequest.ExtensionData!.TryGetValue("GeneratePScav", out var generatePScavObj))
             {
                 LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
                 loggingUtil.Error($"GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
@@ -57,19 +58,17 @@ namespace QuestingBots.Patches.PScavGeneration
                 return;
             }
 
-            if (!modifiedCondition.GeneratePScav)
+            if (generatePScavObj is JsonElement generatePScavElement && generatePScavElement.GetBoolean())
             {
-                return;
+                __result = ConvertAllToPScav(__result, botGenerationDetails.BotCountToGenerate);
             }
-
-            __result = ConvertAllToPScav(__result, modifiedCondition.Limit);
         }
 
-        private static IEnumerable<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
+        private static List<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
         {
             LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
 
-            List<BotBase> UpdatedBots = new List<BotBase>();
+            List<BotBase?> UpdatedBots = new List<BotBase?>();
             int convertedBots = 0;
 
             foreach (BotBase? bot in bots)
