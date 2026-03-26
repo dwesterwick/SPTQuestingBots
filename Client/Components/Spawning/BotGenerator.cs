@@ -488,7 +488,7 @@ namespace QuestingBots.Components.Spawning
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
 
-                    string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => $"{p.GetCorrectedNickname()} ({p.WillBeAPlayerScav()})"));
+                    string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => $"{p.GetCorrectedNickname()} [{p.WillBeAPlayerScav()}]"));
                     Singleton<LoggingUtil>.Instance.LogInfo($"Generating {botdifficulty} {BotTypeName} group (Number of bots: {bots})...done. ({profileListText})");
                 }
                 catch (NullReferenceException nre)

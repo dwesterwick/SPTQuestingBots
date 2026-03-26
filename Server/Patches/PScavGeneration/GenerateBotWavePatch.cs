@@ -1,5 +1,4 @@
-﻿using QuestingBots.Models;
-using QuestingBots.Patches.Internal;
+﻿using QuestingBots.Patches.Internal;
 using QuestingBots.Utils;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Controllers;
@@ -10,7 +9,6 @@ using SPTarkov.Server.Core.Services;
 using System.Collections;
 using System.Reflection;
 using System.Text.Json;
-using SPTarkov.Server.Core.Models.Spt.Bots;
 
 namespace QuestingBots.Patches.PScavGeneration
 {
@@ -48,19 +46,19 @@ namespace QuestingBots.Patches.PScavGeneration
         }
 
         [PatchPostfix]
-        public static void PatchPostfix(ref IEnumerable<BotBase?> __result, GenerateCondition generateRequest, BotGenerationDetails botGenerationDetails)
+        public static void PatchPostfix(ref IEnumerable<BotBase?> __result, GenerateCondition generateRequest)
         {
             if (!generateRequest.ExtensionData!.TryGetValue("GeneratePScav", out var generatePScavObj))
             {
                 LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-                loggingUtil.Error($"GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
+                loggingUtil.Error("GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
 
                 return;
             }
 
             if (generatePScavObj is JsonElement generatePScavElement && generatePScavElement.GetBoolean())
             {
-                __result = ConvertAllToPScav(__result, botGenerationDetails.BotCountToGenerate);
+                __result = ConvertAllToPScav(__result, generateRequest.Limit);
             }
         }
 
@@ -98,7 +96,7 @@ namespace QuestingBots.Patches.PScavGeneration
 
         private static bool CanConvertToPScav(BotBase bot)
         {
-            if (bot?.Info?.Settings?.Role == null)
+            if (bot.Info?.Settings?.Role == null)
             {
                 LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
                 loggingUtil.Error("A bot with a null role was generated");

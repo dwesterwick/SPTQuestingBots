@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPT.Reflection.Patching;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using Comfort.Common;
 using EFT;
@@ -45,21 +44,21 @@ namespace QuestingBots.Patches
         {
             for (int i = 0; i < waves.Count; i++)
             {
-                var originalWave = waves[i];
-                waves[i] = new ExtendedWaveInfoClass(
+                WaveInfoClass originalWave = waves[i];
+                waves[i] = new WaveInfoWithPScavFlag(
                     originalWave,
                     generatePScav && (originalWave.Role == WildSpawnType.assault || originalWave.Role == WildSpawnType.assaultGroup)
                 );
             }
         }
 
-        internal class ExtendedWaveInfoClass : WaveInfoClass
+        internal class WaveInfoWithPScavFlag : WaveInfoClass
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("GeneratePScav")]
             public bool GeneratePScav;
 
-            public ExtendedWaveInfoClass(WaveInfoClass original, bool generatePScav) : base(original.Limit, original.Role, original.Difficulty)
+            public WaveInfoWithPScavFlag(WaveInfoClass original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
             {
                 GeneratePScav = generatePScav;
             }
