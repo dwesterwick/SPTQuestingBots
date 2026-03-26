@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPT.Reflection.Patching;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using Comfort.Common;
+using EFT;
 using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
@@ -37,44 +37,30 @@ namespace QuestingBots.Patches
             }
 
             Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
-            legacyParams.Params = new ModifiedParams(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
+            AddPScavFlagsToWaves(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
         }
 
-        internal class ModifiedParams
+        private static void AddPScavFlagsToWaves(List<WaveInfoClass> waves, bool generatePScav)
+        {
+            for (int i = 0; i < waves.Count; i++)
+            {
+                WaveInfoClass originalWave = waves[i];
+                waves[i] = new WaveInfoWithPScavFlag(
+                    originalWave,
+                    generatePScav && (originalWave.Role == WildSpawnType.assault || originalWave.Role == WildSpawnType.assaultGroup)
+                );
+            }
+        }
+
+        internal class WaveInfoWithPScavFlag : WaveInfoClass
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            [JsonProperty("conditions")]
-            public List<WaveInfoClass> Conditions { get; set; } = null!;
-
-            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("GeneratePScav")]
-            public bool GeneratePScav { get; set; }
+            public bool GeneratePScav;
 
-            public ModifiedParams()
+            public WaveInfoWithPScavFlag(WaveInfoClass original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
             {
-
-            }
-
-            public ModifiedParams(List<WaveInfoClass> _conditions, bool _GeneratePScav)
-            {
-                Conditions = _conditions;
-                GeneratePScav = _GeneratePScav;
-            }
-
-            public override string ToString()
-            {
-                return JsonConvert.SerializeObject(this, Formatting.Indented);
-            }
-
-            public override int GetHashCode()
-            {
-                return 861877474 + EqualityComparer<List<WaveInfoClass>>.Default.GetHashCode(Conditions);
-            }
-
-            public override bool Equals(object value)
-            {
-                ModifiedParams? modifiedParams = value as ModifiedParams;
-                return modifiedParams != null && EqualityComparer<List<WaveInfoClass>>.Default.Equals(Conditions, modifiedParams.Conditions);
+                GeneratePScav = generatePScav;
             }
         }
     }

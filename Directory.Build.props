@@ -4,7 +4,7 @@
 		<AssemblyTitle>QuestingBots</AssemblyTitle>
 		<Authors>DanW</Authors>
 		<Version>0.11.0</Version>
-		<SPTVersion>~4.0.0</SPTVersion>
+		<SPTVersion>~4.0.2</SPTVersion>
 		<SPTGUID>com.danw.questingbots</SPTGUID>
 		<GithubRepoPath>https://github.com/dwesterwick/QuestingBots</GithubRepoPath>
 		<RelativePathToRootSPTInstall>../../</RelativePathToRootSPTInstall>
