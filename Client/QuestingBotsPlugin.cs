@@ -23,16 +23,8 @@ namespace QuestingBots
     {
         protected void Awake()
         {
-            Patches.TarkovInitPatch.MinVersion = "4.0.2.0";
-            Patches.TarkovInitPatch.MaxVersion = "4.0.99.0";
-
             Logger.LogInfo("Loading QuestingBots...");
             Singleton<LoggingUtil>.Create(new LoggingUtil(Logger));
-            if (!confirmNoPreviousVersionExists())
-            {
-                Chainloader.DependencyErrors.Add("An older version of " + ModInfo.MODNAME + " still exists in '/BepInEx/plugins'. Please remove QuestingBots.dll from that directory, or this mod will not work correctly.");
-                return;
-            }
 
             Logger.LogInfo("Loading QuestingBots...getting configuration data...");
             Singleton<ConfigUtil>.Create(new ConfigUtil());
@@ -44,96 +36,147 @@ namespace QuestingBots
 
             new Patches.MenuShowPatch().Enable();
 
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.IsModEnabled())
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...");
-
-                new Patches.TarkovInitPatch().Enable();
-                new Patches.BotsControllerInitPatch().Enable();
-                new Patches.BotsControllerStopPatch().Enable();
-                new Patches.BotOwnerBrainActivatePatch().Enable();
-                new Patches.IsFollowerSuitableForBossPatch().Enable();
-                new Patches.OnBeenKilledByAggressorPatch().Enable();
-                new Patches.AirdropLandPatch().Enable();
-                new Patches.ServerRequestPatch().Enable();
-                new Patches.CheckLookEnemyPatch().Enable();
-                new Patches.ReturnToPoolPatch().Enable();
-                new Patches.BotOwnerSprintPatch().Enable();
-
-                new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
-                new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();
-                new Patches.Lighthouse.LighthouseTraderZonePlayerAttackPatch().Enable();
-
-                if (Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
-                {
-                    new Patches.DebugPatches.ProcessSourceOcclusionPatch().Enable();
-                    //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
-                    //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
-                }
-
-                if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
-                {
-                    new Patches.Spawning.GameStartPatch().Enable();
-                    new Patches.Spawning.TimeHasComeScreenClassChangeStatusPatch().Enable();
-                    new Patches.Spawning.ActivateBossesByWavePatch().Enable();
-                    new Patches.Spawning.AddEnemyPatch().Enable();
-                    new Patches.Spawning.TryLoadBotsProfilesOnStartPatch().Enable();
-                    new Patches.Spawning.SetNewBossPatch().Enable();
-                    new Patches.Spawning.GetAllBossPlayersPatch().Enable();
-
-                    new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
-                    new Patches.Spawning.Advanced.ExceptAIPatch().Enable();
-                    new Patches.Spawning.Advanced.BotDiedPatch().Enable();
-                    new Patches.Spawning.Advanced.TryToSpawnInZoneAndDelayPatch().Enable();
-
-                    new Patches.Spawning.ScavLimits.SpawnPointIsValidPatch().Enable();
-                    new Patches.Spawning.ScavLimits.TrySpawnFreeAndDelayPatch().Enable();
-                    new Patches.Spawning.ScavLimits.NonWavesSpawnScenarioCreatePatch().Enable();
-                    new Patches.Spawning.ScavLimits.BotsControllerStopPatch().Enable();
-
-                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnInitialBossesFirst)
-                    {
-                        new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
-                    }
-
-                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
-                    {
-                        new Patches.Spawning.BotsGroupIsPlayerEnemyPatch().Enable();
-                    }
-
-                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.Enabled)
-                    {
-                        BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();
-                        Singleton<LoggingUtil>.Instance.LogInfo("Enabled PMC bot generation");
-                    }
-                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
-                    {
-                        BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
-                        Singleton<LoggingUtil>.Instance.LogInfo("Enabled PScav bot generation");
-                    }
-                }
-
-                if ((Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled) || Singleton<ConfigUtil>.Instance.CurrentConfig.AdjustPScavChance.Enabled)
-                {
-                    new Patches.PScavProfilePatch().Enable();
-                }
-                
-                // Add options to the F12 menu
-                QuestingBotsPluginConfig.BuildConfigOptions(Config);
-            }
+            EnableMod();
 
             Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...done.");
         }
 
-        private bool confirmNoPreviousVersionExists()
+        private void EnableMod()
         {
-            string oldPath = AppDomain.CurrentDomain.BaseDirectory + "/BepInEx/plugins/QuestingBots.dll";
-            if (File.Exists(oldPath))
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsModEnabled())
             {
-                return false;
+                return;
             }
 
-            return true;
+            Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...");
+
+            EnableCommonPatches();
+            EnableLighthousePatches();
+            
+            EnableSpawningPatches();
+            EnablePlayerScavGenerationPatches();
+            RegisterBotGenerators();
+
+            EnableDebugPatches();
+
+            // Add options to the F12 menu
+            QuestingBotsPluginConfig.BuildConfigOptions(Config);
+        }
+
+        private void EnableCommonPatches()
+        {
+            new Patches.TarkovInitPatch().Enable();
+            new Patches.BotsControllerInitPatch().Enable();
+            new Patches.BotsControllerStopPatch().Enable();
+            new Patches.BotOwnerBrainActivatePatch().Enable();
+            new Patches.IsFollowerSuitableForBossPatch().Enable();
+            new Patches.OnBeenKilledByAggressorPatch().Enable();
+            new Patches.AirdropLandPatch().Enable();
+            new Patches.ServerRequestPatch().Enable();
+            new Patches.CheckLookEnemyPatch().Enable();
+            new Patches.ReturnToPoolPatch().Enable();
+            new Patches.BotOwnerSprintPatch().Enable();
+        }
+
+        private void EnableLighthousePatches()
+        {
+            new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
+            new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();
+            new Patches.Lighthouse.LighthouseTraderZonePlayerAttackPatch().Enable();
+        }
+
+        private void EnableDebugPatches()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
+            {
+                return;
+            }
+
+            new Patches.DebugPatches.ProcessSourceOcclusionPatch().Enable();
+            //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
+            //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
+        }
+
+        private void EnableSpawningPatches()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
+            {
+                return;
+            }
+
+            Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...enabling spawning patches");
+
+            new Patches.Spawning.GameStartPatch().Enable();
+            new Patches.Spawning.TimeHasComeScreenClassChangeStatusPatch().Enable();
+            new Patches.Spawning.ActivateBossesByWavePatch().Enable();
+            new Patches.Spawning.AddEnemyPatch().Enable();
+            new Patches.Spawning.TryLoadBotsProfilesOnStartPatch().Enable();
+            new Patches.Spawning.SetNewBossPatch().Enable();
+            new Patches.Spawning.GetAllBossPlayersPatch().Enable();
+
+            new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
+            new Patches.Spawning.Advanced.ExceptAIPatch().Enable();
+            new Patches.Spawning.Advanced.BotDiedPatch().Enable();
+            new Patches.Spawning.Advanced.TryToSpawnInZoneAndDelayPatch().Enable();
+
+            new Patches.Spawning.ScavLimits.SpawnPointIsValidPatch().Enable();
+            new Patches.Spawning.ScavLimits.TrySpawnFreeAndDelayPatch().Enable();
+            new Patches.Spawning.ScavLimits.NonWavesSpawnScenarioCreatePatch().Enable();
+            new Patches.Spawning.ScavLimits.BotsControllerStopPatch().Enable();
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnInitialBossesFirst)
+            {
+                new Patches.Spawning.InitBossSpawnLocationPatch().Enable();
+            }
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
+            {
+                new Patches.Spawning.BotsGroupIsPlayerEnemyPatch().Enable();
+            }
+        }
+
+        private void RegisterBotGenerators()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
+            {
+                return;
+            }
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.Enabled)
+            {
+                BotGenerator.RegisterBotGenerator<Components.Spawning.PMCGenerator>();
+                Singleton<LoggingUtil>.Instance.LogInfo("Enabled PMC bot generation");
+            }
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
+            {
+                BotGenerator.RegisterBotGenerator<Components.Spawning.PScavGenerator>(true);
+                Singleton<LoggingUtil>.Instance.LogInfo("Enabled PScav bot generation");
+            }
+        }
+
+        private void EnablePlayerScavGenerationPatches()
+        {
+            if (!ShouldEnablePlayerScavGenerationPatches())
+            {
+                return;
+            }
+
+            new Patches.PScavProfilePatch().Enable();
+        }
+
+        private bool ShouldEnablePlayerScavGenerationPatches()
+        {
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
+            {
+                return true;
+            }
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.AdjustPScavChance.Enabled)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

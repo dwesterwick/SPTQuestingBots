@@ -15,7 +15,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 
         public override string IncompatibilityMessage => $"Installed Fika Headless ({PluginInfo.Metadata.Version}) is not compatible with Questing Bots spawning system. Please upgrade Fika Headless to {MinCompatibleVersion} or newer to use the QB spawning system.";
 
-        public MethodInfo RunMemoryCleanupMethod;
+        public MethodInfo RunMemoryCleanupMethod = null!;
 
         public override bool IsCompatible()
         {

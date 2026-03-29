@@ -4,8 +4,8 @@ using EFT;
 using EFT.InputSystem;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Models;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 using System;
@@ -19,9 +19,6 @@ namespace QuestingBots.Patches
 {
     public class TarkovInitPatch : ModulePatch
     {
-        public static string MinVersion { get; set; } = "0.0.0.0";
-        public static string MaxVersion { get; set; } = "999999.999999.999999.999999";
-
         protected override MethodBase GetTargetMethod()
         {
             return typeof(TarkovApplication).GetMethod(nameof(TarkovApplication.Init), BindingFlags.Public | BindingFlags.Instance);
@@ -41,30 +38,16 @@ namespace QuestingBots.Patches
 
         private static void checkSPTVersion()
         {
+            SemanticVersionRange sptValidRange = SemanticVersionRange.Parse(ModInfo.SPT_VERSION_COMPATIBILITY);
+            Version MinVersion = sptValidRange.MinVersion;
+            Version MaxVersion = sptValidRange.MaxVersion;
+
             if (Helpers.GameCompatibilityCheckHelper.IsSPTWithinVersionRange(MinVersion, MaxVersion, out string currentVersion))
             {
                 return;
             }
 
-            string errorMessage = "Could not load " + ModInfo.MODNAME + " because it requires SPT ";
-
-            if (MinVersion == MaxVersion)
-            {
-                errorMessage += MinVersion;
-            }
-            else if (MaxVersion == "999999.999999.999999.999999")
-            {
-                errorMessage += MinVersion + " or later";
-            }
-            else if (MinVersion == "0.0.0.0")
-            {
-                errorMessage += MaxVersion + " or older";
-            }
-            else
-            {
-                errorMessage += "between versions " + MinVersion + " and " + MaxVersion;
-            }
-
+            string errorMessage = "Could not load " + ModInfo.MODNAME + " because it requires SPT between version " + MinVersion.ToString() + " and " + MaxVersion.ToString();
             errorMessage += ". The current version is " + currentVersion + ".";
 
             Chainloader.DependencyErrors.Add(errorMessage);

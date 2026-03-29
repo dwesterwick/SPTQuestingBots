@@ -11,7 +11,6 @@ using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.Configuration;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.ExternalMods
@@ -20,9 +19,6 @@ namespace QuestingBots.BotLogic.ExternalMods
     {
         public static SAINModInfo SAINModInfo { get; private set; } = new SAINModInfo();
         public static LootingBotsModInfo LootingBotsModInfo { get; private set; } = new LootingBotsModInfo();
-        public static DonutsModInfo DonutsModInfo { get; private set; } = new DonutsModInfo();
-        public static PerformanceImprovementsModInfo PerformanceImprovementsModInfo { get; private set; } = new PerformanceImprovementsModInfo();
-        public static PleaseJustFightModInfo PleaseJustFightModInfo { get; private set; } = new PleaseJustFightModInfo();
         public static FikaModInfo FikaModInfo { get; private set; } = new FikaModInfo();
         public static HeadlessModInfo HeadlessModInfo { get; private set; } = new HeadlessModInfo();
 
@@ -30,9 +26,6 @@ namespace QuestingBots.BotLogic.ExternalMods
         {
             SAINModInfo,
             LootingBotsModInfo,
-            DonutsModInfo,
-            PerformanceImprovementsModInfo,
-            PleaseJustFightModInfo,
             FikaModInfo,
             HeadlessModInfo
         };
