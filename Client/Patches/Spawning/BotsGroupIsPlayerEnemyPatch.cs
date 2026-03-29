@@ -2,7 +2,6 @@
 using HarmonyLib;
 using SPT.Reflection.Patching;
 using QuestingBots.Components.Spawning;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
@@ -18,8 +17,6 @@ namespace QuestingBots.Patches.Spawning
 {
     public class BotsGroupIsPlayerEnemyPatch : ModulePatch
     {
-        private static readonly bool SHOW_DEBUG_MESSAGES = false;
-
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotsGroup).GetMethod(nameof(BotsGroup.IsPlayerEnemy), BindingFlags.Public | BindingFlags.Instance);
@@ -74,7 +71,7 @@ namespace QuestingBots.Patches.Spawning
         [PatchPostfix]
         protected static void PatchPostfix(BotsGroup __instance, bool __result, IPlayer player)
         {
-            if (!SHOW_DEBUG_MESSAGES)
+            if (!QuestingBotsPluginConfig.ShowHostilityDebugMessages.Value)
             {
                 return;
             }
@@ -91,12 +88,12 @@ namespace QuestingBots.Patches.Spawning
 
             if (!player.Profile.WillBeAPMC() && !player.Profile.WillBeAPlayerScav())
             {
-                return;
+                //return;
             }
 
             if (!__instance.InitialBot.WillBeAPMC() && !__instance.InitialBot.WillBeAPlayerScav())
             {
-                return;
+                //return;
             }
 
             string message = $"Group containing bot {__instance.InitialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";

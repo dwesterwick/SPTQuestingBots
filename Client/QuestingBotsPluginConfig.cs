@@ -69,6 +69,7 @@ namespace QuestingBots
 
         public static ConfigEntry<bool> QuestingEnabled = null!;
         public static ConfigEntry<bool> ShowSpawnDebugMessages = null!;
+        public static ConfigEntry<bool> ShowHostilityDebugMessages = null!;
         public static ConfigEntry<bool> SprintingEnabled = null!;
         public static ConfigEntry<int> MinSprintingDistance = null!;
 
@@ -120,6 +121,8 @@ namespace QuestingBots
                 true, "Allow bots to quest");
             ShowSpawnDebugMessages = Config.Bind("Main", "Show Debug Messages for Spawning",
                 false, new ConfigDescription("Show additional debug messages to troubleshoot spawning issues", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            ShowHostilityDebugMessages = Config.Bind("Main", "Show Debug Messages for Bot Hostilities",
+                false, new ConfigDescription("Show additional debug messages to troubleshoot bot hostility issues", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
             SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
             MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",
