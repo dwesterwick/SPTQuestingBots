@@ -16,6 +16,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "blacklisted_pmc_bot_brains", IsRequired = true)]
         public string[] BlacklistedPMCBotBrains { get; set; } = Array.Empty<string>();
 
+        [DataMember(Name = "player_scav_brain_conversion_chances_overrides", IsRequired = true)]
+        public PlayerScavBrainConversionChancesOverridesConfig PlayerScavBrainConversionChancesOverrides { get; set; } = new PlayerScavBrainConversionChancesOverridesConfig();
+
         [DataMember(Name = "spawn_retry_time", IsRequired = true)]
         public float SpawnRetryTime { get; set; } = 10;
 

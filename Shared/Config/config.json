@@ -270,6 +270,14 @@
 	"bot_spawns": {
 		"enabled": true,
 		"blacklisted_pmc_bot_brains": [ "bossKilla", "bossTagilla", "exUsec", "followerGluharAssault", "followerGluharProtect", "crazyAssaultEvent", "bossKnight" ],
+		"player_scav_brain_conversion_chances_overrides": {
+			"enabled": false,
+			"chances": {
+				"assault": 1,
+				"pmcBEAR": 2,
+				"pmcUSEC": 2
+			}
+		},
 		"spawn_retry_time": 10,
 		"delay_game_start_until_bot_gen_finishes": true,
 		"spawn_initial_bosses_first": false,
