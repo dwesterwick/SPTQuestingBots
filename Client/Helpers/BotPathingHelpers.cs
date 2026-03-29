@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EFT;
 using HarmonyLib;
-using QuestingBots.Controllers;
 using UnityEngine;
 
 namespace QuestingBots.Helpers
@@ -98,8 +97,12 @@ namespace QuestingBots.Helpers
         public static Vector3? GetCurrentPathLastPoint(this BotMover botMover)
         {
             Vector3[] currentPath = botMover.GetCurrentPath();
-            Vector3? lastPathPoint = currentPath?.Last();
+            if ((currentPath == null) || (currentPath.Length == 0))
+            {
+                return null;
+            }
 
+            Vector3 lastPathPoint = currentPath.Last();
             return lastPathPoint;
         }
 

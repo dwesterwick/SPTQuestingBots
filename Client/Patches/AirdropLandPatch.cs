@@ -33,7 +33,8 @@ namespace QuestingBots.Patches
             AddNavMeshObstacle(___AirdropSynchronizableObject_0);
 
             Vector3 airdropPosition = ___AirdropSynchronizableObject_0.transform.position;
-            Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(airdropPosition);
+            Bounds airdropBounds = ___AirdropSynchronizableObject_0.CollisionCollider.bounds;
+            Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().StartAddAirdropChaserQuest(airdropPosition, airdropBounds);
         }
 
         private static void AddNavMeshObstacle(AirdropSynchronizableObject ___airdropSynchronizableObject_0)

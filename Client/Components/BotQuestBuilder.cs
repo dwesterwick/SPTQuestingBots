@@ -45,7 +45,7 @@ namespace QuestingBots.Components
             return questPathFinder.GetStaticPaths(target);
         }
 
-        public void AddAirdropChaserQuest(Vector3 airdropPosition)
+        public void StartAddAirdropChaserQuest(Vector3 airdropPosition, Bounds airdropBounds)
         {
             if (airdropPosition == null)
             {
@@ -57,18 +57,31 @@ namespace QuestingBots.Components
                 Singleton<LoggingUtil>.Instance.LogError("Airdrop chaser quest cannot be added when the raid is not in-progress");
                 return;
             }
+            
+            StartCoroutine(AddAirdropChaserQuest(airdropPosition, airdropBounds));
+        }
+
+        private IEnumerator AddAirdropChaserQuest(Vector3 airdropPosition, Bounds airdropBounds)
+        {
+            // Need to wait at least one frame for the NavMeshObstacle to take effect
+            yield return null;
 
             Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropChaser);
-            if (airdopChaserQuest != null)
-            {
-                airdopChaserQuest.MaxRaidET = RaidHelpers.GetRaidElapsedSeconds() + Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropBotInterestTime;
-                BotJobAssignmentFactory.AddQuest(airdopChaserQuest);
-
-                Singleton<LoggingUtil>.Instance.LogInfo("Added quest for the most recent airdop");
-            }
-            else
+            if (airdopChaserQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not add quest for the most recent airdop");
+                yield break;
+            }
+
+            airdopChaserQuest.MaxRaidET = RaidHelpers.GetRaidElapsedSeconds() + Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropBotInterestTime;
+            BotJobAssignmentFactory.AddQuest(airdopChaserQuest);
+
+            Vector3 airdropQuestPosition = airdopChaserQuest.ValidObjectives.First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
+            Singleton<LoggingUtil>.Instance.LogInfo($"Added quest for the most recent airdop at {airdropPosition} with its objective position at {airdropQuestPosition}");
+
+            if (airdropBounds.Contains(airdropQuestPosition))
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Airdrop quest position is inside of the airdop CollisionCollider");
             }
         }
 

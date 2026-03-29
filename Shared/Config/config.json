@@ -7,7 +7,7 @@
 		"show_zone_outlines": false,
 		"show_failed_paths": false,
 		"show_door_interaction_test_points": false,
-		"allow_zero_distance_sleeping": true
+		"allow_zero_distance_sleeping": false
 	},
 	"max_calc_time_per_frame_ms": 5,
 	"chance_of_being_hostile_toward_bosses": {

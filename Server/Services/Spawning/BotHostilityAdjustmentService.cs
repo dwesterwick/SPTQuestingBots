@@ -79,7 +79,7 @@ namespace QuestingBots.Services.Spawning
                 return;
             }
 
-            if (settings.SavageEnemyChance == null)
+            if (settings.SavageEnemyChance != null)
             {
                 settings.SavageEnemyChance = _config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.GlobalScavEnemyChance;
             }
