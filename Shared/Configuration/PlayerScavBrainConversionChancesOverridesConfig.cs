@@ -9,7 +9,7 @@ namespace QuestingBots.Configuration
     public class PlayerScavBrainConversionChancesOverridesConfig
     {
         [DataMember(Name = "enabled", IsRequired = true)]
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
 
         [DataMember(Name = "chances", IsRequired = true)]
         public Dictionary<string, int> Chances { get; set; } = new Dictionary<string, int>();
