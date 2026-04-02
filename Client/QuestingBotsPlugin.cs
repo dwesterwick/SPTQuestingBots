@@ -76,6 +76,7 @@ namespace QuestingBots
             new Patches.CheckLookEnemyPatch().Enable();
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
+            new Patches.DisableLocalAvoidancePatch().Enable();
         }
 
         private void EnableLighthousePatches()

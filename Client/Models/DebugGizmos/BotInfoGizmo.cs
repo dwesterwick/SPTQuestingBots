@@ -20,7 +20,7 @@ namespace QuestingBots.Models.DebugGizmos
         public DebugOverlay Overlay { get; set; }
 
         private BotOwner bot = null!;
-        private BotObjectiveManager botObjectiveManager = null!;
+        private BotObjectiveManager? botObjectiveManager = null;
         private BotQuestingDecisionMonitor botQuestingDecisionMonitor = null!;
 
         public BotInfoGizmo(BotOwner _bot) : base(100)

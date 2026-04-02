@@ -16,19 +16,19 @@ namespace QuestingBots.Controllers
             botObjectiveManagers.Clear();
         }
 
-        public static Components.BotObjectiveManager GetObjectiveManager(this BotOwner botOwner)
+        public static Components.BotObjectiveManager? GetObjectiveManager(this BotOwner botOwner)
         {
-            if (botObjectiveManagers.TryGetValue(botOwner, out var objectiveManager))
+            if (botObjectiveManagers.TryGetValue(botOwner, out Components.BotObjectiveManager objectiveManager))
             {
                 return objectiveManager;
             }
 
-            return null!;
+            return null;
         }
 
         public static Components.BotObjectiveManager GetOrAddObjectiveManager(this BotOwner botOwner)
         {
-            Components.BotObjectiveManager objectiveManager = GetObjectiveManager(botOwner);
+            Components.BotObjectiveManager? objectiveManager = GetObjectiveManager(botOwner);
             if (objectiveManager != null)
             {
                 return objectiveManager;

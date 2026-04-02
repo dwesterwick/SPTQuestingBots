@@ -20,7 +20,7 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         protected static bool PatchPrefix(BotOwner __instance, bool val, bool withDebugCallback)
         {
-            Components.BotObjectiveManager botObjectiveManager = __instance.GetObjectiveManager();
+            Components.BotObjectiveManager? botObjectiveManager = __instance.GetObjectiveManager();
             if (botObjectiveManager != null)
             {
                 botObjectiveManager.BotSprintingController.ExternalUpdate(val, withDebugCallback);

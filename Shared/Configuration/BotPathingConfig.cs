@@ -16,6 +16,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "incomplete_path_retry_interval", IsRequired = true)]
         public float IncompletePathRetryInterval { get; set; } = 5;
 
+        [DataMember(Name = "disable_eft_local_avoidance", IsRequired = true)]
+        public bool DisableEFTLocalAvoidance { get; set; } = true;
+
         public BotPathingConfig()
         {
 

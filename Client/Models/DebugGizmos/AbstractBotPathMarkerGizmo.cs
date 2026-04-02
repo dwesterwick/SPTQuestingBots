@@ -18,8 +18,8 @@ namespace QuestingBots.Models.DebugGizmos
         public string MarkerName { get; private set; }
         public Color MarkerColor { get; private set; }
         
-        protected BotOwner BotOwner;
-        protected BotObjectiveManager BotObjectiveManager;
+        protected BotOwner BotOwner = null!;
+        protected BotObjectiveManager BotObjectiveManager = null!;
 
         public bool IsActive => MarkerAndOverlay.IsActive;
         public float MarkerRadius => MarkerAndOverlay.MarkerRadius;
@@ -30,7 +30,13 @@ namespace QuestingBots.Models.DebugGizmos
             MarkerColor = _color;
 
             BotOwner = _bot;
-            BotObjectiveManager = BotOwner.GetObjectiveManager();
+
+            BotObjectiveManager? botObjectiveManager = BotOwner.GetObjectiveManager();
+            if (botObjectiveManager == null)
+            {
+                throw new InvalidOperationException($"Cannot retrieve objective manager for {_bot.GetText()}");
+            }
+            BotObjectiveManager = botObjectiveManager;
 
             GameObject marker = DebugHelpers.CreateSphere(Vector3.negativeInfinity, _markerRadius * 2, MarkerColor);
             DebugOverlay overlay = new DebugOverlay(UpdateGUIStyle);

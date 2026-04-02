@@ -122,8 +122,8 @@ namespace QuestingBots.BotLogic.Sleep
             foreach (BotOwner bot in allOtherBots)
             {
                 // We only care about other bots that can quest
-                Components.BotObjectiveManager otherBotObjectiveManager = bot.GetObjectiveManager();
-                if (otherBotObjectiveManager?.IsQuestingAllowed != true)
+                Components.BotObjectiveManager? otherBotObjectiveManager = bot.GetObjectiveManager();
+                if ((otherBotObjectiveManager != null) && otherBotObjectiveManager.IsQuestingAllowed)
                 {
                     continue;
                 }

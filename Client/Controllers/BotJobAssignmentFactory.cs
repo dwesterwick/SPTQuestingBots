@@ -520,9 +520,14 @@ namespace QuestingBots.Controllers
 
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
         {
+            if (bot == null)
+            {
+                throw new ArgumentNullException("Cannot get an assignment for a null bot");
+            }
+
             // Do not select another quest objective if the bot wants to extract
-            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
-            if (botObjectiveManager?.DoesBotWantToExtract() == true)
+            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
+            if ((botObjectiveManager != null) && botObjectiveManager.DoesBotWantToExtract())
             {
                 return null!;
             }
@@ -634,6 +639,11 @@ namespace QuestingBots.Controllers
 
         public static Quest GetRandomQuest(this BotOwner bot, IEnumerable<Quest> invalidQuests)
         {
+            if (bot == null)
+            {
+                throw new ArgumentNullException("Cannot get a quest for a null bot");
+            }
+
             Stopwatch questSelectionTimer = Stopwatch.StartNew();
 
             Quest[] assignableQuests = bot.GetAllPossibleQuests()
@@ -645,7 +655,7 @@ namespace QuestingBots.Controllers
                 return null!;
             }
 
-            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
+            BotObjectiveManager? botObjectiveManager = bot?.GetObjectiveManager();
             Vector3? vectorToExfil = botObjectiveManager?.VectorToExfiltrationPointForQuesting();
 
             Dictionary<Quest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<Quest, Configuration.MinMaxConfig>();
@@ -657,14 +667,14 @@ namespace QuestingBots.Controllers
             {
                 IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
                 IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p!.Value);
-                IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot.Position, p));
+                IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot!.Position, p));
 
                 questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
 
                 if (vectorToExfil.HasValue)
                 {
-                    IEnumerable<Vector3> vectorsToObjectivePositions = validObjectivePositions.Select(p => p - bot.Position);
-                    IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(p - bot.Position, vectorToExfil.Value));
+                    IEnumerable<Vector3> vectorsToObjectivePositions = validObjectivePositions.Select(p => p - bot!.Position);
+                    IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(p - bot!.Position, vectorToExfil.Value));
 
                     questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(anglesToObjectives.Min(), anglesToObjectives.Max()));
                 }
@@ -929,7 +939,12 @@ namespace QuestingBots.Controllers
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
             if (botGroupSize > botJobAssignment.QuestAssignment.MaxBotsInGroup)
             {
-                BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
+                BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
+                if (botObjectiveManager == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError($"Cannot retrieve the objective manager for {bot.GetText()}");
+                    return;
+                }
 
                 if (botObjectiveManager.TryChangeObjective())
                 {

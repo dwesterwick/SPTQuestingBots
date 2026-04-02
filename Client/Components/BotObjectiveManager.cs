@@ -250,7 +250,7 @@ namespace QuestingBots.Components
 
             foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
             {
-                BotObjectiveManager followerObjectiveManager = follower.GetObjectiveManager();
+                BotObjectiveManager? followerObjectiveManager = follower.GetObjectiveManager();
                 if (followerObjectiveManager == null)
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager component for follower " + follower.GetText() + " of " + botOwner.GetText());

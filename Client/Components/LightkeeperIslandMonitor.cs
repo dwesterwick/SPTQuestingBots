@@ -142,7 +142,7 @@ namespace QuestingBots.Components
 
         public bool IsBotObjectiveOnLightkeeperIsland(BotOwner bot)
         {
-            BotObjectiveManager botObjectiveManager = bot.GetObjectiveManager();
+            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
             if (botObjectiveManager == null)
             {
                 return false;

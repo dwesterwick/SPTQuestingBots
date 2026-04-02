@@ -43,6 +43,7 @@ namespace QuestingBots.Components.Spawning
         private static Task botGenerationTask = null!;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
         private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
+        private static readonly Dictionary<BotOwner, Models.BotSpawnInfo> botSpawnInfoCache = new Dictionary<BotOwner, Models.BotSpawnInfo>();
 
         public int SpawnedGroupCount => BotGroups.Count(g => g.HaveAllBotsSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HaveAllBotsSpawned);
@@ -114,6 +115,11 @@ namespace QuestingBots.Components.Spawning
             }
 
             StartCoroutine(spawnBotGroups(BotGroups.ToArray()));
+        }
+
+        public static void Clear()
+        {
+            botSpawnInfoCache.Clear();
         }
 
         public static void RegisterBotGenerator<T>(bool isPScavGenerator = false) where T : BotGenerator
@@ -269,10 +275,17 @@ namespace QuestingBots.Components.Spawning
 
         public static bool TryGetBotGroupFromAnyGenerator(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
         {
+            if (botSpawnInfoCache.ContainsKey(bot))
+            {
+                matchingGroupData = botSpawnInfoCache[bot];
+                return true;
+            }
+
             foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
             {
                 if (botGenerator?.TryGetBotGroup(bot, out matchingGroupData) == true)
                 {
+                    botSpawnInfoCache.Add(bot, matchingGroupData);
                     return true;
                 }
             }

@@ -19,7 +19,7 @@ namespace QuestingBots.BotLogic.HiveMind
         {
             Action<BotOwner> updateFromObjectiveManager = new Action<BotOwner>((bot) =>
             {
-                Components.BotObjectiveManager objectiveManager = bot.GetObjectiveManager();
+                Components.BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
                 if (objectiveManager != null )
                 {
                     botState[bot] = objectiveManager.CanSprintToObjective();

@@ -87,7 +87,8 @@
 		},
 		"bot_pathing": {
 			"max_start_position_discrepancy": 0.5,
-			"incomplete_path_retry_interval": 5
+			"incomplete_path_retry_interval": 5,
+			"disable_eft_local_avoidance": true
 		},
 		"bot_questing_requirements": {
 			"exclude_bots_by_level": true,
