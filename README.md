@@ -1,38 +1,24 @@
 You're no longer the only PMC running around placing markers and collecting quest items. The bots have transcended and are coming for you...
 
-**This mod may have a performance impact**, but it should be minimal starting with the 0.5.0 release. If you notice performance problems, please try using the built-in AI limiter.
-
 **---------- Mod Compatibility ----------**
 
 **REQUIRES:**
-* [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/) (1.3.2 or later)
-* [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.7.1 or later)
+* [BigBrain](https://hub.sp-tarkov.com/files/file/1219-bigbrain/) (1.4.0 or later)
+* [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.8.2 or later)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (4.0.3 or later recommended)
-* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.5.2 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (4.4.0 or later recommended)
+* [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.6.3 or later recommended)
 
 **Partially compatible with:**
-* **Fika** (If you're using the Questing Bots spawning system, you must disable `Enforced Spawn Limits` in the F12 menu for Fika)
-* [Path to Tarkov](https://hub.sp-tarkov.com/files/file/569-path-to-tarkov/), [Traveler](https://hub.sp-tarkov.com/files/file/1212-traveler/), [Entry Point Selector](https://hub.sp-tarkov.com/files/file/2291-entry-point-selector-2-0/), and similar mods that significantly reduce spawn points (You MUST use another mod like [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
-* [Realism](https://hub.sp-tarkov.com/files/file/606-spt-realism-mod/) (You must disable Realism's bot-spawning changes when using the Questing Bots spawning system)
-* [Please Just Fight](https://hub.sp-tarkov.com/files/file/2652-please-just-fight/) (This mod should only be used if you're not using the Questing Bots spawning system)
-* [Declutterer](https://hub.sp-tarkov.com/files/file/2838-simple-declutter/) (Causes crashes for some people; use at your own risk)
+* [Vagabond](https://forge.sp-tarkov.com/mod/2642/vagabond) and similar mods that significantly reduce spawn points (You MUST use another mod like [Acid's Bot Placement System](https://forge.sp-tarkov.com/mod/2097/abps-acids-bot-placement-system) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
 
 **NOT compatible with:**
-* [AI Limit](https://hub.sp-tarkov.com/files/file/793-ai-limit/) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
-
-**Compatible with:**
-* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
-* [Late to the Party](https://hub.sp-tarkov.com/files/file/1099-late-to-the-party/)
-* [Performance Improvements](https://hub.sp-tarkov.com/files/file/2505-performance-improvements/) (Must be version 0.2.4 or newer)
+* [AI Limit](https://forge.sp-tarkov.com/mod/1945/ai-limit) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
-* [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/)
-* [MOAR](https://hub.sp-tarkov.com/files/file/1059-moar-bots-spawning-difficulty/)
-* [Better Spawns Plus](https://hub.sp-tarkov.com/files/file/1002-better-spawns-plus/)
-* [Reality](https://hub.sp-tarkov.com/files/file/2585-reality/)
-* [Acid's Bot Placement System](https://hub.sp-tarkov.com/files/file/2782-abps-acid-s-bot-placement-system/)
+* [Unda](https://forge.sp-tarkov.com/mod/1173/unda)
+* [Acid's Bot Placement System](https://forge.sp-tarkov.com/mod/2097/abps-acids-bot-placement-system)
 
 **---------- Overview ----------**
 
@@ -255,6 +241,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * **questing.bot_search_distances.max_navmesh_path_error**: If a complete path cannot be generated to a bot's target objective position, it will try to get within this radius (in meters) of it anyway. This is to simulate situations like bots checking if a door is unlocked when it doesn't have the key. This is **10** m by default. 
 * **questing.bot_pathing.max_start_position_discrepancy**: The minimum distance (in meters) between the bot's position and the start of its path above which its path will be recalculated if there is a difference between its current target position and the target position for its quest. **Do not change this unless you know what you're doing!**
 * **questing.bot_pathing.incomplete_path_retry_interval**: If a bot's path to its objective is incomplete, the path will be recalculated at this interval (in seconds) until a complete path is found. This is **5** s by default.
+* **questing.bot_pathing.disable_eft_local_avoidance**: If EFT's "local avoidance" system should be disabled for questing bots. When enabled, this system prevents bots from being too close to each other by adding "inertia" to oppose them and possible teleport them to another location. Especially with questing bots that have multiple followers, this causes them to behave erratically. This is **true** by default. **Do not change this unless you know what you're doing!** 
 * **questing.bot_questing_requirements.exclude_bots_by_level**: Each quest has a minimum and maximum player level assigned to it. If this option is **true** (which is the default setting), bots will only be allowed to select a quest if its player level is within this range. This prevents low-level bots from selecting end-game quests and vice versa. 
 * **questing.bot_questing_requirements.repeat_quest_delay**: The minimum delay (in seconds) after a bot stops performing objectives for a repeatable quest before it's allowed to repeat the quest. This is **360** s by default. 
 * **questing.bot_questing_requirements.max_time_per_quest**: The maximum amount of time (in seconds) that bots are allowed to perform objectives for the same quest. This is to encourage questing diversity for bots and to deter them from remaining in the same area for a long time. This is **300** s by default. 
@@ -341,6 +328,8 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 **PMC and Player-Scav Spawning Options:**
 * **bot_spawns.enabled**: Allow this mod to spawn PMC's and player Scavs (**true** by default). 
 * **bot_spawns.blacklisted_pmc_bot_brains**: An array of the bot "brain" types that SPT will not be able to use when generating initial PMC's. These "brain" types have behaviors that inhibit their ability to quest, and this causes them to get stuck in areas for a long time (including their spawn locations). **Do not change this unless you know what you're doing!**
+* **bot_spawns.player_scav_brain_conversion_chances_overrides.enabled**: Allows this mod to override the chances that player Scav brains will be replaced by another brain type. Currently, this causes problems such as normal Scavs attacking player Scavs and player-Scav kills being treated as PMC or boss kills. This is **false** by default. **Do not change this unless you know what you're doing!**
+* **bot_spawns.player_scav_brain_conversion_chances_overrides.chances**: The chances that player Scav brain types will be changed to the ones in this dictionary. The brain types in this setting will be added to (or overwrite) the brain types in SPT's configuration, but brain types in SPT's configuration that are not in this setting will not be removed. 
 * **bot_spawns.spawn_retry_time**: If any bots fail to spawn, no other attempts will be made to spawn more of them for this amount of time (in seconds). By default, this is **10** s.
 * **bot_spawns.delay_game_start_until_bot_gen_finishes**: After the final loading screen shows "0:00.000" for a few seconds, the game will be further delayed from starting if not all bots have been generated. Without doing this, PMC's may not spawn immediately when the raid starts, and the remaining bots will take much longer to generate. This is **true** by default. 
 * **bot_spawns.spawn_initial_bosses_first**: If initial bosses must spawn before PMC's are allowed to spawn. This does not apply to Factory (Day or Night). This is **false** by default.
@@ -378,10 +367,8 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **---------- Known Issues ----------**
 
-**Vanilla EFT Issues in SPT 3.11:**
+**Vanilla EFT Issues in SPT 3.11 and later:**
 * Bots sometimes "teleport" through doors
-* Bots shudder while unlocking doors
-* Bots sometimes rapidly accelerate and decelerate while moving (especially when following bosses)
 
 **General:**
 * A flicker occurs whenever EFT spawns bots, even when the Questing Bots spawning system is disabled
@@ -389,18 +376,16 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
 * Bots tend to get trapped in certain areas. Known areas:
-    * Customs between Warehouse 4 and New Gas
     * Customs in some Dorms rooms (i.e. 214 and 220 in 3 story)
     * Lighthouse in the mountains near the Resort spawn
     * Lighthouse on the rocks near the helicopter crash
-* Bots blindly run to their objective (unless they're in combat) even if it's certain death (i.e. running into the Sawmill when Shturman is there).
 * Bots take the most direct path to their objectives, which may involve running in the middle of an open area without any cover.
-* Certain bot "brains" stay in a combat state for a long time, during which they're unable to continue their quests.
 * Certain bot "brains" are blacklisted because they cause the bot to always be in a combat state and therefore never quest (i.e. exUSEC's when they're near a stationary weapon)
 * Bots sometimes unlock doors for no reason if they can't properly resolve their quest locations.
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 * Extraction via Questing Bots is only partially implemented
+* Spawn rush quests do not work when using Fika
 
 **---------- Credits ----------**
 
@@ -409,6 +394,6 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * Thanks to [nooky](https://hub.sp-tarkov.com/user/29062-nooky/) for lots of help with testing and ensuring this mod remains compatible with [SWAG + DONUTS](https://hub.sp-tarkov.com/files/file/878-swag-donuts-dynamic-spawn-waves-and-custom-spawn-points/). 
 * Thanks to [Skwizzy](https://hub.sp-tarkov.com/user/31303-skwizzy/) for help with adding interop capability to [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/).
 * Thanks to [Solarint](https://hub.sp-tarkov.com/user/30697-solarint/) for help with improving interop capability to [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) and working with me to balance bot questing vs. combat behavior.
-* Thanks to [ozen](https://github.com/ozen-m) for help with testing and contributing to SPT 3.11 updates.
+* Thanks to [ozen](https://github.com/ozen-m) for help with testing and contributing to SPT 3.11 and SPT 4.0 updates.
 * Thanks to everyone else on Discord who helped to test the many alpha releases of this mod and provided feedback to make it better. There are too many people to name, but you're all awesome. 
 * Of course, thanks to the SPT development team who made this possible in the first place. 
