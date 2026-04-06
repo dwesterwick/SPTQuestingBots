@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using Comfort.Common;
+using EFT.Game.Spawning;
 using HarmonyLib;
 using QuestingBots.Utils;
+using UnityEngine;
 
 namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 {
@@ -45,5 +47,25 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
         }
 
         public override bool CheckInteropAvailability() => true;
+
+        public static Vector3? TryGetHeadlessSpawnPoint()
+        {
+            Type? fikaGameType = AccessTools.TypeByName("Fika.Core.Main.GameMode.IFikaGame");
+            if (fikaGameType == null) return null;
+
+            Type fikaGameSingletonType = typeof(Singleton<>).MakeGenericType(fikaGameType);
+            PropertyInfo? instanceProperty = AccessTools.Property(fikaGameSingletonType, "Instance");
+            object? fikaGame = instanceProperty?.GetValue(null);
+            if (fikaGame == null) return null;
+
+            PropertyInfo? baseGameControllerProperty = AccessTools.Property(fikaGameType, "GameController");
+            object? baseGameController = baseGameControllerProperty?.GetValue(fikaGame);
+
+            Type? baseGameControllerType = AccessTools.TypeByName("Fika.Core.Main.GameMode.BaseGameController");
+            PropertyInfo? spawnPointProperty = AccessTools.Property(baseGameControllerType, "SpawnPoint");
+            ISpawnPoint? spawnPoint = spawnPointProperty?.GetValue(baseGameController) as ISpawnPoint;
+
+            return spawnPoint?.Position;
+        }
     }
 }

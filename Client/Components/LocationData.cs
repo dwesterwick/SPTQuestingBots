@@ -9,6 +9,7 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using HarmonyLib;
+using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
@@ -424,7 +425,7 @@ namespace QuestingBots.Components
             return false;
         }
 
-        public Vector3? GetMainPlayerPosition()
+        public static Vector3? GetMainPlayerPosition()
         {
             if (Singleton<GameWorld>.Instance == null)
             {
@@ -432,10 +433,9 @@ namespace QuestingBots.Components
             }
 
             // Fika Headless client does not have a MainPlayer
-            // TODO: Find an alternative?
             if (Singleton<GameWorld>.Instance.MainPlayer == null)
             {
-                return null;
+                return HeadlessModInfo.TryGetHeadlessSpawnPoint();
             }
 
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
