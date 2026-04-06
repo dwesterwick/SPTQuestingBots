@@ -4,7 +4,6 @@ using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Configuration;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -32,7 +31,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             minMaxSearchTimeAfterCombat = ExternalModHandler.GetSearchTimeAfterCombat(brainName);
         }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             IsInCombat = isInCombat();
         }

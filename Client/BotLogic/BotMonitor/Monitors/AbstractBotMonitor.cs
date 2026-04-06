@@ -33,8 +33,9 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public virtual void Start() { }
 
-        public virtual void Update() { }
-
+        public virtual void UpdateAlways() { }
+        public virtual void UpdateIfQuesting() { }
+        
         public virtual void OnDestroy() { }
     }
 }

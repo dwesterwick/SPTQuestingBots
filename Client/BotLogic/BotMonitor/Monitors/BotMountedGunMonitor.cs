@@ -21,7 +21,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             stationaryWSLayerMonitor.Init(BotOwner, "StationaryWS");
         }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             WantsToUseStationaryWeapon = wantsToUseStationaryWeapon();
         }

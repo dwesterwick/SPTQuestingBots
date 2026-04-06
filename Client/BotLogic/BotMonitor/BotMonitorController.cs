@@ -64,13 +64,15 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return;
             }
 
+            monitors.Values.ExecuteForEach(monitor => monitor.UpdateAlways());
+
             if (!objectiveManager.IsQuestingAllowed)
             {
                 questingDecisionMonitor.ForceDecision(BotQuestingDecision.None);
                 return;
             }
 
-            monitors.Values.ExecuteForEach(monitor => monitor.Update());
+            monitors.Values.ExecuteForEach(monitor => monitor.UpdateIfQuesting());
         }
 
         protected void OnDestroy()

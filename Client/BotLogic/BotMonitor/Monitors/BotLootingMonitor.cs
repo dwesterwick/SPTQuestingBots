@@ -40,7 +40,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             lootFunction = ExternalModHandler.CreateLootFunction(BotOwner);
         }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             IsLooting = lootFunction.IsLooting();
             IsSearchingForLoot = lootFunction.IsSearchingForLoot();

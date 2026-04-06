@@ -55,7 +55,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             extractFunction = ExternalModHandler.CreateExtractFunction(BotOwner);
         }
 
-        public override void Update()
+        public override void UpdateAlways()
         {
             IsTryingToExtract = extractFunction.IsTryingToExtract();
         }

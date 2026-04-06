@@ -47,7 +47,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             updateMaxSuspiciousTime();
         }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             IsSuspicious = isSuspicious();
         }

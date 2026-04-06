@@ -36,7 +36,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public BotQuestingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             HasABoss = BotHiveMindMonitor.HasBoss(BotOwner);
             HasAQuestingBoss = HasABoss && BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner);

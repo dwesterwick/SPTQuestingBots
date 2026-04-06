@@ -72,7 +72,7 @@ namespace QuestingBots.BotLogic.BotMonitor
             CurrentDecision = decision;
         }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             HasAQuestingBoss = BotMonitor.GetMonitor<BotQuestingMonitor>().HasAQuestingBoss;
             CurrentDecision = getDecision();

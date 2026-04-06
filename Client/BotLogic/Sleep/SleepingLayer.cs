@@ -68,26 +68,13 @@ namespace QuestingBots.BotLogic.Sleep
             }
             int distanceFromHumans = Math.Min(mapSpecificHumanDistance, QuestingBotsPluginConfig.SleepingMinDistanceToHumansGlobal.Value);
 
-            // Check if the bot is currently allowed to quest
-            if ((objectiveManager?.IsQuestingAllowed == true) || (objectiveManager?.IsInitialized == false))
+            // Check bots are allowed to sleep on the current map
+            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value || !QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(currentMap))
             {
-                // Check if bots that can quest are allowed to sleep
-                if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value)
+                if (isQuestingOrExtracting(BotOwner))
                 {
                     return updatePreviousState(false);
                 }
-
-                // If the bot can quest and is allowed to sleep, ensure it's allowed to sleep on the current map
-                if (!QuestingBotsPluginConfig.MapsToAllowSleepingForQuestingBots.Value.HasFlag(currentMap))
-                {
-                    return updatePreviousState(false);
-                }
-            }
-
-            // Allow bots to extract so new ones can spawn
-            if (!QuestingBotsPluginConfig.SleepingEnabledForQuestingBots.Value && (objectiveManager?.BotMonitor?.GetMonitor<BotExtractMonitor>()?.IsTryingToExtract == true))
-            {
-                return updatePreviousState(false);
             }
 
             // Ensure there are still alive human players on the map
@@ -121,17 +108,13 @@ namespace QuestingBots.BotLogic.Sleep
 
             foreach (BotOwner bot in allOtherBots)
             {
-                // We only care about other bots that can quest
-                Components.BotObjectiveManager? otherBotObjectiveManager = bot.GetObjectiveManager();
-                if ((otherBotObjectiveManager != null) && otherBotObjectiveManager.IsQuestingAllowed)
+                if (!isQuestingOrExtracting(bot))
                 {
                     continue;
                 }
 
                 // Ignore bots that are in the same group
-
-                List<BotOwner> groupMemberList = bot.BotsGroup.GetAllMembers();
-                if (groupMemberList.Contains(BotOwner))
+                if (BotOwner.BotsGroup.Contains(bot))
                 {
                     continue;
                 }
@@ -145,6 +128,27 @@ namespace QuestingBots.BotLogic.Sleep
 
             setNextAction(BehaviorExtensions.BotActionType.Sleep, "Sleep");
             return updatePreviousState(true);
+        }
+
+        private bool isQuestingOrExtracting(BotOwner bot)
+        {
+            Components.BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+            if (objectiveManager == null)
+            {
+                return false;
+            }
+
+            if (objectiveManager.IsQuestingAllowed || !objectiveManager.IsInitialized)
+            {
+                return true;
+            }
+
+            if (objectiveManager.BotMonitor.GetMonitor<BotExtractMonitor>()?.IsTryingToExtract == true)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool isSleeplessBot()

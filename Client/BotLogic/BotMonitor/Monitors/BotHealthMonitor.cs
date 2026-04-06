@@ -31,7 +31,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public BotHealthMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
-        public override void Update()
+        public override void UpdateIfQuesting()
         {
             if (IsMonitoringPaused)
             {
