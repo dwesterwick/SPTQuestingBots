@@ -274,7 +274,9 @@
 		"player_scav_brain_conversion_chances_overrides": {
 			"enabled": false,
 			"chances": {
-				"assault": 1,
+				"assault": 0,
+				"bossKilla": 0,
+				"pmcBot": 0,
 				"pmcBEAR": 2,
 				"pmcUSEC": 2
 			}

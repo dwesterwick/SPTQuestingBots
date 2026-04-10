@@ -328,7 +328,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 **PMC and Player-Scav Spawning Options:**
 * **bot_spawns.enabled**: Allow this mod to spawn PMC's and player Scavs (**true** by default). 
 * **bot_spawns.blacklisted_pmc_bot_brains**: An array of the bot "brain" types that SPT will not be able to use when generating initial PMC's. These "brain" types have behaviors that inhibit their ability to quest, and this causes them to get stuck in areas for a long time (including their spawn locations). **Do not change this unless you know what you're doing!**
-* **bot_spawns.player_scav_brain_conversion_chances_overrides.enabled**: Allows this mod to override the chances that player Scav brains will be replaced by another brain type. Currently, this causes problems such as normal Scavs attacking player Scavs and player-Scav kills being treated as PMC or boss kills. This is **false** by default. **Do not change this unless you know what you're doing!**
+* **bot_spawns.player_scav_brain_conversion_chances_overrides.enabled**: Allows this mod to override the chances that player Scav brains will be replaced by another brain type. This is **false** by default. **Do not change this unless you know what you're doing!**
 * **bot_spawns.player_scav_brain_conversion_chances_overrides.chances**: The chances that player Scav brain types will be changed to the ones in this dictionary. The brain types in this setting will be added to (or overwrite) the brain types in SPT's configuration, but brain types in SPT's configuration that are not in this setting will not be removed. 
 * **bot_spawns.spawn_retry_time**: If any bots fail to spawn, no other attempts will be made to spawn more of them for this amount of time (in seconds). By default, this is **10** s.
 * **bot_spawns.delay_game_start_until_bot_gen_finishes**: After the final loading screen shows "0:00.000" for a few seconds, the game will be further delayed from starting if not all bots have been generated. Without doing this, PMC's may not spawn immediately when the raid starts, and the remaining bots will take much longer to generate. This is **true** by default. 
@@ -385,7 +385,8 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 * Extraction via Questing Bots is only partially implemented
-* Spawn rush quests do not work when using Fika
+* Looting via Questing Bots only allows bots to travel toward loot POI's (via vanilla EFT logic), so they rarely loot while questing
+* Player Scavs will only extract when using SPT 4.0.14 or later or when using SAIN without vanilla Scavs turned on
 
 **---------- Credits ----------**
 
