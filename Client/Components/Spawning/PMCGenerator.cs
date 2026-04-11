@@ -176,6 +176,11 @@ namespace QuestingBots.Components.Spawning
                 return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidFactory;
             }
 
+            if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("labyrinth"))
+            {
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidLabyrinth;
+            }
+
             return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
         }
     }

@@ -93,6 +93,10 @@ namespace QuestingBots.BotLogic.Objective
                     }
                     return updatePreviousState(true);
 
+                case QuestAction.Teleport:
+                    setNextAction(BotActionType.Teleport, "Teleport");
+                    return updatePreviousState(true);
+
                 case QuestAction.HoldAtPosition:
                     setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
                     return updatePreviousState(true);

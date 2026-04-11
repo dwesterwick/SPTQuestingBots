@@ -7,7 +7,6 @@ using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -82,6 +81,7 @@ namespace QuestingBots.BotLogic.Objective
             System.Random random = new System.Random();
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
+                Singleton<LoggingUtil>.Instance.LogInfo("Chance of " + BotOwner.GetText() + " having the key for " + ObjectiveManager + ": " + ObjectiveManager.ChanceOfHavingKey);
                 Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for door " + worldInteractiveObject.Id + ". Selecting another objective...");
 
                 ObjectiveManager.FailObjective();

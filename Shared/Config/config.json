@@ -136,6 +136,7 @@
 					"rezervbase": 120,
 					"interchange": 120,
 					"laboratory": 60,
+					"labyrinth": 120,
 					"tarkovstreets": 120,
 					"sandbox": 120,
 					"sandbox_high": 120
@@ -215,6 +216,7 @@
 				"rezervbase": 0.4,
 				"interchange": 0.7,
 				"laboratory": 0.3,
+				"labyrinth": 0.2,
 				"tarkovstreets": 0.7,
 				"sandbox": 0.5,
 				"sandbox_high": 0.5
@@ -302,6 +304,7 @@
 				"rezervbase": 0,
 				"interchange": 0,
 				"laboratory": 0,
+				"labyrinth": 0,
 				"tarkovstreets": 0,
 				"sandbox": 0,
 				"sandbox_high": 0
@@ -324,6 +327,7 @@
 			"rezervbase": 7,
 			"interchange": 8,
 			"laboratory": 9,
+			"labyrinth": 5,
 			"tarkovstreets": 8,
 			"sandbox": 7,
 			"sandbox_high": 7
@@ -335,33 +339,34 @@
 			"global_scav_enemy_chance": 100,
 			"pmc_enemy_roles": ["pmcBEAR", "pmcUSEC", "assault", "marksman", "assaultGroup"]
 		},
-		"pmcs" : {
+		"pmcs": {
 			"enabled": true,
 			"min_raid_time_remaining": 180,
 			"min_distance_from_players_initial": 25,
 			"min_distance_from_players_during_raid": 75,
 			"min_distance_from_players_during_raid_factory": 50,
+			"min_distance_from_players_during_raid_labyrinth": 35,
 			"fraction_of_max_players_vs_raidET": [
-				[0, 0.2],
-				[0.2, 0.2],
-				[0.6, 0.5],
-				[0.8, 0.7],
-				[0.9, 0.9],
-				[0.95, 1],
-				[1, 1]
+				[ 0, 0.2 ],
+				[ 0.2, 0.2 ],
+				[ 0.6, 0.5 ],
+				[ 0.8, 0.7 ],
+				[ 0.9, 0.9 ],
+				[ 0.95, 1 ],
+				[ 1, 1 ]
 			],
-			"bots_per_group_distribution" : [
-				[1, 40],
-				[2, 30],
-				[3, 22],
-				[4, 5],
-				[5, 3]
+			"bots_per_group_distribution": [
+				[ 1, 40 ],
+				[ 2, 30 ],
+				[ 3, 22 ],
+				[ 4, 5 ],
+				[ 5, 3 ]
 			],
-			"bot_difficulty_as_online" : [
-				[0, 25],
-				[1, 50],
-				[2, 20],
-				[3, 5]
+			"bot_difficulty_as_online": [
+				[ 0, 25 ],
+				[ 1, 50 ],
+				[ 2, 20 ],
+				[ 3, 5 ]
 			]
 		},
 		"player_scavs": {
@@ -370,20 +375,21 @@
 			"min_distance_from_players_initial": 25,
 			"min_distance_from_players_during_raid": 75,
 			"min_distance_from_players_during_raid_factory": 35,
+			"min_distance_from_players_during_raid_labyrinth": 35,
 			"fraction_of_max_players": 1.5,
 			"time_randomness": 10,
-			"bots_per_group_distribution" : [
-				[1, 75],
-				[2, 16],
-				[3, 5],
-				[4, 3],
-				[5, 1]
+			"bots_per_group_distribution": [
+				[ 1, 75 ],
+				[ 2, 16 ],
+				[ 3, 5 ],
+				[ 4, 3 ],
+				[ 5, 1 ]
 			],
-			"bot_difficulty_as_online" : [
-				[0, 33],
-				[1, 65],
-				[2, 10],
-				[3, 2]
+			"bot_difficulty_as_online": [
+				[ 0, 33 ],
+				[ 1, 65 ],
+				[ 2, 10 ],
+				[ 3, 2 ]
 			]
 		}
 	},

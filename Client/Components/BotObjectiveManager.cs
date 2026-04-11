@@ -39,6 +39,7 @@ namespace QuestingBots.Components
 
         public Vector3? Position => assignment?.Position;
         public Vector3? LookToPosition => assignment?.LookToPosition;
+        public Vector3? TargetPosition => assignment?.TargetPosition;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public string DoorIDToUnlockForObjective => assignment?.QuestObjectiveAssignment?.DoorIDToUnlock ?? "";
@@ -48,6 +49,8 @@ namespace QuestingBots.Components
         public double MinElapsedActionTime => assignment?.MinElapsedTime ?? 0;
         public float ChanceOfHavingKey => assignment?.QuestObjectiveStepAssignment?.ChanceOfHavingKey ?? 0;
         public float? MaxDistanceForCurrentStep => assignment?.QuestObjectiveStepAssignment?.MaxDistance;
+        public bool IgnoreHearing => assignment?.IgnoreHearing ?? false;
+        public double? WaitTimeAfterCompleting => assignment?.QuestObjectiveStepAssignment?.WaitTimeAfterCompleting;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
@@ -245,7 +248,7 @@ namespace QuestingBots.Components
 
             BotPath.ClearPath();
 
-            float duration = (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 5;
+            float duration = (float)WaitTimeAfterCompleting!.Value + 5;
             UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, duration);
 
             foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))

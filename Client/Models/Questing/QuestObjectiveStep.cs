@@ -8,7 +8,6 @@ using EFT;
 using EFT.Interactive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using UnityEngine;
@@ -19,6 +18,7 @@ namespace QuestingBots.Models.Questing
     {
         Undefined,
         MoveToPosition,
+        Teleport,
         HoldAtPosition,
         Ambush,
         Snipe,
@@ -39,6 +39,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("lookToPosition")]
         public SerializableVector3 SerializableLookToPosition { get; set; } = null!;
 
+        [JsonProperty("targetPosition")]
+        public SerializableVector3 SerializableTargetPosition { get; set; } = null!;
+
         [JsonProperty("stepType")]
         [JsonConverter(typeof(StringEnumConverter))]
         public QuestAction ActionType { get; set; } = QuestAction.MoveToPosition;
@@ -54,6 +57,9 @@ namespace QuestingBots.Models.Questing
 
         [JsonProperty("chanceOfHavingKey")]
         public float ChanceOfHavingKey { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
+
+        [JsonProperty("ignoreHearing")]
+        public bool IgnoreHearing { get; set; } = false;
 
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;
@@ -109,6 +115,16 @@ namespace QuestingBots.Models.Questing
             }
 
             return SerializableLookToPosition.ToUnityVector3();
+        }
+
+        public Vector3? GetTargetPosition()
+        {
+            if ((SerializableTargetPosition == null) || SerializableTargetPosition.Any(float.NaN))
+            {
+                return null;
+            }
+
+            return SerializableTargetPosition.ToUnityVector3();
         }
 
         public void SetPosition(Vector3? position)

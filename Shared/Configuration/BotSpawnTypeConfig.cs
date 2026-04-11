@@ -25,6 +25,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "min_distance_from_players_during_raid_factory", IsRequired = true)]
         public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
 
+        [DataMember(Name = "min_distance_from_players_during_raid_labyrinth", IsRequired = true)]
+        public float MinDistanceFromPlayersDuringRaidLabyrinth { get; set; } = 35;
+
         [DataMember(Name = "fraction_of_max_players")]
         public float FractionOfMaxPlayers { get; set; } = 1;
 

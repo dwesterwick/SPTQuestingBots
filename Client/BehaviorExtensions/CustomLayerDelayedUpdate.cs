@@ -13,6 +13,7 @@ namespace QuestingBots.BehaviorExtensions
     {
         Undefined,
         GoToObjective,
+        Teleport,
         FollowBoss,
         HoldPosition,
         Ambush,
@@ -62,6 +63,7 @@ namespace QuestingBots.BehaviorExtensions
             switch (nextAction)
             {
                 case BotActionType.GoToObjective: return new Action(typeof(BotLogic.Objective.GoToObjectiveAction), actionReason);
+                case BotActionType.Teleport: return new Action(typeof(BotLogic.Objective.TeleportAction), actionReason);
                 case BotActionType.FollowBoss: return new Action(typeof(BotLogic.Follow.FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(BotLogic.Objective.HoldAtObjectiveAction), actionReason);
                 case BotActionType.Ambush: return new Action(typeof(BotLogic.Objective.AmbushAction), actionReason);
