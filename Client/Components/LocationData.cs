@@ -27,7 +27,6 @@ namespace QuestingBots.Components
         public RaidSettings CurrentRaidSettings { get; private set; } = null!;
 
         private readonly DateTime awakeTime = DateTime.Now;
-        private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
@@ -39,8 +38,6 @@ namespace QuestingBots.Components
 
         protected void Awake()
         {
-            gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
-
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
             if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
@@ -834,13 +831,10 @@ namespace QuestingBots.Components
                 }
 
                 // Ensure a player can interact with the door
-                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, worldInteractiveObject);
-                if ((availableActionsResult == null) || !availableActionsResult.Actions.Any())
+                if (!worldInteractiveObject.enabled || !worldInteractiveObject.Operatable)
                 {
                     continue;
                 }
-
-                //Singleton<LoggingUtil>.Instance.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
                 Vector3? interactionPosition = GetDoorInteractionPosition(worldInteractiveObject, startingPosition);
                 if (interactionPosition.HasValue)
