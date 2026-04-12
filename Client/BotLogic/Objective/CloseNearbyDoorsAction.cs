@@ -217,14 +217,14 @@ namespace QuestingBots.BotLogic.Objective
 
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(possibleInteractionPosition, Color.yellow, searchRadius);
+                    DebugHelpers.DrawPositionOutline(possibleInteractionPosition, Color.yellow, searchRadius);
                 }
             }
             else
             {
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(navMeshPosition.Value, Color.green);
+                    DebugHelpers.DrawPositionOutline(navMeshPosition.Value, Color.green);
                 }
             }
 

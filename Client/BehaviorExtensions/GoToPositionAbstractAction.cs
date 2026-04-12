@@ -224,7 +224,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            DebugHelpers.outlinePosition(ObjectiveManager.Position.Value, color);
+            DebugHelpers.DrawPositionOutline(ObjectiveManager.Position.Value, color);
         }
 
         protected void updateBotZoneForGroup(bool allowForFollowers = false)

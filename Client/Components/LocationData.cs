@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.GameTriggers;
 using EFT.Interactive;
 using HarmonyLib;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
@@ -14,6 +9,13 @@ using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,7 +32,8 @@ namespace QuestingBots.Components
         private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
+        private Dictionary<GameObject, List<TriggerZone>> triggerZonesForTraps = new Dictionary<GameObject, List<TriggerZone>>();
+        private Dictionary<string, EFT.Interactive.Switch> IdsForSwitches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
         private Dictionary<WorldInteractiveObject, bool> areLockedDoorsUnlocked = new Dictionary<WorldInteractiveObject, bool>();
         private Dictionary<WorldInteractiveObject, Vector3> doorInteractionPositions = new Dictionary<WorldInteractiveObject, Vector3>();
@@ -40,6 +43,8 @@ namespace QuestingBots.Components
         protected void Awake()
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
+
+            Singleton<BotEventHandler>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
@@ -80,9 +85,27 @@ namespace QuestingBots.Components
             BotObjectiveManagerFactory.Clear();
         }
 
+        protected void OnDestroy()
+        {
+            Singleton<BotEventHandler>.Instance.OnEvent -= HandleBotEvent;
+        }
+
         protected void Update()
         {
             handleCustomQuestKeypress();
+        }
+
+        private void HandleBotEvent(string id)
+        {
+            if (id == "alarm")
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Alarm enabled");
+            }
+
+            if (id == "alarm_stop")
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Alarm disabled");
+            }
         }
 
         public void UpdateMaxTotalBots()
@@ -114,22 +137,108 @@ namespace QuestingBots.Components
 
         public void FindAllInteractiveObjects()
         {
+            FindAllTraps();
             FindAllSwitches();
             FindAllLockedDoors();
         }
 
+        public void FindAllTraps()
+        {
+            triggerZonesForTraps.Clear();
+
+            IEnumerable<TriggerZone> allTraps = FindObjectsOfType<TriggerZone>()
+                .Where(zone => zone.TriggerTag == TriggerZone.ETriggerTag.Trap);
+
+            foreach (TriggerZone trap in allTraps)
+            {
+                HandlerDamage handlerDamage = trap.gameObject.GetComponent<HandlerDamage>();
+                if (handlerDamage == null)
+                {
+                    continue;
+                }
+
+                Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
+
+                if (triggerZonesForTraps.ContainsKey(trap.gameObject))
+                {
+                    triggerZonesForTraps[trap.gameObject].Add(trap);
+                    continue;
+                }
+
+                triggerZonesForTraps.Add(trap.gameObject, new List<TriggerZone>() { trap });
+            }
+        }
+
         public void FindAllSwitches()
         {
-            switches.Clear();
+            IdsForSwitches.Clear();
 
             EFT.Interactive.Switch[] allSwitches = FindObjectsOfType<EFT.Interactive.Switch>();
-            switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
+            IdsForSwitches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
             
             //Singleton<LoggingUtil>.Instance.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
 
             foreach (EFT.Interactive.Switch sw in allSwitches)
             {
                 sw.OnDoorStateChanged += reportSwitchChange;
+
+                HandlerTriggerState handlerTriggerState = sw.gameObject.GetComponent<HandlerTriggerState>();
+                if (handlerTriggerState == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(sw.gameObject.name + " does not have a HandlerTriggerState");
+                    continue;
+                }
+
+                FieldInfo controlledTriggerIdsField = AccessTools.Field(typeof(HandlerTriggerState), "_controlledTriggerId");
+                string[]? controlledTriggerIds = controlledTriggerIdsField?.GetValue(handlerTriggerState) as string[];
+                if (controlledTriggerIds == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not get _controlledTriggerId for " + handlerTriggerState.gameObject.name);
+                    continue;
+                }
+
+                FieldInfo triggerIdField = AccessTools.Field(typeof(TriggerZone), "_triggerId");
+
+                foreach (List<TriggerZone> triggerZones in triggerZonesForTraps.Values)
+                {
+                    foreach (TriggerZone triggerZone in triggerZones)
+                    {
+                        string? triggerId = triggerIdField.GetValue(triggerZone) as string;
+                        if (triggerId == null)
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Could not get _triggerId for " + triggerZone.gameObject.name);
+                            continue;
+                        }
+
+                        if (!controlledTriggerIds.Any(x => x == triggerId))
+                        {
+                            //Singleton<LoggingUtil>.Instance.LogInfo(sw.gameObject.name + " does not control " + triggerId + ". Controlled Ids = " + string.Join(",", controlledTriggerIds));
+                            continue;
+                        }
+
+                        Collider collider = triggerZone.gameObject.GetComponent<Collider>();
+                        if (collider == null)
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Could not get Collider for " + triggerZone.gameObject.name);
+                            continue;
+                        }
+
+                        NavMeshObstacle navMeshObstacle = triggerZone.gameObject.GetOrAddComponent<NavMeshObstacle>();
+                        navMeshObstacle.shape = NavMeshObstacleShape.Box;
+                        navMeshObstacle.center = Vector3.zero;
+                        navMeshObstacle.size = collider.bounds.size;
+                        navMeshObstacle.carving = true;
+
+                        Singleton<LoggingUtil>.Instance.LogInfo("Added NavMeshObstacle for " + triggerZone.gameObject.name + " at " + navMeshObstacle.transform.position + " with size " + navMeshObstacle.size);
+
+                        if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+                        {
+                            Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(collider.bounds);
+                            Models.Pathing.PathVisualizationData boundingBox = new Models.Pathing.PathVisualizationData("Trap_" + triggerZone.gameObject.name, colliderBounds, Color.red);
+                            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox);
+                        }
+                    }
+                }
             }
         }
 
@@ -140,9 +249,9 @@ namespace QuestingBots.Components
 
         public EFT.Interactive.Switch FindSwitch(string id)
         {
-            if (switches.ContainsKey(id))
+            if (IdsForSwitches.ContainsKey(id))
             {
-                return switches[id];
+                return IdsForSwitches[id];
             }
 
             return null!;
@@ -749,7 +858,7 @@ namespace QuestingBots.Components
 
                     if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                     {
-                        DebugHelpers.outlinePosition(possibleInteractionPosition, Color.white, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                        DebugHelpers.DrawPositionOutline(possibleInteractionPosition, Color.white, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                     }
 
                     continue;
@@ -770,7 +879,7 @@ namespace QuestingBots.Components
 
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(navMeshPosition.Value, Color.yellow);
+                    DebugHelpers.DrawPositionOutline(navMeshPosition.Value, Color.yellow);
                 }
             }
 
@@ -783,11 +892,11 @@ namespace QuestingBots.Components
                 // If applicable, draw the positions in the world
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(orderedPostions.First(), Color.green);
+                    DebugHelpers.DrawPositionOutline(orderedPostions.First(), Color.green);
 
                     foreach (Vector3 alternatePosition in orderedPostions.Skip(1))
                     {
-                        DebugHelpers.outlinePosition(alternatePosition, Color.magenta);
+                        DebugHelpers.DrawPositionOutline(alternatePosition, Color.magenta);
                     }
                 }
 
