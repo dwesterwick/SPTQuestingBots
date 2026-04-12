@@ -50,6 +50,7 @@ namespace QuestingBots.Components
         public float ChanceOfHavingKey => assignment?.QuestObjectiveStepAssignment?.ChanceOfHavingKey ?? 0;
         public float? MaxDistanceForCurrentStep => assignment?.QuestObjectiveStepAssignment?.MaxDistance;
         public bool IgnoreHearing => assignment?.IgnoreHearing ?? false;
+        public bool ForceUnlock => assignment?.ForceUnlock ?? false;
         public double? WaitTimeAfterCompleting => assignment?.QuestObjectiveStepAssignment?.WaitTimeAfterCompleting;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;

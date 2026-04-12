@@ -26,7 +26,7 @@
             }
           },
           {
-            "waitTimeAfterCompleting": 5,
+            "waitTimeAfterCompleting": 30,
             "ignoreHearing": true,
             "position": {
               "x": -44.29326,
@@ -35,32 +35,12 @@
             }
           },
           {
-            "waitTimeAfterCompleting": 5,
-            "ignoreHearing": true,
-            "position": {
-              "x": -24.4604473,
-              "y": 0.52335006,
-              "z": 65.75551
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 5,
-            "ignoreHearing": true,
-            "chanceOfHavingKey": 100,
-            "position": {
-              "x": -23.78035,
-              "y": 0.52335006,
-              "z": 62.80357
-            }
-          },
-          {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "chanceOfHavingKey": 100,
             "position": {
-              "x": -31.9053783,
-              "y": 0.5485316,
-              "z": 56.5732269
+              "x": -42.1979752,
+              "y": 0.539007,
+              "z": 70.82165
             }
           },
           {
@@ -69,9 +49,9 @@
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00005",
             "position": {
-              "x": -31.9053783,
-              "y": 0.5485316,
-              "z": 56.5732269
+              "x": -42.1979752,
+              "y": 0.539007,
+              "z": 70.82165
             }
           },
           {
@@ -153,6 +133,7 @@
             "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "set_valve_01",
+            "forceUnlock": true,
             "position": {
               "x": 2.80494952,
               "y": 0.637732148,
@@ -224,6 +205,7 @@
             "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStuff_000033",
+            "forceUnlock": true,
             "position": {
               "x": -48.9607468,
               "y": 0.547223,
@@ -234,9 +216,9 @@
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
             "position": {
-              "x": -43.658165,
-              "y": 0.5686257,
-              "z": -9.651543
+              "x": -44.9795647,
+              "y": 0.5426926,
+              "z": -12.6429844
             }
           },
           {
@@ -245,9 +227,9 @@
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00003",
             "position": {
-              "x": -43.658165,
-              "y": 0.5686257,
-              "z": -9.651543
+              "x": -44.9795647,
+              "y": 0.5426926,
+              "z": -12.6429844
             }
           },
           {
@@ -374,6 +356,7 @@
             "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00006",
+            "forceUnlock": true,
             "position": {
               "x": 39.2842026,
               "y": -0.6290565,
@@ -384,9 +367,9 @@
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
             "position": {
-              "x": 45.2514839,
-              "y": -0.27668786,
-              "z": 11.593379
+              "x": 39.2842026,
+              "y": -0.6290565,
+              "z": 21.0950718
             }
           },
           {
@@ -395,9 +378,9 @@
             "stepType": "ToggleSwitch",
             "switchID": "disable_traps_04",
             "position": {
-              "x": 45.2514839,
-              "y": -0.27668786,
-              "z": 11.593379
+              "x": 39.2842026,
+              "y": -0.6290565,
+              "z": 21.0950718
             }
           },
           {

@@ -18,7 +18,6 @@ namespace QuestingBots.BotLogic.Objective
     {
         private WorldInteractiveObject worldInteractiveObject = null!;
         private Vector3? interactionPosition = null!;
-        private IResult keyGenerationResult = null!;
         private KeyComponent keyComponent = null!;
         private DependencyGraphClass<IEasyBundle>.GClass1659 bundleLoader = null!;
 
@@ -166,14 +165,6 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
-            // Check if EFT was unable to generate the key for the bot
-            if (keyGenerationResult?.Failed == true)
-            {
-                ObjectiveManager.FailObjective();
-
-                return;
-            }
-
             if (checkIfBotIsStuck())
             {
                 Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while trying to unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
@@ -258,7 +249,7 @@ namespace QuestingBots.BotLogic.Objective
             InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(interactionType, BotOwner, keyComponent);
 
             // Instruct the bot to unlock the door
-            BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
+            BotOwner.InteractWithWorldInteractiveObject(worldInteractiveObject, interactionResult);
 
             Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + worldInteractiveObject.Id);
 

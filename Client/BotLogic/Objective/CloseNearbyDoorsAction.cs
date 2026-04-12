@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using UnityEngine;
@@ -189,17 +188,6 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             return openNearbyDoors.First();
-        }
-
-        private void debugOpenNearbyDoors()
-        {
-            foreach (Door door in nearbyDoors)
-            {
-                if (door.DoorState == EDoorState.Shut)
-                {
-                    door.Interact(new InteractionResult(EInteractionType.Open));
-                }
-            }
         }
 
         private Vector3? getInteractionPosition(Door door)

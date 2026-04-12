@@ -58,6 +58,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("chanceOfHavingKey")]
         public float ChanceOfHavingKey { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DefaultChanceOfBotsHavingKeys;
 
+        [JsonProperty("forceUnlock")]
+        public bool ForceUnlock { get; set; } = false;
+
         [JsonProperty("ignoreHearing")]
         public bool IgnoreHearing { get; set; } = false;
 

@@ -41,6 +41,7 @@ namespace QuestingBots.Models.Questing
         public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
         public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
         public bool IgnoreHearing => QuestObjectiveStepAssignment?.IgnoreHearing ?? false;
+        public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
 
         public BotJobAssignment(BotOwner bot)
         {

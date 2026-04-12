@@ -51,7 +51,7 @@ namespace QuestingBots.BehaviorExtensions
 
             if (ObjectiveManager.IgnoreHearing)
             {
-                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing(9999, true);
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing(float.MaxValue, true);
             }
         }
 

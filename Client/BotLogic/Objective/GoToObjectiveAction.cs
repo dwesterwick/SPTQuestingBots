@@ -278,7 +278,7 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(EInteractionType.Open, BotOwner);
-            BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
+            BotOwner.InteractWithWorldInteractiveObject(worldInteractiveObject, interactionResult);
         }
     }
 }
