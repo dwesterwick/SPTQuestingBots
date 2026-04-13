@@ -37,15 +37,6 @@
           {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "position": {
-              "x": -42.1979752,
-              "y": 0.539007,
-              "z": 70.82165
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00005",
             "position": {
@@ -57,25 +48,16 @@
           {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "position": {
-              "x": -37.48438,
-              "y": 0.175667807,
-              "z": 57.7625427
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "stepType": "Teleport",
             "position": {
-              "x": -37.48438,
-              "y": 0.175667807,
-              "z": 57.7625427
+              "x": -37.3363571,
+              "y": 0.483774751,
+              "z": 59.1971436
             },
             "targetPosition": {
-              "x": -39.0446854,
-              "y": 0.192673653,
-              "z": 49.6448174
+              "x": -39.1878,
+              "y": 0.531291246,
+              "z": 48.35091
             }
           },
           {
@@ -109,6 +91,16 @@
         "maxRunDistance": 25,
         "steps": [
           {
+            "waitTimeAfterCompleting": 1,
+            "ignoreHearing": true,
+            "chanceOfHavingKey": 100,
+            "position": {
+              "x": -6.20759153,
+              "y": 1.58818936,
+              "z": -35.1151
+            }
+          },
+          {
             "waitTimeAfterCompleting": 20,
             "ignoreHearing": true,
             "chanceOfHavingKey": 100,
@@ -116,16 +108,6 @@
               "x": -9.767155,
               "y": 3.802609,
               "z": -31.79131
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
-            "chanceOfHavingKey": 100,
-            "position": {
-              "x": 2.80494952,
-              "y": 0.637732148,
-              "z": -32.868412
             }
           },
           {
@@ -194,15 +176,6 @@
           {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "position": {
-              "x": -48.9607468,
-              "y": 0.547223,
-              "z": -13.5182972
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStuff_000033",
             "forceUnlock": true,
@@ -210,15 +183,6 @@
               "x": -48.9607468,
               "y": 0.547223,
               "z": -13.5182972
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
-            "position": {
-              "x": -44.9795647,
-              "y": 0.5426926,
-              "z": -12.6429844
             }
           },
           {
@@ -285,15 +249,6 @@
           {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "position": {
-              "x": 23.732193,
-              "y": 0.0873561651,
-              "z": 59.7018433
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "disable_traps_01",
             "position": {
@@ -345,27 +300,9 @@
           {
             "waitTimeAfterCompleting": 1,
             "ignoreHearing": true,
-            "position": {
-              "x": 39.2842026,
-              "y": -0.6290565,
-              "z": 21.0950718
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00006",
             "forceUnlock": true,
-            "position": {
-              "x": 39.2842026,
-              "y": -0.6290565,
-              "z": 21.0950718
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
-            "ignoreHearing": true,
             "position": {
               "x": 39.2842026,
               "y": -0.6290565,
@@ -415,14 +352,6 @@
         "steps": [
           {
             "waitTimeAfterCompleting": 1,
-            "position": {
-              "x": 0.9994007,
-              "y": 0.163983509,
-              "z": 5.62948656
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",
             "switchID": "disable_traps_07",
             "position": {
@@ -452,14 +381,6 @@
         "maxDistanceFromBot": 25,
         "maxRunDistance": 5,
         "steps": [
-          {
-            "waitTimeAfterCompleting": 1,
-            "position": {
-              "x": -7.34220934,
-              "y": 0.1207518,
-              "z": 1.23809922
-            }
-          },
           {
             "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",
@@ -493,14 +414,6 @@
         "steps": [
           {
             "waitTimeAfterCompleting": 1,
-            "position": {
-              "x": -13.7114506,
-              "y": 0.115415357,
-              "z": 37.0583038
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00000",
             "position": {
@@ -532,14 +445,6 @@
         "steps": [
           {
             "waitTimeAfterCompleting": 1,
-            "position": {
-              "x": -4.39649868,
-              "y": 0.102459818,
-              "z": 54.80464
-            }
-          },
-          {
-            "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStaff_00001",
             "position": {
@@ -569,14 +474,6 @@
         "maxDistanceFromBot": 25,
         "maxRunDistance": 5,
         "steps": [
-          {
-            "waitTimeAfterCompleting": 1,
-            "position": {
-              "x": 8.73315048,
-              "y": 0.0994715,
-              "z": 27.4438572
-            }
-          },
           {
             "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",

@@ -64,6 +64,8 @@ namespace QuestingBots.Components
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
         public void RetryPath() => assignment.HasCompletePath = true;
 
+        public double? TimeSinceJobAssigmentStarted() => assignment.TimeSinceStarted();
+
         public override string ToString()
         {
             if (assignment.QuestAssignment != null)

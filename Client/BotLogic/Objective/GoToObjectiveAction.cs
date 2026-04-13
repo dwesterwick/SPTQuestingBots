@@ -154,11 +154,16 @@ namespace QuestingBots.BotLogic.Objective
 
             float distanceToEndOfPath = ObjectiveManager.BotPath.GetDistanceToFinalPoint();
             float distanceToObjective = ObjectiveManager.BotPath.DistanceToTarget;
+
             float missingDistance = ObjectiveManager.BotPath.GetMissingDistanceToTarget();
+            if (float.IsNaN(missingDistance))
+            {
+                missingDistance = distanceToObjective;
+            }
 
             // If the bot is far from its objective position but its path is incomplete, have it try going there anyway. Sometimes I get lost too,
             // so who am I to judge?
-            if (distanceToEndOfPath > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.MaxNavMeshPathError)
+            if (ObjectiveManager.BotPath.HasPath && (distanceToEndOfPath > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.MaxNavMeshPathError))
             {
                 // Check if this is the first time an incomplete path was generated. If so, write a warning message. 
                 if (ObjectiveManager.HasCompletePath)
@@ -212,8 +217,11 @@ namespace QuestingBots.BotLogic.Objective
 
         private bool isAllowedToUnlockDoors()
         {
+            float debounceTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DebounceTime;
+            double? timeSinceStarted = ObjectiveManager.TimeSinceJobAssigmentStarted();
+
             // Don't search for doors every cycle or too many may be selected in a short time
-            if (unlockDebounceTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DebounceTime)
+            if ((unlockDebounceTime < debounceTime) && (timeSinceStarted > debounceTime))
             {
                 return false;
             }

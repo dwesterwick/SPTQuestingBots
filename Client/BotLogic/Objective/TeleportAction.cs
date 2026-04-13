@@ -60,6 +60,11 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
+            if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
             if (!ObjectiveManager.Position.HasValue || !ObjectiveManager.MaxDistanceForCurrentStep.HasValue)
             {
                 throw new InvalidOperationException("Cannot go to a null position");

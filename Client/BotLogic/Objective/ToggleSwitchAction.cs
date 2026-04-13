@@ -93,6 +93,11 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
+            if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
             if (worldInteractiveObject == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Cannot toggle a null switch");
@@ -170,11 +175,13 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if the switch requires a key
-            if (worldInteractiveObject.KeyId != "")
+            if ((worldInteractiveObject.DoorState == EDoorState.Locked) && (worldInteractiveObject.KeyId != ""))
             {
                 // Create the key if the bot does not already have it
                 if (keyComponent == null)
                 {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to identify key " + worldInteractiveObject.KeyId);
+
                     keyComponent = BotOwner.FindKeyComponent(worldInteractiveObject);
 
                     return;
@@ -215,6 +222,8 @@ namespace QuestingBots.BotLogic.Objective
                 InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(EInteractionType.Unlock, BotOwner, keyComponent);
                 BotOwner.InteractWithWorldInteractiveObject(worldInteractiveObject, interactionResult);
 
+                // Switches in Labyrinth only unlock, so the bot shouldn't also try opening them. If they do, the switch gets stuck in EDoorState.Interacting
+                ObjectiveManager.CompleteObjective();
                 return;
             }
 
@@ -224,11 +233,11 @@ namespace QuestingBots.BotLogic.Objective
                 BotOwner.InteractWithWorldInteractiveObject(worldInteractiveObject, interactionResult);
 
                 ObjectiveManager.CompleteObjective();
+                return;
             }
-            else
-            {
-                Singleton<LoggingUtil>.Instance.LogWarning(worldInteractiveObject.InteractingPlayer.GetText() + " is already interacting with switch " + worldInteractiveObject.Id);
-            }
+
+            Singleton<LoggingUtil>.Instance.LogWarning(worldInteractiveObject.InteractingPlayer.GetText() + " is already interacting with switch " + worldInteractiveObject.Id);
+            ObjectiveManager.CompleteObjective();
         }
     }
 }

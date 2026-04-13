@@ -32,7 +32,9 @@ namespace QuestingBots.Components
         private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private Dictionary<GameObject, List<TriggerZone>> triggerZonesForTraps = new Dictionary<GameObject, List<TriggerZone>>();
+        private Dictionary<GameObject, List<TriggerZone>> triggerZonesForGameObjects = new Dictionary<GameObject, List<TriggerZone>>();
+        private Dictionary<GameObject, HandlerTriggerState> handlerTriggerStatesForGameObjects = new Dictionary<GameObject, HandlerTriggerState>();
+        private Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>> navMeshObstaclesControlledBySwitches = new Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>>();
         private Dictionary<string, EFT.Interactive.Switch> IdsForSwitches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
         private Dictionary<WorldInteractiveObject, bool> areLockedDoorsUnlocked = new Dictionary<WorldInteractiveObject, bool>();
@@ -144,28 +146,34 @@ namespace QuestingBots.Components
 
         public void FindAllTraps()
         {
-            triggerZonesForTraps.Clear();
+            handlerTriggerStatesForGameObjects.Clear();
+            triggerZonesForGameObjects.Clear();
 
-            IEnumerable<TriggerZone> allTraps = FindObjectsOfType<TriggerZone>()
-                .Where(zone => zone.TriggerTag == TriggerZone.ETriggerTag.Trap);
-
-            foreach (TriggerZone trap in allTraps)
+            IEnumerable<HandlerTriggerState> allhandlerTriggerStates = FindObjectsOfType<HandlerTriggerState>();
+            foreach (HandlerTriggerState handlerTriggerState in allhandlerTriggerStates)
             {
-                HandlerDamage handlerDamage = trap.gameObject.GetComponent<HandlerDamage>();
-                if (handlerDamage == null)
+                handlerTriggerStatesForGameObjects.Add(handlerTriggerState.gameObject, handlerTriggerState);
+            }
+
+            IEnumerable<TriggerZone> allTriggerZones = FindObjectsOfType<TriggerZone>();
+            foreach (TriggerZone triggerZone in allTriggerZones)
+            {
+                HandlerDamage handlerDamage = triggerZone.gameObject.GetComponent<HandlerDamage>();
+                HandlerShoot? handlerShoot = triggerZone.gameObject.transform.parent?.gameObject?.GetComponent<HandlerShoot>();
+                if ((handlerDamage == null) && (handlerShoot == null))
                 {
                     continue;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
 
-                if (triggerZonesForTraps.ContainsKey(trap.gameObject))
+                if (triggerZonesForGameObjects.ContainsKey(triggerZone.gameObject))
                 {
-                    triggerZonesForTraps[trap.gameObject].Add(trap);
+                    triggerZonesForGameObjects[triggerZone.gameObject].Add(triggerZone);
                     continue;
                 }
 
-                triggerZonesForTraps.Add(trap.gameObject, new List<TriggerZone>() { trap });
+                triggerZonesForGameObjects.Add(triggerZone.gameObject, new List<TriggerZone>() { triggerZone });
             }
         }
 
@@ -182,24 +190,15 @@ namespace QuestingBots.Components
             {
                 sw.OnDoorStateChanged += reportSwitchChange;
 
-                HandlerTriggerState handlerTriggerState = sw.gameObject.GetComponent<HandlerTriggerState>();
-                if (handlerTriggerState == null)
+                IEnumerable<string> triggerIds = GetTriggerIdsForSwitch(sw);
+                if (!triggerIds.Any())
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo(sw.gameObject.name + " does not have a HandlerTriggerState");
-                    continue;
-                }
-
-                FieldInfo controlledTriggerIdsField = AccessTools.Field(typeof(HandlerTriggerState), "_controlledTriggerId");
-                string[]? controlledTriggerIds = controlledTriggerIdsField?.GetValue(handlerTriggerState) as string[];
-                if (controlledTriggerIds == null)
-                {
-                    Singleton<LoggingUtil>.Instance.LogWarning("Could not get _controlledTriggerId for " + handlerTriggerState.gameObject.name);
                     continue;
                 }
 
                 FieldInfo triggerIdField = AccessTools.Field(typeof(TriggerZone), "_triggerId");
 
-                foreach (List<TriggerZone> triggerZones in triggerZonesForTraps.Values)
+                foreach (List<TriggerZone> triggerZones in triggerZonesForGameObjects.Values)
                 {
                     foreach (TriggerZone triggerZone in triggerZones)
                     {
@@ -210,9 +209,8 @@ namespace QuestingBots.Components
                             continue;
                         }
 
-                        if (!controlledTriggerIds.Any(x => x == triggerId))
+                        if (!triggerIds.Any(x => x == triggerId))
                         {
-                            //Singleton<LoggingUtil>.Instance.LogInfo(sw.gameObject.name + " does not control " + triggerId + ". Controlled Ids = " + string.Join(",", controlledTriggerIds));
                             continue;
                         }
 
@@ -226,25 +224,138 @@ namespace QuestingBots.Components
                         NavMeshObstacle navMeshObstacle = triggerZone.gameObject.GetOrAddComponent<NavMeshObstacle>();
                         navMeshObstacle.shape = NavMeshObstacleShape.Box;
                         navMeshObstacle.center = Vector3.zero;
-                        navMeshObstacle.size = collider.bounds.size;
+                        navMeshObstacle.size = Vector3.one;
                         navMeshObstacle.carving = true;
 
-                        Singleton<LoggingUtil>.Instance.LogInfo("Added NavMeshObstacle for " + triggerZone.gameObject.name + " at " + navMeshObstacle.transform.position + " with size " + navMeshObstacle.size);
+                        if (navMeshObstaclesControlledBySwitches.ContainsKey(sw))
+                        {
+                            navMeshObstaclesControlledBySwitches[sw].Add(navMeshObstacle);
+                        }
+                        else
+                        {
+                            navMeshObstaclesControlledBySwitches.Add(sw, new List<NavMeshObstacle> { navMeshObstacle });
+                        }
+
+                        Singleton<LoggingUtil>.Instance.LogInfo("Added NavMeshObstacle for " + triggerZone.gameObject.name + " at " + navMeshObstacle.transform.position + " with size " + navMeshObstacle.gameObject.transform.localScale);
 
                         if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
                         {
                             Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(collider.bounds);
                             Models.Pathing.PathVisualizationData boundingBox = new Models.Pathing.PathVisualizationData("Trap_" + triggerZone.gameObject.name, colliderBounds, Color.red);
-                            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox);
+                            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox, true);
                         }
                     }
                 }
             }
         }
 
+        private IEnumerable<string> GetTriggerIdsForSwitch(EFT.Interactive.Switch sw)
+        {
+            HandlerTriggerState handlerTriggerState = sw.gameObject.GetComponent<HandlerTriggerState>();
+            if (handlerTriggerState != null)
+            {
+                string[] controlledTriggerIds = GetControlledTriggerIdsForHandlerTriggerState(handlerTriggerState);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found controlledTriggerIds for " + sw.name + ": " + string.Join(",", controlledTriggerIds));
+
+                return controlledTriggerIds;
+            }
+
+            HandlerPlaySoundAdvanced handlerPlaySoundAdvanced = sw.gameObject.GetComponent<HandlerPlaySoundAdvanced>();
+            if (handlerPlaySoundAdvanced != null)
+            {
+                FieldInfo playTriggerIdField = AccessTools.Field(typeof(HandlerPlaySoundAdvanced), "_playTriggerId");
+                string? playTriggerId = playTriggerIdField?.GetValue(handlerPlaySoundAdvanced) as string;
+                if (playTriggerId != null)
+                {
+                    List<string> allControlledTriggerIds = new List<string>();
+
+                    foreach (HandlerTriggerState handlerTriggerState1 in handlerTriggerStatesForGameObjects.Values)
+                    {
+                        string triggerId = GetTriggerIdForHandlerTriggerState(handlerTriggerState1);
+                        if (playTriggerId == triggerId)
+                        {
+                            string[] controlledTriggerIds = GetControlledTriggerIdsForHandlerTriggerState(handlerTriggerState1);
+                            //Singleton<LoggingUtil>.Instance.LogInfo("Found controlledTriggerIds for " + playTriggerId  + " for " + handlerTriggerState1.name + ": " + string.Join(",", controlledTriggerIds));
+
+                            allControlledTriggerIds.AddRange(controlledTriggerIds);
+                        }
+                    }
+
+                    if (allControlledTriggerIds.Count > 0)
+                    {
+                        return allControlledTriggerIds;
+                    }
+
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not find HandlerTriggerState for HandlerPlaySoundAdvanced _triggerId " + playTriggerId);
+                }
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        private string[] GetControlledTriggerIdsForHandlerTriggerState(HandlerTriggerState handlerTriggerState)
+        {
+            if (handlerTriggerState == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            FieldInfo controlledTriggerIdsField = AccessTools.Field(typeof(HandlerTriggerState), "_controlledTriggerId");
+            string[]? controlledTriggerIds = controlledTriggerIdsField?.GetValue(handlerTriggerState) as string[];
+            if (controlledTriggerIds != null)
+            {
+                return controlledTriggerIds;
+            }
+
+            return Array.Empty<string>();
+        }
+
+        private string GetTriggerIdForHandlerTriggerState(HandlerTriggerState handlerTriggerState)
+        {
+            if (handlerTriggerState == null)
+            {
+                return string.Empty;
+            }
+
+            FieldInfo triggerIdField = AccessTools.Field(typeof(HandlerTriggerState), "_triggerId");
+            string? triggerId = triggerIdField?.GetValue(handlerTriggerState) as string;
+            if (triggerId != null)
+            {
+                return triggerId;
+            }
+
+            return string.Empty;
+        }
+
         private void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
             Singleton<LoggingUtil>.Instance.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
+
+            EFT.Interactive.Switch? sw = obj as EFT.Interactive.Switch;
+            if (sw == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError(obj.Id + " is not a Switch");
+                return;
+            }
+
+            if (!navMeshObstaclesControlledBySwitches.ContainsKey(sw))
+            {
+                return;
+            }
+
+            bool navMeshObstacleEnabled = nextState == EDoorState.Open ? true : false;
+
+            foreach (NavMeshObstacle navMeshObstacle in navMeshObstaclesControlledBySwitches[sw])
+            {
+                navMeshObstacle.enabled = navMeshObstacleEnabled;
+
+                IEnumerable<Models.Pathing.PathVisualizationData> boundingBoxes = Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().FindPaths("Trap_" + navMeshObstacle.gameObject.name);
+                foreach (Models.Pathing.PathVisualizationData boundingBox in boundingBoxes)
+                {
+                    boundingBox.LineColor = Color.green;
+                    Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox, false);
+                }
+            }
         }
 
         public EFT.Interactive.Switch FindSwitch(string id)

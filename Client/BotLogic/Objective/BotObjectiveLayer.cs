@@ -94,7 +94,14 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.Teleport:
-                    setNextAction(BotActionType.Teleport, "Teleport");
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToTeleportPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.Teleport, "Teleport");
+                    }
                     return updatePreviousState(true);
 
                 case QuestAction.HoldAtPosition:

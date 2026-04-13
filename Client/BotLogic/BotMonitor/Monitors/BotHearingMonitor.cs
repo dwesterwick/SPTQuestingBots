@@ -208,6 +208,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return;
             }
 
+            //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " heard " + type.ToString() + " " + dist + "m away from " + iplayer.GetText());
+
             lastEnemySoundHeardTime = Time.time;
         }
 
