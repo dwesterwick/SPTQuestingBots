@@ -12,7 +12,7 @@ namespace QuestingBots.BotLogic.Objective
 {
     public class TeleportAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private Vector3? targetPosition = null!;
+        private Vector3? teleportTargetPosition = null!;
         private bool wasStuck = false;
 
         public TeleportAction(BotOwner _BotOwner) : base(_BotOwner, 100)
@@ -26,14 +26,14 @@ namespace QuestingBots.BotLogic.Objective
 
             BotOwner.PatrollingData.Pause();
 
-            targetPosition = ObjectiveManager.TargetPosition;
-            if (targetPosition != null)
+            teleportTargetPosition = ObjectiveManager.TargetPosition;
+            if (teleportTargetPosition != null)
             {
-                targetPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(targetPosition.Value, 0.5f);
+                teleportTargetPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(teleportTargetPosition.Value, 0.5f);
             }
-            if (targetPosition == null)
+            if (teleportTargetPosition == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot teleport to " + targetPosition);
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot teleport to " + teleportTargetPosition);
 
                 ObjectiveManager.FailObjective();
 
@@ -61,6 +61,11 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
+            if (!teleportTargetPosition.HasValue)
             {
                 return;
             }
@@ -100,7 +105,7 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
-            BotOwner.Mover.Teleport(targetPosition);
+            BotOwner.Mover.Teleport(teleportTargetPosition.Value);
             ObjectiveManager.CompleteObjective();
         }
 
