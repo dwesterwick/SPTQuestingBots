@@ -19,6 +19,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "min_distance_from_players_initial", IsRequired = true)]
         public float MinDistanceFromPlayersInitial { get; set; } = 25;
 
+        [DataMember(Name = "min_distance_from_players_initial_labyrinth", IsRequired = true)]
+        public float MinDistanceFromPlayersInitialLabyrinth { get; set; } = 20;
+
         [DataMember(Name = "min_distance_from_players_during_raid", IsRequired = true)]
         public float MinDistanceFromPlayersDuringRaid { get; set; } = 100;
 

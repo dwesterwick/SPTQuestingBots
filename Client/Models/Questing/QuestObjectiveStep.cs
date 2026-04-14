@@ -61,9 +61,6 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("forceUnlock")]
         public bool ForceUnlock { get; set; } = false;
 
-        [JsonProperty("ignoreHearing")]
-        public bool IgnoreHearing { get; set; } = false;
-
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;
 

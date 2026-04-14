@@ -6,9 +6,7 @@ using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -77,6 +75,7 @@ namespace QuestingBots
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
             new Patches.DisableLocalAvoidancePatch().Enable();
+            new Patches.TriggerZoneBotPoliticPatch().Enable();
         }
 
         private void EnableLighthousePatches()

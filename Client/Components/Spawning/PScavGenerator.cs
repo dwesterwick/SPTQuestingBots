@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
-using QuestingBots.Patches;
 using QuestingBots.Utils;
 using UnityEngine;
 
@@ -26,7 +24,8 @@ namespace QuestingBots.Components.Spawning
         {
             RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
-            setMaxAliveBots();
+            SetMaxAliveBots();
+            Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map at the same time: " + MaxAliveBots);
         }
 
         protected override void Refresh() { }
@@ -137,7 +136,7 @@ namespace QuestingBots.Components.Spawning
             }
 
             // Ensure none of the spawn points are too close to other players or bots
-            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositions, getMinDistanceFromOtherPlayers(), out float distance))
+            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositions, GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs), out float distance))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
@@ -209,37 +208,6 @@ namespace QuestingBots.Components.Spawning
             IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
             IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
             Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
-        }
-
-        private void setMaxAliveBots()
-        {
-            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
-
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
-            {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
-            }
-            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
-            {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
-            }
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map (" + locationID + ") at the same time: " + MaxAliveBots);
-        }
-
-        private float getMinDistanceFromOtherPlayers()
-        {
-            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
-            {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersInitial;
-            }
-
-            if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
-            {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory;
-            }
-
-            return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaid;
         }
     }
 }

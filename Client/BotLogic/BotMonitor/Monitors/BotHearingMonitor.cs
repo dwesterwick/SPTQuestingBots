@@ -29,6 +29,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
 
+        public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
+
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
         public override void Start()
@@ -71,8 +73,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public bool TrySetIgnoreHearing(float duration, bool value)
         {
-            bool hearingIgored = hearingFunction.TryIgnoreHearing(value, false, duration);
-            if (hearingIgored && value)
+            bool hearingIgnored = hearingFunction.TryIgnoreHearing(value, false, duration);
+            if (hearingIgnored && value)
             {
                 nextTimeSuspicionAllowed = Time.time + duration;
             }
@@ -81,7 +83,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 nextTimeSuspicionAllowed = 0;
             }
 
-            return hearingIgored;
+            return hearingIgnored;
         }
 
         private bool isSuspicious()
@@ -215,9 +217,9 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private bool shouldIgnoreSound(AISoundType soundType, float distance)
         {
-            if (Time.time < nextTimeSuspicionAllowed)
+            if (!SuspicionAllowedByTime)
             {
-                return false;
+                return true;
             }
 
             switch (soundType)

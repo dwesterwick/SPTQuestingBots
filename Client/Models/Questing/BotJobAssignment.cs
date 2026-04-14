@@ -36,11 +36,13 @@ namespace QuestingBots.Models.Questing
         public bool HasCompletePath { get; set; } = true;
         public double MinElapsedTime { get; private set; } = 0;
 
+        private bool ignoreHearing = false;
+
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
         public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
         public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
-        public bool IgnoreHearing => QuestObjectiveStepAssignment?.IgnoreHearing ?? false;
+        public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
         public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
 
         public BotJobAssignment(BotOwner bot)
@@ -89,12 +91,14 @@ namespace QuestingBots.Models.Questing
         {
             if ((Status != JobAssignmentStatus.Completed) && (Status != JobAssignmentStatus.NotStarted))
             {
+                ignoreHearing = false;
                 return false;
             }
 
             QuestObjectiveStep nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
             if (nextStep == null)
             {
+                ignoreHearing = false;
                 return false;
             }
 
@@ -143,6 +147,7 @@ namespace QuestingBots.Models.Questing
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
 
                 Status = JobAssignmentStatus.Pending;
+                ignoreHearing = false;
             }
         }
 
@@ -177,6 +182,7 @@ namespace QuestingBots.Models.Questing
 
             Status = JobAssignmentStatus.Pending;
             HasCompletePath = true;
+            ignoreHearing = QuestObjectiveAssignment.IgnoreHearing;
         }
 
         private void endInternal()

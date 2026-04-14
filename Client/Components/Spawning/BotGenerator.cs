@@ -532,6 +532,47 @@ namespace QuestingBots.Components.Spawning
             return (BotDifficulty)Math.Round(difficultyChances.GetValueFromTotalChanceFraction(random.NextDouble()));
         }
 
+        protected void SetMaxAliveBots()
+        {
+            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
+            {
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
+            }
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
+            {
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
+            }
+        }
+
+        protected float GetMinSpawnDistanceFromOtherPlayers(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            string lowercaseLocationName = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower();
+
+            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
+            {
+                if (lowercaseLocationName.Contains("labyrinth"))
+                {
+                    return botSpawnType.MinDistanceFromPlayersInitialLabyrinth;
+                }
+
+                return botSpawnType.MinDistanceFromPlayersInitial;
+            }
+
+            if (lowercaseLocationName.Contains("factory"))
+            {
+                return botSpawnType.MinDistanceFromPlayersDuringRaidFactory;
+            }
+
+            if (lowercaseLocationName.Contains("labyrinth"))
+            {
+                return botSpawnType.MinDistanceFromPlayersDuringRaidLabyrinth;
+            }
+
+            return botSpawnType.MinDistanceFromPlayersDuringRaid;
+        }
+
         private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)
         {
             try

@@ -23,15 +23,20 @@ namespace QuestingBots.Components
 {
     public class LocationData : MonoBehaviour
     {
+        public const string BOT_EVENT_ID_ALARM_ON = "alarm";
+        public const string BOT_EVENT_ID_ALARM_OFF = "alarm_stop";
+
         public int MaxTotalBots { get; private set; } = 15;
         public float MaxDistanceBetweenSpawnPoints { get; private set; } = float.MaxValue;
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null!;
         public RaidSettings CurrentRaidSettings { get; private set; } = null!;
+        public bool AlarmState { get; private set; } = false;
 
         private readonly DateTime awakeTime = DateTime.Now;
         private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
+        private List<TriggerZone> alarmTriggerZones = new List<TriggerZone>();
         private Dictionary<GameObject, List<TriggerZone>> triggerZonesForGameObjects = new Dictionary<GameObject, List<TriggerZone>>();
         private Dictionary<GameObject, HandlerTriggerState> handlerTriggerStatesForGameObjects = new Dictionary<GameObject, HandlerTriggerState>();
         private Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>> navMeshObstaclesControlledBySwitches = new Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>>();
@@ -41,6 +46,8 @@ namespace QuestingBots.Components
         private Dictionary<WorldInteractiveObject, Vector3> doorInteractionPositions = new Dictionary<WorldInteractiveObject, Vector3>();
         private Dictionary<WorldInteractiveObject, NoPowerTip> noPowerTipsForDoors = new Dictionary<WorldInteractiveObject, NoPowerTip>();
         private float maxExfilPointDistance = 0;
+
+        public bool IsTriggerZoneForAlarm(TriggerZone zone) => alarmTriggerZones.Contains(zone);
 
         protected void Awake()
         {
@@ -99,14 +106,16 @@ namespace QuestingBots.Components
 
         private void HandleBotEvent(string id)
         {
-            if (id == "alarm")
+            if (id == BOT_EVENT_ID_ALARM_ON)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Alarm enabled");
+                AlarmState = true;
+                Singleton<LoggingUtil>.Instance.LogDebug("Alarm enabled");
             }
 
-            if (id == "alarm_stop")
+            if (id == BOT_EVENT_ID_ALARM_OFF)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Alarm disabled");
+                AlarmState = false;
+                Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
             }
         }
 
@@ -146,6 +155,7 @@ namespace QuestingBots.Components
 
         public void FindAllTraps()
         {
+            alarmTriggerZones.Clear();
             handlerTriggerStatesForGameObjects.Clear();
             triggerZonesForGameObjects.Clear();
 
@@ -158,6 +168,12 @@ namespace QuestingBots.Components
             IEnumerable<TriggerZone> allTriggerZones = FindObjectsOfType<TriggerZone>();
             foreach (TriggerZone triggerZone in allTriggerZones)
             {
+                string botsEventId = GetBotsEventId(triggerZone.gameObject);
+                if (botsEventId == BOT_EVENT_ID_ALARM_ON)
+                {
+                    alarmTriggerZones.Add(triggerZone);
+                }
+
                 HandlerDamage handlerDamage = triggerZone.gameObject.GetComponent<HandlerDamage>();
                 HandlerShoot? handlerShoot = triggerZone.gameObject.transform.parent?.gameObject?.GetComponent<HandlerShoot>();
                 if ((handlerDamage == null) && (handlerShoot == null))
@@ -175,6 +191,20 @@ namespace QuestingBots.Components
 
                 triggerZonesForGameObjects.Add(triggerZone.gameObject, new List<TriggerZone>() { triggerZone });
             }
+        }
+
+        private string GetBotsEventId(GameObject obj)
+        {
+            HandlerBotsEvent handlerBotsEvent = obj.GetComponent<HandlerBotsEvent>();
+            if (handlerBotsEvent == null)
+            {
+                return string.Empty;
+            }
+
+            FieldInfo botsEventIdField = AccessTools.Field(typeof(HandlerBotsEvent), "_botsEventId");
+            string? botsEventId = botsEventIdField.GetValue(handlerBotsEvent) as string;
+
+            return botsEventId ?? string.Empty;
         }
 
         public void FindAllSwitches()
@@ -218,6 +248,15 @@ namespace QuestingBots.Components
                         if (collider == null)
                         {
                             Singleton<LoggingUtil>.Instance.LogWarning("Could not get Collider for " + triggerZone.gameObject.name);
+                            continue;
+                        }
+
+                        // Some trigger zones for the Labyrinth shotgun traps cause excessive NavMesh carving due to their local scale
+                        Vector3 triggerZoneLocalScale = triggerZone.gameObject.transform.localScale;
+                        float triggerZoneLocalScaleMagnitude = triggerZoneLocalScale.magnitude;
+                        if (triggerZoneLocalScaleMagnitude > 10)
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Skipping " + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude=" + triggerZoneLocalScaleMagnitude);
                             continue;
                         }
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using UnityEngine;
@@ -23,7 +22,8 @@ namespace QuestingBots.Components.Spawning
         {
             RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
-            setMaxAliveBots();
+            SetMaxAliveBots();
+            Singleton<LoggingUtil>.Instance.LogInfo("Max PMCs on the map at the same time: " + MaxAliveBots);
         }
 
         protected override void Refresh() { }
@@ -86,7 +86,7 @@ namespace QuestingBots.Components.Spawning
         {
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
             EPlayerSideMask playerMask = RaidHelpers.IsBeginningOfRaid() ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
-            float minDistanceFromOtherPlayers = getMinDistanceFromOtherPlayers() + 5;
+            float minDistanceFromOtherPlayers = GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs) + 5;
 
             string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
             Vector3[] positionsToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
@@ -116,7 +116,7 @@ namespace QuestingBots.Components.Spawning
             }
 
             // Ensure none of the spawn points are too close to other players or bots
-            if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, getMinDistanceFromOtherPlayers(), out float distance))
+            if (locationData.AreAnyPositionsCloseToOtherPlayers(spawnPositions, GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs), out float distance))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
@@ -130,22 +130,6 @@ namespace QuestingBots.Components.Spawning
             }
 
             return spawnPositions;
-        }
-
-        private void setMaxAliveBots()
-        {
-            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
-
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
-            {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
-            }
-            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
-            {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
-            }
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Max PMC's on the map (" + locationID + ") at the same time: " + MaxAliveBots);
         }
 
         private Configuration.MinMaxConfig getPMCCount()
@@ -162,26 +146,6 @@ namespace QuestingBots.Components.Spawning
             int maxPlayers = (int)Math.Ceiling((locationData.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
 
             return new Configuration.MinMaxConfig(minPlayers, maxPlayers);
-        }
-
-        private float getMinDistanceFromOtherPlayers()
-        {
-            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
-            {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersInitial;
-            }
-
-            if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("factory"))
-            {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidFactory;
-            }
-
-            if (Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower().Contains("labyrinth"))
-            {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaidLabyrinth;
-            }
-
-            return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.MinDistanceFromPlayersDuringRaid;
         }
     }
 }
