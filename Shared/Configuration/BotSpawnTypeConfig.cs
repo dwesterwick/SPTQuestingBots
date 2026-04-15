@@ -13,6 +13,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "enabled", IsRequired = true)]
         public bool Enabled { get; set; } = true;
 
+        [DataMember(Name = "disabled_maps")]
+        public string[] DisabledMaps { get; set; } = Array.Empty<string>();
+
         [DataMember(Name = "min_raid_time_remaining", IsRequired = true)]
         public float MinRaidTimeRemaining { get; set; } = 0;
 

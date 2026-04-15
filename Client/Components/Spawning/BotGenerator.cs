@@ -532,6 +532,14 @@ namespace QuestingBots.Components.Spawning
             return (BotDifficulty)Math.Round(difficultyChances.GetValueFromTotalChanceFraction(random.NextDouble()));
         }
 
+        protected bool BotsAllowedToSpawnInCurrentLocation(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            string locationID = locationData.CurrentLocation.Id.ToLower();
+
+            return !botSpawnType.DisabledMaps.Contains(locationID);
+        }
+
         protected void SetMaxAliveBots()
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();

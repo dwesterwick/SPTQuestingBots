@@ -76,6 +76,7 @@ namespace QuestingBots
             new Patches.BotOwnerSprintPatch().Enable();
             new Patches.DisableLocalAvoidancePatch().Enable();
             new Patches.TriggerZoneBotPoliticPatch().Enable();
+            new Patches.CanDeactivateMinePatch().Enable();
         }
 
         private void EnableLighthousePatches()

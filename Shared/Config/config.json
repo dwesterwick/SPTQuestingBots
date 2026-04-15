@@ -327,7 +327,7 @@
 			"rezervbase": 7,
 			"interchange": 8,
 			"laboratory": 9,
-			"labyrinth": 5,
+			"labyrinth": 4,
 			"tarkovstreets": 8,
 			"sandbox": 7,
 			"sandbox_high": 7
@@ -372,6 +372,7 @@
 		},
 		"player_scavs": {
 			"enabled": true,
+			"disabled_maps": [ "laboratory", "labyrinth" ],
 			"min_raid_time_remaining": 180,
 			"min_distance_from_players_initial": 25,
 			"min_distance_from_players_initial_labyrinth": 20,

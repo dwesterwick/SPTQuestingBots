@@ -306,10 +306,16 @@
           },
           {
             "waitTimeAfterCompleting": 1,
+            "stepType": "Teleport",
             "position": {
-              "x": 19.5903587,
-              "y": 0.0424461141,
-              "z": 40.6724319
+              "x": 32.3456078,
+              "y": 0.07213059,
+              "z": 40.6482239
+            },
+            "targetPosition": {
+              "x": 25.67165,
+              "y": -0.131082028,
+              "z": 40.6749763
             }
           }
         ]
@@ -321,10 +327,8 @@
     "minLevel": 0,
     "maxLevel": 99,
     "maxBots": 2,
-    "desirability": 30,
-    "requiredSwitches": {
-      "disable_traps_07": true
-    },
+    "desirability": 60,
+    "alarmQuest": true,
     "name": "Alarm Button 7",
     "objectives": [
       {
@@ -352,10 +356,8 @@
     "minLevel": 0,
     "maxLevel": 99,
     "maxBots": 2,
-    "desirability": 30,
-    "requiredSwitches": {
-      "switch_Labyrinth_DesignStaff_00004": true
-    },
+    "desirability": 60,
+    "alarmQuest": true,
     "name": "Alarm Button 8",
     "objectives": [
       {
@@ -383,10 +385,8 @@
     "minLevel": 0,
     "maxLevel": 99,
     "maxBots": 2,
-    "desirability": 30,
-    "requiredSwitches": {
-      "switch_Labyrinth_DesignStaff_00000": true
-    },
+    "desirability": 60,
+    "alarmQuest": true,
     "name": "Alarm Button 9",
     "objectives": [
       {
@@ -414,10 +414,8 @@
     "minLevel": 0,
     "maxLevel": 99,
     "maxBots": 2,
-    "desirability": 30,
-    "requiredSwitches": {
-      "switch_Labyrinth_DesignStaff_00001": true
-    },
+    "desirability": 60,
+    "alarmQuest": true,
     "name": "Alarm Button 10",
     "objectives": [
       {
@@ -445,10 +443,8 @@
     "minLevel": 0,
     "maxLevel": 99,
     "maxBots": 2,
-    "desirability": 30,
-    "requiredSwitches": {
-      "switch_Labyrinth_DesignStaff_00002": true
-    },
+    "desirability": 60,
+    "alarmQuest": true,
     "name": "Alarm Button 11",
     "objectives": [
       {

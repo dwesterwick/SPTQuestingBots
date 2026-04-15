@@ -54,6 +54,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("maxTimeOnQuest")]
         public float MaxTimeOnQuest { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxTimePerQuest;
 
+        [JsonProperty("alarmQuest")]
+        public bool AlarmQuest { get; set; } = false;
+
         [JsonProperty("canRunBetweenObjectives")]
         public bool CanRunBetweenObjectives { get; set; } = true;
 
@@ -162,6 +165,11 @@ namespace QuestingBots.Models.Questing
             }
 
             float raidTime = RaidHelpers.GetRaidElapsedSeconds();
+
+            if (AlarmQuest && !Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().AlarmState)
+            {
+                return false;
+            }
 
             if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
             {

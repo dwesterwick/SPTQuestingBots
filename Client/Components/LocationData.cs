@@ -108,14 +108,20 @@ namespace QuestingBots.Components
         {
             if (id == BOT_EVENT_ID_ALARM_ON)
             {
+                if (!AlarmState)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Alarm enabled");
+                }
                 AlarmState = true;
-                Singleton<LoggingUtil>.Instance.LogDebug("Alarm enabled");
             }
 
             if (id == BOT_EVENT_ID_ALARM_OFF)
             {
+                if (AlarmState)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
+                }
                 AlarmState = false;
-                Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
             }
         }
 
@@ -168,9 +174,10 @@ namespace QuestingBots.Components
             IEnumerable<TriggerZone> allTriggerZones = FindObjectsOfType<TriggerZone>();
             foreach (TriggerZone triggerZone in allTriggerZones)
             {
-                string botsEventId = GetBotsEventId(triggerZone.gameObject);
+                string botsEventId = GetBotsEventId(triggerZone.transform.parent.gameObject);
                 if (botsEventId == BOT_EVENT_ID_ALARM_ON)
                 {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for alarm: " + triggerZone.transform.parent.gameObject.name);
                     alarmTriggerZones.Add(triggerZone);
                 }
 
@@ -193,9 +200,9 @@ namespace QuestingBots.Components
             }
         }
 
-        private string GetBotsEventId(GameObject obj)
+        private string GetBotsEventId(GameObject gameObject)
         {
-            HandlerBotsEvent handlerBotsEvent = obj.GetComponent<HandlerBotsEvent>();
+            HandlerBotsEvent handlerBotsEvent = gameObject.GetComponent<HandlerBotsEvent>();
             if (handlerBotsEvent == null)
             {
                 return string.Empty;

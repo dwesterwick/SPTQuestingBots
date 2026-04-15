@@ -38,6 +38,11 @@ namespace QuestingBots.Components.Spawning
                 return 0;
             }
 
+            if (!BotsAllowedToSpawnInCurrentLocation(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs))
+            {
+                return 0;
+            }
+
             createBotSpawnSchedule();
 
             return botSpawnSchedule.Count;

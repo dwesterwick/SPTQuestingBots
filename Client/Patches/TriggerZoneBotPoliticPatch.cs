@@ -5,6 +5,7 @@ using HarmonyLib;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using SPT.Custom.CustomAI;
 using SPT.Reflection.Patching;
 using System;
 using System.Collections.Generic;
@@ -23,68 +24,59 @@ namespace QuestingBots.Patches
         }
 
         [PatchTranspiler]
-        protected static IEnumerable<CodeInstruction> PatchTranspiler(IEnumerable<CodeInstruction> originalInstructions, ILGenerator iLGenerator)
+        protected static IEnumerable<CodeInstruction> PatchTranspiler(IEnumerable<CodeInstruction> originalInstructions)
         {
-            MethodInfo playerShouldSetOffAlarmMethodInfo = typeof(TriggerZoneBotPoliticPatch).GetMethod(nameof(PlayerShouldSetOffAlarm), BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo skipReturnInILHelperMethodInfo = typeof(TriggerZoneBotPoliticPatch).GetMethod(nameof(SkipReturnInILHelper), BindingFlags.NonPublic | BindingFlags.Static);
-            Label continueLabel = iLGenerator.DefineLabel();
+            MethodInfo isAIMethodInfo = AccessTools.PropertyGetter(typeof(Player), nameof(Player.IsAI));
+            MethodInfo shouldIgnorePlayerMethodInfo = AccessTools.Method(typeof(TriggerZoneBotPoliticPatch), nameof(ShouldIgnorePlayer));
 
             List<CodeInstruction> modifiedInstructions = new List<CodeInstruction>();
             
-            bool modificationPerformed = false;
             foreach (CodeInstruction originalInstruction in originalInstructions)
             {
-                if (modificationPerformed)
-                {
-                    modifiedInstructions.Add(originalInstruction);
-                    continue;
-                }
-
-                // We only want to replace "return;" in the following:
+                // We only want to replace "player.IsAI" in the following with "ShouldIgnorePlayer(player, this)"
                 // if (player.IsAI && this._botPolitic == TriggerZone.EBotPolitic.Ignore)
                 // {
                 //     return;
                 // }
-                if (originalInstruction.opcode != OpCodes.Ret)
+                if ((originalInstruction.opcode != OpCodes.Callvirt) || ((MethodInfo)originalInstruction.operand != isAIMethodInfo))
                 {
                     modifiedInstructions.Add(originalInstruction);
                     continue;
                 }
 
-                modifiedInstructions.Add(new CodeInstruction(OpCodes.Ldarg_1));
+                //modifiedInstructions.Add(new CodeInstruction(OpCodes.Ldarg_1)); //<-- this should already be the previous instruction
                 modifiedInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
-                modifiedInstructions.Add(new CodeInstruction(OpCodes.Call, playerShouldSetOffAlarmMethodInfo));
-                modifiedInstructions.Add(new CodeInstruction(OpCodes.Call, skipReturnInILHelperMethodInfo));
-
-                modificationPerformed = true;
+                modifiedInstructions.Add(new CodeInstruction(OpCodes.Call, shouldIgnorePlayerMethodInfo));
             }
 
             return modifiedInstructions;
         }
 
-        private static void SkipReturnInILHelper(bool shouldSkipReturn)
+        private static bool ShouldIgnorePlayer(Player player, TriggerZone zone)
         {
-            if (!shouldSkipReturn)
+            if (!player.IsAI)
             {
-                // This will add OpCodes.Ret into the IL stream
-                return;
+                return false;
             }
-        }
 
-        private static bool PlayerShouldSetOffAlarm(Player player, TriggerZone zone)
-        {
+            BotOwner botOwner = player.GetBotOwner();
+            if (botOwner == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Could not get BotOwner for " + player.GetText());
+                return false;
+            }
+
+            // EFT behavior should only be changed for alarm TriggerZones
             LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
             if (!locationData.IsTriggerZoneForAlarm(zone))
             {
-                return false;
+                return true;
             }
 
-            if (!player.ShouldPlayerBeTreatedAsHuman())
+            if (botOwner.IsPMC() || botOwner.IsSimulatedPlayerScav())
             {
                 return false;
             }
-
-            Singleton<LoggingUtil>.Instance.LogDebug(player.GetText() + " is allowed to set off alarm linked to " + zone.transform.parent.name + "::" + zone.name);
 
             return true;
         }

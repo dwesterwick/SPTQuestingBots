@@ -39,6 +39,11 @@ namespace QuestingBots.Components.Spawning
                 return 0;
             }
 
+            if (!BotsAllowedToSpawnInCurrentLocation(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs))
+            {
+                return 0;
+            }
+
             // Determine how many total PMC's to spawn (reduced for Scav raids)
             Configuration.MinMaxConfig pmcCountRange = getPMCCount();
             int pmcCount = random.Next((int)pmcCountRange.Min, (int)pmcCountRange.Max);
