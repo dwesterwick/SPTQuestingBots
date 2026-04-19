@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
-using static GClass2380;
 
 namespace QuestingBots.BotLogic.Objective
 {

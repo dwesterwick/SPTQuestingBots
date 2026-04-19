@@ -1,22 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
-using QuestingBots.Controllers;
 using UnityEngine;
-using HarmonyLib;
 using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
     public static class InteractiveObjectHelpers
     {
+        public static EDoorState DesiredDoorState(this EInteractionType interactionType)
+        {
+            switch (interactionType)
+            {
+                case EInteractionType.Open:
+                case EInteractionType.Breach:
+                case EInteractionType.Unlock:
+                    return EDoorState.Open;
+                case EInteractionType.Close:
+                    return EDoorState.Shut;
+            }
+
+            throw new InvalidOperationException("Cannot get the desired door state for " + interactionType.ToString());
+        }
+
+        public static EDoorState OppositeDoorState(this EInteractionType interactionType)
+        {
+            switch (interactionType)
+            {
+                case EInteractionType.Open:
+                case EInteractionType.Breach:
+                    return EDoorState.Shut;
+                case EInteractionType.Close:
+                    return EDoorState.Open;
+                case EInteractionType.Unlock:
+                    return EDoorState.Locked;
+            }
+
+            throw new InvalidOperationException("Cannot get the opposite door state for " + interactionType.ToString());
+        }
+
         public static Item GenerateKey(this WorldInteractiveObject door)
         {
             // Create a new item for the key needed to unlock the door
@@ -28,6 +56,45 @@ namespace QuestingBots.Helpers
             }
 
             return keyItem;
+        }
+
+        public static Vector3? GetDoorInteractionPosition(this Door door, Vector3 startingPosition)
+        {
+            if (door == null)
+            {
+                return null;
+            }
+
+            // The possible interaction position is found by offsetting the position of the door vertically by a configurable amount. Otherwise,
+            // a large search radius may find a NavMesh position on the floor below. Then, the position is translated toward the bot by a specified
+            // distance. This is to force the bot to close the door from inside of its current room.
+            Vector3 possibleInteractionPosition = door.transform.position;
+            Vector3 vectorToBot = (startingPosition - possibleInteractionPosition).normalized;
+            possibleInteractionPosition += new Vector3(0, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchOffset, 0);
+            possibleInteractionPosition += vectorToBot * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+
+            // Determine the NavMesh position to which the bot should go in order to unlock the door. This is based on the possible interaction
+            // position defined above. 
+            float searchRadius = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
+            if (navMeshPosition == null)
+            {
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
+                {
+                    DebugHelpers.DrawPositionOutline(possibleInteractionPosition, Color.yellow, searchRadius);
+                }
+
+                return null;
+            }
+            else
+            {
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
+                {
+                    DebugHelpers.DrawPositionOutline(navMeshPosition.Value, Color.green);
+                }
+            }
+
+            return navMeshPosition;
         }
 
         public static InteractionResult GetInteractionResult(this WorldInteractiveObject worldInteractiveObject, EInteractionType interactionType, BotOwner botOwner, KeyComponent key = null!)

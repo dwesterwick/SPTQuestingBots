@@ -105,7 +105,14 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.HoldAtPosition:
-                    setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToHoldingPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
+                    }
                     return updatePreviousState(true);
 
                 case QuestAction.Ambush:
@@ -142,11 +149,22 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.ToggleSwitch:
-                    setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToSwitchPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
+                    }
                     return updatePreviousState(true);
 
                 case QuestAction.CloseNearbyDoors:
                     setNextAction(BotActionType.CloseNearbyDoors, "CloseNearbyDoors");
+                    return updatePreviousState(true);
+
+                case QuestAction.OpenNearbyDoors:
+                    setNextAction(BotActionType.CloseNearbyDoors, "OpenNearbyDoors");
                     return updatePreviousState(true);
 
                 case QuestAction.RequestExtract:

@@ -25,7 +25,8 @@ namespace QuestingBots.Models.Questing
         PlantItem,
         ToggleSwitch,
         RequestExtract,
-        CloseNearbyDoors
+        CloseNearbyDoors,
+        OpenNearbyDoors
     }
 
     public class QuestObjectiveStep

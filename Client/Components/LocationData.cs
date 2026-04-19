@@ -190,6 +190,8 @@ namespace QuestingBots.Components
 
                 //Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
 
+                AddNavMeshObstacleToIntoxicationTrap(triggerZone);
+
                 if (triggerZonesForGameObjects.ContainsKey(triggerZone.gameObject))
                 {
                     triggerZonesForGameObjects[triggerZone.gameObject].Add(triggerZone);
@@ -198,6 +200,30 @@ namespace QuestingBots.Components
 
                 triggerZonesForGameObjects.Add(triggerZone.gameObject, new List<TriggerZone>() { triggerZone });
             }
+        }
+
+        private void AddNavMeshObstacleToIntoxicationTrap(TriggerZone triggerZone)
+        {
+            HandlerEffect handlerEffect = triggerZone.gameObject.GetComponent<HandlerEffect>();
+            if (handlerEffect == null)
+            {
+                return;
+            }
+
+            FieldInfo effectsFieldInfo = AccessTools.Field(typeof(HandlerEffect), "_effects");
+            HandlerEffect.EffectsSet effects = (HandlerEffect.EffectsSet)effectsFieldInfo.GetValue(handlerEffect);
+            if (effects.Intoxication.Length == 0)
+            {
+                return;
+            }
+
+            Singleton<LoggingUtil>.Instance.LogInfo("Found Intoxication trap " + triggerZone.gameObject.name);
+
+            NavMeshObstacle navMeshObstacle = triggerZone.gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.shape = NavMeshObstacleShape.Box;
+            navMeshObstacle.center = Vector3.zero;
+            navMeshObstacle.size = Vector3.one;
+            navMeshObstacle.carving = true;
         }
 
         private string GetBotsEventId(GameObject gameObject)
@@ -389,11 +415,9 @@ namespace QuestingBots.Components
                 return;
             }
 
-            bool navMeshObstacleEnabled = nextState == EDoorState.Open ? true : false;
-
             foreach (NavMeshObstacle navMeshObstacle in navMeshObstaclesControlledBySwitches[sw])
             {
-                navMeshObstacle.enabled = navMeshObstacleEnabled;
+                navMeshObstacle.enabled = false;
 
                 IEnumerable<Models.Pathing.PathVisualizationData> boundingBoxes = Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().FindPaths("Trap_" + navMeshObstacle.gameObject.name);
                 foreach (Models.Pathing.PathVisualizationData boundingBox in boundingBoxes)

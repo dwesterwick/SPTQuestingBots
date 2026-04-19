@@ -13,7 +13,7 @@
       {
         "repeatable": true,
         "minDistanceFromBot": 1,
-        "maxDistanceFromBot": 25,
+        "maxDistanceFromBot": 12,
         "maxRunDistance": 25,
         "ignoreHearing": true,
         "steps": [
@@ -83,7 +83,7 @@
       {
         "repeatable": true,
         "minDistanceFromBot": 1,
-        "maxDistanceFromBot": 25,
+        "maxDistanceFromBot": 16,
         "maxRunDistance": 25,
         "ignoreHearing": true,
         "steps": [
@@ -143,7 +143,7 @@
       {
         "repeatable": true,
         "minDistanceFromBot": 1,
-        "maxDistanceFromBot": 25,
+        "maxDistanceFromBot": 8,
         "maxRunDistance": 25,
         "ignoreHearing": true,
         "steps": [
@@ -170,6 +170,16 @@
             "stepType": "ToggleSwitch",
             "switchID": "switch_Labyrinth_DesignStuff_000033",
             "forceUnlock": true,
+            "position": {
+              "x": -48.9607468,
+              "y": 0.547223,
+              "z": -13.5182972
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "stepType": "OpenNearbyDoors",
+            "maxDistance": 5,
             "position": {
               "x": -48.9607468,
               "y": 0.547223,
@@ -212,7 +222,7 @@
       {
         "repeatable": true,
         "minDistanceFromBot": 1,
-        "maxDistanceFromBot": 25,
+        "maxDistanceFromBot": 11,
         "maxRunDistance": 25,
         "ignoreHearing": true,
         "steps": [
@@ -232,6 +242,17 @@
               "x": 23.7330933,
               "y": 0.0447569452,
               "z": 66.6211243
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "stepType": "OpenNearbyDoors",
+            "chanceOfHavingKey": 100,
+            "maxDistance": 5,
+            "position": {
+              "x": 23.732193,
+              "y": 0.0873561651,
+              "z": 59.7018433
             }
           },
           {
@@ -271,10 +292,18 @@
       {
         "repeatable": true,
         "minDistanceFromBot": 1,
-        "maxDistanceFromBot": 25,
+        "maxDistanceFromBot": 14,
         "maxRunDistance": 25,
         "ignoreHearing": true,
         "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": 33.7707,
+              "y": -0.104670949,
+              "z": 39.41646
+            }
+          },
           {
             "waitTimeAfterCompleting": 20,
             "position": {
@@ -296,6 +325,17 @@
           },
           {
             "waitTimeAfterCompleting": 1,
+            "stepType": "OpenNearbyDoors",
+            "chanceOfHavingKey": 100,
+            "maxDistance": 5,
+            "position": {
+              "x": 39.2842026,
+              "y": -0.6290565,
+              "z": 21.0950718
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
             "stepType": "ToggleSwitch",
             "switchID": "disable_traps_04",
             "position": {
@@ -308,9 +348,9 @@
             "waitTimeAfterCompleting": 1,
             "stepType": "Teleport",
             "position": {
-              "x": 32.3456078,
-              "y": 0.07213059,
-              "z": 40.6482239
+              "x": 33.7707,
+              "y": -0.104670949,
+              "z": 39.41646
             },
             "targetPosition": {
               "x": 25.67165,
