@@ -105,14 +105,7 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.HoldAtPosition:
-                    if (!objectiveManager.IsCloseToObjective())
-                    {
-                        setNextAction(BotActionType.GoToObjective, "GoToHoldingPosition");
-                    }
-                    else
-                    {
-                        setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
-                    }
+                    setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
                     return updatePreviousState(true);
 
                 case QuestAction.Ambush:

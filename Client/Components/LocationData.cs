@@ -171,13 +171,16 @@ namespace QuestingBots.Components
                 handlerTriggerStatesForGameObjects.Add(handlerTriggerState.gameObject, handlerTriggerState);
             }
 
+            FieldInfo triggerIdField = AccessTools.Field(typeof(TriggerZone), "_triggerId");
+
             IEnumerable<TriggerZone> allTriggerZones = FindObjectsOfType<TriggerZone>();
             foreach (TriggerZone triggerZone in allTriggerZones)
             {
                 string botsEventId = GetBotsEventId(triggerZone.transform.parent.gameObject);
                 if (botsEventId == BOT_EVENT_ID_ALARM_ON)
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for alarm: " + triggerZone.transform.parent.gameObject.name);
+                    string? triggerId = triggerIdField.GetValue(triggerZone) as string;
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found TriggerZone " + (triggerId ?? "???") + " for alarm " + triggerZone.transform.parent.gameObject.name);
                     alarmTriggerZones.Add(triggerZone);
                 }
 
@@ -217,7 +220,10 @@ namespace QuestingBots.Components
                 return;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Found Intoxication trap " + triggerZone.gameObject.name);
+            FieldInfo triggerIdField = AccessTools.Field(typeof(HandlerEffect), "_triggerId");
+            string? triggerId = triggerIdField.GetValue(handlerEffect) as string;
+
+            Singleton<LoggingUtil>.Instance.LogDebug("Found Intoxication trap " + (triggerId ?? "???") + " for " + triggerZone.transform.parent.gameObject.name);
 
             NavMeshObstacle navMeshObstacle = triggerZone.gameObject.GetOrAddComponent<NavMeshObstacle>();
             navMeshObstacle.shape = NavMeshObstacleShape.Box;
@@ -289,7 +295,7 @@ namespace QuestingBots.Components
                         float triggerZoneLocalScaleMagnitude = triggerZoneLocalScale.magnitude;
                         if (triggerZoneLocalScaleMagnitude > 10)
                         {
-                            Singleton<LoggingUtil>.Instance.LogWarning("Skipping " + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude=" + triggerZoneLocalScaleMagnitude);
+                            Singleton<LoggingUtil>.Instance.LogWarning("NavMeshObstacle will not be added for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude is " + triggerZoneLocalScaleMagnitude);
                             continue;
                         }
 
@@ -308,7 +314,7 @@ namespace QuestingBots.Components
                             navMeshObstaclesControlledBySwitches.Add(sw, new List<NavMeshObstacle> { navMeshObstacle });
                         }
 
-                        Singleton<LoggingUtil>.Instance.LogInfo("Added NavMeshObstacle for " + triggerZone.gameObject.name + " at " + navMeshObstacle.transform.position + " with size " + navMeshObstacle.gameObject.transform.localScale);
+                        Singleton<LoggingUtil>.Instance.LogDebug("Added NavMeshObstacle for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name);
 
                         if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
                         {
@@ -417,6 +423,11 @@ namespace QuestingBots.Components
 
             foreach (NavMeshObstacle navMeshObstacle in navMeshObstaclesControlledBySwitches[sw])
             {
+                if (navMeshObstacle.enabled)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Disabling NavMeshObstacle for trap " + navMeshObstacle.transform.parent.gameObject.name + "." + navMeshObstacle.gameObject.name);
+                }
+
                 navMeshObstacle.enabled = false;
 
                 IEnumerable<Models.Pathing.PathVisualizationData> boundingBoxes = Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().FindPaths("Trap_" + navMeshObstacle.gameObject.name);
