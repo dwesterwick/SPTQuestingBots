@@ -52,7 +52,6 @@ namespace QuestingBots.Patches
             // This is an expensive call and needs to be time-gated
             if (!HasCompletePath(__instance))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(__instance.BotOwner_0.GetText() + " does not have a complete path to deactivate nearby mine");
                 __result = false;
             }
 

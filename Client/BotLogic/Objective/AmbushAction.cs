@@ -43,7 +43,7 @@ namespace QuestingBots.BotLogic.Objective
             // If the bot was instructed to ignore its hearing, reverse the instruction so it can be effective in combat again
             if (allowedToIgnoreHearing && isIgnoringHearing)
             {
-                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, false);
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, false, false);
                 isIgnoringHearing = false;
             }
         }
@@ -99,7 +99,7 @@ namespace QuestingBots.BotLogic.Objective
             // Needed in case somebody drops the layer priorities of this mod. Without doing this, SAIN will prevent bots from staying in their ambush spots.
             if (allowedToIgnoreHearing && !isIgnoringHearing)
             {
-                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, true);
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing((float)ActionElapsedTimeRemaining, true, true);
                 isIgnoringHearing = true;
             }
 

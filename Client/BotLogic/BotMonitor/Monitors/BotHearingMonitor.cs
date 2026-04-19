@@ -71,9 +71,9 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             soundPlayedEventAdded = false;
         }
 
-        public bool TrySetIgnoreHearing(float duration, bool value)
+        public bool TrySetIgnoreHearing(float duration, bool value, bool ignoreUnderHire)
         {
-            bool hearingIgnored = hearingFunction.TryIgnoreHearing(value, false, duration);
+            bool hearingIgnored = hearingFunction.TryIgnoreHearing(value, ignoreUnderHire, duration);
             if (hearingIgnored && value)
             {
                 nextTimeSuspicionAllowed = Time.time + duration;
