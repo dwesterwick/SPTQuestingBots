@@ -32,6 +32,7 @@ namespace QuestingBots
                 return;
             }
 
+            Singleton<EftAccessToolsUtil>.Create(new EftAccessToolsUtil());
             new Patches.MenuShowPatch().Enable();
 
             EnableMod();
@@ -50,7 +51,8 @@ namespace QuestingBots
 
             EnableCommonPatches();
             EnableLighthousePatches();
-            
+            EnableLabyrinthPatches();
+
             EnableSpawningPatches();
             EnablePlayerScavGenerationPatches();
             RegisterBotGenerators();
@@ -75,8 +77,6 @@ namespace QuestingBots
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
             new Patches.DisableLocalAvoidancePatch().Enable();
-            new Patches.TriggerZoneBotPoliticPatch().Enable();
-            new Patches.CanDeactivateMinePatch().Enable();
         }
 
         private void EnableLighthousePatches()
@@ -84,6 +84,16 @@ namespace QuestingBots
             new Patches.Lighthouse.MineDirectionalShouldExplodePatch().Enable();
             new Patches.Lighthouse.LighthouseTraderZoneAwakePatch().Enable();
             new Patches.Lighthouse.LighthouseTraderZonePlayerAttackPatch().Enable();
+        }
+
+        private void EnableLabyrinthPatches()
+        {
+            new Patches.CanDeactivateMinePatch().Enable();
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.PMCBotsTriggerAlarms)
+            {
+                new Patches.TriggerZoneBotPoliticPatch().Enable();
+            }
         }
 
         private void EnableDebugPatches()

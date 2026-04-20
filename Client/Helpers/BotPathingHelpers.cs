@@ -16,6 +16,17 @@ namespace QuestingBots.Helpers
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Int_0");
 
+        public static NavMeshObstacle GetOrAddNavMeshObstacle(this GameObject gameObject)
+        {
+            NavMeshObstacle navMeshObstacle = gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.shape = NavMeshObstacleShape.Box;
+            navMeshObstacle.center = Vector3.zero;
+            navMeshObstacle.size = Vector3.one;
+            navMeshObstacle.carving = true;
+
+            return navMeshObstacle;
+        }
+
         public static NavMeshPathStatus CreatePathSegment(Vector3 start, Vector3 end, out Vector3[] pathCorners)
         {
             NavMeshPath navMeshPath = new NavMeshPath();

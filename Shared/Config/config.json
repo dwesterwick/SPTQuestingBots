@@ -240,9 +240,15 @@
 					[40, 40]
 				]
 			},
-			"lightkeeper_island_quests" : {
+			"lightkeeper_island_quests": {
 				"enabled": true
 			},
+			"labyrinth_quests": {
+				"max_collider_magnitude_to_block_navmesh": 10,
+				"pmc_bots_trigger_alarms": true,
+				"block_navmesh_for_starting_chamber_traps": true,
+				"block_navmesh_for_intoxication_traps": true
+			}
 			"spawn_rush": {
 				"desirability": 100,
 				"pmcsOnly": true,
