@@ -1,5 +1,5 @@
 ﻿using EFT.GameTriggers;
-using HarmonyLib;
+using QuestingBots.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,106 +10,48 @@ namespace QuestingBots.Utils
 {
     public class EftAccessToolsUtil
     {
-        private FieldInfo triggerZoneTriggerIdFieldInfo;
-        private FieldInfo handlerTriggerStateTriggerIdFieldInfo;
-        private FieldInfo handlerTriggerStateControlledTriggerIdFieldInfo;
-        private FieldInfo handlerEffectTriggerIdFieldInfo;
-        private FieldInfo handlerEffectEffectsFieldInfo;
-        private FieldInfo botsEventIdFieldInfo;
-        private FieldInfo handlerPlaySoundAdvancedPlayTriggerIdFieldInfo;
+        private AccessToolsLazyLoadField<TriggerZone, string> triggerZoneTriggerId;
+        private AccessToolsLazyLoadField<HandlerTriggerState, string> handlerTriggerStateTriggerId;
+        private AccessToolsLazyLoadField<HandlerEffect, string> handlerEffectTriggerId;
 
+        private AccessToolsLazyLoadField<HandlerPlaySoundAdvanced, string> handlerPlaySoundAdvancedPlayTrigger;
+
+        private AccessToolsLazyLoadField<HandlerTriggerState, string[]> handlerTriggerStateControlledTriggerId;
+
+        private AccessToolsLazyLoadField<HandlerEffect, HandlerEffect.EffectsSet> handlerEffectEffects;
+
+        private AccessToolsLazyLoadField<HandlerBotsEvent, string> botsEventId;
+        
         public EftAccessToolsUtil()
         {
-            triggerZoneTriggerIdFieldInfo = AccessTools.Field(typeof(TriggerZone), "_triggerId");
-            handlerTriggerStateTriggerIdFieldInfo = AccessTools.Field(typeof(HandlerTriggerState), "_triggerId");
-            handlerTriggerStateControlledTriggerIdFieldInfo = AccessTools.Field(typeof(HandlerTriggerState), "_controlledTriggerId");
-            handlerEffectTriggerIdFieldInfo = AccessTools.Field(typeof(HandlerEffect), "_triggerId");
-            handlerEffectEffectsFieldInfo = AccessTools.Field(typeof(HandlerEffect), "_effects");
-            botsEventIdFieldInfo = AccessTools.Field(typeof(HandlerBotsEvent), "_botsEventId");
-            handlerPlaySoundAdvancedPlayTriggerIdFieldInfo = AccessTools.Field(typeof(HandlerPlaySoundAdvanced), "_playTriggerId");
+            triggerZoneTriggerId = new AccessToolsLazyLoadField<TriggerZone, string>("_triggerId", "");
+            handlerTriggerStateTriggerId = new AccessToolsLazyLoadField<HandlerTriggerState, string>("_triggerId", "");
+            handlerEffectTriggerId = new AccessToolsLazyLoadField<HandlerEffect, string>("_triggerId", "");
+
+            handlerPlaySoundAdvancedPlayTrigger = new AccessToolsLazyLoadField<HandlerPlaySoundAdvanced, string>("_playTriggerId", "");
+
+            handlerTriggerStateControlledTriggerId = new AccessToolsLazyLoadField<HandlerTriggerState, string[]>("_controlledTriggerId", Array.Empty<string>());
+
+            handlerEffectEffects = new AccessToolsLazyLoadField<HandlerEffect, HandlerEffect.EffectsSet>("_effects", new HandlerEffect.EffectsSet());
+
+            botsEventId = new AccessToolsLazyLoadField<HandlerBotsEvent, string>("_botsEventId", "");
         }
 
-        public string GetTriggerId(TriggerZone triggerZone)
-        {
-            if (triggerZone == null)
-            {
-                return string.Empty;
-            }
+        public string GetTriggerId(TriggerZone triggerZone) => triggerZoneTriggerId.GetValue(triggerZone);
+        public string GetTriggerId(HandlerTriggerState handlerTriggerState) => handlerTriggerStateTriggerId.GetValue(handlerTriggerState);
+        public string GetTriggerId(HandlerEffect handlerEffect) => handlerEffectTriggerId.GetValue(handlerEffect);
 
-            string? triggerId = triggerZoneTriggerIdFieldInfo.GetValue(triggerZone) as string;
-            return triggerId ?? string.Empty;
-        }
+        public string GetPlayTriggerId(HandlerPlaySoundAdvanced handlerPlaySoundAdvanced) => handlerPlaySoundAdvancedPlayTrigger.GetValue(handlerPlaySoundAdvanced);
 
-        public string GetTriggerId(HandlerTriggerState handlerTriggerState)
-        {
-            if (handlerTriggerState == null)
-            {
-                return string.Empty;
-            }
+        public string[] GetControlledTriggerId(HandlerTriggerState handlerTriggerState) => handlerTriggerStateControlledTriggerId.GetValue(handlerTriggerState);
 
-            string? triggerId = handlerTriggerStateTriggerIdFieldInfo.GetValue(handlerTriggerState) as string;
-            return triggerId ?? string.Empty;
-        }
+        public HandlerEffect.EffectsSet GetEffects(HandlerEffect handlerEffect) => handlerEffectEffects.GetValue(handlerEffect);
 
-        public string GetTriggerId(HandlerEffect handlerEffect)
-        {
-            if (handlerEffect == null)
-            {
-                return string.Empty;
-            }
-
-            string? triggerId = handlerEffectTriggerIdFieldInfo.GetValue(handlerEffect) as string;
-            return triggerId ?? string.Empty;
-        }
-
-        public string[] GetControlledTriggerId(HandlerTriggerState handlerTriggerState)
-        {
-            if (handlerTriggerState == null)
-            {
-                return Array.Empty<string>();
-            }
-
-            string[]? controlledTriggerId = handlerTriggerStateControlledTriggerIdFieldInfo.GetValue(handlerTriggerState) as string[];
-            return controlledTriggerId ?? Array.Empty<string>();
-        }
-
-        public HandlerEffect.EffectsSet GetEffects(HandlerEffect handlerEffect)
-        {
-            if (handlerEffect == null)
-            {
-                return new HandlerEffect.EffectsSet();
-            }
-
-            HandlerEffect.EffectsSet effects = (HandlerEffect.EffectsSet)handlerEffectEffectsFieldInfo.GetValue(handlerEffect);
-            return effects;
-        }
-
-        public string GetBotsEventId(HandlerBotsEvent handlerBotsEvent)
-        {
-            if (handlerBotsEvent == null)
-            {
-                return string.Empty;
-            }
-
-            string? botsEventId = botsEventIdFieldInfo.GetValue(handlerBotsEvent) as string;
-            return botsEventId ?? string.Empty;
-        }
-
+        public string GetBotsEventId(HandlerBotsEvent handlerBotsEvent) => botsEventId.GetValue(handlerBotsEvent);
         public string GetBotsEventId(GameObject gameObject)
         {
             HandlerBotsEvent handlerBotsEvent = gameObject.GetComponent<HandlerBotsEvent>();
             return GetBotsEventId(handlerBotsEvent);
-        }
-
-        public string GetPlayTriggerId(HandlerPlaySoundAdvanced handlerPlaySoundAdvanced)
-        {
-            if (handlerPlaySoundAdvanced == null)
-            {
-                return string.Empty;
-            }
-
-            string? playTriggerId = handlerPlaySoundAdvancedPlayTriggerIdFieldInfo.GetValue(handlerPlaySoundAdvanced) as string;
-            return playTriggerId ?? string.Empty;
         }
     }
 }
