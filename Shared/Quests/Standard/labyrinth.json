@@ -506,5 +506,848 @@
         ]
       }
     ]
+  },
+  {
+    "repeatable": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 3,
+    "desirability": 40,
+    "name": "Northern Passages",
+    "objectives": [
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -11.5619555,
+              "y": 0.111293152,
+              "z": -7.201508
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -3.33627224,
+              "y": 0.110493816,
+              "z": 4.39276266
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -17.1493034,
+              "y": 0.110493787,
+              "z": 3.11443353
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -15.1511688,
+              "y": 0.110493787,
+              "z": 9.417464
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -22.83876,
+              "y": 0.08963172,
+              "z": 9.902528
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -24.912159,
+              "y": 0.114663206,
+              "z": 16.0993538
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -23.9820156,
+              "y": 0.128148824,
+              "z": 20.2722034
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -24.8015213,
+              "y": 0.118759744,
+              "z": 28.5795536
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -28.3659153,
+              "y": 0.118759744,
+              "z": 26.826334
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -28.5044441,
+              "y": 0.118759744,
+              "z": 33.7276878
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -23.30705,
+              "y": 0.118759744,
+              "z": 32.7059669
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -23.2185268,
+              "y": 0.116116896,
+              "z": 49.6211929
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -20.5745773,
+              "y": 0.116116896,
+              "z": 46.6465721
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -9.060402,
+              "y": 0.1178628,
+              "z": 51.3065376
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -6.954657,
+              "y": 0.1178628,
+              "z": 47.379715
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -16.5684738,
+              "y": 0.1178628,
+              "z": 48.7398338
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 3,
+    "desirability": 40,
+    "name": "Southern Passages",
+    "objectives": [
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 12.3984365,
+              "y": 0.097841084,
+              "z": 38.058857
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 5.470945,
+              "y": 0.097841084,
+              "z": 39.0164757
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 11.9031286,
+              "y": 0.109644622,
+              "z": 34.0595779
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 11.1053333,
+              "y": 0.08477682,
+              "z": 27.13126
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 19.58607,
+              "y": 0.08477682,
+              "z": 24.1720619
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 16.8260326,
+              "y": 0.113696381,
+              "z": 18.8230419
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 22.3812065,
+              "y": 0.137696981,
+              "z": 13.69785
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 15.0535221,
+              "y": 0.114763744,
+              "z": 12.649394
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 18.0420876,
+              "y": 0.105985023,
+              "z": 2.28397036
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 11.9707727,
+              "y": 0.09228388,
+              "z": -0.669910431
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 10.6923456,
+              "y": 0.117492706,
+              "z": -6.92595243
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 10.7671137,
+              "y": 0.107073233,
+              "z": 9.550626
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 2.40999079,
+              "y": 0.107073233,
+              "z": 9.062794
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -1.70012033,
+              "y": 0.107073233,
+              "z": -2.59287167
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 3.20421028,
+              "y": 0.107073233,
+              "z": -2.995802
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 9.38071,
+              "y": 0.0884126052,
+              "z": 48.3175621
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 0.696741939,
+              "y": 0.09209676,
+              "z": 53.6604042
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 2,
+    "desirability": 30,
+    "name": "Center Passage",
+    "objectives": [
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 0.689501762,
+              "y": 0.115402959,
+              "z": 41.35727
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -1.07267916,
+              "y": 0.115402959,
+              "z": 31.9583645
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": 2.42643952,
+              "y": 0.104098976,
+              "z": 26.0834522
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -1.72757649,
+              "y": 0.104098976,
+              "z": 25.6088352
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": 3.11591721,
+              "y": 0.104098976,
+              "z": 18.3604622
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -4.633066,
+              "y": 0.118068971,
+              "z": 16.3558121
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -7.6532793,
+              "y": 0.10434106,
+              "z": 18.7778168
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -10.2922564,
+              "y": 0.10434106,
+              "z": 17.775362
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": true,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 25,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -10.5527935,
+              "y": 0.10434106,
+              "z": 9.242297
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": false,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 3,
+    "desirability": 50,
+    "name": "Nuke Room",
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 75,
+        "maxRunDistance": 25,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -7.399653,
+              "y": 0.118068971,
+              "z": 25.41808
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -10.13944,
+              "y": 0.118068971,
+              "z": 23.3409214
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -10.0405083,
+              "y": 0.118068971,
+              "z": 27.1465988
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -10.183816,
+              "y": 0.118068971,
+              "z": 30.3437233
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -11.0326862,
+              "y": 0.118068971,
+              "z": 34.9921379
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": -7.85531,
+              "y": 0.118068971,
+              "z": 34.6049728
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 2,
+            "position": {
+              "x": -4.56034946,
+              "y": 0.118068971,
+              "z": 32.4757347
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": false,
+    "isCamping": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 2,
+    "maxBotsInGroup": 2,
+    "desirability": 20,
+    "name": "Nuke Room Camping",
+    "forbiddenWeapons": [ "sniperRifle" ],
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 75,
+        "maxRunDistance": 20,
+        "steps": [
+          {
+            "stepType": "HoldAtPosition",
+            "maxDistance": 3,
+            "minElapsedTime": {
+              "min": 180,
+              "max": 420
+            },
+            "position": {
+              "x": -10.1681776,
+              "y": 0.0959167257,
+              "z": 28.1041
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": false,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 3,
+    "desirability": 50,
+    "name": "Corpse Room",
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 50,
+        "maxRunDistance": 20,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": 10.8841658,
+              "y": 0.09550805,
+              "z": -14.1364975
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": 7.456658,
+              "y": 0.116014242,
+              "z": -14.0024948
+            }
+          },
+          {
+            "waitTimeAfterCompleting": 1,
+            "position": {
+              "x": 9.626985,
+              "y": 0.1135941,
+              "z": -14.1548538
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": false,
+    "isCamping": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 2,
+    "maxBotsInGroup": 2,
+    "desirability": 20,
+    "name": "Corpse Room Camping",
+    "forbiddenWeapons": [ "sniperRifle" ],
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 50,
+        "maxRunDistance": 20,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "stepType": "Ambush",
+            "minElapsedTime": {
+              "min": 180,
+              "max": 420
+            },
+            "position": {
+              "x": 12.597971,
+              "y": 0.115271039,
+              "z": -5.50986338
+            },
+            "lookToPosition": {
+              "x": 2.62124252,
+              "y": 0.115271039,
+              "z": -8.201734
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repeatable": false,
+    "isCamping": true,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 1,
+    "maxBotsInGroup": 2,
+    "desirability": 10,
+    "minRaidET": 840,
+    "name": "Ariadne's Path Camping",
+    "forbiddenWeapons": [ "sniperRifle" ],
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 1,
+        "maxDistanceFromBot": 50,
+        "maxRunDistance": 20,
+        "steps": [
+          {
+            "waitTimeAfterCompleting": 1,
+            "stepType": "Ambush",
+            "minElapsedTime": {
+              "min": 300,
+              "max": 600
+            },
+            "position": {
+              "x": 16.1459274,
+              "y": 0.16062884,
+              "z": 14.7419462
+            },
+            "lookToPosition": {
+              "x": 15.3088818,
+              "y": 0.103200793,
+              "z": -0.426238477
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

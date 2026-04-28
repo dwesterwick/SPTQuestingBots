@@ -20,6 +20,7 @@ namespace QuestingBots.BotLogic.Objective
         protected WorldInteractiveObject? DesiredWorldInteractiveObject { get; private set; } = null;
         
         private bool interactIfLocked;
+        private System.Random random = new System.Random();
         private KeyComponent? keyComponent = null;
         private DependencyGraphClass<IEasyBundle>.GClass1659? bundleLoader = null;
         private bool wasStuck = false;
@@ -135,10 +136,9 @@ namespace QuestingBots.BotLogic.Objective
                 return false;
             }
 
-            System.Random random = new System.Random();
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + door.Id + ".");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + door.Id + " (Chance=" + ObjectiveManager.ChanceOfHavingKey + "%)");
                 return false;
             }
 
