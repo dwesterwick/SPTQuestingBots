@@ -45,13 +45,13 @@ namespace QuestingBots.Helpers
             throw new InvalidOperationException("Cannot get the opposite door state for " + interactionType.ToString());
         }
 
-        public static Item GenerateKey(this WorldInteractiveObject door)
+        public static Item GenerateKey(this WorldInteractiveObject worldInteractiveObject)
         {
-            // Create a new item for the key needed to unlock the door
-            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), door.KeyId, null);
+            // Create a new item for the key needed to unlock the WorldInteractiveObject
+            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), worldInteractiveObject.KeyId, null);
             if (keyItem == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot create key for door " + door.Id);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot create key for " + worldInteractiveObject.Id);
                 return null!;
             }
 
@@ -97,7 +97,7 @@ namespace QuestingBots.Helpers
             return navMeshPosition;
         }
 
-        public static InteractionResult GetInteractionResult(this WorldInteractiveObject worldInteractiveObject, EInteractionType interactionType, BotOwner botOwner, KeyComponent key = null!)
+        public static InteractionResult GetInteractionResult(this WorldInteractiveObject worldInteractiveObject, EInteractionType interactionType, BotOwner botOwner, KeyComponent? key = null)
         {
             try
             {

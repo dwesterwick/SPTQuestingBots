@@ -74,7 +74,7 @@ namespace QuestingBots.BotLogic.Objective
                 if (!wasStuck)
                 {
                     ObjectiveManager.StuckCount++;
-                    Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " is stuck and will get a new objective.");
+                    Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while going to " + (targetDoor?.Id ?? "[NULL]") + " and will get a new objective.");
                 }
                 wasStuck = true;
 
@@ -108,7 +108,7 @@ namespace QuestingBots.BotLogic.Objective
             {
                 targetPosition = interactionPosition.Value;
             }
-            if (!tryGoToPosition(targetPosition))
+            if (!tryGoToPosition(targetPosition, 0.75f))
             {
                 return;
             }
@@ -129,21 +129,21 @@ namespace QuestingBots.BotLogic.Objective
             }
         }
 
-        private bool tryGoToPosition(Vector3 position)
+        private bool tryGoToPosition(Vector3 targetPosition, float maxDistanceFromTargetPosition)
         {
             // TO DO: Can this distance be reduced?
-            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, position);
-            if (distanceToTargetPosition < 0.75f)
+            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, targetPosition);
+            if (distanceToTargetPosition < maxDistanceFromTargetPosition)
             {
                 return true;
             }
 
             // If the bot cannot find a complete path to the door, it will be close to open it
-            NavMeshPathStatus? pathStatus = RecalculatePath(position);
-            //if (!pathStatus.HasValue || (pathStatus.Value != NavMeshPathStatus.PathComplete))
-            if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(position, 0.5f) != true))
+            NavMeshPathStatus? pathStatus = RecalculatePath(targetPosition);
+            
+            if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(targetPosition, 0.5f) != true))
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to " + position.ToString());
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to " + targetPosition.ToString());
 
                 ObjectiveManager.FailObjective();
 
@@ -186,7 +186,10 @@ namespace QuestingBots.BotLogic.Objective
                 nearbyDoors = FindNearbyDoors(ObjectiveManager.MaxDistanceForCurrentStep!.Value).ToList();
             }
 
-            IEnumerable<Door> openNearbyDoors = nearbyDoors.Where(d => d.DoorState == desiredInteractionType.OppositeDoorState());
+            IEnumerable<Door> openNearbyDoors = nearbyDoors
+                .Where(d => d.DoorState == desiredInteractionType.OppositeDoorState())
+                .Where(d => d.DoorState != EDoorState.Locked || interactIfLocked);
+            
             if (!openNearbyDoors.Any())
             {
                 ObjectiveManager.CompleteObjective();
