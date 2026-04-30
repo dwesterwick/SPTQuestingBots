@@ -3,7 +3,6 @@ using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Configuration;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -41,6 +40,8 @@ namespace QuestingBots.BotLogic.BotMonitor
         public bool HasAQuestingBoss { get; private set; } = false;
 
         private Components.BotQuestBuilder botQuestBuilder = null!;
+
+        public bool MustQuestBeforeFollowing => ObjectiveManager.PrioritizeQuestingOverFollowing || ObjectiveManager.HasTeleportingAssignment;
 
         private bool allowedToTakeABreak() => ObjectiveManager.IsAllowedToTakeABreak();
         private bool allowedToInvestigate() => ObjectiveManager.IsAllowedToInvestigate();
@@ -90,7 +91,7 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return BotQuestingDecision.Inactive;
             }
 
-            if (HasAQuestingBoss)
+            if (HasAQuestingBoss && !MustQuestBeforeFollowing)
             {
                 return getFollowerDecision();
             }
@@ -209,14 +210,17 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return BotQuestingDecision.StopToHeal;
             }
 
-            if (allowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
+            if (!MustQuestBeforeFollowing)
             {
-                return BotQuestingDecision.WaitForGroup;
-            }
+                if (allowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
+                {
+                    return BotQuestingDecision.WaitForGroup;
+                }
 
-            if (allowedToInvestigate() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
-            {
-                return BotQuestingDecision.WaitForGroup;
+                if (allowedToInvestigate() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
+                {
+                    return BotQuestingDecision.WaitForGroup;
+                }
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
@@ -239,8 +243,13 @@ namespace QuestingBots.BotLogic.BotMonitor
 
             setLootingHiveMindState(false);
 
+            if (BotMonitor.GetMonitor<BotQuestingMonitor>().FollowersNeedToTeleport)
+            {
+                return BotQuestingDecision.WaitForGroup;
+            }
+
             // Check if the bot has wandered too far from its followers.
-            if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotQuestingMonitor>().NeedToRegroupWithFollowers)
+            if (allowedToTakeABreak() && !MustQuestBeforeFollowing && BotMonitor.GetMonitor<BotQuestingMonitor>().NeedToRegroupWithFollowers)
             {
                 return BotQuestingDecision.Regroup;
             }

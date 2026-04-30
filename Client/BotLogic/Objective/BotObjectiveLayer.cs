@@ -7,7 +7,6 @@ using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 
@@ -49,7 +48,7 @@ namespace QuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (decisionMonitor.HasAQuestingBoss)
+            if (decisionMonitor.HasAQuestingBoss && !objectiveManager.PrioritizeQuestingOverFollowing)
             {
                 return updatePreviousState(false);
             }

@@ -16,6 +16,7 @@
         "maxDistanceFromBot": 12,
         "maxRunDistance": 25,
         "ignoreHearing": true,
+        "prioritizeOverFollowing": true,
         "steps": [
           {
             "waitTimeAfterCompleting": 5,
@@ -46,6 +47,7 @@
           {
             "waitTimeAfterCompleting": 1,
             "stepType": "Teleport",
+            "requireForFollowers": false,
             "position": {
               "x": -37.3363571,
               "y": 0.483774751,
@@ -86,6 +88,7 @@
         "maxDistanceFromBot": 16,
         "maxRunDistance": 25,
         "ignoreHearing": true,
+        "prioritizeOverFollowing": true,
         "steps": [
           {
             "waitTimeAfterCompleting": 1,
@@ -146,6 +149,7 @@
         "maxDistanceFromBot": 8,
         "maxRunDistance": 25,
         "ignoreHearing": true,
+        "prioritizeOverFollowing": true,
         "steps": [
           {
             "waitTimeAfterCompleting": 10,
@@ -225,6 +229,7 @@
         "maxDistanceFromBot": 11,
         "maxRunDistance": 25,
         "ignoreHearing": true,
+        "prioritizeOverFollowing": true,
         "steps": [
           {
             "waitTimeAfterCompleting": 20,
@@ -295,6 +300,7 @@
         "maxDistanceFromBot": 14,
         "maxRunDistance": 25,
         "ignoreHearing": true,
+        "prioritizeOverFollowing": true,
         "steps": [
           {
             "waitTimeAfterCompleting": 1,
@@ -347,6 +353,7 @@
           {
             "waitTimeAfterCompleting": 1,
             "stepType": "Teleport",
+            "requireForFollowers": false,
             "position": {
               "x": 33.7707,
               "y": -0.104670949,

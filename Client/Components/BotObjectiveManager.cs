@@ -41,6 +41,7 @@ namespace QuestingBots.Components
         public Vector3? LookToPosition => assignment?.LookToPosition;
         public Vector3? TargetPosition => assignment?.TargetPosition;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
+        public bool HasTeleportingAssignment => assignment?.MustTeleport == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public string DoorIDToUnlockForObjective => assignment?.QuestObjectiveAssignment?.DoorIDToUnlock ?? "";
         public Vector3? InteractionPositionForDoorToUnlockForObjective => assignment?.QuestObjectiveAssignment?.InteractionPositionToUnlockDoor?.ToUnityVector3();
@@ -51,6 +52,7 @@ namespace QuestingBots.Components
         public float? MaxDistanceForCurrentStep => assignment?.QuestObjectiveStepAssignment?.MaxDistance;
         public bool IgnoreHearing => assignment?.IgnoreHearing ?? false;
         public bool ForceUnlock => assignment?.ForceUnlock ?? false;
+        public bool PrioritizeQuestingOverFollowing => assignment?.PrioritizeOverFollowing ?? false;
         public double? WaitTimeAfterCompleting => assignment?.QuestObjectiveStepAssignment?.WaitTimeAfterCompleting;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
@@ -202,7 +204,7 @@ namespace QuestingBots.Components
             }
 
             // Don't monitor the bot's job assignment if it's a follower of a boss
-            if (BotHiveMindMonitor.HasBoss(botOwner))
+            if (BotHiveMindMonitor.HasBoss(botOwner) && !PrioritizeQuestingOverFollowing)
             {
                 return;
             }
@@ -220,6 +222,14 @@ namespace QuestingBots.Components
 
                 SetObjective(botOwner.GetCurrentJobAssignment());
             }
+        }
+
+        public BotJobAssignment CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
+        {
+            BotJobAssignment clonedAssignment = new BotJobAssignment(otherBotToDoAssignment, assignment);
+            BotJobAssignmentFactory.RegisterBotJobAssignment(clonedAssignment);
+
+            return clonedAssignment;
         }
 
         public void SetObjective(BotJobAssignment objective)
@@ -351,9 +361,11 @@ namespace QuestingBots.Components
             switch (CurrentQuestAction)
             {
                 case QuestAction.HoldAtPosition:
+                case QuestAction.Teleport:
                 case QuestAction.Ambush:
                 case QuestAction.Snipe:
                 case QuestAction.CloseNearbyDoors:
+                case QuestAction.OpenNearbyDoors:
                 case QuestAction.ToggleSwitch:
                     return false;
                 case QuestAction.PlantItem:
@@ -367,8 +379,10 @@ namespace QuestingBots.Components
         {
             switch (CurrentQuestAction)
             {
+                case QuestAction.Teleport:
                 case QuestAction.Ambush:
                 case QuestAction.CloseNearbyDoors:
+                case QuestAction.OpenNearbyDoors:
                 case QuestAction.ToggleSwitch:
                     return false;
                 case QuestAction.PlantItem:

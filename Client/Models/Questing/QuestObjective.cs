@@ -47,6 +47,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("ignoreHearing")]
         public bool IgnoreHearing { get; set; } = false;
 
+        [JsonProperty("prioritizeOverFollowing")]
+        public bool PrioritizeOverFollowing { get; set; } = false;
+
         [JsonProperty("name")]
         private string name = "Unnamed Quest Objective";
 

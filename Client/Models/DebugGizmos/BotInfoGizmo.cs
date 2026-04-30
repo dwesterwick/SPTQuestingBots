@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace QuestingBots.Models.DebugGizmos
@@ -92,21 +93,21 @@ namespace QuestingBots.Models.DebugGizmos
             {
                 sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
             }
-            else if (botObjectiveManager.IsQuestingAllowed)
-            {
-                BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
-                if (botJobAssignment != null)
-                {
-                    sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
-                    sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
-                    sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
-                }
-            }
 
             if ((botQuestingDecisionMonitor == null) || !botObjectiveManager.IsQuestingAllowed)
             {
                 return;
+            }
+
+            bool mustQuest = (boss == null) || botQuestingDecisionMonitor.MustQuestBeforeFollowing;
+
+            BotJobAssignment botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            if ((botJobAssignment != null) && mustQuest)
+            {
+                sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
+                sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
             }
 
             sb.AppendLabeledValue("Current Decision", botQuestingDecisionMonitor.CurrentDecision.ToString(), Color.white, Color.white);

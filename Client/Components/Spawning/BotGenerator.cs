@@ -560,7 +560,7 @@ namespace QuestingBots.Components.Spawning
 
             if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
             {
-                if (lowercaseLocationName.Contains("labyrinth"))
+                if (lowercaseLocationName == "labyrinth")
                 {
                     return botSpawnType.MinDistanceFromPlayersInitialLabyrinth;
                 }
@@ -568,14 +568,14 @@ namespace QuestingBots.Components.Spawning
                 return botSpawnType.MinDistanceFromPlayersInitial;
             }
 
+            if (lowercaseLocationName == "labyrinth")
+            {
+                return botSpawnType.MinDistanceFromPlayersDuringRaidLabyrinth;
+            }
+
             if (lowercaseLocationName.Contains("factory"))
             {
                 return botSpawnType.MinDistanceFromPlayersDuringRaidFactory;
-            }
-
-            if (lowercaseLocationName.Contains("labyrinth"))
-            {
-                return botSpawnType.MinDistanceFromPlayersDuringRaidLabyrinth;
             }
 
             return botSpawnType.MinDistanceFromPlayersDuringRaid;

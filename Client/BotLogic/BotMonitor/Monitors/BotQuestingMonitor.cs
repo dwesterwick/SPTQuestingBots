@@ -27,6 +27,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public bool IsFollowing { get; private set; } = false;
         public bool IsRegrouping { get; private set; } = false;
         public bool ShouldWaitForFollowers { get; private set; } = false;
+        public bool FollowersNeedToTeleport { get; private set; } = false;
 
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
@@ -46,6 +47,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             IsFollowing= isFollowing();
             IsRegrouping = isRegrouping();
             ShouldWaitForFollowers = shouldWaitForFollowers();
+            FollowersNeedToTeleport = followersNeedToTeleport();
 
             if (ShouldWaitForFollowers)
             {
@@ -72,15 +74,17 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private bool shouldWaitForFollowers()
         {
             // Check if the bot has any followers
-            IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner);
-            if (followers.Count == 0)
+            IEnumerable<BotOwner> activeFollowers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner)
+                .Where(f => (f != null) && !f.IsDead)
+                .Where(f => f.GetObjectiveManager()?.PrioritizeQuestingOverFollowing != true);
+
+            if (!activeFollowers.Any())
             {
                 return false;
             }
 
             // Check if the bot is too far from any of its followers
-            IEnumerable<float> followerDistances = followers
-                .Where(f => (f != null) && !f.IsDead)
+            IEnumerable<float> followerDistances = activeFollowers
                 .Select(f => Vector3.Distance(BotOwner.Position, f.Position));
 
             if
@@ -110,6 +114,27 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
                 return true;
+            }
+
+            return false;
+        }
+
+        private bool followersNeedToTeleport()
+        {
+            IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner);
+            foreach (BotOwner follower in followers)
+            {
+                Components.BotObjectiveManager? followerObjectiveManager = follower.GetObjectiveManager();
+                if (followerObjectiveManager == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot retrieve BotObjectiveManager for follower " + follower.GetText());
+                    continue;
+                }
+
+                if (followerObjectiveManager.HasTeleportingAssignment)
+                {
+                    return true;
+                }
             }
 
             return false;

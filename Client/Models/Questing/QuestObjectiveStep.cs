@@ -62,6 +62,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("forceUnlock")]
         public bool ForceUnlock { get; set; } = false;
 
+        [JsonProperty("requireForFollowers")]
+        public bool RequireForFollowers { get; set; } = false;
+
         [JsonIgnore]
         public int? StepNumber { get; set; } = null;
 
