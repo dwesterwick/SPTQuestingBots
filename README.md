@@ -7,7 +7,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Waypoints](https://hub.sp-tarkov.com/files/file/1119-waypoints-expanded-bot-patrols-and-navmesh/) (1.8.2 or later)
 
 **Highly Recommended:**
-* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (4.4.0 or later recommended)
+* [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) (4.4.3 or later recommended)
 * [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) (1.6.3 or later recommended)
 
 **Partially compatible with:**
@@ -91,6 +91,7 @@ The three major data structures are:
     * **minRaidET**: The quest can only be selected if at least this many seconds have elapsed in the raid. This is based on the overall raid time, not the time after you spawn. For example, if you set **maxRaidET=60** for a quest and you spawn into a Factory raid with 15 minutes remaining, this quest will never be used because 300 seconds has already elapsed in the overall raid. This property is typically used to make bots rush to locations like Dorms when the raid begins. 
     * **maxRaidET**: The quest can only be selected if more more than this many seconds have elapsed in the raid. See **minRaidET** for more information.
     * **maxTimeOnQuest**: The maximum time (in seconds) that a bot is allowed to continue doing the quest after it completes at least one of its objectives. This is intended to add more variety to bot questing instead of having them stay in one area for a long period of time. By default, this is 300 seconds.
+    * **alarmQuest**: The quest can only be performed if the alarm on the map is active, which only applies to Labyrinth. This is **false** by default. 
     * **canRunBetweenObjectives**: Boolean indicating if bots are allowed to sprint to the next objective in the quest after it completes at least one objective. This is intended to be used in areas where stealth is more important (typically in buildings). This is **true** by default. 
     * **requiredSwitches**: A dictionary of the switches that must be in a specific position bot bots to perform the quest. The dictionary key is the ID of the switch, and the value is a boolean indicating if the switch must be open (actuated). If the dictionary is empty, no switches will be checked. 
     * **forbiddenWeapons**: An array of weapon classes that cannot be used to perform this quest. In order for the bot to perform the quest, it must have at least one weapon that is not in the weapon classes listed in the array. The only available options for the array elements are (case-sensitive):
@@ -119,6 +120,8 @@ The three major data structures are:
     * **lootAfterCompleting**: The only valid options for this are "Default", "Force", and "Inhibit" (case-sensitive). If "Force" is used, Questing Bots will try invoking [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) to make the bot scan for loot immediately after completing each step in the objective. However, bots will not be able to loot if they're in combat or have no available space. If "Inhibit" is used, this mod will try invoking [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) to prevent the bot from looting until after it selects another quest objective. [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) version 1.2.1 or later is required for either option to work. [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/) 2.1.9 or later is required for Questing Bots to properly force bots to loot.
     * **doorIDToUnlock**: If specified, the door with this ID must be unlocked before bots are allowed to proceed with any steps in the objective. The door's state will be checked when the bot is within **questing.unlocking_doors.search_radius** meters of the objective's first step position. 
     * **fixedPositionToUnlockDoor**: If **doorIDToUnlock** is specified, this field can optionally be added to specify an exact position where bots will stand to open the door. If this field is omitted, the interaction position will be determined programmatically. 
+    * **ignoreHearing**: If **true**, bots will ignore footsteps and gunshots, unless they see an enemy or are hit by an enemy, for the entire duration during which they are performing the objective. This is used for the initial Labyrinth quests that allow bots to escape their starting chambers without being distracted. This is **false** by default. 
+    * **prioritizeOverFollowing**: If **true**, bots will attempt to complete the objective even if they are followers for a questing boss. This is used for the initial Labyrinth quests that allow bots to escape their starting chambers because each bot spawns in its own chamber, even if it's a follower of another bot. This is **false** by default. 
     * **steps**: An array of the steps in the objective. Bots will complete the steps exactly in the order you specify.
 
 * **Steps**: A step is an individual component of an objective. 
@@ -126,21 +129,27 @@ The three major data structures are:
     Quest objective steps have the following properties:
     * **position**: The position on the map that the bot will try to reach
     * **lookToPosition**: The position on the map that bots will look toward after they reach **position**. This is only used for the **Ambush** and **Snipe** step types described below. 
+    * **targetPosition**: The position on the map that that is relevant for the quest step. This is only used for the **Teleport** step type (described below) and is the teleporting destination for bots. 
     * **waitTimeAfterCompleting**: The time the bot must wait after completing the step before it will be allowed to quest again. The default value for this field is defined by **questing.default_wait_time_after_objective_completion**.
     * **stepType**: The only valid options for this are (case-sensitive):
         * **MoveToPosition**: Bots are instructed to go to **position**. If possible, they're allowed to unlock doors that block their path.
+        * **Teleport** Bots are instructed to go to **position**, and then they are immediately teleported to **targetPosition**. This should only be used to allow bots to travel to locations they normally would be unable to reach (due to gaps in the NavMesh). 
         * **HoldAtPosition**: Bots are instructed to remain within **maxDistance** meters of **position** and stay alert for a random time between the min and max values of **minElapsedTime**.
         * **Ambush**: Bots are instructed to go to **position**, stand still, and look at **lookToPosition** for a random time between the min and max values of **minElapsedTime**. This is used to simulate camping quests.
         * **Snipe**: The same as **Ambush**, but bots can be interrupted if they hear suspicious noises
-        * **ToggleSwitch**: Bots are instructed to go to **position** and toggle the switch defined by **switchID**.
+        * **PlantItem**: Bots are instructed to go to **position** and then crouch as low as possible for a random time between the min and max values of **minElapsedTime** to simulate them planting something. Before they crouch, they will turn around to face the direction from which they came. 
+        * **ToggleSwitch**: Bots are instructed to go to **position** and toggle the switch defined by **switchID**. If the switch is locked (requiring a tool), it can only be toggled if **forceUnlock** is **true**. 
         * **RequestExtract**: This mod will try to instruct bots to extract via [SAIN](https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/).
         * **CloseNearbyDoors**: Bots are instructed to close all doors within **maxDistance** meters of **position**
+        * **OpenNearbyDoors**: Bots are instructed to open all doors within **maxDistance** meters of **position**. Currently, they cannot unlock doors when doing this. 
     
         If **stepType** is omitted, **MoveToPosition** is used by default.
     * **minElapsedTime**: The range of minimum and maximum time that a bot will perform certain types of objective steps (namely **HoldAtPosition**, **Ambush**, and **Snipe**).
     * **switchID**: If **stepType="ToggleSwitch"**, this is the ID of the switch the bot should open. It needs to exactly match one of the results in the "Found switches" debug message shown in the bepinex console when loading into the map. 
     * **maxDistance**: If **stepType="HoldAtPosition"**, this is the maximum distance (in meters) bots will be allowed to wander from **position** for the objective step. If **stepType="CloseNearbyDoors"**, bots will close all doors within this radius of **position** (in meters).
     * **chanceOfHavingKey**: The chance that bots will have keys to unlock any doors that are blocking their paths to this objective step. This overrides the default chance of having keys defined by **questing.unlocking_doors.default_chance_of_bots_having_keys** or **questing.bot_quests.eft_quests.chance_of_having_keys**. 
+    * **forceUnlock**: If **true**, bots will be able to unlock doors and toggle locked switches regardless of the value of **chanceOfHavingKey**. This is used for the initial Labyrinth quests that allow bots to escape their starting chambers without having to loot required keys and tools (which might be impossible for them to reach). This is **false** by default. 
+    * **requireForFollowers**: If **true**, all followers of a questing boss will be required to perform this step after the boss completes it. This can be helpful for quest objectives that make questing bots teleport to another location that its followers cannot reach. This is **false** by default. 
 
 **Tips and Tricks**
 * Objectives should be sparsely placed on the map. Since bots take a break from questing after each objective is completed, they will wander around the area (for an unknown distance) before continuing the quest. If you place objective positions too close to each other, the bot will unnecessarily run back and forth around the area. As a rule of thumb, place objectives at least 20m from each other. 
@@ -151,8 +160,8 @@ The three major data structures are:
 **---------- Bot Group Spawning System ----------**
 
 * Spawn chances for various group sizes are configurable. By default, solo spawns are most likely, but 2-man and 3-man groups will be commonly seen. 4-man and 5-man groups are rare but possible. 
-* EFT will assign one bot in the group to be a "boss", and the boss will select the quest to perform. All other bots in the group will follow the boss.
-* If any group members stray too far from the boss, the boss will stop questing and attempt to regroup
+* EFT will assign one bot in the group to be a "boss", and the boss will select the quest to perform. All other bots in the group will follow the boss unless they are performing an objective for which **prioritizeOverFollowing** is **true**. 
+* If any group members stray too far from the boss, the boss will stop questing and attempt to regroup unless it's performing an objective for which **prioritizeOverFollowing** is **true**. 
 * If any member of the group engages in combat or hears a suspicious noise, all other members will stop questing (or following) and engage in combat too. 
 * If the boss is allowed to sprint, so are its followers and vice versa. 
 * If the boss of a bot group dies, EFT will automatically assign a new one from the remaining members
@@ -306,6 +315,10 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * **questing.bot_quests.airdrop_bot_interest_time**: The time (in seconds) after an airdop lands during which bots can go to it via an "Airdrop Chaser" quest. This is **420** s by default. 
 * **questing.bot_quests.elimination_quest_search_time**: The time (in seconds) a bot will wait before selecting another quest after reaching each objective in an elimination EFT quest. This is **60** s by default. 
 * **questing.bot_quests.lightkeeper_island_quests.enabled**: If bots are able to perform quests on Lightkeeper Island. This is **true** by default.
+* **questing.bot_quests.labyrinth_quests.max_collider_magnitude_to_block_navmesh**: Limits the maximum size of colliders attached to traps on Labyrinth that Questing Bots uses to prevent bots from passing through them until the trap has been disabled. This is **10** m by default. **Do not change this unless you know what you're doing!** 
+* **questing.bot_quests.labyrinth_quests.pmc_bots_trigger_alarms**: Allows PMC and PScav bots to trigger the alarm on Labyrinth. This is **true** by default.
+* **questing.bot_quests.labyrinth_quests.block_navmesh_for_starting_chamber_traps**: Prevents all bots from travelling through traps on Labyrinth until they have been disabled. This makes the Labyrinth experience more realistic (more like live EFT), but if bots fail their initial quests to escape the traps, they could be stuck in their starting chambers for the whole raid. This is **true** by default.
+* **questing.bot_quests.labyrinth_quests.block_navmesh_for_intoxication_traps**: Prevents all bots from moving through poison-tipped barbed wire on Labyrinth. This is **true** by default.
 * **questing.bot_quests.eft_quests.xxx**: The settings to apply to all quests based on EFT's quests. 
 * **questing.bot_quests.spawn_rush.xxx**: The settings to apply to the "Spawn Rush" quest. 
 * **questing.bot_quests.spawn_point_wander.xxx**: The settings to apply to the "Spawn Point Wandering" quest.
@@ -355,10 +368,13 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **Options for *bot_spawns.pmcs* and *bot_spawns.player_scavs*:**
 * **enabled**: If the corresponding bot type will be allowed to spawn. This is **true** by default for both bot types.
+* **disabled_maps**: An array of the names of maps in which the bot type will not be allowed to spawn. If this option is excluded, the bot type will be allowed to spawn in all maps. 
 * **min_raid_time_remaining**: The minimum time (in seconds) that must be remaining in the raid for bots of the corresponding bot type to spawn. This is **180** s by default for both PMC's and PScavs.
 * **min_distance_from_players_initial**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used during the first wave of spawns and is **25** m by default. 
+* **min_distance_from_players_initial_labyrinth**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. However, this is only used for Labyrinth instead of **min_distance_from_players_initial**. This is used during the first wave of spawns and is **20** m by default. 
 * **min_distance_from_players_during_raid**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns.
 * **min_distance_from_players_during_raid_factory**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns. However, this is only used for Factory raids instead of **min_distance_from_players_during_raid**.
+* **min_distance_from_players_during_raid_labyrinth**: The minimum distance (in meters) that a bot must be from you and other bots when selecting its spawn point. This is used after the first wave of spawns. However, this is only used for Labyrinth raids instead of **min_distance_from_players_during_raid**.
 * **fraction_of_max_players**: When determining how many total bots of this type will spawn throughout the raid, the maximum player count for the map is multiplied by this value. This is **1** by default for PMC's and **1.5** by default for player Scavs.
 * **fraction_of_max_players_vs_raidET**: If you spawn late into the raid as a Scav, the minimum and maximum initial PMC's will be reduced by a factor determined by this array. The array contains [fraction of raid time remaining, fraction of max players] pairs, and there is no limit to the number of pairs.
 * **time_randomness**: The maximum percentage of total raid time (before reducing it for Scav raids) that player-Scav spawns can be randomly adjusted when generating a spawn schedule for them. However, player Scavs will never be allowed to spawn earlier than the minimum reduced raid time in the SPT configuration for the map, and they will never be allowed to spawn later than the maximum reduced raid time for the map. This is **10%** by default. 
@@ -385,7 +401,7 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * A *"Destroying GameObjects immediately is not permitted during physics trigger/contact, animation event callbacks or OnValidate. You must use Destroy instead."* error will sometimes appear in the game console after a bot unlocks a door. This can be ignored. 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 * Extraction via Questing Bots is only partially implemented
-* Looting via Questing Bots only allows bots to travel toward loot POI's (via vanilla EFT logic), so they rarely loot while questing
+* Looting via Questing Bots only allows bots to travel toward loot POI's (via vanilla EFT logic), so they rarely loot while questing. Using [Looting Bots](https://hub.sp-tarkov.com/files/file/1096-looting-bots/) will result in more realistic behavior. 
 * Player Scavs will only extract when using SPT 4.0.14 or later or when using SAIN without vanilla Scavs turned on
 
 **---------- Credits ----------**
