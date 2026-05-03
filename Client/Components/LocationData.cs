@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using EFT.Game.Spawning;
+using EFT.GameTriggers;
 using EFT.Interactive;
 using HarmonyLib;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
@@ -14,6 +9,12 @@ using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,25 +22,39 @@ namespace QuestingBots.Components
 {
     public class LocationData : MonoBehaviour
     {
+        public const string BOT_EVENT_ID_ALARM_ON = "alarm";
+        public const string BOT_EVENT_ID_ALARM_OFF = "alarm_stop";
+
         public int MaxTotalBots { get; private set; } = 15;
         public float MaxDistanceBetweenSpawnPoints { get; private set; } = float.MaxValue;
         public LocationSettingsClass.Location CurrentLocation { get; private set; } = null!;
         public RaidSettings CurrentRaidSettings { get; private set; } = null!;
+        public bool AlarmState { get; private set; } = false;
 
         private readonly DateTime awakeTime = DateTime.Now;
         private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
-        private Dictionary<string, EFT.Interactive.Switch> switches = new Dictionary<string, EFT.Interactive.Switch>();
+        private List<TriggerZone> alarmTriggerZones = new List<TriggerZone>();
+        private Dictionary<GameObject, List<TriggerZone>> triggerZonesForGameObjects = new Dictionary<GameObject, List<TriggerZone>>();
+        private Dictionary<GameObject, HandlerTriggerState> handlerTriggerStatesForGameObjects = new Dictionary<GameObject, HandlerTriggerState>();
+        private Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>> navMeshObstaclesControlledBySwitches = new Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>>();
+        private Dictionary<string, EFT.Interactive.Switch> IdsForSwitches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
         private Dictionary<WorldInteractiveObject, bool> areLockedDoorsUnlocked = new Dictionary<WorldInteractiveObject, bool>();
         private Dictionary<WorldInteractiveObject, Vector3> doorInteractionPositions = new Dictionary<WorldInteractiveObject, Vector3>();
         private Dictionary<WorldInteractiveObject, NoPowerTip> noPowerTipsForDoors = new Dictionary<WorldInteractiveObject, NoPowerTip>();
         private float maxExfilPointDistance = 0;
 
+        public bool IsTriggerZoneForAlarm(TriggerZone zone) => alarmTriggerZones.Contains(zone);
+
+        private string CreateNavMeshObstacleOutlinePathName(GameObject gameObject) => "NavMeshObstacle_" + gameObject.name;
+
         protected void Awake()
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
+
+            Singleton<BotEventHandler>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
@@ -80,9 +95,35 @@ namespace QuestingBots.Components
             BotObjectiveManagerFactory.Clear();
         }
 
+        protected void OnDestroy()
+        {
+            Singleton<BotEventHandler>.Instance.OnEvent -= HandleBotEvent;
+        }
+
         protected void Update()
         {
             handleCustomQuestKeypress();
+        }
+
+        private void HandleBotEvent(string id)
+        {
+            if (id == BOT_EVENT_ID_ALARM_ON)
+            {
+                if (!AlarmState)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Alarm enabled");
+                }
+                AlarmState = true;
+            }
+
+            if (id == BOT_EVENT_ID_ALARM_OFF)
+            {
+                if (AlarmState)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
+                }
+                AlarmState = false;
+            }
         }
 
         public void UpdateMaxTotalBots()
@@ -114,41 +155,310 @@ namespace QuestingBots.Components
 
         public void FindAllInteractiveObjects()
         {
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.PMCBotsTriggerAlarms)
+            {
+                FindAllAlarms();
+            }
+
+            FindAllHandlerTriggerStates();
+            FindAllTraps();
             FindAllSwitches();
             FindAllLockedDoors();
         }
 
-        public void FindAllSwitches()
+        private void FindAllAlarms()
         {
-            switches.Clear();
+            alarmTriggerZones.Clear();
+
+            TriggerZone[] allTriggerZones = FindObjectsOfType<TriggerZone>();
+            foreach (TriggerZone triggerZone in allTriggerZones)
+            {
+                string botsEventId = Singleton<EftAccessToolsUtil>.Instance.GetBotsEventId(triggerZone.transform.parent.gameObject);
+                if (botsEventId != BOT_EVENT_ID_ALARM_ON)
+                {
+                    continue;
+                }
+
+                string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(triggerZone);
+                Singleton<LoggingUtil>.Instance.LogDebug("Found TriggerZone " + (triggerId ?? "???") + " for alarm " + triggerZone.transform.parent.gameObject.name);
+                alarmTriggerZones.Add(triggerZone);
+            }
+        }
+
+        private void FindAllHandlerTriggerStates()
+        {
+            handlerTriggerStatesForGameObjects.Clear();
+
+            IEnumerable<HandlerTriggerState> allhandlerTriggerStates = FindObjectsOfType<HandlerTriggerState>();
+            foreach (HandlerTriggerState handlerTriggerState in allhandlerTriggerStates)
+            {
+                handlerTriggerStatesForGameObjects.Add(handlerTriggerState.gameObject, handlerTriggerState);
+            }
+        }
+
+        private void FindAllTraps()
+        {
+            triggerZonesForGameObjects.Clear();
+
+            TriggerZone[] allTriggerZones = FindObjectsOfType<TriggerZone>();
+            foreach (TriggerZone triggerZone in allTriggerZones)
+            {
+                HandlerDamage handlerDamage = triggerZone.gameObject.GetComponent<HandlerDamage>();
+                HandlerShoot? handlerShoot = triggerZone.gameObject.transform.parent?.gameObject?.GetComponent<HandlerShoot>();
+                if ((handlerDamage == null) && (handlerShoot == null))
+                {
+                    continue;
+                }
+
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
+
+                AddLinkedTriggerZone(gameObject, triggerZone);
+
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.BlockNavmeshForIntoxicationTraps)
+                {
+                    TryAddNavMeshObstacleToIntoxicationTrap(triggerZone);
+                }
+            }
+        }
+
+        private void AddLinkedTriggerZone(GameObject gameObject, TriggerZone triggerZone)
+        {
+            if (triggerZonesForGameObjects.ContainsKey(triggerZone.gameObject))
+            {
+                triggerZonesForGameObjects[triggerZone.gameObject].Add(triggerZone);
+                return;
+            }
+
+            triggerZonesForGameObjects.Add(triggerZone.gameObject, new List<TriggerZone>() { triggerZone });
+        }
+
+        private IEnumerable<TriggerZone> GetAllLinkedTriggerZones()
+        {
+            foreach (List<TriggerZone> triggerZones in triggerZonesForGameObjects.Values)
+            {
+                foreach (TriggerZone triggerZone in triggerZones)
+                {
+                    yield return triggerZone;
+                }
+            }
+        }
+
+        private bool TryAddNavMeshObstacleToIntoxicationTrap(TriggerZone triggerZone)
+        {
+            HandlerEffect handlerEffect = triggerZone.gameObject.GetComponent<HandlerEffect>();
+            if (handlerEffect == null)
+            {
+                return false;
+            }
+
+            HandlerEffect.EffectsSet effects = Singleton<EftAccessToolsUtil>.Instance.GetEffects(handlerEffect);
+            if (effects.Intoxication.Length == 0)
+            {
+                return false;
+            }
+
+            string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(handlerEffect);
+            Singleton<LoggingUtil>.Instance.LogDebug("Blocking NavMesh for intoxication trap " + (triggerId ?? "???") + " for " + triggerZone.transform.parent.gameObject.name);
+
+            triggerZone.gameObject.GetOrAddNavMeshObstacle();
+            return true;
+        }
+
+        private void FindAllSwitches()
+        {
+            IdsForSwitches.Clear();
 
             EFT.Interactive.Switch[] allSwitches = FindObjectsOfType<EFT.Interactive.Switch>();
-            switches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
+            IdsForSwitches.AddRange(allSwitches.ToDictionary(s => s.Id, s => s));
             
             //Singleton<LoggingUtil>.Instance.LogInfo("Found switches: " + string.Join(", ", allSwitches.Select(s => s.Id)));
 
             foreach (EFT.Interactive.Switch sw in allSwitches)
             {
                 sw.OnDoorStateChanged += reportSwitchChange;
+
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.BlockNavmeshForStartingChamberTraps)
+                {
+                    FindTrapsForSwitch(sw);
+                }
             }
+        }
+
+        private void FindTrapsForSwitch(EFT.Interactive.Switch sw)
+        {
+            IEnumerable<string> triggerIdsForSwitch = GetTriggerIdsForSwitch(sw);
+            if (!triggerIdsForSwitch.Any())
+            {
+                return;
+            }
+
+            IEnumerable<TriggerZone> triggerZones = GetAllLinkedTriggerZones();
+            foreach (TriggerZone triggerZone in triggerZones)
+            {
+                string triggerIdForTriggerZone = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(triggerZone);
+                if (!triggerIdsForSwitch.Any(x => x == triggerIdForTriggerZone))
+                {
+                    continue;
+                }
+
+                // Some trigger zones for the Labyrinth shotgun traps cause excessive NavMesh carving due to their local scale
+                Vector3 triggerZoneLocalScale = triggerZone.gameObject.transform.localScale;
+                float triggerZoneLocalScaleMagnitude = triggerZoneLocalScale.magnitude;
+                if (triggerZoneLocalScaleMagnitude > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.MaxColliderMagnitudeToBlockNavmesh)
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("NavMeshObstacle will not be added for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude is " + triggerZoneLocalScaleMagnitude);
+                    continue;
+                }
+
+                AddNavMeshObstacleForSwitch(sw, triggerZone.gameObject);
+                Singleton<LoggingUtil>.Instance.LogDebug("Added NavMeshObstacle for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name);
+            }
+        }
+
+        private void AddNavMeshObstacleForSwitch(EFT.Interactive.Switch sw, GameObject gameObjectNeedingNavMeshObstacle)
+        {
+            NavMeshObstacle navMeshObstacle = gameObjectNeedingNavMeshObstacle.GetOrAddNavMeshObstacle();
+
+            if (navMeshObstaclesControlledBySwitches.ContainsKey(sw))
+            {
+                navMeshObstaclesControlledBySwitches[sw].Add(navMeshObstacle);
+            }
+            else
+            {
+                navMeshObstaclesControlledBySwitches.Add(sw, new List<NavMeshObstacle> { navMeshObstacle });
+            }
+
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            {
+                return;
+            }
+
+            Collider collider = gameObjectNeedingNavMeshObstacle.GetComponent<Collider>();
+            if (collider == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not get Collider for " + gameObjectNeedingNavMeshObstacle.name);
+                return;
+            }
+
+            Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(collider.bounds);
+            string pathName = CreateNavMeshObstacleOutlinePathName(gameObjectNeedingNavMeshObstacle);
+            Models.Pathing.PathVisualizationData boundingBox = new Models.Pathing.PathVisualizationData(pathName, colliderBounds, Color.red);
+            Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox, true);
+        }
+
+        private void ToggleNavMeshObstacle(NavMeshObstacle navMeshObstacle, bool enabled)
+        {
+            if (navMeshObstacle.enabled != enabled)
+            {
+                string verb = enabled ? "Enabling" : "Disabling";
+                Singleton<LoggingUtil>.Instance.LogDebug(verb + " NavMeshObstacle for " + navMeshObstacle.transform.parent.gameObject.name + "." + navMeshObstacle.gameObject.name);
+            }
+
+            navMeshObstacle.enabled = enabled;
+
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            {
+                return;
+            }
+
+            string pathName = CreateNavMeshObstacleOutlinePathName(navMeshObstacle.gameObject);
+            IEnumerable<Models.Pathing.PathVisualizationData> paths = Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().FindPaths(pathName);
+            foreach (Models.Pathing.PathVisualizationData path in paths)
+            {
+                path.LineColor = enabled ? Color.red : Color.green;
+                Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(path, false);
+            }
+        }
+
+        private IEnumerable<string> GetTriggerIdsForSwitch(EFT.Interactive.Switch sw)
+        {
+            HandlerTriggerState handlerTriggerState = sw.gameObject.GetComponent<HandlerTriggerState>();
+            if (handlerTriggerState != null)
+            {
+                string[] controlledTriggerIds = Singleton<EftAccessToolsUtil>.Instance.GetControlledTriggerId(handlerTriggerState);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found controlledTriggerIds for " + sw.name + ": " + string.Join(",", controlledTriggerIds));
+
+                return controlledTriggerIds;
+            }
+
+            return GetControlledTriggerIdsForSwitch(sw);
+        }
+
+        private IEnumerable<string> GetControlledTriggerIdsForSwitch(EFT.Interactive.Switch sw)
+        {
+            HandlerPlaySoundAdvanced handlerPlaySoundAdvanced = sw.gameObject.GetComponent<HandlerPlaySoundAdvanced>();
+            if (handlerPlaySoundAdvanced == null)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            string playTriggerId = Singleton<EftAccessToolsUtil>.Instance.GetPlayTriggerId(handlerPlaySoundAdvanced);
+            if (playTriggerId.Length == 0)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            List<string> allControlledTriggerIds = new List<string>();
+            foreach (HandlerTriggerState handlerTriggerState1 in handlerTriggerStatesForGameObjects.Values)
+            {
+                string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(handlerTriggerState1);
+                if (playTriggerId != triggerId)
+                {
+                    continue;
+                }
+
+                string[] controlledTriggerIds = Singleton<EftAccessToolsUtil>.Instance.GetControlledTriggerId(handlerTriggerState1);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found controlledTriggerIds for " + playTriggerId  + " for " + handlerTriggerState1.name + ": " + string.Join(",", controlledTriggerIds));
+
+                allControlledTriggerIds.AddRange(controlledTriggerIds);
+            }
+
+            if (allControlledTriggerIds.Count == 0)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not find HandlerTriggerState for HandlerPlaySoundAdvanced _triggerId " + playTriggerId);
+            }
+
+            return allControlledTriggerIds;
         }
 
         private void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
             Singleton<LoggingUtil>.Instance.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
+
+            EFT.Interactive.Switch? sw = obj as EFT.Interactive.Switch;
+            if (sw == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError(obj.Id + " is not a Switch");
+                return;
+            }
+
+            DisableAllNavMeshObstaclesForSwitch(sw);
+        }
+
+        private void DisableAllNavMeshObstaclesForSwitch(EFT.Interactive.Switch sw)
+        {
+            if (!navMeshObstaclesControlledBySwitches.ContainsKey(sw))
+            {
+                return;
+            }
+
+            foreach (NavMeshObstacle navMeshObstacle in navMeshObstaclesControlledBySwitches[sw])
+            {
+                ToggleNavMeshObstacle(navMeshObstacle, false);
+            }
         }
 
         public EFT.Interactive.Switch FindSwitch(string id)
         {
-            if (switches.ContainsKey(id))
+            if (IdsForSwitches.ContainsKey(id))
             {
-                return switches[id];
+                return IdsForSwitches[id];
             }
 
             return null!;
         }
 
-        public void FindAllLockedDoors()
+        private void FindAllLockedDoors()
         {
             areLockedDoorsUnlocked.Clear();
 
@@ -352,9 +662,18 @@ namespace QuestingBots.Components
                 return validSpawnPointParams;
             }
 
+            if (CurrentLocation.Id == "Labyrinth")
+            {
+                // Players must complete their own starting chambers
+                SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
+                    .Where(s => s.Categories.Contain(ESpawnCategory.Player))
+                    .ToArray();
+
+                return validSpawnPointParams;
+            }
+
             if (CurrentLocation.Id.Contains("factory"))
             {
-                
                 SpawnPointParams[] validSpawnPointParams = CurrentLocation.SpawnPointParams
                     .Where(s => !isOutsideNearTransitOnFactory(s.Position) && !isInsideBrokenSiloOnFactory(s.Position))
                     .ToArray();
@@ -495,6 +814,7 @@ namespace QuestingBots.Components
                 distance = Vector3.Distance(position, closestBot.Position);
                 if ((closestBot != null) && (distance < distanceFromPlayers))
                 {
+                    Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + closestBot.GetText() + " at " + closestBot.Position);
                     return true;
                 }
             }
@@ -504,6 +824,7 @@ namespace QuestingBots.Components
                 distance = Vector3.Distance(position, player.Position);
                 if (distance < distanceFromPlayers)
                 {
+                    Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + player.GetText() + " at " + player.Position);
                     return true;
                 }
             }
@@ -527,18 +848,18 @@ namespace QuestingBots.Components
             return TryGetFurthestSpawnPointFromPlayers(players, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
         }
 
-        public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(Vector3[] positions, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, float distanceFromAllPlayers = 5)
-        {
-            return TryGetFurthestSpawnPointFromPositions(positions, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
-        }
-
         public SpawnPointParams? TryGetFurthestSpawnPointFromPlayers(IEnumerable<Player> players, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
         {
             Vector3[] playerPositions = players.Select(p => p.Position).ToArray();
             return TryGetFurthestSpawnPointFromPositions(playerPositions, allowedCategories, allowedSides, excludedSpawnPoints, distanceFromAllPlayers);
         }
 
-        public SpawnPointParams? TryGetFurthestSpawnPointFromPositions(Vector3[] positions, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPositions(Vector3[] positions, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, float distanceFromAllPlayers = 5)
+        {
+            return TryGetFurthestSpawnPointFromPositions(positions, allowedCategories, allowedSides, new SpawnPointParams[0], distanceFromAllPlayers);
+        }
+
+        public SpawnPointParams? TryGetFurthestSpawnPointFromPositions(Vector3[] positionsToAvoid, ESpawnCategoryMask allowedCategories, EPlayerSideMask allowedSides, SpawnPointParams[] excludedSpawnPoints, float distanceFromAllPlayers = 5)
         {
             Vector3[] allPlayerPositions = Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(p => p.Position).ToArray();
             SpawnPointParams[] allSpawnPoints = GetAllValidSpawnPointParams();
@@ -573,7 +894,7 @@ namespace QuestingBots.Components
             }
 
             // Get the locations of all alive bots/players on the map.
-            if (positions.Length == 0)
+            if (positionsToAvoid.Length == 0)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("No player positions");
                 return null;
@@ -581,10 +902,10 @@ namespace QuestingBots.Components
 
             //Singleton<LoggingUtil>.Instance.LogInfo("Alive players: " + string.Join(", ", Singleton<GameWorld>.Instance.AllAlivePlayersList.Select(s => s.Profile.Nickname)));
 
-            return GetFurthestSpawnPoint(positions, eligibleSpawnPoints);
+            return GetFurthestSpawnPointFromPositions(positionsToAvoid, eligibleSpawnPoints);
         }
 
-        public SpawnPointParams GetFurthestSpawnPoint(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams GetFurthestSpawnPointFromPositions(Vector3[] referencePositions, SpawnPointParams[] allSpawnPoints)
         {
             if (referencePositions.Length == 0)
             {
@@ -619,14 +940,14 @@ namespace QuestingBots.Components
             // The furthest spawn point from all reference positions is the one that has the furthest minimum distance to all of them
             KeyValuePair<SpawnPointParams, float> selectedPoint = nearestReferencePoints.OrderBy(p => p.Value).Last();
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from other players");
+            //Singleton<LoggingUtil>.Instance.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from reference positions " + string.Join(",", referencePositions));
 
             return selectedPoint.Key;
         }
 
-        public SpawnPointParams GetFurthestSpawnPoint(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams GetFurthestSpawnPointFromReferenceSpawnPoints(SpawnPointParams[] referenceSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
-            return GetFurthestSpawnPoint(referenceSpawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray(), allSpawnPoints);
+            return GetFurthestSpawnPointFromPositions(referenceSpawnPoints.Select(p => p.Position.ToUnityVector3()).ToArray(), allSpawnPoints);
         }
 
         public IEnumerable<SpawnPointParams> GetNearestSpawnPoints(Vector3 position, int count)
@@ -645,16 +966,20 @@ namespace QuestingBots.Components
             List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
             while (spawnPoints.Count < count)
             {
-                SpawnPointParams nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
-
-                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
+                SpawnPointParams? nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+                if (nextPosition == null)
                 {
-                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
                     continue;
                 }
 
-                spawnPoints.Add(nextPosition);
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Value.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition.Value).ToArray();
+                    continue;
+                }
+
+                spawnPoints.Add(nextPosition.Value);
             }
 
             return spawnPoints;
@@ -670,7 +995,7 @@ namespace QuestingBots.Components
             return allSpawnPoints.Where(s => Vector3.Distance(position, s.Position) < distance);
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             if (allSpawnPoints.Length == 0)
             {
@@ -701,18 +1026,19 @@ namespace QuestingBots.Components
             // Ensure at least one possible spawn point hasn't also been excluded
             if (excludedSpawnPoints.Contains(nearestSpawnPoint))
             {
-                throw new InvalidOperationException("All possible spawn points (" + allSpawnPoints.Length + ") are in the blacklist (" + excludedSpawnPoints.Length + ")");
+                Singleton<LoggingUtil>.Instance.LogDebug("All possible spawn points (" + allSpawnPoints.Length + ") are in the blacklist (" + excludedSpawnPoints.Length + ")");
+                return null;
             }
 
             return nearestSpawnPoint;
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition)
         {
             return GetNearestSpawnPoint(postition, new SpawnPointParams[0], GetAllValidSpawnPointParams());
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }
@@ -749,7 +1075,7 @@ namespace QuestingBots.Components
 
                     if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                     {
-                        DebugHelpers.outlinePosition(possibleInteractionPosition, Color.white, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
+                        DebugHelpers.DrawPositionOutline(possibleInteractionPosition, Color.white, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceDoors);
                     }
 
                     continue;
@@ -770,7 +1096,7 @@ namespace QuestingBots.Components
 
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(navMeshPosition.Value, Color.yellow);
+                    DebugHelpers.DrawPositionOutline(navMeshPosition.Value, Color.yellow);
                 }
             }
 
@@ -783,11 +1109,11 @@ namespace QuestingBots.Components
                 // If applicable, draw the positions in the world
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
                 {
-                    DebugHelpers.outlinePosition(orderedPostions.First(), Color.green);
+                    DebugHelpers.DrawPositionOutline(orderedPostions.First(), Color.green);
 
                     foreach (Vector3 alternatePosition in orderedPostions.Skip(1))
                     {
-                        DebugHelpers.outlinePosition(alternatePosition, Color.magenta);
+                        DebugHelpers.DrawPositionOutline(alternatePosition, Color.magenta);
                     }
                 }
 

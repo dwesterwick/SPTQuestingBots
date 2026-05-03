@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Interactive;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using EFT.Interactive;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -39,6 +40,26 @@ namespace QuestingBots.Models.Questing
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
         public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
+        public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
+        public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
+        public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
+        public bool RequireForFollowes => QuestObjectiveStepAssignment?.RequireForFollowers ?? false;
+        public bool PrioritizeOverFollowing => QuestObjectiveAssignment?.PrioritizeOverFollowing ?? false;
+        public bool MustTeleport => IsActive && (QuestObjectiveStepAssignment?.ActionType == QuestAction.Teleport);
+
+        private BotObjectiveManager? _objectiveManager = null;
+        protected BotObjectiveManager? ObjectiveManager
+        {
+            get
+            {
+                if (_objectiveManager == null)
+                {
+                    _objectiveManager = BotOwner.GetObjectiveManager();
+                }
+
+                return _objectiveManager;
+            }
+        }
 
         public BotJobAssignment(BotOwner bot)
         {
@@ -55,6 +76,20 @@ namespace QuestingBots.Models.Questing
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Unable to set first step for " + bot.GetText() + " for " + ToString());
             }
+        }
+
+        public BotJobAssignment(BotOwner bot, Quest quest, QuestObjective objective, QuestObjectiveStep step) : this(bot)
+        {
+            QuestAssignment = quest;
+            QuestObjectiveAssignment = objective;
+            QuestObjectiveStepAssignment = step;
+
+            InitializeObjectiveStep();
+        }
+
+        public BotJobAssignment(BotOwner bot, JobAssignment assignment) : this(bot, assignment.QuestAssignment, assignment.QuestObjectiveAssignment, assignment.QuestObjectiveStepAssignment)
+        {
+
         }
 
         public double? TimeSinceStarted()
@@ -96,16 +131,27 @@ namespace QuestingBots.Models.Questing
             }
 
             QuestObjectiveStepAssignment = nextStep;
-            MinElapsedTime = nextStep.GetRandomMinElapsedTime();
-            DoorToUnlock = null!;
-            EndTime = null;
-            startInternal();
+            InitializeObjectiveStep();
 
             return true;
         }
 
+        private void InitializeObjectiveStep()
+        {
+            MinElapsedTime = QuestObjectiveStepAssignment.GetRandomMinElapsedTime();
+            DoorToUnlock = null!;
+            EndTime = null;
+
+            startInternal();
+        }
+
         public void Complete()
         {
+            if (RequireForFollowes)
+            {
+                InstructFollowersToComplete();
+            }
+
             endInternal();
 
             if (Status != JobAssignmentStatus.Completed)
@@ -114,6 +160,35 @@ namespace QuestingBots.Models.Questing
             }
 
             Status = JobAssignmentStatus.Completed;
+        }
+
+        private void InstructFollowersToComplete()
+        {
+            if (ObjectiveManager == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot retrieve BotObjectiveManager for " + BotOwner.GetText());
+                return;
+            }
+
+            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner))
+            {
+                if ((follower == null) || follower.IsDead)
+                {
+                    continue;
+                }
+
+                Components.BotObjectiveManager? followerObjectiveManager = follower.GetObjectiveManager();
+                if (followerObjectiveManager == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot retrieve BotObjectiveManager for follower " + follower.GetText());
+                    continue;
+                }
+
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to complete quest step " + ToString() + "...");
+
+                BotJobAssignment clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
+                followerObjectiveManager.SetObjective(clonedAssignment);
+            }
         }
 
         public void Fail()

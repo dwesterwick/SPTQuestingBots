@@ -39,7 +39,9 @@ namespace QuestingBots.Components
 
         public Vector3? Position => assignment?.Position;
         public Vector3? LookToPosition => assignment?.LookToPosition;
+        public Vector3? TargetPosition => assignment?.TargetPosition;
         public bool IsJobAssignmentActive => assignment?.IsActive == true;
+        public bool HasTeleportingAssignment => assignment?.MustTeleport == true;
         public bool HasCompletePath => assignment.HasCompletePath;
         public string DoorIDToUnlockForObjective => assignment?.QuestObjectiveAssignment?.DoorIDToUnlock ?? "";
         public Vector3? InteractionPositionForDoorToUnlockForObjective => assignment?.QuestObjectiveAssignment?.InteractionPositionToUnlockDoor?.ToUnityVector3();
@@ -48,6 +50,10 @@ namespace QuestingBots.Components
         public double MinElapsedActionTime => assignment?.MinElapsedTime ?? 0;
         public float ChanceOfHavingKey => assignment?.QuestObjectiveStepAssignment?.ChanceOfHavingKey ?? 0;
         public float? MaxDistanceForCurrentStep => assignment?.QuestObjectiveStepAssignment?.MaxDistance;
+        public bool IgnoreHearing => assignment?.IgnoreHearing ?? false;
+        public bool ForceUnlock => assignment?.ForceUnlock ?? false;
+        public bool PrioritizeQuestingOverFollowing => assignment?.PrioritizeOverFollowing ?? false;
+        public double? WaitTimeAfterCompleting => assignment?.QuestObjectiveStepAssignment?.WaitTimeAfterCompleting;
 
         public double TimeSpentAtObjective => timeSpentAtObjectiveTimer.ElapsedMilliseconds / 1000.0;
         public float DistanceToObjective => Position.HasValue ? Vector3.Distance(Position.Value, botOwner.Position) : float.NaN;
@@ -59,6 +65,8 @@ namespace QuestingBots.Components
         public void StartJobAssigment() => assignment.Start();
         public void ReportIncompletePath() => assignment.HasCompletePath = false;
         public void RetryPath() => assignment.HasCompletePath = true;
+
+        public double? TimeSinceJobAssigmentStarted() => assignment.TimeSinceStarted();
 
         public override string ToString()
         {
@@ -196,7 +204,7 @@ namespace QuestingBots.Components
             }
 
             // Don't monitor the bot's job assignment if it's a follower of a boss
-            if (BotHiveMindMonitor.HasBoss(botOwner))
+            if (BotHiveMindMonitor.HasBoss(botOwner) && !PrioritizeQuestingOverFollowing)
             {
                 return;
             }
@@ -214,6 +222,14 @@ namespace QuestingBots.Components
 
                 SetObjective(botOwner.GetCurrentJobAssignment());
             }
+        }
+
+        public BotJobAssignment CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
+        {
+            BotJobAssignment clonedAssignment = new BotJobAssignment(otherBotToDoAssignment, assignment);
+            BotJobAssignmentFactory.RegisterBotJobAssignment(clonedAssignment);
+
+            return clonedAssignment;
         }
 
         public void SetObjective(BotJobAssignment objective)
@@ -245,7 +261,7 @@ namespace QuestingBots.Components
 
             BotPath.ClearPath();
 
-            float duration = (float)assignment.QuestObjectiveStepAssignment.WaitTimeAfterCompleting + 5;
+            float duration = (float)WaitTimeAfterCompleting!.Value + 5;
             UpdateLootingBehavior(assignment.QuestObjectiveAssignment.LootAfterCompletingSetting, duration);
 
             foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
@@ -345,9 +361,11 @@ namespace QuestingBots.Components
             switch (CurrentQuestAction)
             {
                 case QuestAction.HoldAtPosition:
+                case QuestAction.Teleport:
                 case QuestAction.Ambush:
                 case QuestAction.Snipe:
                 case QuestAction.CloseNearbyDoors:
+                case QuestAction.OpenNearbyDoors:
                 case QuestAction.ToggleSwitch:
                     return false;
                 case QuestAction.PlantItem:
@@ -361,8 +379,10 @@ namespace QuestingBots.Components
         {
             switch (CurrentQuestAction)
             {
+                case QuestAction.Teleport:
                 case QuestAction.Ambush:
                 case QuestAction.CloseNearbyDoors:
+                case QuestAction.OpenNearbyDoors:
                 case QuestAction.ToggleSwitch:
                     return false;
                 case QuestAction.PlantItem:

@@ -619,9 +619,21 @@ namespace QuestingBots.Controllers
 
             // Once a valid assignment is selected, assign it to the bot
             BotJobAssignment assignment = new BotJobAssignment(bot, quest, objective);
-            botJobAssignments[bot.Profile.Id].Add(assignment);
+            RegisterBotJobAssignment(assignment);
 
             return assignment;
+        }
+
+        public static void RegisterBotJobAssignment(BotJobAssignment assignment)
+        {
+            string botId = assignment.BotOwner.Profile.Id;
+
+            if (!botJobAssignments.ContainsKey(botId))
+            {
+                botJobAssignments.Add(botId, new List<BotJobAssignment>());
+            }
+
+            botJobAssignments[botId].Add(assignment);
         }
 
         public static IEnumerable<Quest> GetAllPossibleQuests(this BotOwner bot)

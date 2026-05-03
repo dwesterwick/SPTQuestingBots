@@ -1,12 +1,13 @@
-﻿using System;
+﻿using EFT;
+using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using HarmonyLib;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace QuestingBots.Helpers
 {
@@ -14,6 +15,26 @@ namespace QuestingBots.Helpers
     {
         private static FieldInfo pathPointsField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Vector3_0");
         private static FieldInfo pathIndexField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Int_0");
+
+        public static NavMeshObstacle GetOrAddNavMeshObstacle(this GameObject gameObject)
+        {
+            NavMeshObstacle navMeshObstacle = gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.shape = NavMeshObstacleShape.Box;
+            navMeshObstacle.center = Vector3.zero;
+            navMeshObstacle.size = Vector3.one;
+            navMeshObstacle.carving = true;
+
+            return navMeshObstacle;
+        }
+
+        public static NavMeshPathStatus CreatePathSegment(Vector3 start, Vector3 end, out Vector3[] pathCorners)
+        {
+            NavMeshPath navMeshPath = new NavMeshPath();
+            NavMesh.CalculatePath(start, end, -1, navMeshPath);
+            pathCorners = navMeshPath.corners;
+
+            return navMeshPath.status;
+        }
 
         public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {

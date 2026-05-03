@@ -8,7 +8,6 @@ using Comfort.Common;
 using EFT;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using UnityEngine;
 
@@ -44,6 +43,12 @@ namespace QuestingBots.Models.Questing
 
         [JsonProperty("fixedPositionToUnlockDoor")]
         public SerializableVector3 InteractionPositionToUnlockDoor = null!;
+
+        [JsonProperty("ignoreHearing")]
+        public bool IgnoreHearing { get; set; } = false;
+
+        [JsonProperty("prioritizeOverFollowing")]
+        public bool PrioritizeOverFollowing { get; set; } = false;
 
         [JsonProperty("name")]
         private string name = "Unnamed Quest Objective";

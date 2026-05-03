@@ -17,6 +17,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\factory4_night.json" />
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\interchange.json" />
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\laboratory.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\labyrinth.json" />
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\lighthouse.json" />
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\rezervbase.json" />
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\sandbox.json" />
@@ -26,6 +27,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LabyrinthQuestsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PlayerScavBrainConversionChancesOverridesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ServerResponses\ServerErrorResponse.cs" />

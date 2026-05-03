@@ -1,29 +1,22 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Interactive;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT.Interactive;
-using EFT.InventoryLogic;
-using EFT;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
 using UnityEngine;
-using UnityEngine.AI;
-using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
-    public class UnlockDoorAction : BehaviorExtensions.GoToPositionAbstractAction
+    public class UnlockDoorAction : AbstractWorldInteractiveObjectInteractionAction
     {
-        private WorldInteractiveObject worldInteractiveObject = null!;
         private Vector3? interactionPosition = null!;
-        private IResult keyGenerationResult = null!;
-        private KeyComponent keyComponent = null!;
-        private DependencyGraphClass<IEasyBundle>.GClass1659 bundleLoader = null!;
 
-        public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public UnlockDoorAction(BotOwner _BotOwner) : base(_BotOwner, EInteractionType.Unlock, true)
         {
             
         }
@@ -32,81 +25,38 @@ namespace QuestingBots.BotLogic.Objective
         {
             base.Start();
 
-            BotOwner.PatrollingData.Pause();
-
-            // Ensure a door has been selected for the bot to unlock
-            worldInteractiveObject = ObjectiveManager.GetCurrentQuestInteractiveObject();
-            if (worldInteractiveObject == null)
+            if (!WorldInteractiveObjectExistsForQuestStep())
             {
-                if (ObjectiveManager.MustUnlockDoor)
-                {
-                    Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot unlock a null door. InteractiveObject=" + (ObjectiveManager.GetCurrentQuestInteractiveObject()?.Id ?? "???"));
-
-                    ObjectiveManager.FailObjective();
-                }
-
-                return;
-            }
-
-            // Determine the location to which the bot should go in order to unlock the door
-            interactionPosition = ObjectiveManager.InteractionPositionForDoorToUnlockForObjective;
-            if (interactionPosition == null)
-            {
-                interactionPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetDoorInteractionPosition(worldInteractiveObject, BotOwner.Position);
-            }
-            if (interactionPosition == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
-
                 ObjectiveManager.FailObjective();
-
                 return;
             }
 
-            // Check if the door can be breached and can't be unlocked by a key
-            Door? door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
-            if ((door != null) && door.CanBeBreached && (door.KeyId == ""))
+            if (!GetDoorInteractionPosition())
             {
-                return;
-            }
-
-            // Determine what key is needed to unlock the door, and check if the bot has it
-            keyComponent = BotOwner.FindKeyComponent(worldInteractiveObject);
-            if (keyComponent != null)
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " already has key " + keyComponent.Item.LocalizedName() + " for door " + worldInteractiveObject.Id + "...");
-                return;
-            }
-
-            // If the bot does not have the key, roll the dice to see if it should be given the key
-            System.Random random = new System.Random();
-            if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for door " + worldInteractiveObject.Id + ". Selecting another objective...");
-
                 ObjectiveManager.FailObjective();
-
                 return;
             }
 
-            Item keyItem = worldInteractiveObject.GenerateKey();
-
-            if (!keyItem.TryAddToFakeStash(BotOwner, "fake stash for spawning keys"))
+            if (!DoesWorldInteractiveObjectNeedToBeUnlocked())
             {
-                Singleton<LoggingUtil>.Instance.LogError("Could not add key for door " + worldInteractiveObject.Id + " to fake stash for " + BotOwner.GetText());
-
-                ObjectiveManager.FailObjective();
-
                 return;
             }
 
-            // If the bot is lucky enough to get the key, try to transfer it to the bot
-            if (!BotOwner.TryTransferItem(keyItem))
+            if (DoesWorldInteractiveObjectNeedToBeBreached() || DoesBotHaveCorrectKey())
             {
-                Singleton<LoggingUtil>.Instance.LogError("Could not transfer key for door " + worldInteractiveObject.Id + " to " + BotOwner.GetText());
+                return;
+            }
 
+            if (!IsWorldInteractiveObjectAllowedToBeUnlocked())
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " cannot unlock " + DesiredWorldInteractiveObject!.Id);
                 ObjectiveManager.FailObjective();
+                return;
+            }
 
+            if (!TryGiveKeyToBot())
+            {
+                ObjectiveManager.FailObjective();
                 return;
             }
         }
@@ -114,8 +64,6 @@ namespace QuestingBots.BotLogic.Objective
         public override void Stop()
         {
             base.Stop();
-
-            BotOwner.PatrollingData.Unpause();
         }
 
         public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
@@ -130,10 +78,14 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
-            if (worldInteractiveObject == null)
+            if (!ObjectiveManager.IsJobAssignmentActive)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Door no longer exists");
+                return;
+            }
 
+            if (DesiredWorldInteractiveObject == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("WorldInteractiveObject no longer exists");
                 ObjectiveManager.FailObjective();
 
                 return;
@@ -141,8 +93,7 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!interactionPosition.HasValue)
             {
-                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + worldInteractiveObject.Id);
-
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for " + DesiredWorldInteractiveObject.Id);
                 ObjectiveManager.FailObjective();
 
                 return;
@@ -157,118 +108,69 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if the door is already unlocked
-            if (worldInteractiveObject.DoorState != EDoorState.Locked)
+            if (DesiredWorldInteractiveObject.DoorState == DesiredInteractionType.DesiredDoorState())
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + " is already unlocked");
-
-                ObjectiveManager.DoorIsUnlocked();
+                Singleton<LoggingUtil>.Instance.LogWarning(DesiredWorldInteractiveObject.Id + " has already been " + InteractionVerbPastTense);
+                InteractionComplete();
 
                 return;
             }
 
-            // Check if EFT was unable to generate the key for the bot
-            if (keyGenerationResult?.Failed == true)
+            if (!TryGoToWorldInteractiveObject(interactionPosition!.Value, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.MaxDistanceToUnlock))
             {
-                ObjectiveManager.FailObjective();
-
                 return;
             }
 
-            if (checkIfBotIsStuck())
+            if (MustWaitForKeyBundleToLoad())
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while trying to unlock door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id + ". Giving up.");
-
-                if (ObjectiveManager.TryChangeObjective())
-                {
-                    restartStuckTimer();
-                }
-
                 return;
             }
 
-            // This doesn't really need to be updated every frame
-            CanSprint = IsAllowedToSprint();
-
-            // Go to the interaction location selected when the action was created
-            // TO DO: Can this distance be reduced?
-            float distanceToTargetPosition = Vector3.Distance(BotOwner.Position, interactionPosition.Value);
-            if (distanceToTargetPosition >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.MaxDistanceToUnlock)
+            if (!TryExecuteInteraction())
             {
-                NavMeshPathStatus? pathStatus = RecalculatePath(interactionPosition.Value);
-
-                //if (!pathStatus.HasValue || (pathStatus.Value == NavMeshPathStatus.PathInvalid))
-                if (!pathStatus.HasValue || (BotOwner.Mover?.IsPathComplete(interactionPosition.Value, 0.5f) != true))
-                {
-                    Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " cannot find a complete path to door " + ObjectiveManager.GetCurrentQuestInteractiveObject().Id);
-
-                    ObjectiveManager.FailObjective();
-
-                    if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
-                    {
-                        drawBotPath(Color.yellow);
-                    }
-                }
-
                 return;
             }
 
-            // Check if the door requires a key
-            if (worldInteractiveObject.KeyId != "")
+            InteractionComplete();
+        }
+
+        private void InteractionComplete()
+        {
+            if ((DesiredInteractionType != EInteractionType.Unlock) && (DesiredInteractionType != EInteractionType.Breach))
             {
-                // Create the key if the bot does not already have it
-                if (keyComponent == null)
-                {
-                    keyComponent = BotOwner.FindKeyComponent(worldInteractiveObject);
-
-                    return;
-                }
-
-                // Wait for the the bundle to finish loading. If the bundle has not finished loading at this point, something is likely wrong...
-                if ((bundleLoader != null) && (!bundleLoader.Finished))
-                {
-                    Singleton<LoggingUtil>.Instance.LogWarning("Waiting for bundle for " + keyComponent.Item.LocalizedName() + " to load...");
-
-                    return;
-                }
-
-                // Load the bundle for the key if it hasn't been already. Otherwise, the unlock animation will fail. 
-                if (!keyComponent.Item.IsBundleLoaded())
-                {
-                    if (bundleLoader != null)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogInfo("Releasing bundle loader...");
-                        bundleLoader.Release();
-                    }
-
-                    Singleton<LoggingUtil>.Instance.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
-                    bundleLoader = keyComponent.Item.LoadBundle();
-
-                    return;
-                }
+                return;
             }
-
-            Door? door = ObjectiveManager.GetCurrentQuestInteractiveObject() as Door;
-
-            // Create the interaction result for the door
-            EInteractionType interactionType = EInteractionType.Unlock;
-            if ((door != null) && door.CanBeBreached && (door.KeyId == ""))
-            {
-                interactionType = EInteractionType.Breach;
-            }
-            InteractionResult interactionResult = worldInteractiveObject.GetInteractionResult(interactionType, BotOwner, keyComponent);
-
-            // Instruct the bot to unlock the door
-            BotOwner.InteractWithDoor(worldInteractiveObject, interactionResult);
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " unlocked door " + worldInteractiveObject.Id);
 
             // Report that the door has been unlocked, and wait a few seconds before allowing the bot to recalculate its path to its quest objective.
             // If the questing layer is not paused, there will not be enough time for the NavMesh to update, and the bot will fail its objective. 
             ObjectiveManager.DoorIsUnlocked();
             ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.PauseTimeAfterUnlocking;
-            
+
             // Assume the door has been unlocked because bots will constantly try breaching some doors otherwise
-            Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().ReportUnlockedDoor(worldInteractiveObject);
+            Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().ReportUnlockedDoor(DesiredWorldInteractiveObject!);
+        }
+
+        private bool GetDoorInteractionPosition()
+        {
+            if (!(DesiredWorldInteractiveObject is Door))
+            {
+                Singleton<LoggingUtil>.Instance.LogError(DesiredWorldInteractiveObject!.Id + " is not a Door");
+                return false;
+            }
+
+            // Determine the location to which the bot should go in order to unlock the door
+            interactionPosition = ObjectiveManager.InteractionPositionForDoorToUnlockForObjective;
+            if (interactionPosition == null)
+            {
+                interactionPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetDoorInteractionPosition(DesiredWorldInteractiveObject, BotOwner.Position);
+            }
+            if (interactionPosition == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + DesiredWorldInteractiveObject.Id);
+                return false;
+            }
+
+            return true;
         }
     }
 }

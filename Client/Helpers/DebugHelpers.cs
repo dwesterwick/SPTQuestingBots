@@ -83,12 +83,12 @@ namespace QuestingBots.Helpers
             };
         }
 
-        public static void outlinePosition(Vector3 position, Color color)
+        public static void DrawPositionOutline(Vector3 position, Color color)
         {
-            outlinePosition(position, color, 0.5f);
+            DrawPositionOutline(position, color, 0.5f);
         }
 
-        public static void outlinePosition(Vector3 position, Color color, float radius)
+        public static void DrawPositionOutline(Vector3 position, Color color, float radius)
         {
             string pathName = "Postion_" + "_" + DateTime.Now.ToFileTime();
 

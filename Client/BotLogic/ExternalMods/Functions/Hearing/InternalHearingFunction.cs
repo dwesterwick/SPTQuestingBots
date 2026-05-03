@@ -16,7 +16,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Hearing
 
         public override bool TryIgnoreHearing(bool value, bool ignoreUnderFire, float duration = 0)
         {
-            return false;
+            return true;
         }
     }
 }

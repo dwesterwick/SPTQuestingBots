@@ -8,7 +8,6 @@ using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
@@ -292,19 +291,24 @@ namespace QuestingBots.Helpers
             }
         }
 
-        public static KeyComponent FindKeyComponent(this BotOwner botOwner, WorldInteractiveObject door)
+        public static KeyComponent? FindKeyComponent(this BotOwner botOwner, WorldInteractiveObject? worldInteractiveObject)
         {
+            if (worldInteractiveObject == null)
+            {
+                return null;
+            }
+
             try
             {
                 InventoryController inventoryControllerClass = GetInventoryController(botOwner);
 
                 IEnumerable<KeyComponent> matchingKeys = inventoryControllerClass.Inventory.Equipment
                     .GetItemComponentsInChildren<KeyComponent>(false)
-                    .Where(k => k.Template.KeyId == door.KeyId);
+                    .Where(k => k.Template.KeyId == worldInteractiveObject.KeyId);
 
                 if (!matchingKeys.Any())
                 {
-                    return null!;
+                    return null;
                 }
 
                 return matchingKeys.First();

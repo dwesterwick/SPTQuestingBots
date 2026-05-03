@@ -55,6 +55,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "lightkeeper_island_quests", IsRequired = true)]
         public LightkeeperIslandQuestsConfig LightkeeperIslandQuests { get; set; } = new LightkeeperIslandQuestsConfig();
 
+        [DataMember(Name = "labyrinth_quests", IsRequired = true)]
+        public LabyrinthQuestsConfig LabyrinthQuests { get; set; } = new LabyrinthQuestsConfig();
+
         [DataMember(Name = "spawn_rush", IsRequired = true)]
         public QuestSettingsConfig SpawnRush { get; set; } = new QuestSettingsConfig();
 
