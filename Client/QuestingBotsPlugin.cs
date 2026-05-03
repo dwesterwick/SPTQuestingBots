@@ -14,6 +14,7 @@ namespace QuestingBots
 {
     [BepInIncompatibility("com.pandahhcorp.aidisabler")]
     [BepInIncompatibility("com.dvize.AILimit")]
+    [BepInIncompatibility("com.janky.phobos")]
     [BepInDependency("xyz.drakia.waypoints", "1.8.2")]
     [BepInDependency("xyz.drakia.bigbrain", "1.4.0")]
     [BepInPlugin(ModInfo.GUID, ModInfo.MODNAME, ModInfo.MOD_VERSION)]

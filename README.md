@@ -14,6 +14,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 * [Vagabond](https://forge.sp-tarkov.com/mod/2642/vagabond) and similar mods that significantly reduce spawn points (You MUST use another mod like [Acid's Bot Placement System](https://forge.sp-tarkov.com/mod/2097/abps-acids-bot-placement-system) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 
 
 **NOT compatible with:**
+* [Phobos](https://github.com/SleepingPills/Phobos)
 * [AI Limit](https://forge.sp-tarkov.com/mod/1945/ai-limit) or any other mods that disable AI in a similar manner. This mod relies on the AI being active throughout the entire map. **Starting with 0.2.10, Questing Bots has its own AI Limiter feature.** Please see the tab below for more information.
 
 **NOTE: Please disable the bot-spawning system in this mod if you're using other mods that manage spawning! Otherwise, there will be too many bots on the map. The bot-spawning system in this mod will be automatically disabled** if any of the following mods are detected:
