@@ -2,7 +2,6 @@
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.Components.Spawning;
-using QuestingBots.Controllers;
 using QuestingBots.Models;
 using QuestingBots.Utils;
 using System;
@@ -34,9 +33,14 @@ namespace QuestingBots.Helpers
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allBrains.ToStringList(), brainLayerPriorities.Regrouping);
         }
 
-        public static IEnumerable<BotBrainType> AddTestBrain(this IEnumerable<BotBrainType> list)
+        public static IEnumerable<BotBrainType> AddTestBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("BossTest", WildSpawnType.bossTest) });
+            return list.Concat(new[]
+            {
+                new BotBrainType("BossTest", WildSpawnType.bossTest),
+                new BotBrainType("Assault", WildSpawnType.followerTest),
+                new BotBrainType("Assault", WildSpawnType.test)
+            });
         }
 
         public static IEnumerable<BotBrainType> AddBTRBrain(this IEnumerable<BotBrainType> list)
@@ -49,7 +53,11 @@ namespace QuestingBots.Helpers
             return list.Concat(new[]
             {
                 new BotBrainType("Assault", WildSpawnType.assault),
-                new BotBrainType("CursAssault", WildSpawnType.cursedAssault)
+                new BotBrainType("CursAssault", WildSpawnType.cursedAssault),
+                new BotBrainType("Assault", WildSpawnType.spiritSpring),
+                new BotBrainType("Assault", WildSpawnType.spiritWinter),
+                new BotBrainType("Assault", WildSpawnType.peacemaker),
+                new BotBrainType("Assault", WildSpawnType.skier)
             });
         }
 
@@ -111,14 +119,26 @@ namespace QuestingBots.Helpers
             return list.Concat(new[] { new BotBrainType("SectantWarrior", WildSpawnType.sectantWarrior) });
         }
 
-        public static IEnumerable<BotBrainType> AddCultistPriestBrain(this IEnumerable<BotBrainType> list)
+        public static IEnumerable<BotBrainType> AddCultistBossBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("SectantPriest", WildSpawnType.sectantPriest) });
+            return list.Concat(new[]
+            {
+                new BotBrainType("SectantPriest", WildSpawnType.sectantPriest),
+                new BotBrainType("Prst event", WildSpawnType.sectactPriestEvent),
+                new BotBrainType("SctPredvst", WildSpawnType.sectantPredvestnik),
+                new BotBrainType("PrizrakSt", WildSpawnType.sectantPrizrak),
+                new BotBrainType("Oni", WildSpawnType.sectantOni)
+            });
         }
 
-        public static IEnumerable<BotBrainType> AddZryachiyBrain(this IEnumerable<BotBrainType> list)
+        public static IEnumerable<BotBrainType> AddZryachiyBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("BossZryachiy", WildSpawnType.bossZryachiy) });
+            return list.Concat(new[]
+            {
+                new BotBrainType("BossZryachiy", WildSpawnType.bossZryachiy),
+                new BotBrainType("PeaceZryachiy", WildSpawnType.peacefullZryachiyEvent),
+                new BotBrainType("RavangeZryachiy", WildSpawnType.ravangeZryachiyEvent)
+            });
         }
 
         public static IEnumerable<BotBrainType> AddZryachiyFollowerBrain(this IEnumerable<BotBrainType> list)
@@ -126,14 +146,23 @@ namespace QuestingBots.Helpers
             return list.Concat(new[] { new BotBrainType("Fl_Zraychiy", WildSpawnType.followerZryachiy) });
         }
 
-        public static IEnumerable<BotBrainType> AddTagillaBrain(this IEnumerable<BotBrainType> list)
+        public static IEnumerable<BotBrainType> AddTagillaBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Tagilla", WildSpawnType.bossTagilla) });
+            return list.Concat(new[]
+            {
+                new BotBrainType("Tagilla", WildSpawnType.bossTagilla),
+                new BotBrainType("Tagilla", WildSpawnType.infectedTagilla),
+                new BotBrainType("TagillaAgro", WildSpawnType.bossTagillaAgro)
+            });
         }
 
-        public static IEnumerable<BotBrainType> AddKillaBrain(this IEnumerable<BotBrainType> list)
+        public static IEnumerable<BotBrainType> AddKillaBrains(this IEnumerable<BotBrainType> list)
         {
-            return list.Concat(new[] { new BotBrainType("Killa", WildSpawnType.bossKilla) });
+            return list.Concat(new[]
+            {
+                new BotBrainType("Killa", WildSpawnType.bossKilla),
+                new BotBrainType("KillaAgro", WildSpawnType.bossKillaAgro)
+            });
         }
 
         public static IEnumerable<BotBrainType> AddNormalBossBrains(this IEnumerable<BotBrainType> list)
@@ -156,6 +185,7 @@ namespace QuestingBots.Helpers
                 new BotBrainType("FollowerBully", WildSpawnType.followerBully),
                 new BotBrainType("FollowerSanitar", WildSpawnType.followerSanitar),
                 new BotBrainType("TagillaFollower", WildSpawnType.followerTagilla),
+                new BotBrainType("HelperAgro", WildSpawnType.tagillaHelperAgro),
                 new BotBrainType("FollowerGluharAssault", WildSpawnType.followerGluharAssault),
                 new BotBrainType("FollowerGluharProtect", WildSpawnType.followerGluharSecurity),
                 new BotBrainType("FollowerGluharScout", WildSpawnType.followerGluharScout),
@@ -169,12 +199,23 @@ namespace QuestingBots.Helpers
             });
         }
 
+        public static IEnumerable<BotBrainType> AddInfectedBrains(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[]
+            {
+                new BotBrainType("InfectedSlow", WildSpawnType.infectedAssault),
+                new BotBrainType("InfectedSlow", WildSpawnType.infectedCivil),
+                new BotBrainType("InfectedSlow", WildSpawnType.infectedLaborant),
+                new BotBrainType("InfectedSlow", WildSpawnType.infectedPmc)
+            });
+        }
+
         public static IEnumerable<BotBrainType> AddAllNormalBossBrains(this IEnumerable<BotBrainType> list)
         {
             return list
                 .AddNormalBossBrains()
-                .AddTagillaBrain()
-                .AddKillaBrain()
+                .AddTagillaBrains()
+                .AddKillaBrains()
                 .AddRogueBrain()
                 .AddRaiderBrain()
                 .AddKnightBrain()
@@ -199,13 +240,13 @@ namespace QuestingBots.Helpers
         {
             return list
                 .AddCultistBrain()
-                .AddCultistPriestBrain();
+                .AddCultistBossBrains();
         }
 
         public static IEnumerable<BotBrainType> AddZryachiyAndFollowerBrains(this IEnumerable<BotBrainType> list)
         {
             return list
-                .AddZryachiyBrain()
+                .AddZryachiyBrains()
                 .AddZryachiyFollowerBrain();
         }
 
@@ -213,7 +254,7 @@ namespace QuestingBots.Helpers
         {
             return list
                 .AddSniperScavBrain()
-                .AddZryachiyBrain()
+                .AddZryachiyBrains()
                 .AddZryachiyFollowerBrain();
         }
 
@@ -223,6 +264,7 @@ namespace QuestingBots.Helpers
                 .AddPMCBrains()
                 .AddNormalScavBrains()
                 .AddCrazyScavBrain()
+                .AddInfectedBrains()
                 .AddAllNormalBossAndFollowerBrains()
                 .AddAllCultistBrains();
         }
