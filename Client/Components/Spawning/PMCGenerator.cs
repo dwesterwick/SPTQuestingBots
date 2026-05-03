@@ -132,10 +132,7 @@ namespace QuestingBots.Components.Spawning
 
             // Add the spawn points for the bot group to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each
             // other when multiple initial PMC groups are spawned at the same time. 
-            if (spawnPoint.HasValue)
-            {
-                PendingSpawnPoints.AddRange(spawnPointsForGroup);
-            }
+            PendingSpawnPoints.AddRange(spawnPointsForGroup);
 
             return spawnPositionsForGroup;
         }

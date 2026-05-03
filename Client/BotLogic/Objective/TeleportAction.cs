@@ -35,7 +35,8 @@ namespace QuestingBots.BotLogic.Objective
             }
             if (teleportTargetPosition == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot teleport to " + teleportTargetPosition);
+                string targetPositionText = ObjectiveManager.TargetPosition == null ? "null position" : ObjectiveManager.TargetPosition.ToString();
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot teleport to " + targetPositionText);
 
                 ObjectiveManager.FailObjective();
 

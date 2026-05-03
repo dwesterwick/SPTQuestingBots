@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -48,7 +50,7 @@ namespace QuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (decisionMonitor.HasAQuestingBoss && !objectiveManager.PrioritizeQuestingOverFollowing)
+            if (decisionMonitor.HasAQuestingBoss && !objectiveManager.PrioritizeQuestingOverFollowing && !objectiveManager.HasTeleportingAssignment)
             {
                 return updatePreviousState(false);
             }

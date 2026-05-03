@@ -678,8 +678,6 @@ namespace QuestingBots.Components
                     .Where(s => !isOutsideNearTransitOnFactory(s.Position) && !isInsideBrokenSiloOnFactory(s.Position))
                     .ToArray();
 
-                Singleton<LoggingUtil>.Instance.LogDebug("Player spawn points: " + string.Join(", ", validSpawnPointParams));
-
                 return validSpawnPointParams;
             }
 
@@ -942,7 +940,7 @@ namespace QuestingBots.Components
             // The furthest spawn point from all reference positions is the one that has the furthest minimum distance to all of them
             KeyValuePair<SpawnPointParams, float> selectedPoint = nearestReferencePoints.OrderBy(p => p.Value).Last();
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from reference positions " + string.Join(",", referencePositions));
+            //Singleton<LoggingUtil>.Instance.LogDebug("Found furthest spawn point " + selectedPoint.Key.Position.ToUnityVector3().ToString() + " that is " + selectedPoint.Value + "m from reference positions " + string.Join(",", referencePositions));
 
             return selectedPoint.Key;
         }
@@ -968,16 +966,20 @@ namespace QuestingBots.Components
             List<SpawnPointParams> spawnPoints = new List<SpawnPointParams>();
             while (spawnPoints.Count < count)
             {
-                SpawnPointParams nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
-
-                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
-                if (!navMeshPosition.HasValue)
+                SpawnPointParams? nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
+                if (nextPosition == null)
                 {
-                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition).ToArray();
                     continue;
                 }
 
-                spawnPoints.Add(nextPosition);
+                Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Value.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
+                if (!navMeshPosition.HasValue)
+                {
+                    excludedSpawnPoints = excludedSpawnPoints.AddItem(nextPosition.Value).ToArray();
+                    continue;
+                }
+
+                spawnPoints.Add(nextPosition.Value);
             }
 
             return spawnPoints;
@@ -993,7 +995,7 @@ namespace QuestingBots.Components
             return allSpawnPoints.Where(s => Vector3.Distance(position, s.Position) < distance);
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints, SpawnPointParams[] allSpawnPoints)
         {
             if (allSpawnPoints.Length == 0)
             {
@@ -1024,18 +1026,19 @@ namespace QuestingBots.Components
             // Ensure at least one possible spawn point hasn't also been excluded
             if (excludedSpawnPoints.Contains(nearestSpawnPoint))
             {
-                throw new InvalidOperationException("All possible spawn points (" + allSpawnPoints.Length + ") are in the blacklist (" + excludedSpawnPoints.Length + ")");
+                Singleton<LoggingUtil>.Instance.LogDebug("All possible spawn points (" + allSpawnPoints.Length + ") are in the blacklist (" + excludedSpawnPoints.Length + ")");
+                return null;
             }
 
             return nearestSpawnPoint;
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition)
         {
             return GetNearestSpawnPoint(postition, new SpawnPointParams[0], GetAllValidSpawnPointParams());
         }
 
-        public SpawnPointParams GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
+        public SpawnPointParams? GetNearestSpawnPoint(Vector3 postition, SpawnPointParams[] excludedSpawnPoints)
         {
             return GetNearestSpawnPoint(postition, excludedSpawnPoints, GetAllValidSpawnPointParams());
         }

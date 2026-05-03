@@ -121,8 +121,11 @@ namespace QuestingBots.Components.Spawning
                 .ToArray();
 
             // Find a spawn location for the bot group that is as far from other players and bots as possible
-            SpawnPointParams[] excludedSpawnpoints = PendingSpawnPoints
-                .SelectMany(s => locationData.GetNearbySpawnPoints(s.Position, minDistanceFromOtherPlayers)).ToArray();
+            SpawnPointParams[] excludedSpawnpoints = positionsToAvoid
+                .SelectMany(point => locationData.GetNearbySpawnPoints(point, minDistanceFromOtherPlayers))
+                .Distinct() // This can probably be commented out for release builds
+                .ToArray();
+
             SpawnPointParams? spawnPoint = locationData.TryGetFurthestSpawnPointFromPositions(positionsToAvoid, ESpawnCategoryMask.Player, EPlayerSideMask.All, excludedSpawnpoints, minDistanceFromOtherPlayers);
             if (!spawnPoint.HasValue)
             {
@@ -131,17 +134,17 @@ namespace QuestingBots.Components.Spawning
             }
 
             // Create a list of spawn points at the selected location
-            IEnumerable<Vector3> spawnPositions = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, excludedSpawnpoints)
-                .Select(p => p.Position.ToUnityVector3());
-
-            if (!spawnPositions.Any())
+            IEnumerable<SpawnPointParams> spawnPointsForGroup = locationData.GetNearestSpawnPoints(spawnPoint.Value.Position.ToUnityVector3(), botGroup.Data.Count, excludedSpawnpoints);
+            if (!spawnPointsForGroup.Any())
             {
                 Singleton<LoggingUtil>.Instance.LogError("No valid spawn positions found for spawn point " + spawnPoint.Value.Position.ToUnityVector3().ToString());
                 return Enumerable.Empty<Vector3>();
             }
 
             // Ensure none of the spawn points are too close to other players or bots
-            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositions, GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs), out float distance))
+            IEnumerable<Vector3> spawnPositionsForGroup = spawnPointsForGroup.Select(p => p.Position.ToUnityVector3());
+            float minSpawnDistance = GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs);
+            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositionsForGroup, minSpawnDistance, out float distance))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();
@@ -149,12 +152,9 @@ namespace QuestingBots.Components.Spawning
 
             // Add the bot's spawn point to the list of other spawn points that are currently being used. That way, multiple bots won't spawn close to each
             // other when multiple initial PMC groups are spawned at the same time. 
-            if (spawnPoint.HasValue)
-            {
-                PendingSpawnPoints.Add(spawnPoint.Value);
-            }
+            PendingSpawnPoints.AddRange(spawnPointsForGroup);
 
-            return spawnPositions;
+            return spawnPositionsForGroup;
         }
 
         private void createBotSpawnSchedule()
