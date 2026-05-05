@@ -212,7 +212,7 @@ namespace QuestingBots.Components
 
                 //Singleton<LoggingUtil>.Instance.LogInfo("Found TriggerZone for trap " + trap.gameObject.name);
 
-                AddLinkedTriggerZone(gameObject, triggerZone);
+                AddLinkedTriggerZone(triggerZone);
 
                 if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.BlockNavmeshForIntoxicationTraps)
                 {
@@ -221,7 +221,7 @@ namespace QuestingBots.Components
             }
         }
 
-        private void AddLinkedTriggerZone(GameObject gameObject, TriggerZone triggerZone)
+        private void AddLinkedTriggerZone(TriggerZone triggerZone)
         {
             if (triggerZonesForGameObjects.ContainsKey(triggerZone.gameObject))
             {
