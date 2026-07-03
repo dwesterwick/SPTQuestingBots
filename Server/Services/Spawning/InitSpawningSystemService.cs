@@ -155,7 +155,7 @@ namespace QuestingBots.Services.Spawning
                     continue;
                 }
 
-                string locationId = location.Base.Id;
+                string locationId = location.Base.Id.ToLower();
                 if (!_botConfig.MaxBotCap.ContainsKey(locationId))
                 {
                     continue;
@@ -178,7 +178,7 @@ namespace QuestingBots.Services.Spawning
                 int newBotCap = _botConfig.MaxBotCap[locationId];
                 if (newBotCap != originalSPTBotCap)
                 {
-                    _logger.Info($"Updated bot cap for {locationId} to ${newBotCap} (Original SPT: {originalSPTBotCap}, EFT: {eftBotCap}, Fixed Adjustment: {fixedAdjustment})");
+                    _logger.Info($"Updated bot cap for {locationId} to {newBotCap} (Original SPT: {originalSPTBotCap}, EFT: {eftBotCap}, Fixed Adjustment: {fixedAdjustment})");
                 }
             }
         }
