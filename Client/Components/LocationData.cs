@@ -93,6 +93,8 @@ namespace QuestingBots.Components
 
             calculateMaxDistanceBetweenSpawnPoints();
             BotObjectiveManagerFactory.Clear();
+
+            //OutlinePartisanZones();
         }
 
         protected void OnDestroy()
@@ -123,6 +125,31 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
                 }
                 AlarmState = false;
+            }
+        }
+
+        private void OutlinePartisanZones()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            {
+                return;
+            }
+
+            AIPlaceLogicPartisan[] allPartisanZones = FindObjectsOfType<AIPlaceLogicPartisan>();
+            foreach (AIPlaceLogicPartisan partisanZone in allPartisanZones)
+            {
+                Collider collider = partisanZone.transform.parent.gameObject.GetComponent<Collider>();
+                if (collider == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not get Collider for " + partisanZone.name);
+                    continue;
+                }
+
+                Vector3[] colliderBounds = DebugHelpers.GetBoundingBoxPoints(collider.bounds);
+                Models.Pathing.PathVisualizationData boundingBox = new Models.Pathing.PathVisualizationData(partisanZone.name, colliderBounds, Color.magenta);
+                Singleton<GameWorld>.Instance.GetComponent<PathRenderer>().AddOrUpdatePath(boundingBox, true);
+
+                Singleton<LoggingUtil>.Instance.LogDebug("Added outline for AIPlaceLogicPartisan " + partisanZone.name);
             }
         }
 
