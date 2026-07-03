@@ -1,8 +1,10 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using HarmonyLib;
-using SPT.Reflection.Patching;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +12,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -26,6 +26,7 @@ namespace QuestingBots.Patches.Spawning
         protected static IEnumerable<CodeInstruction> PatchTranspiler(IEnumerable<CodeInstruction> originalInstructions)
         {
             MethodInfo isSuitableMethodInfo = typeof(BotsGroup).GetMethod(nameof(BotsGroup.IsSuitable), BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo replacementMethodInfo = typeof(BotsGroupIsPlayerEnemyPatch).GetMethod(nameof(ShouldAlwaysBeAllies), BindingFlags.NonPublic | BindingFlags.Static);
 
             List<CodeInstruction> modifiedInstructions = originalInstructions.ToList();
 
@@ -34,16 +35,31 @@ namespace QuestingBots.Patches.Spawning
                 // Search for "if (this.IsSuitable(role))"
                 if ((modifiedInstructions[i].opcode == OpCodes.Call) && ((MethodInfo)modifiedInstructions[i].operand == isSuitableMethodInfo))
                 {
-                    // Remove the "return false" inside the "if" block
-                    for (int j = i + 2; j < i + 4; j++)
-                    {
-                        modifiedInstructions[j].opcode = OpCodes.Nop;
-                        modifiedInstructions[j].operand = null;
-                    }
+                    // Replace the role argument with player argument
+                    modifiedInstructions[i - 1] = new CodeInstruction(OpCodes.Ldarg_1);
+
+                    // Replace the original method call
+                    modifiedInstructions[i] = new CodeInstruction(OpCodes.Call, replacementMethodInfo);
                 }
             }
 
             return modifiedInstructions;
+        }
+
+        private static bool ShouldAlwaysBeAllies(BotsGroup __instance, IPlayer player)
+        {
+            if (__instance.InitialBot.Profile.Info.Side != EPlayerSide.Savage)
+            {
+                return false;
+            }
+
+            if (player.Profile.Info.Side != EPlayerSide.Savage)
+            {
+                return false;
+            }
+
+            bool isSuitable = __instance.IsSuitable(player.Profile.Info.Settings.Role);
+            return isSuitable;
         }
 
         [PatchPrefix]

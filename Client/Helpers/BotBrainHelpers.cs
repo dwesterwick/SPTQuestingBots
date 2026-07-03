@@ -114,6 +114,11 @@ namespace QuestingBots.Helpers
             });
         }
 
+        public static IEnumerable<BotBrainType> AddPartisanBrain(this IEnumerable<BotBrainType> list)
+        {
+            return list.Concat(new[] { new BotBrainType("BossPartisan", WildSpawnType.bossPartisan) });
+        }
+
         public static IEnumerable<BotBrainType> AddCultistBrain(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[] { new BotBrainType("SectantWarrior", WildSpawnType.sectantWarrior) });
@@ -266,6 +271,7 @@ namespace QuestingBots.Helpers
                 .AddCrazyScavBrain()
                 .AddInfectedBrains()
                 .AddAllNormalBossAndFollowerBrains()
+                .AddPartisanBrain()
                 .AddAllCultistBrains();
         }
 
