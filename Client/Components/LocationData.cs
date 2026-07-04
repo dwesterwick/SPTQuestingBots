@@ -996,7 +996,7 @@ namespace QuestingBots.Components
                 SpawnPointParams? nextPosition = GetNearestSpawnPoint(position, spawnPoints.ToArray().AddRangeToArray(excludedSpawnPoints));
                 if (nextPosition == null)
                 {
-                    continue;
+                    return Enumerable.Empty<SpawnPointParams>();
                 }
 
                 Vector3? navMeshPosition = FindNearestNavMeshPosition(nextPosition.Value.Position, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn);
