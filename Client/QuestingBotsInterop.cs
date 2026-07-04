@@ -3,6 +3,7 @@ using EFT;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,33 @@ namespace QuestingBots
         }
     }
 
+    internal class QuestingBotsBotJobAssignmentHistoryEntry
+    {
+        public bool IsValid { get; private set; } = false;
+        public string StartTimestampText { get; private set; } = string.Empty;
+        public string EndTimestampText { get; private set; } = string.Empty;
+        public string QuestName { get; private set; } = string.Empty;
+        public string QuestObjectiveName { get; private set; } = string.Empty;
+        public string QuestStep { get; private set; } = string.Empty;
+        public string Status { get; private set; } = string.Empty;
+
+        public long StartTimestamp => long.Parse(StartTimestampText);
+        public long EndTimestamp => long.Parse(EndTimestampText);
+
+        public QuestingBotsBotJobAssignmentHistoryEntry() { }
+
+        public QuestingBotsBotJobAssignmentHistoryEntry(string startTimestamp, string endTimestamp, string questName, string questObjectiveName, string questStep, string status) : this()
+        {
+            StartTimestampText = startTimestamp;
+            EndTimestampText = endTimestamp;
+            QuestName = questName;
+            QuestObjectiveName = questObjectiveName;
+            QuestStep = questStep;
+            Status = status;
+            IsValid = true;
+        }
+    }
+
     internal static class QuestingBotsInterop
     {
         private static bool _QuestingBotsLoadedChecked = false;
@@ -74,6 +102,7 @@ namespace QuestingBots
         private static MethodInfo _IsCurrentJobAssignmentAnEftQuestMethod = null!;
         private static MethodInfo _IsCurrentJobAssignmentActiveMethod = null!;
         private static MethodInfo _HasAQuestingBossMethod = null!;
+        private static MethodInfo _GetJobAssignmentHistoryCsvDataMethod = null!;
 
         /**
          * Return true if Questing Bots is loaded in the client
@@ -117,6 +146,7 @@ namespace QuestingBots
                     _IsCurrentJobAssignmentAnEftQuestMethod = AccessTools.Method(_QuestingBotsExternalType, "IsCurrentJobAssignmentAnEftQuest");
                     _IsCurrentJobAssignmentActiveMethod = AccessTools.Method(_QuestingBotsExternalType, "HasActiveJobAssignment");
                     _HasAQuestingBossMethod = AccessTools.Method(_QuestingBotsExternalType, "HasAQuestingBoss");
+                    _GetJobAssignmentHistoryCsvDataMethod = AccessTools.Method(_QuestingBotsExternalType, "GetJobAssignmentHistoryCsvData");
                 }
             }
 
@@ -254,6 +284,31 @@ namespace QuestingBots
 
             bool hasAQuestingBoss = (bool)_HasAQuestingBossMethod.Invoke(null, new object[] { bot });
             return hasAQuestingBoss;
+        }
+
+        /**
+         * Return information about all job assignments for the specified bot
+         */
+        public static IEnumerable<QuestingBotsBotJobAssignmentHistoryEntry> GetJobAssignmentHistory(BotOwner bot)
+        {
+            if (!Init()) yield break;
+            if (_GetJobAssignmentHistoryCsvDataMethod == null) yield break;
+
+            IEnumerable<string[]> historyCsvEntries = (IEnumerable<string[]>)_GetJobAssignmentHistoryCsvDataMethod.Invoke(null, new object[] { bot });
+            foreach (string[] historyCsvEntry in historyCsvEntries)
+            {
+                QuestingBotsBotJobAssignmentHistoryEntry historyEntry = new QuestingBotsBotJobAssignmentHistoryEntry
+                (
+                    historyCsvEntry[0],
+                    historyCsvEntry[1],
+                    historyCsvEntry[2],
+                    historyCsvEntry[3],
+                    historyCsvEntry[4],
+                    historyCsvEntry[5]
+                );
+
+                yield return historyEntry;
+            }
         }
     }
 }

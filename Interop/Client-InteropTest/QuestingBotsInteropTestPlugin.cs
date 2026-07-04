@@ -17,6 +17,7 @@ namespace QuestingBotsInteropTest
             LoggingController.Logger = Logger;
             new GameStartPatch().Enable();
             new BotsControllerInitPatch().Enable();
+            new BotDisposedPatch().Enable();
             Logger.LogInfo("Loading QuestingBotsInteropTest...done.");
         }
     }

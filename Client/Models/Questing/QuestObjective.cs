@@ -56,6 +56,7 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("steps")]
         private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
 
+        public string Name => name;
         public ReadOnlyCollection<QuestObjectiveStep> AllSteps => new ReadOnlyCollection<QuestObjectiveStep>(questObjectiveSteps);
         public int StepCount => questObjectiveSteps.Length;
 

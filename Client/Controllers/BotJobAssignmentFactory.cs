@@ -1,8 +1,6 @@
-﻿using BepInEx.Bootstrap;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
-using QuestingBots.BotLogic.Objective;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
@@ -748,14 +746,19 @@ namespace QuestingBots.Controllers
             return selectedQuest;
         }
 
-        public static IEnumerable<BotJobAssignment> GetCompletedOrAchivedQuests(this BotOwner bot)
+        public static IEnumerable<BotJobAssignment> GetAllQuests(this BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
                 return Enumerable.Empty<BotJobAssignment>();
             }
 
-            return botJobAssignments[bot.Profile.Id].Where(a => a.IsCompletedOrArchived);
+            return botJobAssignments[bot.Profile.Id];
+        }
+
+        public static IEnumerable<BotJobAssignment> GetCompletedOrAchivedQuests(this BotOwner bot)
+        {
+            return bot.GetAllQuests().Where(a => a.IsCompletedOrArchived);
         }
 
         public static int NumberOfCompletedOrAchivedQuests(this BotOwner bot)

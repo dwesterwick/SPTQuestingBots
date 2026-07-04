@@ -43,7 +43,7 @@ namespace QuestingBots.Models.Questing
         public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
         public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
         public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
-        public bool RequireForFollowes => QuestObjectiveStepAssignment?.RequireForFollowers ?? false;
+        public bool RequireForFollowers => QuestObjectiveStepAssignment?.RequireForFollowers ?? false;
         public bool PrioritizeOverFollowing => QuestObjectiveAssignment?.PrioritizeOverFollowing ?? false;
         public bool MustTeleport => IsActive && (QuestObjectiveStepAssignment?.ActionType == QuestAction.Teleport);
 
@@ -147,7 +147,7 @@ namespace QuestingBots.Models.Questing
 
         public void Complete()
         {
-            if (RequireForFollowes)
+            if (RequireForFollowers)
             {
                 InstructFollowersToComplete();
             }

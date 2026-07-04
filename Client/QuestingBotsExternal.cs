@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using EFT;
+﻿using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Models.Questing;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace QuestingBots
@@ -18,6 +19,23 @@ namespace QuestingBots
         public static int GetRemainingBotGenerators() => BotGenerator.RemainingBotGenerators;
         public static int GetCurrentBotGeneratorProgress() => BotGenerator.CurrentBotGeneratorProgress;
         public static string GetCurrentBotGeneratorType() => BotGenerator.CurrentBotGeneratorType;
+
+        public static IEnumerable<string[]> GetJobAssignmentHistoryCsvData(this BotOwner bot)
+        {
+            IEnumerable<BotJobAssignment> allJobAssignments = bot.GetAllQuests();
+            foreach (BotJobAssignment assignment in allJobAssignments)
+            {
+                yield return new string[]
+                {
+                    (assignment.StartTime ?? DateTime.FromFileTimeUtc(0)).ToFileTimeUtc().ToString(),
+                    (assignment.EndTime ?? DateTime.FromFileTimeUtc(0)).ToFileTimeUtc().ToString(),
+                    assignment.QuestAssignment.Name,
+                    assignment.QuestObjectiveAssignment.Name,
+                    assignment.QuestObjectiveStepAssignment.ToString(),
+                    assignment.Status.ToString()
+                };
+            }
+        }
 
         public static string GetCurrentDecision(this BotOwner bot)
         {
