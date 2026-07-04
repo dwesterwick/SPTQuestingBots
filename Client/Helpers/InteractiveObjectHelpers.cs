@@ -196,20 +196,21 @@ namespace QuestingBots.Helpers
 
         public static void ExecuteInteractionResult(this WorldInteractiveObject worldInteractiveObject, InteractionResult interactionResult, Player player)
         {
+            Action interactionCallback = () => { interactionResult.RaiseUnlockEvent(CommandStatus.Succeed, player); };
+
+            interactionResult.RaiseUnlockEvent(CommandStatus.Begin, player);
+
             if (worldInteractiveObject is Door)
             {
-                interactionResult.RaiseUnlockEvent(CommandStatus.Begin, player);
-
                 // NOTE: This method MUST be used for Fika compatibility
-                player.vmethod_0(worldInteractiveObject, interactionResult, () => { interactionResult.RaiseUnlockEvent(CommandStatus.Succeed, player); });
+                player.vmethod_0(worldInteractiveObject, interactionResult, interactionCallback);
             }
 
             if (worldInteractiveObject is Switch)
             {
-                worldInteractiveObject.OnDoorStateChanged += ForceSwitchOpen;
+                interactionCallback();
 
-                interactionResult.RaiseUnlockEvent(CommandStatus.Begin, player);
-                interactionResult.RaiseUnlockEvent(CommandStatus.Succeed, player);
+                worldInteractiveObject.OnDoorStateChanged += EnsureDoorStateChanged;
             }
 
             // NOTE: This method MUST be used for Fika compatibility
@@ -228,19 +229,23 @@ namespace QuestingBots.Helpers
             unlockInteractionResult.RaiseEvents(player.InventoryController, command);
         }
 
-        private static void ForceSwitchOpen(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
+        private static void EnsureDoorStateChanged(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
             if (nextState == EDoorState.Interacting)
             {
                 return;
             }
 
-            EDoorState desiredDoorState = nextState.OppositeDoorState();
+            // Make sure the WorldInteractiveObject didn't return to its original state, which sometimes happens on Labyrinth
+            if (nextState == obj.InitialDoorState)
+            {
+                EDoorState desiredDoorState = obj.InitialDoorState.OppositeDoorState();
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Forcing switch " + obj.Id + " to be " + desiredDoorState + "...");
-            obj.SetDoorState(desiredDoorState);
+                Singleton<LoggingUtil>.Instance.LogInfo("Forcing WorldInteractiveObject " + obj.Id + " to be " + desiredDoorState + "...");
+                obj.SetDoorState(desiredDoorState);
+            }
 
-            obj.OnDoorStateChanged -= ForceSwitchOpen;
+            obj.OnDoorStateChanged -= EnsureDoorStateChanged;
         }
     }
 }

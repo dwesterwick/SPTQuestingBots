@@ -459,10 +459,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            if (nextState != EDoorState.Interacting)
-            {
-                DisableAllNavMeshObstaclesForSwitch(sw);
-            }
+            DisableAllNavMeshObstaclesForSwitch(sw);
         }
 
         private void DisableAllNavMeshObstaclesForSwitch(EFT.Interactive.Switch sw)
