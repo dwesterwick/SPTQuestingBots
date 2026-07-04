@@ -45,6 +45,21 @@ namespace QuestingBots.Helpers
             throw new InvalidOperationException("Cannot get the opposite door state for " + interactionType.ToString());
         }
 
+        public static EDoorState OppositeDoorState(this EDoorState doorState)
+        {
+            switch (doorState)
+            {
+                case EDoorState.Open:
+                    return EDoorState.Shut;
+                case EDoorState.Shut:
+                    return EDoorState.Open;
+                case EDoorState.Locked:
+                    return EDoorState.Shut;
+            }
+
+            throw new InvalidOperationException("Cannot get the opposite door state for " + doorState.ToString());
+        }
+
         public static Item GenerateKey(this WorldInteractiveObject worldInteractiveObject)
         {
             // Create a new item for the key needed to unlock the WorldInteractiveObject
@@ -191,6 +206,8 @@ namespace QuestingBots.Helpers
 
             if (worldInteractiveObject is Switch)
             {
+                worldInteractiveObject.OnDoorStateChanged += ForceSwitchOpen;
+
                 interactionResult.RaiseUnlockEvent(CommandStatus.Begin, player);
                 interactionResult.RaiseUnlockEvent(CommandStatus.Succeed, player);
             }
@@ -209,6 +226,21 @@ namespace QuestingBots.Helpers
             }
 
             unlockInteractionResult.RaiseEvents(player.InventoryController, command);
+        }
+
+        private static void ForceSwitchOpen(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
+        {
+            if (nextState == EDoorState.Interacting)
+            {
+                return;
+            }
+
+            EDoorState desiredDoorState = nextState.OppositeDoorState();
+
+            Singleton<LoggingUtil>.Instance.LogInfo("Forcing switch " + obj.Id + " to be " + desiredDoorState + "...");
+            obj.SetDoorState(desiredDoorState);
+
+            obj.OnDoorStateChanged -= ForceSwitchOpen;
         }
     }
 }
