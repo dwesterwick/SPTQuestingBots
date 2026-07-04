@@ -19,6 +19,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         private BotQuestingDecisionMonitor questingDecisionMonitor = null!;
 
         public BotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? BotQuestingDecision.None;
+        public bool HasAQuestingBoss => questingDecisionMonitor?.HasAQuestingBoss ?? false;
 
         public void Init(BotOwner _botOwner)
         {

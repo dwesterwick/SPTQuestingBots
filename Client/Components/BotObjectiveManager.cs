@@ -220,7 +220,11 @@ namespace QuestingBots.Components
                     return;
                 }
 
-                SetObjective(botOwner.GetCurrentJobAssignment());
+                BotJobAssignment? botJobAssignment = botOwner.GetCurrentJobAssignment();
+                if (botJobAssignment != null)
+                {
+                    SetObjective(botJobAssignment);
+                }
             }
         }
 
@@ -482,7 +486,11 @@ namespace QuestingBots.Components
                 Singleton<LoggingUtil>.Instance.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
                 try
                 {
-                    SetObjective(botOwner.GetCurrentJobAssignment());
+                    BotJobAssignment? botJobAssignment = botOwner.GetCurrentJobAssignment();
+                    if (botJobAssignment != null)
+                    {
+                        SetObjective(botJobAssignment);
+                    }
                 }
                 catch (TimeoutException)
                 {

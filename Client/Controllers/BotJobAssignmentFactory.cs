@@ -447,7 +447,7 @@ namespace QuestingBots.Controllers
             return false;
         }
 
-        public static BotJobAssignment GetCurrentJobAssignment(this BotOwner bot, bool allowUpdate = true)
+        public static BotJobAssignment? GetCurrentJobAssignment(this BotOwner bot, bool allowUpdate = true)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
@@ -481,7 +481,7 @@ namespace QuestingBots.Controllers
                 Singleton<LoggingUtil>.Instance.LogWarning("Could not get a job assignment for bot " + bot.GetText());
             }
 
-            return null!;
+            return null;
         }
 
         public static bool DoesBotHaveNewJobAssignment(this BotOwner bot)
@@ -942,7 +942,7 @@ namespace QuestingBots.Controllers
 
         public static void CheckBotJobAssignmentValidity(BotOwner bot)
         {
-            BotJobAssignment botJobAssignment = GetCurrentJobAssignment(bot, false);
+            BotJobAssignment? botJobAssignment = GetCurrentJobAssignment(bot, false);
             if (botJobAssignment?.QuestAssignment == null)
             {
                 return;

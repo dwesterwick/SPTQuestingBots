@@ -35,7 +35,7 @@ namespace QuestingBots_InteropTest
                 return;
             }
 
-            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotDecisionLoggingComponent>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotInformationLoggingComponent>();
         }
     }
 }
