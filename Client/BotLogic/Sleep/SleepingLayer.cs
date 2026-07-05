@@ -2,7 +2,6 @@
 using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Controllers;
-using SPT.Custom.CustomAI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -153,6 +152,11 @@ namespace QuestingBots.BotLogic.Sleep
 
         private bool isSleeplessBot()
         {
+            if (QuestingBotsPluginConfig.SleeplessBotTypes.Value.HasFlag(BotTypeException.CustomBotTypes) && ((int)BotOwner.Profile.Info.Settings.Role > 67))
+            {
+                return true;
+            }
+
             if (!QuestingBotsPluginConfig.ExceptionFlagForWildSpawnType.ContainsKey(BotOwner.Profile.Info.Settings.Role))
             {
                 return false;
@@ -178,6 +182,7 @@ namespace QuestingBots.BotLogic.Sleep
                 case TarkovMaps.Streets: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansStreets.Value;
                 case TarkovMaps.Woods: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansWoods.Value;
                 case TarkovMaps.GroundZero: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansGroundZero.Value;
+                case TarkovMaps.Labyrinth: return QuestingBotsPluginConfig.SleepingMinDistanceToHumansLabyrinth.Value;
             }
 
             return int.MaxValue;

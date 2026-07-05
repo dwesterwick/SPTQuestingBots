@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using BepInEx.Configuration;
 using Comfort.Common;
 using EFT;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models;
 using QuestingBots.Utils;
@@ -27,8 +26,9 @@ namespace QuestingBots
         Streets = 128,
         Woods = 256,
         GroundZero = 512,
+        Labyrinth = 1024,
 
-        All = Customs | Factory | Interchange | Labs | Lighthouse | Reserve | Shoreline | Streets | Woods | GroundZero,
+        All = Customs | Factory | Interchange | Labs | Lighthouse | Reserve | Shoreline | Streets | Woods | GroundZero | Labyrinth,
     }
 
     [Flags]
@@ -38,8 +38,9 @@ namespace QuestingBots
         Rogues = 2,
         Raiders = 4,
         BossesAndFollowers = 8,
+        CustomBotTypes = 16,
 
-        All = SniperScavs | Rogues | Raiders | BossesAndFollowers,
+        All = SniperScavs | Rogues | Raiders | BossesAndFollowers | CustomBotTypes,
     }
 
     [Flags]
@@ -92,6 +93,7 @@ namespace QuestingBots
         public static ConfigEntry<int> SleepingMinDistanceToHumansStreets = null!;
         public static ConfigEntry<int> SleepingMinDistanceToHumansWoods = null!;
         public static ConfigEntry<int> SleepingMinDistanceToHumansGroundZero = null!;
+        public static ConfigEntry<int> SleepingMinDistanceToHumansLabyrinth = null!;
         public static ConfigEntry<int> SleepingMinDistanceToQuestingBots = null!;
         public static ConfigEntry<TarkovMaps> MapsToAllowSleepingForQuestingBots = null!;
         public static ConfigEntry<BotTypeException> SleeplessBotTypes = null!;
@@ -180,6 +182,8 @@ namespace QuestingBots
                 1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Woods", new AcceptableValueRange<int>(minDistanceAILimitNormal, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
             SleepingMinDistanceToHumansGroundZero = Config.Bind("AI Limiter", "Distance from Human Players on GroundZero (m)",
                 1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on GroundZero", new AcceptableValueRange<int>(minDistanceAILimitNormal, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
+            SleepingMinDistanceToHumansLabyrinth = Config.Bind("AI Limiter", "Distance from Human Players on Labyrinth (m)",
+                1000, new ConfigDescription("AI will only be disabled if it's more than this distance from a human player on Labyrinth", new AcceptableValueRange<int>(minDistanceAILimitNormal, 1000), new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             ShowBotInfoOverlays = Config.Bind("Debug", "Show Bot Info Overlays",
                 (QuestingBotType)0, "Show information about what each bot is doing");
@@ -224,6 +228,7 @@ namespace QuestingBots
             TarkovMapIDToEnum.Add("Woods", TarkovMaps.Woods);
             TarkovMapIDToEnum.Add("Sandbox", TarkovMaps.GroundZero);
             TarkovMapIDToEnum.Add("Sandbox_high", TarkovMaps.GroundZero);
+            TarkovMapIDToEnum.Add("Labyrinth", TarkovMaps.Labyrinth);
         }
 
         private static void indexWildSpawnTypeExceptions()
