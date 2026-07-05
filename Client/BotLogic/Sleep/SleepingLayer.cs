@@ -2,6 +2,7 @@
 using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,7 +153,8 @@ namespace QuestingBots.BotLogic.Sleep
 
         private bool isSleeplessBot()
         {
-            if (QuestingBotsPluginConfig.SleeplessBotTypes.Value.HasFlag(BotTypeException.CustomBotTypes) && ((int)BotOwner.Profile.Info.Settings.Role > 67))
+            bool isCustomBotType = (int)BotOwner.Profile.Info.Settings.Role > BotBrainHelpers.MAX_VANILLA_EFT_WILDSPAWNTYPE_VALUE;
+            if (isCustomBotType && QuestingBotsPluginConfig.SleeplessBotTypes.Value.HasFlag(BotTypeException.CustomBotTypes))
             {
                 return true;
             }

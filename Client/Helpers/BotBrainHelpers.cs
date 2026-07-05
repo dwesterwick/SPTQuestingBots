@@ -12,6 +12,8 @@ namespace QuestingBots.Helpers
 {
     public static class BotBrainHelpers
     {
+        public const int MAX_VANILLA_EFT_WILDSPAWNTYPE_VALUE = 67;
+
         public static void AddQuestingBotsBrainLayers(Configuration.BrainLayerPrioritiesConfig brainLayerPriorities)
         {
             IEnumerable<BotBrainType> allNonSniperBrains = GetAllNonSniperBrains();
