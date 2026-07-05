@@ -19,7 +19,7 @@ namespace QuestingBots.BotLogic.Objective
         private bool interactIfLocked;
 
         private List<Door> nearbyDoors = null!;
-        private Door targetDoor = null!;
+        private Door? targetDoor = null!;
         private Vector3? interactionPosition = null;
         private bool wasStuck = false;
 
@@ -159,6 +159,11 @@ namespace QuestingBots.BotLogic.Objective
         private bool tryUpdateTargetDoor()
         {
             targetDoor = tryFindNextOpenDoor();
+            if (targetDoor == null)
+            {
+                return false;
+            }
+
             interactionPosition = targetDoor.GetDoorInteractionPosition(BotOwner.Position);
             if (interactionPosition == null)
             {
@@ -173,12 +178,12 @@ namespace QuestingBots.BotLogic.Objective
             return true;
         }
 
-        private Door tryFindNextOpenDoor()
+        private Door? tryFindNextOpenDoor()
         {
             if (ObjectiveManager.MaxDistanceForCurrentStep == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("MaxDistanceForCurrentStep is null");
-                return null!;
+                return null;
             }
 
             if (nearbyDoors == null)
@@ -193,7 +198,7 @@ namespace QuestingBots.BotLogic.Objective
             if (!openNearbyDoors.Any())
             {
                 ObjectiveManager.CompleteObjective();
-                return null!;
+                return null;
             }
 
             return openNearbyDoors.First();
