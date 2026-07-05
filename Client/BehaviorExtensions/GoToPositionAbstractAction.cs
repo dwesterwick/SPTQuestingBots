@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using HarmonyLib;
+using QuestingBots.BotLogic;
+using QuestingBots.BotLogic.BotMonitor.Monitors;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using HarmonyLib;
-using QuestingBots.BotLogic;
-using QuestingBots.Components;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -223,7 +224,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            DebugHelpers.outlinePosition(ObjectiveManager.Position.Value, color);
+            DebugHelpers.DrawPositionOutline(ObjectiveManager.Position.Value, color);
         }
 
         protected void updateBotZoneForGroup(bool allowForFollowers = false)

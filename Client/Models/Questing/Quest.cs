@@ -10,7 +10,6 @@ using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
 using Newtonsoft.Json;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using UnityEngine;
@@ -54,6 +53,9 @@ namespace QuestingBots.Models.Questing
 
         [JsonProperty("maxTimeOnQuest")]
         public float MaxTimeOnQuest { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxTimePerQuest;
+
+        [JsonProperty("alarmQuest")]
+        public bool AlarmQuest { get; set; } = false;
 
         [JsonProperty("canRunBetweenObjectives")]
         public bool CanRunBetweenObjectives { get; set; } = true;
@@ -163,6 +165,11 @@ namespace QuestingBots.Models.Questing
             }
 
             float raidTime = RaidHelpers.GetRaidElapsedSeconds();
+
+            if (AlarmQuest && !Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().AlarmState)
+            {
+                return false;
+            }
 
             if (RequiredSwitches.Any(s => !isSwitchInCorrectPosition(s.Key, s.Value)))
             {

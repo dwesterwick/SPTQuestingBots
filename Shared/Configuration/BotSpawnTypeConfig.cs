@@ -13,17 +13,26 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "enabled", IsRequired = true)]
         public bool Enabled { get; set; } = true;
 
+        [DataMember(Name = "disabled_maps")]
+        public string[] DisabledMaps { get; set; } = Array.Empty<string>();
+
         [DataMember(Name = "min_raid_time_remaining", IsRequired = true)]
         public float MinRaidTimeRemaining { get; set; } = 0;
 
         [DataMember(Name = "min_distance_from_players_initial", IsRequired = true)]
         public float MinDistanceFromPlayersInitial { get; set; } = 25;
 
+        [DataMember(Name = "min_distance_from_players_initial_labyrinth", IsRequired = true)]
+        public float MinDistanceFromPlayersInitialLabyrinth { get; set; } = 20;
+
         [DataMember(Name = "min_distance_from_players_during_raid", IsRequired = true)]
         public float MinDistanceFromPlayersDuringRaid { get; set; } = 100;
 
         [DataMember(Name = "min_distance_from_players_during_raid_factory", IsRequired = true)]
         public float MinDistanceFromPlayersDuringRaidFactory { get; set; } = 50;
+
+        [DataMember(Name = "min_distance_from_players_during_raid_labyrinth", IsRequired = true)]
+        public float MinDistanceFromPlayersDuringRaidLabyrinth { get; set; } = 35;
 
         [DataMember(Name = "fraction_of_max_players")]
         public float FractionOfMaxPlayers { get; set; } = 1;

@@ -47,6 +47,33 @@ namespace QuestingBots.Components
             }
         }
 
+        public Models.Pathing.PathVisualizationData? FindPath(string pathName)
+        {
+            lock (pathDictLock)
+            {
+                if (paths.ContainsKey(pathName))
+                {
+                    return paths[pathName];
+                }
+            }
+
+            return null;
+        }
+
+        public IEnumerable<Models.Pathing.PathVisualizationData> FindPaths(string textInPathName)
+        {
+            lock (pathDictLock)
+            {
+                foreach (string pathName in paths.Keys)
+                {
+                    if (pathName.Contains(textInPathName))
+                    {
+                        yield return paths[pathName];
+                    }
+                }
+            }
+        }
+
         public bool AddOrUpdatePath(Models.Pathing.PathVisualizationData data, bool autoIncrementPathName = true)
         {
             if (data == null)

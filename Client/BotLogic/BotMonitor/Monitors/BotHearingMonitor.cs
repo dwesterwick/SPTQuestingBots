@@ -25,8 +25,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private AbstractHearingFunction hearingFunction = null!;
         private double suspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private float maxSuspiciousTime = 60;
+        private float nextTimeSuspicionAllowed = 0;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
+
+        public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -68,7 +71,20 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             soundPlayedEventAdded = false;
         }
 
-        public bool TrySetIgnoreHearing(float duration, bool value) => hearingFunction.TryIgnoreHearing(value, false, duration);
+        public bool TrySetIgnoreHearing(float duration, bool value, bool ignoreUnderHire)
+        {
+            bool hearingIgnored = hearingFunction.TryIgnoreHearing(value, ignoreUnderHire, duration);
+            if (hearingIgnored && value)
+            {
+                nextTimeSuspicionAllowed = Time.time + duration;
+            }
+            else
+            {
+                nextTimeSuspicionAllowed = 0;
+            }
+
+            return hearingIgnored;
+        }
 
         private bool isSuspicious()
         {
@@ -194,11 +210,18 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return;
             }
 
+            //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " heard " + type.ToString() + " " + dist + "m away from " + iplayer.GetText());
+
             lastEnemySoundHeardTime = Time.time;
         }
 
         private bool shouldIgnoreSound(AISoundType soundType, float distance)
         {
+            if (!SuspicionAllowedByTime)
+            {
+                return true;
+            }
+
             switch (soundType)
             {
                 case AISoundType.step:

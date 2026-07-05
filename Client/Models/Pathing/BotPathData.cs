@@ -155,7 +155,7 @@ namespace QuestingBots.Models.Pathing
         {
             StartPosition = bot.Position;
 
-            Status = CreatePathSegment(bot.Position, target, out Vector3[] corners);
+            Status = BotPathingHelpers.CreatePathSegment(bot.Position, target, out Vector3[] corners);
             if (Status == UnityEngine.AI.NavMeshPathStatus.PathPartial)
             {
                 // Check if any static paths exist to the target position and sort them based on the approximate total path length for the bot
@@ -172,7 +172,7 @@ namespace QuestingBots.Models.Pathing
                 foreach (StaticPathData staticPath in staticPaths)
                 {
                     // Check if Unity can form a complete path from the bot to the static path's endpoint
-                    UnityEngine.AI.NavMeshPathStatus staticPathStatus = CreatePathSegment(bot.Position, staticPath.StartPosition, out Vector3[] staticPathCorners);
+                    UnityEngine.AI.NavMeshPathStatus staticPathStatus = BotPathingHelpers.CreatePathSegment(bot.Position, staticPath.StartPosition, out Vector3[] staticPathCorners);
                     if (staticPathStatus == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         Corners = staticPathCorners;

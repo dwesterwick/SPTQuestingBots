@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.AI;
 using UnityEngine;
 using HarmonyLib;
+using QuestingBots.Helpers;
 
 namespace QuestingBots.Models.Pathing
 {
@@ -34,7 +35,12 @@ namespace QuestingBots.Models.Pathing
             TargetPosition = target;
             ReachDistance = reachDistance;
 
-            Status = CreatePathSegment(start, target, out Vector3[] corners);
+            RecalculatePath();
+        }
+
+        public void RecalculatePath()
+        {
+            Status = BotPathingHelpers.CreatePathSegment(StartPosition, TargetPosition, out Vector3[] corners);
             SetCorners(corners);
         }
 
@@ -139,15 +145,6 @@ namespace QuestingBots.Models.Pathing
             }
 
             return Vector3.Distance(TargetPosition, Corners.Last());
-        }
-
-        protected NavMeshPathStatus CreatePathSegment(Vector3 start, Vector3 end, out Vector3[] pathCorners)
-        {
-            NavMeshPath navMeshPath = new NavMeshPath();
-            NavMesh.CalculatePath(start, end, -1, navMeshPath);
-            pathCorners = navMeshPath.corners;
-
-            return navMeshPath.status;
         }
 
         protected void CombineWithPath(StaticPathData pathToMerge, Vector3[] combinedCorners)

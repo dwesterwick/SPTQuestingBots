@@ -532,6 +532,55 @@ namespace QuestingBots.Components.Spawning
             return (BotDifficulty)Math.Round(difficultyChances.GetValueFromTotalChanceFraction(random.NextDouble()));
         }
 
+        protected bool BotsAllowedToSpawnInCurrentLocation(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+            string locationID = locationData.CurrentLocation.Id.ToLower();
+
+            return !botSpawnType.DisabledMaps.Contains(locationID);
+        }
+
+        protected void SetMaxAliveBots()
+        {
+            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
+            {
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
+            }
+            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
+            {
+                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
+            }
+        }
+
+        protected float GetMinSpawnDistanceFromOtherPlayers(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            string lowercaseLocationName = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower();
+
+            if (RaidHelpers.IsBeginningOfRaid() || RaidHelpers.HumanPlayersRecentlySpawned())
+            {
+                if (lowercaseLocationName == "labyrinth")
+                {
+                    return botSpawnType.MinDistanceFromPlayersInitialLabyrinth;
+                }
+
+                return botSpawnType.MinDistanceFromPlayersInitial;
+            }
+
+            if (lowercaseLocationName == "labyrinth")
+            {
+                return botSpawnType.MinDistanceFromPlayersDuringRaidLabyrinth;
+            }
+
+            if (lowercaseLocationName.Contains("factory"))
+            {
+                return botSpawnType.MinDistanceFromPlayersDuringRaidFactory;
+            }
+
+            return botSpawnType.MinDistanceFromPlayersDuringRaid;
+        }
+
         private IEnumerator spawnBotGroups(Models.BotSpawnInfo[] botGroups)
         {
             try

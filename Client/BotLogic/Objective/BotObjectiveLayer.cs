@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -49,7 +50,7 @@ namespace QuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (decisionMonitor.HasAQuestingBoss)
+            if (decisionMonitor.HasAQuestingBoss && !objectiveManager.PrioritizeQuestingOverFollowing && !objectiveManager.HasTeleportingAssignment)
             {
                 return updatePreviousState(false);
             }
@@ -93,6 +94,17 @@ namespace QuestingBots.BotLogic.Objective
                     }
                     return updatePreviousState(true);
 
+                case QuestAction.Teleport:
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToTeleportPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.Teleport, "Teleport");
+                    }
+                    return updatePreviousState(true);
+
                 case QuestAction.HoldAtPosition:
                     setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
                     return updatePreviousState(true);
@@ -131,11 +143,22 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.ToggleSwitch:
-                    setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
+                    if (!objectiveManager.IsCloseToObjective())
+                    {
+                        setNextAction(BotActionType.GoToObjective, "GoToSwitchPosition");
+                    }
+                    else
+                    {
+                        setNextAction(BotActionType.ToggleSwitch, "ToggleSwitch");
+                    }
                     return updatePreviousState(true);
 
                 case QuestAction.CloseNearbyDoors:
                     setNextAction(BotActionType.CloseNearbyDoors, "CloseNearbyDoors");
+                    return updatePreviousState(true);
+
+                case QuestAction.OpenNearbyDoors:
+                    setNextAction(BotActionType.CloseNearbyDoors, "OpenNearbyDoors");
                     return updatePreviousState(true);
 
                 case QuestAction.RequestExtract:

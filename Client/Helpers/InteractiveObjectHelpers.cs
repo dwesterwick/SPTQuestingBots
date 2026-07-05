@@ -1,36 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT;
-using QuestingBots.Controllers;
 using UnityEngine;
-using HarmonyLib;
 using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
     public static class InteractiveObjectHelpers
     {
-        public static Item GenerateKey(this WorldInteractiveObject door)
+        public static EDoorState DesiredDoorState(this EInteractionType interactionType)
         {
-            // Create a new item for the key needed to unlock the door
-            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), door.KeyId, null);
+            switch (interactionType)
+            {
+                case EInteractionType.Open:
+                case EInteractionType.Breach:
+                case EInteractionType.Unlock:
+                    return EDoorState.Open;
+                case EInteractionType.Close:
+                    return EDoorState.Shut;
+            }
+
+            throw new InvalidOperationException("Cannot get the desired door state for " + interactionType.ToString());
+        }
+
+        public static EDoorState OppositeDoorState(this EInteractionType interactionType)
+        {
+            switch (interactionType)
+            {
+                case EInteractionType.Open:
+                case EInteractionType.Breach:
+                    return EDoorState.Shut;
+                case EInteractionType.Close:
+                    return EDoorState.Open;
+                case EInteractionType.Unlock:
+                    return EDoorState.Locked;
+            }
+
+            throw new InvalidOperationException("Cannot get the opposite door state for " + interactionType.ToString());
+        }
+
+        public static EDoorState OppositeDoorState(this EDoorState doorState)
+        {
+            switch (doorState)
+            {
+                case EDoorState.Open:
+                    return EDoorState.Shut;
+                case EDoorState.Shut:
+                    return EDoorState.Open;
+                case EDoorState.Locked:
+                    return EDoorState.Shut;
+            }
+
+            throw new InvalidOperationException("Cannot get the opposite door state for " + doorState.ToString());
+        }
+
+        public static Item GenerateKey(this WorldInteractiveObject worldInteractiveObject)
+        {
+            // Create a new item for the key needed to unlock the WorldInteractiveObject
+            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), worldInteractiveObject.KeyId, null);
             if (keyItem == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot create key for door " + door.Id);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot create key for " + worldInteractiveObject.Id);
                 return null!;
             }
 
             return keyItem;
         }
 
-        public static InteractionResult GetInteractionResult(this WorldInteractiveObject door, EInteractionType interactionType, BotOwner botOwner, KeyComponent key = null!)
+        public static Vector3? GetDoorInteractionPosition(this Door door, Vector3 startingPosition)
+        {
+            if (door == null)
+            {
+                return null;
+            }
+
+            // The possible interaction position is found by offsetting the position of the door vertically by a configurable amount. Otherwise,
+            // a large search radius may find a NavMesh position on the floor below. Then, the position is translated toward the bot by a specified
+            // distance. This is to force the bot to close the door from inside of its current room.
+            Vector3 possibleInteractionPosition = door.transform.position;
+            Vector3 vectorToBot = (startingPosition - possibleInteractionPosition).normalized;
+            possibleInteractionPosition += new Vector3(0, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchOffset, 0);
+            possibleInteractionPosition += vectorToBot * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.DoorApproachPositionSearchRadius;
+
+            // Determine the NavMesh position to which the bot should go in order to unlock the door. This is based on the possible interaction
+            // position defined above. 
+            float searchRadius = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
+            Vector3? navMeshPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindNearestNavMeshPosition(possibleInteractionPosition, searchRadius);
+            if (navMeshPosition == null)
+            {
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
+                {
+                    DebugHelpers.DrawPositionOutline(possibleInteractionPosition, Color.yellow, searchRadius);
+                }
+
+                return null;
+            }
+            else
+            {
+                if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowDoorInteractionTestPoints)
+                {
+                    DebugHelpers.DrawPositionOutline(navMeshPosition.Value, Color.green);
+                }
+            }
+
+            return navMeshPosition;
+        }
+
+        public static InteractionResult GetInteractionResult(this WorldInteractiveObject worldInteractiveObject, EInteractionType interactionType, BotOwner botOwner, KeyComponent? key = null)
         {
             try
             {
@@ -44,10 +126,10 @@ namespace QuestingBots.Helpers
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                KeyInteractionResultClass unlockDoorInteractionResult = new KeyInteractionResultClass(key, null, true);
-                if (unlockDoorInteractionResult == null)
+                KeyInteractionResultClass unlockInteractionResult = new KeyInteractionResultClass(key, null, true);
+                if (unlockInteractionResult == null)
                 {
-                    throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
+                    throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock WorldInteractiveObject " + worldInteractiveObject.Id);
                 }
 
                 // Reduce the remaining usages for the key after the bot unlocks the door
@@ -56,7 +138,7 @@ namespace QuestingBots.Helpers
                     key.NumberOfUsages++;
                 }
 
-                return unlockDoorInteractionResult;
+                return unlockInteractionResult;
             }
             catch (Exception e)
             {
@@ -67,19 +149,22 @@ namespace QuestingBots.Helpers
             }
         }
 
-        public static void InteractWithDoor(this BotOwner botOwner, WorldInteractiveObject door, InteractionResult interactionResult)
+        public static void InteractWithWorldInteractiveObject(this BotOwner botOwner, WorldInteractiveObject worldInteractiveObject, InteractionResult interactionResult)
         {
             try
             {
-                if (door == null)
+                if (worldInteractiveObject == null)
                 {
-                    throw new ArgumentNullException(nameof(door));
+                    throw new ArgumentNullException(nameof(worldInteractiveObject));
                 }
 
-                // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
+                if (worldInteractiveObject is Door)
+                {
+                    // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
 
-                botOwner.DoorOpener.Interacting = true;
-                botOwner.DoorOpener.TraversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
+                    botOwner.DoorOpener.Interacting = true;
+                    botOwner.DoorOpener.TraversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
+                }
 
                 string interactionTypeText = "opening";
                 switch (interactionResult.InteractionType)
@@ -94,11 +179,11 @@ namespace QuestingBots.Helpers
                         interactionTypeText = "breaching";
                         break;
                 }
-                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " door " + door.Id + "...");
+                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " " + worldInteractiveObject.GetType().Name + " " + worldInteractiveObject.Id + "...");
 
                 // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without 
                 // also running ExecuteDoorInteraction
-                door.ExecuteInteractionResult(interactionResult, botOwner.GetPlayer);
+                worldInteractiveObject.ExecuteInteractionResult(interactionResult, botOwner.GetPlayer);
             }
             catch (Exception e)
             {
@@ -111,10 +196,21 @@ namespace QuestingBots.Helpers
 
         public static void ExecuteInteractionResult(this WorldInteractiveObject worldInteractiveObject, InteractionResult interactionResult, Player player)
         {
+            Action interactionCallback = () => { interactionResult.RaiseUnlockEvent(CommandStatus.Succeed, player); };
+
+            interactionResult.RaiseUnlockEvent(CommandStatus.Begin, player);
+
             if (worldInteractiveObject is Door)
             {
                 // NOTE: This method MUST be used for Fika compatibility
-                player.vmethod_0(worldInteractiveObject, interactionResult, null);
+                player.vmethod_0(worldInteractiveObject, interactionResult, interactionCallback);
+            }
+
+            if (worldInteractiveObject is Switch)
+            {
+                interactionCallback();
+
+                worldInteractiveObject.OnDoorStateChanged += EnsureDoorStateChanged;
             }
 
             // NOTE: This method MUST be used for Fika compatibility
@@ -122,30 +218,34 @@ namespace QuestingBots.Helpers
             player.vmethod_1(worldInteractiveObject, interactionResult);
         }
 
-        public static void ToggleSwitch(this BotOwner botOwner, WorldInteractiveObject sw, EInteractionType interactionType)
+        private static void RaiseUnlockEvent(this InteractionResult interactionResult, CommandStatus command, Player player)
         {
-            try
+            KeyInteractionResultClass? unlockInteractionResult = interactionResult as KeyInteractionResultClass;
+            if (unlockInteractionResult == null)
             {
-                if (sw == null)
-                {
-                    throw new ArgumentNullException(nameof(sw));
-                }
-
-                Player player = botOwner.GetPlayer;
-                if (player == null)
-                {
-                    throw new InvalidOperationException("Cannot get Player object from " + botOwner.GetText());
-                }
-
-                sw.ExecuteInteractionResult(new InteractionResult(interactionType), player);
+                return;
             }
-            catch (Exception e)
+
+            unlockInteractionResult.RaiseEvents(player.InventoryController, command);
+        }
+
+        private static void EnsureDoorStateChanged(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
+        {
+            if (nextState == EDoorState.Interacting)
             {
-                Singleton<LoggingUtil>.Instance.LogError(e.Message);
-                Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
-
-                throw;
+                return;
             }
+
+            // Make sure the WorldInteractiveObject didn't return to its original state, which sometimes happens on Labyrinth
+            if (nextState == obj.InitialDoorState)
+            {
+                EDoorState desiredDoorState = obj.InitialDoorState.OppositeDoorState();
+
+                Singleton<LoggingUtil>.Instance.LogInfo("Forcing WorldInteractiveObject " + obj.Id + " to be " + desiredDoorState + "...");
+                obj.SetDoorState(desiredDoorState);
+            }
+
+            obj.OnDoorStateChanged -= EnsureDoorStateChanged;
         }
     }
 }

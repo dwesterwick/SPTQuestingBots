@@ -13,6 +13,7 @@ namespace QuestingBots.BehaviorExtensions
     {
         Undefined,
         GoToObjective,
+        Teleport,
         FollowBoss,
         HoldPosition,
         Ambush,
@@ -23,7 +24,8 @@ namespace QuestingBots.BehaviorExtensions
         Sleep,
         ToggleSwitch,
         UnlockDoor,
-        CloseNearbyDoors
+        CloseNearbyDoors,
+        OpenNearbyDoors
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -55,13 +57,12 @@ namespace QuestingBots.BehaviorExtensions
 
         public override Action GetNextAction()
         {
-            //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is swtiching from " + previousAction.ToString() + " to " + nextAction.ToString());
-
             previousAction = nextAction;
 
             switch (nextAction)
             {
                 case BotActionType.GoToObjective: return new Action(typeof(BotLogic.Objective.GoToObjectiveAction), actionReason);
+                case BotActionType.Teleport: return new Action(typeof(BotLogic.Objective.TeleportAction), actionReason);
                 case BotActionType.FollowBoss: return new Action(typeof(BotLogic.Follow.FollowBossAction), actionReason);
                 case BotActionType.HoldPosition: return new Action(typeof(BotLogic.Objective.HoldAtObjectiveAction), actionReason);
                 case BotActionType.Ambush: return new Action(typeof(BotLogic.Objective.AmbushAction), actionReason);
@@ -73,6 +74,7 @@ namespace QuestingBots.BehaviorExtensions
                 case BotActionType.ToggleSwitch: return new Action(typeof(BotLogic.Objective.ToggleSwitchAction), actionReason);
                 case BotActionType.UnlockDoor: return new Action(typeof(BotLogic.Objective.UnlockDoorAction), actionReason);
                 case BotActionType.CloseNearbyDoors: return new Action(typeof(BotLogic.Objective.CloseNearbyDoorsAction), actionReason);
+                case BotActionType.OpenNearbyDoors: return new Action(typeof(BotLogic.Objective.OpenNearbyDoorsAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

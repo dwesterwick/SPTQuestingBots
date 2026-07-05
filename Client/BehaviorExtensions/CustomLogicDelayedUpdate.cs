@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Comfort.Common;
+using DrakiaXYZ.BigBrain.Brains;
+using EFT;
+using EFT.Interactive;
+using QuestingBots.BotLogic.BotMonitor.Monitors;
+using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using DrakiaXYZ.BigBrain.Brains;
-using EFT;
-using EFT.Interactive;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.BehaviorExtensions
@@ -47,6 +48,11 @@ namespace QuestingBots.BehaviorExtensions
         public override void Start()
         {
             RestartActionElapsedTime();
+
+            if (ObjectiveManager.IgnoreHearing)
+            {
+                ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>().TrySetIgnoreHearing(float.MaxValue, true, true);
+            }
         }
 
         public override void Stop()
@@ -54,6 +60,13 @@ namespace QuestingBots.BehaviorExtensions
             actionElapsedTime.Stop();
 
             BotOwner.Mover.Sprint(false);
+
+            BotHearingMonitor hearingMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>();
+            if (!hearingMonitor.SuspicionAllowedByTime && !ObjectiveManager.IgnoreHearing)
+            {
+                float nextSuspicionAllowedTime = (float)(ObjectiveManager.WaitTimeAfterCompleting ?? 1) + 1;
+                hearingMonitor.TrySetIgnoreHearing(nextSuspicionAllowedTime, true, false);
+            }
         }
 
         public void StartActionElapsedTime()
