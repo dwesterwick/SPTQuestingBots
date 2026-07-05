@@ -8,6 +8,7 @@ using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Utils.Benchmarking;
 
 namespace QuestingBots.Patches
 {
@@ -53,6 +54,8 @@ namespace QuestingBots.Patches
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();
+
+            Benchmark.LogAllBenchmarksAndReset();
         }
     }
 }

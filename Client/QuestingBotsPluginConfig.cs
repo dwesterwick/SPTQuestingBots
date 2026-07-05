@@ -108,6 +108,7 @@ namespace QuestingBots
         public static ConfigEntry<int> QuestOverlayFontSize = null!;
         public static ConfigEntry<int> QuestOverlayMaxDistance = null!;
         public static ConfigEntry<string> BotFilter = null!;
+        public static ConfigEntry<bool> EnableBenchmarking = null!;
 
         public static ConfigEntry<bool> CreateQuestLocations = null!;
         public static ConfigEntry<bool> ShowCurrentLocation = null!;
@@ -203,6 +204,8 @@ namespace QuestingBots
                 16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36))); 
             BotFilter = Config.Bind("Debug", "Bot Filter",
                 "", new ConfigDescription("Show debug info only for bots listed e.g 2,4", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            EnableBenchmarking = Config.Bind("Debug", "Enable Performance Benchmarking",
+                false, new ConfigDescription("Measures performance of certain methods and saves a log at the end of each raid", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
 
             CreateQuestLocations = Config.Bind("Custom Quest Locations", "Enable Quest Location Saving",
                 false, new ConfigDescription("Allow custom quest locations to be saved", null, new ConfigurationManagerAttributes { Order = 4, IsAdvanced = true }));

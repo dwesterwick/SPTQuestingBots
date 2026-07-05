@@ -1,9 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
 using Comfort.Common;
+using HarmonyLib;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,9 +107,19 @@ namespace QuestingBots
                 return;
             }
 
+#if DEBUG
+            AddBenchmarkingPatches();
+#endif
+
             new Patches.DebugPatches.ProcessSourceOcclusionPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
+        }
+
+        private void AddBenchmarkingPatches()
+        {
+            Harmony harmony = new Harmony(ModInfo.GUID + "debug");
+            harmony.PatchAll(typeof(BenchmarkingPatchGenerator));
         }
 
         private void EnableSpawningPatches()

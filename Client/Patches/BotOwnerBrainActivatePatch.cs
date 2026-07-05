@@ -11,6 +11,7 @@ using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 
 namespace QuestingBots.Patches
 {
@@ -40,6 +41,7 @@ namespace QuestingBots.Patches
             __instance.StandBy.CanDoStandBy = false;
         }
 
+        [Benchmark]
         private static void registerBot(BotOwner __instance)
         {
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
