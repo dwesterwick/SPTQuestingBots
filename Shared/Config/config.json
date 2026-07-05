@@ -24,13 +24,13 @@
 				"questing": 18,
 				"following": 19,
 				"regrouping": 26,
-				"sleeping": 99
+				"sleeping": 250
 			},
 			"without_sain" : {
 				"questing": 21,
 				"following": 22,
 				"regrouping": 26,
-				"sleeping": 99
+				"sleeping": 250
 			}
 		},
 		"quest_selection_timeout": 250,
