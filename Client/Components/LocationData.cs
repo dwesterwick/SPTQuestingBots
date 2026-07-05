@@ -32,7 +32,6 @@ namespace QuestingBots.Components
         public bool AlarmState { get; private set; } = false;
 
         private readonly DateTime awakeTime = DateTime.Now;
-        private GamePlayerOwner gamePlayerOwner = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private List<TriggerZone> alarmTriggerZones = new List<TriggerZone>();
@@ -52,8 +51,6 @@ namespace QuestingBots.Components
 
         protected void Awake()
         {
-            gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
-
             Singleton<BotEventHandler>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
@@ -1187,13 +1184,10 @@ namespace QuestingBots.Components
                 }
 
                 // Ensure a player can interact with the door
-                ActionsReturnClass availableActionsResult = GetActionsClass.GetAvailableActions(gamePlayerOwner, worldInteractiveObject);
-                if ((availableActionsResult == null) || !availableActionsResult.Actions.Any())
+                if (!worldInteractiveObject.enabled || !worldInteractiveObject.Operatable)
                 {
                     continue;
                 }
-
-                //Singleton<LoggingUtil>.Instance.LogInfo("Actions for door " + door.Id + ": " + string.Join(", ", availableActionsResult.Actions.Select(a => a.Name)));
 
                 Vector3? interactionPosition = GetDoorInteractionPosition(worldInteractiveObject, startingPosition);
                 if (interactionPosition.HasValue)
