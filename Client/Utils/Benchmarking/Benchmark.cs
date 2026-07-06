@@ -26,7 +26,6 @@ namespace QuestingBots.Utils.Benchmarking
         private Stopwatch _benchmarkStopwatch = new Stopwatch();
 
         public bool IsRunning => Status == BenchmarkStatus.Running;
-        public long MemoryAllocated => EndingMemory > 0 ? EndingMemory - StartingMemory : long.MinValue;
         
         public Benchmark(MethodBase method)
         {
@@ -35,7 +34,10 @@ namespace QuestingBots.Utils.Benchmarking
 
         public void Start()
         {
-            Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...");
+            if (BenchmarkService.ShowDebugMessages)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...");
+            }
 
             Status = BenchmarkStatus.Running;
 
@@ -48,7 +50,10 @@ namespace QuestingBots.Utils.Benchmarking
             Stop_Internal();
             Status = BenchmarkStatus.Complete;
 
-            Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...done.");
+            if (BenchmarkService.ShowDebugMessages)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...done.");
+            }
         }
 
         private void Stop_Internal()
@@ -62,7 +67,10 @@ namespace QuestingBots.Utils.Benchmarking
             Stop_Internal();
             Status = BenchmarkStatus.Aborted;
 
-            Singleton<LoggingUtil>.Instance.LogWarning($"Running benchmark for {Method.Name}...aborted!");
+            if (BenchmarkService.ShowDebugMessages)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning($"Running benchmark for {Method.Name}...aborted!");
+            }
         }
 
         public void AbortIfRunning()
@@ -75,10 +83,12 @@ namespace QuestingBots.Utils.Benchmarking
 
         public BenchmarkResult GetResult(double overallElapsedTime)
         {
-            double elapsedTime = _benchmarkStopwatch.ElapsedMillisecondsAsDouble();
+            BenchmarkResult result = new BenchmarkResult(overallElapsedTime, Method, _benchmarkStopwatch, StartingMemory, EndingMemory);
 
-            BenchmarkResult result = new BenchmarkResult(overallElapsedTime, Method, elapsedTime, MemoryAllocated);
-            Singleton<LoggingUtil>.Instance.LogDebug($"Result for {Method.Name}: Time = {elapsedTime} ms. Allocation = {MemoryAllocated} bytes");
+            if (BenchmarkService.ShowDebugMessages)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug($"Result for {Method.Name}: Time = {result.GetElapsedMilliseconds()} ms. Allocation = {result.MemoryAllocated} bytes");
+            }
 
             return result;
         }

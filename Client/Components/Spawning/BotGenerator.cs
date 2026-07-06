@@ -177,7 +177,6 @@ namespace QuestingBots.Components.Spawning
             return false;
         }
 
-        [Benchmark]
         public static IEnumerable<string> GetAllGeneratedBotProfileIDs()
         {
             return GetAllGeneratedBotProfiles().Select(b => b.Id);

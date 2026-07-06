@@ -22,20 +22,14 @@ namespace QuestingBots.Patches
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
         }
 
+        [Benchmark]
         [PatchPostfix]
         protected static void PatchPostfix(BotOwner __instance)
         {
             registerBot(__instance);
-
-            if (BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
-            {
-                reduceBotCounts(__instance);
-            }
-
-            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
-            {
-                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
-            }
+            registerBotComponents(__instance);
+            adjustEftBotCounts(__instance);
+            updateBotHostilities(__instance);
 
             // Fix for bots getting stuck in Standby when enemy PMC's are near them
             __instance.StandBy.CanDoStandBy = false;
@@ -45,8 +39,8 @@ namespace QuestingBots.Patches
         private static void registerBot(BotOwner __instance)
         {
             string roleName = __instance.Profile.Info.Settings.Role.ToString();
-
             Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
+
             if (__instance.WillBeAPMC())
             {
                 Controllers.BotRegistrationManager.RegisterPMC(__instance);
@@ -58,12 +52,34 @@ namespace QuestingBots.Patches
 
             Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(__instance);
 
-            BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
-            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
-
             if (__instance.IsARegisteredPMC() || __instance.WillBeAPlayerScav())
             {
                 registerBotAsHumanPlayer(__instance);
+            }
+        }
+
+        [Benchmark]
+        private static void registerBotComponents(BotOwner __instance)
+        {
+            BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
+            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
+        }
+
+        [Benchmark]
+        private static void adjustEftBotCounts(BotOwner __instance)
+        {
+            if (BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
+            {
+                reduceBotCounts(__instance);
+            }
+        }
+
+        [Benchmark]
+        private static void updateBotHostilities(BotOwner __instance)
+        {
+            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
+            {
+                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
             }
         }
 

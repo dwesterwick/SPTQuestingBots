@@ -5,6 +5,7 @@ using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -516,6 +517,7 @@ namespace QuestingBots.Controllers
             return false;
         }
 
+        [Benchmark]
         public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
         {
             if (bot == null)
