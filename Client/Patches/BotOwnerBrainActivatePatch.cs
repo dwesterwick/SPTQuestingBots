@@ -67,6 +67,7 @@ namespace QuestingBots.Patches
             }
         }
 
+        [Benchmark]
         private static void registerBotAsHumanPlayer(BotOwner __instance)
         {
             if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)

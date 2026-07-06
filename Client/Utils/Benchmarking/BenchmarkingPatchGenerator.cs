@@ -25,9 +25,9 @@ namespace QuestingBots.Utils.Benchmarking
         }
 
         [HarmonyLib.HarmonyPrefix]
-        protected static void Prefix(MethodBase __originalMethod) => Benchmark.Start(__originalMethod);
+        protected static void Prefix(MethodBase __originalMethod) => BenchmarkService.Start(__originalMethod);
 
         [HarmonyLib.HarmonyPostfix]
-        protected static void Postfix(MethodBase __originalMethod) => Benchmark.Stop(__originalMethod);
+        protected static void Postfix(MethodBase __originalMethod) => BenchmarkService.Stop(__originalMethod);
     }
 }

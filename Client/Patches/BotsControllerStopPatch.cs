@@ -46,6 +46,8 @@ namespace QuestingBots.Patches
 
                 BotJobAssignmentFactory.WriteQuestLogFile(timestamp);
                 BotJobAssignmentFactory.WriteBotJobAssignmentLogFile(timestamp);
+
+                BenchmarkService.LogAllBenchmarksAndReset(timestamp);
             }
 
             // Erase all bot and bot-assignment tracking data
@@ -54,8 +56,6 @@ namespace QuestingBots.Patches
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();
-
-            Benchmark.LogAllBenchmarksAndReset();
         }
     }
 }

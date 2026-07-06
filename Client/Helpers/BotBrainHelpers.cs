@@ -4,6 +4,7 @@ using EFT;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Models;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace QuestingBots.Helpers
             Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Questing);
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allBrains));
-            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allBrains.ToStringList(), brainLayerPriorities.Following);
-            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allBrains.ToStringList(), brainLayerPriorities.Regrouping);
+            Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allNonSniperBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Following);
+            BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Regrouping);
         }
 
         public static IEnumerable<BotBrainType> AddTestBrains(this IEnumerable<BotBrainType> list)

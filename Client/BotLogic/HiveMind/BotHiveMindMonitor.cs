@@ -13,6 +13,7 @@ using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using SPT.Custom.CustomAI;
 using UnityEngine;
 
@@ -116,6 +117,7 @@ namespace QuestingBots.BotLogic.HiveMind
             return sensor!.GetLastLootingTimeForBoss(bot);
         }
 
+        [Benchmark]
         public static void RegisterBot(BotOwner bot)
         {
             if (bot == null)

@@ -4,6 +4,7 @@ using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,6 +107,7 @@ namespace QuestingBots.Controllers
             return null;
         }
 
+        [Benchmark]
         public static void WriteMessageForNewBotSpawn(BotOwner botOwner)
         {
             SpawnedBotCount++;
@@ -198,6 +200,7 @@ namespace QuestingBots.Controllers
             }
         }
 
+        [Benchmark]
         private static void updateAllHostileGroupEnemies()
         {
             foreach (BotsGroup hostileGroup in hostileGroups)

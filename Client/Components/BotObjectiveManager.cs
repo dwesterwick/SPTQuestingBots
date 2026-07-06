@@ -8,6 +8,7 @@ using QuestingBots.Helpers;
 using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -78,6 +79,7 @@ namespace QuestingBots.Components
             return "Position " + (Position?.ToString() ?? "???");
         }
 
+        [Benchmark]
         public void Init(BotOwner _botOwner)
         {
             if (IsInitialized)
@@ -478,24 +480,27 @@ namespace QuestingBots.Components
             return exfiltrationPoint.transform.position - botOwner.Position;
         }
 
+        [Benchmark]
         private void setInitialObjective()
         {
             // Only set an objective for the bot if its type is allowed to spawn and all quests have been loaded and generated
-            if (IsQuestingAllowed && Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (!IsQuestingAllowed || !Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
-                try
+                return;
+            }
+
+            Singleton<LoggingUtil>.Instance.LogInfo("Setting objective for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")...");
+            try
+            {
+                BotJobAssignment? botJobAssignment = botOwner.GetCurrentJobAssignment();
+                if (botJobAssignment != null)
                 {
-                    BotJobAssignment? botJobAssignment = botOwner.GetCurrentJobAssignment();
-                    if (botJobAssignment != null)
-                    {
-                        SetObjective(botJobAssignment);
-                    }
+                    SetObjective(botJobAssignment);
                 }
-                catch (TimeoutException)
-                {
-                    Singleton<LoggingUtil>.Instance.LogError("Timed out when trying to select an initial objective for " + botOwner.GetText());
-                }
+            }
+            catch (TimeoutException)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Timed out when trying to select an initial objective for " + botOwner.GetText());
             }
         }
     }

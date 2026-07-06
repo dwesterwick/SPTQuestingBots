@@ -8,91 +8,79 @@ using System.Text;
 
 namespace QuestingBots.Utils.Benchmarking
 {
-    public class BenchmarkResult
+    public enum BenchmarkStatus
     {
-        public double StartTime { get; private set; }
-        public MethodBase Method { get; private set; }
-        public double ElapsedMilliseconds { get; private set; }
-        public long AllocatedMemory { get; private set; }
-
-        public BenchmarkResult(double startTime, MethodBase method, double elapsedMilliseconds, long allocatedMemory)
-        {
-            StartTime = startTime;
-            Method = method;
-            ElapsedMilliseconds = elapsedMilliseconds;
-            AllocatedMemory = allocatedMemory;
-        }
+        NotStarted,
+        Running,
+        Complete,
+        Aborted,
     }
 
-    public static class Benchmark
+    public class Benchmark
     {
-        private static Stopwatch _overallStopwatch = Stopwatch.StartNew();
-        private static Stopwatch _benchmarkStopwatch = new Stopwatch();
-        private static long _benchmarkStartingMemory = long.MinValue;
-        private static List<BenchmarkResult> _results = new List<BenchmarkResult> ();
+        public BenchmarkStatus Status { get; private set; } = BenchmarkStatus.NotStarted;
+        public MethodBase Method { get; private set; }
+        public long StartingMemory { get; private set; } = long.MinValue;
+        public long EndingMemory { get; private set; } = long.MinValue;
 
-        public static void Start(MethodBase methodToBenchmark)
+        private Stopwatch _benchmarkStopwatch = new Stopwatch();
+
+        public bool IsRunning => Status == BenchmarkStatus.Running;
+        public long MemoryAllocated => EndingMemory > 0 ? EndingMemory - StartingMemory : long.MinValue;
+        
+        public Benchmark(MethodBase method)
         {
-            if (!QuestingBotsPluginConfig.EnableBenchmarking.Value)
-            {
-                return;
-            }
+            Method = method;
+        }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Beginning benchmark for " + methodToBenchmark.Name + "...");
-            
-            if (_results.Count == 0)
-            {
-                _overallStopwatch.Restart();
-            }
+        public void Start()
+        {
+            Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...");
+
+            Status = BenchmarkStatus.Running;
 
             _benchmarkStopwatch.Restart();
-            _benchmarkStartingMemory = GetCurrentlyAllocatedMemory();
+            StartingMemory = BenchmarkService.GetCurrentlyAllocatedMemory();
         }
 
-        public static void Stop(MethodBase methodToBenchmark)
+        public void Stop()
         {
-            long benchmarkEndingMemory = GetCurrentlyAllocatedMemory();
-            if (!_benchmarkStopwatch.IsRunning)
-            {
-                return;
-            }
+            Stop_Internal();
+            Status = BenchmarkStatus.Complete;
+
+            Singleton<LoggingUtil>.Instance.LogDebug($"Running benchmark for {Method.Name}...done.");
+        }
+
+        private void Stop_Internal()
+        {
+            EndingMemory = BenchmarkService.GetCurrentlyAllocatedMemory();
             _benchmarkStopwatch.Stop();
-
-            if (!QuestingBotsPluginConfig.EnableBenchmarking.Value)
-            {
-                return;
-            }
-
-            double currentTime = _overallStopwatch.ElapsedMillisecondsAsDouble();
-            double elapsedTime = _benchmarkStopwatch.ElapsedMillisecondsAsDouble();
-            long memoryAllocated = benchmarkEndingMemory - _benchmarkStartingMemory;
-
-            Singleton<LoggingUtil>.Instance.LogDebug("Beginning benchmark for " + methodToBenchmark.Name + "...Complete. Time = " + elapsedTime + " ms. Allocation = " + memoryAllocated + " bytes");
-
-            BenchmarkResult result = new BenchmarkResult(currentTime, methodToBenchmark, elapsedTime, memoryAllocated);
-            _results.Add(result);
         }
 
-        private static long GetCurrentlyAllocatedMemory() => GC.GetTotalMemory(false);
-
-        public static void LogAllBenchmarksAndReset()
+        public void Abort()
         {
-            _overallStopwatch.Stop();
+            Stop_Internal();
+            Status = BenchmarkStatus.Aborted;
 
-            if (_results.Count > 0)
+            Singleton<LoggingUtil>.Instance.LogWarning($"Running benchmark for {Method.Name}...aborted!");
+        }
+
+        public void AbortIfRunning()
+        {
+            if (IsRunning)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Saving benchmarking log file...");
-                Singleton<LoggingUtil>.Instance.LogDebug("Time (ms), Method Name, ET (ms), Allocation (bytes)");
-
-                foreach (BenchmarkResult result in _results)
-                {
-                    Singleton<LoggingUtil>.Instance.LogDebug(result.StartTime + "," + result.Method.Name + "," + result.ElapsedMilliseconds + "," + result.AllocatedMemory);
-                }
-
-                Singleton<LoggingUtil>.Instance.LogDebug("Saving benchmarking log file...done.");
+                Abort();
             }
+        }
 
-            _results.Clear();
+        public BenchmarkResult GetResult(double overallElapsedTime)
+        {
+            double elapsedTime = _benchmarkStopwatch.ElapsedMillisecondsAsDouble();
+
+            BenchmarkResult result = new BenchmarkResult(overallElapsedTime, Method, elapsedTime, MemoryAllocated);
+            Singleton<LoggingUtil>.Instance.LogDebug($"Result for {Method.Name}: Time = {elapsedTime} ms. Allocation = {MemoryAllocated} bytes");
+
+            return result;
         }
     }
 }

@@ -9,6 +9,7 @@ using QuestingBots.Controllers;
 using QuestingBots.Models.DebugGizmos;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -22,6 +23,7 @@ namespace QuestingBots.Components
 
         private int jobAssignmentGizmoCount => gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
+        [Benchmark]
         public void RegisterBot(BotOwner bot)
         {
             gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
