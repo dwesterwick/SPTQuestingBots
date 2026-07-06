@@ -204,8 +204,11 @@ namespace QuestingBots
                 16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36))); 
             BotFilter = Config.Bind("Debug", "Bot Filter",
                 "", new ConfigDescription("Show debug info only for bots listed e.g 2,4", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+
+#if DEBUG
             EnableBenchmarking = Config.Bind("Debug", "Enable Performance Benchmarking",
                 false, new ConfigDescription("Measures performance of certain methods and saves a log at the end of each raid", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+#endif
 
             CreateQuestLocations = Config.Bind("Custom Quest Locations", "Enable Quest Location Saving",
                 false, new ConfigDescription("Allow custom quest locations to be saved", null, new ConfigurationManagerAttributes { Order = 4, IsAdvanced = true }));
