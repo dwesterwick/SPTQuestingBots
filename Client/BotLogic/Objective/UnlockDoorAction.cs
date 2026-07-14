@@ -39,11 +39,13 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!DoesWorldInteractiveObjectNeedToBeUnlocked())
             {
+                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need to unlock " + DesiredWorldInteractiveObject!.Id);
                 return;
             }
 
             if (DoesWorldInteractiveObjectNeedToBeBreached() || DoesBotHaveCorrectKey())
             {
+                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need a new key to open " + DesiredWorldInteractiveObject!.Id);
                 return;
             }
 
@@ -152,21 +154,15 @@ namespace QuestingBots.BotLogic.Objective
 
         private bool GetDoorInteractionPosition()
         {
-            if (!(DesiredWorldInteractiveObject is Door))
-            {
-                Singleton<LoggingUtil>.Instance.LogError(DesiredWorldInteractiveObject!.Id + " is not a Door");
-                return false;
-            }
-
             // Determine the location to which the bot should go in order to unlock the door
             interactionPosition = ObjectiveManager.InteractionPositionForDoorToUnlockForObjective;
             if (interactionPosition == null)
             {
-                interactionPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetDoorInteractionPosition(DesiredWorldInteractiveObject, BotOwner.Position);
+                interactionPosition = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetDoorInteractionPosition(DesiredWorldInteractiveObject!, BotOwner.Position);
             }
             if (interactionPosition == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + DesiredWorldInteractiveObject.Id);
+                Singleton<LoggingUtil>.Instance.LogError(BotOwner.GetText() + " cannot find the appropriate interaction position for door " + DesiredWorldInteractiveObject!.Id);
                 return false;
             }
 

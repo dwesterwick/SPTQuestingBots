@@ -87,6 +87,17 @@ namespace QuestingBots.BotLogic.Objective
                 Singleton<LoggingUtil>.Instance.LogWarning("Door " + door.Id + " is locked but cannot be breached and has no key assigned for unlocking it");
             }
 
+            Trunk? trunk = DesiredWorldInteractiveObject as Trunk;
+            if ((trunk != null) && (trunk.DoorState == EDoorState.Locked))
+            {
+                if (trunk.KeyId != "")
+                {
+                    return true;
+                }
+
+                Singleton<LoggingUtil>.Instance.LogWarning("Trunk " + trunk.Id + " is locked but has no key assigned for unlocking it");
+            }
+
             Switch? sw = DesiredWorldInteractiveObject as Switch;
             if (sw != null)
             {
@@ -129,16 +140,17 @@ namespace QuestingBots.BotLogic.Objective
                 return true;
             }
 
-            // Only doors are allowed to be unlocked by chance
+            // Only doors and trunks are allowed to be unlocked by chance
             Door? door = DesiredWorldInteractiveObject as Door;
-            if (door == null)
+            Trunk? trunk = DesiredWorldInteractiveObject as Trunk;
+            if ((door == null) && (trunk == null))
             {
                 return false;
             }
 
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + door.Id + " (Chance=" + ObjectiveManager.ChanceOfHavingKey + "%)");
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + DesiredWorldInteractiveObject!.Id + " (Chance=" + ObjectiveManager.ChanceOfHavingKey + "%)");
                 return false;
             }
 

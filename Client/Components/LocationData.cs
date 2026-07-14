@@ -498,16 +498,22 @@ namespace QuestingBots.Components
                 }
 
                 IDsForWorldInteractiveObjects.Add(worldInteractiveObject.Id, worldInteractiveObject);
-                //Singleton<LoggingUtil>.Instance.LogInfo("Found door " + door.Id + " at " + door.transform.position + " (State: " + door.DoorState.ToString() + ")");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found WorldInteractiveObject " + worldInteractiveObject.Id + " at " + worldInteractiveObject.transform.position + " (State: " + worldInteractiveObject.DoorState.ToString() + ")");
 
                 if (!worldInteractiveObject.Operatable)
                 {
-                    //Singleton<LoggingUtil>.Instance.LogInfo("Door " + door.Id + " is inoperable");
+                    //Singleton<LoggingUtil>.Instance.LogInfo("WorldInteractiveObject " + worldInteractiveObject.Id + " is inoperable");
                     continue;
                 }
 
                 Door? door = worldInteractiveObject as Door;
-                if ((door != null) && !door.CanBeBreached && (door.KeyId == ""))
+                if (door == null)
+                {
+                    //Singleton<LoggingUtil>.Instance.LogInfo("WorldInteractiveObject " + worldInteractiveObject.Id + " is not a door");
+                    continue;
+                }
+
+                if (!door.CanBeBreached && (door.KeyId == ""))
                 {
                     //Singleton<LoggingUtil>.Instance.LogInfo("Door " + door.Id + " cannot be breached and has no valid key");
                     continue;
