@@ -96,7 +96,7 @@ namespace QuestingBots.Components
                 if (BotJobAssignmentFactory.QuestCount == 0)
                 {
                     // Create quests based on the EFT quest templates loaded from the server. This may include custom quests added by mods. 
-                    RawQuestClass[] allQuestTemplates = Singleton<ConfigUtil>.Instance.GetAllQuestTemplates();
+                    SptRawQuestClass[] allQuestTemplates = Singleton<ConfigUtil>.Instance.GetAllQuestTemplates();
 
                     Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = Singleton<ConfigUtil>.Instance.GetEFTQuestSettings();
                     Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
@@ -104,7 +104,7 @@ namespace QuestingBots.Components
                     // Need to be able to override private properties
                     BindingFlags overrideBindingFlags = Models.JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
 
-                    foreach (RawQuestClass questTemplate in allQuestTemplates)
+                    foreach (SptRawQuestClass questTemplate in allQuestTemplates)
                     {
                         Quest quest = new Quest(questTemplate);
 
@@ -113,7 +113,7 @@ namespace QuestingBots.Components
                         
                         if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
                         {
-                            Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.Name + "...");
+                            Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.GetName() + "...");
                             quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id], overrideBindingFlags);
                         }
 
@@ -240,19 +240,19 @@ namespace QuestingBots.Components
                 foreach (QuestObjective objective in quest.ValidObjectives.ToArray())
                 {
                     objectiveNum++;
-                    objective.SetName(quest.Name + ": Objective #" + objectiveNum);
+                    objective.SetName(quest.GetName() + ": Objective #" + objectiveNum);
                     bool removeObjective = false;
 
                     if (!removeObjective && !objective.TryFindAllInteractiveObjects())
                     {
                         removeObjective = true;
-                        Singleton<LoggingUtil>.Instance.LogError("Could not find required interactive objects for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+                        Singleton<LoggingUtil>.Instance.LogError("Could not find required interactive objects for all steps in objective " + objective.ToString() + " for quest " + quest.GetName());
                     }
 
                     if (!removeObjective && !objective.TrySnapAllStepPositionsToNavMesh())
                     {
                         removeObjective = true;
-                        Singleton<LoggingUtil>.Instance.LogError("Could not find valid NavMesh positions for all steps in objective " + objective.ToString() + " for quest " + quest.Name);
+                        Singleton<LoggingUtil>.Instance.LogError("Could not find valid NavMesh positions for all steps in objective " + objective.ToString() + " for quest " + quest.GetName());
                     }
 
                     if (removeObjective && !quest.TryRemoveObjective(objective))
@@ -265,7 +265,7 @@ namespace QuestingBots.Components
                 // Do not use quests that don't have any valid objectives (using the check above)
                 if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.StepCount == 0))
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Could not find any valid objectives for quest " + quest.Name + ". Disabling quest.");
+                    Singleton<LoggingUtil>.Instance.LogError("Could not find any valid objectives for quest " + quest.GetName() + ". Disabling quest.");
                     continue;
                 }
 
@@ -306,7 +306,7 @@ namespace QuestingBots.Components
 
             if (quest.Template == null)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Quest " + quest.Name + " has a null template");
+                Singleton<LoggingUtil>.Instance.LogWarning("Quest " + quest.GetName() + " has a null template");
             }
 
             quest.IsActiveForPlayer = activeQuestsForPlayer.Any(q => q.Template?.Id == quest.Template?.Id);
@@ -353,7 +353,7 @@ namespace QuestingBots.Components
             // Add a step with the NavMesh position to corresponding objectives in every quest using this zone
             foreach (Quest quest in matchingQuests)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name);
+                Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName());
 
                 QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
                 objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value));
@@ -361,7 +361,7 @@ namespace QuestingBots.Components
                 float? plantTime = quest.FindPlantTime(trigger.Id);
                 if (plantTime.HasValue)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding plant time: " + plantTime.Value + "s");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding plant time: " + plantTime.Value + "s");
 
                     Configuration.MinMaxConfig plantTimeMinMax = new Configuration.MinMaxConfig(plantTime.Value, plantTime.Value);
                     objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
@@ -371,7 +371,7 @@ namespace QuestingBots.Components
                 float? beaconTime = quest.FindBeaconTime(trigger.Id);
                 if (beaconTime.HasValue)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding beacon time: " + beaconTime.Value + "s");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding beacon time: " + beaconTime.Value + "s");
 
                     objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
                 }
@@ -379,7 +379,7 @@ namespace QuestingBots.Components
                 if ((quest.Template != null) && (quest.Template.QuestType == RawQuestClass.EQuestType.Elimination))
                 {
                     float searchTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EliminationQuestSearchTime;
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.Name + " - Adding elimination search time: " + searchTime + "s");
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding elimination search time: " + searchTime + "s");
 
                     objective.SetFirstWaitTimeAfterCompleting(searchTime);
                 }
@@ -540,7 +540,7 @@ namespace QuestingBots.Components
 
             Models.Questing.QuestObjective objective = new Models.Questing.QuestObjective(navMeshPosition.Value);
             objective.ApplyQuestSettingsFromConfig(settings);
-            objective.SetName(quest.Name + ": Objective #1");
+            objective.SetName(quest.GetName() + ": Objective #1");
             quest.AddObjective(objective);
 
             return quest;
@@ -586,7 +586,7 @@ namespace QuestingBots.Components
 
                 Models.Questing.QuestSpawnPointObjective objective = new Models.Questing.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 objective.ApplyQuestSettingsFromConfig(settings);
-                objective.SetName(quest.Name + ": Objective #" + objNum);
+                objective.SetName(quest.GetName() + ": Objective #" + objNum);
                 quest.AddObjective(objective);
 
                 objNum++;

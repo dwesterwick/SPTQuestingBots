@@ -70,7 +70,7 @@ namespace QuestingBots.Models.Questing
         public WildSpawnType[] BotRoleFilter { get; set; } = new WildSpawnType[0];
 
         [JsonIgnore]
-        public RawQuestClass Template { get; private set; } = null!;
+        public SptRawQuestClass? Template { get; private set; } = null;
 
         [JsonIgnore]
         public bool IsActiveForPlayer { get; set; } = false;
@@ -87,7 +87,6 @@ namespace QuestingBots.Models.Questing
         [JsonIgnore]
         private IList<Vector3> waypointPositions = null!;
 
-        public string Name => Template?.Name ?? name;
         public bool IsEFTQuest => Template != null;
         
         // Return all objectives in the quest
@@ -108,14 +107,29 @@ namespace QuestingBots.Models.Questing
             name = _name;
         }
 
-        public Quest(RawQuestClass template) : this()
+        public Quest(SptRawQuestClass template) : this()
         {
             Template = template;
         }
 
         public override string ToString()
         {
-            return Name;
+            return GetName();
+        }
+
+        public string GetName()
+        {
+            if (Template == null)
+            {
+                return name;
+            }
+
+            if (string.IsNullOrEmpty(Template.Name))
+            {
+                return Template.SptQuestName;
+            }
+
+            return Template.Name;
         }
 
         public void Clear()
@@ -247,7 +261,7 @@ namespace QuestingBots.Models.Questing
 
             if (matchingObjectives.Count() > 1)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + Name + ". Returning the first one.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Found multiple quest objectives: " + string.Join(", ", matchingObjectives.Select(o => o.ToString())) + " for quest " + GetName() + ". Returning the first one.");
             }
 
             return matchingObjectives.First();

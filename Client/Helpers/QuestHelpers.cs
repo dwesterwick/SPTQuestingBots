@@ -187,17 +187,17 @@ namespace QuestingBots.Helpers
                             int matchingDoorCount = matchingWorldInteractiveObjects.Count();
                             if (matchingDoorCount == 0)
                             {
-                                Singleton<LoggingUtil>.Instance.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Cannot find any doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.GetName());
                             }
                             if (matchingDoorCount > 1)
                             {
-                                Singleton<LoggingUtil>.Instance.LogInfo("Found too many doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogInfo("Found too many doors to unlock for item " + item.Item.LocalizedName() + " for quest " + quest.GetName());
                             }
                             if (matchingDoorCount == 1)
                             {
                                 doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
                                 interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
-                                Singleton<LoggingUtil>.Instance.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                                Singleton<LoggingUtil>.Instance.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.GetName());
                             }
                         }
                     }
@@ -224,7 +224,7 @@ namespace QuestingBots.Helpers
                     newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
                     quest.AddObjective(newObjective);
 
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.Name);
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.GetName());
                 }
             }
         }

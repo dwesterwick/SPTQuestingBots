@@ -29,7 +29,7 @@ namespace QuestingBots
                 {
                     (assignment.StartTime ?? DateTime.FromFileTimeUtc(0)).ToFileTimeUtc().ToString(),
                     (assignment.EndTime ?? DateTime.FromFileTimeUtc(0)).ToFileTimeUtc().ToString(),
-                    assignment.QuestAssignment.Name,
+                    assignment.QuestAssignment.GetName(),
                     assignment.QuestObjectiveAssignment.Name,
                     assignment.QuestObjectiveStepAssignment.ToString(),
                     assignment.Status.ToString()
@@ -71,7 +71,7 @@ namespace QuestingBots
                 return string.Empty;
             }
 
-            return botJobAssignment.QuestAssignment.Name;
+            return botJobAssignment.QuestAssignment.GetName();
         }
 
         public static bool IsCurrentJobAssignmentAnEftQuest(this BotOwner bot)

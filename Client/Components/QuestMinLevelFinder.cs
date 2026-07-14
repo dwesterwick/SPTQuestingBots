@@ -112,7 +112,7 @@ namespace QuestingBots.Components
             Quest preReqQuest = BotJobAssignmentFactory.FindQuest(conditionQuest.target);
             if (preReqQuest == null)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.Name);
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.GetName());
                 return 0;
             }
 

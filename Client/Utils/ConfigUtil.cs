@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
+using QuestingBots.Models.Questing;
 using SPT.Common.Http;
 using SPT.Common.Utils;
 using System;
@@ -126,13 +127,13 @@ namespace QuestingBots.Utils
             return _response;
         }
 
-        public RawQuestClass[] GetAllQuestTemplates()
+        public SptRawQuestClass[] GetAllQuestTemplates()
         {
             string routeName = SharedRouterHelpers.GetRoutePath("GetAllQuestTemplates");
             string errorMessage = "Cannot read quest templates.";
             string json = GetJson(routeName, errorMessage);
 
-            TryDeserializeObject(json, errorMessage, out RawQuestClass[] _templates);
+            TryDeserializeObject(json, errorMessage, out SptRawQuestClass[] _templates);
             return _templates;
         }
 

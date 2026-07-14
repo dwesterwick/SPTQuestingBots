@@ -31,7 +31,7 @@ namespace QuestingBots.Models.Questing
         public override string ToString()
         {
             string stepNumberText = QuestObjectiveStepAssignment?.StepNumber?.ToString() ?? "???";
-            return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.Name;
+            return "Step #" + stepNumberText + " for objective " + (QuestObjectiveAssignment?.ToString() ?? "???") + " in quest " + QuestAssignment.GetName();
         }
 
         public object Clone()

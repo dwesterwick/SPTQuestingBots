@@ -90,7 +90,7 @@ namespace QuestingBots.Controllers
 
         public static Quest FindQuest(string questID)
         {
-            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.Template.Id == questID);
+            IEnumerable<Quest> matchingQuests = allQuests.Where(q => q.Template?.Id == questID);
             if (matchingQuests.Count() == 1)
             {
                 return matchingQuests.First();
@@ -812,7 +812,7 @@ namespace QuestingBots.Controllers
                         continue;
                     }
 
-                    sb.Append(quest.Name.Replace(",", "") + ",");
+                    sb.Append(quest.GetName().Replace(",", "") + ",");
                     sb.Append("\"" + objective.ToString().Replace(",", "") + "\",");
                     sb.Append(objective.StepCount + ",");
                     sb.Append(quest.MinLevel + ",");
