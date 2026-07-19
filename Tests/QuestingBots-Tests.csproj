@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not &quot;$(Configuration)&quot; == &quot;Debug&quot; (dotnet test --no-build)" />
+    <Exec Command="if not &quot;$(Configuration)&quot; == &quot;Debug&quot; (dotnet test -c $(Configuration) --no-build)" />
   </Target>
 
 </Project>

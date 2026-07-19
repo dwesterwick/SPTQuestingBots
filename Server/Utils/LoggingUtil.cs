@@ -1,13 +1,19 @@
-﻿using SPTarkov.DI.Annotations;
+﻿using QuestingBots.Helpers;
+using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Utils;
 
 namespace QuestingBots.Utils
 {
     [Injectable(InjectionType.Singleton)]
-    public class LoggingUtil(ISptLogger<QuestingBots_Server> logger)
+    public class LoggingUtil(ISptLogger<QuestingBots_Server> logger, ConfigUtil _configUtil)
     {
         public void Debug(string message)
         {
+            if (!_configUtil.CurrentConfig.IsDebugEnabled())
+            {
+                return;
+            }
+
             logger.Debug(GetLogPrefix() + message);
         }
 
