@@ -47,7 +47,9 @@ namespace QuestingBots.Patches
                 BotJobAssignmentFactory.WriteQuestLogFile(timestamp);
                 BotJobAssignmentFactory.WriteBotJobAssignmentLogFile(timestamp);
 
+#if DEBUG
                 BenchmarkService.LogAllBenchmarksAndReset(timestamp);
+#endif
             }
 
             // Erase all bot and bot-assignment tracking data
