@@ -32,7 +32,7 @@
     <PackageReference Include="SPTarkov.Server.Core" Version="4.0.2" />
   </ItemGroup>
 
-  <Import Project="..\Shared\DansDevTools-Shared.projitems" Label="Shared" />
+  <Import Project="..\Shared\QuestingBots-Shared.projitems" Label="Shared" />
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)CopyFilesAfterBuild.ps1&quot; -modName &quot;$(AssemblyTitle)&quot; -configuration &quot;$(Configuration)&quot; -debugPath &quot;$(SPTServerDebugPath)&quot; -relPathToSptInstall &quot;$(RelativePathToRootSPTInstall)&quot;&#xD;&#xA;powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)..\Shared\CreatePackageAfterBuild.ps1&quot; -modName &quot;$(AssemblyTitle)&quot; -modVersion &quot;$(Version)&quot; -configuration &quot;$(Configuration)&quot;" />
