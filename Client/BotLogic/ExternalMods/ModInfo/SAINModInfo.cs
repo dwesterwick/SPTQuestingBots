@@ -4,7 +4,6 @@ using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.Configuration;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;

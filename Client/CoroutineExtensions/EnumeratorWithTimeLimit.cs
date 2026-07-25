@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 
 namespace QuestingBots.CoroutineExtensions

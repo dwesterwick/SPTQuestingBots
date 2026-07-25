@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using UnityEngine;
 

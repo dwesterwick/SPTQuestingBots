@@ -8,7 +8,6 @@ using EFT.Interactive;
 using EFT;
 using EFT.Quests;
 using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Models.Questing;
 using UnityEngine;
 using QuestingBots.Utils;

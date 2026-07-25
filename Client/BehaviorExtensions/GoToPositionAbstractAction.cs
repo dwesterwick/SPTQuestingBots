@@ -2,9 +2,7 @@
 using EFT;
 using HarmonyLib;
 using QuestingBots.BotLogic;
-using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;

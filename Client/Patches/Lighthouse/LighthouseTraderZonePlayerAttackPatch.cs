@@ -8,7 +8,6 @@ using Comfort.Common;
 using EFT.Interactive;
 using EFT;
 using SPT.Reflection.Patching;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 

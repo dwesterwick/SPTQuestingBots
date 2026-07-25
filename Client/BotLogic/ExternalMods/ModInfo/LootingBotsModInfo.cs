@@ -1,7 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;

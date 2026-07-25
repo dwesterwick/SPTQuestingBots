@@ -2,9 +2,6 @@
 using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
-using QuestingBots.BotLogic.BotMonitor.Monitors;
-using QuestingBots.BotLogic.HiveMind;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;

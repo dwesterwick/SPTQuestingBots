@@ -1,6 +1,5 @@
 ﻿using Comfort.Common;
 using EFT;
-using EFT.Interactive;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;

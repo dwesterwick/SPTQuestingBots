@@ -10,7 +10,6 @@ using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
-using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {

@@ -1,7 +1,6 @@
 ﻿using Comfort.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace QuestingBots.Models
 {

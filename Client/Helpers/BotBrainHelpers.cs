@@ -4,7 +4,6 @@ using EFT;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Models;
 using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections.Generic;
 using System.Linq;

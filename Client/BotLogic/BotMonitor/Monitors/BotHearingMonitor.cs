@@ -3,7 +3,6 @@ using EFT;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.HiveMind;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;

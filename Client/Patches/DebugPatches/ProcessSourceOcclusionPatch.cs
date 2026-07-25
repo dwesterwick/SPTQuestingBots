@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Audio.SpatialSystem;
 using EFT;
 using SPT.Reflection.Patching;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using Comfort.Common;
 using QuestingBots.Utils;

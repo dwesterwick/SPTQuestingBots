@@ -1,7 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor;
-using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;

@@ -9,7 +9,6 @@ using SPT.Custom.CustomAI;
 using SPT.Reflection.Patching;
 using Comfort.Common;
 using EFT;
-using QuestingBots.Controllers;
 using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning

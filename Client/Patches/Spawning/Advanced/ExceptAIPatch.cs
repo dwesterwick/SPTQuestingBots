@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using Comfort.Common;
 using QuestingBots.Utils;

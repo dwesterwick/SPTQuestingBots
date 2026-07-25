@@ -1,5 +1,4 @@
 ﻿using EFT;
-using SPT.Custom.CustomAI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

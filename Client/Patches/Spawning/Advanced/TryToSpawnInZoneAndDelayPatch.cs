@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
 using EFT.Game.Spawning;
-using QuestingBots.Controllers;
 using Comfort.Common;
 using QuestingBots.Utils;
 

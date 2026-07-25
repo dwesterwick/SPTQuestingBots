@@ -13,7 +13,6 @@ using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Patches.Spawning;
 using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using UnityEngine;
 
 namespace QuestingBots.Components.Spawning
