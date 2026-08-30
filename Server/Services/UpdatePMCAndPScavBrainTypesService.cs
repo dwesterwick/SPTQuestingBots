@@ -55,7 +55,7 @@ namespace QuestingBots.Services
             Logger.Info($"Added {addedBrains} and updated {updatedBrains} Player Scav brain types");
         }
 
-        private void RemoveBlacklistedPMCBrains(IEnumerable<string> blacklistedbrainTypes)
+        public void RemoveBlacklistedPMCBrains(IEnumerable<string> blacklistedbrainTypes)
         {
             int removedBrains = 0;
             foreach (string pmcType in _pmcConfig.PmcType.Keys)
@@ -72,7 +72,7 @@ namespace QuestingBots.Services
             Logger.Info($"Removed {removedBrains} blacklisted PMC brain types");
         }
 
-        private void RemoveBlacklistedPlayerScavBrains(IEnumerable<string> blacklistedbrainTypes)
+        public void RemoveBlacklistedPlayerScavBrains(IEnumerable<string> blacklistedbrainTypes)
         {
             int removedBrains = 0;
             foreach (string map in _botConfig.PlayerScavBrainType.Keys)

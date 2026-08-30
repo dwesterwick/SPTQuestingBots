@@ -18,8 +18,8 @@ namespace QuestingBots
     [BepInIncompatibility("com.dvize.AILimit")]
     [BepInIncompatibility("com.janky.phobos")]
     [BepInIncompatibility("com.chazut.orbit")]
-    [BepInDependency("xyz.drakia.waypoints", "1.8.2")]
-    [BepInDependency("xyz.drakia.bigbrain", "1.4.0")]
+    [BepInDependency("xyz.drakia.waypoints", "1.9.0")]
+    [BepInDependency("xyz.drakia.bigbrain", "1.5.0")]
     [BepInPlugin(ModInfo.GUID, ModInfo.MODNAME, ModInfo.MOD_VERSION)]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {

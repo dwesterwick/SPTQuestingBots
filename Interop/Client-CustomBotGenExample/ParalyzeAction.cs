@@ -10,12 +10,12 @@ namespace QuestingBots_CustomBotGenExample
 {
     public class ParalyzeAction : CustomLogic
     {
-        protected BotNodeAbstractClass baseAction { get; private set; } = null;
+        protected AICoreNode baseAction { get; private set; } = null;
 
         public ParalyzeAction(BotOwner _BotOwner) : base(_BotOwner)
         {
             // This doesn't quite achieve "paralysis", but it's probably good enough
-            baseAction = BotActionNodesClass.CreateNode(BotLogicDecision.standBy, BotOwner);
+            baseAction = AIActionsList.CreateNode(BotLogicDecision.standBy, BotOwner);
         }
 
         public override void Start()
