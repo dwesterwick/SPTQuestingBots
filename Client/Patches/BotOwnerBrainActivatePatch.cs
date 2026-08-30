@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
+using EFT.Ballistics;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using QuestingBots.Utils.Benchmarking;
+using SPT.Reflection.Patching;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace QuestingBots.Patches
 {
@@ -97,7 +98,7 @@ namespace QuestingBots.Patches
             __instance.GetPlayer().OnPlayerDead += deletePlayer;
         }
 
-        private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfoStruct damage, EBodyPart part)
+        private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfo damage, EBodyPart part)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
@@ -135,14 +136,14 @@ namespace QuestingBots.Patches
 
             if (bot.Profile.Info.Settings.IsFollower())
             {
-                botSpawnerClass.FollowersBotsCount--;
+                botSpawnerClass._followersBotsCount--;
             }
             else if (bot.Profile.Info.Settings.IsBoss())
             {
-                botSpawnerClass.BossBotsCount--;
+                botSpawnerClass._bossBotsCount--;
             }
 
-            botSpawnerClass.AllBotsCount--;
+            botSpawnerClass._allBotsCount--;
         }
     }
 }

@@ -17,16 +17,16 @@ namespace QuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            targetType = typeof(BotsPresets).BaseType;
+            targetType = typeof(BotProfileClient).BaseType;
             profileListField = AccessTools.Field(targetType, "List_0");
 
             Singleton<LoggingUtil>.Instance.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
 
-            return targetType.GetMethod("GetNewProfile", new Type[] { typeof(BotCreationDataClass), typeof(bool) });
+            return targetType.GetMethod("GetNewProfile", new Type[] { typeof(BotCreationData), typeof(bool) });
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(object __instance, ref Profile __result, BotCreationDataClass data, bool withDelete)
+        protected static bool PatchPrefix(object __instance, ref Profile __result, BotCreationData data, bool withDelete)
         {
             bool shouldSpawnPScav = RaidHelpers.ShouldSpawnPScavByChance();
 

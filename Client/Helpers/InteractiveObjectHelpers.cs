@@ -63,7 +63,7 @@ namespace QuestingBots.Helpers
         public static Item GenerateKey(this WorldInteractiveObject worldInteractiveObject)
         {
             // Create a new item for the key needed to unlock the WorldInteractiveObject
-            Item keyItem = Singleton<ItemFactoryClass>.Instance.CreateItem(MongoID.Generate(true), worldInteractiveObject.KeyId, null);
+            Item keyItem = Singleton<ItemFactory>.Instance.CreateItem(MongoID.Generate(true), worldInteractiveObject.KeyId, null);
             if (keyItem == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Cannot create key for " + worldInteractiveObject.Id);
@@ -126,7 +126,7 @@ namespace QuestingBots.Helpers
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                KeyInteractionResultClass unlockInteractionResult = new KeyInteractionResultClass(key, null, true);
+                UnlockResult unlockInteractionResult = new UnlockResult(key, null, true);
                 if (unlockInteractionResult == null)
                 {
                     throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock WorldInteractiveObject " + worldInteractiveObject.Id);
@@ -163,7 +163,7 @@ namespace QuestingBots.Helpers
                     // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
 
                     botOwner.DoorOpener.Interacting = true;
-                    botOwner.DoorOpener.TraversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
+                    botOwner.DoorOpener._traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
                 }
 
                 string interactionTypeText = "opening";
@@ -203,7 +203,7 @@ namespace QuestingBots.Helpers
             if (worldInteractiveObject is Door)
             {
                 // NOTE: This method MUST be used for Fika compatibility
-                player.vmethod_0(worldInteractiveObject, interactionResult, interactionCallback);
+                player.StartInteraction(worldInteractiveObject, interactionResult, interactionCallback);
             }
 
             if (worldInteractiveObject is Switch)
@@ -215,12 +215,12 @@ namespace QuestingBots.Helpers
 
             // NOTE: This method MUST be used for Fika compatibility
             // NOTE: Ideally, this should be called after a delay. However, this will require a lot of rewriting.
-            player.vmethod_1(worldInteractiveObject, interactionResult);
+            player.ExecuteInteraction(worldInteractiveObject, interactionResult);
         }
 
         private static void RaiseUnlockEvent(this InteractionResult interactionResult, CommandStatus command, Player player)
         {
-            KeyInteractionResultClass? unlockInteractionResult = interactionResult as KeyInteractionResultClass;
+            UnlockResult? unlockInteractionResult = interactionResult as UnlockResult;
             if (unlockInteractionResult == null)
             {
                 return;

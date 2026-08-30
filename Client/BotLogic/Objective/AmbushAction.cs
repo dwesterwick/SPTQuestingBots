@@ -15,7 +15,7 @@ namespace QuestingBots.BotLogic.Objective
 
         public AmbushAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(BotActionNodesClass.CreateNode(BotLogicDecision.holdPosition, BotOwner));
+            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public AmbushAction(BotOwner _BotOwner, bool _allowedToIgnoreHearing) : this(_BotOwner)

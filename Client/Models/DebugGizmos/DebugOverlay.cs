@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EFT.CameraControl;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -84,10 +85,10 @@ namespace QuestingBots.Models.DebugGizmos
         // This should be static so it only updates at a fixed interval regardless of how many overlays are created
         private static float getScreenScale()
         {
-            if (_nextCheckScreenTime < Time.time && CameraClass.Instance.SSAA.isActiveAndEnabled)
+            if (_nextCheckScreenTime < Time.time && CameraManager.Instance.SSAA.isActiveAndEnabled)
             {
                 _nextCheckScreenTime = Time.time + 10f;
-                _screenScale = (float)CameraClass.Instance.SSAA.GetOutputWidth() / (float)CameraClass.Instance.SSAA.GetInputWidth();
+                _screenScale = (float)CameraManager.Instance.SSAA.GetOutputWidth() / (float)CameraManager.Instance.SSAA.GetInputWidth();
             }
 
             return _screenScale;

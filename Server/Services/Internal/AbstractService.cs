@@ -17,7 +17,7 @@ public abstract class AbstractService : IOnLoad
         Config = config;
     }
 
-    public Task OnLoad()
+    public Task OnLoadAsync(CancellationToken cancellationToken)
     {
         if (Config.CurrentConfig.IsModEnabled())
         {

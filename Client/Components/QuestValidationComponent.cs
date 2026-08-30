@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using JsonType;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -37,7 +38,7 @@ namespace QuestingBots.Components
                 throw new InvalidOperationException("Could not retrieve TarkovApplication");
             }
 
-            LocationSettingsClass? locationSettings = tarkovApplication.GetClientBackEndSession()?.LocationSettings;
+            LocationSettings? locationSettings = tarkovApplication.GetClientBackEndSession()?.LocationSettings;
             if (locationSettings == null)
             {
                 return;
@@ -48,11 +49,11 @@ namespace QuestingBots.Components
             questsValidated = true;
         }
 
-        private void validateAllQuestFiles(LocationSettingsClass locationSettings)
+        private void validateAllQuestFiles(LocationSettings locationSettings)
         {
             bool allValidated = true;
 
-            foreach (LocationSettingsClass.Location location in locationSettings.locations.Values)
+            foreach (LocationSettings.Location location in locationSettings.locations.Values)
             {
                 if (!location.Enabled || ignoredLocations.Contains(location.Id))
                 {

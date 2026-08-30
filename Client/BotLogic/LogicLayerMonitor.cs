@@ -21,7 +21,7 @@ namespace QuestingBots.BotLogic
         public string LayerName { get; private set; } = null!;
 
         private BotOwner botOwner = null!;
-        private AICoreLayerClass<BotLogicDecision> layer = null!;
+        private AICoreLayer<BotLogicDecision> layer = null!;
         private Stopwatch maxLayerSearchTimer = new Stopwatch();
         private Stopwatch canUseTimer = Stopwatch.StartNew();
         private Stopwatch lastRequestedTimer = new Stopwatch();
@@ -147,7 +147,7 @@ namespace QuestingBots.BotLogic
                 return "";
             }
 
-            AICoreActionResultStruct<BotLogicDecision, GClass26> lastDecision = layer.GetDecision();
+            AICoreActionResult<BotLogicDecision, CoreActionResultParams> lastDecision = layer.GetDecision();
             if (lastDecision.Reason == null)
             {
                 return "";
@@ -156,9 +156,9 @@ namespace QuestingBots.BotLogic
             return lastDecision.Reason;
         }
 
-        public static ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> GetBrainLayersForBot(BotOwner botOwner)
+        public static ReadOnlyCollection<AICoreLayer<BotLogicDecision>> GetBrainLayersForBot(BotOwner botOwner)
         {
-            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(new AICoreLayerClass<BotLogicDecision>[0]);
+            ReadOnlyCollection<AICoreLayer<BotLogicDecision>> emptyCollection = new ReadOnlyCollection<AICoreLayer<BotLogicDecision>>(new AICoreLayer<BotLogicDecision>[0]);
 
             // This happens sometimes, and I don't know why
             if (botOwner?.Brain?.BaseBrain == null)
@@ -168,7 +168,7 @@ namespace QuestingBots.BotLogic
             }
 
             // Find the field that stores the list of brain layers assigned to the bot
-            Type aICoreStrategyClassType = typeof(AICoreStrategyAbstractClass<BotLogicDecision>);
+            Type aICoreStrategyClassType = typeof(AICoreStrategy<BotLogicDecision>);
 
             FieldInfo layerListField = AccessTools.Field(aICoreStrategyClassType, "List_0");
             if (layerListField == null)
@@ -178,29 +178,29 @@ namespace QuestingBots.BotLogic
             }
 
             // Get the list of brain layers for the bot
-            List<AICoreLayerClass<BotLogicDecision>> layerList = (List<AICoreLayerClass<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
+            List<AICoreLayer<BotLogicDecision>> layerList = (List<AICoreLayer<BotLogicDecision>>)layerListField.GetValue(botOwner.Brain.BaseBrain);
             if (layerList == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not retrieve brain layers for bot " + botOwner.GetText());
                 return emptyCollection;
             }
 
-            return new ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>>(layerList);
+            return new ReadOnlyCollection<AICoreLayer<BotLogicDecision>>(layerList);
         }
 
         public static IEnumerable<string> GetBrainLayerNamesForBot(BotOwner botOwner)
         {
-            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
+            ReadOnlyCollection<AICoreLayer<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
             return brainLayers.Select(l => l.Name());
         }
 
-        public static AICoreLayerClass<BotLogicDecision> GetBrainLayerForBot(BotOwner botOwner, string layerName)
+        public static AICoreLayer<BotLogicDecision> GetBrainLayerForBot(BotOwner botOwner, string layerName)
         {
             // Get all of the brain layers assigned to the bot
-            ReadOnlyCollection<AICoreLayerClass<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
+            ReadOnlyCollection<AICoreLayer<BotLogicDecision>> brainLayers = GetBrainLayersForBot(botOwner);
 
             // Try to find the matching layer
-            IEnumerable<AICoreLayerClass<BotLogicDecision>> matchingLayers = brainLayers.Where(l => l.Name() == layerName);
+            IEnumerable<AICoreLayer<BotLogicDecision>> matchingLayers = brainLayers.Where(l => l.Name() == layerName);
             if (!matchingLayers.Any())
             {
                 return null!;
@@ -218,7 +218,7 @@ namespace QuestingBots.BotLogic
         // This checks if the brain layer CAN be used, not if it's currently being used
         public static bool IsBrainLayerActiveForBot(BotOwner botOwner, string layerName)
         {
-            AICoreLayerClass<BotLogicDecision> brainLayer = GetBrainLayerForBot(botOwner, layerName);
+            AICoreLayer<BotLogicDecision> brainLayer = GetBrainLayerForBot(botOwner, layerName);
             if (brainLayer == null)
             {
                 //Singleton<LoggingUtil>.Instance.LogWarning("Could not find brain layer with the name \"" + layerName + "\".");
@@ -229,7 +229,7 @@ namespace QuestingBots.BotLogic
         }
 
         private static string bigBrainCustomLayerWrapperTypeName = "DrakiaXYZ.BigBrain.Internal.CustomLayerWrapper";
-        public static CustomLayer GetExternalCustomLayer(AICoreLayerClass<BotLogicDecision> layer)
+        public static CustomLayer GetExternalCustomLayer(AICoreLayer<BotLogicDecision> layer)
         {
             if (layer == null)
             {

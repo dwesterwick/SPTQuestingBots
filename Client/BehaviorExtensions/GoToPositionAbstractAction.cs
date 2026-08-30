@@ -144,7 +144,7 @@ namespace QuestingBots.BehaviorExtensions
 
             if (movementContext.CanJump || force)
             {
-                movementContext.method_2(1f);
+                movementContext.EmitJumpNoise(1f);
                 movementContext.PlayerAnimatorEnableJump(true);
             }
         }

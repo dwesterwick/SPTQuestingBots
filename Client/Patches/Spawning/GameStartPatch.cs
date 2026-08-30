@@ -135,7 +135,7 @@ namespace QuestingBots.Patches.Spawning
                 return;
             }
 
-            foreach (BotWaveDataClass wave in wavesSpawnScenario.SpawnWaves)
+            foreach (SpawnWave wave in wavesSpawnScenario.SpawnWaves)
             {
                 Singleton<LoggingUtil>.Instance.LogInfo($"BotWaveDataClass at {wave.Time}s: {wave.BotsCount} bots of type {wave.WildSpawnType}");
             }

@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Ballistics;
+using EFT.Interactive;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT.Interactive;
-using EFT;
-using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Lighthouse
 {
@@ -19,7 +20,7 @@ namespace QuestingBots.Patches.Lighthouse
         {
             MethodInfo methodInfo = typeof(LighthouseTraderZone)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .First(m => m.HasAllParameterTypes(new Type[] { typeof(DamageInfoStruct) }));
+                .First(m => m.HasAllParameterTypes(new Type[] { typeof(DamageInfo) }));
 
             Singleton<LoggingUtil>.Instance.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
 

@@ -41,7 +41,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return;
             }
 
-            Singleton<BotEventHandler>.Instance.OnSoundPlayed += enemySoundHeard;
+            Singleton<GlobalEventDispatcher>.Instance.OnSoundPlayed += enemySoundHeard;
             soundPlayedEventAdded = true;
 
             BotOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { removeSoundPlayedEvent(); };
@@ -66,7 +66,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 return;
             }
 
-            Singleton<BotEventHandler>.Instance.OnSoundPlayed -= enemySoundHeard;
+            Singleton<GlobalEventDispatcher>.Instance.OnSoundPlayed -= enemySoundHeard;
             soundPlayedEventAdded = false;
         }
 

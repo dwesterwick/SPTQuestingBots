@@ -1,28 +1,29 @@
-﻿using System;
+﻿using EFT.UI.Matchmaker;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
 
 namespace QuestingBots.Patches.Spawning
 {
     public class TimeHasComeScreenClassChangeStatusPatch : ModulePatch
     {
-        private static MatchmakerPlayerControllerClass instance = null!;
+        private static MatchmakerPlayersController instance = null!;
         private static string previousText = "???";
         private static float? previousProgress = null;
         private static bool isOverridingText = false;
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(MatchmakerPlayerControllerClass)
-                .GetMethod(nameof(MatchmakerPlayerControllerClass.UpdateMatchingStatus), BindingFlags.Public | BindingFlags.Instance);
+            return typeof(MatchmakerPlayersController)
+                .GetMethod(nameof(MatchmakerPlayersController.UpdateMatchingStatus), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(MatchmakerPlayerControllerClass __instance, string status, float? progress = null)
+        protected static void PatchPostfix(MatchmakerPlayersController __instance, string status, float? progress = null)
         {
             if (isOverridingText)
             {

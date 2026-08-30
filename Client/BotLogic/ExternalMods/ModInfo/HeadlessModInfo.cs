@@ -1,9 +1,10 @@
-﻿using System;
-using System.Reflection;
-using Comfort.Common;
+﻿using Comfort.Common;
+using EFT.Communications;
 using EFT.Game.Spawning;
 using HarmonyLib;
 using QuestingBots.Utils;
+using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic.ExternalMods.ModInfo
@@ -12,8 +13,8 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
     {
         public override string GUID { get; } = "com.fika.headless";
 
-        public override Version MinCompatibleVersion => new Version("1.4.0");
-        public override Version MaxCompatibleVersion => new Version("1.4.99");
+        public override Version MinCompatibleVersion => new Version("1.5.0");
+        public override Version MaxCompatibleVersion => new Version("1.99.99");
 
         public override string IncompatibilityMessage => $"Installed Fika Headless ({PluginInfo.Metadata.Version}) is not compatible with Questing Bots spawning system. Please upgrade Fika Headless to {MinCompatibleVersion} or newer to use the QB spawning system.";
 
@@ -38,7 +39,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
                 }
             }
 
-            NotificationManagerClass.DisplayWarningNotification(IncompatibilityMessage, EFT.Communications.ENotificationDurationType.Long);
+            NotificationManager.DisplayWarningNotification(IncompatibilityMessage, EFT.Communications.ENotificationDurationType.Long);
             Singleton<LoggingUtil>.Instance.LogWarningToServerConsole(IncompatibilityMessage);
             // TODO: Decide if to disable BotSpawns config and spawn patches. Spawns will work, however the game start will not be delayed.
             // Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled = false;

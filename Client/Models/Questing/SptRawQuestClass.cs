@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using EFT.Quests;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace QuestingBots.Models.Questing
 {
-    public class SptRawQuestClass : RawQuestClass
+    public class SptRawQuestClass : QuestTemplate
     {
         [JsonProperty("QuestName")]
         public string SptQuestName = string.Empty;

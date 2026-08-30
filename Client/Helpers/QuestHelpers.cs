@@ -12,6 +12,7 @@ using QuestingBots.Models.Questing;
 using UnityEngine;
 using QuestingBots.Utils;
 using QuestingBots.Configuration;
+using Quest = QuestingBots.Models.Questing.Quest;
 
 namespace QuestingBots.Helpers
 {

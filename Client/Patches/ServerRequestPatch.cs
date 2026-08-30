@@ -29,22 +29,22 @@ namespace QuestingBots.Patches
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(ref LegacyParamsStruct legacyParams)
+        protected static void PatchPrefix(ref SendRequest legacyParams)
         {
             if (!legacyParams.Url.EndsWith(botGenerationEndpoint))
             {
                 return;
             }
 
-            Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
+            BotGenerateRequestParams<List<CountTypeBotWave>> originalParams = (BotGenerateRequestParams<List<CountTypeBotWave>>)legacyParams.Params;
             AddPScavFlagsToWaves(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
         }
 
-        private static void AddPScavFlagsToWaves(List<WaveInfoClass> waves, bool generatePScav)
+        private static void AddPScavFlagsToWaves(List<CountTypeBotWave> waves, bool generatePScav)
         {
             for (int i = 0; i < waves.Count; i++)
             {
-                WaveInfoClass originalWave = waves[i];
+                CountTypeBotWave originalWave = waves[i];
                 waves[i] = new WaveInfoWithPScavFlag(
                     originalWave,
                     generatePScav && (originalWave.Role == WildSpawnType.assault || originalWave.Role == WildSpawnType.assaultGroup)
@@ -52,13 +52,13 @@ namespace QuestingBots.Patches
             }
         }
 
-        internal class WaveInfoWithPScavFlag : WaveInfoClass
+        internal class WaveInfoWithPScavFlag : CountTypeBotWave
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("GeneratePScav")]
             public bool GeneratePScav;
 
-            public WaveInfoWithPScavFlag(WaveInfoClass original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
+            public WaveInfoWithPScavFlag(CountTypeBotWave original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
             {
                 GeneratePScav = generatePScav;
             }

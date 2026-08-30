@@ -1,19 +1,24 @@
-﻿using QuestingBots.Patches.Internal;
-using QuestingBots.Utils;
+﻿using QuestingBots.Utils;
+using SPTarkov.DI.Annotations;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Controllers;
-using SPTarkov.Server.Core.Generators;
+using SPTarkov.Server.Core.Generators.Bot;
 using SPTarkov.Server.Core.Models.Eft.Bot;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Services;
+using SPTarkov.Server.Core.Services.Bot;
 using System.Collections;
 using System.Reflection;
 using System.Text.Json;
 
-namespace QuestingBots.Patches.PScavGeneration
+namespace QuestingBots.Patches
 {
+    [Injectable]
     public class GenerateBotWavePatch : AbstractPatch
     {
+        private static LoggingUtil _loggingUtil = null!;
+        private static BotNameService _botNameService = null!;
+        private static BotGenerator _botGenerator = null!;
+
         private static MethodInfo _setRandomisedGameVersionAndCategoryMethod = null!;
         public static MethodInfo SetRandomisedGameVersionAndCategoryMethod
         {
@@ -40,6 +45,13 @@ namespace QuestingBots.Patches.PScavGeneration
             return setRandomisedGameVersionAndCategoryMethod;
         }
 
+        public GenerateBotWavePatch(LoggingUtil loggingUtil, BotNameService botNameService, BotGenerator botGenerator)
+        {
+            _loggingUtil = loggingUtil;
+            _botNameService = botNameService;
+            _botGenerator = botGenerator;
+        }
+
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotController).GetMethod("GenerateBotWave", BindingFlags.Instance | BindingFlags.NonPublic)!;
@@ -50,8 +62,7 @@ namespace QuestingBots.Patches.PScavGeneration
         {
             if (!generateRequest.ExtensionData!.TryGetValue("GeneratePScav", out var generatePScavObj))
             {
-                LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-                loggingUtil.Error("GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
+                _loggingUtil.Error("GenerateCondition did not contain the required GeneratePScav flag. Falling back to default SPT behavior.");
 
                 return;
             }
@@ -64,8 +75,6 @@ namespace QuestingBots.Patches.PScavGeneration
 
         private static List<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
         {
-            LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-
             List<BotBase?> UpdatedBots = new List<BotBase?>();
             int convertedBots = 0;
 
@@ -73,7 +82,7 @@ namespace QuestingBots.Patches.PScavGeneration
             {
                 if (bot == null)
                 {
-                    loggingUtil.Error("A null bot was generated");
+                    _loggingUtil.Error("A null bot was generated");
                     continue;
                 }
 
@@ -88,7 +97,7 @@ namespace QuestingBots.Patches.PScavGeneration
 
             if (convertedBots < targetCount)
             {
-                loggingUtil.Warning($"{targetCount} player Scavs were requested, but only {convertedBots} were created");
+                _loggingUtil.Warning($"{targetCount} player Scavs were requested, but only {convertedBots} were created");
             }
 
             return UpdatedBots;
@@ -98,16 +107,14 @@ namespace QuestingBots.Patches.PScavGeneration
         {
             if (bot.Info?.Settings?.Role == null)
             {
-                LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-                loggingUtil.Error("A bot with a null role was generated");
+                _loggingUtil.Error("A bot with a null role was generated");
 
                 return false;
             }
 
             if (bot.Info.Settings.Role != "assault")
             {
-                //LoggingUtil loggingUtil = ServiceRepository.GetService<LoggingUtil>();
-                //loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
+                //_loggingUtil.Warning($"Tried generating a player Scav, but a bot with role {bot.Info.Settings.Role} was returned");
 
                 return false;
             }
@@ -117,16 +124,14 @@ namespace QuestingBots.Patches.PScavGeneration
 
         private static void ConvertToPScav(BotBase bot)
         {
-            BotNameService botNameService = ServiceRepository.GetService<BotNameService>();
-            botNameService.AddRandomPmcNameToBotMainProfileNicknameProperty(bot);
+            _botNameService.AddRandomPmcNameToBotMainProfileNicknameProperty(bot);
 
             SetRandomisedGameVersionAndCategory(bot);
         }
 
         private static void SetRandomisedGameVersionAndCategory(BotBase bot)
         {
-            BotGenerator botGenerator = ServiceRepository.GetService<BotGenerator>();
-            SetRandomisedGameVersionAndCategoryMethod.Invoke(botGenerator, new object?[] { bot.Info });
+            SetRandomisedGameVersionAndCategoryMethod.Invoke(_botGenerator, new object?[] { bot.Info });
         }
     }
 }

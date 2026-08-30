@@ -7,7 +7,7 @@ using SPTarkov.Server.Core.Models.Spt.Mod;
 
 namespace QuestingBots.Services
 {
-    [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + QuestingBots_Server.LOAD_ORDER_OFFSET)]
+    [Injectable(TypePriority = OnLoadOrder.Preload + QuestingBots_Server.LOAD_ORDER_OFFSET)]
     public class AutoDisableSpawningSystemService : AbstractService
     {
         private readonly string[] SPAWNING_MOD_GUIDS = ["li.barlog.unda", "com.acidphantasm.botplacementsystem"];

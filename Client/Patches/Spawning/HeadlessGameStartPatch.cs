@@ -1,10 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
+using EFT.NextObservedPlayer.Operations;
 using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace QuestingBots.Patches.Spawning
@@ -53,7 +54,7 @@ namespace QuestingBots.Patches.Spawning
             await originalTask;
             Singleton<LoggingUtil>.Instance.LogDebug("Original run-memory-cleanup Task completed");
 
-            TaskCompletionClass source = new TaskCompletionClass();
+            SafeTaskCompleteSource source = new SafeTaskCompleteSource();
             game.StartCoroutine(GameStartPatch.WaitForBotGenerators(source.Complete));
             await source.Task;
 

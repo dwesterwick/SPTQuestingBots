@@ -19,8 +19,8 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
     {
         public abstract string GUID { get; }
 
-        public virtual Version MinCompatibleVersion => new Version("0.0.0");
-        public virtual Version MaxCompatibleVersion => new Version("9999.9999.9999");
+        public virtual System.Version MinCompatibleVersion => new System.Version("0.0.0");
+        public virtual System.Version MaxCompatibleVersion => new System.Version("9999.9999.9999");
 
         public bool IsInstalled { get; private set; } = false;
         public PluginInfo PluginInfo { get; private set; } = null!;
@@ -64,7 +64,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
 
         public bool IsVersionCompatible()
         {
-            Version actualVersion = GetVersion();
+            System.Version actualVersion = GetVersion();
             if (actualVersion == null)
             {
                 return true;
@@ -73,7 +73,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             return actualVersion.IsCompatible(MinCompatibleVersion, MaxCompatibleVersion);
         }
 
-        public Version GetVersion()
+        public System.Version GetVersion()
         {
             if (!checkedIfInstalled)
             {

@@ -18,7 +18,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(BotOwner bot, BotsClass ___Bots, Action<BotOwner> ___OnBotRemoved)
+        protected static bool PatchPrefix(BotOwner bot, BotsList ___Bots, Action<BotOwner> ___OnBotRemoved)
         {
             if (!bot.ShouldPlayerBeTreatedAsHuman())
             {

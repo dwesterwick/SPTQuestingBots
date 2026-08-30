@@ -11,7 +11,7 @@ namespace QuestingBots.BotLogic.Objective
     {
         public PlantItemAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(BotActionNodesClass.CreateNode(BotLogicDecision.lay, BotOwner));
+            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.lay, BotOwner));
         }
 
         public override void Start()

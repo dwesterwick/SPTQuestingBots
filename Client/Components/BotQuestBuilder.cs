@@ -6,9 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
+using Diz.Utils;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using EFT.Quests;
+using Koenigz.PerfectCulling.EFT;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
@@ -16,6 +19,7 @@ using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using UnityEngine;
+using Quest = QuestingBots.Models.Questing.Quest;
 
 namespace QuestingBots.Components
 {
@@ -66,7 +70,7 @@ namespace QuestingBots.Components
             // Need to wait at least one frame for the NavMeshObstacle to take effect
             yield return null;
 
-            Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropChaser);
+            Models.Questing.Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropChaser);
             if (airdopChaserQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not add quest for the most recent airdop");
@@ -102,7 +106,7 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
 
                     // Need to be able to override private properties
-                    BindingFlags overrideBindingFlags = Models.JSONObject<Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
+                    BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
 
                     foreach (SptRawQuestClass questTemplate in allQuestTemplates)
                     {
@@ -127,7 +131,7 @@ namespace QuestingBots.Components
                 }
 
                 // Check which quests are currently active for the player
-                ISession session = tarkovApplication.GetClientBackEndSession();
+                IEftSession session = tarkovApplication.GetClientBackEndSession();
                 QuestDataClass[] activeQuestsForPlayer = session.Profile.QuestsData
                     .Where(q => q.Status == EFT.Quests.EQuestStatus.Started || q.Status == EFT.Quests.EQuestStatus.AvailableForFinish || q.Status == EFT.Quests.EQuestStatus.Success)
                     .ToArray();
@@ -275,7 +279,7 @@ namespace QuestingBots.Components
             Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
 
-        private void LoadQuest(Quest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
+        private void LoadQuest(Models.Questing.Quest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
         {
             quest.MaxBots = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
 
@@ -376,7 +380,7 @@ namespace QuestingBots.Components
                     objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
                 }
 
-                if ((quest.Template != null) && (quest.Template.QuestType == RawQuestClass.EQuestType.Elimination))
+                if ((quest.Template != null) && (quest.Template.QuestType == QuestTemplate.EQuestType.Elimination))
                 {
                     float searchTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EliminationQuestSearchTime;
                     Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding elimination search time: " + searchTime + "s");

@@ -4,6 +4,7 @@ using EFT.Game.Spawning;
 using EFT.GameTriggers;
 using EFT.Interactive;
 using HarmonyLib;
+using JsonType;
 using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
@@ -27,7 +28,7 @@ namespace QuestingBots.Components
 
         public int MaxTotalBots { get; private set; } = 15;
         public float MaxDistanceBetweenSpawnPoints { get; private set; } = float.MaxValue;
-        public LocationSettingsClass.Location CurrentLocation { get; private set; } = null!;
+        public LocationSettings.Location CurrentLocation { get; private set; } = null!;
         public RaidSettings CurrentRaidSettings { get; private set; } = null!;
         public bool AlarmState { get; private set; } = false;
 
@@ -51,7 +52,7 @@ namespace QuestingBots.Components
 
         protected void Awake()
         {
-            Singleton<BotEventHandler>.Instance.OnEvent += HandleBotEvent;
+            Singleton<GlobalEventDispatcher>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
@@ -96,7 +97,7 @@ namespace QuestingBots.Components
 
         protected void OnDestroy()
         {
-            Singleton<BotEventHandler>.Instance.OnEvent -= HandleBotEvent;
+            Singleton<GlobalEventDispatcher>.Instance.OnEvent -= HandleBotEvent;
         }
 
         protected void Update()
@@ -153,7 +154,7 @@ namespace QuestingBots.Components
         public void UpdateMaxTotalBots()
         {
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-            int botmax = botControllerClass.MaxCount;
+            int botmax = botControllerClass._maxCount;
             if (botmax > 0)
             {
                 MaxTotalBots = botmax;
@@ -750,7 +751,7 @@ namespace QuestingBots.Components
                 {
                     // Perform a raycast test from the source position to the object
                     Vector3 direction = item.transform.position - position;
-                    RaycastHit[] raycastHits = Physics.RaycastAll(position, direction, distace, LayerMaskClass.HighPolyWithTerrainMask);
+                    RaycastHit[] raycastHits = Physics.RaycastAll(position, direction, distace, LayersMaskController.HighPolyWithTerrainMask);
 
                     // Ignore raycast hits that are very close to the source position or the object
                     float rayEndPointThreshold = 0.02f;

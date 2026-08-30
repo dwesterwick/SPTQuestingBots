@@ -39,7 +39,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(BotCreationDataClass data)
+        protected static bool PatchPrefix(BotCreationData data)
         {
             if (!QuestingBotsPluginConfig.ScavLimitsEnabled.Value)
             {

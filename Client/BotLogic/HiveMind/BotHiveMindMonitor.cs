@@ -335,7 +335,7 @@ namespace QuestingBots.BotLogic.HiveMind
             bot.BotsGroup = newGroup;
             newGroup.Lock();
 
-            currentGroup.Members.Remove(bot);
+            currentGroup._members.Remove(bot);
 
             // Make the bot's old group members friendly
             List<BotOwner> oldGroupMembers = currentGroup.GetAllMembers();

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT.Communications;
+using EFT.UI;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT.UI;
-using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -56,7 +57,7 @@ namespace QuestingBots.Patches
         private static void showNvidiaReflexWarning()
         {
             string profileWarningMessage = "Using nVidia Reflex may result in long raid loading times";
-            NotificationManagerClass.DisplayWarningNotification(profileWarningMessage, EFT.Communications.ENotificationDurationType.Long);
+            NotificationManager.DisplayWarningNotification(profileWarningMessage, EFT.Communications.ENotificationDurationType.Long);
             Singleton<LoggingUtil>.Instance.LogWarningToServerConsole(profileWarningMessage);
 
             _displayedReflexWarning = true;

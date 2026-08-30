@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Airdrop;
+using EFT.SynchronizableObjects;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using Comfort.Common;
-using EFT;
-using EFT.SynchronizableObjects;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,11 +19,11 @@ namespace QuestingBots.Patches
         protected override MethodBase GetTargetMethod()
         {
             // Called when eairdropFallingStage_0=EAirdropFallingStage.Landed in ManualUpdate()
-            return typeof(AirdropLogicClass).GetMethod("method_15", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(ClientAirDrop).GetMethod(nameof(ClientAirDrop.CheckSurface), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(AirdropSynchronizableObject ___AirdropSynchronizableObject_0)
+        protected static void PatchPostfix(AirdropSynchronizableObject ____syncObject)
         {
             // Do not run this on Fika client machines
             if (!Helpers.RaidHelpers.IsHostRaid())
@@ -30,17 +31,17 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            AddNavMeshObstacle(___AirdropSynchronizableObject_0);
+            AddNavMeshObstacle(____syncObject);
 
-            Vector3 airdropPosition = ___AirdropSynchronizableObject_0.transform.position;
-            Bounds airdropBounds = ___AirdropSynchronizableObject_0.CollisionCollider.bounds;
+            Vector3 airdropPosition = ____syncObject.transform.position;
+            Bounds airdropBounds = ____syncObject.CollisionCollider.bounds;
             Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().StartAddAirdropChaserQuest(airdropPosition, airdropBounds);
         }
 
-        private static void AddNavMeshObstacle(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
+        private static void AddNavMeshObstacle(AirdropSynchronizableObject ____syncObject)
         {
-            NavMeshObstacle navMeshObstacle = ___airdropSynchronizableObject_0.gameObject.GetOrAddComponent<NavMeshObstacle>();
-            navMeshObstacle.size = ___airdropSynchronizableObject_0.CollisionCollider.bounds.size;
+            NavMeshObstacle navMeshObstacle = ____syncObject.gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.size = ____syncObject.CollisionCollider.bounds.size;
             navMeshObstacle.carving = true;
         }
     }
