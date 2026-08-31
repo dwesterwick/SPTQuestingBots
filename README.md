@@ -406,7 +406,6 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 * Player-level ranges for some quests are not reasonable, so bots may do late-game quests at low player levels and vice versa. This is because EFT has no minimum level defined for several quest lines.
 * Extraction via Questing Bots is only partially implemented
 * Looting via Questing Bots only allows bots to travel toward loot POI's (via vanilla EFT logic), so they rarely loot while questing. Using [Looting Bots](https://forge.sp-tarkov.com/mod/812/looting-bots) will result in more realistic behavior. 
-* Player Scavs will only extract when using SPT 4.0.14 or later (currently unreleased) or when using SAIN without vanilla Scavs turned on
 
 **---------- Credits ----------**
 
