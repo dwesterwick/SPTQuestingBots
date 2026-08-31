@@ -10,7 +10,6 @@ namespace QuestingBots.Patches
 {
     internal class PScavProfilePatch : ModulePatch
     {
-        private static Type targetType = null!;
         private static FieldInfo profileListField = null!;
 
         protected override MethodBase GetTargetMethod()
