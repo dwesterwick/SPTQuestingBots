@@ -15,7 +15,7 @@ namespace QuestingBots.Models
 {
     public class BotSpawnInfo
     {
-        public BotCreationDataClass Data { get; private set; }
+        public BotCreationData Data { get; private set; }
         public BotGenerator BotGenerator { get; private set; }
         public bool HasSpawnStarted { get; private set; } = false;
         public bool IsInitialSpawn { get; private set; } = false;
@@ -29,13 +29,13 @@ namespace QuestingBots.Models
         public bool AreAllAliveBotsActive => bots.Where(b => !b.IsDead).All(b => b.BotState == EBotState.Active);
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
 
-        public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator)
+        public BotSpawnInfo(BotCreationData data, BotGenerator botGenerator)
         {
             Data = data;
             BotGenerator = botGenerator;
         }
 
-        public BotSpawnInfo(BotCreationDataClass data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
+        public BotSpawnInfo(BotCreationData data, BotGenerator botGenerator, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data, botGenerator)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
         }
@@ -140,7 +140,7 @@ namespace QuestingBots.Models
             }
 
             // Create a new spawn group for the bot
-            BotCreationDataClass newData = BotCreationDataClass.CreateWithoutProfile(botToSeparate.SpawnProfileData);
+            BotCreationData newData = BotCreationData.CreateWithoutProfile(botToSeparate.SpawnProfileData);
             newData.AddProfile(botToSeparate.Profile);
             Models.BotSpawnInfo newGroup = new BotSpawnInfo(newData, BotGenerator);
             BotGenerator.AddNewBotGroup(newGroup);

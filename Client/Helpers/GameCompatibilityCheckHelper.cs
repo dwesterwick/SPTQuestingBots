@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT.Settings;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -80,12 +81,12 @@ namespace QuestingBots.Helpers
 
         public static bool IsNvidiaReflexEnabled()
         {
-            if (!Singleton<SharedGameSettingsClass>.Instantiated)
+            if (!Singleton<SettingsManager>.Instantiated)
             {
                 return false;
             }
 
-            EFT.Settings.Graphics.ENvidiaReflexMode reflexMode = Singleton<SharedGameSettingsClass>.Instance.Graphics.Settings.NVidiaReflex;
+            EFT.Settings.Graphics.ENvidiaReflexMode reflexMode = Singleton<SettingsManager>.Instance.Graphics.Settings.NVidiaReflex;
 
             return reflexMode != EFT.Settings.Graphics.ENvidiaReflexMode.Off;
         }

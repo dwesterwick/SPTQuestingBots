@@ -3,20 +3,19 @@ using QuestingBots.Utils;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Spt.Config;
-using SPTarkov.Server.Core.Servers;
 
 namespace QuestingBots.Services
 {
-    [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + QuestingBots_Server.LOAD_ORDER_OFFSET)]
+    [Injectable(TypePriority = OnLoadOrder.Preload + QuestingBots_Server.LOAD_ORDER_OFFSET)]
     public class UpdatePMCAndPScavBrainTypesService : AbstractService
     {
         private PmcConfig _pmcConfig;
         private BotConfig _botConfig;
 
-        public UpdatePMCAndPScavBrainTypesService(LoggingUtil logger, ConfigUtil config, ConfigServer configServer) : base(logger, config)
+        public UpdatePMCAndPScavBrainTypesService(LoggingUtil logger, ConfigUtil config, PmcConfig pmcConfig, BotConfig botConfig) : base(logger, config)
         {
-            _pmcConfig = configServer.GetConfig<PmcConfig>();
-            _botConfig = configServer.GetConfig<BotConfig>();
+            _pmcConfig = pmcConfig;
+            _botConfig = botConfig;
         }
 
         protected override void OnLoadIfModIsEnabled()
@@ -56,7 +55,7 @@ namespace QuestingBots.Services
             Logger.Info($"Added {addedBrains} and updated {updatedBrains} Player Scav brain types");
         }
 
-        private void RemoveBlacklistedPMCBrains(IEnumerable<string> blacklistedbrainTypes)
+        public void RemoveBlacklistedPMCBrains(IEnumerable<string> blacklistedbrainTypes)
         {
             int removedBrains = 0;
             foreach (string pmcType in _pmcConfig.PmcType.Keys)
@@ -73,7 +72,7 @@ namespace QuestingBots.Services
             Logger.Info($"Removed {removedBrains} blacklisted PMC brain types");
         }
 
-        private void RemoveBlacklistedPlayerScavBrains(IEnumerable<string> blacklistedbrainTypes)
+        public void RemoveBlacklistedPlayerScavBrains(IEnumerable<string> blacklistedbrainTypes)
         {
             int removedBrains = 0;
             foreach (string map in _botConfig.PlayerScavBrainType.Keys)

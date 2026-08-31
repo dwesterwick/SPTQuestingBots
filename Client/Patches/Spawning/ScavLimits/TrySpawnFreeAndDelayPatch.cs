@@ -33,13 +33,13 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
         protected override MethodBase GetTargetMethod()
         {
-            nextRetryTimeDelayField = AccessTools.Field(typeof(NonWavesSpawnScenario), "float_2");
+            nextRetryTimeDelayField = AccessTools.Field(typeof(NonWavesSpawnScenario), "_botSpawnPeriodCheck");
 
             return typeof(BotSpawner).GetMethod(nameof(BotSpawner.TrySpawnFreeAndDelay), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(BotCreationDataClass data)
+        protected static bool PatchPrefix(BotCreationData data)
         {
             if (!QuestingBotsPluginConfig.ScavLimitsEnabled.Value)
             {

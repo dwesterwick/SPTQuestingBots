@@ -5,28 +5,27 @@ using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
     internal class PScavProfilePatch : ModulePatch
     {
-        private static Type targetType = null!;
         private static FieldInfo profileListField = null!;
 
         protected override MethodBase GetTargetMethod()
         {
-            targetType = typeof(BotsPresets).BaseType;
-            profileListField = AccessTools.Field(targetType, "List_0");
+            profileListField = AccessTools.Field(typeof(ABotProfileCreator), "_simpleProfiles");
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
-
-            return targetType.GetMethod("GetNewProfile", new Type[] { typeof(BotCreationDataClass), typeof(bool) });
+            return typeof(ABotProfileCreator).GetMethod(
+                nameof(ABotProfileCreator.GetNewProfile),
+                BindingFlags.Public | BindingFlags.Instance,
+                null,
+                new Type[] { typeof(BotCreationData), typeof(bool) },
+                null);
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(object __instance, ref Profile __result, BotCreationDataClass data, bool withDelete)
+        protected static bool PatchPrefix(object __instance, ref Profile __result, BotCreationData data, bool withDelete)
         {
             bool shouldSpawnPScav = RaidHelpers.ShouldSpawnPScavByChance();
 

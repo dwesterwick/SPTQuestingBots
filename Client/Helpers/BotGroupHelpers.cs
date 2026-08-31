@@ -21,12 +21,12 @@ namespace QuestingBots.Helpers
             EPlayerSide side = initialBot.Profile.Info.Side;
 
             List<BotOwner> list = new List<BotOwner>();
-            foreach (BotOwner botOwner in botSpawner.method_5(initialBot))
+            foreach (BotOwner botOwner in botSpawner.GetBotEnemiesList(initialBot))
             {
                 list.Add(botOwner);
             }
 
-            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, botSpawner.DeadBodiesController, botSpawner.AllPlayers, true);
+            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, botSpawner._deadBodiesController, botSpawner._allPlayers, true);
             group.TargetMembersCount = targetMembersCount;
             botSpawner.Groups.Add(zone, side, group, true);
             // ------------------------------------------

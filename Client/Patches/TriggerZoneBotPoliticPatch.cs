@@ -20,7 +20,7 @@ namespace QuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(TriggerZone).GetMethod(nameof(TriggerZone.method_1), BindingFlags.Public | BindingFlags.Instance);
+            return typeof(TriggerZone).GetMethod(nameof(TriggerZone.OnTriggerEnterAuthority), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchTranspiler]

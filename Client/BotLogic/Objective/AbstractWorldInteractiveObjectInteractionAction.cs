@@ -1,4 +1,6 @@
 ﻿using Comfort.Common;
+using Diz.DependencyManager;
+using Diz.Resources;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
@@ -22,7 +24,7 @@ namespace QuestingBots.BotLogic.Objective
         private bool interactIfLocked;
         private System.Random random = new System.Random();
         private KeyComponent? keyComponent = null;
-        private DependencyGraphClass<IEasyBundle>.GClass1659? bundleLoader = null;
+        private DependencyGraph<IEasyBundle>.TokenBase? bundleLoader = null;
         private bool wasStuck = false;
 
         protected string InteractionVerbPastTense

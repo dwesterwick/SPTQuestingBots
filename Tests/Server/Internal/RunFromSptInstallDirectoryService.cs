@@ -55,9 +55,9 @@ namespace QuestingBots.Server.Internal
             return output;
         }
 
-        private static string GetPathToSptInstallDirectory()
+        public static string GetPathToSptInstallDirectory()
         {
-            string sptInstallPath = Path.GetFullPath(Path.Combine(CurrentDirectory, RELATIVE_PATH_TO_SPT_INSTALL_DIRECTORY, "..\\..\\..\\..\\SPT"));
+            string sptInstallPath = Path.GetFullPath(Path.Combine(CurrentDirectory, RELATIVE_PATH_TO_SPT_INSTALL_DIRECTORY, "..\\..\\..\\..\\SPT_Runtime"));
             if (!Directory.Exists(sptInstallPath))
             {
                 throw new DirectoryNotFoundException($"Could not find directory {sptInstallPath}");

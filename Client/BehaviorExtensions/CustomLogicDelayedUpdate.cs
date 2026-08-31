@@ -20,7 +20,7 @@ namespace QuestingBots.BehaviorExtensions
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
         protected Components.BotObjectiveManager ObjectiveManager { get; private set; }
-        protected BotNodeAbstractClass baseAction { get; private set; } = null!;
+        protected AICoreNode baseAction { get; private set; } = null!;
         protected static int updateInterval { get; private set; } = 100;
 
         private Stopwatch updateTimer = Stopwatch.StartNew();
@@ -29,7 +29,7 @@ namespace QuestingBots.BehaviorExtensions
         private float sprintDelayTime = 0;
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass395 baseSteeringLogic = new GClass395();
+        private LookAround baseSteeringLogic = new LookAround();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
@@ -84,12 +84,12 @@ namespace QuestingBots.BehaviorExtensions
             actionElapsedTime.Restart();
         }
 
-        public void SetBaseAction(BotNodeAbstractClass _baseAction)
+        public void SetBaseAction(AICoreNode _baseAction)
         {
             baseAction = _baseAction;
         }
 
-        public void UpdateBaseAction(GClass26 data)
+        public void UpdateBaseAction(CoreActionResultParams data)
         {
             baseAction?.UpdateNodeByMain(data);
         }

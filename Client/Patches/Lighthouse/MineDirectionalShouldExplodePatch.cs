@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
 using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
 using UnityEngine;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Lighthouse
 {
@@ -20,13 +18,7 @@ namespace QuestingBots.Patches.Lighthouse
 
         protected override MethodBase GetTargetMethod()
         {
-            MethodInfo methodInfo = typeof(MineDirectional)
-                .GetMethods()
-                .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(Collider) }));
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Found method for MineDirectionalShouldExplodePatch: " + methodInfo.Name);
-
-            return methodInfo;
+            return typeof(MineDirectional).GetMethod(nameof(MineDirectional.ShouldIgnore), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]

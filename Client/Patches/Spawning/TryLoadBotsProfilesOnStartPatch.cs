@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -20,23 +19,11 @@ namespace QuestingBots.Patches.Spawning
 
         protected override MethodBase GetTargetMethod()
         {
-            MethodInfo[] matchingMethods = typeof(BotsPresets)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.HasAllParameterTypesInOrder(new Type[] { typeof(List<WaveInfoClass>), typeof(EProfilesAskingStat) }))
-                .ToArray();
-
-            if (matchingMethods.Length != 1)
-            {
-                throw new TypeLoadException("Could not find matching method for TryLoadBotsProfilesOnStartPatch");
-            }
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Found method for TryLoadBotsProfilesOnStartPatch: " + matchingMethods[0].Name);
-
-            return matchingMethods[0];
+            return typeof(BotProfileClient).GetMethod(nameof(BotProfileClient.LoadProfiles), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(List<WaveInfoClass> waves, EProfilesAskingStat stat)
+        protected static void PatchPrefix(List<CountTypeBotWave> waves, EProfilesAskingStat stat)
         {
             if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
             {
@@ -45,7 +32,7 @@ namespace QuestingBots.Patches.Spawning
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(Task<Profile[]> __result, List<WaveInfoClass> waves, EProfilesAskingStat stat)
+        protected static void PatchPostfix(Task<Profile[]> __result, List<CountTypeBotWave> waves, EProfilesAskingStat stat)
         {
             GenerateBotsTasks.Add(__result);
         }

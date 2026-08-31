@@ -1,4 +1,5 @@
 ﻿using Comfort.Common;
+using EFT;
 using Newtonsoft.Json;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
@@ -59,36 +60,7 @@ namespace QuestingBots.Utils
             }
         }
 
-        private JsonSerializerSettings _serializerSettings = null!;
-        public JsonSerializerSettings SerializerSettings
-        {
-            get
-            {
-                if ( _serializerSettings == null)
-                {
-                    _serializerSettings = findSerializerSettings();
-                }
-
-                return _serializerSettings;
-            }
-        }
-
         public ConfigUtil() { }
-
-        private JsonSerializerSettings findSerializerSettings()
-        {
-            string fieldName = "SerializerSettings";
-            Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByField(fieldName);
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for " + fieldName + ": " + targetType.FullName, true);
-
-            JsonSerializerSettings? jsonSerializerSettings = targetType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static).GetValue(null) as JsonSerializerSettings;
-            if (jsonSerializerSettings == null)
-            {
-                throw new InvalidOperationException("Cannot find EFT JsonSerializerSettings type");
-            }
-
-            return jsonSerializerSettings;
-        }
 
         private Configuration.ModConfig GetConfig()
         {
@@ -258,7 +230,7 @@ namespace QuestingBots.Utils
                     }
                 }
 
-                obj = JsonConvert.DeserializeObject<T>(json, SerializerSettings)!;
+                obj = JsonConvert.DeserializeObject<T>(json, EftJsonConverters.SerializerSettings)!;
 
                 return true;
             }

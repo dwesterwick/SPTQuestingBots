@@ -17,7 +17,7 @@ namespace QuestingBots.BotLogic.Objective
 
         public HoldAtObjectiveAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(BotActionNodesClass.CreateNode(BotLogicDecision.search, BotOwner));
+            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.search, BotOwner));
         }
 
         public override void Start()

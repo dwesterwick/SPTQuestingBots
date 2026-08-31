@@ -43,9 +43,9 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            if (!CanUpdate(__instance.BotOwner_0))
+            if (!CanUpdate(__instance._owner))
             {
-                __result = GetLastValue(__instance.BotOwner_0);
+                __result = GetLastValue(__instance._owner);
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace QuestingBots.Patches
                 __result = false;
             }
 
-            UpdateLastValue(__instance.BotOwner_0, __result);
+            UpdateLastValue(__instance._owner, __result);
         }
 
         private static bool CanUpdate(BotOwner botOwner)
@@ -83,7 +83,7 @@ namespace QuestingBots.Patches
 
         private static bool HasCompletePath(BotBewarePlantedMine __instance)
         {
-            NavMeshPathStatus pathStatus = BotPathingHelpers.CreatePathSegment(__instance.BotOwner_0.Position, __instance.DeactivatingPlace.Pos, out Vector3[] corners);
+            NavMeshPathStatus pathStatus = BotPathingHelpers.CreatePathSegment(__instance._owner.Position, __instance.DeactivatingPlace.Pos, out Vector3[] corners);
             return pathStatus == NavMeshPathStatus.PathComplete;
         }
 

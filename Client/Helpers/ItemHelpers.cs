@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Comfort.Common;
+using Diz.DependencyManager;
+using Diz.LanguageExtensions;
+using Diz.Resources;
+using EFT;
+using EFT.Interactive;
+using EFT.InventoryLogic;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT.Interactive;
-using EFT.InventoryLogic;
-using EFT;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Helpers
 {
@@ -115,7 +118,7 @@ namespace QuestingBots.Helpers
                 multiplier *= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessMultiplierHeadset;
             }
 
-            ArmoredEquipmentTemplateClass? helmetTemplate = helmet?.Template as ArmoredEquipmentTemplateClass;
+            ArmoredEquipmentTemplate? helmetTemplate = helmet?.Template as ArmoredEquipmentTemplate;
             switch (helmetTemplate?.DeafStrength)
             {
                 case EDeafStrength.Low:
@@ -131,21 +134,21 @@ namespace QuestingBots.Helpers
             return multiplier;
         }
 
-        public static StashItemClass CreateFakeStash(InventoryController inventoryController, string stashName)
+        public static Stash CreateFakeStash(InventoryController inventoryController, string stashName)
         {
-            StashItemClass stashItemClass = Singleton<ItemFactoryClass>.Instance.CreateFakeStash(null);
-            StashGridClass stashGridClass = new StashGridClass(stashName, 15, 15, false, Array.Empty<ItemFilter>(), stashItemClass);
-            stashItemClass.Grids[0] = stashGridClass;
-            stashItemClass.CurrentAddress = inventoryController.CreateItemAddress();
+            Stash stash = Singleton<ItemFactory>.Instance.CreateFakeStash(null);
+            Grid grid = new Grid(stashName, 15, 15, false, Array.Empty<ItemFilter>(), stash);
+            stash.Grids[0] = grid;
+            stash.CurrentAddress = inventoryController.CreateItemAddress();
 
-            return stashItemClass;
+            return stash;
         }
 
         public static bool TryAddToFakeStash(this Item item, InventoryController inventoryController, string stashName)
         {
-            StashItemClass stashItemClass = CreateFakeStash(inventoryController, stashName);
+            Stash stash = CreateFakeStash(inventoryController, stashName);
 
-            var addItemToStashOperationResult = stashItemClass.Grids[0].AddAnywhere(item, EErrorHandlingType.Ignore);
+            var addItemToStashOperationResult = stash.Grids[0].AddAnywhere(item, EErrorHandlingType.Ignore);
             if (addItemToStashOperationResult.Failed)
             {
                 return false;
@@ -184,7 +187,7 @@ namespace QuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                var moveResult = InteractionsHandlerClass.Move(item, locationForItem, inventoryController, true);
+                OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, true);
                 if (!moveResult.Succeeded)
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -227,7 +230,7 @@ namespace QuestingBots.Helpers
 
                 // Search through all grids in the equipment slot
                 CompoundItem? equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as CompoundItem;
-                foreach (StashGridClass grid in (equipmentSlot?.Grids ?? (new StashGridClass[0])))
+                foreach (Grid grid in (equipmentSlot?.Grids ?? (new Grid[0])))
                 {
                     //Singleton<LoggingUtil>.Instance.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
@@ -266,7 +269,7 @@ namespace QuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraphClass<IEasyBundle>.GClass1659 LoadBundle(this Item item)
+        public static DependencyGraph<IEasyBundle>.TokenBase LoadBundle(this Item item)
         {
             try
             {

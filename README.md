@@ -3,12 +3,12 @@ You're no longer the only PMC running around placing markers and collecting ques
 **---------- Mod Compatibility ----------**
 
 **REQUIRES:**
-* [BigBrain](https://forge.sp-tarkov.com/mod/902/bigbrain) (1.4.0 or later)
-* [Waypoints](https://forge.sp-tarkov.com/mod/827/waypoints-expanded-navmesh) (1.8.2 or later)
+* [BigBrain](https://forge.sp-tarkov.com/mod/902/bigbrain) (1.450 or later)
+* [Waypoints](https://forge.sp-tarkov.com/mod/827/waypoints-expanded-navmesh) (1.9.0 or later)
 
 **Highly Recommended:**
-* [SAIN](https://forge.sp-tarkov.com/mod/791/sain-solarints-ai-modifications-full-ai-combat-system-replacement) (4.4.3 or later recommended)
-* [Looting Bots](https://forge.sp-tarkov.com/mod/812/looting-bots) (1.6.3 or later recommended)
+* [SAIN](https://forge.sp-tarkov.com/mod/791/sain-solarints-ai-modifications-full-ai-combat-system-replacement) (4.5.0 or later recommended)
+* [Looting Bots](https://forge.sp-tarkov.com/mod/812/looting-bots) (1.8.0 or later recommended)
 
 **Partially compatible with:**
 * [Vagabond](https://forge.sp-tarkov.com/mod/2642/vagabond) and similar mods that significantly reduce spawn points (You MUST use another mod like [Acid's Bot Placement System](https://forge.sp-tarkov.com/mod/2097/abps-acids-bot-placement-system) to manage bot spawning when using this mod. Otherwise, bots will spawn right in front of you.) 

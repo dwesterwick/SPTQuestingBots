@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Interactive;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT.Interactive;
-using EFT;
-using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Lighthouse
 {
@@ -17,17 +17,11 @@ namespace QuestingBots.Patches.Lighthouse
     {
         protected override MethodBase GetTargetMethod()
         {
-            MethodInfo methodInfo = typeof(LighthouseTraderZone)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .First(m => m.HasAllParameterTypes(new Type[] { typeof(DamageInfoStruct) }));
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Found method for LighthouseTraderZonePlayerAttackPatch: " + methodInfo.Name);
-
-            return methodInfo;
+            return typeof(LighthouseTraderZone).GetMethod(nameof(LighthouseTraderZone.OnPlayerDieInZone), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(Player player, IPlayer lastAgressor, PhysicsTriggerHandler ___physicsTriggerHandler_0)
+        protected static void PatchPostfix(Player player, IPlayer lastAgressor, PhysicsTriggerHandler ____triggerHandler)
         {
             if (player == null || lastAgressor == null)
             {
@@ -51,7 +45,7 @@ namespace QuestingBots.Patches.Lighthouse
             }
 
             // Ignore victims that are not on the island
-            if (!___physicsTriggerHandler_0.trigger.bounds.Contains(player.Position))
+            if (!____triggerHandler.trigger.bounds.Contains(player.Position))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("[DSP Not Changed] Victim not on the island");
                 return;

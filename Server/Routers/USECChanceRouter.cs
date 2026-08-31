@@ -3,7 +3,6 @@ using QuestingBots.Routers.Internal;
 using QuestingBots.Utils;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Spt.Config;
-using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils;
 
 namespace QuestingBots.Routers
@@ -15,9 +14,9 @@ namespace QuestingBots.Routers
 
         private PmcConfig _pmcConfig;
 
-        public USECChanceRouter(LoggingUtil logger, ConfigUtil config, JsonUtil jsonUtil, ConfigServer configServer) : base(_routeNames, logger, config, jsonUtil)
+        public USECChanceRouter(LoggingUtil logger, ConfigUtil config, JsonUtil jsonUtil, PmcConfig pmcConfig) : base(_routeNames, logger, config, jsonUtil)
         {
-            _pmcConfig = configServer.GetConfig<PmcConfig>();
+            _pmcConfig = pmcConfig;
         }
 
         public override ValueTask<string?> HandleRoute(string routeName, RequestData routerData)

@@ -16,19 +16,18 @@ namespace QuestingBots.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            Type localAvoidanceType = AccessTools.Field(typeof(BotMover), nameof(BotMover.LocalAvoidance)).FieldType;
-            return localAvoidanceType.GetMethod("ManualUpdate", BindingFlags.Public | BindingFlags.Instance);
+            return typeof(BotLocalAvoidance).GetMethod(nameof(BotLocalAvoidance.ManualUpdate), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
-        protected static bool PatchPrefix(BotOwner ___BotOwner_0)
+        protected static bool PatchPrefix(BotOwner ____owner)
         {
             if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.DisableEFTLocalAvoidance)
             {
                 return true;
             }
 
-            Components.BotObjectiveManager? objectiveManager = BotObjectiveManagerFactory.GetObjectiveManager(___BotOwner_0);
+            Components.BotObjectiveManager? objectiveManager = BotObjectiveManagerFactory.GetObjectiveManager(____owner);
             if ((objectiveManager != null) && objectiveManager.IsQuestingAllowed)
             {
                 return false;

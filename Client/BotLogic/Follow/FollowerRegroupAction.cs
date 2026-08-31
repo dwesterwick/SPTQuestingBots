@@ -18,7 +18,7 @@ namespace QuestingBots.BotLogic.Follow
 
         public FollowerRegroupAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
-            SetBaseAction(BotActionNodesClass.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
+            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
         }
 
         public override void Start()

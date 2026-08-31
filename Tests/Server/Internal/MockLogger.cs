@@ -1,17 +1,16 @@
-﻿using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Models.Logging;
-using SPTarkov.Server.Core.Models.Spt.Logging;
-using SPTarkov.Server.Core.Models.Utils;
-using SPTarkov.Server.Core.Utils.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Spectre.Console;
+using SPTarkov.Common.Models.Logging;
+using SPTarkov.DI.Annotations;
 
 namespace QuestingBots.Server.Internal;
 
 // Copied from https://github.com/sp-tarkov/server-csharp/blob/main/Testing/UnitTests/Mock/MockLogger.cs
 
-[Injectable(TypeOverride = typeof(SptLogger<>))]
-public class MockLogger<T> : ISptLogger<T>
+[Injectable]
+public class MockLogger<T> : ISptLogger<T>, ILogger<T>
 {
-    public void LogWithColor(string data, LogTextColor? textColor = null, LogBackgroundColor? backgroundColor = null, Exception? ex = null)
+    public void LogWithColor(string data, Color? textColor = null, Color? backgroundColor = null, Exception? ex = null)
     {
         Console.WriteLine(data);
     }
@@ -49,15 +48,15 @@ public class MockLogger<T> : ISptLogger<T>
     public void Log(
         LogLevel level,
         string data,
-        LogTextColor? textColor = null,
-        LogBackgroundColor? backgroundColor = null,
+        Color? textColor = null,
+        Color? backgroundColor = null,
         Exception? ex = null
     )
     {
         throw new NotImplementedException();
     }
 
-    public void WriteToLogFile(string body, LogLevel level = LogLevel.Info)
+    public void WriteToLogFile(string body, LogLevel level = LogLevel.Information)
     {
         throw new NotImplementedException();
     }
@@ -72,7 +71,7 @@ public class MockLogger<T> : ISptLogger<T>
         throw new NotImplementedException();
     }
 
-    public void LogWithColor(string data, Exception? ex = null, LogTextColor? textColor = null, LogBackgroundColor? backgroundColor = null)
+    public void LogWithColor(string data, Exception? ex = null, Color? textColor = null, Color? backgroundColor = null)
     {
         Console.WriteLine(data);
     }
@@ -80,5 +79,36 @@ public class MockLogger<T> : ISptLogger<T>
     public void WriteToLogFile(object body)
     {
         Console.WriteLine(body);
+    }
+
+    public IDisposable? BeginScope<TState>(TState state)
+        where TState : notnull
+    {
+        return null;
+    }
+
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        return true;
+    }
+
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception?, string> formatter
+    )
+    {
+        ArgumentNullException.ThrowIfNull(formatter);
+
+        var message = formatter(state, exception);
+
+        Console.WriteLine($"[{logLevel}] {message}");
+
+        if (exception != null)
+        {
+            Console.WriteLine(exception);
+        }
     }
 }

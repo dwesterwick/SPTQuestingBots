@@ -4,7 +4,7 @@ using SPTarkov.Server.Core.Utils;
 
 namespace QuestingBots.Routers.Internal
 {
-    [Injectable(InjectionType = InjectionType.Singleton, TypePriority = OnLoadOrder.PreSptModLoader + 1)]
+    [Injectable(InjectionType = InjectionType.Singleton, TypePriority = OnLoadOrder.Preload + 1)]
     public class HTTPResponseRepository
     {
         public static string NullResponseText { get; private set; } = null!;

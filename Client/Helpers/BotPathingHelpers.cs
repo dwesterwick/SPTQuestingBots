@@ -13,8 +13,8 @@ namespace QuestingBots.Helpers
 {
     public static class BotPathingHelpers
     {
-        private static FieldInfo pathPointsField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Vector3_0");
-        private static FieldInfo pathIndexField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "Int_0");
+        private static FieldInfo pathPointsField = AccessTools.Field(typeof(AbstractBotPath), "_path");
+        private static FieldInfo pathIndexField = AccessTools.Field(typeof(AbstractBotPath), "_curIndex");
 
         public static NavMeshObstacle GetOrAddNavMeshObstacle(this GameObject gameObject)
         {
@@ -84,12 +84,12 @@ namespace QuestingBots.Helpers
 
         public static bool TrySetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
         {
-            if (botMover?.PathFinder == null)
+            if (botMover?._pathFinder == null)
             {
                 return false;
             }
 
-            botMover.PathFinder.SlowAtTheEnd = slowAtTheEnd;
+            botMover._pathFinder.SlowAtTheEnd = slowAtTheEnd;
             return true;
         }
 

@@ -33,7 +33,7 @@ catch
 
 
 # Create server and client folders
-$serverFolderAbsolute = Join-Path $packageFolderAbsolute ('SPT\user\mods\{0}' -f $modName)
+$serverFolderAbsolute = Join-Path $packageFolderAbsolute ('SPT_Runtime\user\mods\{0}' -f $modName)
 $clientFolderAbsolute = Join-Path $packageFolderAbsolute ('BepInEx\plugins\{0}' -f $modName)
 
 try

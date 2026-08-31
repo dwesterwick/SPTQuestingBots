@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
-using Comfort.Common;
 using EFT;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -20,31 +18,26 @@ namespace QuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            string methodName = "CreateFromLegacyParams";
-
-            Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName);
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
-
-            return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            return typeof(BackendRequestParams).GetMethod(nameof(BackendRequestParams.CreateFromLegacyParams), BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(ref LegacyParamsStruct legacyParams)
+        protected static void PatchPrefix(ref SendRequest legacyParams)
         {
             if (!legacyParams.Url.EndsWith(botGenerationEndpoint))
             {
                 return;
             }
 
-            Class19<List<WaveInfoClass>> originalParams = (Class19<List<WaveInfoClass>>)legacyParams.Params;
+            BotGenerateRequestParams<List<CountTypeBotWave>> originalParams = (BotGenerateRequestParams<List<CountTypeBotWave>>)legacyParams.Params;
             AddPScavFlagsToWaves(originalParams.conditions, RaidHelpers.ShouldSpawnPScavByChance());
         }
 
-        private static void AddPScavFlagsToWaves(List<WaveInfoClass> waves, bool generatePScav)
+        private static void AddPScavFlagsToWaves(List<CountTypeBotWave> waves, bool generatePScav)
         {
             for (int i = 0; i < waves.Count; i++)
             {
-                WaveInfoClass originalWave = waves[i];
+                CountTypeBotWave originalWave = waves[i];
                 waves[i] = new WaveInfoWithPScavFlag(
                     originalWave,
                     generatePScav && (originalWave.Role == WildSpawnType.assault || originalWave.Role == WildSpawnType.assaultGroup)
@@ -52,13 +45,13 @@ namespace QuestingBots.Patches
             }
         }
 
-        internal class WaveInfoWithPScavFlag : WaveInfoClass
+        internal class WaveInfoWithPScavFlag : CountTypeBotWave
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             [JsonProperty("GeneratePScav")]
             public bool GeneratePScav;
 
-            public WaveInfoWithPScavFlag(WaveInfoClass original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
+            public WaveInfoWithPScavFlag(CountTypeBotWave original, bool generatePScav = false) : base(original.Limit, original.Role, original.Difficulty)
             {
                 GeneratePScav = generatePScav;
             }

@@ -475,7 +475,7 @@ namespace QuestingBots.Components.Spawning
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-            IBotCreator ibotCreator = botSpawnerClass.BotCreator;
+            IBotCreator ibotCreator = botSpawnerClass._botCreator;
 
             Singleton<LoggingUtil>.Instance.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
@@ -490,8 +490,8 @@ namespace QuestingBots.Components.Spawning
                     //EPlayerSide spawnSide = spawnType.GetPlayerSide();
                     EPlayerSide spawnSide = EPlayerSide.Savage;
 
-                    BotProfileDataClass botProfileData = new BotProfileDataClass(spawnSide, spawnType, botdifficulty, 0f, null);
-                    BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
+                    GetProfileDataParams botProfileData = new GetProfileDataParams(spawnSide, spawnType, botdifficulty, 0f, null);
+                    BotCreationData botSpawnData = await BotCreationData.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     if (botSpawnData.Profiles.Count != bots)
                     {
@@ -688,7 +688,7 @@ namespace QuestingBots.Components.Spawning
         private void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
         {
             BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-            IBotCreator ibotCreator = botSpawner.BotCreator;
+            IBotCreator ibotCreator = botSpawner._botCreator;
 
             BotZone closestBotZone = botSpawner.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
@@ -745,7 +745,7 @@ namespace QuestingBots.Components.Spawning
                 try
                 {
                     BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                    botSpawner.method_4(bot);
+                    botSpawner.SetBotAsEnemy(bot);
                 }
                 catch (Exception e)
                 {
@@ -765,7 +765,7 @@ namespace QuestingBots.Components.Spawning
                     stopWatch.Start();
 
                     BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-                    botSpawner.method_11(bot, botSpawnInfo.Data, null, false, stopWatch);
+                    botSpawner.ActivateBotCallback(bot, botSpawnInfo.Data, null, false, stopWatch);
 
                     if (botSpawnInfo.ShouldBotBeBoss(bot))
                     {

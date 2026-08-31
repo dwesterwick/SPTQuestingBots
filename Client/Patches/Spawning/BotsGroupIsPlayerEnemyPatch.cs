@@ -48,7 +48,7 @@ namespace QuestingBots.Patches.Spawning
 
         private static bool ShouldAlwaysBeAllies(BotsGroup __instance, IPlayer player)
         {
-            if (__instance.InitialBot.Profile.Info.Side != EPlayerSide.Savage)
+            if (__instance._initialBot.Profile.Info.Side != EPlayerSide.Savage)
             {
                 return false;
             }
@@ -71,7 +71,7 @@ namespace QuestingBots.Patches.Spawning
                 return true;
             }
 
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance.InitialBot, out Models.BotSpawnInfo botSpawnInfo))
+            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance._initialBot, out Models.BotSpawnInfo botSpawnInfo))
             {
                 if (botSpawnInfo.ContainsProfile(player.Profile))
                 {
@@ -97,7 +97,7 @@ namespace QuestingBots.Patches.Spawning
                 return;
             }
 
-            if (__instance.InitialBot.Profile.Info.Settings.Role == player.Profile.Info.Settings.Role)
+            if (__instance._initialBot.Profile.Info.Settings.Role == player.Profile.Info.Settings.Role)
             {
                 return;
             }
@@ -107,12 +107,12 @@ namespace QuestingBots.Patches.Spawning
                 //return;
             }
 
-            if (!__instance.InitialBot.WillBeAPMC() && !__instance.InitialBot.WillBeAPlayerScav())
+            if (!__instance._initialBot.WillBeAPMC() && !__instance._initialBot.WillBeAPlayerScav())
             {
                 //return;
             }
 
-            string message = $"Group containing bot {__instance.InitialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";
+            string message = $"Group containing bot {__instance._initialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";
             if (!__result)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning(message);

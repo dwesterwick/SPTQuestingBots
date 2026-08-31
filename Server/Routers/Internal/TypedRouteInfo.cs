@@ -51,11 +51,11 @@ namespace QuestingBots.Routers.Internal
                 return null;
             }
 
-            Func<string, IRequestData, MongoId, string?, ValueTask<object>> func = async (url, info, sessionId, output) =>
-                        await HandleRoute(Name, url, info, sessionId, output) ?? throw new InvalidOperationException("HandleRoute returned null");
+            Func<string, IRequestData, MongoId, string?, CancellationToken, ValueTask<object>> func = async (url, info, sessionId, output, cancellationToken) =>
+                        await HandleRoute(Name, url, info, sessionId, output, cancellationToken) ?? throw new InvalidOperationException("HandleRoute returned null");
 
-            Func<string, IRequestData, MongoId, string?, ValueTask<string?>> funcTyped = async (url, info, sessionId, output) =>
-                        await HandleRoute(Name, url, info, sessionId, output) ?? throw new InvalidOperationException("HandleRoute returned null");
+            Func<string, IRequestData, MongoId, string?, CancellationToken, ValueTask<string?>> funcTyped = async (url, info, sessionId, output, cancellationToken) =>
+                        await HandleRoute(Name, url, info, sessionId, output, cancellationToken) ?? throw new InvalidOperationException("HandleRoute returned null");
 
             bool useTypedAction = typeof(T) != typeof(EmptyRequestData);
             if (useTypedAction)
@@ -66,9 +66,9 @@ namespace QuestingBots.Routers.Internal
             return new RouteAction(Path, func!);
         }
 
-        private async ValueTask<string?> HandleRoute(string routeName, string url, IRequestData info, MongoId sessionId, string? output)
+        private async ValueTask<string?> HandleRoute(string routeName, string url, IRequestData info, MongoId sessionId, string? output, CancellationToken cancellationToken)
         {
-            RequestData requestData = new RequestData(url, info, sessionId, output);
+            RequestData requestData = new RequestData(url, info, sessionId, output, cancellationToken);
             return await HandleRoute(routeName, requestData);
         }
 

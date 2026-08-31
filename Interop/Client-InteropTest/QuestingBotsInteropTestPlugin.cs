@@ -8,7 +8,7 @@ using QuestingBots_InteropTest;
 
 namespace QuestingBotsInteropTest
 {
-    [BepInPlugin("com.danw.questingbotsinteroptest", "QuestingBots-InteropTest", "1.3.0")]
+    [BepInPlugin("com.danw.questingbotsinteroptest", "QuestingBots-InteropTest", "1.4.0")]
     public class QuestingBotsInteropTestPlugin : BaseUnityPlugin
     {
         protected void Awake()

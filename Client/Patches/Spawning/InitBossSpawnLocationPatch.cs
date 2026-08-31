@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using EFT;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -15,13 +15,7 @@ namespace QuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            MethodInfo methodInfo = typeof(BossSpawnScenario)
-                .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .First();
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Found method for InitBossSpawnLocationPatch: " + methodInfo.Name);
-
-            return methodInfo;
+            return typeof(BossSpawnScenario).GetMethod(nameof(BossSpawnScenario.Create), BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPostfix]
