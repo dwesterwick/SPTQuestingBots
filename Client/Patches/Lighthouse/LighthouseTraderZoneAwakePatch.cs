@@ -19,9 +19,9 @@ namespace QuestingBots.Patches.Lighthouse
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(PhysicsTriggerHandler ___physicsTriggerHandler_0)
+        protected static void PatchPostfix(PhysicsTriggerHandler ____triggerHandler)
         {
-            Components.LightkeeperIslandMonitor.LightkeeperTraderZoneColliderHandler = ___physicsTriggerHandler_0;
+            Components.LightkeeperIslandMonitor.LightkeeperTraderZoneColliderHandler = ____triggerHandler;
             Singleton<LoggingUtil>.Instance.LogDebug("Found collider for the Lighthouse trader zone");
         }
     }

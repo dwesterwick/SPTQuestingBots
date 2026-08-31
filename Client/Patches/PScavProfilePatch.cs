@@ -5,8 +5,6 @@ using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -17,12 +15,14 @@ namespace QuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            targetType = typeof(BotProfileClient).BaseType;
-            profileListField = AccessTools.Field(targetType, "List_0");
+            profileListField = AccessTools.Field(typeof(ABotProfileCreator), "_simpleProfiles");
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
-
-            return targetType.GetMethod("GetNewProfile", new Type[] { typeof(BotCreationData), typeof(bool) });
+            return typeof(ABotProfileCreator).GetMethod(
+                nameof(ABotProfileCreator.GetNewProfile),
+                BindingFlags.Public | BindingFlags.Instance,
+                null,
+                new Type[] { typeof(BotCreationData), typeof(bool) },
+                null);
         }
 
         [PatchPrefix]

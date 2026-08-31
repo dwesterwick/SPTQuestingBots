@@ -170,7 +170,7 @@ namespace QuestingBots.BotLogic
             // Find the field that stores the list of brain layers assigned to the bot
             Type aICoreStrategyClassType = typeof(AICoreStrategy<BotLogicDecision>);
 
-            FieldInfo layerListField = AccessTools.Field(aICoreStrategyClassType, "List_0");
+            FieldInfo layerListField = AccessTools.Field(aICoreStrategyClassType, "_activeLayers");
             if (layerListField == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not find brain layer list in type " + aICoreStrategyClassType.FullName);

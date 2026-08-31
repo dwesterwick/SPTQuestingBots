@@ -84,5 +84,15 @@ namespace QuestingBots.Helpers
 
         private static Version Min(Version a, Version b) => a.CompareTo(b) <= 0 ? a : b;
         private static Version Max(Version a, Version b) => a.CompareTo(b) >= 0 ? a : b;
+
+        public static Version IncludeRevision(this Version v)
+        {
+            if (v.Revision >= 0)
+            {
+                return v;
+            }
+
+            return new Version(v.Major, v.Minor, v.Build, 0);
+        }
     }
 }

@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
-using Comfort.Common;
 using EFT;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -20,12 +18,7 @@ namespace QuestingBots.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            string methodName = "CreateFromLegacyParams";
-
-            Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName);
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ServerRequestPatch: " + targetType.FullName);
-
-            return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            return typeof(BackendRequestParams).GetMethod(nameof(BackendRequestParams.CreateFromLegacyParams), BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPrefix]

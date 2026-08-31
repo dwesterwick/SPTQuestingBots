@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using SPT.Reflection.Patching;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -16,17 +16,11 @@ namespace QuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            MethodInfo methodInfo = typeof(BossGroup)
-                .GetMethods()
-                .First(m => m.IsUnmapped() && m.HasAllParameterTypesInOrder(new Type[] { typeof(BotOwner) }));
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Found method for SetNewBossPatch: " + methodInfo.Name);
-
-            return methodInfo;
+            return typeof(BossGroup).GetMethod(nameof(BossGroup.OnBossDead), BindingFlags.Public | BindingFlags.Instance);
         }
 
         [PatchPrefix]
-        protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ___Boss_1)
+        protected static void PatchPrefix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, BotOwner ____boss)
         {
             foreach (BotOwner follower in followers)
             {
@@ -35,19 +29,19 @@ namespace QuestingBots.Patches.Spawning
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, ref BotOwner ___Boss_1)
+        protected static void PatchPostfix(BossGroup __instance, BotOwner boss, List<BotOwner> followers, ref BotOwner ____boss)
         {
-            ___Boss_1 = null!;
+            ____boss = null!;
 
             foreach (BotOwner follower in followers)
             {
                 if (follower.Boss.IamBoss && (follower.Profile.Id != boss.Profile.Id))
                 {
-                    ___Boss_1 = follower;
+                    ____boss = follower;
                 }
             }
 
-            if ((___Boss_1 == null) && (followers.Count > 1))
+            if ((____boss == null) && (followers.Count > 1))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Could not find a new boss to replace " + boss.GetText());
             }

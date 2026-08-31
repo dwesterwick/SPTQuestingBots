@@ -1,14 +1,13 @@
-﻿using System;
+﻿using EFT;
+using EFT.Game.Spawning;
+using QuestingBots.Helpers;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using EFT;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.Advanced
 {
@@ -16,12 +15,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
     {
         protected override MethodBase GetTargetMethod()
         {
-            string methodName = "ExceptAI";
-
-            Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName);
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for ExceptAIPatch: " + targetType.FullName);
-
-            return targetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            return typeof(PlayersCollectionExtension).GetMethod(nameof(PlayersCollectionExtension.ExceptAI), BindingFlags.Public | BindingFlags.Static);
         }
 
         [PatchPrefix]

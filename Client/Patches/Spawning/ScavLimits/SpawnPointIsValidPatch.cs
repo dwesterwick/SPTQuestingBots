@@ -10,7 +10,6 @@ using EFT.Game.Spawning;
 using SPT.Reflection.Patching;
 using QuestingBots.Helpers;
 using UnityEngine;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning.ScavLimits
 {
@@ -18,17 +17,11 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
     {
         protected override MethodBase GetTargetMethod()
         {
-            string methodName = "IsValid";
-            Type[] argumentTypes = new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(SpawnSystemDebugCollector) };
-
-            Type targetType = Helpers.TarkovTypeHelpers.FindTargetTypeByMethod(methodName, argumentTypes);
-            Singleton<LoggingUtil>.Instance.LogInfo("Found type for SpawnPointIsValidPatch: " + targetType.FullName);
-
-            return targetType.GetMethod(
-                methodName,
+            return typeof(SpawnPointExtension).GetMethod(
+                nameof(SpawnPointExtension.IsValid),
                 BindingFlags.Public | BindingFlags.Static,
                 null,
-                argumentTypes,
+                new Type[] { typeof(ISpawnPoint), typeof(IReadOnlyCollection<IPlayer>), typeof(float), typeof(SpawnSystemDebugCollector) },
                 null);
         }
 

@@ -70,7 +70,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
                 return true;
             }
 
-            return actualVersion.IsCompatible(MinCompatibleVersion, MaxCompatibleVersion);
+            return actualVersion.IncludeRevision().IsCompatible(MinCompatibleVersion, MaxCompatibleVersion);
         }
 
         public System.Version GetVersion()
