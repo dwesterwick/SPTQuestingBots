@@ -3,7 +3,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **---------- Mod Compatibility ----------**
 
 **REQUIRES:**
-* [BigBrain](https://forge.sp-tarkov.com/mod/902/bigbrain) (1.450 or later)
+* [BigBrain](https://forge.sp-tarkov.com/mod/902/bigbrain) (1.5.0 or later)
 * [Waypoints](https://forge.sp-tarkov.com/mod/827/waypoints-expanded-navmesh) (1.9.0 or later)
 
 **Highly Recommended:**
