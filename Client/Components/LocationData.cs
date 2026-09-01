@@ -76,6 +76,7 @@ namespace QuestingBots.Components
             UpdateMaxTotalBots();
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotLogic.HiveMind.BotHiveMindMonitor>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Spawning.BotGenerationManager>();
 
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.Enabled)
             {

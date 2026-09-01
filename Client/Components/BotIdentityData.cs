@@ -133,7 +133,8 @@ namespace QuestingBots.Components
 
         private void adjustEftBotCounts()
         {
-            if (BotGenerator.GetAllGeneratedBotProfileIDs().Contains(_botOwner.Profile.Id))
+            IEnumerable<string> allGeneratedBotProfileIds = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs();
+            if (allGeneratedBotProfileIds.Contains(_botOwner.Profile.Id))
             {
                 reduceBotCounts();
             }

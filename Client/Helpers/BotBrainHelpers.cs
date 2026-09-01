@@ -383,7 +383,7 @@ namespace QuestingBots.Helpers
 
         public static bool ShouldPlayerBeTreatedAsHuman(this IPlayer player)
         {
-            return !player.IsAI || BotGenerator.GetAllGeneratedBotProfileIDs().Contains(player.Profile.Id);
+            return !player.IsAI || Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs().Contains(player.Profile.Id);
         }
 
         public static bool ShouldPlayerBeTreatedAsHuman(this BotOwner bot)

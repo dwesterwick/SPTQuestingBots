@@ -29,9 +29,10 @@ namespace QuestingBots.Components.Spawning
         public int MaxAliveBots { get; protected set; } = 10;
         public float RetryTimeSeconds { get; protected set; } = 10;
 
+        protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
+
         protected List<SpawnPointParams> PendingSpawnPoints = new List<SpawnPointParams>();
 
-        protected readonly List<Models.BotSpawnInfo> BotGroups = new List<Models.BotSpawnInfo>();
         private readonly Stopwatch retrySpawnTimer = Stopwatch.StartNew();
         private readonly Stopwatch updateTimer = Stopwatch.StartNew();
         private readonly System.Random random = new System.Random();
@@ -43,12 +44,11 @@ namespace QuestingBots.Components.Spawning
         private static Task botGenerationTask = null!;
         private static readonly List<Func<Task>> botGeneratorList = new List<Func<Task>>();
         private static readonly Dictionary<Func<BotGenerator>, bool> registeredBotGenerators = new Dictionary<Func<BotGenerator>, bool>();
-        private static readonly Dictionary<BotOwner, Models.BotSpawnInfo> botSpawnInfoCache = new Dictionary<BotOwner, Models.BotSpawnInfo>();
 
+        public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.AsReadOnly();
+        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HaveAllBotsSpawned);
         public int SpawnedGroupCount => BotGroups.Count(g => g.HaveAllBotsSpawned);
         public int RemainingGroupsToSpawnCount => BotGroups.Count(g => !g.HaveAllBotsSpawned);
-        public bool HasRemainingSpawns => !HasGeneratedBots || BotGroups.Any(g => !g.HaveAllBotsSpawned);
-        public IReadOnlyCollection<Models.BotSpawnInfo> GetBotGroups() => BotGroups.ToArray();
         public int MaxBotsToGenerate => Math.Min(MaxAliveBots, MaxGeneratedBots - GeneratedBotCount);
         public int GeneratorProgress => 100 * GeneratedBotCount / MaxGeneratedBots;
 
@@ -117,11 +117,6 @@ namespace QuestingBots.Components.Spawning
             StartCoroutine(spawnBotGroups(BotGroups.ToArray()));
         }
 
-        public static void Clear()
-        {
-            botSpawnInfoCache.Clear();
-        }
-
         public static void RegisterBotGenerator<T>(bool isPScavGenerator = false) where T : BotGenerator
         {
             registeredBotGenerators.Add(() => Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<T>(), isPScavGenerator);
@@ -138,160 +133,9 @@ namespace QuestingBots.Components.Spawning
             return raidSettings.BotSettings.BotAmount != EFT.Bots.EBotAmount.NoBots;
         }
 
-        public static bool IsPositionCloseToAnyGeneratedBots(Vector3 position, float distanceFromPlayers, out float distance)
-        {
-            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
-            {
-                if (botGenerator == null)
-                {
-                    continue;
-                }
-
-                if (botGenerator.IsPositionCloseToGeneratedBots(position, distanceFromPlayers, out distance))
-                {
-                    return true;
-                }
-            }
-
-            distance = float.MaxValue;
-            return false;
-        }
-
-        public static bool AreAnyPositionsCloseToAnyGeneratedBots(IEnumerable<Vector3> positions, float distanceFromPlayers, out float distance)
-        {
-            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
-            {
-                if (botGenerator == null)
-                {
-                    continue;
-                }
-
-                if (botGenerator.AreAnyPositionsCloseToGeneratedBots(positions, distanceFromPlayers, out distance))
-                {
-                    return true;
-                }
-            }
-
-            distance = float.MaxValue;
-            return false;
-        }
-
-        public static IEnumerable<string> GetAllGeneratedBotProfileIDs()
-        {
-            return GetAllGeneratedBotProfiles().Select(b => b.Id);
-        }
-
-        public static IEnumerable<Profile> GetAllGeneratedBotProfiles()
-        {
-            List<Profile> generatedBotProfiles = new List<Profile>();
-            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
-            {
-                if (botGenerator == null)
-                {
-                    continue;
-                }
-
-                generatedBotProfiles.AddRange(botGenerator.GetGeneratedBotProfiles());
-            }
-
-            return generatedBotProfiles;
-        }
-
-        public bool AreAnyPositionsCloseToGeneratedBots(IEnumerable<Vector3> positions, float distanceFromPlayers, out float distance)
-        {
-            foreach (Vector3 position in positions)
-            {
-                if (IsPositionCloseToGeneratedBots(position, distanceFromPlayers, out distance))
-                {
-                    return true;
-                }
-            }
-
-            distance = float.MaxValue;
-            return false;
-        }
-
-        public bool IsPositionCloseToGeneratedBots(Vector3 position, float distanceFromPlayers, out float distance)
-        {
-            foreach (Models.BotSpawnInfo botGroup in GetBotGroups())
-            {
-                IEnumerable<BotOwner> aliveBots = botGroup.SpawnedBots.Where(b => (b != null) && !b.IsDead);
-                foreach (BotOwner bot in aliveBots)
-                {
-                    distance = Vector3.Distance(bot.Position, position);
-                    if (distance <= distanceFromPlayers)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            distance = float.MaxValue;
-            return false;
-        }
-
-        public IEnumerable<string> GetGeneratedBotProfileIDs()
-        {
-            return GetGeneratedBotProfiles().Select(b => b.Id);
-        }
-
-        public IEnumerable<Profile> GetGeneratedBotProfiles()
-        {
-            List<Profile> generatedBotProfiles = new List<Profile>();
-
-            foreach (Models.BotSpawnInfo botGroup in GetBotGroups())
-            {
-                generatedBotProfiles.AddRange(botGroup.Data.Profiles);
-            }
-
-            return generatedBotProfiles;
-        }
-
-        public bool TryGetBotGroup(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
-        {
-            matchingGroupData = null!;
-
-            foreach (Models.BotSpawnInfo info in BotGroups)
-            {
-                foreach (Profile profile in info.Data.Profiles)
-                {
-                    if (profile.Id != bot.Profile.Id)
-                    {
-                        continue;
-                    }
-
-                    matchingGroupData = info;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public void AddNewBotGroup(Models.BotSpawnInfo newGroup)
         {
             BotGroups.Add(newGroup);
-        }
-
-        public static bool TryGetBotGroupFromAnyGenerator(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
-        {
-            if (botSpawnInfoCache.ContainsKey(bot))
-            {
-                matchingGroupData = botSpawnInfoCache[bot];
-                return true;
-            }
-
-            foreach (BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(BotGenerator)))
-            {
-                if (botGenerator?.TryGetBotGroup(bot, out matchingGroupData) == true)
-                {
-                    botSpawnInfoCache.Add(bot, matchingGroupData);
-                    return true;
-                }
-            }
-
-            matchingGroupData = null!;
-            return false;
         }
 
         public IReadOnlyCollection<BotOwner> GetSpawnGroupMembers(BotOwner bot)
@@ -390,6 +234,7 @@ namespace QuestingBots.Components.Spawning
         public static void RunBotGenerationTasks()
         {
             RaidSettings raidSettings = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentRaidSettings;
+            BotGenerationManager botGenerationManager = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>();
 
             foreach (Func<BotGenerator> registerBotGenerator in registeredBotGenerators.Keys)
             {
@@ -399,7 +244,8 @@ namespace QuestingBots.Components.Spawning
                     continue;
                 }
 
-                registerBotGenerator();
+                BotGenerator botGenerator = registerBotGenerator();
+                botGenerationManager.AddActiveBotGenerator(botGenerator);
             }
 
             botGenerationTask = runBotGenerationTasks();

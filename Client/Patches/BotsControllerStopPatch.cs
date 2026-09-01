@@ -36,9 +36,6 @@ namespace QuestingBots.Patches
                 botGenerator.enabled = false;
             }
 
-            // Clear cache
-            Components.Spawning.BotGenerator.Clear();
-
             // Write all log files
             if (Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().HaveQuestsBeenBuilt)
             {

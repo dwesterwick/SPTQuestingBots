@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components.Spawning;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using EFT;
-using QuestingBots.Helpers;
-using Comfort.Common;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -30,14 +31,16 @@ namespace QuestingBots.Patches
                 return true;
             }
 
+            BotGenerationManager botGenerationManager = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>();
+
             IReadOnlyCollection<Profile> bossGroupMemberProfiles = emptyProfileCollection;
-            if (Components.Spawning.BotGenerator.TryGetBotGroupFromAnyGenerator(__instance.Owner, out Models.BotSpawnInfo botSpawnInfo))
+            if (botGenerationManager.TryGetBotGroupFromAnyGenerator(__instance.Owner, out Models.BotSpawnInfo botSpawnInfo))
             {
                 bossGroupMemberProfiles = botSpawnInfo.GetGeneratedProfiles();
             }
 
             IReadOnlyCollection<Profile> offerGroupMemberProfiles = emptyProfileCollection;
-            if (Components.Spawning.BotGenerator.TryGetBotGroupFromAnyGenerator(offer, out botSpawnInfo))
+            if (botGenerationManager.TryGetBotGroupFromAnyGenerator(offer, out botSpawnInfo))
             {
                 offerGroupMemberProfiles = botSpawnInfo.GetGeneratedProfiles();
             }

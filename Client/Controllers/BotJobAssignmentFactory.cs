@@ -3,6 +3,7 @@ using Diz.Utils;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Components;
+using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
@@ -870,7 +871,7 @@ namespace QuestingBots.Controllers
                 }
             }
 
-            foreach (Profile profile in Components.Spawning.BotGenerator.GetAllGeneratedBotProfiles())
+            foreach (Profile profile in Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfiles())
             {
                 if (botJobAssignments.ContainsKey(profile.Id))
                 {

@@ -280,7 +280,7 @@ namespace QuestingBots.BotLogic.HiveMind
             }
 
             // If the bot was spawned by this mod, create a new spawn group for it
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
+            if (Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
             {
                 matchingGroupData.SeparateBotOwner(bot);
             }
