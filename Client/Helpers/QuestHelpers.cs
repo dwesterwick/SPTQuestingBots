@@ -12,7 +12,7 @@ using QuestingBots.Models.Questing;
 using UnityEngine;
 using QuestingBots.Utils;
 using QuestingBots.Configuration;
-using Quest = QuestingBots.Models.Questing.Quest;
+using BotQuest = QuestingBots.Models.Questing.BotQuest;
 
 namespace QuestingBots.Helpers
 {
@@ -32,7 +32,7 @@ namespace QuestingBots.Helpers
             QuestMinLevelFinder.ClearCache();
         }
 
-        public static void ApplyQuestSettingsFromConfig(this Models.Questing.Quest quest, QuestSettingsConfig settings)
+        public static void ApplyQuestSettingsFromConfig(this Models.Questing.BotQuest quest, QuestSettingsConfig settings)
         {
             quest.Desirability = settings.Desirability;
             quest.PMCsOnly = settings.PMCsOnly;
@@ -42,7 +42,7 @@ namespace QuestingBots.Helpers
             quest.MaxLevel = settings.MaxLevel;
         }
 
-        public static void ApplyQuestSettingsFromConfig(this Models.Questing.QuestObjective objective, QuestSettingsConfig settings)
+        public static void ApplyQuestSettingsFromConfig(this Models.Questing.BotQuestObjective objective, QuestSettingsConfig settings)
         {
             objective.MinDistanceFromBot = settings.MinDistance;
             objective.MaxDistanceFromBot = settings.MaxDistance;
@@ -50,7 +50,7 @@ namespace QuestingBots.Helpers
 
         public static bool ValidateQuestFiles(string locationId)
         {
-            IEnumerable<Quest> quests = Singleton<ConfigUtil>.Instance.GetCustomQuests(locationId);
+            IEnumerable<BotQuest> quests = Singleton<ConfigUtil>.Instance.GetCustomQuests(locationId);
 
             if (!quests.Any())
             {
@@ -75,7 +75,7 @@ namespace QuestingBots.Helpers
             return zoneAndItemQuestPositions;
         }
 
-        public static IEnumerable<string> GetAllZoneIDs(this Quest quest)
+        public static IEnumerable<string> GetAllZoneIDs(this BotQuest quest)
         {
             List<string> zoneIDs = new List<string>();
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
@@ -90,7 +90,7 @@ namespace QuestingBots.Helpers
             return zoneIDs;
         }
 
-        public static float? FindPlantTime(this Quest quest, string zoneID)
+        public static float? FindPlantTime(this BotQuest quest, string zoneID)
         {
             float? plantTime = quest.findQuestValue(zoneID, FindPlantTime);
             if (plantTime.HasValue)
@@ -101,7 +101,7 @@ namespace QuestingBots.Helpers
             return null;
         }
 
-        public static float? FindBeaconTime(this Quest quest, string zoneID)
+        public static float? FindBeaconTime(this BotQuest quest, string zoneID)
         {
             float? beaconTime = quest.findQuestValue(zoneID, FindBeaconTime);
             if (beaconTime.HasValue)
@@ -112,7 +112,7 @@ namespace QuestingBots.Helpers
             return null;
         }
 
-        public static void LocateQuestItems(this Quest quest, IEnumerable<LootItem> allLoot)
+        public static void LocateQuestItems(this BotQuest quest, IEnumerable<LootItem> allLoot)
         {
             LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
             if (locationData == null)
@@ -139,7 +139,7 @@ namespace QuestingBots.Helpers
 
                     // Check if an objective has already been added for the item. This is to prevent duplicate objectives from being added for
                     // some EFT quests. 
-                    QuestObjective objective = quest.GetObjectiveForLootItem(target);
+                    BotQuestObjective objective = quest.GetObjectiveForLootItem(target);
                     if (objective != null)
                     {
                         continue;
@@ -219,7 +219,7 @@ namespace QuestingBots.Helpers
                     }
 
                     // Add an objective for the quest item using the nearest valid NavMesh position to it
-                    QuestObjective newObjective = new QuestItemObjective(item, navMeshTargetPoint.Value);
+                    BotQuestObjective newObjective = new BotQuestItemObjective(item, navMeshTargetPoint.Value);
                     newObjective.DoorIDToUnlock = doorIDToUnlock;
                     newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
                     quest.AddObjective(newObjective);
@@ -351,7 +351,7 @@ namespace QuestingBots.Helpers
             return null;
         }
 
-        private static T findQuestValue<T>(this Quest quest, string zoneID, Func<Condition, string, T> searchMethod)
+        private static T findQuestValue<T>(this BotQuest quest, string zoneID, Func<Condition, string, T> searchMethod)
         {
             EQuestStatus eQuestStatus = EQuestStatus.AvailableForFinish;
             if (quest.Template?.Conditions?.ContainsKey(eQuestStatus) == true)

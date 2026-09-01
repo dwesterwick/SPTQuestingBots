@@ -29,7 +29,7 @@ namespace QuestingBots.Models.Questing
         OpenNearbyDoors
     }
 
-    public class QuestObjectiveStep
+    public class BotQuestObjectiveStep
     {
         [JsonProperty("waitTimeAfterCompleting")]
         public double WaitTimeAfterCompleting { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.DefaultWaitTimeAfterObjectiveCompletion;
@@ -71,27 +71,27 @@ namespace QuestingBots.Models.Questing
         [JsonIgnore]
         public WorldInteractiveObject InteractiveObject { get; set; } = null!;
 
-        public QuestObjectiveStep()
+        public BotQuestObjectiveStep()
         {
 
         }
 
-        public QuestObjectiveStep(SerializableVector3 position) : this()
+        public BotQuestObjectiveStep(SerializableVector3 position) : this()
         {
             SerializablePosition = position;
         }
 
-        public QuestObjectiveStep(Vector3 position) : this()
+        public BotQuestObjectiveStep(Vector3 position) : this()
         {
             SerializablePosition = position.ToSerializableVector3();
         }
 
-        public QuestObjectiveStep(Vector3 position, QuestAction actionType) : this(position)
+        public BotQuestObjectiveStep(Vector3 position, QuestAction actionType) : this(position)
         {
             ActionType = actionType;
         }
 
-        public QuestObjectiveStep(Vector3 position, QuestAction actionType, Configuration.MinMaxConfig minElapsedTime) : this(position, actionType)
+        public BotQuestObjectiveStep(Vector3 position, QuestAction actionType, Configuration.MinMaxConfig minElapsedTime) : this(position, actionType)
         {
             MinElapsedTime = minElapsedTime;
         }

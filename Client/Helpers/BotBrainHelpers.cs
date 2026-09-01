@@ -2,6 +2,7 @@
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.Components.Spawning;
+using QuestingBots.Controllers;
 using QuestingBots.Models;
 using QuestingBots.Utils;
 using System;
@@ -33,6 +34,28 @@ namespace QuestingBots.Helpers
             Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Following);
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Regrouping);
+        }
+
+        public static bool AllowsQuesting(this BotType botType)
+        {
+            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PMC)
+            {
+                return true;
+            }
+            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Boss)
+            {
+                return true;
+            }
+            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Scav)
+            {
+                return true;
+            }
+            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PScav)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static IEnumerable<BotBrainType> AddTestBrains(this IEnumerable<BotBrainType> list)

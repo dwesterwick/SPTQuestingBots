@@ -16,11 +16,11 @@ namespace QuestingBots.Components
     {
         private static Dictionary<string, int> cachedMinLevelsForQuestIds = new Dictionary<string, int>();
 
-        private Dictionary<Models.Questing.Quest, int> minLevelsForQuests = new Dictionary<Models.Questing.Quest, int>();
+        private Dictionary<Models.Questing.BotQuest, int> minLevelsForQuests = new Dictionary<Models.Questing.BotQuest, int>();
 
-        private Models.Questing.Quest targetQuest;
+        private Models.Questing.BotQuest targetQuest;
 
-        public QuestMinLevelFinder(Models.Questing.Quest _quest)
+        public QuestMinLevelFinder(Models.Questing.BotQuest _quest)
         {
             targetQuest = _quest;
         }
@@ -32,7 +32,7 @@ namespace QuestingBots.Components
 
         public int FindMinLevel() => FindMinLevel(targetQuest);
 
-        private int FindMinLevel(Models.Questing.Quest quest)
+        private int FindMinLevel(Models.Questing.BotQuest quest)
         {
             // Check if this instance has already checked for the min level of this quest
             if (minLevelsForQuests.ContainsKey(quest))
@@ -55,7 +55,7 @@ namespace QuestingBots.Components
 
         private void UpdateCache()
         {
-            foreach (Models.Questing.Quest preReqQuest in minLevelsForQuests.Keys)
+            foreach (Models.Questing.BotQuest preReqQuest in minLevelsForQuests.Keys)
             {
                 if (preReqQuest.Template == null)
                 {
@@ -66,7 +66,7 @@ namespace QuestingBots.Components
             }
         }
 
-        private void UpdateMinLevelFromQuestRequirements(Models.Questing.Quest quest)
+        private void UpdateMinLevelFromQuestRequirements(Models.Questing.BotQuest quest)
         {
             int startingMinLevel = quest.Template?.Level ?? 0;
             minLevelsForQuests.Add(quest, startingMinLevel);
@@ -109,7 +109,7 @@ namespace QuestingBots.Components
         private int GetLevelFromConditionQuest(ConditionQuest conditionQuest)
         {
             // Find the required quest
-            Models.Questing.Quest preReqQuest = BotJobAssignmentFactory.FindQuest(conditionQuest.target);
+            Models.Questing.BotQuest preReqQuest = BotJobAssignmentFactory.FindQuest(conditionQuest.target);
             if (preReqQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.GetName());
@@ -119,7 +119,7 @@ namespace QuestingBots.Components
             return FindMinLevel(preReqQuest);
         }
 
-        private void UpdateMinLevel(Models.Questing.Quest quest, int level)
+        private void UpdateMinLevel(Models.Questing.BotQuest quest, int level)
         {
             if (!minLevelsForQuests.ContainsKey(quest))
             {

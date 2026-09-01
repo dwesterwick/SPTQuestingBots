@@ -104,7 +104,7 @@ namespace QuestingBots.Components
             IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
 
             Vector3 lastPosition = Vector3.positiveInfinity;
-            Quest lastQuest = null!;
+            BotQuest lastQuest = null!;
             foreach (JobAssignment jobAssignment in jobAssignments)
             {
                 // Ensure the position is valid and isn't the same as the previous step in the quest objective

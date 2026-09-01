@@ -8,16 +8,16 @@ using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public class QuestSpawnPointObjective : QuestObjective
+    public class BotQuestSpawnPointObjective : BotQuestObjective
     {
         public SpawnPointParams? SpawnPoint { get; set; } = null;
 
-        public QuestSpawnPointObjective() : base()
+        public BotQuestSpawnPointObjective() : base()
         {
 
         }
 
-        public QuestSpawnPointObjective(SpawnPointParams spawnPoint, Vector3 position) : base(position)
+        public BotQuestSpawnPointObjective(SpawnPointParams spawnPoint, Vector3 position) : base(position)
         {
             SpawnPoint = spawnPoint;
         }

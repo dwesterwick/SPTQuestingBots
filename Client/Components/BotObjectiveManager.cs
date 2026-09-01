@@ -27,6 +27,7 @@ namespace QuestingBots.Components
         public float PauseRequest { get; set; } = 0;
         public Models.BotSprintingController BotSprintingController { get; private set; } = null!;
         public BotLogic.BotMonitor.BotMonitorController BotMonitor { get; private set; } = null!;
+        public BotIdentityData IdentityData { get; private set; } = null!;
         public BotPathData BotPath { get; private set; } = null!;
         public EFT.Interactive.Door DoorToOpen { get; set; } = null!;
         public Vector3? LastCorner { get; set; } = null;
@@ -101,6 +102,11 @@ namespace QuestingBots.Components
                 BotMonitor.Init(botOwner);
             }
 
+            if (IdentityData == null)
+            {
+                IdentityData = BotIdentityData.GetBotIdentityData(botOwner);
+            }
+
             if (BotPath == null)
             {
                 BotPath = new BotPathData(botOwner);
@@ -113,40 +119,6 @@ namespace QuestingBots.Components
 
             // Override the EFT distance that makes bots "avoid danger" when the BTR is near
             botOwner.Settings.FileSettings.Mind.AVOID_BTR_RADIUS_SQR = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance;
-        }
-
-        private void updateBotType()
-        {
-            if (!BotLogic.HiveMind.BotHiveMindMonitor.IsRegistered(botOwner))
-            {
-                Singleton<LoggingUtil>.Instance.LogError(botOwner.GetText() + " has not been registered in BotHiveMindMonitor");
-            }
-
-            BotType botType = Controllers.BotRegistrationManager.GetBotType(botOwner);
-
-            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PMC)
-            {
-                IsQuestingAllowed = true;
-            }
-            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Boss)
-            {
-                IsQuestingAllowed = true;
-            }
-            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Scav)
-            {
-                IsQuestingAllowed = true;
-            }
-            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PScav)
-            {
-                IsQuestingAllowed = true;
-            }
-
-            if (botType == BotType.Undetermined)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
-            }
-
-            IsInitialized = true;
         }
 
         protected void Update()
@@ -169,9 +141,20 @@ namespace QuestingBots.Components
 
             if (!IsInitialized)
             {
-                updateBotType();
+                if (!IdentityData.ActivationComplete)
+                {
+                    return;
+                }
+
+                IsQuestingAllowed = IdentityData.BotType.AllowsQuesting();
+                if (IdentityData.BotType == BotType.Undetermined)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
+                }
+
                 setInitialObjective();
 
+                IsInitialized = true;
                 return;
             }
 

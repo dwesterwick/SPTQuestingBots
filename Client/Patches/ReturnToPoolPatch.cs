@@ -16,13 +16,16 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         protected static void PatchPrefix(GameObject gameObject)
         {
-            if (gameObject.TryGetComponent<Components.BotObjectiveManager>(out var objectiveManager))
+            TryDestroyComponent<Components.BotIdentityData>(gameObject);
+            TryDestroyComponent<Components.BotObjectiveManager>(gameObject);
+            TryDestroyComponent<BotLogic.BotMonitor.BotMonitorController>(gameObject);
+        }
+
+        private static void TryDestroyComponent<T>(GameObject gameObject) where T: Component
+        {
+            if (gameObject.TryGetComponent<T>(out var component))
             {
-                UnityEngine.Object.Destroy(objectiveManager);
-            }
-            if (gameObject.TryGetComponent<BotLogic.BotMonitor.BotMonitorController>(out var botMonitorController))
-            {
-                UnityEngine.Object.Destroy(botMonitorController);
+                UnityEngine.Object.Destroy(component);
             }
         }
     }

@@ -66,7 +66,7 @@ namespace QuestingBots.Components
             Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...done.");
         }
 
-        private void findStaticPaths(Models.Questing.Quest quest)
+        private void findStaticPaths(Models.Questing.BotQuest quest)
         {
             if (!quest.ValidObjectives.Any())
             {
@@ -111,7 +111,7 @@ namespace QuestingBots.Components
             }
 
             // Check for static paths between each quest objective and each waypoint
-            foreach (Models.Questing.QuestObjective questObjective in quest.ValidObjectives)
+            foreach (Models.Questing.BotQuestObjective questObjective in quest.ValidObjectives)
             {
                 Vector3? firstStepPosition = questObjective.GetFirstStepPosition();
                 if (firstStepPosition == null)

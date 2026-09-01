@@ -9,19 +9,19 @@ namespace QuestingBots.Models.Questing
 {
     public class JobAssignment : ICloneable
     {
-        public Quest QuestAssignment { get; protected set; } = null!;
-        public QuestObjective QuestObjectiveAssignment { get; protected set; } = null!;
-        public QuestObjectiveStep QuestObjectiveStepAssignment { get; protected set; } = null!;
+        public BotQuest QuestAssignment { get; protected set; } = null!;
+        public BotQuestObjective QuestObjectiveAssignment { get; protected set; } = null!;
+        public BotQuestObjectiveStep QuestObjectiveStepAssignment { get; protected set; } = null!;
 
         public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition();
-        public bool IsSpawnSearchQuest => QuestObjectiveAssignment is QuestSpawnPointObjective;
+        public bool IsSpawnSearchQuest => QuestObjectiveAssignment is BotQuestSpawnPointObjective;
 
         public JobAssignment()
         {
 
         }
 
-        public JobAssignment(Quest _quest, QuestObjective _objective, QuestObjectiveStep _step) : this()
+        public JobAssignment(BotQuest _quest, BotQuestObjective _objective, BotQuestObjectiveStep _step) : this()
         {
             QuestAssignment = _quest;
             QuestObjectiveAssignment = _objective;

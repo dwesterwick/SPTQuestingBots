@@ -20,7 +20,7 @@ namespace QuestingBots.Models.Questing
         Inhibit = 2,
     }
 
-    public class QuestObjective
+    public class BotQuestObjective
     {
         [JsonProperty("repeatable")]
         public bool IsRepeatable { get; set; } = false;
@@ -54,30 +54,30 @@ namespace QuestingBots.Models.Questing
         private string name = "Unnamed Quest Objective";
 
         [JsonProperty("steps")]
-        private QuestObjectiveStep[] questObjectiveSteps = new QuestObjectiveStep[0];
+        private BotQuestObjectiveStep[] questObjectiveSteps = new BotQuestObjectiveStep[0];
 
         public string Name => name;
-        public ReadOnlyCollection<QuestObjectiveStep> AllSteps => new ReadOnlyCollection<QuestObjectiveStep>(questObjectiveSteps);
+        public ReadOnlyCollection<BotQuestObjectiveStep> AllSteps => new ReadOnlyCollection<BotQuestObjectiveStep>(questObjectiveSteps);
         public int StepCount => questObjectiveSteps.Length;
 
-        public QuestObjective()
+        public BotQuestObjective()
         {
 
         }
 
-        public QuestObjective(QuestObjectiveStep[] steps) : this()
+        public BotQuestObjective(BotQuestObjectiveStep[] steps) : this()
         {
             questObjectiveSteps = steps;
         }
 
-        public QuestObjective(QuestObjectiveStep step) : this()
+        public BotQuestObjective(BotQuestObjectiveStep step) : this()
         {
-            questObjectiveSteps = new QuestObjectiveStep[1] { step };
+            questObjectiveSteps = new BotQuestObjectiveStep[1] { step };
         }
 
-        public QuestObjective(Vector3 position) : this()
+        public BotQuestObjective(Vector3 position) : this()
         {
-            questObjectiveSteps = new QuestObjectiveStep[1] { new QuestObjectiveStep(position) };
+            questObjectiveSteps = new BotQuestObjectiveStep[1] { new BotQuestObjectiveStep(position) };
         }
 
         public override string ToString()
@@ -88,7 +88,7 @@ namespace QuestingBots.Models.Questing
         public virtual void Clear()
         {
             // Steps should never be deleted because some of them are generated from EFT's quests
-            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
             {
                 step.SetPosition(null);
             }
@@ -96,10 +96,10 @@ namespace QuestingBots.Models.Questing
 
         public void DeleteAllSteps()
         {
-            questObjectiveSteps = new QuestObjectiveStep[0];
+            questObjectiveSteps = new BotQuestObjectiveStep[0];
         }
 
-        public void AddStep(QuestObjectiveStep step)
+        public void AddStep(BotQuestObjectiveStep step)
         {
             // Immediately plant items after reaching objective locations
             if ((step.ActionType == QuestAction.PlantItem) && (questObjectiveSteps.Length > 0))
@@ -139,7 +139,7 @@ namespace QuestingBots.Models.Questing
 
         public void SetAllPositions(Vector3 position)
         {
-            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
             {
                 step.SetPosition(position);
             }
@@ -164,7 +164,7 @@ namespace QuestingBots.Models.Questing
         {
             bool allSnapped = true;
 
-            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
             {
                 float maxNavMeshDistance = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestGeneration.NavMeshSearchDistanceSpawn;
                 if (!step.TrySnapToNavMesh(maxNavMeshDistance))
@@ -181,7 +181,7 @@ namespace QuestingBots.Models.Questing
         {
             bool allFound = true;
 
-            foreach (QuestObjectiveStep step in questObjectiveSteps)
+            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
             {
                 if (!step.TryFindSwitch())
                 {
@@ -222,7 +222,7 @@ namespace QuestingBots.Models.Questing
             return true;
         }
 
-        public QuestObjectiveStep GetNextObjectiveStep(QuestObjectiveStep currentStep, bool allowReset = false)
+        public BotQuestObjectiveStep GetNextObjectiveStep(BotQuestObjectiveStep currentStep, bool allowReset = false)
         {
             if (!allowReset && (currentStep == null))
             {
@@ -230,7 +230,7 @@ namespace QuestingBots.Models.Questing
             }
 
             int currentStepNumber = currentStep?.StepNumber ?? 0;
-            IEnumerable<QuestObjectiveStep> nextStep = questObjectiveSteps.Where(s => s.StepNumber == currentStepNumber + 1);
+            IEnumerable<BotQuestObjectiveStep> nextStep = questObjectiveSteps.Where(s => s.StepNumber == currentStepNumber + 1);
 
             if (nextStep.Any())
             {

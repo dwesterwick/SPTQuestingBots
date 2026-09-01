@@ -9,18 +9,18 @@ using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public class QuestItemObjective : QuestObjective
+    public class BotQuestItemObjective : BotQuestObjective
     {
         public LootItem Item { get; set; } = null!;
 
         private string ItemName = null!;
 
-        public QuestItemObjective() : base()
+        public BotQuestItemObjective() : base()
         {
 
         }
 
-        public QuestItemObjective(LootItem item, Vector3 position) : base(position)
+        public BotQuestItemObjective(LootItem item, Vector3 position) : base(position)
         {
             Item = item;
             ItemName = Item.Item.LocalizedName();

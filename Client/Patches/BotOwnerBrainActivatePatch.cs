@@ -1,13 +1,8 @@
-﻿using Comfort.Common;
-using EFT;
-using EFT.Ballistics;
-using QuestingBots.Components.Spawning;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
+﻿using EFT;
+using QuestingBots.Components;
 using SPT.Reflection.Patching;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -23,127 +18,10 @@ namespace QuestingBots.Patches
             return typeof(BotOwner).GetMethod("method_10", BindingFlags.Public | BindingFlags.Instance);
         }
 
-        [Benchmark]
         [PatchPostfix]
         protected static void PatchPostfix(BotOwner __instance)
         {
-            registerBot(__instance);
-            registerBotComponents(__instance);
-            adjustEftBotCounts(__instance);
-            updateBotHostilities(__instance);
-
-            // Fix for bots getting stuck in Standby when enemy PMC's are near them
-            __instance.StandBy.CanDoStandBy = false;
-        }
-
-        [Benchmark]
-        private static void registerBot(BotOwner __instance)
-        {
-            string roleName = __instance.Profile.Info.Settings.Role.ToString();
-            Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + __instance.GetText() + ": " + roleName);
-
-            if (__instance.WillBeAPMC())
-            {
-                Controllers.BotRegistrationManager.RegisterPMC(__instance);
-            }
-            else if (__instance.WillBeABoss())
-            {
-                Controllers.BotRegistrationManager.RegisterBoss(__instance);
-            }
-
-            Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(__instance);
-
-            if (__instance.IsARegisteredPMC() || __instance.WillBeAPlayerScav())
-            {
-                registerBotAsHumanPlayer(__instance);
-            }
-        }
-
-        [Benchmark]
-        private static void registerBotComponents(BotOwner __instance)
-        {
-            BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(__instance);
-            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(__instance);
-        }
-
-        [Benchmark]
-        private static void adjustEftBotCounts(BotOwner __instance)
-        {
-            if (BotGenerator.GetAllGeneratedBotProfileIDs().Contains(__instance.Profile.Id))
-            {
-                reduceBotCounts(__instance);
-            }
-        }
-
-        [Benchmark]
-        private static void updateBotHostilities(BotOwner __instance)
-        {
-            if (shouldMakeBotGroupHostileTowardAllBosses(__instance))
-            {
-                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
-            }
-        }
-
-        [Benchmark]
-        private static void registerBotAsHumanPlayer(BotOwner __instance)
-        {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
-            {
-                return;
-            }
-
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            botSpawnerClass.AddPlayer(__instance.GetPlayer());
-            __instance.GetPlayer().OnPlayerDead += deletePlayer;
-        }
-
-        private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfo damage, EBodyPart part)
-        {
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            try
-            {
-                botSpawnerClass.DeletePlayer(player.GetPlayer());
-            }
-            catch (Exception ex)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Could not delete player " + player.GetText() + ": " + ex.Message);
-                Singleton<LoggingUtil>.Instance.LogError(ex.StackTrace);
-            }
-        }
-
-        private static bool shouldMakeBotGroupHostileTowardAllBosses(BotOwner bot)
-        {
-            BotType botType = Controllers.BotRegistrationManager.GetBotType(bot);
-
-            float chance = Singleton<ConfigUtil>.Instance.CurrentConfig.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
-
-            System.Random random = new System.Random();
-            if (random.Next(1, 100) <= chance)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static void reduceBotCounts(BotOwner bot)
-        {
-            Singleton<LoggingUtil>.Instance.LogDebug("Adjusting EFT bot counts for " + bot.GetText() + "...");
-
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
-            if (bot.Profile.Info.Settings.IsFollower())
-            {
-                botSpawnerClass._followersBotsCount--;
-            }
-            else if (bot.Profile.Info.Settings.IsBoss())
-            {
-                botSpawnerClass._bossBotsCount--;
-            }
-
-            botSpawnerClass._allBotsCount--;
+            BotIdentityData.GetBotIdentityData(__instance);
         }
     }
 }

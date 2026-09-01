@@ -19,7 +19,7 @@ using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using UnityEngine;
-using Quest = QuestingBots.Models.Questing.Quest;
+using BotQuest = QuestingBots.Models.Questing.BotQuest;
 
 namespace QuestingBots.Components
 {
@@ -70,7 +70,7 @@ namespace QuestingBots.Components
             // Need to wait at least one frame for the NavMeshObstacle to take effect
             yield return null;
 
-            Models.Questing.Quest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropChaser);
+            Models.Questing.BotQuest airdopChaserQuest = createGoToPositionQuest(airdropPosition, "Airdrop Chaser", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropChaser);
             if (airdopChaserQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not add quest for the most recent airdop");
@@ -106,11 +106,11 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
 
                     // Need to be able to override private properties
-                    BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.Quest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
+                    BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.BotQuest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
 
                     foreach (SptRawQuestClass questTemplate in allQuestTemplates)
                     {
-                        Quest quest = new Quest(questTemplate);
+                        BotQuest quest = new BotQuest(questTemplate);
 
                         quest.ApplyQuestSettingsFromConfig(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests);
                         quest.PMCsOnly = true;
@@ -164,7 +164,7 @@ namespace QuestingBots.Components
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
-                Quest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnPointWander);
+                BotQuest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnPointWander);
                 if (spawnPointQuest != null)
                 {
                     //Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for going to random spawn points...");
@@ -176,7 +176,7 @@ namespace QuestingBots.Components
                 }
 
                 // Create a quest where initial PMC's can run to your spawn point (not directly to you).
-                Models.Questing.Quest spawnRushQuest = null!;
+                Models.Questing.BotQuest spawnRushQuest = null!;
                 SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetMainPlayerSpawnPoint();
                 if (playerSpawnPoint.HasValue)
                 {
@@ -202,7 +202,7 @@ namespace QuestingBots.Components
                 foreach (string boss in bossSpawnZones.Keys)
                 {
                     IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossSpawnZones[boss].Contains(s.BotZoneName ?? ""));
-                    Quest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.BossHunter);
+                    BotQuest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.BossHunter);
                     if (bossHunterQuest != null)
                     {
                         Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
@@ -231,17 +231,17 @@ namespace QuestingBots.Components
         private void LoadCustomQuests()
         {
             // Load all JSON files for custom quests
-            IEnumerable<Quest> customQuests = Singleton<ConfigUtil>.Instance.GetCustomQuests(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
+            IEnumerable<BotQuest> customQuests = Singleton<ConfigUtil>.Instance.GetCustomQuests(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
             if (!customQuests.Any())
             {
                 return;
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...");
-            foreach (Quest quest in customQuests)
+            foreach (BotQuest quest in customQuests)
             {
                 int objectiveNum = 0;
-                foreach (QuestObjective objective in quest.ValidObjectives.ToArray())
+                foreach (BotQuestObjective objective in quest.ValidObjectives.ToArray())
                 {
                     objectiveNum++;
                     objective.SetName(quest.GetName() + ": Objective #" + objectiveNum);
@@ -279,7 +279,7 @@ namespace QuestingBots.Components
             Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
         }
 
-        private void LoadQuest(Models.Questing.Quest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
+        private void LoadQuest(Models.Questing.BotQuest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
         {
             quest.MaxBots = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests.MaxBotsPerQuest;
 
@@ -297,7 +297,7 @@ namespace QuestingBots.Components
                 }
 
                 // Add a new objective for the zone
-                QuestZoneObjective objective = new QuestZoneObjective(zoneID);
+                BotQuestZoneObjective objective = new BotQuestZoneObjective(zoneID);
                 quest.AddObjective(objective);
             }
 
@@ -339,7 +339,7 @@ namespace QuestingBots.Components
             }
 
             // Find all quests that have objectives using this trigger
-            Quest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
+            BotQuest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
             if (matchingQuests.Length == 0)
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo("No matching quests for trigger " + trigger.Id);
@@ -355,12 +355,12 @@ namespace QuestingBots.Components
             }
 
             // Add a step with the NavMesh position to corresponding objectives in every quest using this zone
-            foreach (Quest quest in matchingQuests)
+            foreach (BotQuest quest in matchingQuests)
             {
                 Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName());
 
-                QuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
-                objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value));
+                BotQuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
+                objective.AddStep(new BotQuestObjectiveStep(navMeshTargetPoint.Value));
 
                 float? plantTime = quest.FindPlantTime(trigger.Id);
                 if (plantTime.HasValue)
@@ -368,7 +368,7 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding plant time: " + plantTime.Value + "s");
 
                     Configuration.MinMaxConfig plantTimeMinMax = new Configuration.MinMaxConfig(plantTime.Value, plantTime.Value);
-                    objective.AddStep(new QuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
+                    objective.AddStep(new BotQuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
                     objective.LootAfterCompletingSetting = LootAfterCompleting.Inhibit;
                 }
 
@@ -475,7 +475,7 @@ namespace QuestingBots.Components
             return cost;
         }
 
-        private void updateEFTQuestObjectives(Models.Questing.Quest quest)
+        private void updateEFTQuestObjectives(Models.Questing.BotQuest quest)
         {
             if (!quest.IsEFTQuest)
             {
@@ -483,9 +483,9 @@ namespace QuestingBots.Components
             }
 
             float nearbyObjectiveDistance = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests.MatchLootingBehaviorDistance;
-            foreach (QuestObjective objective in quest.AllObjectives)
+            foreach (BotQuestObjective objective in quest.AllObjectives)
             {
-                foreach (QuestObjectiveStep step in objective.AllSteps)
+                foreach (BotQuestObjectiveStep step in objective.AllSteps)
                 {
                     step.ChanceOfHavingKey = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests.ChanceOfHavingKeys;
                 }
@@ -502,7 +502,7 @@ namespace QuestingBots.Components
                 }
 
                 // Find all nearby quest objectives that are not from EFT quests
-                QuestObjective[] nearbyObjectives = BotJobAssignmentFactory.GetQuestObjectivesNearPosition(objectivePosition.Value, nearbyObjectiveDistance, false)
+                BotQuestObjective[] nearbyObjectives = BotJobAssignmentFactory.GetQuestObjectivesNearPosition(objectivePosition.Value, nearbyObjectiveDistance, false)
                     .ToArray();
 
                 // Match the looting behavior of the nearby objectives
@@ -514,7 +514,7 @@ namespace QuestingBots.Components
             }
         }
 
-        private Models.Questing.Quest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
+        private Models.Questing.BotQuest createGoToPositionQuest(Vector3 position, string questName, QuestSettingsConfig settings)
         {
             if (position == null)
             {
@@ -539,10 +539,10 @@ namespace QuestingBots.Components
                 return null!;
             }
 
-            Models.Questing.Quest quest = new Models.Questing.Quest(questName);
+            Models.Questing.BotQuest quest = new Models.Questing.BotQuest(questName);
             quest.ApplyQuestSettingsFromConfig(settings);
 
-            Models.Questing.QuestObjective objective = new Models.Questing.QuestObjective(navMeshPosition.Value);
+            Models.Questing.BotQuestObjective objective = new Models.Questing.BotQuestObjective(navMeshPosition.Value);
             objective.ApplyQuestSettingsFromConfig(settings);
             objective.SetName(quest.GetName() + ": Objective #1");
             quest.AddObjective(objective);
@@ -550,7 +550,7 @@ namespace QuestingBots.Components
             return quest;
         }
 
-        private Models.Questing.Quest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
+        private Models.Questing.BotQuest createSpawnPointQuest(IEnumerable<SpawnPointParams> spawnPoints, string questName, QuestSettingsConfig settings, ESpawnCategoryMask spawnTypes = ESpawnCategoryMask.All)
         {
             if (spawnPoints == null)
             {
@@ -574,7 +574,7 @@ namespace QuestingBots.Components
                 return null!;
             }
 
-            Models.Questing.Quest quest = new Models.Questing.Quest(questName);
+            Models.Questing.BotQuest quest = new Models.Questing.BotQuest(questName);
             quest.ApplyQuestSettingsFromConfig(settings);
 
             int objNum = 1;
@@ -588,7 +588,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                Models.Questing.QuestSpawnPointObjective objective = new Models.Questing.QuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
+                Models.Questing.BotQuestSpawnPointObjective objective = new Models.Questing.BotQuestSpawnPointObjective(spawnPoint, spawnPoint.Position);
                 objective.ApplyQuestSettingsFromConfig(settings);
                 objective.SetName(quest.GetName() + ": Objective #" + objNum);
                 quest.AddObjective(objective);

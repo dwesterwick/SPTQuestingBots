@@ -7,21 +7,21 @@ using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public class QuestZoneObjective : QuestObjective
+    public class BotQuestZoneObjective : BotQuestObjective
     {
         public string ZoneID { get; set; } = null!;
 
-        public QuestZoneObjective() : base()
+        public BotQuestZoneObjective() : base()
         {
 
         }
 
-        public QuestZoneObjective(string zoneID) : this()
+        public BotQuestZoneObjective(string zoneID) : this()
         {
             ZoneID = zoneID;
         }
 
-        public QuestZoneObjective(string zoneID, Vector3 position) : base(position)
+        public BotQuestZoneObjective(string zoneID, Vector3 position) : base(position)
         {
             ZoneID = zoneID;
         }
