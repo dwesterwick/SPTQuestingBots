@@ -19,7 +19,6 @@ using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using UnityEngine;
-using BotQuest = QuestingBots.Models.Questing.BotQuest;
 
 namespace QuestingBots.Components
 {
