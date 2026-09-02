@@ -204,13 +204,16 @@ namespace QuestingBots.Components.Spawning
 
         public IEnumerable<BotOwner> AliveBots()
         {
-            List<BotOwner> aliveBots = new List<BotOwner>();
             foreach (Models.BotSpawnInfo botSpawnInfo in BotGroups)
             {
-                aliveBots.AddRange(botSpawnInfo.SpawnedBots.Where(b => (b != null) && !b.IsDead));
+                IEnumerable<BotOwner> aliveBots = botSpawnInfo.SpawnedBots
+                    .Where(b => (b != null) && !b.IsDead);
+                
+                foreach (BotOwner aliveBot in aliveBots)
+                {
+                    yield return aliveBot;
+                }
             }
-
-            return aliveBots;
         }
 
         public bool CanSpawnAdditionalBots() => BotsAllowedToSpawnForGeneratorType() > 0;

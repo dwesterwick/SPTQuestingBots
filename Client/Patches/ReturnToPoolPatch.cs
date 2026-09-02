@@ -17,6 +17,7 @@ namespace QuestingBots.Patches
         protected static void PatchPrefix(GameObject gameObject)
         {
             TryDestroyComponent<Components.BotIdentityData>(gameObject);
+            TryDestroyComponent<Components.BotQuestSelector>(gameObject);
             TryDestroyComponent<Components.BotObjectiveManager>(gameObject);
             TryDestroyComponent<BotLogic.BotMonitor.BotMonitorController>(gameObject);
         }

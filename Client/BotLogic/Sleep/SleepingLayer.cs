@@ -138,7 +138,7 @@ namespace QuestingBots.BotLogic.Sleep
                 return false;
             }
 
-            if (objectiveManager.IsQuestingAllowed || !objectiveManager.IsInitialized)
+            if (objectiveManager.IsQuestingAllowed || !objectiveManager.IsInitialQuestSelectionComplete)
             {
                 return true;
             }

@@ -1,21 +1,21 @@
 ﻿using Comfort.Common;
 using Diz.Utils;
 using EFT;
-using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Controllers
 {
@@ -156,6 +156,19 @@ namespace QuestingBots.Controllers
                     }
                 }
             }
+        }
+
+        public static IEnumerable<BotQuest> GetAllPossibleQuests(this BotOwner bot)
+        {
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+
+            return allQuests
+                .Where(q => q.Desirability != 0)
+                .Where(q => q.NumberOfValidObjectives > 0)
+                .Where(q => q.MaxBotsInGroup >= botGroupSize)
+                .Where(q => q.CanMoreBotsDoQuest())
+                .Where(q => q.CanAssignToBot(bot))
+                .ToArray();
         }
 
         public static void FailAllJobAssignmentsForBot(string botID)
@@ -448,306 +461,36 @@ namespace QuestingBots.Controllers
             return false;
         }
 
-        public static BotJobAssignment? GetCurrentJobAssignment(this BotOwner bot, bool allowUpdate = true)
+        public static ReadOnlyCollection<BotJobAssignment> GetAllBotJobAssignments(this BotOwner bot)
+        {
+            bot.InitializeBotJobAssignmentsList();
+            return botJobAssignments[bot.Profile.Id].AsReadOnly();
+        }
+
+        private static void InitializeBotJobAssignmentsList(this BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
                 botJobAssignments.Add(bot.Profile.Id, new List<BotJobAssignment>());
             }
+        }
 
-            if (allowUpdate && DoesBotHaveNewJobAssignment(bot))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now doing " + botJobAssignments[bot.Profile.Id].Last().ToString());
-
-                if (botJobAssignments[bot.Profile.Id].Count > 1)
-                {
-                    BotJobAssignment lastAssignment = botJobAssignments[bot.Profile.Id].TakeLast(2).First();
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + bot.GetText() + " was previously doing " + lastAssignment.ToString());
-
-                    //double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
-                    //double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);
-                    //string startedTimeText = timeSinceBotStartedQuest.HasValue ? timeSinceBotStartedQuest.Value.ToString() : "N/A";
-                    //string lastFinishedTimeText = timeSinceBotLastFinishedQuest.HasValue ? timeSinceBotLastFinishedQuest.Value.ToString() : "N/A";
-                    //Singleton<LoggingUtil>.Instance.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
-                }
-            }
+        public static BotJobAssignment? GetMostRecentJobAssignment(this BotOwner bot)
+        {
+            bot.InitializeBotJobAssignmentsList();
 
             if (botJobAssignments[bot.Profile.Id].Count > 0)
             {
                 return botJobAssignments[bot.Profile.Id].Last();
             }
 
-            if (allowUpdate)
-            {
-                Singleton<LoggingUtil>.Instance.LogWarning("Could not get a job assignment for bot " + bot.GetText());
-            }
-
             return null;
         }
 
-        public static bool DoesBotHaveNewJobAssignment(this BotOwner bot)
+        public static void Register(this BotJobAssignment assignment)
         {
-            if (!botJobAssignments.ContainsKey(bot.Profile.Id))
-            {
-                botJobAssignments.Add(bot.Profile.Id, new List<BotJobAssignment>());
-            }
-
-            if (botJobAssignments[bot.Profile.Id].Count > 0)
-            {
-                BotJobAssignment currentAssignment = botJobAssignments[bot.Profile.Id].Last();
-
-                // Check if the bot is currently doing an assignment
-                if (currentAssignment.IsActive)
-                {
-                    return false;
-                }
-
-                // Check if more steps are available for the bot's current assignment
-                if (currentAssignment.TrySetNextObjectiveStep(false))
-                {
-                    return true;
-                }
-
-                //Singleton<LoggingUtil>.Instance.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
-            }
-
-            if (bot.GetNewBotJobAssignment() != null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        [Benchmark]
-        public static BotJobAssignment GetNewBotJobAssignment(this BotOwner bot)
-        {
-            if (bot == null)
-            {
-                throw new ArgumentNullException("Cannot get an assignment for a null bot");
-            }
-
-            // Do not select another quest objective if the bot wants to extract
-            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
-            if ((botObjectiveManager != null) && botObjectiveManager.DoesBotWantToExtract())
-            {
-                return null!;
-            }
-
-            float maxDistanceBetweenExfils = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxDistanceBetweenExfils();
-            float minDistanceToSwitchExfil = maxDistanceBetweenExfils * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilReachedMinFraction;
-
-            // If the bot is close to its selected exfil (only used for quest selection), select a new one
-            float? distanceToExfilPoint = botObjectiveManager?.DistanceToExfiltrationPointForQuesting();
-            if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
-            {
-                botObjectiveManager?.SetExfiliationPointForQuesting();
-            }
-
-            // Get the bot's most recent assingment if applicable
-            BotQuest? quest = null;
-            BotQuestObjective? objective = null;
-            if (botJobAssignments[bot.Profile.Id].Count > 0)
-            {
-                quest = botJobAssignments[bot.Profile.Id].Last().QuestAssignment;
-                objective = botJobAssignments[bot.Profile.Id].Last().QuestObjectiveAssignment;
-            }
-
-            // Clear the bot's assignment if it's been doing the same quest for too long
-            if ((quest?.HasBotBeingDoingQuestTooLong(bot, out double? timeDoingQuest) == true) && (timeDoingQuest != null))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
-                quest = null;
-                objective = null;
-            }
-
-            // Try to find a quest that has at least one objective that can be assigned to the bot
-            List<BotQuest> invalidQuests = new List<BotQuest>();
-            Stopwatch timeoutMonitor = Stopwatch.StartNew();
-            do
-            {
-                // Find the nearest objective for the bot's currently assigned quest (if any)
-                objective = quest?
-                    .RemainingObjectivesForBot(bot)?
-                    .Where(o => o.CanAssignBot(bot))?
-                    .Where(o => o.CanBotRepeatQuestObjective(bot))?
-                    .NearestToBot(bot);
-
-                // Exit the loop if an objective was found for the bot
-                if (objective != null)
-                {
-                    break;
-                }
-                if (quest != null)
-                {
-                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " cannot select quest " + quest.ToString() + " because it has no valid objectives");
-                    invalidQuests.Add(quest);
-                }
-
-                // If no objectives were found, select another quest
-                quest = bot.GetRandomQuest(invalidQuests);
-
-                // If a quest hasn't been found within a certain amount of time, something is wrong
-                if (timeoutMonitor.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelectionTimeout)
-                {
-                    // First try allowing the bot to repeat quests it already completed
-                    if (bot.TryArchiveRepeatableAssignments() > 0)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogWarning(bot.GetText() + " cannot select any quests. Trying to select a repeatable quest early instead...");
-                        continue;
-                    }
-
-                    // If there are still no quests available for the bot to select, give up trying to select one
-                    Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " could not select any of the following quests: " + string.Join(", ", bot.GetAllPossibleQuests()));
-                    botObjectiveManager?.StopQuesting();
-
-                    // Try making the bot extract because it has nothing to do
-                    if (botObjectiveManager?.BotMonitor?.GetMonitor<BotExtractMonitor>()?.TryInstructBotToExtract() == true)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogWarning(bot.GetText() + " cannot select any quests. Extracting instead...");
-                        return null!;
-                    }
-
-                    Singleton<LoggingUtil>.Instance.LogError(bot.GetText() + " cannot select any quests. Questing disabled.");
-                    return null!;
-                }
-
-            } while (objective == null);
-
-            if (quest == null)
-            {
-                return null!;
-            }
-
-            // Once a valid assignment is selected, assign it to the bot
-            BotJobAssignment assignment = new BotJobAssignment(bot, quest, objective);
-            RegisterBotJobAssignment(assignment);
-
-            return assignment;
-        }
-
-        public static void RegisterBotJobAssignment(BotJobAssignment assignment)
-        {
-            string botId = assignment.BotOwner.Profile.Id;
-
-            if (!botJobAssignments.ContainsKey(botId))
-            {
-                botJobAssignments.Add(botId, new List<BotJobAssignment>());
-            }
-
-            botJobAssignments[botId].Add(assignment);
-        }
-
-        public static IEnumerable<BotQuest> GetAllPossibleQuests(this BotOwner bot)
-        {
-            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
-
-            return allQuests
-                .Where(q => q.Desirability != 0)
-                .Where(q => q.NumberOfValidObjectives > 0)
-                .Where(q => q.MaxBotsInGroup >= botGroupSize)
-                .Where(q => q.CanMoreBotsDoQuest())
-                .Where(q => q.CanAssignToBot(bot))
-                .ToArray();
-        }
-
-        public static BotQuest GetRandomQuest(this BotOwner bot, IEnumerable<BotQuest> invalidQuests)
-        {
-            if (bot == null)
-            {
-                throw new ArgumentNullException("Cannot get a quest for a null bot");
-            }
-
-            Stopwatch questSelectionTimer = Stopwatch.StartNew();
-
-            BotQuest[] assignableQuests = bot.GetAllPossibleQuests()
-                .Where(q => !invalidQuests.Contains(q))
-                .ToArray();
-
-            if (!assignableQuests.Any())
-            {
-                return null!;
-            }
-
-            BotObjectiveManager? botObjectiveManager = bot?.GetObjectiveManager();
-            Vector3? vectorToExfil = botObjectiveManager?.VectorToExfiltrationPointForQuesting();
-
-            Dictionary<BotQuest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<BotQuest, Configuration.MinMaxConfig>();
-            Dictionary<BotQuest, Configuration.MinMaxConfig> questExfilAngleRanges = new Dictionary<BotQuest, Configuration.MinMaxConfig>();
-
-            // Calculate the distances from the bot to all valid quest objectives and the angles between the vector to the bot's selected
-            // exfil (for questing) and the vector to each valid quest objective
-            foreach (BotQuest quest in assignableQuests)
-            {
-                IEnumerable<Vector3?> objectivePositions = quest.ValidObjectives.Select(o => o.GetFirstStepPosition());
-                IEnumerable<Vector3> validObjectivePositions = objectivePositions.Where(p => p.HasValue).Select(p => p!.Value);
-                IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(bot!.Position, p));
-
-                questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
-
-                if (vectorToExfil.HasValue)
-                {
-                    IEnumerable<Vector3> vectorsToObjectivePositions = validObjectivePositions.Select(p => p - bot!.Position);
-                    IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(p - bot!.Position, vectorToExfil.Value));
-
-                    questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(anglesToObjectives.Min(), anglesToObjectives.Max()));
-                }
-                else
-                {
-                    questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(0, 0));
-                }
-            }
-
-            // Calculate the maximum amount of "randomness" to apply to each quest
-            //double distanceRange = questDistanceRanges.Max(q => q.Value.Max) - questDistanceRanges.Min(q => q.Value.Min);
-            double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
-            int maxRandomDistance = (int)Math.Ceiling(maxDistance * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness / 100.0);
-            float maxExfilAngle = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionMaxAngle;
-
-            int distanceRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness;
-            int desirabilityRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityRandomness;
-
-            float distanceWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceWeighting;
-            float desirabilityWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityWeighting;
-            float exfilDirectionWeighting = 0;
-
-            string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(locationId))
-            {
-                exfilDirectionWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting[locationId];
-            }
-            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey("default"))
-            {
-                exfilDirectionWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting["default"];
-            }
-
-            System.Random random = new System.Random();
-            Dictionary<BotQuest, double> questDistanceFractions = questDistanceRanges
-                .ToDictionary(o => o.Key, o => 1 - (o.Value.Min + random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance);
-            Dictionary<BotQuest, float> questDesirabilityFractions = questDistanceRanges
-                .ToDictionary(o => o.Key, o => 
-                (
-                    o.Key.Desirability * (o.Key.IsActiveForPlayer ? Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityActiveQuestMultiplier : 1)
-                    + random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100
-                );
-            Dictionary<BotQuest, double> questExfilAngleFactor = questExfilAngleRanges
-                .ToDictionary(o => o.Key, o => Math.Max(0, o.Value.Min - maxExfilAngle) / (180 - maxExfilAngle));
-
-            IEnumerable<BotQuest> sortedQuests = questDistanceRanges
-                .OrderBy
-                (o =>
-                    (questDistanceFractions[o.Key] * distanceWeighting)
-                    + (questDesirabilityFractions[o.Key] * desirabilityWeighting)
-                    - (questExfilAngleFactor[o.Key] * exfilDirectionWeighting)
-                )
-                .Select(o => o.Key);
-
-            BotQuest selectedQuest = sortedQuests.Last();
-
-            //Singleton<LoggingUtil>.Instance.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
-            //Singleton<LoggingUtil>.Instance.LogInfo("Time for quest selection: " + questSelectionTimer.ElapsedMilliseconds + "ms");
-
-            return selectedQuest;
+            assignment.BotOwner.InitializeBotJobAssignmentsList();
+            botJobAssignments[assignment.BotOwner.Profile.Id].Add(assignment);
         }
 
         public static IEnumerable<BotJobAssignment> GetAllQuests(this BotOwner bot)
@@ -949,7 +692,14 @@ namespace QuestingBots.Controllers
 
         public static void CheckBotJobAssignmentValidity(BotOwner bot)
         {
-            BotJobAssignment? botJobAssignment = GetCurrentJobAssignment(bot, false);
+            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
+            if (botObjectiveManager == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError($"Cannot retrieve the objective manager for {bot.GetText()}");
+                return;
+            }
+
+            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment(false);
             if (botJobAssignment?.QuestAssignment == null)
             {
                 return;
@@ -958,13 +708,6 @@ namespace QuestingBots.Controllers
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
             if (botGroupSize > botJobAssignment.QuestAssignment.MaxBotsInGroup)
             {
-                BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
-                if (botObjectiveManager == null)
-                {
-                    Singleton<LoggingUtil>.Instance.LogError($"Cannot retrieve the objective manager for {bot.GetText()}");
-                    return;
-                }
-
                 if (botObjectiveManager.TryChangeObjective())
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning("Selected new quest for " + bot.GetText() + " because it has too many followers for its previous quest");

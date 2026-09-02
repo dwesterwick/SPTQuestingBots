@@ -135,12 +135,8 @@ namespace QuestingBots
 
         private static BotJobAssignment? GetCurrentJobAssignmentForActiveBot(this BotOwner bot)
         {
-            if (!bot.IsActive())
-            {
-                return null;
-            }
-
-            BotJobAssignment? botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            BotObjectiveManager? botObjectiveManager = bot.GetBotObjectiveManagerForActiveBot();
+            BotJobAssignment? botJobAssignment = botObjectiveManager?.QuestSelector?.GetCurrentJobAssignment(false);
             return botJobAssignment;
         }
 

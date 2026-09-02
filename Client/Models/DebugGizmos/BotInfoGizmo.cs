@@ -100,7 +100,7 @@ namespace QuestingBots.Models.DebugGizmos
 
             bool mustQuest = (boss == null) || botQuestingDecisionMonitor.MustQuestBeforeFollowing;
 
-            BotJobAssignment? botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment(false);
             if ((botJobAssignment != null) && mustQuest)
             {
                 sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
