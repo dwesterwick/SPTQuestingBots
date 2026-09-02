@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Components.Spawning;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
@@ -107,14 +108,13 @@ namespace QuestingBots.Controllers
             return null;
         }
 
-        [Benchmark]
         public static void WriteMessageForNewBotSpawn(BotOwner botOwner)
         {
             SpawnedBotCount++;
             string message = "Spawned ";
 
             // If initial PMC's need to spawn but haven't yet, assume the bot is a boss. Otherwise, PMC's should have already spawned. 
-            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+            BotGenerator? pmcGenerator = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetActiveBotGenerator<PMCGenerator>();
             if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots && !pmcGenerator.IsSpawningBots && (pmcGenerator.SpawnedGroupCount == 0))
             {
                 message += "boss " + botOwner.GetText() + " (" + registeredBosses.Count + "/" + ZeroWaveTotalBotCount + ")";
@@ -200,7 +200,6 @@ namespace QuestingBots.Controllers
             }
         }
 
-        [Benchmark]
         private static void updateAllHostileGroupEnemies()
         {
             foreach (BotsGroup hostileGroup in hostileGroups)
@@ -242,7 +241,6 @@ namespace QuestingBots.Controllers
 
         private static IEnumerable<BotOwner> getAliveGroupMembers(BotsGroup group)
         {
-            List<BotOwner> groupMemberList = new List<BotOwner>();
             for (int m = 0; m < group.MembersCount; m++)
             {
                 BotOwner member = group.Member(m);
@@ -252,10 +250,8 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                groupMemberList.Add(member);
+                yield return member;
             }
-
-            return groupMemberList;
         }
     }
 }

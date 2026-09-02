@@ -323,13 +323,7 @@ namespace QuestingBots.Helpers
         };
 
         public static bool WillBeAPMC(this BotOwner bot) => bot.Profile.WillBeAPMC();
-
-        public static bool WillBeAPMC(this Profile profile)
-        {
-            return Enumerable.Empty<BotBrainType>()
-                .AddPMCBrains()
-                .Any(b => b.SpawnType == profile.Info.Settings.Role);
-        }
+        public static bool WillBeAPMC(this Profile profile) => PMCSpawnTypes.Contains(profile.Info.Settings.Role);
 
         public static bool WillBeABoss(this BotOwner botOwner)
         {

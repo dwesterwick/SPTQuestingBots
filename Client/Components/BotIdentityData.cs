@@ -5,6 +5,7 @@ using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +37,6 @@ namespace QuestingBots.Components
 
             _botOwner = botOwner;
 
-            // Spread out the work to reduce the performance impact
             StartCoroutine(activateBot());
 
             _initComplete = true;
@@ -44,6 +44,9 @@ namespace QuestingBots.Components
 
         private IEnumerator activateBot()
         {
+            // Spread out the work to reduce the performance impact
+            yield return null;
+
             registerBot();
             yield return null;
 
@@ -51,13 +54,8 @@ namespace QuestingBots.Components
             yield return null;
 
             BotType = getBotType();
-            yield return null;
-
             adjustEftBotCounts();
-            yield return null;
-
             updateBotHostilities();
-            yield return null;
 
             // Fix for bots getting stuck in Standby when enemy PMC's are near them
             _botOwner.StandBy.CanDoStandBy = false;
@@ -65,6 +63,7 @@ namespace QuestingBots.Components
             ActivationComplete = true;
         }
 
+        [Benchmark]
         private void registerBot()
         {
             string roleName = _botOwner.Profile.Info.Settings.Role.ToString();
@@ -96,8 +95,9 @@ namespace QuestingBots.Components
 
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
-            botSpawnerClass.AddPlayer(_botOwner.GetPlayer());
-            _botOwner.GetPlayer().OnPlayerDead += deletePlayer;
+            Player player = _botOwner.GetPlayer();
+            botSpawnerClass.AddPlayer(player);
+            player.OnPlayerDead += deletePlayer;
         }
 
         private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfo damage, EBodyPart part)
@@ -106,7 +106,7 @@ namespace QuestingBots.Components
 
             try
             {
-                botSpawnerClass.DeletePlayer(player.GetPlayer());
+                botSpawnerClass.DeletePlayer(player);
             }
             catch (Exception ex)
             {
@@ -115,6 +115,7 @@ namespace QuestingBots.Components
             }
         }
 
+        [Benchmark]
         private void registerBotComponents()
         {
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(_botOwner);
@@ -140,29 +141,6 @@ namespace QuestingBots.Components
             }
         }
 
-        private void updateBotHostilities()
-        {
-            if (shouldMakeBotGroupHostileTowardAllBosses())
-            {
-                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(_botOwner);
-            }
-        }
-
-        private bool shouldMakeBotGroupHostileTowardAllBosses()
-        {
-            BotType botType = Controllers.BotRegistrationManager.GetBotType(_botOwner);
-
-            float chance = Singleton<ConfigUtil>.Instance.CurrentConfig.ChanceOfBeingHostileTowardBosses.GetValue(botType) ?? 0;
-
-            System.Random random = new System.Random();
-            if (random.Next(1, 100) <= chance)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         private void reduceBotCounts()
         {
             Singleton<LoggingUtil>.Instance.LogDebug("Adjusting EFT bot counts for " + _botOwner.GetText() + "...");
@@ -179,6 +157,27 @@ namespace QuestingBots.Components
             }
 
             botSpawnerClass._allBotsCount--;
+        }
+
+        private void updateBotHostilities()
+        {
+            if (shouldMakeBotGroupHostileTowardAllBosses())
+            {
+                Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(_botOwner);
+            }
+        }
+
+        private bool shouldMakeBotGroupHostileTowardAllBosses()
+        {
+            float chance = Singleton<ConfigUtil>.Instance.CurrentConfig.ChanceOfBeingHostileTowardBosses.GetValue(BotType) ?? 0;
+
+            System.Random random = new System.Random();
+            if (random.Next(1, 100) <= chance)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
