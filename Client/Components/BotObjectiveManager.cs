@@ -131,6 +131,11 @@ namespace QuestingBots.Components
                 return;
             }
 
+            if ((botOwner.BotState != EBotState.Active) || botOwner.IsDead)
+            {
+                return;
+            }
+
             if (!IsInitialized)
             {
                 Singleton<LoggingUtil>.Instance.LogDebug("Waiting for BotObjectiveManager initialization to finish...");
@@ -160,12 +165,7 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 }
 
-                BotJobAssignment? initialJobAssignment = QuestSelector.GetInitialObjective();
-                if (initialJobAssignment != null)
-                {
-                    SetObjective(initialJobAssignment);
-                }
-
+                QuestSelector.NewJobCreationJobRunning();
                 IsInitialQuestSelectionComplete = true;
                 return;
             }
@@ -175,9 +175,13 @@ namespace QuestingBots.Components
                 return;
             }
 
-            if ((botOwner.BotState != EBotState.Active) || botOwner.IsDead)
+            if (QuestSelector.NewAssignmentReady)
             {
-                return;
+                BotJobAssignment? botJobAssignment = QuestSelector.GetCurrentJobAssignment();
+                if (botJobAssignment != null)
+                {
+                    SetObjective(botJobAssignment);
+                }
             }
 
             bool isSleeping = BotRegistrationManager.IsBotSleeping(botOwner.Profile.Id);
@@ -220,11 +224,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            BotJobAssignment? botJobAssignment = QuestSelector.GetCurrentJobAssignment();
-            if (botJobAssignment != null)
-            {
-                SetObjective(botJobAssignment);
-            }
+            QuestSelector.GetCurrentJobAssignment();
         }
 
         public BotJobAssignment CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
@@ -245,8 +245,24 @@ namespace QuestingBots.Components
             lastAssignment = assignment;
             assignment = objective;
 
-            //Singleton<LoggingUtil>.Instance.LogInfo("Updated objective for " + botOwner.GetText() + " from " + (lastAssignment?.ToString() ?? "[None]") + " to " + assignment.ToString());
+            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
 
+            if (lastAssignment != null)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + botOwner.GetText() + " was previously doing " + lastAssignment.ToString());
+            }
+
+            //double? timeSinceBotStartedQuest = lastAssignment.QuestAssignment.ElapsedTimeSinceBotStarted(bot);
+            //double? timeSinceBotLastFinishedQuest = lastAssignment.QuestAssignment.ElapsedTimeWhenLastEndedForBot(bot);
+            //string startedTimeText = timeSinceBotStartedQuest.HasValue ? timeSinceBotStartedQuest.Value.ToString() : "N/A";
+            //string lastFinishedTimeText = timeSinceBotLastFinishedQuest.HasValue ? timeSinceBotLastFinishedQuest.Value.ToString() : "N/A";
+            //Singleton<LoggingUtil>.Instance.LogInfo("Time since first objective ended: " + startedTimeText + ", Time since last objective ended: " + lastFinishedTimeText);
+
+            CheckIfQuestAssignmentIsOnLightkeeperIsland();
+        }
+
+        private void CheckIfQuestAssignmentIsOnLightkeeperIsland()
+        {
             if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.LightkeeperIslandMonitor lightkeeperIslandMonitor))
             {
                 return;
@@ -256,8 +272,6 @@ namespace QuestingBots.Components
             {
                 Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
             }
-
-            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + assignment.ToString());
         }
 
         public void CompleteObjective()
@@ -304,14 +318,7 @@ namespace QuestingBots.Components
                 return false;
             }
 
-            BotJobAssignment? botJobAssignment = QuestSelector.GetNewBotJobAssignment();
-            if (botJobAssignment == null)
-            {
-                return false;
-            }
-            
-            SetObjective(botJobAssignment);
-            return true;
+            return QuestSelector.TryCreateNewJobAssignment();
         }
 
         public void UnlockDoor(EFT.Interactive.WorldInteractiveObject door)
