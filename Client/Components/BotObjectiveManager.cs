@@ -165,7 +165,11 @@ namespace QuestingBots.Components
                     Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
                 }
 
-                QuestSelector.NewJobCreationJobRunning();
+                if (IsQuestingAllowed)
+                {
+                    QuestSelector.RefreshJobAssignment();
+                }
+
                 IsInitialQuestSelectionComplete = true;
                 return;
             }
@@ -224,7 +228,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            QuestSelector.GetCurrentJobAssignment();
+            QuestSelector.RefreshJobAssignment();
         }
 
         public BotJobAssignment CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
@@ -305,18 +309,19 @@ namespace QuestingBots.Components
 
         public bool TryChangeObjective()
         {
-            double? timeSinceJobEnded = assignment?.TimeSinceEnded();
-            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.MinTimeBetweenSwitchingObjectives))
-            {
-                return false;
-            }
-
-            assignment?.Inactivate();
-
             if (botOwner == null)
             {
                 return false;
             }
+
+            double? timeSinceJobEnded = assignment?.TimeSinceEnded();
+            if (timeSinceJobEnded.HasValue && (timeSinceJobEnded.Value < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.MinTimeBetweenSwitchingObjectives))
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Could not change the job assignment for " + botOwner.GetText() + " because not enough time has elapsed since it was last updated");
+                return false;
+            }
+
+            assignment?.Inactivate();
 
             return QuestSelector.TryCreateNewJobAssignment();
         }

@@ -25,6 +25,8 @@ namespace QuestingBots.Components
 
         public bool NewAssignmentReady => assignmentCreationJob?.NewAssignmentReady == true;
 
+        public BotJobAssignment? GetCurrentJobAssignment() => _botOwner.GetMostRecentJobAssignment();
+
         public static BotQuestSelector GetBotQuestSelector(BotOwner botOwner)
         {
             BotQuestSelector botQuestSelector = botOwner.gameObject.GetOrAddComponent<BotQuestSelector>();
@@ -57,54 +59,61 @@ namespace QuestingBots.Components
             }
         }
 
-        public BotJobAssignment? GetCurrentJobAssignment(bool allowUpdate = true)
+        public void RefreshJobAssignment()
         {
-            bool hasNewJobAssignment = allowUpdate && DoesBotHaveNewJobAssignment();
-
-            BotJobAssignment? mostRecentAssignment = _botOwner.GetMostRecentJobAssignment();
-            if (!hasNewJobAssignment)
+            if (HasActiveAssignment(out _))
             {
-                return mostRecentAssignment;
-            }
-            
-            if (assignmentCreationJob != null)
-            {
-                return assignmentCreationJob.AssignmentCreationResult;
+                return;
             }
 
-            return mostRecentAssignment;
+            if (TryAssignNextObjectiveStep())
+            {
+                return;
+            }
+
+            if (IsNewJobCreationJobRunning())
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug(_botOwner.GetText() + " is waiting for a new job assignment to be created");
+                return;
+            }
+
+            TryCreateNewJobAssignment();
         }
 
-        public bool DoesBotHaveNewJobAssignment()
+        public bool HasActiveAssignment(out BotJobAssignment? currentAssignment)
         {
-            BotJobAssignment? mostRecentAssignment = _botOwner.GetMostRecentJobAssignment();
-            if (mostRecentAssignment != null)
+            currentAssignment = _botOwner.GetMostRecentJobAssignment();
+            if (currentAssignment == null)
             {
-                // Check if the bot is currently doing an assignment
-                if (mostRecentAssignment.IsActive)
-                {
-                    return false;
-                }
-
-                // Check if more steps are available for the bot's current assignment
-                if (mostRecentAssignment.TrySetNextObjectiveStep(false))
-                {
-                    assignmentCreationJob = null;
-                    return true;
-                }
-
-                //Singleton<LoggingUtil>.Instance.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
+                return false;
             }
 
-            return NewJobCreationJobRunning();
+            return currentAssignment.IsActive;
         }
 
-        [Benchmark]
-        public bool NewJobCreationJobRunning()
+        public bool TryAssignNextObjectiveStep()
+        {
+            if (HasActiveAssignment(out BotJobAssignment? currentAssignment))
+            {
+                return false;
+            }
+
+            // Check if more steps are available for the bot's current assignment
+            if ((currentAssignment != null) && currentAssignment.TrySetNextObjectiveStep(false))
+            {
+                assignmentCreationJob = null;
+                return true;
+            }
+
+            //Singleton<LoggingUtil>.Instance.LogInfo("There are no more steps available for " + bot.GetText() + " in " + (currentAssignment.QuestObjectiveAssignment?.ToString() ?? "???"));
+            return false;
+        }
+
+        public bool IsNewJobCreationJobRunning()
         {
             if (assignmentCreationJob == null)
             {
-                return TryCreateNewJobAssignment();
+                return false;
             }
 
             if (assignmentCreationJob.IsCreatingAnAssignment)
@@ -113,25 +122,21 @@ namespace QuestingBots.Components
                 return true;
             }
 
-            if (!assignmentCreationJob.NewAssignmentReady)
-            {
-                Singleton<LoggingUtil>.Instance.LogWarning("Could not create a new assignment for " + _botOwner.GetText());
-                assignmentCreationJob = null;
-                return false;
-            }
-
-            if (assignmentCreationJob.AssignmentCreationResult == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Created a null job assignment for " + _botOwner.GetText());
-                assignmentCreationJob = null;
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         public bool TryCreateNewJobAssignment()
         {
+            if (assignmentCreationJob?.IsCreatingAnAssignment == true)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Discarding pending job assignment creation task for " + _botOwner.GetText());
+            }
+
+            if (assignmentCreationJob?.NewAssignmentReady == true)
+            {
+                //Singleton<LoggingUtil>.Instance.LogDebug("Discarding finished job assignment creation task for " + _botOwner.GetText());
+            }
+
             BotObjectiveManager? objectiveManager = _botOwner.GetObjectiveManager();
             if (objectiveManager == null)
             {

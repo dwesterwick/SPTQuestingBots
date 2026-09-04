@@ -698,7 +698,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment(false);
+            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment();
             if (botJobAssignment?.QuestAssignment == null)
             {
                 return;
