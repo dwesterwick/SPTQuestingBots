@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace QuestingBots.Controllers
 {
-    public static class BotJobAssignmentFactory
+    public static class BotJobAssignmentController
     {
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(Singleton<ConfigUtil>.Instance.CurrentConfig.MaxCalcTimePerFrame);
         private static List<BotQuest> allQuests = new List<BotQuest>();
@@ -253,7 +253,7 @@ namespace QuestingBots.Controllers
             return quest.AllObjectives.Where(o => !matchingAssignments.Any(a => a.QuestObjectiveAssignment == o));
         }
 
-        public static BotQuestObjective NearestToBot(this IEnumerable<BotQuestObjective> objectives, BotOwner bot)
+        public static BotQuestObjective? NearestToBot(this IEnumerable<BotQuestObjective> objectives, BotOwner bot)
         {
             Dictionary<BotQuestObjective, float> objectiveDistances = new Dictionary<BotQuestObjective, float>();
             foreach (BotQuestObjective objective in objectives)
@@ -269,7 +269,7 @@ namespace QuestingBots.Controllers
 
             if (objectiveDistances.Count == 0)
             {
-                return null!;
+                return null;
             }
 
             return objectiveDistances.OrderBy(i => i.Value).First().Key;

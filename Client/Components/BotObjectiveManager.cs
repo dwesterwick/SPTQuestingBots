@@ -234,7 +234,7 @@ namespace QuestingBots.Components
         public BotJobAssignment CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
         {
             BotJobAssignment clonedAssignment = new BotJobAssignment(otherBotToDoAssignment, assignment);
-            BotJobAssignmentFactory.Register(clonedAssignment);
+            BotJobAssignmentController.Register(clonedAssignment);
 
             return clonedAssignment;
         }

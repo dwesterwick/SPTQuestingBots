@@ -33,7 +33,7 @@
 				"sleeping": 250
 			}
 		},
-		"quest_selection_timeout": 250,
+		"quest_selection_timeout": 20000,
 		"btr_run_distance": 10,
 		"allowed_bot_types_for_questing": {
 			"scav": false,

@@ -20,7 +20,7 @@ namespace QuestingBots.Components
     public class BotQuestSelector : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         private BotOwner _botOwner = null!;
-        private ExfiltrationPoint exfiltrationPoint = null!;
+        private ExfiltrationPoint _exfiltrationPoint = null!;
         private BotJobAssignmentCreationJob? assignmentCreationJob = null;
 
         public bool NewAssignmentReady => assignmentCreationJob?.NewAssignmentReady == true;
@@ -38,11 +38,10 @@ namespace QuestingBots.Components
         public void Init(BotOwner botOwner)
         {
             _botOwner = botOwner;
-            SetExfiliationPointForQuesting();
+            SetExfiltrationPointForQuesting();
         }
 
-        [Benchmark]
-        public void SetExfiliationPointForQuesting()
+        public void SetExfiltrationPointForQuesting()
         {
             Dictionary<ExfiltrationPoint, float> exfiltrationPointDistances = Singleton<GameWorld>.Instance.ExfiltrationController.ExfiltrationPoints
                 .ToDictionary(p => p, p => Vector3.Distance(p.transform.position, _botOwner.Position));
@@ -53,10 +52,50 @@ namespace QuestingBots.Components
                     .OrderBy(p => p.Value)
                     .Last();
 
-                exfiltrationPoint = furthestPoint.Key;
+                _exfiltrationPoint = furthestPoint.Key;
 
                 //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
             }
+        }
+
+        public void RefreshExfiltrationPointForQuesting()
+        {
+            BotObjectiveManager? objectiveManager = _botOwner.GetObjectiveManager();
+            if (objectiveManager == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot retrieve BotObjectiveManager for " + _botOwner.GetText());
+                return;
+            }
+
+            float maxDistanceBetweenExfils = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().GetMaxDistanceBetweenExfils();
+            float minDistanceToSwitchExfil = maxDistanceBetweenExfils * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilReachedMinFraction;
+
+            // If the bot is close to its selected exfil (only used for quest selection), select a new one
+            float? distanceToExfilPoint = DistanceToExfiltrationPointForQuesting();
+            if (distanceToExfilPoint.HasValue && (distanceToExfilPoint.Value < minDistanceToSwitchExfil))
+            {
+                objectiveManager.QuestSelector.SetExfiltrationPointForQuesting();
+            }
+        }
+
+        public float? DistanceToExfiltrationPointForQuesting()
+        {
+            if (_exfiltrationPoint == null)
+            {
+                return null;
+            }
+
+            return Vector3.Distance(_botOwner.Position, _exfiltrationPoint.transform.position);
+        }
+
+        public Vector3? VectorToExfiltrationPointForQuesting()
+        {
+            if (_exfiltrationPoint == null)
+            {
+                return null;
+            }
+
+            return _exfiltrationPoint.transform.position - _botOwner.Position;
         }
 
         public void RefreshJobAssignment()
@@ -73,7 +112,6 @@ namespace QuestingBots.Components
 
             if (IsNewJobCreationJobRunning())
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(_botOwner.GetText() + " is waiting for a new job assignment to be created");
                 return;
             }
 
@@ -118,7 +156,7 @@ namespace QuestingBots.Components
 
             if (assignmentCreationJob.IsCreatingAnAssignment)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Waiting for an assignment to be created for " + _botOwner.GetText());
+                //Singleton<LoggingUtil>.Instance.LogDebug("Waiting for an assignment to be created for " + _botOwner.GetText());
                 return true;
             }
 
@@ -155,7 +193,10 @@ namespace QuestingBots.Components
                 return false;
             }
 
-            assignmentCreationJob = new BotJobAssignmentCreationJob(_botOwner, exfiltrationPoint);
+            // If the bot is close to its originally selected exfiltration point, choose a new one to keep it moving around the map
+            RefreshExfiltrationPointForQuesting();
+
+            assignmentCreationJob = new BotJobAssignmentCreationJob(_botOwner);
             StartCoroutine(assignmentCreationJob.CreateNewBotJobAssignment());
 
             return true;

@@ -101,7 +101,7 @@ namespace QuestingBots.Components
         {
             Singleton<LoggingUtil>.Instance.LogInfo("Loading all possible job assignments...");
 
-            IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentFactory.CreateAllPossibleJobAssignments();
+            IEnumerable<JobAssignment> jobAssignments = BotJobAssignmentController.CreateAllPossibleJobAssignments();
 
             Vector3 lastPosition = Vector3.positiveInfinity;
             BotQuest lastQuest = null!;

@@ -418,7 +418,7 @@ namespace QuestingBots.BotLogic.HiveMind
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
                 botFollowers[boss].Add(bot);
 
-                BotJobAssignmentFactory.CheckBotJobAssignmentValidity(boss);
+                BotJobAssignmentController.CheckBotJobAssignmentValidity(boss);
             }
         }
 

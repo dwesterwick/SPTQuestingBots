@@ -77,7 +77,7 @@ namespace QuestingBots.Components
             }
 
             airdopChaserQuest.MaxRaidET = RaidHelpers.GetRaidElapsedSeconds() + Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropBotInterestTime;
-            BotJobAssignmentFactory.AddQuest(airdopChaserQuest);
+            BotJobAssignmentController.AddQuest(airdopChaserQuest);
 
             Vector3 airdropQuestPosition = airdopChaserQuest.ValidObjectives.First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
             Singleton<LoggingUtil>.Instance.LogInfo($"Added quest for the most recent airdop at {airdropPosition} with its objective position at {airdropQuestPosition}");
@@ -96,7 +96,7 @@ namespace QuestingBots.Components
 
             try
             {
-                if (BotJobAssignmentFactory.QuestCount == 0)
+                if (BotJobAssignmentController.QuestCount == 0)
                 {
                     // Create quests based on the EFT quest templates loaded from the server. This may include custom quests added by mods. 
                     SptRawQuestClass[] allQuestTemplates = Singleton<ConfigUtil>.Instance.GetAllQuestTemplates();
@@ -120,7 +120,7 @@ namespace QuestingBots.Components
                             quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id], overrideBindingFlags);
                         }
 
-                        BotJobAssignmentFactory.AddQuest(quest);
+                        BotJobAssignmentController.AddQuest(quest);
                     }
                 }
 
@@ -145,7 +145,7 @@ namespace QuestingBots.Components
                 }
 
                 // Process each of the quests created by an EFT quest template
-                yield return BotJobAssignmentFactory.ProcessAllQuests(LoadQuest, activeQuestsForPlayer);
+                yield return BotJobAssignmentController.ProcessAllQuests(LoadQuest, activeQuestsForPlayer);
 
                 Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...");
 
@@ -157,7 +157,7 @@ namespace QuestingBots.Components
                 // Create quest objectives for all matching quest items found in the map
                 //IEnumerable<LootItem> allLoot = FindObjectsOfType<LootItem>(); <-- this does not work for inactive quest items!
                 IEnumerable<LootItem> allItems = Singleton<GameWorld>.Instance.LootItems.Where(i => i.Item != null).Distinct(i => i.TemplateId);
-                yield return BotJobAssignmentFactory.ProcessAllQuests(QuestHelpers.LocateQuestItems, allItems);
+                yield return BotJobAssignmentController.ProcessAllQuests(QuestHelpers.LocateQuestItems, allItems);
 
                 Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...done.");
 
@@ -167,7 +167,7 @@ namespace QuestingBots.Components
                 if (spawnPointQuest != null)
                 {
                     //Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for going to random spawn points...");
-                    BotJobAssignmentFactory.AddQuest(spawnPointQuest);
+                    BotJobAssignmentController.AddQuest(spawnPointQuest);
                 }
                 else
                 {
@@ -189,7 +189,7 @@ namespace QuestingBots.Components
                 if (spawnRushQuest != null)
                 {
                     //Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for rushing your spawn point...");
-                    BotJobAssignmentFactory.AddQuest(spawnRushQuest);
+                    BotJobAssignmentController.AddQuest(spawnRushQuest);
                 }
                 else
                 {
@@ -205,16 +205,16 @@ namespace QuestingBots.Components
                     if (bossHunterQuest != null)
                     {
                         Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
-                        BotJobAssignmentFactory.AddQuest(bossHunterQuest);
+                        BotJobAssignmentController.AddQuest(bossHunterQuest);
                     }
                 }
 
                 LoadCustomQuests();
 
-                BotJobAssignmentFactory.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
+                BotJobAssignmentController.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
 
                 // Update all other settings for EFT quests
-                yield return BotJobAssignmentFactory.ProcessAllQuests(updateEFTQuestObjectives);
+                yield return BotJobAssignmentController.ProcessAllQuests(updateEFTQuestObjectives);
 
                 HaveQuestsBeenBuilt = true;
                 Singleton<LoggingUtil>.Instance.LogInfo("Finished loading quest data.");
@@ -272,7 +272,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                BotJobAssignmentFactory.AddQuest(quest);
+                BotJobAssignmentController.AddQuest(quest);
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
@@ -338,7 +338,7 @@ namespace QuestingBots.Components
             }
 
             // Find all quests that have objectives using this trigger
-            BotQuest[] matchingQuests = BotJobAssignmentFactory.FindQuestsWithZone(trigger.Id);
+            BotQuest[] matchingQuests = BotJobAssignmentController.FindQuestsWithZone(trigger.Id);
             if (matchingQuests.Length == 0)
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo("No matching quests for trigger " + trigger.Id);
@@ -501,7 +501,7 @@ namespace QuestingBots.Components
                 }
 
                 // Find all nearby quest objectives that are not from EFT quests
-                BotQuestObjective[] nearbyObjectives = BotJobAssignmentFactory.GetQuestObjectivesNearPosition(objectivePosition.Value, nearbyObjectiveDistance, false)
+                BotQuestObjective[] nearbyObjectives = BotJobAssignmentController.GetQuestObjectivesNearPosition(objectivePosition.Value, nearbyObjectiveDistance, false)
                     .ToArray();
 
                 // Match the looting behavior of the nearby objectives

@@ -61,7 +61,7 @@ namespace QuestingBots.Components
         {
             Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...");
 
-            yield return BotJobAssignmentFactory.ProcessAllQuests(findStaticPaths);
+            yield return BotJobAssignmentController.ProcessAllQuests(findStaticPaths);
 
             Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...done.");
         }

@@ -109,7 +109,7 @@ namespace QuestingBots.Components
         private int GetLevelFromConditionQuest(ConditionQuest conditionQuest)
         {
             // Find the required quest
-            Models.Questing.BotQuest preReqQuest = BotJobAssignmentFactory.FindQuest(conditionQuest.target);
+            Models.Questing.BotQuest preReqQuest = BotJobAssignmentController.FindQuest(conditionQuest.target);
             if (preReqQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot find prerequisite quest " + conditionQuest.target + " for quest " + targetQuest.GetName());

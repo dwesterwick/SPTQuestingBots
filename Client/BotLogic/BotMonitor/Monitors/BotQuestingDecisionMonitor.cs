@@ -101,7 +101,7 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         private BotQuestingDecision getFollowerDecision()
         {
-            Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
+            Controllers.BotJobAssignmentController.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsInCombat)
             {

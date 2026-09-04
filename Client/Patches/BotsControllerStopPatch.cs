@@ -41,8 +41,8 @@ namespace QuestingBots.Patches
             {
                 long timestamp = DateTime.Now.ToFileTimeUtc();
 
-                BotJobAssignmentFactory.WriteQuestLogFile(timestamp);
-                BotJobAssignmentFactory.WriteBotJobAssignmentLogFile(timestamp);
+                BotJobAssignmentController.WriteQuestLogFile(timestamp);
+                BotJobAssignmentController.WriteBotJobAssignmentLogFile(timestamp);
 
 #if DEBUG
                 BenchmarkService.LogAllBenchmarksAndReset(timestamp);
@@ -50,7 +50,7 @@ namespace QuestingBots.Patches
             }
 
             // Erase all bot and bot-assignment tracking data
-            BotJobAssignmentFactory.Clear();
+            BotJobAssignmentController.Clear();
             Controllers.BotRegistrationManager.Clear();
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
