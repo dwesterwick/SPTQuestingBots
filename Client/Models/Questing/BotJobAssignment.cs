@@ -39,8 +39,8 @@ namespace QuestingBots.Models.Questing
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
-        public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
-        public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
+        public Vector3? LookToPosition => QuestObjectiveStepAssignment?.LookToPosition;
+        public Vector3? TargetPosition => QuestObjectiveStepAssignment?.TargetPosition;
         public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
         public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
         public bool RequireForFollowers => QuestObjectiveStepAssignment?.RequireForFollowers ?? false;

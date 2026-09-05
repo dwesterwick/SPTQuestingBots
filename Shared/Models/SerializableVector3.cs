@@ -29,6 +29,10 @@ namespace QuestingBots.Models
             Z = z;
         }
 
+        public override string ToString() => $"(X={X},Y={Y},Z={Z})";
+
+        public bool HasNaNComponent() => Any(float.NaN);
+
         public bool Any(float n)
         {
             if (X.Equals(n)) return true;

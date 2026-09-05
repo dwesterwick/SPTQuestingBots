@@ -26,12 +26,6 @@ namespace QuestingBots.Models.Questing
             ItemName = Item.Item.LocalizedName();
         }
 
-        public override void Clear()
-        {
-            Item = null!;
-            base.Clear();
-        }
-
         public override string ToString()
         {
             if (Item != null)

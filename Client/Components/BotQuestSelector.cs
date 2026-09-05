@@ -20,12 +20,10 @@ namespace QuestingBots.Components
     public class BotQuestSelector : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
         private BotOwner _botOwner = null!;
-        private ExfiltrationPoint _exfiltrationPoint = null!;
+        private ExfiltrationPoint? _exfiltrationPoint = null;
         private BotJobAssignmentCreationJob? assignmentCreationJob = null;
 
         public bool NewAssignmentReady => assignmentCreationJob?.NewAssignmentReady == true;
-
-        public BotJobAssignment? GetCurrentJobAssignment() => _botOwner.GetMostRecentJobAssignment();
 
         public static BotQuestSelector GetBotQuestSelector(BotOwner botOwner)
         {
@@ -43,19 +41,25 @@ namespace QuestingBots.Components
 
         public void SetExfiltrationPointForQuesting()
         {
-            Dictionary<ExfiltrationPoint, float> exfiltrationPointDistances = Singleton<GameWorld>.Instance.ExfiltrationController.ExfiltrationPoints
-                .ToDictionary(p => p, p => Vector3.Distance(p.transform.position, _botOwner.Position));
+            float furthestExfilDistace = 0;
+            _exfiltrationPoint = null;
 
-            if (exfiltrationPointDistances.Count > 0)
+            foreach (ExfiltrationPoint exfiltrationPoint in Singleton<GameWorld>.Instance.ExfiltrationController.ExfiltrationPoints)
             {
-                KeyValuePair<ExfiltrationPoint, float> furthestPoint = exfiltrationPointDistances
-                    .OrderBy(p => p.Value)
-                    .Last();
-
-                _exfiltrationPoint = furthestPoint.Key;
-
-                //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
+                float exfilDistace = Vector3.Distance(exfiltrationPoint.transform.position, _botOwner.Position);
+                if (exfilDistace > furthestExfilDistace)
+                {
+                    _exfiltrationPoint = exfiltrationPoint;
+                    furthestExfilDistace = exfilDistace;
+                }
             }
+
+            if (_exfiltrationPoint == null)
+            {
+                return;
+            }
+
+            //Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " has selected " + furthestPoint.Key.Settings.Name + " as its furthest exfil point (" + furthestPoint.Value + "m)");
         }
 
         public void RefreshExfiltrationPointForQuesting()
@@ -96,6 +100,16 @@ namespace QuestingBots.Components
             }
 
             return _exfiltrationPoint.transform.position - _botOwner.Position;
+        }
+
+        public BotJobAssignment? GetCurrentJobAssignment()
+        {
+            if (NewAssignmentReady)
+            {
+                assignmentCreationJob = null;
+            }
+
+            return _botOwner.GetMostRecentJobAssignment();
         }
 
         public void RefreshJobAssignment()

@@ -14,23 +14,35 @@ namespace QuestingBots.BotLogic.BotMonitor
     public class BotMonitorController : MonoBehaviourDelayedUpdate
     {
         private BotOwner botOwner = null!;
-        private BotObjectiveManager objectiveManager = null!;
+        private bool _initComplete = false;
         private Dictionary<Type, AbstractBotMonitor> monitors = new Dictionary<Type, AbstractBotMonitor>();
         private BotQuestingDecisionMonitor questingDecisionMonitor = null!;
 
         public BotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? BotQuestingDecision.None;
         public bool HasAQuestingBoss => questingDecisionMonitor?.HasAQuestingBoss ?? false;
 
+        public static BotMonitorController GetBotMonitorController(BotOwner botOwner)
+        {
+            BotMonitorController botMonitorController = botOwner.gameObject.GetOrAddComponent<BotLogic.BotMonitor.BotMonitorController>();
+            botMonitorController.Init(botOwner);
+
+            return botMonitorController;
+        }
+
         public void Init(BotOwner _botOwner)
         {
             botOwner = _botOwner;
-            objectiveManager = botOwner.GetOrAddObjectiveManager();
 
             addSensors();
         }
 
         private void addSensors()
         {
+            if (_initComplete)
+            {
+                return;
+            }
+
             monitors.Add(typeof(BotHearingMonitor), new BotHearingMonitor(botOwner));
             monitors.Add(typeof(BotMountedGunMonitor), new BotMountedGunMonitor(botOwner));
             monitors.Add(typeof(BotExtractMonitor), new BotExtractMonitor(botOwner));
@@ -41,6 +53,8 @@ namespace QuestingBots.BotLogic.BotMonitor
 
             questingDecisionMonitor = new BotQuestingDecisionMonitor(botOwner);
             monitors.Add(typeof(BotQuestingDecisionMonitor), questingDecisionMonitor);
+
+            _initComplete = true;
         }
 
         protected void Start()
@@ -55,6 +69,7 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return;
             }
 
+            BotObjectiveManager? objectiveManager = botOwner.GetObjectiveManager();
             if (objectiveManager == null)
             {
                 return;

@@ -79,7 +79,7 @@ namespace QuestingBots.Components
             airdopChaserQuest.MaxRaidET = RaidHelpers.GetRaidElapsedSeconds() + Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.AirdropBotInterestTime;
             BotJobAssignmentController.AddQuest(airdopChaserQuest);
 
-            Vector3 airdropQuestPosition = airdopChaserQuest.ValidObjectives.First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
+            Vector3 airdropQuestPosition = airdopChaserQuest.GetValidObjectives().First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
             Singleton<LoggingUtil>.Instance.LogInfo($"Added quest for the most recent airdop at {airdropPosition} with its objective position at {airdropQuestPosition}");
 
             if (airdropBounds.Contains(airdropQuestPosition))
@@ -240,7 +240,7 @@ namespace QuestingBots.Components
             foreach (BotQuest quest in customQuests)
             {
                 int objectiveNum = 0;
-                foreach (BotQuestObjective objective in quest.ValidObjectives.ToArray())
+                foreach (BotQuestObjective objective in quest.GetValidObjectives())
                 {
                     objectiveNum++;
                     objective.SetName(quest.GetName() + ": Objective #" + objectiveNum);
@@ -266,7 +266,7 @@ namespace QuestingBots.Components
                 }
 
                 // Do not use quests that don't have any valid objectives (using the check above)
-                if (!quest.ValidObjectives.Any() || quest.ValidObjectives.All(o => o.StepCount == 0))
+                if (!quest.GetValidObjectives().Any() || quest.GetValidObjectives().All(o => o.StepCount == 0))
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Could not find any valid objectives for quest " + quest.GetName() + ". Disabling quest.");
                     continue;

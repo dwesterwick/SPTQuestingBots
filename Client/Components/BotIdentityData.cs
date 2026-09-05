@@ -44,10 +44,14 @@ namespace QuestingBots.Components
 
         private IEnumerator activateBot()
         {
+            string roleName = _botOwner.Profile.Info.Settings.Role.ToString();
+            Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + _botOwner.GetText() + ": " + roleName);
+
             // Spread out the work to reduce the performance impact
             yield return null;
 
             registerBot();
+            Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(_botOwner);
             yield return null;
 
             registerBotComponents();
@@ -66,9 +70,6 @@ namespace QuestingBots.Components
         [Benchmark]
         private void registerBot()
         {
-            string roleName = _botOwner.Profile.Info.Settings.Role.ToString();
-            Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + _botOwner.GetText() + ": " + roleName);
-
             if (_botOwner.WillBeAPMC())
             {
                 Controllers.BotRegistrationManager.RegisterPMC(_botOwner);
@@ -77,8 +78,6 @@ namespace QuestingBots.Components
             {
                 Controllers.BotRegistrationManager.RegisterBoss(_botOwner);
             }
-
-            Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(_botOwner);
 
             if (_botOwner.IsARegisteredPMC() || _botOwner.WillBeAPlayerScav())
             {
@@ -93,10 +92,8 @@ namespace QuestingBots.Components
                 return;
             }
 
-            BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-
             Player player = _botOwner.GetPlayer();
-            botSpawnerClass.AddPlayer(player);
+            Singleton<IBotGame>.Instance.BotsController.BotSpawner.AddPlayer(player);
             player.OnPlayerDead += deletePlayer;
         }
 
@@ -115,16 +112,10 @@ namespace QuestingBots.Components
             }
         }
 
-        [Benchmark]
         private void registerBotComponents()
         {
             Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(_botOwner);
-
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(_botOwner);
-            if (!BotLogic.HiveMind.BotHiveMindMonitor.IsRegistered(_botOwner))
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Could not register " + _botOwner.GetText() + " in BotHiveMindMonitor");
-            }
         }
 
         private BotType getBotType()

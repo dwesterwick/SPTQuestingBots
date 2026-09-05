@@ -13,7 +13,7 @@ namespace QuestingBots.Models.Questing
         public BotQuestObjective QuestObjectiveAssignment { get; protected set; } = null!;
         public BotQuestObjectiveStep QuestObjectiveStepAssignment { get; protected set; } = null!;
 
-        public Vector3? Position => QuestObjectiveStepAssignment?.GetPosition();
+        public Vector3? Position => QuestObjectiveStepAssignment?.Position;
         public bool IsSpawnSearchQuest => QuestObjectiveAssignment is BotQuestSpawnPointObjective;
 
         public JobAssignment()

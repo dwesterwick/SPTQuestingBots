@@ -85,15 +85,6 @@ namespace QuestingBots.Models.Questing
             return name;
         }
 
-        public virtual void Clear()
-        {
-            // Steps should never be deleted because some of them are generated from EFT's quests
-            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
-            {
-                step.SetPosition(null);
-            }
-        }
-
         public void DeleteAllSteps()
         {
             questObjectiveSteps = new BotQuestObjectiveStep[0];
@@ -124,25 +115,7 @@ namespace QuestingBots.Models.Questing
                 return null;
             }
 
-            return questObjectiveSteps[0].GetPosition();
-        }
-
-        public void SetFirstPosition(Vector3 position)
-        {
-            if (questObjectiveSteps.Length == 0)
-            {
-                throw new InvalidOperationException("There are no steps in the objective.");
-            }
-
-            questObjectiveSteps[0].SetPosition(position);
-        }
-
-        public void SetAllPositions(Vector3 position)
-        {
-            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
-            {
-                step.SetPosition(position);
-            }
+            return questObjectiveSteps[0].Position;
         }
 
         public void SetFirstWaitTimeAfterCompleting(float time)
@@ -157,7 +130,10 @@ namespace QuestingBots.Models.Questing
 
         public IEnumerable<Vector3?> GetAllPositions()
         {
-            return questObjectiveSteps.Select(step => step.GetPosition());
+            foreach (BotQuestObjectiveStep step in questObjectiveSteps)
+            {
+                yield return step.Position;
+            }
         }
 
         public bool TrySnapAllStepPositionsToNavMesh()
@@ -170,7 +146,7 @@ namespace QuestingBots.Models.Questing
                 if (!step.TrySnapToNavMesh(maxNavMeshDistance))
                 {
                     allSnapped = false;
-                    Singleton<LoggingUtil>.Instance.LogError("Unable to snap position " + (step.GetPosition()?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Unable to snap position " + (step.Position?.ToString() ?? "???") + " to NavMesh for quest objective " + ToString());
                 }
             }
 
@@ -201,7 +177,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
-            Vector3? position = questObjectiveSteps[0].GetPosition();
+            Vector3? position = questObjectiveSteps[0].Position;
             if (!position.HasValue)
             {
                 return false;

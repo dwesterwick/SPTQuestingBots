@@ -117,7 +117,6 @@ namespace QuestingBots.BotLogic.HiveMind
             return sensor!.GetLastLootingTimeForBoss(bot);
         }
 
-        [Benchmark]
         public static void RegisterBot(BotOwner bot)
         {
             if (bot == null)
@@ -168,7 +167,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public static ReadOnlyCollection<BotOwner> GetFollowers(BotOwner bot)
         {
-            return botFollowers.ContainsKey(bot) ? new ReadOnlyCollection<BotOwner>(botFollowers[bot]) : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            return botFollowers.ContainsKey(bot) ? botFollowers[bot].AsReadOnly() : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
         }
 
         public static ReadOnlyCollection<BotOwner> GetAllGroupMembers(BotOwner bot)

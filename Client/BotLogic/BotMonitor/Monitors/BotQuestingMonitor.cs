@@ -33,12 +33,17 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public float DistanceToBoss => BotHiveMindMonitor.GetDistanceToBoss(BotOwner);
         public bool NeedToRegroupWithFollowers => followersTooFarTimer.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000;
-        public bool StuckTooManyTimes => ObjectiveManager.StuckCount >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxCount;
+        public bool StuckTooManyTimes => (ObjectiveManager != null) && (ObjectiveManager.StuckCount >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxCount);
 
         public BotQuestingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
         public override void UpdateIfQuesting()
         {
+            if ((ObjectiveManager == null) || (BotMonitor == null))
+            {
+                return;
+            }
+
             HasABoss = BotHiveMindMonitor.HasBoss(BotOwner);
             HasAQuestingBoss = HasABoss && BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner);
             DoesBossNeedHelp = HasABoss && doesBossNeedHelp();

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Controllers
 {
@@ -89,15 +90,17 @@ namespace QuestingBots.Controllers
             allQuests.Add(quest);
         }
 
-        public static BotQuest FindQuest(string questID)
+        public static BotQuest? FindQuest(string questID)
         {
-            IEnumerable<BotQuest> matchingQuests = allQuests.Where(q => q.Template?.Id == questID);
-            if (matchingQuests.Count() == 1)
+            foreach (BotQuest quest in allQuests)
             {
-                return matchingQuests.First();
+                if (quest.Template?.Id == questID)
+                {
+                    return quest;
+                }
             }
 
-            return null!;
+            return null;
         }
 
         public static void RemoveBlacklistedQuestObjectives(string locationId)
@@ -161,13 +164,35 @@ namespace QuestingBots.Controllers
         {
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
 
-            return allQuests
-                .Where(q => q.Desirability != 0)
-                .Where(q => q.NumberOfValidObjectives > 0)
-                .Where(q => q.MaxBotsInGroup >= botGroupSize)
-                .Where(q => q.CanMoreBotsDoQuest())
-                .Where(q => q.CanAssignToBot(bot))
-                .ToArray();
+            foreach (BotQuest quest in allQuests)
+            {
+                if (quest.Desirability <= 0)
+                {
+                    continue;
+                }
+
+                if (quest.NumberOfValidObjectives() == 0)
+                {
+                    continue;
+                }
+
+                if (botGroupSize > quest.MaxBotsInGroup)
+                {
+                    continue;
+                }
+
+                if (!quest.CanMoreBotsDoQuest())
+                {
+                    continue;
+                }
+
+                if (!quest.CanAssignToBot(bot))
+                {
+                    continue;
+                }
+
+                yield return quest;
+            }
         }
 
         public static void FailAllJobAssignmentsForBot(string botID)
@@ -177,8 +202,13 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            foreach (BotJobAssignment assignment in botJobAssignments[botID].Where(a => a.IsActive))
+            foreach (BotJobAssignment assignment in botJobAssignments[botID])
             {
+                if (!assignment.IsActive)
+                {
+                    continue;
+                }
+
                 assignment.Fail();
             }
         }
@@ -212,21 +242,43 @@ namespace QuestingBots.Controllers
 
         public static int NumberOfActiveBots(this BotQuest quest)
         {
-            float pendingTimeLimit = 0.3f;
-
             int num = 0;
-            foreach (string id in botJobAssignments.Keys)
+            foreach (List<BotJobAssignment> botAssignmentList in botJobAssignments.Values)
             {
-                num += botJobAssignments[id]
-                    .Where(a => a.StartTime.HasValue)
-                    .Where(a => (a.Status == JobAssignmentStatus.Active) || ((a.Status == JobAssignmentStatus.Pending) && (a?.TimeSinceStarted() < pendingTimeLimit)))
-                    .Where(a => a.QuestAssignment == quest)
-                    .Count();
+                foreach (BotJobAssignment assignment in botAssignmentList)
+                {
+                    if (assignment.QuestAssignment != quest)
+                    {
+                        continue;
+                    }
+
+                    if (!assignment.IsActiveForAssignedBot())
+                    {
+                        continue;
+                    }
+
+                    num++;
+                }
             }
 
             //Singleton<LoggingUtil>.Instance.LogInfo("Bots doing " + quest.ToString() + ": " + num);
-
             return num;
+        }
+
+        private const float PENDING_STATUS_TIME_LIMIT = 0.3f;
+        public static bool IsActiveForAssignedBot(this BotJobAssignment botAssignment)
+        {
+            if (!botAssignment.IsActive)
+            {
+                return false;
+            }
+
+            if ((botAssignment.Status == JobAssignmentStatus.Pending) && (botAssignment.TimeSinceStarted() >= PENDING_STATUS_TIME_LIMIT))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static IEnumerable<BotQuestObjective> RemainingObjectivesForBot(this BotQuest quest, BotOwner bot)
@@ -241,38 +293,63 @@ namespace QuestingBots.Controllers
                 throw new ArgumentNullException("Quest is null", nameof(quest));
             }
 
-            if (!botJobAssignments.ContainsKey(bot.Profile.Id))
+            foreach (BotQuestObjective objective in quest.AllObjectives)
             {
-                return quest.AllObjectives;
-            }
+                if (!botJobAssignments.ContainsKey(bot.Profile.Id))
+                {
+                    yield return objective;
+                    continue;
+                }
 
-            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
-                .Where(a => a.QuestAssignment == quest)
-                .Where(a => a.Status != JobAssignmentStatus.Archived);
-
-            return quest.AllObjectives.Where(o => !matchingAssignments.Any(a => a.QuestObjectiveAssignment == o));
-        }
-
-        public static BotQuestObjective? NearestToBot(this IEnumerable<BotQuestObjective> objectives, BotOwner bot)
-        {
-            Dictionary<BotQuestObjective, float> objectiveDistances = new Dictionary<BotQuestObjective, float>();
-            foreach (BotQuestObjective objective in objectives)
-            {
-                Vector3? firstStepPosition = objective.GetFirstStepPosition();
-                if (!firstStepPosition.HasValue)
+                if (botJobAssignments[bot.Profile.Id].HasMatchingUnArchivedAssignment(quest, objective))
                 {
                     continue;
                 }
 
-                objectiveDistances.Add(objective, Vector3.Distance(bot.Position, firstStepPosition.Value));
+                yield return objective;
             }
+        }
 
-            if (objectiveDistances.Count == 0)
+        public static bool HasMatchingUnArchivedAssignment(this IEnumerable<BotJobAssignment> assignments, BotQuest quest, BotQuestObjective objective)
+        {
+            foreach (BotJobAssignment assignment in assignments)
             {
-                return null;
+                if (assignment.Status == JobAssignmentStatus.Archived)
+                {
+                    continue;
+                }
+
+                if ((assignment.QuestAssignment == quest) && (assignment.QuestObjectiveAssignment == objective))
+                {
+                    return true;
+                }
             }
 
-            return objectiveDistances.OrderBy(i => i.Value).First().Key;
+            return false;
+        }
+
+        public static BotQuestObjective? NearestToBot(this IEnumerable<BotQuestObjective> objectives, BotOwner bot)
+        {
+            BotQuestObjective? nearestObjective = null;
+            float nearestObjectiveDistance = float.MaxValue;
+
+            foreach (BotQuestObjective objective in objectives)
+            {
+                Vector3? firstStepPosition = objective.GetFirstStepPosition();
+                if (firstStepPosition == null)
+                {
+                    continue;
+                }
+
+                float objectiveDistance = Vector3.Distance(bot.Position, firstStepPosition.Value);
+                if (objectiveDistance < nearestObjectiveDistance)
+                {
+                    nearestObjective = objective;
+                    nearestObjectiveDistance = objectiveDistance;
+                }
+            }
+
+            return nearestObjective;
         }
 
         public static DateTime? TimeWhenLastEndedForBot(this BotQuest quest, BotOwner bot)
@@ -283,18 +360,28 @@ namespace QuestingBots.Controllers
             }
 
             // Find all of the bot's assignments with this quest that have not been archived yet
-            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
-                .Where(a => a.QuestAssignment == quest)
-                .Where(a => a.Status != JobAssignmentStatus.Archived)
-                .Reverse<BotJobAssignment>()
-                .SkipWhile(a => !a.EndTime.HasValue);
-
-            if (!matchingAssignments.Any())
+            DateTime? endTime = null;
+            foreach (BotJobAssignment assignment in botJobAssignments[bot.Profile.Id])
             {
-                return null;
+                if (assignment.QuestAssignment != quest)
+                {
+                    continue;
+                }
+
+                if (assignment.Status == JobAssignmentStatus.Archived)
+                {
+                    continue;
+                }
+
+                if (assignment.EndTime == null)
+                {
+                    continue;
+                }
+
+                endTime = assignment.EndTime;
             }
 
-            return matchingAssignments.First().EndTime;
+            return endTime;
         }
 
         public static double? ElapsedTimeWhenLastEndedForBot(this BotQuest quest, BotOwner bot)
@@ -315,17 +402,18 @@ namespace QuestingBots.Controllers
                 return null;
             }
 
-            // If the bot is currently doing this quest, find the time it first started
-            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
-                .Reverse<BotJobAssignment>()
-                .TakeWhile(a => a.QuestAssignment == quest);
-
-            if (!matchingAssignments.Any())
+            DateTime? endTime = null;
+            for (int i = botJobAssignments[bot.Profile.Id].Count - 1; i >= 0; i--)
             {
-                return null;
+                if (botJobAssignments[bot.Profile.Id][i].QuestAssignment != quest)
+                {
+                    break;
+                }
+
+                endTime = botJobAssignments[bot.Profile.Id][i].EndTime;
             }
 
-            return matchingAssignments.Last().EndTime;
+            return endTime;
         }
 
         public static double? ElapsedTimeSinceBotStarted(this BotQuest quest, BotOwner bot)
@@ -358,22 +446,16 @@ namespace QuestingBots.Controllers
                 return false;
             }
 
-            // If the bot has never been assigned a job, it should be able to do the quest
-            // TO DO: Could this return a false positive?
-            if (!botJobAssignments.ContainsKey(bot.Profile.Id))
-            {
-                return true;
-            }
-
             // Ensure the bot can do at least one of the objectives
-            if (!quest.AllObjectives.Any(o => o.CanAssignBot(bot)))
+            if (!quest.CanAssignAnObjectiveToBot(bot))
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo("Cannot assign " + bot.GetText() + " to any objectives in quest " + quest.ToString());
                 return false;
             }
 
-            if (quest.HasBotBeingDoingQuestTooLong(bot, out double? timeDoingQuest))
+            if (quest.HasBotBeingDoingQuestTooLong(bot, out double? time) && (time != null))
             {
+                //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has been doing quest " + quest.ToString() + " for " + time + "s");
                 return false;
             }
 
@@ -383,10 +465,25 @@ namespace QuestingBots.Controllers
                 return true;
             }
 
+            Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no remaining objectives for quest " + quest.ToString());
+
             // Check if enough time has elasped from the bot's last assignment in the quest
             if (quest.TryArchiveIfBotCanRepeat(bot))
             {
                 return true;
+            }
+
+            return false;
+        }
+
+        public static bool CanAssignAnObjectiveToBot(this BotQuest quest, BotOwner bot)
+        {
+            foreach (BotQuestObjective objective in quest.AllObjectives)
+            {
+                if (objective.CanAssignBot(bot))
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -400,53 +497,73 @@ namespace QuestingBots.Controllers
             }
 
             double? timeSinceQuestEnded = quest.ElapsedTimeWhenLastEndedForBot(bot);
-            if (timeSinceQuestEnded.HasValue && (timeSinceQuestEnded >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.RepeatQuestDelay))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
-
-                IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
-                    .Where(a => a.QuestAssignment == quest);
-
-                foreach (BotJobAssignment assignment in matchingAssignments)
-                {
-                    assignment.Archive();
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public static int TryArchiveRepeatableAssignments(this BotOwner bot)
-        {
-            BotJobAssignment[] matchingAssignments = botJobAssignments[bot.Profile.Id]
-                    .Where(a => a.QuestAssignment.IsRepeatable)
-                    .Where(a => a.Status == JobAssignmentStatus.Completed)
-                    .ToArray();
-
-            matchingAssignments.ExecuteForEach(a => a.Archive());
-
-            return matchingAssignments.Length;
-        }
-
-        public static bool CanBotRepeatQuestObjective(this BotQuestObjective objective, BotOwner bot)
-        {
-            IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
-                .Where(a => a.QuestObjectiveAssignment == objective);
-
-            if (!matchingAssignments.Any())
-            {
-                return true;
-            }
-
-            // If the assignment hasn't been archived yet, not enough time has elapsed to repeat it
-            if (!objective.IsRepeatable && matchingAssignments.Any(a => a.Status == JobAssignmentStatus.Completed))
+            if (!timeSinceQuestEnded.HasValue || (timeSinceQuestEnded < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.RepeatQuestDelay))
             {
                 return false;
             }
 
-            return objective.IsRepeatable && matchingAssignments.All(a => a.Status == JobAssignmentStatus.Archived);
+            Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
+
+            foreach (BotJobAssignment assignment in botJobAssignments[bot.Profile.Id])
+            {
+                if (assignment.QuestAssignment != quest)
+                {
+                    continue;
+                }
+
+                assignment.Archive();
+            }
+
+            return true;
+        }
+
+        public static int TryArchiveRepeatableAssignments(this BotOwner bot)
+        {
+            int archivedQuests = 0;
+            foreach (BotJobAssignment assignment in botJobAssignments[bot.Profile.Id])
+            {
+                if (!assignment.QuestAssignment.IsRepeatable)
+                {
+                    continue;
+                }
+
+                if (assignment.Status != JobAssignmentStatus.Completed)
+                {
+                    continue;
+                }
+
+                assignment.Archive();
+                archivedQuests++;
+            }
+
+            return archivedQuests;
+        }
+
+        public static bool CanBotSelectQuestObjective(this BotQuestObjective objective, BotOwner bot)
+        {
+            List<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id];
+            if (matchingAssignments.Count == 0)
+            {
+                return true;
+            }
+
+            bool allArchived = true;
+            foreach (BotJobAssignment assignment in matchingAssignments)
+            {
+                if (assignment.QuestObjectiveAssignment != objective)
+                {
+                    continue;
+                }
+
+                if (!objective.IsRepeatable && (assignment.Status == JobAssignmentStatus.Completed))
+                {
+                    return false;
+                }
+
+                allArchived = allArchived & assignment.Status == JobAssignmentStatus.Archived;
+            }
+
+            return objective.IsRepeatable && allArchived;
         }
 
         public static bool HasBotBeingDoingQuestTooLong(this BotQuest quest, BotOwner bot, out double? time)
@@ -492,7 +609,7 @@ namespace QuestingBots.Controllers
             botJobAssignments[assignment.BotOwner.Profile.Id].Add(assignment);
         }
 
-        public static IEnumerable<BotJobAssignment> GetAllQuests(this BotOwner bot)
+        public static IEnumerable<BotJobAssignment> GetAllQuestAssignments(this BotOwner bot)
         {
             if (!botJobAssignments.ContainsKey(bot.Profile.Id))
             {
@@ -504,7 +621,15 @@ namespace QuestingBots.Controllers
 
         public static IEnumerable<BotJobAssignment> GetCompletedOrAchivedQuests(this BotOwner bot)
         {
-            return bot.GetAllQuests().Where(a => a.IsCompletedOrArchived);
+            foreach (BotJobAssignment assignment in bot.GetAllQuestAssignments())
+            {
+                if (!assignment.IsCompletedOrArchived)
+                {
+                    continue;
+                }
+
+                yield return assignment;
+            }
         }
 
         public static int NumberOfCompletedOrAchivedQuests(this BotOwner bot)
@@ -644,7 +769,7 @@ namespace QuestingBots.Controllers
 
             foreach (BotQuest quest in allQuests)
             {
-                foreach (BotQuestObjective objective in quest.ValidObjectives)
+                foreach (BotQuestObjective objective in quest.GetValidObjectives())
                 {
                     foreach (BotQuestObjectiveStep step in objective.AllSteps)
                     {
@@ -668,7 +793,7 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                foreach (BotQuestObjective objective in quest.ValidObjectives)
+                foreach (BotQuestObjective objective in quest.GetValidObjectives())
                 {
                     Vector3? firstStepPosition = objective.GetFirstStepPosition();
                     if (!firstStepPosition.HasValue)

@@ -33,17 +33,14 @@ namespace QuestingBots.Helpers
 
     public static class ItemHelpers
     {
-        public static InventoryController GetInventoryController(this BotOwner bot)
-        {
-            Type playerType = typeof(Player);
-
-            FieldInfo inventoryControllerField = playerType.GetField("_inventoryController", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (InventoryController)inventoryControllerField.GetValue(bot.GetPlayer);
-        }
+        public static InventoryController GetInventoryController(this BotOwner bot) => bot.GetPlayer.InventoryController;
 
         public static IEnumerable<WeaponClass> ToWeaponClasses(this IEnumerable<string> weaponClassNames)
         {
-            return weaponClassNames.Select(n => (WeaponClass)Enum.Parse(typeof(WeaponClass), n));
+            foreach (string weaponClassName in weaponClassNames)
+            {
+                yield return (WeaponClass)Enum.Parse(typeof(WeaponClass), weaponClassName);
+            }
         }
 
         public static bool HasAnyRequiredWeapon(this BotOwner botOwner, IEnumerable<WeaponClass> requiredClasses)
@@ -74,12 +71,16 @@ namespace QuestingBots.Helpers
 
         public static IEnumerable<WeaponClass> GetEquippedWeaponClasses(this BotOwner botOwner)
         {
-            return botOwner.GetEquippedWeaponClassNames().ToWeaponClasses();
+            return botOwner.GetEquippedWeaponClassNames()
+                .ToWeaponClasses();
         }
 
         public static IEnumerable<string> GetEquippedWeaponClassNames(this BotOwner botOwner)
         {
-            return botOwner.GetEquippedWeapons().Select(w => w.WeapClass);
+            foreach (Weapon weapon in botOwner.GetEquippedWeapons())
+            {
+                yield return weapon.WeapClass;
+            }
         }
 
         public static float GetMaxWeaponSightingRange(this BotOwner botOwner)

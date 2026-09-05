@@ -22,7 +22,7 @@ namespace QuestingBots
 
         public static IEnumerable<string[]> GetJobAssignmentHistoryCsvData(this BotOwner bot)
         {
-            IEnumerable<BotJobAssignment> allJobAssignments = bot.GetAllQuests();
+            IEnumerable<BotJobAssignment> allJobAssignments = bot.GetAllQuestAssignments();
             foreach (BotJobAssignment assignment in allJobAssignments)
             {
                 yield return new string[]

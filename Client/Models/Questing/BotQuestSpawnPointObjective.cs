@@ -22,12 +22,6 @@ namespace QuestingBots.Models.Questing
             SpawnPoint = spawnPoint;
         }
 
-        public override void Clear()
-        {
-            SpawnPoint = null;
-            base.Clear();
-        }
-
         public override string ToString()
         {
             if (SpawnPoint.HasValue)

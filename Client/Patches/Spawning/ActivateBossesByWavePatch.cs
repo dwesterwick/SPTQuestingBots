@@ -69,7 +69,7 @@ namespace QuestingBots.Patches.Spawning
                     BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
                     BotRegistrationManager.ZeroWaveTotalRogueCount -= botCount;
 
-                    Singleton<LoggingUtil>.Instance.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many Rogues will be on the map");
+                    Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many Rogues will be on the map");
                     return true;
                 }
             }
@@ -80,7 +80,7 @@ namespace QuestingBots.Patches.Spawning
             {
                 BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
 
-                Singleton<LoggingUtil>.Instance.LogWarning("Suppressing boss wave (" + botCount + " bots) or too many bosses will be on the map");
+                Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many bosses will be on the map");
                 return true;
             }
 

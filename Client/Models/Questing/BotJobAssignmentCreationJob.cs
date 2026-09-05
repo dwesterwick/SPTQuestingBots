@@ -123,17 +123,47 @@ namespace QuestingBots.Models.Questing
             }
 
             // Clear the bot's assignment if it's been doing the same quest for too long
-            if ((quest.HasBotBeingDoingQuestTooLong(_botOwner, out double? timeDoingQuest) == true) && (timeDoingQuest != null))
+            if (quest.HasBotBeingDoingQuestTooLong(_botOwner, out double? timeDoingQuest) && (timeDoingQuest != null))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo(_botOwner.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
                 return null;
             }
 
-            return quest
-                .RemainingObjectivesForBot(_botOwner)
-                .Where(o => o.CanAssignBot(_botOwner))
-                .Where(o => o.CanBotRepeatQuestObjective(_botOwner))
-                .NearestToBot(_botOwner);
+            IEnumerable<BotQuestObjective> remainingObjectives = quest.RemainingObjectivesForBot(_botOwner);
+            return GetNearestAssignableObjective(remainingObjectives);
+        }
+
+        private BotQuestObjective? GetNearestAssignableObjective(IEnumerable<BotQuestObjective> assignableObjectives)
+        {
+            BotQuestObjective? nearestObjective = null;
+            float nearestObjectiveDistance = float.MaxValue;
+            foreach (BotQuestObjective objective in assignableObjectives)
+            {
+                if (!objective.CanAssignBot(_botOwner))
+                {
+                    continue;
+                }
+
+                if (!objective.CanBotSelectQuestObjective(_botOwner))
+                {
+                    continue;
+                }
+
+                Vector3? firstStepPosition = objective.GetFirstStepPosition();
+                if (firstStepPosition == null)
+                {
+                    continue;
+                }
+
+                float objectiveDistance = Vector3.Distance(_botOwner.Position, firstStepPosition.Value);
+                if (objectiveDistance < nearestObjectiveDistance)
+                {
+                    nearestObjective = objective;
+                    nearestObjectiveDistance = objectiveDistance;
+                }
+            }
+
+            return nearestObjective;
         }
 
         private void StopQuestingAndExtract()
@@ -163,7 +193,10 @@ namespace QuestingBots.Models.Questing
             }
 
             Dictionary<BotQuest, Configuration.MinMaxConfig> questDistanceRanges = GetQuestDistanceRanges(assignableQuests);
+            yield return HasReachMaxCalculationTimeForFrame();
+
             Dictionary<BotQuest, Configuration.MinMaxConfig> questExfilAngleRanges = GetQuestExfilAngleRanges(assignableQuests);
+            yield return HasReachMaxCalculationTimeForFrame();
 
             double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
             int distanceRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness;
@@ -176,7 +209,7 @@ namespace QuestingBots.Models.Questing
             float desirabilityWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityWeighting;
             float exfilDirectionWeighting = GetExfilWeighting();
 
-            Dictionary<BotQuest, double> questWeights = new Dictionary<BotQuest, double>();
+            double maxWeight = double.MinValue;
             foreach (BotQuest quest in assignableQuests)
             {
                 Configuration.MinMaxConfig distanceRange = questDistanceRanges[quest];
@@ -187,16 +220,14 @@ namespace QuestingBots.Models.Questing
                 double exfilAngleFactor = Math.Max(0, exfilAngleRange.Min - maxExfilAngle) / (180 - maxExfilAngle);
 
                 double weight = (distanceFraction * distanceWeighting) + (desirabilityFraction * desirabilityWeighting) + (exfilAngleFactor * exfilDirectionWeighting);
-                questWeights.Add(quest, weight);
+                if (weight > maxWeight)
+                {
+                    _nextRandomQuest = quest;
+                    maxWeight = weight;
+                }
 
                 yield return HasReachMaxCalculationTimeForFrame();
             }
-
-            _nextRandomQuest = questWeights
-                .OrderBy(o => o.Value)
-                .Last().Key;
-
-            //Singleton<LoggingUtil>.Instance.LogInfo("Distance: " + questDistanceFractions[selectedQuest] + ", Desirability: " + questDesirabilityFractions[selectedQuest] + ", Exfil Angle Factor: " + questExfilAngleFactor[selectedQuest]);
         }
 
         private IEnumerator HasReachMaxCalculationTimeForFrame()
@@ -216,9 +247,28 @@ namespace QuestingBots.Models.Questing
             foreach (BotQuest quest in quests)
             {
                 IEnumerable<Vector3> validObjectivePositions = GetValidObjectivePositions(quest);
-                IEnumerable<float> distancesToObjectives = validObjectivePositions.Select(p => Vector3.Distance(_botOwner.Position, p));
+                if (!validObjectivePositions.Any())
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("No valid positions found for quest " + quest.ToString());
+                    continue;
+                }
 
-                questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(distancesToObjectives.Min(), distancesToObjectives.Max()));
+                float minDistance = float.MaxValue;
+                float maxDistance = 0;
+                foreach (Vector3 objectivePosition in validObjectivePositions)
+                {
+                    float distance = Vector3.Distance(_botOwner.Position, objectivePosition);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                    }
+                }
+
+                questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(minDistance, maxDistance));
             }
 
             return questDistanceRanges;
@@ -240,10 +290,28 @@ namespace QuestingBots.Models.Questing
                 }
 
                 IEnumerable<Vector3> validObjectivePositions = GetValidObjectivePositions(quest);
-                IEnumerable<Vector3> vectorsToObjectivePositions = validObjectivePositions.Select(p => p - _botOwner.Position);
-                IEnumerable<float> anglesToObjectives = vectorsToObjectivePositions.Select(p => Vector3.Angle(p - _botOwner.Position, vectorToExfil.Value));
+                if (!validObjectivePositions.Any())
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("No valid positions found for quest " + quest.ToString());
+                    continue;
+                }
 
-                questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(anglesToObjectives.Min(), anglesToObjectives.Max()));
+                float minAngle = float.MaxValue;
+                float maxAngle = float.MinValue;
+                foreach (Vector3 objectivePosition in validObjectivePositions)
+                {
+                    float angle = Vector3.Angle(objectivePosition - _botOwner.Position, vectorToExfil.Value);
+                    if (angle < minAngle)
+                    {
+                        minAngle = angle;
+                    }
+                    if (angle > maxAngle)
+                    {
+                        maxAngle = angle;
+                    }
+                }
+
+                questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(minAngle, maxAngle));
             }
 
             return questExfilAngleRanges;
@@ -251,13 +319,15 @@ namespace QuestingBots.Models.Questing
 
         private IEnumerable<Vector3> GetValidObjectivePositions(BotQuest quest)
         {
-            foreach (BotQuestObjective objective in quest.ValidObjectives)
+            foreach (BotQuestObjective objective in quest.GetValidObjectives())
             {
                 Vector3? firstPosition = objective.GetFirstStepPosition();
-                if (firstPosition.HasValue)
+                if (firstPosition == null)
                 {
-                    yield return firstPosition.Value;
+                    continue;
                 }
+
+                yield return firstPosition.Value;
             }
         }
 

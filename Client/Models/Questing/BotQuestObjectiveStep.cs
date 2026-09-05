@@ -35,13 +35,13 @@ namespace QuestingBots.Models.Questing
         public double WaitTimeAfterCompleting { get; set; } = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.DefaultWaitTimeAfterObjectiveCompletion;
 
         [JsonProperty("position")]
-        public SerializableVector3 SerializablePosition { get; set; } = null!;
+        public SerializableVector3? SerializablePosition { get; set; } = null;
 
         [JsonProperty("lookToPosition")]
-        public SerializableVector3 SerializableLookToPosition { get; set; } = null!;
+        public SerializableVector3? SerializableLookToPosition { get; set; } = null;
 
         [JsonProperty("targetPosition")]
-        public SerializableVector3 SerializableTargetPosition { get; set; } = null!;
+        public SerializableVector3? SerializableTargetPosition { get; set; } = null;
 
         [JsonProperty("stepType")]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -69,7 +69,65 @@ namespace QuestingBots.Models.Questing
         public int? StepNumber { get; set; } = null;
 
         [JsonIgnore]
-        public WorldInteractiveObject InteractiveObject { get; set; } = null!;
+        public WorldInteractiveObject? InteractiveObject { get; set; } = null;
+
+        [JsonIgnore]
+        private Vector3? _position = null;
+        public Vector3? Position
+        {
+            get
+            {
+                if (_position == null)
+                {
+                    if ((SerializablePosition != null) && !SerializablePosition.HasNaNComponent())
+                    {
+                        _position = SerializablePosition.ToUnityVector3();
+                    }
+                    else
+                    {
+                        Singleton<LoggingUtil>.Instance.LogWarning("SerializablePosition is invalid for step: " + SerializablePosition?.ToString() ?? " [NULL]");
+                    }
+                }
+
+                return _position;
+            }
+        }
+
+        [JsonIgnore]
+        private Vector3? _lookToPosition = null;
+        public Vector3? LookToPosition
+        {
+            get
+            {
+                if (_lookToPosition == null)
+                {
+                    if ((SerializableLookToPosition != null) && !SerializableLookToPosition.HasNaNComponent())
+                    {
+                        _lookToPosition = SerializableLookToPosition.ToUnityVector3();
+                    }
+                }
+
+                return _lookToPosition;
+            }
+        }
+
+        [JsonIgnore]
+        private Vector3? _targetPosition = null;
+        public Vector3? TargetPosition
+        {
+            get
+            {
+                if (_targetPosition == null)
+                {
+                    if ((SerializableTargetPosition != null) && !SerializableTargetPosition.HasNaNComponent())
+                    {
+                        _targetPosition = SerializableTargetPosition.ToUnityVector3();
+                    }
+                }
+
+                return _targetPosition;
+            }
+        }
 
         public BotQuestObjectiveStep()
         {
@@ -101,47 +159,6 @@ namespace QuestingBots.Models.Questing
             return "Step " + (StepNumber.HasValue ? ("#" + StepNumber.Value.ToString()) : "???");
         }
 
-        public Vector3? GetPosition()
-        {
-            if ((SerializablePosition == null) || SerializablePosition.Any(float.NaN))
-            {
-                return null;
-            }
-
-            return SerializablePosition.ToUnityVector3();
-        }
-
-        public Vector3? GetLookToPosition()
-        {
-            if ((SerializableLookToPosition == null) || SerializableLookToPosition.Any(float.NaN))
-            {
-                return null;
-            }
-
-            return SerializableLookToPosition.ToUnityVector3();
-        }
-
-        public Vector3? GetTargetPosition()
-        {
-            if ((SerializableTargetPosition == null) || SerializableTargetPosition.Any(float.NaN))
-            {
-                return null;
-            }
-
-            return SerializableTargetPosition.ToUnityVector3();
-        }
-
-        public void SetPosition(Vector3? position)
-        {
-            if (!position.HasValue)
-            {
-                SerializablePosition = null!;
-                return;
-            }
-
-            SerializablePosition = position.Value.ToSerializableVector3();
-        }
-
         public bool TrySnapToNavMesh(float maxDistance)
         {
             if (SerializablePosition == null)
@@ -157,6 +174,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
+            _position = null;
             SerializablePosition = navMeshPosition.Value.ToSerializableVector3();
             return true;
         }

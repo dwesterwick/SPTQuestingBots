@@ -26,12 +26,6 @@ namespace QuestingBots.Models.Questing
             ZoneID = zoneID;
         }
 
-        public override void Clear()
-        {
-            ZoneID = null!;
-            base.Clear();
-        }
-
         public override string ToString()
         {
             if (ZoneID != null)

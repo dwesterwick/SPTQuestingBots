@@ -474,14 +474,14 @@ namespace QuestingBots.Components
             }
         }
 
-        public EFT.Interactive.Switch FindSwitch(string id)
+        public EFT.Interactive.Switch? FindSwitch(string id)
         {
             if (IdsForSwitches.ContainsKey(id))
             {
                 return IdsForSwitches[id];
             }
 
-            return null!;
+            return null;
         }
 
         private void FindAllLockedDoors()

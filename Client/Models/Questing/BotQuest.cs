@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Game.Spawning;
+using EFT.Interactive;
+using EFT.Quests;
+using Newtonsoft.Json;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using EFT.Game.Spawning;
-using EFT.Interactive;
-using Newtonsoft.Json;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
@@ -93,10 +94,6 @@ namespace QuestingBots.Models.Questing
         public ReadOnlyCollection<BotQuestObjective> AllObjectives => new ReadOnlyCollection<BotQuestObjective>(objectives);
         public int NumberOfObjectives => AllObjectives.Count;
 
-        // Return all objectives in the quest that have valid positions for their first step
-        public IEnumerable<BotQuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
-        public int NumberOfValidObjectives => ValidObjectives.Count();
-
         public BotQuest()
         {
 
@@ -137,6 +134,22 @@ namespace QuestingBots.Models.Questing
             objectives = new BotQuestObjective[0];
         }
 
+        // Return all objectives in the quest that have valid positions for their first step
+        public IEnumerable<BotQuestObjective> GetValidObjectives()
+        {
+            foreach (BotQuestObjective objective in objectives)
+            {
+                if (objective.GetFirstStepPosition() == null)
+                {
+                    continue;
+                }
+
+                yield return objective;
+            }
+        }
+
+        public int NumberOfValidObjectives() => GetValidObjectives().Count();
+
         public IList<Vector3> GetWaypointPositions()
         {
             if (waypointPositions != null)
@@ -173,13 +186,6 @@ namespace QuestingBots.Models.Questing
 
         public bool CanAssignBot(BotOwner bot)
         {
-            if (!RaidHelpers.HasRaidStarted())
-            {
-                return false;
-            }
-
-            float raidTime = RaidHelpers.GetRaidElapsedSeconds();
-
             if (AlarmQuest && !Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().AlarmState)
             {
                 return false;
@@ -195,6 +201,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
+            float raidTime = RaidHelpers.GetRaidElapsedSeconds();
             bool canAssign = canAssignForBotType(bot)
                 && ((bot.Profile.Info.Level >= MinLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
@@ -269,7 +276,7 @@ namespace QuestingBots.Models.Questing
 
         private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
         {
-            EFT.Interactive.Switch requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(switchID);
+            EFT.Interactive.Switch? requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(switchID);
             if (requiredSwitch == null)
             {
                 return true;
