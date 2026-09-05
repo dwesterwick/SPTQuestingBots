@@ -15,7 +15,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Controllers
 {
@@ -465,7 +464,7 @@ namespace QuestingBots.Controllers
                 return true;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no remaining objectives for quest " + quest.ToString());
+            //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no remaining objectives for quest " + quest.ToString());
 
             // Check if enough time has elasped from the bot's last assignment in the quest
             if (quest.TryArchiveIfBotCanRepeat(bot))

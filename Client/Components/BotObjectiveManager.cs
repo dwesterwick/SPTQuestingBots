@@ -236,6 +236,7 @@ namespace QuestingBots.Components
 
             lastAssignment = assignment;
             assignment = objective;
+            QuestSelector.AcceptNewAssignment();
 
             if (assignment != null)
             {

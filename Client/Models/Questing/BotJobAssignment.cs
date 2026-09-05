@@ -124,7 +124,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
-            BotQuestObjectiveStep nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
+            BotQuestObjectiveStep? nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
             if (nextStep == null)
             {
                 return false;

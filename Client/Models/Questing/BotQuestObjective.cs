@@ -198,11 +198,11 @@ namespace QuestingBots.Models.Questing
             return true;
         }
 
-        public BotQuestObjectiveStep GetNextObjectiveStep(BotQuestObjectiveStep currentStep, bool allowReset = false)
+        public BotQuestObjectiveStep? GetNextObjectiveStep(BotQuestObjectiveStep currentStep, bool allowReset = false)
         {
             if (!allowReset && (currentStep == null))
             {
-                return null!;
+                return null;
             }
 
             int currentStepNumber = currentStep?.StepNumber ?? 0;
@@ -213,7 +213,7 @@ namespace QuestingBots.Models.Questing
                 return nextStep.First();
             }
 
-            return null!;
+            return null;
         }
 
         public void UpdateQuestObjectiveStepNumbers()

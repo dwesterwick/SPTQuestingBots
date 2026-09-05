@@ -5,7 +5,6 @@ using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +20,7 @@ namespace QuestingBots.Components
     {
         private BotOwner _botOwner = null!;
         private ExfiltrationPoint? _exfiltrationPoint = null;
-        private BotJobAssignmentCreationJob? assignmentCreationJob = null;
+        private IBotJobAssignmentCreationJob? assignmentCreationJob = null;
 
         public bool NewAssignmentReady => assignmentCreationJob?.NewAssignmentReady == true;
 
@@ -104,12 +103,18 @@ namespace QuestingBots.Components
 
         public BotJobAssignment? GetCurrentJobAssignment()
         {
-            if (NewAssignmentReady)
+            return _botOwner.GetMostRecentJobAssignment();
+        }
+
+        public void AcceptNewAssignment()
+        {
+            if (!NewAssignmentReady)
             {
-                assignmentCreationJob = null;
+                Singleton<LoggingUtil>.Instance.LogWarning(_botOwner.GetText() + " tried accepting a new assignment that was not ready");
+                return;
             }
 
-            return _botOwner.GetMostRecentJobAssignment();
+            assignmentCreationJob = null;
         }
 
         public void RefreshJobAssignment()
@@ -153,7 +158,7 @@ namespace QuestingBots.Components
             // Check if more steps are available for the bot's current assignment
             if ((currentAssignment != null) && currentAssignment.TrySetNextObjectiveStep(false))
             {
-                assignmentCreationJob = null;
+                assignmentCreationJob = new CompletedBotJobAssignmentCreationJob(currentAssignment);
                 return true;
             }
 

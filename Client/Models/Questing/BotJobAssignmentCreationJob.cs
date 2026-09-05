@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public class BotJobAssignmentCreationJob
+    public class BotJobAssignmentCreationJob : IBotJobAssignmentCreationJob
     {
         private const float MAX_CYCLE_TIME_MS = 1;
 
@@ -250,6 +250,8 @@ namespace QuestingBots.Models.Questing
                 if (!validObjectivePositions.Any())
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning("No valid positions found for quest " + quest.ToString());
+
+                    questDistanceRanges.Add(quest, new Configuration.MinMaxConfig(float.MaxValue, float.MaxValue));
                     continue;
                 }
 
@@ -285,7 +287,7 @@ namespace QuestingBots.Models.Questing
             {
                 if (vectorToExfil == null)
                 {
-                    questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(0, 0));
+                    questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(float.MaxValue, float.MaxValue));
                     continue;
                 }
 
@@ -293,6 +295,8 @@ namespace QuestingBots.Models.Questing
                 if (!validObjectivePositions.Any())
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning("No valid positions found for quest " + quest.ToString());
+
+                    questExfilAngleRanges.Add(quest, new Configuration.MinMaxConfig(float.MaxValue, float.MaxValue));
                     continue;
                 }
 
