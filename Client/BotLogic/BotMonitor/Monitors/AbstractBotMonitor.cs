@@ -11,9 +11,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 {
     public abstract class AbstractBotMonitor
     {
-        protected BotOwner BotOwner { get; private set; } = null!;
-        protected BotObjectiveManager ObjectiveManager { get; private set; } = null!;
-        protected BotMonitorController BotMonitor { get; private set; } = null!;
+        protected BotOwner BotOwner { get; private set; }
+
+        protected BotObjectiveManager? ObjectiveManager => BotOwner.GetObjectiveManager();
+        protected BotMonitorController? BotMonitor => ObjectiveManager?.BotMonitor;
 
         public AbstractBotMonitor(BotOwner _botOwner)
         {
@@ -23,12 +24,6 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
 
             BotOwner = _botOwner;
-            ObjectiveManager = BotOwner.GetOrAddObjectiveManager();
-
-            if (ObjectiveManager != null)
-            {
-                BotMonitor = ObjectiveManager.BotMonitor;
-            }
         }
 
         public virtual void Start() { }

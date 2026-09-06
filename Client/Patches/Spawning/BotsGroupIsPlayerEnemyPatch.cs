@@ -71,7 +71,7 @@ namespace QuestingBots.Patches.Spawning
                 return true;
             }
 
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance._initialBot, out Models.BotSpawnInfo botSpawnInfo))
+            if (Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().TryGetBotGroupFromAnyGenerator(__instance._initialBot, out Models.BotSpawnInfo botSpawnInfo))
             {
                 if (botSpawnInfo.ContainsProfile(player.Profile))
                 {

@@ -76,6 +76,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private bool updateCombatState(bool inCombat)
         {
+            if (BotMonitor == null)
+            {
+                return false;
+            }
+
             if (inCombat)
             {
                 BotMonitor.GetMonitor<BotHealthMonitor>().PauseHealthMonitoring();

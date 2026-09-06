@@ -93,7 +93,7 @@ namespace QuestingBots.Components.Spawning
             EPlayerSideMask playerMask = RaidHelpers.IsBeginningOfRaid() ? EPlayerSideMask.Pmc : EPlayerSideMask.All;
             float minDistanceFromOtherPlayers = GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs) + 5;
 
-            string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
+            string[] allGeneratedProfileIDs = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs().ToArray();
             Vector3[] positionsToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
                 .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId))
                 .Select(p => p.Position)

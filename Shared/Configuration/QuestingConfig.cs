@@ -19,8 +19,8 @@ namespace QuestingBots.Configuration
         [DataMember (Name = "brain_layer_priorities", IsRequired = true)]
         public BrainLayerPrioritiesOptionsConfig BrainLayerPriorities { get; set; } = new BrainLayerPrioritiesOptionsConfig();
 
-        [DataMember(Name = "quest_selection_timeout", IsRequired = true)]
-        public float QuestSelectionTimeout { get; set; } = 2000;
+        [DataMember(Name = "quest_selection", IsRequired = true)]
+        public QuestSelectionConfig QuestSelection { get; set; } = new QuestSelectionConfig();
 
         [DataMember(Name = "btr_run_distance", IsRequired = true)]
         public float BTRRunDistance { get; set; } = 40;

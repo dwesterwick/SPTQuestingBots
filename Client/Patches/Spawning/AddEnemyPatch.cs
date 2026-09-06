@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components.Spawning;
+using QuestingBots.Utils;
+using SPT.Custom.CustomAI;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Custom.CustomAI;
-using SPT.Reflection.Patching;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches.Spawning
 {
@@ -50,9 +51,10 @@ namespace QuestingBots.Patches.Spawning
 
             // Check if the the bot group was created by this mod
             bool isGroupFromBotGenerator = false;
-            foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
+            IEnumerable<string> allGeneratedBotProfileIds = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs();
+            foreach (string id in allGeneratedBotProfileIds)
             {
-                if (botGenerator.GetBotGroups().Any(g => g.SpawnedBots.Any(b => groupMemberIDs.Contains(b.Profile.Id))))
+                if (groupMemberIDs.Contains(id))
                 {
                     isGroupFromBotGenerator = true;
                     break;

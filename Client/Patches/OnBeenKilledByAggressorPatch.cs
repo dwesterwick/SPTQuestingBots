@@ -40,7 +40,7 @@ namespace QuestingBots.Patches
             Singleton<LoggingUtil>.Instance.LogInfo(message);
 
             // Make sure the bot doesn't have any active quests if it's dead
-            Controllers.BotJobAssignmentFactory.FailAllJobAssignmentsForBot(__instance.Profile.Id);
+            Controllers.BotJobAssignmentController.FailAllJobAssignmentsForBot(__instance.Profile.Id);
         }
     }
 }

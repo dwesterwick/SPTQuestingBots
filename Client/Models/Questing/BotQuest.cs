@@ -1,22 +1,23 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Game.Spawning;
+using EFT.Interactive;
+using EFT.Quests;
+using Newtonsoft.Json;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using EFT.Game.Spawning;
-using EFT.Interactive;
-using Newtonsoft.Json;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public class Quest : JSONObject<Quest>
+    public class BotQuest : JSONObject<BotQuest>
     {
         [JsonProperty("repeatable")]
         public bool IsRepeatable { get; set; } = false;
@@ -82,7 +83,7 @@ namespace QuestingBots.Models.Questing
         private SerializableVector3[] serializableWaypointPositions { get; set; } = new SerializableVector3[0];
 
         [JsonProperty("objectives")]
-        private QuestObjective[] objectives { get; set; } = new QuestObjective[0];
+        private BotQuestObjective[] objectives { get; set; } = new BotQuestObjective[0];
 
         [JsonIgnore]
         private IList<Vector3> waypointPositions = null!;
@@ -90,24 +91,20 @@ namespace QuestingBots.Models.Questing
         public bool IsEFTQuest => Template != null;
         
         // Return all objectives in the quest
-        public ReadOnlyCollection<QuestObjective> AllObjectives => new ReadOnlyCollection<QuestObjective>(objectives);
+        public ReadOnlyCollection<BotQuestObjective> AllObjectives => new ReadOnlyCollection<BotQuestObjective>(objectives);
         public int NumberOfObjectives => AllObjectives.Count;
 
-        // Return all objectives in the quest that have valid positions for their first step
-        public IEnumerable<QuestObjective> ValidObjectives => AllObjectives.Where(o => o.GetFirstStepPosition() != null);
-        public int NumberOfValidObjectives => ValidObjectives.Count();
-
-        public Quest()
+        public BotQuest()
         {
 
         }
 
-        public Quest(string _name) : this()
+        public BotQuest(string _name) : this()
         {
             name = _name;
         }
 
-        public Quest(SptRawQuestClass template) : this()
+        public BotQuest(SptRawQuestClass template) : this()
         {
             Template = template;
         }
@@ -134,8 +131,24 @@ namespace QuestingBots.Models.Questing
 
         public void Clear()
         {
-            objectives = new QuestObjective[0];
+            objectives = new BotQuestObjective[0];
         }
+
+        // Return all objectives in the quest that have valid positions for their first step
+        public IEnumerable<BotQuestObjective> GetValidObjectives()
+        {
+            foreach (BotQuestObjective objective in objectives)
+            {
+                if (objective.GetFirstStepPosition() == null)
+                {
+                    continue;
+                }
+
+                yield return objective;
+            }
+        }
+
+        public int NumberOfValidObjectives() => GetValidObjectives().Count();
 
         public IList<Vector3> GetWaypointPositions()
         {
@@ -173,13 +186,6 @@ namespace QuestingBots.Models.Questing
 
         public bool CanAssignBot(BotOwner bot)
         {
-            if (!RaidHelpers.HasRaidStarted())
-            {
-                return false;
-            }
-
-            float raidTime = RaidHelpers.GetRaidElapsedSeconds();
-
             if (AlarmQuest && !Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().AlarmState)
             {
                 return false;
@@ -195,6 +201,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
+            float raidTime = RaidHelpers.GetRaidElapsedSeconds();
             bool canAssign = canAssignForBotType(bot)
                 && ((bot.Profile.Info.Level >= MinLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
                 && ((bot.Profile.Info.Level <= MaxLevel) || !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.ExcludeBotsByLevel)
@@ -204,14 +211,14 @@ namespace QuestingBots.Models.Questing
             return canAssign;
         }
 
-        public void AddObjective(QuestObjective objective)
+        public void AddObjective(BotQuestObjective objective)
         {
             objective.UpdateQuestObjectiveStepNumbers();
 
             objectives = objectives.Append(objective).ToArray();
         }
 
-        public bool TryRemoveObjective(QuestObjective objective)
+        public bool TryRemoveObjective(BotQuestObjective objective)
         {
             if (objectives.Length == 0)
             {
@@ -224,31 +231,31 @@ namespace QuestingBots.Models.Questing
             return startingLength == objectives.Length + 1;
         }
 
-        public QuestObjective GetObjectiveForZoneID(string zoneId)
+        public BotQuestObjective GetObjectiveForZoneID(string zoneId)
         {
-            Func<QuestZoneObjective, bool> matchTest = o => o?.ZoneID == zoneId;
+            Func<BotQuestZoneObjective, bool> matchTest = o => o?.ZoneID == zoneId;
             return GetObjective(matchTest);
         }
 
-        public QuestObjective GetObjectiveForLootItem(LootItem item)
+        public BotQuestObjective GetObjectiveForLootItem(LootItem item)
         {
-            Func<QuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == item.TemplateId;
+            Func<BotQuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == item.TemplateId;
             return GetObjective(matchTest);
         }
 
-        public QuestObjective GetObjectiveForLootItem(string templateID)
+        public BotQuestObjective GetObjectiveForLootItem(string templateID)
         {
-            Func<QuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == templateID;
+            Func<BotQuestItemObjective, bool> matchTest = o => o.Item?.TemplateId == templateID;
             return GetObjective(matchTest);
         }
 
-        public QuestObjective GetObjectiveForSpawnPoint(SpawnPointParams spawnPoint)
+        public BotQuestObjective GetObjectiveForSpawnPoint(SpawnPointParams spawnPoint)
         {
-            Func<QuestSpawnPointObjective, bool> matchTest = o => o.SpawnPoint?.Id == spawnPoint.Id;
+            Func<BotQuestSpawnPointObjective, bool> matchTest = o => o.SpawnPoint?.Id == spawnPoint.Id;
             return GetObjective(matchTest);
         }
 
-        private QuestObjective GetObjective<T>(Func<T, bool> matchTestFunc) where T : QuestObjective
+        private BotQuestObjective GetObjective<T>(Func<T, bool> matchTestFunc) where T : BotQuestObjective
         {
             IEnumerable<T> matchingObjectives = objectives
                 .OfType<T>()
@@ -269,7 +276,7 @@ namespace QuestingBots.Models.Questing
 
         private bool isSwitchInCorrectPosition(string switchID, bool mustBeOpen)
         {
-            EFT.Interactive.Switch requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(switchID);
+            EFT.Interactive.Switch? requiredSwitch = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().FindSwitch(switchID);
             if (requiredSwitch == null)
             {
                 return true;

@@ -47,7 +47,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         {
             random = new System.Random();
 
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(BotOwner, out BotSpawnInfo botGroup))
+            if (Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().TryGetBotGroupFromAnyGenerator(BotOwner, out BotSpawnInfo botGroup))
             {
                 maxQuestsScalingFactor = botGroup.IsInitialSpawn ? RaidHelpers.InitialRaidTimeFraction : 1;
             }

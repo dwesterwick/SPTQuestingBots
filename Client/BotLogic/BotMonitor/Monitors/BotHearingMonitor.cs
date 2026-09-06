@@ -87,17 +87,22 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private bool isSuspicious()
         {
+            if (BotMonitor == null)
+            {
+                return false;
+            }
+
             bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
             //if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
             //{
             //    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
             //}
 
-            if (!wasSuspiciousTooLong && BotMonitor.GetMonitor<BotHearingMonitor>().shouldBeSuspicious(suspiciousTime))
+            if (!wasSuspiciousTooLong && shouldBeSuspicious(suspiciousTime))
             {
                 if (!BotHiveMindMonitor.GetValueForBot(BotHiveMindSensorType.IsSuspicious, BotOwner))
                 {
-                    suspiciousTime = BotMonitor.GetMonitor<BotHearingMonitor>().updateSuspiciousTime();
+                    suspiciousTime = updateSuspiciousTime();
                     //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " will be suspicious for " + suspiciousTime + " seconds");
 
                     BotMonitor.GetMonitor<BotLootingMonitor>().TryPreventBotFromLooting((float)suspiciousTime);

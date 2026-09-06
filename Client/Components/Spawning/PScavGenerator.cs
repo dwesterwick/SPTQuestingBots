@@ -113,7 +113,7 @@ namespace QuestingBots.Components.Spawning
             float minDistanceFromOtherPlayers = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.MinDistanceFromPlayersDuringRaidFactory + 5;
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
 
-            string[] allGeneratedProfileIDs = GetAllGeneratedBotProfileIDs().ToArray();
+            string[] allGeneratedProfileIDs = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs().ToArray();
             Vector3[] positionsToAvoid = Singleton<GameWorld>.Instance.AllAlivePlayersList
                 .Where(p => !p.IsAI || allGeneratedProfileIDs.Contains(p.ProfileId))
                 .Select(p => p.Position)
@@ -144,7 +144,7 @@ namespace QuestingBots.Components.Spawning
             // Ensure none of the spawn points are too close to other players or bots
             IEnumerable<Vector3> spawnPositionsForGroup = spawnPointsForGroup.Select(p => p.Position.ToUnityVector3());
             float minSpawnDistance = GetMinSpawnDistanceFromOtherPlayers(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs);
-            if (AreAnyPositionsCloseToAnyGeneratedBots(spawnPositionsForGroup, minSpawnDistance, out float distance))
+            if (Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().AreAnyPositionsCloseToAnyGeneratedBots(spawnPositionsForGroup, minSpawnDistance, out float distance))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot spawn " + BotTypeName + " group at " + spawnPoint.Value.Position.ToUnityVector3().ToString() + ". Another player is " + distance + "m away.");
                 return Enumerable.Empty<Vector3>();

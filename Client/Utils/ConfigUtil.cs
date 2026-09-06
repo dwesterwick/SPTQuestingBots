@@ -128,9 +128,9 @@ namespace QuestingBots.Utils
             return _positions;
         }
 
-        public IEnumerable<Models.Questing.Quest> GetCustomQuests(string locationID)
+        public IEnumerable<Models.Questing.BotQuest> GetCustomQuests(string locationID)
         {
-            Models.Questing.Quest[] standardQuests = new Models.Questing.Quest[0];
+            Models.Questing.BotQuest[] standardQuests = new Models.Questing.BotQuest[0];
             string filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\Quests\\Standard\\" + locationID + ".json";
             if (File.Exists(filename))
             {
@@ -148,7 +148,7 @@ namespace QuestingBots.Utils
                 }
             }
 
-            Models.Questing.Quest[] customQuests = new Models.Questing.Quest[0];
+            Models.Questing.BotQuest[] customQuests = new Models.Questing.BotQuest[0];
             filename = Singleton<LoggingUtil>.Instance.LoggingPath + "..\\Quests\\Custom\\" + locationID + ".json";
             if (File.Exists(filename))
             {

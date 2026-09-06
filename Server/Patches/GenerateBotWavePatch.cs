@@ -7,6 +7,7 @@ using SPTarkov.Server.Core.Models.Eft.Bot;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Services.Bot;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 
@@ -73,11 +74,9 @@ namespace QuestingBots.Patches
             }
         }
 
-        private static List<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
+        private static IEnumerable<BotBase?> ConvertAllToPScav(IEnumerable<BotBase?> bots, int targetCount)
         {
-            List<BotBase?> UpdatedBots = new List<BotBase?>();
             int convertedBots = 0;
-
             foreach (BotBase? bot in bots)
             {
                 if (bot == null)
@@ -92,15 +91,13 @@ namespace QuestingBots.Patches
                     convertedBots++;
                 }
 
-                UpdatedBots.Add(bot);
+                yield return bot;
             }
 
             if (convertedBots < targetCount)
             {
                 _loggingUtil.Warning($"{targetCount} player Scavs were requested, but only {convertedBots} were created");
             }
-
-            return UpdatedBots;
         }
 
         private static bool CanConvertToPScav(BotBase bot)

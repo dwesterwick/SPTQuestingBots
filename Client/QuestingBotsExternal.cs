@@ -22,7 +22,7 @@ namespace QuestingBots
 
         public static IEnumerable<string[]> GetJobAssignmentHistoryCsvData(this BotOwner bot)
         {
-            IEnumerable<BotJobAssignment> allJobAssignments = bot.GetAllQuests();
+            IEnumerable<BotJobAssignment> allJobAssignments = bot.GetAllQuestAssignments();
             foreach (BotJobAssignment assignment in allJobAssignments)
             {
                 yield return new string[]
@@ -135,12 +135,8 @@ namespace QuestingBots
 
         private static BotJobAssignment? GetCurrentJobAssignmentForActiveBot(this BotOwner bot)
         {
-            if (!bot.IsActive())
-            {
-                return null;
-            }
-
-            BotJobAssignment? botJobAssignment = BotJobAssignmentFactory.GetCurrentJobAssignment(bot, false);
+            BotObjectiveManager? botObjectiveManager = bot.GetBotObjectiveManagerForActiveBot();
+            BotJobAssignment? botJobAssignment = botObjectiveManager?.CurrentAssignment;
             return botJobAssignment;
         }
 

@@ -117,7 +117,6 @@ namespace QuestingBots.BotLogic.HiveMind
             return sensor!.GetLastLootingTimeForBoss(bot);
         }
 
-        [Benchmark]
         public static void RegisterBot(BotOwner bot)
         {
             if (bot == null)
@@ -168,7 +167,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public static ReadOnlyCollection<BotOwner> GetFollowers(BotOwner bot)
         {
-            return botFollowers.ContainsKey(bot) ? new ReadOnlyCollection<BotOwner>(botFollowers[bot]) : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            return botFollowers.ContainsKey(bot) ? botFollowers[bot].AsReadOnly() : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
         }
 
         public static ReadOnlyCollection<BotOwner> GetAllGroupMembers(BotOwner bot)
@@ -280,7 +279,7 @@ namespace QuestingBots.BotLogic.HiveMind
             }
 
             // If the bot was spawned by this mod, create a new spawn group for it
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
+            if (Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().TryGetBotGroupFromAnyGenerator(bot, out Models.BotSpawnInfo matchingGroupData))
             {
                 matchingGroupData.SeparateBotOwner(bot);
             }
@@ -418,7 +417,7 @@ namespace QuestingBots.BotLogic.HiveMind
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now a follower for " + boss.GetText());
                 botFollowers[boss].Add(bot);
 
-                BotJobAssignmentFactory.CheckBotJobAssignmentValidity(boss);
+                BotJobAssignmentController.CheckBotJobAssignmentValidity(boss);
             }
         }
 

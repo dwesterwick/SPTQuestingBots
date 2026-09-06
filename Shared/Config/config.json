@@ -20,20 +20,23 @@
 		"enabled": true,
 		"bot_pathing_update_interval_ms": 100,
 		"brain_layer_priorities": {
-			"with_sain" : {
+			"with_sain": {
 				"questing": 18,
 				"following": 19,
 				"regrouping": 26,
 				"sleeping": 250
 			},
-			"without_sain" : {
+			"without_sain": {
 				"questing": 21,
 				"following": 22,
 				"regrouping": 26,
 				"sleeping": 250
 			}
 		},
-		"quest_selection_timeout": 250,
+		"quest_selection": {
+			"max_calc_time_per_frame_ms": 1,
+			"timeout": 20000
+		},
 		"btr_run_distance": 10,
 		"allowed_bot_types_for_questing": {
 			"scav": false,
@@ -48,14 +51,14 @@
 			"follower_break_time": 10,
 			"max_not_able_bodied_time": 120,
 			"stuck_bot_remedies": {
-				"enabled" : true,
+				"enabled": true,
 				"min_time_before_jumping": 6,
 				"jump_debounce_time": 4,
 				"min_time_before_vaulting": 8,
 				"vault_debounce_time": 4
 			}
 		},
-		"unlocking_doors" : {
+		"unlocking_doors": {
 			"enabled": {
 				"scav": false,
 				"pscav": false,
@@ -102,11 +105,11 @@
 			"min_health_legs": 50,
 			"max_overweight_percentage": 100,
 			"search_time_after_combat": {
-				"prioritized_sain" : {
+				"prioritized_sain": {
 					"min": 5,
 					"max": 20
 				},
-				"prioritized_questing" : {
+				"prioritized_questing": {
 					"min": 20,
 					"max": 45
 				}
@@ -188,11 +191,11 @@
 				"min": 0.1,
 				"max": 0.5
 			},
-			"sharp_path_corners" : {
+			"sharp_path_corners": {
 				"distance": 2,
 				"angle": 45
 			},
-			"approaching_closed_doors" : {
+			"approaching_closed_doors": {
 				"distance": 3,
 				"angle": 60
 			}
@@ -232,12 +235,12 @@
 				"chance_of_having_keys": 50,
 				"match_looting_behavior_distance": 5,
 				"level_range": [
-					[0, 99],
-					[1, 8],
-					[10, 15],
-					[20, 25],
-					[30, 30],
-					[40, 40]
+					[ 0, 99 ],
+					[ 1, 8 ],
+					[ 10, 15 ],
+					[ 20, 25 ],
+					[ 30, 30 ],
+					[ 40, 40 ]
 				]
 			},
 			"lightkeeper_island_quests": {

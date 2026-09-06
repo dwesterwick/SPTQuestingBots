@@ -39,8 +39,8 @@ namespace QuestingBots.Models.Questing
 
         public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
         public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
-        public Vector3? LookToPosition => QuestObjectiveStepAssignment?.GetLookToPosition();
-        public Vector3? TargetPosition => QuestObjectiveStepAssignment?.GetTargetPosition();
+        public Vector3? LookToPosition => QuestObjectiveStepAssignment?.LookToPosition;
+        public Vector3? TargetPosition => QuestObjectiveStepAssignment?.TargetPosition;
         public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
         public bool ForceUnlock => QuestObjectiveStepAssignment?.ForceUnlock ?? false;
         public bool RequireForFollowers => QuestObjectiveStepAssignment?.RequireForFollowers ?? false;
@@ -67,7 +67,7 @@ namespace QuestingBots.Models.Questing
             updateBotInfo();
         }
 
-        public BotJobAssignment(BotOwner bot, Quest quest, QuestObjective objective) : this(bot)
+        public BotJobAssignment(BotOwner bot, BotQuest quest, BotQuestObjective objective) : this(bot)
         {
             QuestAssignment = quest;
             QuestObjectiveAssignment = objective;
@@ -78,7 +78,7 @@ namespace QuestingBots.Models.Questing
             }
         }
 
-        public BotJobAssignment(BotOwner bot, Quest quest, QuestObjective objective, QuestObjectiveStep step) : this(bot)
+        public BotJobAssignment(BotOwner bot, BotQuest quest, BotQuestObjective objective, BotQuestObjectiveStep step) : this(bot)
         {
             QuestAssignment = quest;
             QuestObjectiveAssignment = objective;
@@ -124,7 +124,7 @@ namespace QuestingBots.Models.Questing
                 return false;
             }
 
-            QuestObjectiveStep nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
+            BotQuestObjectiveStep? nextStep = QuestObjectiveAssignment.GetNextObjectiveStep(QuestObjectiveStepAssignment, allowReset);
             if (nextStep == null)
             {
                 return false;
@@ -186,7 +186,13 @@ namespace QuestingBots.Models.Questing
 
                 Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to complete quest step " + ToString() + "...");
 
-                BotJobAssignment clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
+                BotJobAssignment? clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
+                if (clonedAssignment == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Tried cloning a null assignment for follower " + follower.GetText());
+                    continue;
+                }
+
                 followerObjectiveManager.SetObjective(clonedAssignment);
             }
         }

@@ -41,10 +41,10 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         private Components.BotQuestBuilder botQuestBuilder = null!;
 
-        public bool MustQuestBeforeFollowing => ObjectiveManager.PrioritizeQuestingOverFollowing || ObjectiveManager.HasTeleportingAssignment;
+        public bool MustQuestBeforeFollowing => (ObjectiveManager != null) && (ObjectiveManager.PrioritizeQuestingOverFollowing || ObjectiveManager.HasTeleportingAssignment);
 
-        private bool allowedToTakeABreak() => ObjectiveManager.IsAllowedToTakeABreak();
-        private bool allowedToInvestigate() => ObjectiveManager.IsAllowedToInvestigate();
+        private bool allowedToTakeABreak() => (ObjectiveManager != null) && ObjectiveManager.IsAllowedToTakeABreak();
+        private bool allowedToInvestigate() => (ObjectiveManager != null) && ObjectiveManager.IsAllowedToInvestigate();
 
         public BotQuestingDecisionMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -75,6 +75,11 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         public override void UpdateIfQuesting()
         {
+            if (BotMonitor == null)
+            {
+                return;
+            }
+
             HasAQuestingBoss = BotMonitor.GetMonitor<BotQuestingMonitor>().HasAQuestingBoss;
             CurrentDecision = getDecision();
         }
@@ -101,7 +106,12 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         private BotQuestingDecision getFollowerDecision()
         {
-            Controllers.BotJobAssignmentFactory.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
+            if (BotMonitor == null)
+            {
+                return BotQuestingDecision.None;
+            }
+
+            Controllers.BotJobAssignmentController.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsInCombat)
             {
@@ -167,6 +177,11 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         private BotQuestingDecision getSoloDecision()
         {
+            if ((ObjectiveManager == null) || (BotMonitor == null))
+            {
+                return BotQuestingDecision.None;
+            }
+
             if (!ObjectiveManager.IsQuestingAllowed)
             {
                 return BotQuestingDecision.None;
@@ -265,7 +280,16 @@ namespace QuestingBots.BotLogic.BotMonitor
 
         private void setLootingHiveMindState(bool value) => BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, value);
 
-        private bool isFollowerTooFarFromBossForQuesting() => BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceQuesting();
+        private bool isFollowerTooFarFromBossForQuesting()
+        {
+            if (BotMonitor == null)
+            {
+                return false;
+            }
+
+            return BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceQuesting();
+        }
+
         private double getFollowerTargetDistanceQuesting()
         {
             MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting;
@@ -278,7 +302,16 @@ namespace QuestingBots.BotLogic.BotMonitor
             return targetFollowerRangeQuesting.Max;
         }
 
-        private bool isFollowerTooFarFromBossForCombat() => BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceCombat();
+        private bool isFollowerTooFarFromBossForCombat()
+        {
+            if (BotMonitor == null)
+            {
+                return false;
+            }
+
+            return BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceCombat();
+        }
+
         private double getFollowerTargetDistanceCombat()
         {
             MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat;
