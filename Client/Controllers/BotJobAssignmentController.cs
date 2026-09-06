@@ -606,6 +606,8 @@ namespace QuestingBots.Controllers
 
         public static void Register(this BotJobAssignment assignment)
         {
+            Singleton<LoggingUtil>.Instance.LogDebug("Registered assignment " + assignment.ToString() + " for " + assignment.BotOwner.GetText());
+
             assignment.BotOwner.InitializeBotJobAssignmentsList();
             botJobAssignments[assignment.BotOwner.Profile.Id].Add(assignment);
         }

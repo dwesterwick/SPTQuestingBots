@@ -38,17 +38,17 @@ namespace QuestingBots.BotLogic.Follow
                 return previousState;
             }
 
+            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor.CurrentDecision != BotQuestingDecision.HelpBoss)
+            {
+                return updatePreviousState(false);
+            }
+
             float pauseRequestTime = getPauseRequestTime();
             if (pauseRequestTime > 0)
             {
                 //Singleton<LoggingUtil>.Instance.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
                 return pauseLayer(pauseRequestTime);
-            }
-
-            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
-            if (decisionMonitor.CurrentDecision != BotQuestingDecision.HelpBoss)
-            {
-                return updatePreviousState(false);
             }
 
             setNextAction(BotActionType.FollowerRegroup, "RegroupWithBoss");

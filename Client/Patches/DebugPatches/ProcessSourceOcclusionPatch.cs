@@ -30,8 +30,7 @@ namespace QuestingBots.Patches.DebugPatches
         {
             if (source == null)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Skipping ProcessSourceOcclusion with null sound for " + player.GetText() + "...");
-
+                //Singleton<LoggingUtil>.Instance.LogWarning("Skipping ProcessSourceOcclusion with null sound for " + player.GetText() + "...");
                 return false;
             }
 

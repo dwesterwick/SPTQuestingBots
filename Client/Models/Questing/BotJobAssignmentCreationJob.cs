@@ -18,8 +18,6 @@ namespace QuestingBots.Models.Questing
 {
     public class BotJobAssignmentCreationJob : IBotJobAssignmentCreationJob
     {
-        private const float MAX_CYCLE_TIME_MS = 1;
-
         public bool IsCreatingAnAssignment { get; private set; } = false;
         public bool NewAssignmentReady { get; private set; } = false;
 
@@ -35,9 +33,16 @@ namespace QuestingBots.Models.Questing
 
         public BotJobAssignment? AssignmentCreationResult => NewAssignmentReady ? _assignmentCreationResult : null;
 
-        private bool jobHasBeenRunningTooLong => _timeoutMonitor.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelectionTimeout;
+        private bool jobHasBeenRunningTooLong => _timeoutMonitor.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelection.Timeout;
         private double elapsedCycleTime => (double)_cycleTimer.ElapsedTicks / (double)Stopwatch.Frequency;
-        private bool maxCycleTimeExceeded => elapsedCycleTime > MAX_CYCLE_TIME_MS;
+        private bool maxCycleTimeExceeded => elapsedCycleTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelection.MaxCalcTimePerFrame;
+
+        private int _distanceRandomness => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness;
+        private float _maxExfilAngle => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionMaxAngle;
+        private int _desirabilityRandomness => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityRandomness;
+        private float _distanceWeighting => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceWeighting;
+        private float _desirabilityWeighting => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityWeighting;
+        private Dictionary<string, float> _exfilDirectionWeighting => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting;
 
         public BotJobAssignmentCreationJob(BotOwner botOwner)
         {
@@ -211,14 +216,7 @@ namespace QuestingBots.Models.Questing
             yield return HasReachMaxCalculationTimeForFrame();
 
             double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
-            int distanceRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceRandomness;
-            int maxRandomDistance = (int)Math.Ceiling(maxDistance * distanceRandomness / 100.0);
-            float maxExfilAngle = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionMaxAngle;
-
-            int desirabilityRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityRandomness;
-
-            float distanceWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DistanceWeighting;
-            float desirabilityWeighting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.DesirabilityWeighting;
+            int maxRandomDistance = (int)Math.Ceiling(maxDistance * _distanceRandomness / 100.0);
             float exfilDirectionWeighting = GetExfilWeighting();
 
             double maxWeight = double.MinValue;
@@ -228,10 +226,10 @@ namespace QuestingBots.Models.Questing
                 Configuration.MinMaxConfig exfilAngleRange = questExfilAngleRanges[quest];
 
                 double distanceFraction = 1 - ((distanceRange.Min + _random.Next(-1 * maxRandomDistance, maxRandomDistance)) / maxDistance);
-                double desirabilityFraction = (quest.Desirability * DesirabilityMultiplier(quest) + _random.Next(-1 * desirabilityRandomness, desirabilityRandomness)) / 100;
-                double exfilAngleFactor = Math.Max(0, exfilAngleRange.Min - maxExfilAngle) / (180 - maxExfilAngle);
+                double desirabilityFraction = (quest.Desirability * DesirabilityMultiplier(quest) + _random.Next(-1 * _desirabilityRandomness, _desirabilityRandomness)) / 100;
+                double exfilAngleFactor = Math.Max(0, exfilAngleRange.Min - _maxExfilAngle) / (180 - _maxExfilAngle);
 
-                double weight = (distanceFraction * distanceWeighting) + (desirabilityFraction * desirabilityWeighting) + (exfilAngleFactor * exfilDirectionWeighting);
+                double weight = (distanceFraction * _distanceWeighting) + (desirabilityFraction * _desirabilityWeighting) + (exfilAngleFactor * exfilDirectionWeighting);
                 if (weight > maxWeight)
                 {
                     _nextRandomQuest = quest;
@@ -251,7 +249,6 @@ namespace QuestingBots.Models.Questing
             }
         }
 
-        [Benchmark]
         private Dictionary<BotQuest, Configuration.MinMaxConfig> GetQuestDistanceRanges(IEnumerable<BotQuest> quests)
         {
             Dictionary<BotQuest, Configuration.MinMaxConfig> questDistanceRanges = new Dictionary<BotQuest, Configuration.MinMaxConfig>();
@@ -288,7 +285,6 @@ namespace QuestingBots.Models.Questing
             return questDistanceRanges;
         }
 
-        [Benchmark]
         private Dictionary<BotQuest, Configuration.MinMaxConfig> GetQuestExfilAngleRanges(IEnumerable<BotQuest> quests)
         {
             Dictionary<BotQuest, Configuration.MinMaxConfig> questExfilAngleRanges = new Dictionary<BotQuest, Configuration.MinMaxConfig>();
@@ -360,13 +356,14 @@ namespace QuestingBots.Models.Questing
         private float GetExfilWeighting()
         {
             string locationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey(locationId))
+
+            if (_exfilDirectionWeighting.ContainsKey(locationId))
             {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting[locationId];
+                return _exfilDirectionWeighting[locationId];
             }
-            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting.ContainsKey("default"))
+            else if (_exfilDirectionWeighting.ContainsKey("default"))
             {
-                return Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.ExfilDirectionWeighting["default"];
+                return _exfilDirectionWeighting["default"];
             }
 
             return 0;
