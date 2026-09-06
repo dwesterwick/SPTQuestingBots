@@ -186,8 +186,8 @@ namespace QuestingBots.Models.Questing
         {
             _nextRandomQuest = null;
 
-            IEnumerable<BotQuest> assignableQuests = _botOwner.GetAllPossibleQuests();
-            if (!assignableQuests.Any())
+            BotQuest[] assignableQuests = _botOwner.GetAllPossibleQuests().ToArray();
+            if (assignableQuests.Length == 0)
             {
                 yield break;
             }
