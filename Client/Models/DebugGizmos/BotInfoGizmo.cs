@@ -100,13 +100,12 @@ namespace QuestingBots.Models.DebugGizmos
 
             bool mustQuest = (boss == null) || botQuestingDecisionMonitor.MustQuestBeforeFollowing;
 
-            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment();
-            if ((botJobAssignment != null) && mustQuest)
+            if ((botObjectiveManager.CurrentAssignment != null) && mustQuest)
             {
-                sb.AppendLabeledValue("Quest", botJobAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
-                sb.AppendLabeledValue("Objective", botJobAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
-                sb.AppendLabeledValue("Step", botJobAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
-                sb.AppendLabeledValue("Status", botJobAssignment.Status.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Quest", botObjectiveManager.CurrentAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
+                sb.AppendLabeledValue("Objective", botObjectiveManager.CurrentAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Step", botObjectiveManager.CurrentAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
+                sb.AppendLabeledValue("Status", botObjectiveManager.CurrentAssignment.Status.ToString(), Color.white, Color.white);
             }
 
             sb.AppendLabeledValue("Current Decision", botQuestingDecisionMonitor.CurrentDecision.ToString(), Color.white, Color.white);

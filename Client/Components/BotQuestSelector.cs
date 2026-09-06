@@ -101,11 +101,6 @@ namespace QuestingBots.Components
             return _exfiltrationPoint.transform.position - _botOwner.Position;
         }
 
-        public BotJobAssignment? GetCurrentJobAssignment()
-        {
-            return _botOwner.GetMostRecentJobAssignment();
-        }
-
         public void AcceptNewAssignment()
         {
             if (!NewAssignmentReady)

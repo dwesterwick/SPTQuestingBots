@@ -186,7 +186,13 @@ namespace QuestingBots.Models.Questing
 
                 Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to complete quest step " + ToString() + "...");
 
-                BotJobAssignment clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
+                BotJobAssignment? clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
+                if (clonedAssignment == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Tried cloning a null assignment for follower " + follower.GetText());
+                    continue;
+                }
+
                 followerObjectiveManager.SetObjective(clonedAssignment);
             }
         }

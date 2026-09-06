@@ -540,14 +540,15 @@ namespace QuestingBots.Controllers
 
         public static bool CanBotSelectQuestObjective(this BotQuestObjective objective, BotOwner bot)
         {
-            List<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id];
-            if (matchingAssignments.Count == 0)
+            List<BotJobAssignment> botAssignments = botJobAssignments[bot.Profile.Id];
+            if (botAssignments.Count == 0)
             {
                 return true;
             }
 
             bool allArchived = true;
-            foreach (BotJobAssignment assignment in matchingAssignments)
+            int matchingAssignments = 0;
+            foreach (BotJobAssignment assignment in botAssignments)
             {
                 if (assignment.QuestObjectiveAssignment != objective)
                 {
@@ -560,9 +561,10 @@ namespace QuestingBots.Controllers
                 }
 
                 allArchived = allArchived & assignment.Status == JobAssignmentStatus.Archived;
+                matchingAssignments++;
             }
 
-            return objective.IsRepeatable && allArchived;
+            return matchingAssignments > 0 ? objective.IsRepeatable && allArchived : true;
         }
 
         public static bool HasBotBeingDoingQuestTooLong(this BotQuest quest, BotOwner bot, out double? time)
@@ -822,14 +824,13 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            BotJobAssignment? botJobAssignment = botObjectiveManager.QuestSelector.GetCurrentJobAssignment();
-            if (botJobAssignment?.QuestAssignment == null)
+            if (botObjectiveManager.CurrentAssignment == null)
             {
                 return;
             }
 
             int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
-            if (botGroupSize > botJobAssignment.QuestAssignment.MaxBotsInGroup)
+            if (botGroupSize > botObjectiveManager.CurrentAssignment.QuestAssignment.MaxBotsInGroup)
             {
                 if (botObjectiveManager.TryChangeObjective())
                 {
@@ -837,7 +838,7 @@ namespace QuestingBots.Controllers
                 }
                 else
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot select new quest for " + bot.GetText() + ". It has too many followers for quest " + botJobAssignment.QuestAssignment.ToString());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot select new quest for " + bot.GetText() + ". It has too many followers for quest " + botObjectiveManager.CurrentAssignment.QuestAssignment.ToString());
                 }
             }
         }

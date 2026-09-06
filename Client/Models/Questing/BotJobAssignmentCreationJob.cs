@@ -25,11 +25,13 @@ namespace QuestingBots.Models.Questing
 
         private BotOwner _botOwner;
         private BotObjectiveManager _objectiveManager = null!;
+        private List<BotQuest> availableQuests = new List<BotQuest>();
         private Stopwatch _timeoutMonitor = new Stopwatch();
         private Stopwatch _cycleTimer = new Stopwatch();
         private System.Random _random = new System.Random();
         private BotJobAssignment? _assignmentCreationResult = null;
         private BotQuest? _nextRandomQuest = null;
+        
 
         public BotJobAssignment? AssignmentCreationResult => NewAssignmentReady ? _assignmentCreationResult : null;
 
@@ -59,7 +61,11 @@ namespace QuestingBots.Models.Questing
 
             try
             {
-                 yield return TryGetNextAssignment();
+                RefreshAvailableQuests();
+                if (availableQuests.Count > 0)
+                {
+                    yield return TryGetNextAssignment();
+                }
 
                 if (_assignmentCreationResult != null)
                 {
@@ -77,6 +83,12 @@ namespace QuestingBots.Models.Questing
             }
         }
 
+        [Benchmark]
+        private void RefreshAvailableQuests()
+        {
+            availableQuests = _botOwner.GetAllPossibleQuests().ToList();
+        }
+
         private IEnumerator TryGetNextAssignment()
         {
             _timeoutMonitor.Restart();
@@ -92,6 +104,12 @@ namespace QuestingBots.Models.Questing
 
                 quest = _nextRandomQuest;
                 objective = GetNextObjectiveForQuest(quest);
+
+                if ((objective == null) && (quest != null))
+                {
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Temporarily blacklisted unavailable quest " + quest.ToString() + " for " + _botOwner.GetText());
+                    availableQuests.Remove(quest);
+                }
                 
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if ((objective == null) && jobHasBeenRunningTooLong)
@@ -169,7 +187,7 @@ namespace QuestingBots.Models.Questing
         private void StopQuestingAndExtract()
         {
             // If there are still no quests available for the bot to select, give up trying to select one
-            Singleton<LoggingUtil>.Instance.LogError(_botOwner.GetText() + " could not select any of the following quests: " + string.Join(", ", _botOwner.GetAllPossibleQuests()));
+            Singleton<LoggingUtil>.Instance.LogError(_botOwner.GetText() + " could not select any of the following quests: " + string.Join(", ", availableQuests));
             _objectiveManager.StopQuesting();
 
             // Try making the bot extract because it has nothing to do
@@ -186,16 +204,10 @@ namespace QuestingBots.Models.Questing
         {
             _nextRandomQuest = null;
 
-            BotQuest[] assignableQuests = _botOwner.GetAllPossibleQuests().ToArray();
-            if (assignableQuests.Length == 0)
-            {
-                yield break;
-            }
-
-            Dictionary<BotQuest, Configuration.MinMaxConfig> questDistanceRanges = GetQuestDistanceRanges(assignableQuests);
+            Dictionary<BotQuest, Configuration.MinMaxConfig> questDistanceRanges = GetQuestDistanceRanges(availableQuests);
             yield return HasReachMaxCalculationTimeForFrame();
 
-            Dictionary<BotQuest, Configuration.MinMaxConfig> questExfilAngleRanges = GetQuestExfilAngleRanges(assignableQuests);
+            Dictionary<BotQuest, Configuration.MinMaxConfig> questExfilAngleRanges = GetQuestExfilAngleRanges(availableQuests);
             yield return HasReachMaxCalculationTimeForFrame();
 
             double maxDistance = questDistanceRanges.Max(o => o.Value.Max);
@@ -210,7 +222,7 @@ namespace QuestingBots.Models.Questing
             float exfilDirectionWeighting = GetExfilWeighting();
 
             double maxWeight = double.MinValue;
-            foreach (BotQuest quest in assignableQuests)
+            foreach (BotQuest quest in availableQuests)
             {
                 Configuration.MinMaxConfig distanceRange = questDistanceRanges[quest];
                 Configuration.MinMaxConfig exfilAngleRange = questExfilAngleRanges[quest];
