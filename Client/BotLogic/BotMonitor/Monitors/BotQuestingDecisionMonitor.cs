@@ -63,6 +63,26 @@ namespace QuestingBots.BotLogic.BotMonitor
             return true;
         }
 
+        public bool ShouldFollowBoss()
+        {
+            if (!HasAQuestingBoss)
+            {
+                return false;
+            }
+
+            if (ObjectiveManager == null)
+            {
+                return false;
+            }
+
+            if (ObjectiveManager.PrioritizeQuestingOverFollowing || ObjectiveManager.HasTeleportingAssignment)
+            {
+                return false;
+            }
+
+            return true; 
+        }
+
         public override void Start()
         {
             botQuestBuilder = Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>();

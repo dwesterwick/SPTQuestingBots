@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EFT;
+using QuestingBots.BotLogic.BotMonitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -50,6 +51,12 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
+            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor.ShouldFollowBoss())
             {
                 return;
             }

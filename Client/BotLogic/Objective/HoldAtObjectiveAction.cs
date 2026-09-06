@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
 
 namespace QuestingBots.BotLogic.Objective
 {
@@ -52,6 +53,12 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
+            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor.ShouldFollowBoss())
             {
                 return;
             }

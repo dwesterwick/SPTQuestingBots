@@ -49,7 +49,7 @@ namespace QuestingBots.BotLogic.Objective
                 return updatePreviousState(false);
             }
 
-            if (decisionMonitor.HasAQuestingBoss && !objectiveManager.PrioritizeQuestingOverFollowing && !objectiveManager.HasTeleportingAssignment)
+            if (decisionMonitor.ShouldFollowBoss())
             {
                 return updatePreviousState(false);
             }
