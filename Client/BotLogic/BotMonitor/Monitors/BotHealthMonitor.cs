@@ -2,7 +2,6 @@
 using EFT;
 using EFT.HealthSystem;
 using QuestingBots.BotLogic.HiveMind;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -103,7 +102,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (IsAbleBodied)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is not able-bodied");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is not able-bodied");
                 }
 
                 notAbleBodiedTimer.Start();
@@ -112,7 +111,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if (!IsAbleBodied)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is now able-bodied");
+                //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is now able-bodied");
             }
 
             notAbleBodiedTimer.Reset();
@@ -126,7 +125,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (!NeedsToHeal)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to heal");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to heal");
                 }
 
                 mustHealTimer.Start();
@@ -135,7 +134,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if (NeedsToHeal)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has finished healing");
+                //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has finished healing");
             }
 
             mustHealTimer.Reset();
@@ -149,7 +148,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (!NeedsToEatOrDrink)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to drink");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to drink");
                 }
                 return true;
             }
@@ -159,14 +158,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (!NeedsToEatOrDrink)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to eat");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to eat");
                 }
                 return true;
             }
 
             if (NeedsToEatOrDrink)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " no longer needs to eat or drink");
+                //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " no longer needs to eat or drink");
             }
             return false;
         }
@@ -192,14 +191,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (!HasLowHealth)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has one or more body parts with health too low for questing");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has one or more body parts with health too low for questing");
                 }
                 return true;
             }
 
             if (HasLowHealth)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " now has enough health for questing");
+                //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " now has enough health for questing");
             }
             return false;
         }
@@ -211,14 +210,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 if (!IsOverweight)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is overweight");
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is overweight");
                 }
                 return true;
             }
 
             if (IsOverweight)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is no longer overweight");
+                //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is no longer overweight");
             }
             return false;
         }

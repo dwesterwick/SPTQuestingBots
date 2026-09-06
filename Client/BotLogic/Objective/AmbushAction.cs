@@ -76,6 +76,11 @@ namespace QuestingBots.BotLogic.Objective
                 return;
             }
 
+            if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
             if (!ObjectiveManager.Position.HasValue)
             {
                 throw new InvalidOperationException("Cannot go to a null position");

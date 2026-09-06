@@ -64,6 +64,11 @@ namespace QuestingBots.BotLogic.Objective
                 throw new InvalidOperationException("Cannot go to a null position");
             }
 
+            if (!ObjectiveManager.IsJobAssignmentActive)
+            {
+                return;
+            }
+
             ObjectiveManager.StartJobAssigment();
 
             // This doesn't really need to be updated every frame

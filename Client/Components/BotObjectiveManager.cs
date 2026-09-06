@@ -196,6 +196,7 @@ namespace QuestingBots.Components
                 return;
             }
 
+            //Singleton<LoggingUtil>.Instance.LogDebug("Refreshing job assignment for " + botOwner.GetText());
             QuestSelector.RefreshJobAssignment();
         }
 
