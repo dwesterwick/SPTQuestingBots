@@ -28,7 +28,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public TimeSpan TimeSinceBossLastLooted => DateTime.Now - BotHiveMindMonitor.GetLastLootingTimeForBoss(BotOwner);
         public bool BossWillAllowLootingByTime => TimeSinceBossLastLooted.TotalSeconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MinTimeBetweenFollowerLootingChecks;
-        public bool BossWillAllowLootingByDistance => BotHiveMindMonitor.GetDistanceToBoss(BotOwner) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
+        public bool BossWillAllowLootingByDistance => BotHiveMindMonitor.GetDistanceToGroupLeader(BotOwner) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
         public bool BossWillAllowLooting => (BossWillAllowLootingByTime && ShouldCheckForLoot()) || (BossWillAllowLootingByDistance && IsLooting);
         public bool IsForcedToSearchForLoot => forcedLootSearchTimer.IsRunning && (forcedLootSearchTimer.ElapsedMilliseconds < 1000 * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxLootScanTime);
 

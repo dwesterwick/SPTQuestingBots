@@ -20,7 +20,7 @@ namespace QuestingBots.Helpers
             IEnumerable<BotBrainType> allNonSniperBrains = GetAllNonSniperBrains();
             IEnumerable<BotBrainType> allBrains = allNonSniperBrains.AddAllSniperBrains();
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
+            //Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for sleeping: " + string.Join(", ", allBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Sleep.SleepingLayer), allBrains.ToStringList(), brainLayerPriorities.Sleeping);
 
             if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.Enabled)
@@ -28,12 +28,14 @@ namespace QuestingBots.Helpers
                 return;
             }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
+            //Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for questing: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Objective.BotObjectiveLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Questing);
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allNonSniperBrains));
+            //Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for following: " + string.Join(", ", allNonSniperBrains));
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Following);
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Regrouping);
+
+            Singleton<LoggingUtil>.Instance.LogDebug("Questing Bots brain layers added");
         }
 
         public static bool AllowsQuesting(this BotType botType)
@@ -372,12 +374,23 @@ namespace QuestingBots.Helpers
         
         public static IEnumerable<IPlayer> HumanAndSimulatedPlayers(this IEnumerable<IPlayer> players)
         {
-            return players.Where(p => p.ShouldPlayerBeTreatedAsHuman());
+            foreach (IPlayer player in players)
+            {
+                if (player.ShouldPlayerBeTreatedAsHuman())
+                {
+                    yield return player;
+                }
+            }
         }
 
         public static bool ShouldPlayerBeTreatedAsHuman(this IPlayer player)
         {
-            return !player.IsAI || Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs().Contains(player.Profile.Id);
+            if (!player.IsAI)
+            {
+                return true;
+            }
+
+            return Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().TryGetBotGroupFromAnyGenerator(player.Profile.Id, out _);
         }
 
         public static bool ShouldPlayerBeTreatedAsHuman(this BotOwner bot)

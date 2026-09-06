@@ -20,9 +20,16 @@ namespace QuestingBots.Patches.Spawning.Advanced
         [PatchPostfix]
         protected static void PatchPostfix(ref List<BotOwner> __result, BotZone zone)
         {
-            List<BotOwner> remainingBots = __result
-                .Where(b => !b.ShouldPlayerBeTreatedAsHuman())
-                .ToList();
+            List<BotOwner> remainingBots = new List<BotOwner>();
+            foreach (BotOwner bot in __result)
+            {
+                if (bot.ShouldPlayerBeTreatedAsHuman())
+                {
+                    continue;
+                }
+
+                remainingBots.Add(bot);
+            }
 
             __result = remainingBots;
         }

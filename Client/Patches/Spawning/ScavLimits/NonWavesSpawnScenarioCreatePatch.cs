@@ -12,7 +12,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 {
     public class NonWavesSpawnScenarioCreatePatch : ModulePatch
     {
-        public static NonWavesSpawnScenario MostRecentNonWavesSpawnScenario { get; private set; } = null!;
+        public static NonWavesSpawnScenario? MostRecentNonWavesSpawnScenario { get; private set; } = null;
 
         private static Dictionary<float, int> spawnedScavTimes = new Dictionary<float, int>();
 
@@ -31,7 +31,7 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
         public static void Clear()
         {
-            MostRecentNonWavesSpawnScenario = null!;
+            MostRecentNonWavesSpawnScenario = null;
             spawnedScavTimes.Clear();
         }
 

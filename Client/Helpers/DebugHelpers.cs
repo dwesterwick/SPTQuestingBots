@@ -185,13 +185,13 @@ namespace QuestingBots.Helpers
             if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
             {
                 // Check if overlays are enabled for questing bosses (leaders)
-                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasBoss(bot))
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasGroupLeader(bot))
                 {
                     return true;
                 }
 
                 // Check if overlays are enabled for questing followers
-                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasBoss(bot))
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasGroupLeader(bot))
                 {
                     return true;
                 }

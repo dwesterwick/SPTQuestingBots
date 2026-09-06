@@ -38,7 +38,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public DateTime GetLastLootingTimeForBoss(BotOwner bot)
         {
-            if ((bot == null) || !BotHiveMindMonitor.botBosses.ContainsKey(bot) || (BotHiveMindMonitor.botBosses[bot] == null))
+            if ((bot == null) || !BotHiveMindMonitor.botGroupLeaders.ContainsKey(bot) || (BotHiveMindMonitor.botGroupLeaders[bot] == null))
             {
                 return DateTime.MinValue;
             }

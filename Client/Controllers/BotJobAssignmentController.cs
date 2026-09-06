@@ -161,7 +161,7 @@ namespace QuestingBots.Controllers
 
         public static IEnumerable<BotQuest> GetAllPossibleQuests(this BotOwner bot)
         {
-            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetGroupFollowers(bot).Count + 1;
 
             foreach (BotQuest quest in allQuests)
             {
@@ -831,7 +831,7 @@ namespace QuestingBots.Controllers
                 return;
             }
 
-            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(bot).Count + 1;
+            int botGroupSize = BotLogic.HiveMind.BotHiveMindMonitor.GetGroupFollowers(bot).Count + 1;
             if (botGroupSize > botObjectiveManager.CurrentAssignment.QuestAssignment.MaxBotsInGroup)
             {
                 if (botObjectiveManager.TryChangeObjective())

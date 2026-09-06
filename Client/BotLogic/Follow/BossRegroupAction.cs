@@ -49,11 +49,16 @@ namespace QuestingBots.BotLogic.Follow
             bool mustRegroup = ActionElpasedTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
 
             // determine the location of the nearest follower and the target distance to it
-            Vector3 locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
+            Vector3? locationOfNearestGroupMember = BotHiveMindMonitor.GetLocationOfNearestGroupMember(BotOwner);
+            if (locationOfNearestGroupMember == null)
+            {
+                return;
+            }
+
             float targetDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
             
             // Check if the bot should find its nearest follower
-            if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember) > targetDistance + 2)
+            if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember.Value) > targetDistance + 2)
             {
                 float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
                 RecalculatePath(locationOfNearestGroupMember, allowedVariation, targetDistance);
@@ -68,7 +73,7 @@ namespace QuestingBots.BotLogic.Follow
             {
                 if (!wasStuck)
                 {
-                    IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner);
+                    IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner);
                     string followersText = string.Join(", ", followers.Select(f => f.GetText()));
 
                     Singleton<LoggingUtil>.Instance.LogWarning("Boss " + BotOwner.GetText() + " has been waiting for his followers (" + followersText + ") for a long time...");

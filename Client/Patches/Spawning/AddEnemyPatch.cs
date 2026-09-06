@@ -39,8 +39,8 @@ namespace QuestingBots.Patches.Spawning
 
             // Get the ID's of all group members
             List<BotOwner> groupMemberList = __instance.GetAllMembers();
-            string[] groupMemberIDs = groupMemberList.Select(m => m.Profile.Id).ToArray();
-
+            
+            //string[] groupMemberIDs = groupMemberList.Select(m => m.Profile.Id).ToArray();
             //Singleton<LoggingUtil>.Instance.LogInfo("You are now an enemy of " + string.Join(", ", groupMemberIDs) + " due to reason: " + cause.ToString());
 
             // We only care about one enemy cause
@@ -51,10 +51,10 @@ namespace QuestingBots.Patches.Spawning
 
             // Check if the the bot group was created by this mod
             bool isGroupFromBotGenerator = false;
-            IEnumerable<string> allGeneratedBotProfileIds = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>().GetAllGeneratedBotProfileIDs();
-            foreach (string id in allGeneratedBotProfileIds)
+            BotGenerationManager botGenerationManager = Singleton<GameWorld>.Instance.GetComponent<BotGenerationManager>();
+            foreach (BotOwner member in groupMemberList)
             {
-                if (groupMemberIDs.Contains(id))
+                if (botGenerationManager.TryGetBotGroupFromAnyGenerator(member, out _))
                 {
                     isGroupFromBotGenerator = true;
                     break;

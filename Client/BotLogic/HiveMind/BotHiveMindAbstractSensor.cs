@@ -45,7 +45,7 @@ namespace QuestingBots.BotLogic.HiveMind
             return botState.ContainsKey(bot);
         }
 
-        public virtual void Update(Action<BotOwner> additionalAction = null!)
+        public virtual void Update(Action<BotOwner>? additionalAction = null)
         {
             foreach (BotOwner bot in botState.Keys.ToArray())
             {
@@ -79,7 +79,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public virtual bool CheckForBossOfBot(BotOwner bot)
         {
-            return checkBotState(botState, BotHiveMindMonitor.GetBoss(bot)) ?? defaultValue;
+            return checkBotState(botState, BotHiveMindMonitor.GetGroupLeader(bot)) ?? defaultValue;
         }
 
         public virtual bool CheckForFollowers(BotOwner bot)
@@ -122,12 +122,12 @@ namespace QuestingBots.BotLogic.HiveMind
 
         private bool checkStateForAnyFollowers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
-            if (!BotHiveMindMonitor.botFollowers.ContainsKey(bot))
+            if (!BotHiveMindMonitor.botGroupFollowers.ContainsKey(bot))
             {
                 return false;
             }
 
-            foreach (BotOwner follower in BotHiveMindMonitor.botFollowers[bot].ToArray())
+            foreach (BotOwner follower in BotHiveMindMonitor.botGroupFollowers[bot].ToArray())
             {
                 if (!dict.TryGetValue(follower, out bool value))
                 {
@@ -145,7 +145,7 @@ namespace QuestingBots.BotLogic.HiveMind
 
         private bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
-            BotOwner boss = BotHiveMindMonitor.GetBoss(bot) ?? bot;
+            BotOwner boss = BotHiveMindMonitor.GetGroupLeader(bot) ?? bot;
 
             if (checkBotState(dict, boss) == true)
             {

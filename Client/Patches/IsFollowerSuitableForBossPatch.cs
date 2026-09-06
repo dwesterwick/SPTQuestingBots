@@ -60,9 +60,12 @@ namespace QuestingBots.Patches
             }
 
             // Allow the offer to join the boss's group if it spawned in that group
-            if (bossGroupMemberProfiles.Any(m => m.Id == offer.Profile.Id))
+            foreach (Profile profile in bossGroupMemberProfiles)
             {
-                return true;
+                if (profile.Id == offer.Profile.Id)
+                {
+                    return true;
+                }
             }
 
             Singleton<LoggingUtil>.Instance.LogInfo("Preventing " + offer.GetText() + " from becoming a follower for " + __instance.Owner.GetText());

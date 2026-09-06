@@ -12,7 +12,7 @@ namespace QuestingBots.Components.Spawning
     public class BotGenerationManager : MonoBehaviour
     {
         private List<BotGenerator> activeBotGenerators = new List<BotGenerator>();
-        private Dictionary<BotOwner, Models.BotSpawnInfo> botSpawnInfoCache = new Dictionary<BotOwner, Models.BotSpawnInfo>();
+        private Dictionary<string, Models.BotSpawnInfo> botSpawnInfoCache = new Dictionary<string, Models.BotSpawnInfo>();
 
         public void AddActiveBotGenerator(BotGenerator botGenerator)
         {
@@ -83,7 +83,10 @@ namespace QuestingBots.Components.Spawning
 
         public IEnumerable<string> GetAllGeneratedBotProfileIDs()
         {
-            return GetAllGeneratedBotProfiles().Select(b => b.Id);
+            foreach (Profile profile in GetAllGeneratedBotProfiles())
+            {
+                yield return profile.Id;
+            }
         }
 
         public IEnumerable<Profile> GetAllGeneratedBotProfiles()
@@ -120,9 +123,13 @@ namespace QuestingBots.Components.Spawning
         {
             foreach (Models.BotSpawnInfo botGroup in GetAllBotGroups())
             {
-                IEnumerable<BotOwner> aliveBots = botGroup.SpawnedBots.Where(b => (b != null) && !b.IsDead);
-                foreach (BotOwner bot in aliveBots)
+                foreach (BotOwner bot in botGroup.SpawnedBots)
                 {
+                    if ((bot == null) || bot.IsDead)
+                    {
+                        continue;
+                    }
+
                     distance = Vector3.Distance(bot.Position, position);
                     if (distance <= distanceFromPlayers)
                     {
@@ -137,7 +144,10 @@ namespace QuestingBots.Components.Spawning
 
         public IEnumerable<string> GetGeneratedBotProfileIDs(BotGenerator botGenerator)
         {
-            return GetGeneratedBotProfiles(botGenerator).Select(b => b.Id);
+            foreach (Profile profile in GetGeneratedBotProfiles(botGenerator))
+            {
+                yield return profile.Id;
+            }
         }
 
         public IEnumerable<Profile> GetGeneratedBotProfiles(BotGenerator botGenerator)
@@ -153,18 +163,31 @@ namespace QuestingBots.Components.Spawning
 
         public bool TryGetBotGroup(BotGenerator botGenerator, BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
         {
+            return TryGetBotGroup(botGenerator, bot.Profile.Id, out matchingGroupData);
+        }
+
+        public bool TryGetBotGroup(BotGenerator botGenerator, string profileId, out Models.BotSpawnInfo matchingGroupData)
+        {
+            if (botSpawnInfoCache.ContainsKey(profileId))
+            {
+                matchingGroupData = botSpawnInfoCache[profileId];
+                return true;
+            }
+
             matchingGroupData = null!;
 
             foreach (Models.BotSpawnInfo info in botGenerator.GetBotGroups())
             {
                 foreach (Profile profile in info.Data.Profiles)
                 {
-                    if (profile.Id != bot.Profile.Id)
+                    if (profile.Id != profileId)
                     {
                         continue;
                     }
 
                     matchingGroupData = info;
+                    botSpawnInfoCache.Add(profileId, matchingGroupData);
+
                     return true;
                 }
             }
@@ -174,17 +197,21 @@ namespace QuestingBots.Components.Spawning
 
         public bool TryGetBotGroupFromAnyGenerator(BotOwner bot, out Models.BotSpawnInfo matchingGroupData)
         {
-            if (botSpawnInfoCache.ContainsKey(bot))
+            return TryGetBotGroupFromAnyGenerator(bot.Profile.Id, out matchingGroupData);
+        }
+
+        public bool TryGetBotGroupFromAnyGenerator(string profileId, out Models.BotSpawnInfo matchingGroupData)
+        {
+            if (botSpawnInfoCache.ContainsKey(profileId))
             {
-                matchingGroupData = botSpawnInfoCache[bot];
+                matchingGroupData = botSpawnInfoCache[profileId];
                 return true;
             }
 
             foreach (BotGenerator botGenerator in activeBotGenerators)
             {
-                if (TryGetBotGroup(botGenerator, bot, out matchingGroupData) == true)
+                if (TryGetBotGroup(botGenerator, profileId, out matchingGroupData) == true)
                 {
-                    botSpawnInfoCache.Add(bot, matchingGroupData);
                     return true;
                 }
             }

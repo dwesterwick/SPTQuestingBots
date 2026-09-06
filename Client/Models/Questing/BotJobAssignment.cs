@@ -170,7 +170,7 @@ namespace QuestingBots.Models.Questing
                 return;
             }
 
-            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner))
+            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner))
             {
                 if ((follower == null) || follower.IsDead)
                 {

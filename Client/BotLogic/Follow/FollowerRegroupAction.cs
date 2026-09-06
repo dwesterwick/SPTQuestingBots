@@ -89,7 +89,7 @@ namespace QuestingBots.BotLogic.Follow
 
         private Vector3? getTargetPosition()
         {
-            BotOwner boss = BotHiveMindMonitor.GetBoss(BotOwner);
+            BotOwner boss = BotHiveMindMonitor.GetGroupLeader(BotOwner);
             if (boss == null)
             {
                 return null;

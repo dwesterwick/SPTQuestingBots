@@ -10,6 +10,7 @@ using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using QuestingBots.Utils.Benchmarking;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,8 +22,7 @@ namespace QuestingBots.Components
 {
     public class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
-        public bool IsInitialized { get; private set; } = false;
-        public bool IsInitialQuestSelectionComplete { get; private set; } = false;
+        public bool HasInitialQuestBeenSelected { get; private set; } = false;
         public bool IsQuestingAllowed { get; private set; } = false;
         public BotJobAssignment? CurrentAssignment { get; private set; } = null;
         public int StuckCount { get; set; } = 0;
@@ -36,6 +36,8 @@ namespace QuestingBots.Components
         public Vector3? LastCorner { get; set; } = null;
 
         private BotOwner botOwner = null!;
+        private bool isInitializing = false;
+        private bool isInitialized = false;
         private BotJobAssignment? lastAssignment = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
 
@@ -78,28 +80,41 @@ namespace QuestingBots.Components
             return "Position " + (Position?.ToString() ?? "???");
         }
 
-        [Benchmark]
         public void Init(BotOwner _botOwner)
         {
-            if (IsInitialized)
+            if (isInitialized || isInitializing)
             {
                 return;
             }
 
+            isInitializing = true;
+
             base.UpdateInterval = 200;
             botOwner = _botOwner;
 
-            BotSprintingController = new Models.BotSprintingController(botOwner);
-            BotPath = new BotPathData(botOwner);
-            BotMonitor = BotMonitorController.GetBotMonitorController(botOwner);
-            IdentityData = BotIdentityData.GetBotIdentityData(botOwner);
-            QuestSelector = BotQuestSelector.GetBotQuestSelector(botOwner);
-            
             // Override the EFT distance that makes bots "avoid danger" when the BTR is near
             float newAvoidBtrRadiusSqr = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BTRRunDistance;
             botOwner.Settings.FileSettings.Mind.AVOID_BTR_RADIUS_SQR = newAvoidBtrRadiusSqr;
 
-            IsInitialized = true;
+            StartCoroutine(createComponents());
+        }
+
+        private IEnumerator createComponents()
+        {
+            BotSprintingController = new Models.BotSprintingController(botOwner);
+            BotPath = new BotPathData(botOwner);
+
+            BotMonitor = BotMonitorController.GetBotMonitorController(botOwner);
+            yield return null;
+
+            IdentityData = BotIdentityData.GetBotIdentityData(botOwner);
+            yield return null;
+
+            QuestSelector = BotQuestSelector.GetBotQuestSelector(botOwner);
+            yield return null;
+
+            isInitialized = true;
+            isInitializing = false;
         }
 
         protected void Update()
@@ -115,13 +130,12 @@ namespace QuestingBots.Components
                 return;
             }
 
-            if (!IsInitialized)
+            if (!isInitialized)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Waiting for BotObjectiveManager initialization to finish...");
                 return;
             }
 
-            if (!IsInitialQuestSelectionComplete)
+            if (!HasInitialQuestBeenSelected)
             {
                 SetInitialQuest();
                 return;
@@ -163,7 +177,7 @@ namespace QuestingBots.Components
             }
 
             // Don't monitor the bot's job assignment if it's a follower of a boss
-            if (BotHiveMindMonitor.HasBoss(botOwner) && !PrioritizeQuestingOverFollowing)
+            if (BotHiveMindMonitor.HasGroupLeader(botOwner) && !PrioritizeQuestingOverFollowing)
             {
                 return;
             }
@@ -208,7 +222,7 @@ namespace QuestingBots.Components
                 QuestSelector.RefreshJobAssignment();
             }
 
-            IsInitialQuestSelectionComplete = true;
+            HasInitialQuestBeenSelected = true;
         }
 
         public BotJobAssignment? CloneCurrentJobAssignment(BotOwner otherBotToDoAssignment)
@@ -286,7 +300,7 @@ namespace QuestingBots.Components
             float duration = (float)WaitTimeAfterCompleting!.Value + 5;
             UpdateLootingBehavior(CurrentAssignment.QuestObjectiveAssignment.LootAfterCompletingSetting, duration);
 
-            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetFollowers(botOwner))
+            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetGroupFollowers(botOwner))
             {
                 BotObjectiveManager? followerObjectiveManager = follower.GetObjectiveManager();
                 if (followerObjectiveManager == null)

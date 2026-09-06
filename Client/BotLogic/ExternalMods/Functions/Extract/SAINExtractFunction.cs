@@ -35,7 +35,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
 
             Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
 
-            foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetFollowers(BotOwner))
+            foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner))
             {
                 if ((follower == null) || follower.IsDead)
                 {

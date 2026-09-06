@@ -87,7 +87,7 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            BotOwner boss = BotHiveMindMonitor.GetBoss(bot);
+            BotOwner boss = BotHiveMindMonitor.GetGroupLeader(bot);
             if (boss != null)
             {
                 sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
