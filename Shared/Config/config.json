@@ -283,7 +283,7 @@
 		"enabled": true,
 		"blacklisted_pmc_bot_brains": [ "bossKilla", "bossTagilla", "exUsec", "followerGluharAssault", "followerGluharProtect", "crazyAssaultEvent", "bossKnight" ],
 		"player_scav_brain_conversion_chances_overrides": {
-			"enabled": false,
+			"enabled": true,
 			"chances": {
 				"assault": 0,
 				"bossKilla": 0,
