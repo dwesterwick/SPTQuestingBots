@@ -219,7 +219,10 @@ namespace QuestingBots.Helpers
 
             // NOTE: This method MUST be used for Fika compatibility
             // NOTE: Ideally, this should be called after a delay. However, this will require a lot of rewriting.
-            player.ExecuteInteraction(worldInteractiveObject, interactionResult);
+            if (!(worldInteractiveObject is Door))
+            {
+                player.ExecuteInteraction(worldInteractiveObject, interactionResult);
+            }
         }
 
         private static void RaiseUnlockEvent(this InteractionResult interactionResult, CommandStatus command, Player player)

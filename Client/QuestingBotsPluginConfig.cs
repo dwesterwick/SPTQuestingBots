@@ -71,7 +71,7 @@ namespace QuestingBots
         SpawningAndDying = 4,
         BotInitialization = 8,
         BotHostilityChanges = 16,
-        All = QuestingActions | SpawningAndDying | BotInitialization | BotHostilityChanges,
+        All = QuestingActions | QuestGeneration | SpawningAndDying | BotInitialization | BotHostilityChanges,
     }
 
     public static class QuestingBotsPluginConfig
