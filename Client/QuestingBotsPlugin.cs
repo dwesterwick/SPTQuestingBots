@@ -20,6 +20,7 @@ namespace QuestingBots
     [BepInIncompatibility("com.chazut.orbit")]
     [BepInDependency("xyz.drakia.waypoints", "1.9.0")]
     [BepInDependency("xyz.drakia.bigbrain", "1.5.0")]
+    [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(ModInfo.GUID, ModInfo.MODNAME, ModInfo.MOD_VERSION)]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {

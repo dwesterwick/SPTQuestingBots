@@ -5,6 +5,7 @@ using Diz.Resources;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -187,30 +188,21 @@ namespace QuestingBots.Helpers
                     return false;
                 }
 
-                // Initialize the transation to transfer the key to the bot
-                OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, true);
+                // Initialize the transaction to transfer the key to the bot
+                OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, false);
                 if (!moveResult.Succeeded)
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
                     return false;
                 }
 
-                Action<IResult> callbackAction = (result) => 
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
                 {
-                    if (result.Succeed && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
-                    {
-                        Singleton<LoggingUtil>.Instance.LogInfo("Moved key to inventory of " + botOwner.GetText());
-                    }
+                    Singleton<LoggingUtil>.Instance.LogInfo("Moved key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                }
 
-                    if (result.Failed)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogError("Could not move key to inventory of " + botOwner.GetText());
-                    }
-                };
-
-                // Execute the transation to transfer the key to the bot
-                Callback callback = new Callback(callbackAction);
-                inventoryController.TryRunNetworkTransaction(moveResult, callback);
+                // If we're in a Fika game, execute the transaction to add the key to the bot's inventory in other clients
+                ExternalModHandler.FikaModInfo.TrySendItemAddedPacket(botOwner.GetPlayer, item);
 
                 return true;
             }
