@@ -38,7 +38,10 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
         {
             if (LootingBots.LootingBotsInterop.TryPreventBotFromLooting(BotOwner, duration))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Preventing " + BotOwner.GetText() + " from looting");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Preventing " + BotOwner.GetText() + " from looting");
+                }
 
                 return true;
             }
@@ -54,7 +57,10 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
         {
             if (LootingBots.LootingBotsInterop.TryForceBotToScanLoot(BotOwner))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to loot now");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to loot now");
+                }
 
                 return true;
             }

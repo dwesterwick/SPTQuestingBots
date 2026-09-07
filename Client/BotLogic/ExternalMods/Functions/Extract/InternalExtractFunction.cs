@@ -24,7 +24,11 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
         public override bool TryInstructBotToExtract()
         {
             tryExtractSingleBot(BotOwner);
-            Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
+            }
 
             foreach (BotOwner follower in HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner))
             {
@@ -34,7 +38,11 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
                 }
 
                 tryExtractSingleBot(follower);
-                Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                }
             }
 
             return true;

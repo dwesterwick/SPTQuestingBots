@@ -86,7 +86,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if (IsLooting)
             {
-                if (!hasFoundLoot)
+                if (!hasFoundLoot && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
                 {
                     Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " has found loot");
                 }

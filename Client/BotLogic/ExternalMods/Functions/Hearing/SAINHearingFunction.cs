@@ -26,7 +26,10 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Hearing
                 return false;
             }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+            }
 
             return true;
         }
