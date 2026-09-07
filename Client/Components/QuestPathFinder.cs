@@ -59,11 +59,17 @@ namespace QuestingBots.Components
 
         public IEnumerator FindStaticPathsForAllQuests()
         {
-            Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...");
+            }
 
             yield return BotJobAssignmentController.ProcessAllQuests(findStaticPaths);
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...done.");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Finding static paths...done.");
+            }
         }
 
         private void findStaticPaths(Models.Questing.BotQuest quest)
@@ -100,12 +106,19 @@ namespace QuestingBots.Components
                     StaticPathData path = new StaticPathData(from, to, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        }
+
                         tmpStaticPaths.Add((from, to), path);
                     }
                     else
                     {
-                        Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest, true);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from waypoint " + from + " to waypoint " + to + " for " + quest);
+                        }
                     }
                 }
             }
@@ -130,12 +143,18 @@ namespace QuestingBots.Components
                     StaticPathData path = new StaticPathData(waypoint, firstStepPosition.Value, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotSearchDistances.OjectiveReachedIdeal);
                     if (path.Status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
-                        Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogDebug("Found a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        }
                         tmpStaticPaths.Add((waypoint, firstStepPosition.Value), path);
                     }
                     else
                     {
-                        Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest, true);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Could not find a static path from " + waypoint + " to " + firstStepPosition + " for " + questObjective + " in " + quest);
+                        }
                     }
                 }
             }
@@ -179,7 +198,11 @@ namespace QuestingBots.Components
                             continue;
                         }
 
-                        Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        }
+
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }
@@ -199,7 +222,11 @@ namespace QuestingBots.Components
                             continue;
                         }
 
-                        Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogDebug("Created a combined static path from " + combinedPath.StartPosition + " to " + combinedPath.TargetPosition);
+                        }
+
                         paths.Add((combinedPath.StartPosition, combinedPath.TargetPosition), combinedPath);
                         newPaths++;
                     }

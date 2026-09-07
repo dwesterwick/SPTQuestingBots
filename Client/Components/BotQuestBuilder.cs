@@ -80,7 +80,11 @@ namespace QuestingBots.Components
             BotJobAssignmentController.AddQuest(airdopChaserQuest);
 
             Vector3 airdropQuestPosition = airdopChaserQuest.GetValidObjectives().First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
-            Singleton<LoggingUtil>.Instance.LogInfo($"Added quest for the most recent airdop at {airdropPosition} with its objective position at {airdropQuestPosition}");
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo($"Added quest for the most recent airdop at {airdropPosition} with its objective position at {airdropQuestPosition}");
+            }
 
             if (airdropBounds.Contains(airdropQuestPosition))
             {
@@ -102,7 +106,11 @@ namespace QuestingBots.Components
                     SptRawQuestClass[] allQuestTemplates = Singleton<ConfigUtil>.Instance.GetAllQuestTemplates();
 
                     Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = Singleton<ConfigUtil>.Instance.GetEFTQuestSettings();
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
+
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
+                    }
 
                     // Need to be able to override private properties
                     BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.BotQuest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
@@ -116,7 +124,11 @@ namespace QuestingBots.Components
                         
                         if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
                         {
-                            Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.GetName() + "...");
+                            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                            {
+                                Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.GetName() + "...");
+                            }
+
                             quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id], overrideBindingFlags);
                         }
 
@@ -147,7 +159,10 @@ namespace QuestingBots.Components
                 // Process each of the quests created by an EFT quest template
                 yield return BotJobAssignmentController.ProcessAllQuests(LoadQuest, activeQuestsForPlayer);
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...");
+                }
 
                 // Create quest objectives for all matching trigger colliders found in the map
                 enumeratorWithTimeLimit.Reset();
@@ -159,7 +174,10 @@ namespace QuestingBots.Components
                 IEnumerable<LootItem> allItems = Singleton<GameWorld>.Instance.LootItems.Where(i => i.Item != null).Distinct(i => i.TemplateId);
                 yield return BotJobAssignmentController.ProcessAllQuests(QuestHelpers.LocateQuestItems, allItems);
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...done.");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Searching for EFT quest locations...done.");
+                }
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
@@ -204,7 +222,11 @@ namespace QuestingBots.Components
                     BotQuest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.BossHunter);
                     if (bossHunterQuest != null)
                     {
-                        Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
+                        }
+
                         BotJobAssignmentController.AddQuest(bossHunterQuest);
                     }
                 }
@@ -217,7 +239,11 @@ namespace QuestingBots.Components
                 yield return BotJobAssignmentController.ProcessAllQuests(updateEFTQuestObjectives);
 
                 HaveQuestsBeenBuilt = true;
-                Singleton<LoggingUtil>.Instance.LogInfo("Finished loading quest data.");
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Finished loading quest data.");
+                }
 
                 StartCoroutine(questPathFinder.FindStaticPathsForAllQuests());
             }
@@ -236,7 +262,11 @@ namespace QuestingBots.Components
                 return;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...");
+            }
+
             foreach (BotQuest quest in customQuests)
             {
                 int objectiveNum = 0;
@@ -275,7 +305,10 @@ namespace QuestingBots.Components
                 BotJobAssignmentController.AddQuest(quest);
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Loading custom quests...found " + customQuests.Count() + " custom quests.");
+            }
         }
 
         private void LoadQuest(Models.Questing.BotQuest quest, IEnumerable<QuestDataClass> activeQuestsForPlayer)
@@ -356,7 +389,10 @@ namespace QuestingBots.Components
             // Add a step with the NavMesh position to corresponding objectives in every quest using this zone
             foreach (BotQuest quest in matchingQuests)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName());
+                }
 
                 BotQuestObjective objective = quest.GetObjectiveForZoneID(trigger.Id);
                 objective.AddStep(new BotQuestObjectiveStep(navMeshTargetPoint.Value));
@@ -364,7 +400,10 @@ namespace QuestingBots.Components
                 float? plantTime = quest.FindPlantTime(trigger.Id);
                 if (plantTime.HasValue)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding plant time: " + plantTime.Value + "s");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding plant time: " + plantTime.Value + "s");
+                    }
 
                     Configuration.MinMaxConfig plantTimeMinMax = new Configuration.MinMaxConfig(plantTime.Value, plantTime.Value);
                     objective.AddStep(new BotQuestObjectiveStep(navMeshTargetPoint.Value, QuestAction.PlantItem, plantTimeMinMax));
@@ -374,7 +413,10 @@ namespace QuestingBots.Components
                 float? beaconTime = quest.FindBeaconTime(trigger.Id);
                 if (beaconTime.HasValue)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding beacon time: " + beaconTime.Value + "s");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding beacon time: " + beaconTime.Value + "s");
+                    }
 
                     objective.SetFirstWaitTimeAfterCompleting(beaconTime.Value);
                 }
@@ -382,7 +424,11 @@ namespace QuestingBots.Components
                 if ((quest.Template != null) && (quest.Template.QuestType == QuestTemplate.EQuestType.Elimination))
                 {
                     float searchTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EliminationQuestSearchTime;
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding elimination search time: " + searchTime + "s");
+
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found trigger " + trigger.Id + " for quest: " + quest.GetName() + " - Adding elimination search time: " + searchTime + "s");
+                    }
 
                     objective.SetFirstWaitTimeAfterCompleting(searchTime);
                 }
@@ -408,7 +454,11 @@ namespace QuestingBots.Components
             if ((zoneAndItemQuestPositions?.ContainsKey(zoneName) == true) && (zoneAndItemQuestPositions[zoneName].Position != null))
             {
                 Vector3 overridePosition = zoneAndItemQuestPositions[zoneName].Position.ToUnityVector3();
-                Singleton<LoggingUtil>.Instance.LogInfo("Using override position for " + zoneName);
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Using override position for " + zoneName);
+                }
 
                 return overridePosition;
             }
@@ -442,7 +492,11 @@ namespace QuestingBots.Components
                 if (collider.bounds.extents.y > 1.5f)
                 {
                     targetPosition.y = collider.bounds.min.y + 0.75f;
-                    Singleton<LoggingUtil>.Instance.LogInfo("Adjusting position for zone " + zoneName + " to " + targetPosition.ToString());
+
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Adjusting position for zone " + zoneName + " to " + targetPosition.ToString());
+                    }
                 }
 
                 // Determine how far to search for a valid NavMesh position from the target location. If the collider (zone) is very large, expand the search range.

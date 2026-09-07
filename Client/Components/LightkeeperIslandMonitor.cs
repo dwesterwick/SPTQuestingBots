@@ -180,7 +180,11 @@ namespace QuestingBots.Components
         {
             if (playersOnIsland.Contains(player))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has left Lightkeeper Island");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has left Lightkeeper Island");
+                }
+
                 playersOnIsland.Remove(player);
 
                 revertAlliances(player);
@@ -196,7 +200,11 @@ namespace QuestingBots.Components
             }
             else
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has entered Lightkeeper Island");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(player.GetText() + " has entered Lightkeeper Island");
+                }
+
                 playersOnIsland.Add(player);
 
                 setTemporaryAlliances(player);
@@ -260,7 +268,10 @@ namespace QuestingBots.Components
 
                 if (!originalAllies[player!].Contains(ally))
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group is no longer allied with " + ally.GetText());
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group is no longer allied with " + ally.GetText());
+                    }
 
                     BotOwner allyOwner = ally.GetBotOwner();
                     if (allyOwner != null)
@@ -281,7 +292,11 @@ namespace QuestingBots.Components
 
                 if (!playerGroup.Enemies.ContainsKey(enemy))
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group has restored their hostility with " + enemy.GetText());
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug(player!.GetText() + "'s group has restored their hostility with " + enemy.GetText());
+                    }
+
                     playerGroup.AddEnemy(enemy, EBotEnemyCause.initCauseEnemy);
                 }
             }

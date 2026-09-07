@@ -179,7 +179,11 @@ namespace QuestingBots.Helpers
                         interactionTypeText = "breaching";
                         break;
                 }
-                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " " + worldInteractiveObject.GetType().Name + " " + worldInteractiveObject.Id + "...");
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is " + interactionTypeText + " " + worldInteractiveObject.GetType().Name + " " + worldInteractiveObject.Id + "...");
+                }
 
                 // StartDoorInteraction worked by itself in SPT-AKI 3.7.6, but starting in 3.8.0, doors would "break" without 
                 // also running ExecuteDoorInteraction
@@ -241,7 +245,11 @@ namespace QuestingBots.Helpers
             {
                 EDoorState desiredDoorState = obj.InitialDoorState.OppositeDoorState();
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Forcing WorldInteractiveObject " + obj.Id + " to be " + desiredDoorState + "...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Forcing WorldInteractiveObject " + obj.Id + " to be " + desiredDoorState + "...");
+                }
+
                 obj.SetDoorState(desiredDoorState);
             }
 

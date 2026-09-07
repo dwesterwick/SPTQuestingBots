@@ -27,6 +27,16 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 
         public override bool IsLooting()
         {
+            if (BotOwner.ItemTaker.HaveItemToTake())
+            {
+                return true;
+            }
+
+            if (BotOwner.DeadBodyWork.ShallUse)
+            {
+                return true;
+            }
+
             if (!BotOwner.InLootClusterRadius())
             {
                 return false;

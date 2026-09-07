@@ -382,7 +382,10 @@ namespace QuestingBots.BotLogic.HiveMind
 
                 if (botGroupLeaders[bot].IsDead)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("Group leader " + botGroupLeaders[bot].GetText() + " is now dead.");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Group leader " + botGroupLeaders[bot].GetText() + " is now dead.");
+                    }
 
                     if (botGroupFollowers.ContainsKey(botGroupLeaders[bot]))
                     {
@@ -417,7 +420,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
             if (!botGroupFollowers[leader].Contains(bot))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now a follower for " + leader.GetText());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Bot " + bot.GetText() + " is now a follower for " + leader.GetText());
+                }
+
                 botGroupFollowers[leader].Add(bot);
 
                 BotJobAssignmentController.CheckBotJobAssignmentValidity(leader);
@@ -436,7 +443,10 @@ namespace QuestingBots.BotLogic.HiveMind
                         continue;
                     }
 
-                    Singleton<LoggingUtil>.Instance.LogDebug("Group leader " + leader.GetText() + " is now dead.");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Group leader " + leader.GetText() + " is now dead.");
+                    }
 
                     botGroupFollowers.Remove(leader!);
                     deadBots.Add(leader!);
@@ -448,7 +458,10 @@ namespace QuestingBots.BotLogic.HiveMind
                 {
                     if (follower == null)
                     {
-                        Singleton<LoggingUtil>.Instance.LogWarning("Removing null follower for " + leader.GetText());
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogWarning("Removing null follower for " + leader.GetText());
+                        }
 
                         deadBots.Add(follower!);
                     }
@@ -465,7 +478,10 @@ namespace QuestingBots.BotLogic.HiveMind
 
                     if (follower?.IsDead == true)
                     {
-                        Singleton<LoggingUtil>.Instance.LogDebug("Follower " + follower.GetText() + " for " + leader.GetText() + " is now dead.");
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogDebug("Follower " + follower.GetText() + " for " + leader.GetText() + " is now dead.");
+                        }
 
                         deadBots.Add(follower);
                     }

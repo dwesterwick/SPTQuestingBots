@@ -22,22 +22,25 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         protected static void PatchPostfix(Player __instance, Player aggressor)
         {
-            string message = __instance.GetText();
-            message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
-
-            message += " was killed by ";
-
-            message += aggressor.GetText();
-            message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
-
-            Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
-            if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots)
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
-                BotOwner[] aliveInitialPMCs = pmcGenerator.AliveBots().ToArray();
-                message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
-            }
+                string message = __instance.GetText();
+                message += " (" + (__instance.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
 
-            Singleton<LoggingUtil>.Instance.LogInfo(message);
+                message += " was killed by ";
+
+                message += aggressor.GetText();
+                message += " (" + (aggressor.Side == EPlayerSide.Savage ? "Scav" : "PMC") + ")";
+
+                Singleton<GameWorld>.Instance.TryGetComponent(out Components.Spawning.PMCGenerator pmcGenerator);
+                if ((pmcGenerator != null) && pmcGenerator.HasGeneratedBots)
+                {
+                    BotOwner[] aliveInitialPMCs = pmcGenerator.AliveBots().ToArray();
+                    message += ". Initial PMC's remaining: " + (aliveInitialPMCs.Length - (aliveInitialPMCs.Any(p => p.Id == __instance.Id) ? 1 : 0));
+                }
+
+                Singleton<LoggingUtil>.Instance.LogInfo(message);
+            }
 
             // Make sure the bot doesn't have any active quests if it's dead
             Controllers.BotJobAssignmentController.FailAllJobAssignmentsForBot(__instance.Profile.Id);

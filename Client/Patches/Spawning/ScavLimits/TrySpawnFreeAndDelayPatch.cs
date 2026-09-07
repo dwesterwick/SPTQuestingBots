@@ -116,8 +116,11 @@ namespace QuestingBots.Patches.Spawning.ScavLimits
 
         private static bool blockSpawn(int scavCount, ScavSpawnBlockReason reason)
         {
-            Singleton<LoggingUtil>.Instance.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
-            logScavSpawnRate();
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Prevented " + scavCount + " Scav(s) from spawning due to: " + reason.ToString());
+                logScavSpawnRate();
+            }
 
             float retryDelay = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.EftNewSpawnSystemAdjustments.NonWaveRetryDelayAfterBlocked;
             nextRetryTimeDelayField.SetValue(NonWavesSpawnScenarioCreatePatch.MostRecentNonWavesSpawnScenario, retryDelay);

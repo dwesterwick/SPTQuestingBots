@@ -119,7 +119,10 @@ namespace QuestingBots.Models.Questing
                 // If a quest hasn't been found within a certain amount of time, something is wrong
                 if ((objective == null) && jobHasBeenRunningTooLong)
                 {
-                    Singleton<LoggingUtil>.Instance.LogWarning("Waited " + _timeoutMonitor.ElapsedMilliseconds + "ms to select a quest for " + _botOwner.GetText());
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogWarning("Waited " + _timeoutMonitor.ElapsedMilliseconds + "ms to select a quest for " + _botOwner.GetText());
+                    }
 
                     // First try allowing the bot to repeat quests it already completed
                     if (_botOwner.TryArchiveRepeatableAssignments() > 0)
@@ -133,7 +136,11 @@ namespace QuestingBots.Models.Questing
                 }
             }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Waited " + _timeoutMonitor.ElapsedMilliseconds + "ms to select a quest for " + _botOwner.GetText());
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Waited " + _timeoutMonitor.ElapsedMilliseconds + "ms to select a quest for " + _botOwner.GetText());
+            }
+
             _assignmentCreationResult = new BotJobAssignment(_botOwner, quest, objective);
         }
 
@@ -148,7 +155,11 @@ namespace QuestingBots.Models.Questing
             // Clear the bot's assignment if it's been doing the same quest for too long
             if (quest.HasBotBeingDoingQuestTooLong(_botOwner, out double? timeDoingQuest) && (timeDoingQuest != null))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(_botOwner.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(_botOwner.GetText() + " has been performing quest " + quest.ToString() + " for " + timeDoingQuest.Value + "s and will get a new one.");
+                }
+
                 return null;
             }
 
@@ -192,7 +203,10 @@ namespace QuestingBots.Models.Questing
         private void StopQuestingAndExtract()
         {
             // If there are still no quests available for the bot to select, give up trying to select one
-            Singleton<LoggingUtil>.Instance.LogError(_botOwner.GetText() + " could not select any of the following quests: " + string.Join(", ", availableQuests));
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogError(_botOwner.GetText() + " could not select any of the following quests: " + string.Join(", ", availableQuests));
+            }
             _objectiveManager.StopQuesting();
 
             // Try making the bot extract because it has nothing to do

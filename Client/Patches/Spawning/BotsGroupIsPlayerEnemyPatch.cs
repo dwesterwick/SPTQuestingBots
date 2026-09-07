@@ -87,7 +87,7 @@ namespace QuestingBots.Patches.Spawning
         [PatchPostfix]
         protected static void PatchPostfix(BotsGroup __instance, bool __result, IPlayer player)
         {
-            if (!QuestingBotsPluginConfig.ShowHostilityDebugMessages.Value)
+            if (!QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
             {
                 return;
             }

@@ -152,7 +152,10 @@ namespace QuestingBots.BotLogic.Objective
 
             if (random.Next(1, 100) > ObjectiveManager.ChanceOfHavingKey)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + DesiredWorldInteractiveObject!.Id + " (Chance=" + ObjectiveManager.ChanceOfHavingKey + "%)");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " does not have the key for " + DesiredWorldInteractiveObject!.Id + " (Chance=" + ObjectiveManager.ChanceOfHavingKey + "%)");
+                }
                 return false;
             }
 
@@ -164,7 +167,10 @@ namespace QuestingBots.BotLogic.Objective
             keyComponent = BotOwner.FindKeyComponent(DesiredWorldInteractiveObject);
             if (keyComponent != null)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " has key " + keyComponent.Item.LocalizedName() + " for " + DesiredWorldInteractiveObject!.Id);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " has key " + keyComponent.Item.LocalizedName() + " for " + DesiredWorldInteractiveObject!.Id);
+                }
                 return true;
             }
 
@@ -210,7 +216,10 @@ namespace QuestingBots.BotLogic.Objective
 
             if (keyComponent == null)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to find key " + DesiredWorldInteractiveObject.KeyId);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " needs to find key " + DesiredWorldInteractiveObject.KeyId);
+                }
                 DoesBotHaveCorrectKey();
 
                 return true;
@@ -232,7 +241,10 @@ namespace QuestingBots.BotLogic.Objective
                     bundleLoader.Release();
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Loading bundle for " + keyComponent.Item.LocalizedName() + "...");
+                }
                 bundleLoader = keyComponent.Item.LoadBundle();
 
                 return true;
@@ -287,7 +299,10 @@ namespace QuestingBots.BotLogic.Objective
         {
             if (DesiredWorldInteractiveObject!.DoorState == EDoorState.Breaching)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(DesiredWorldInteractiveObject.InteractingPlayer.Id + " is breaching " + DesiredWorldInteractiveObject.Id);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(DesiredWorldInteractiveObject.InteractingPlayer.Id + " is breaching " + DesiredWorldInteractiveObject.Id);
+                }
                 return false;
             }
 
@@ -310,7 +325,10 @@ namespace QuestingBots.BotLogic.Objective
             InteractionResult interactionResult = DesiredWorldInteractiveObject.GetInteractionResult(DesiredInteractionType, BotOwner, keyComponent);
             BotOwner.InteractWithWorldInteractiveObject(DesiredWorldInteractiveObject, interactionResult);
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " " + InteractionVerbPastTense + " " + DesiredWorldInteractiveObject.Id);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " " + InteractionVerbPastTense + " " + DesiredWorldInteractiveObject.Id);
+            }
             return true;
         }
     }

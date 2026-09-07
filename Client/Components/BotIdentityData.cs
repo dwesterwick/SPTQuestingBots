@@ -44,14 +44,20 @@ namespace QuestingBots.Components
 
         private IEnumerator activateBot()
         {
-            string roleName = _botOwner.Profile.Info.Settings.Role.ToString();
-            Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + _botOwner.GetText() + ": " + roleName);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotInitialization))
+            {
+                string roleName = _botOwner.Profile.Info.Settings.Role.ToString();
+                Singleton<LoggingUtil>.Instance.LogInfo("Initial spawn type for bot " + _botOwner.GetText() + ": " + roleName);
+            }
 
             // Spread out the work to reduce the performance impact
             yield return null;
 
             registerBot();
-            Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(_botOwner);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotInitialization))
+            {
+                Controllers.BotRegistrationManager.WriteMessageForNewBotSpawn(_botOwner);
+            }
             yield return null;
 
             registerBotComponents();
@@ -134,7 +140,10 @@ namespace QuestingBots.Components
 
         private void reduceBotCounts()
         {
-            Singleton<LoggingUtil>.Instance.LogDebug("Adjusting EFT bot counts for " + _botOwner.GetText() + "...");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotInitialization))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Adjusting EFT bot counts for " + _botOwner.GetText() + "...");
+            }
 
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 

@@ -35,9 +35,8 @@ namespace QuestingBots.Patches.Spawning
             }
 
             __result = WaitForBotGenerators(__result, __instance);
-            Singleton<LoggingUtil>.Instance.LogDebug("Injected wait-for-bot-gen Task into Headless run-memory-cleanup Task");
 
-            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 GameStartPatch.WriteSpawnMessages(__instance);
             }
@@ -52,7 +51,6 @@ namespace QuestingBots.Patches.Spawning
             }
 
             await originalTask;
-            Singleton<LoggingUtil>.Instance.LogDebug("Original run-memory-cleanup Task completed");
 
             SafeTaskCompleteSource source = new SafeTaskCompleteSource();
             game.StartCoroutine(GameStartPatch.WaitForBotGenerators(source.Complete));

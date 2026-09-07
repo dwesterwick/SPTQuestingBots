@@ -41,9 +41,7 @@ namespace QuestingBots.Patches.Spawning
             IEnumerator originalEnumeratorWithMessage = addDebugMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
             __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, WaitForBotGenerators(), spawnMissedWavesCoroutine());
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Injected wait-for-bot-gen IEnumerator into start-game IEnumerator");
-
-            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 WriteSpawnMessages(__instance);
             }
@@ -62,7 +60,11 @@ namespace QuestingBots.Patches.Spawning
         private static IEnumerator addDebugMessageAfterEnumerator(IEnumerator enumerator, string message)
         {
             yield return enumerator;
-            Singleton<LoggingUtil>.Instance.LogDebug(message);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug(message);
+            }
         }
 
         private static IEnumerator spawnMissedWavesCoroutine()
@@ -78,7 +80,10 @@ namespace QuestingBots.Patches.Spawning
 
             if (missedBossWaves.Any())
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawning missed boss waves...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Spawning missed boss waves...");
+                }
 
                 foreach (BossLocationSpawn missedBossWave in missedBossWaves)
                 {
@@ -86,7 +91,10 @@ namespace QuestingBots.Patches.Spawning
                 }
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Spawned all missed boss waves");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawned all missed boss waves");
+            }
         }
 
         public static IEnumerator WaitForBotGenerators(Action? onComplete = null)

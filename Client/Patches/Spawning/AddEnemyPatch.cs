@@ -63,7 +63,11 @@ namespace QuestingBots.Patches.Spawning
 
             if (isGroupFromBotGenerator)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("Preventing BotsGroup::AddEnemy from running due to EBotEnemyCause.pmcBossKill because the victim was in a bot group created by this mod");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("Preventing BotsGroup::AddEnemy from running due to EBotEnemyCause.pmcBossKill because the victim was in a bot group created by this mod");
+                }
+                    
                 return false;
 
                 // TODO: The victim list is updated after this method runs, so this doesn't work. However, I don't think we actually care because you will still

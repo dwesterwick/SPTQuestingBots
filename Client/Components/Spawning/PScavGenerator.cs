@@ -25,7 +25,11 @@ namespace QuestingBots.Components.Spawning
             RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
             SetMaxAliveBots();
-            Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map at the same time: " + MaxAliveBots);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Max PScavs on the map at the same time: " + MaxAliveBots);
+            }
         }
 
         protected override void Refresh() { }
@@ -210,9 +214,12 @@ namespace QuestingBots.Components.Spawning
             }
 
             // Write the spawn schedule to the game console for debugging
-            IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
-            IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
-            Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
+                IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
+            }
         }
     }
 }

@@ -32,11 +32,18 @@ namespace QuestingBots.Patches.Spawning
                 // Ignore boss waves that require some type of interaction (i.e. Raiders that only spawn when a lever is pulled)
                 if (bossWave.TriggerType != SpawnTriggerType.none)
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Ignoring " + bossWave.BossName + " boss wave. Trigger type: " + bossWave.TriggerType.ToString());
+                    }
+
                     continue;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Spawn time for boss wave for " + bossWave.BossName + " is " + bossWave.Time);
+                }
 
                 // EFT enables Cultist boss waves during daytime raids even though they'll never spawn. For now, ignore them.
                 // TO DO: Check if they'll actually spawn based on time of day (which EFT SHOULD be doing anyway...)
@@ -58,7 +65,10 @@ namespace QuestingBots.Patches.Spawning
                 Controllers.BotRegistrationManager.ZeroWaveTotalRogueCount += bossWave.BossName.ToLower() == "exusec" ? totalBots : 0;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Total inital bosses and followers " + Controllers.BotRegistrationManager.ZeroWaveTotalBotCount);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Total inital bosses and followers " + Controllers.BotRegistrationManager.ZeroWaveTotalBotCount);
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Comfort.Common;
-using EFT;
-using QuestingBots.Utils;
+﻿using EFT;
 using SPT.Reflection.Patching;
 using System;
 using System.Collections.Generic;
@@ -20,15 +18,6 @@ namespace QuestingBots.Patches.Spawning
         protected override MethodBase GetTargetMethod()
         {
             return typeof(BotProfileClient).GetMethod(nameof(BotProfileClient.LoadProfiles), BindingFlags.Public | BindingFlags.Instance);
-        }
-
-        [PatchPrefix]
-        protected static void PatchPrefix(List<CountTypeBotWave> waves, EProfilesAskingStat stat)
-        {
-            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Found Task for generating " + waves.Count + " bot preset waves");
-            }
         }
 
         [PatchPostfix]

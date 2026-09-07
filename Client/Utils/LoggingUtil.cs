@@ -49,33 +49,18 @@ namespace QuestingBots.Utils
             _logger.LogDebug(message);
         }
 
-        public void LogInfo(string message, bool alwaysShow = false)
+        public void LogInfo(string message)
         {
-            if (!alwaysShow && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
-            {
-                return;
-            }
-
             _logger.LogInfo(message);
         }
 
-        public void LogWarning(string message, bool onlyForDebug = false)
+        public void LogWarning(string message)
         {
-            if (onlyForDebug && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
-            {
-                return;
-            }
-
             _logger.LogWarning(message);
         }
 
-        public void LogError(string message, bool onlyForDebug = false)
+        public void LogError(string message)
         {
-            if (onlyForDebug && !Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
-            {
-                return;
-            }
-
             _logger.LogError(message);
         }
 

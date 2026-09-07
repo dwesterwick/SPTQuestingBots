@@ -154,7 +154,7 @@ namespace QuestingBots.Models.Questing
 
             endInternal();
 
-            if (Status != JobAssignmentStatus.Completed)
+            if ((Status != JobAssignmentStatus.Completed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
             }
@@ -184,7 +184,10 @@ namespace QuestingBots.Models.Questing
                     continue;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to complete quest step " + ToString() + "...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to complete quest step " + ToString() + "...");
+                }
 
                 BotJobAssignment? clonedAssignment = ObjectiveManager.CloneCurrentJobAssignment(follower);
                 if (clonedAssignment == null)
@@ -201,7 +204,7 @@ namespace QuestingBots.Models.Questing
         {
             endInternal();
 
-            if (Status != JobAssignmentStatus.Failed)
+            if ((Status != JobAssignmentStatus.Failed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
             }
@@ -216,7 +219,7 @@ namespace QuestingBots.Models.Questing
 
         public void Inactivate()
         {
-            if (Status == JobAssignmentStatus.Active)
+            if ((Status == JobAssignmentStatus.Active) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
 

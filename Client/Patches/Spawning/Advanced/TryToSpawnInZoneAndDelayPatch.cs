@@ -22,7 +22,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
         [PatchPostfix]
         protected static void PatchPostfix(BotZone botZone, BotCreationData data, bool withCheckMinMax, bool newWave, List<ISpawnPoint> pointsToSpawn, bool forcedSpawn)
         {
-            if (!QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            if (!QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 return;
             }

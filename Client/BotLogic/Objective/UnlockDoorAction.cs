@@ -39,13 +39,19 @@ namespace QuestingBots.BotLogic.Objective
 
             if (!DoesWorldInteractiveObjectNeedToBeUnlocked())
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need to unlock " + DesiredWorldInteractiveObject!.Id);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need to unlock " + DesiredWorldInteractiveObject!.Id);
+                }
                 return;
             }
 
             if (DoesWorldInteractiveObjectNeedToBeBreached() || DoesBotHaveCorrectKey())
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need a new key to open " + DesiredWorldInteractiveObject!.Id);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " does not need a new key to open " + DesiredWorldInteractiveObject!.Id);
+                }
                 return;
             }
 
@@ -118,7 +124,10 @@ namespace QuestingBots.BotLogic.Objective
             // Check if the door is already unlocked
             if (DesiredWorldInteractiveObject.DoorState == DesiredInteractionType.DesiredDoorState())
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(DesiredWorldInteractiveObject.Id + " has already been " + InteractionVerbPastTense);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning(DesiredWorldInteractiveObject.Id + " has already been " + InteractionVerbPastTense);
+                }
                 InteractionComplete();
 
                 return;

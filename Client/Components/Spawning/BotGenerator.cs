@@ -290,7 +290,10 @@ namespace QuestingBots.Components.Spawning
                     CurrentBotGeneratorType = BotTypeName;
                     CurrentBotGeneratorProgress = 0;
 
-                    Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...");
+                    }
 
                     while (GeneratedBotCount < MaxGeneratedBots)
                     {
@@ -302,7 +305,10 @@ namespace QuestingBots.Components.Spawning
                         GeneratedBotCount += group.GeneratedBotCount;
                     }
 
-                    Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Generating " + MaxGeneratedBots + " " + BotTypeName + "s...done.");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -326,7 +332,10 @@ namespace QuestingBots.Components.Spawning
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
             IBotCreator ibotCreator = botSpawnerClass._botCreator;
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
+            }
 
             Models.BotSpawnInfo botSpawnInfo = null!;
             while (botSpawnInfo == null)
@@ -350,8 +359,11 @@ namespace QuestingBots.Components.Spawning
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData, this);
 
-                    string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => p.GetFullName()));
-                    Singleton<LoggingUtil>.Instance.LogInfo($"Generating {botdifficulty} {BotTypeName} group (Number of bots: {bots})...done. ({profileListText})");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        string profileListText = string.Join(", ", botSpawnData.Profiles.Select(p => p.GetFullName()));
+                        Singleton<LoggingUtil>.Instance.LogInfo($"Generating {botdifficulty} {BotTypeName} group (Number of bots: {bots})...done. ({profileListText})");
+                    }
                 }
                 catch (NullReferenceException nre)
                 {
@@ -467,7 +479,11 @@ namespace QuestingBots.Components.Spawning
                     yield break;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...");
+                }
+
                 foreach (Models.BotSpawnInfo botGroup in botGroupsToSpawn)
                 {
                     yield return spawnBotGroup(botGroup);
@@ -485,7 +501,10 @@ namespace QuestingBots.Components.Spawning
                     yield return new WaitForSeconds(0.1f);
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...done.");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn " + botGroupsToSpawn.Count + " " + BotTypeName + " group(s)...done.");
+                }
             }
             finally
             {
@@ -517,7 +536,11 @@ namespace QuestingBots.Components.Spawning
 
             string spawnPositionText = string.Join(", ", spawnPositions.Select(s => s.ToString()));
             string spawningLogMessage = "Spawning " + BotTypeName + " group at " + spawnPositionText + "...";
-            Singleton<LoggingUtil>.Instance.LogInfo(spawningLogMessage);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(spawningLogMessage);
+            }
 
             try
             {
@@ -628,7 +651,11 @@ namespace QuestingBots.Components.Spawning
                     Singleton<LoggingUtil>.Instance.LogError(e.StackTrace);
                 }
 
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawned bot " + bot.GetText());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Spawned bot " + bot.GetText());
+                }
+
                 botSpawnInfo.AddBotOwner(bot);
             }
         }

@@ -57,7 +57,11 @@ namespace QuestingBots.Helpers
                 return false;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Found " + quests.Count() + " non-EFT quests for " + locationId);
+            }
+
             return true;
         }
 
@@ -69,7 +73,11 @@ namespace QuestingBots.Helpers
             }
 
             zoneAndItemQuestPositions = Singleton<ConfigUtil>.Instance.GetZoneAndItemPositions();
-            Singleton<LoggingUtil>.Instance.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
+            }
 
             return zoneAndItemQuestPositions;
         }
@@ -175,7 +183,11 @@ namespace QuestingBots.Helpers
                         if (zoneAndItemQuestPositions[target].Position != null)
                         {
                             itemPosition = zoneAndItemQuestPositions[target].Position.ToUnityVector3();
-                            Singleton<LoggingUtil>.Instance.LogInfo("Using override position for " + item.Item.LocalizedName());
+
+                            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                            {
+                                Singleton<LoggingUtil>.Instance.LogInfo("Using override position for " + item.Item.LocalizedName());
+                            }
                         }
 
                         // Check if bots should open a specific door to get the item
@@ -196,7 +208,11 @@ namespace QuestingBots.Helpers
                             {
                                 doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
                                 interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
-                                Singleton<LoggingUtil>.Instance.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.GetName());
+
+                                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                                {
+                                    Singleton<LoggingUtil>.Instance.LogDebug("WorldInteractiveObject " + doorIDToUnlock + " must be unlocked for item " + item.Item.LocalizedName() + " for quest " + quest.GetName());
+                                }
                             }
                         }
                     }
@@ -223,7 +239,10 @@ namespace QuestingBots.Helpers
                     newObjective.InteractionPositionToUnlockDoor = interactionPositionForDoorToUnlock;
                     quest.AddObjective(newObjective);
 
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.GetName());
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found " + item.Item.LocalizedName() + " for quest " + quest.GetName());
+                    }
                 }
             }
         }

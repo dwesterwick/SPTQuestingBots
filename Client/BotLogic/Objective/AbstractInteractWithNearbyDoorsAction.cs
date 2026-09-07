@@ -127,7 +127,10 @@ namespace QuestingBots.BotLogic.Objective
 
             if (targetDoor != null)
             {
-                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is changing door " + targetDoor.Id + " to " + desiredInteractionType.OppositeDoorState() + "...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is changing door " + targetDoor.Id + " to " + desiredInteractionType.OppositeDoorState() + "...");
+                }
 
                 BotOwner.DoorOpener.Interact(targetDoor, desiredInteractionType);
                 nearbyDoors.Remove(targetDoor);
@@ -185,7 +188,10 @@ namespace QuestingBots.BotLogic.Objective
                 return false;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " will interact with door " + targetDoor.Id);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " will interact with door " + targetDoor.Id);
+            }
 
             return true;
         }

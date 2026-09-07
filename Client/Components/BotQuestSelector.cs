@@ -153,7 +153,10 @@ namespace QuestingBots.Components
             // Check if more steps are available for the bot's current assignment
             if ((currentAssignment != null) && currentAssignment.TrySetNextObjectiveStep(false))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + _botOwner.GetText() + " is now doing " + currentAssignment.ToString());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Bot " + _botOwner.GetText() + " is now doing " + currentAssignment.ToString());
+                }
 
                 //assignmentCreationJob = new CompletedBotJobAssignmentCreationJob(currentAssignment);
                 return true;

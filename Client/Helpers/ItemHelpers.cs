@@ -197,7 +197,7 @@ namespace QuestingBots.Helpers
 
                 Action<IResult> callbackAction = (result) => 
                 {
-                    if (result.Succeed)
+                    if (result.Succeed && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
                     {
                         Singleton<LoggingUtil>.Instance.LogInfo("Moved key to inventory of " + botOwner.GetText());
                     }
@@ -239,7 +239,10 @@ namespace QuestingBots.Helpers
                     LocationInGrid locationInGrid = grid.FindFreeSpace(item);
                     if (locationInGrid != null)
                     {
-                        Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
+                        }
 
                         return grid.CreateItemAddress(locationInGrid);
                     }

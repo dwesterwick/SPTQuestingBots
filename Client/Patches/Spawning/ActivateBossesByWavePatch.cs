@@ -29,7 +29,7 @@ namespace QuestingBots.Patches.Spawning
         {
             if (!GameStartPatch.IsDelayingGameStart)
             {
-                if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
                 {
                     Singleton<LoggingUtil>.Instance.LogInfo("Allowing spawn of boss wave " + wave.BossName + "...");
                 }
@@ -39,7 +39,7 @@ namespace QuestingBots.Patches.Spawning
 
             GameStartPatch.AddMissedBossWave(wave);
 
-            if (QuestingBotsPluginConfig.ShowSpawnDebugMessages.Value)
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Delaying spawn of boss wave " + wave.BossName + "...");
             }
@@ -69,7 +69,11 @@ namespace QuestingBots.Patches.Spawning
                     BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
                     BotRegistrationManager.ZeroWaveTotalRogueCount -= botCount;
 
-                    Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many Rogues will be on the map");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many Rogues will be on the map");
+                    }
+
                     return true;
                 }
             }
@@ -80,7 +84,11 @@ namespace QuestingBots.Patches.Spawning
             {
                 BotRegistrationManager.ZeroWaveTotalBotCount -= botCount;
 
-                Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many bosses will be on the map");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("Suppressing " + bossWave.BossName + " boss wave (" + botCount + " bots) or too many bosses will be on the map");
+                }
+
                 return true;
             }
 
@@ -88,16 +96,23 @@ namespace QuestingBots.Patches.Spawning
             BotRegistrationManager.SpawnedBossCount += botCount;
             if (bossWave.BossName.ToLower() == "exusec")
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Spawning " + (BotRegistrationManager.SpawnedRogueCount + botCount) + "/" + Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.LimitInitialBossSpawns.MaxInitialRogues + " Rogues...");
+                }
+                    
                 BotRegistrationManager.SpawnedRogueCount += botCount;
             }
 
-            string message = "Spawning boss wave ";
-            message += BotRegistrationManager.SpawnedBossWaves + "/" + BotRegistrationManager.ZeroWaveCount;
-            message += " for bot type " + bossWave.BossName;
-            message += " with " + botCount + " total bots";
-            message += "...";
-            Singleton<LoggingUtil>.Instance.LogInfo(message);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                string message = "Spawning boss wave ";
+                message += BotRegistrationManager.SpawnedBossWaves + "/" + BotRegistrationManager.ZeroWaveCount;
+                message += " for bot type " + bossWave.BossName;
+                message += " with " + botCount + " total bots";
+                message += "...";
+                Singleton<LoggingUtil>.Instance.LogInfo(message);
+            }
 
             return false;
         }

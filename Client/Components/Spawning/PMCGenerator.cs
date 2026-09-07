@@ -23,7 +23,11 @@ namespace QuestingBots.Components.Spawning
             RetryTimeSeconds = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.SpawnRetryTime;
 
             SetMaxAliveBots();
-            Singleton<LoggingUtil>.Instance.LogInfo("Max PMCs on the map at the same time: " + MaxAliveBots);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Max PMCs on the map at the same time: " + MaxAliveBots);
+            }
         }
 
         protected override void Refresh() { }
@@ -51,7 +55,10 @@ namespace QuestingBots.Components.Spawning
             // There must be at least 1 PMC still in the map or PScavs will not be allowed to join in live Tarkov
             pmcCount = Math.Max(1, pmcCount);
 
-            Singleton<LoggingUtil>.Instance.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
+            }
 
             return pmcCount;
         }

@@ -8,7 +8,6 @@ using QuestingBots.Helpers;
 using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -250,7 +249,7 @@ namespace QuestingBots.Components
             CurrentAssignment = objective;
             QuestSelector.AcceptNewAssignment();
 
-            if (CurrentAssignment != null)
+            if ((CurrentAssignment != null) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + CurrentAssignment.ToString());
             }
@@ -259,7 +258,7 @@ namespace QuestingBots.Components
                 Singleton<LoggingUtil>.Instance.LogWarning("Bot " + botOwner.GetText() + " was given a null job assignment");
             }
 
-            if (lastAssignment != null)
+            if ((lastAssignment != null) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogDebug("Bot " + botOwner.GetText() + " was previously doing " + lastAssignment.ToString());
             }
@@ -280,7 +279,12 @@ namespace QuestingBots.Components
                 return;
             }
 
-            if (lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
+            if (!lightkeeperIslandMonitor.IsBotObjectiveOnLightkeeperIsland(botOwner))
+            {
+                return;
+            }
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + "'s new quest assignment is on Lightkeeper Island");
             }
@@ -359,7 +363,11 @@ namespace QuestingBots.Components
         public void StopQuesting()
         {
             IsQuestingAllowed = false;
-            Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(botOwner.GetText() + " is no longer allowed to quest.");
+            }
         }
 
         public void ReportIncompletePath()

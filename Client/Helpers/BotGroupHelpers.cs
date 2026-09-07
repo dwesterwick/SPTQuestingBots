@@ -101,14 +101,22 @@ namespace QuestingBots.Helpers
 
             foreach (IPlayer remainingEnemy in enemyMatches)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " has paused their hostility with " + remainingEnemy.GetText());
+                }
+
                 playerGroup.RemoveEnemy(remainingEnemy);
             }
 
             Player otherPlayer = playerToAlly.GetPlayer();
             if (!playerGroup.Allies.Contains(otherPlayer))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Group containing " + groupMembersText + " is temporarily allied with " + otherPlayer.GetText());
+                }
+
                 playerGroup.AddAlly(otherPlayer);
             }
         }

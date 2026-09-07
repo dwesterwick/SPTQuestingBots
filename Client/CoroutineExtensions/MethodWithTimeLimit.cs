@@ -46,7 +46,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (writeConsoleMessage && !hadToWait)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + messageTextSuffix());
             }
             hadToWait = true;
             
@@ -59,7 +59,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (writeConsoleMessage && hadToWait)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "done." + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "done." + messageTextSuffix());
             }
         }
 
@@ -68,7 +68,7 @@ namespace QuestingBots.CoroutineExtensions
             cycleTimes.Add(cycleTimer.ElapsedMilliseconds);
             if (IsRunning)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "aborted." + messageTextSuffix(), true);
+                Singleton<LoggingUtil>.Instance.LogWarning(messageTextPrefix(extraDetail) + "aborted." + messageTextSuffix());
             }
         }
 

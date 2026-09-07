@@ -15,13 +15,18 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
         public override string MonitoredLayerName => "Looting";
 
         private static string _lootingLogicName => "Looting";
+        private static string _lootSearchLogicName => "FindLoot";
 
         public LootingBotsLootFunction(BotOwner _botOwner) : base(_botOwner)
         {
             
         }
 
-        public override bool IsSearchingForLoot() => IsMonitoredLayerActive();
+        public override bool IsSearchingForLoot()
+        {
+            string activeLogicName = BotOwner.GetActiveLogicTypeName() ?? "null";
+            return activeLogicName.Contains(_lootSearchLogicName);
+        }
 
         public override bool IsLooting()
         {

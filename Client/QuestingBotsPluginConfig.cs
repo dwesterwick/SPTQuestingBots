@@ -63,14 +63,24 @@ namespace QuestingBots
         All = QuestTarget | EFTTarget | EFTCurrentCorner,
     }
 
+    [Flags]
+    public enum VerboseLoggingType
+    {
+        QuestingActions = 1,
+        QuestGeneration = 2,
+        SpawningAndDying = 4,
+        BotInitialization = 8,
+        BotHostilityChanges = 16,
+        All = QuestingActions | SpawningAndDying | BotInitialization | BotHostilityChanges,
+    }
+
     public static class QuestingBotsPluginConfig
     {
         public static Dictionary<string, TarkovMaps> TarkovMapIDToEnum = new Dictionary<string, TarkovMaps>();
         public static Dictionary<WildSpawnType, BotTypeException> ExceptionFlagForWildSpawnType = new Dictionary<WildSpawnType, BotTypeException>();
 
         public static ConfigEntry<bool> QuestingEnabled = null!;
-        public static ConfigEntry<bool> ShowSpawnDebugMessages = null!;
-        public static ConfigEntry<bool> ShowHostilityDebugMessages = null!;
+        public static ConfigEntry<VerboseLoggingType> VerboseLogging = null!;
         public static ConfigEntry<bool> SprintingEnabled = null!;
         public static ConfigEntry<int> MinSprintingDistance = null!;
 
@@ -122,10 +132,8 @@ namespace QuestingBots
 
             QuestingEnabled = Config.Bind("Main", "Enable Questing",
                 true, "Allow bots to quest");
-            ShowSpawnDebugMessages = Config.Bind("Main", "Show Debug Messages for Spawning",
-                false, new ConfigDescription("Show additional debug messages to troubleshoot spawning issues", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
-            ShowHostilityDebugMessages = Config.Bind("Main", "Show Debug Messages for Bot Hostilities",
-                false, new ConfigDescription("Show additional debug messages to troubleshoot bot hostility issues", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            VerboseLogging = Config.Bind("Main", "Verbose Logging",
+                (VerboseLoggingType)0, "Toggles verbose logging for the selected options");
             SprintingEnabled = Config.Bind("Main", "Allow Bots to Sprint while Questing",
                 true, "Allow bots to sprint while questing. This does not affect their ability to sprint when they're not questing.");
             MinSprintingDistance = Config.Bind("Main", "Sprinting Distance Limit from Objectives (m)",
@@ -149,7 +157,7 @@ namespace QuestingBots
             int minDistanceAILimitQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AllowZeroDistanceSleeping ? 0 : 25;
 
             SleepingEnabled = Config.Bind("AI Limiter", "Enable AI Limiting",
-                false, "Improve FPS by minimizing CPU load for AI out of certain ranges");
+                true, "Improve FPS by minimizing CPU load for AI out of certain ranges");
             SleepingEnabledForQuestingBots = Config.Bind("AI Limiter", "Enable AI Limiting for Bots That Are Questing",
                 true, "Allow AI to be disabled for bots that are questing");
             MapsToAllowSleepingForQuestingBots = Config.Bind("AI Limiter", "Maps to Allow AI Limiting for Bots That Are Questing",

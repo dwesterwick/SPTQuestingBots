@@ -117,7 +117,7 @@ namespace QuestingBots.Controllers
 
                         if (visitsIsland && !Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LightkeeperIslandQuests.Enabled)
                         {
-                            if (quest.TryRemoveObjective(objective))
+                            if (quest.TryRemoveObjective(objective) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
                             {
                                 Singleton<LoggingUtil>.Instance.LogInfo("Removing quest objective on Lightkeeper island: " + objective + " for quest " + quest);
                             }
@@ -138,7 +138,7 @@ namespace QuestingBots.Controllers
                         
                         if (visitsIsland)
                         {
-                            if (quest.TryRemoveObjective(objective))
+                            if (quest.TryRemoveObjective(objective) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
                             {
                                 Singleton<LoggingUtil>.Instance.LogInfo("Removing quest objective on Scav island: " + objective + " for quest " + quest);
                             }
@@ -501,7 +501,10 @@ namespace QuestingBots.Controllers
                 return false;
             }
 
-            Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " is now allowed to repeat quest " + quest.ToString());
+            }
 
             foreach (BotJobAssignment assignment in botJobAssignments[bot.Profile.Id])
             {
@@ -656,7 +659,7 @@ namespace QuestingBots.Controllers
 
         public static void WriteQuestLogFile(long timestamp)
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }
@@ -706,7 +709,7 @@ namespace QuestingBots.Controllers
 
         public static void WriteBotJobAssignmentLogFile(long timestamp)
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
             {
                 return;
             }

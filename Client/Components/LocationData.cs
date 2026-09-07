@@ -110,7 +110,7 @@ namespace QuestingBots.Components
         {
             if (id == BOT_EVENT_ID_ALARM_ON)
             {
-                if (!AlarmState)
+                if (!AlarmState && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
                 {
                     Singleton<LoggingUtil>.Instance.LogDebug("Alarm enabled");
                 }
@@ -119,7 +119,7 @@ namespace QuestingBots.Components
 
             if (id == BOT_EVENT_ID_ALARM_OFF)
             {
-                if (AlarmState)
+                if (AlarmState && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
                 {
                     Singleton<LoggingUtil>.Instance.LogDebug("Alarm disabled");
                 }
@@ -205,8 +205,12 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(triggerZone);
-                Singleton<LoggingUtil>.Instance.LogDebug("Found TriggerZone " + (triggerId ?? "???") + " for alarm " + triggerZone.transform.parent.gameObject.name);
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(triggerZone);
+                    Singleton<LoggingUtil>.Instance.LogDebug("Found TriggerZone " + (triggerId ?? "???") + " for alarm " + triggerZone.transform.parent.gameObject.name);
+                }
+
                 alarmTriggerZones.Add(triggerZone);
             }
         }
@@ -283,8 +287,11 @@ namespace QuestingBots.Components
                 return false;
             }
 
-            string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(handlerEffect);
-            Singleton<LoggingUtil>.Instance.LogDebug("Blocking NavMesh for intoxication trap " + (triggerId ?? "???") + " for " + triggerZone.transform.parent.gameObject.name);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                string triggerId = Singleton<EftAccessToolsUtil>.Instance.GetTriggerId(handlerEffect);
+                Singleton<LoggingUtil>.Instance.LogDebug("Blocking NavMesh for intoxication trap " + (triggerId ?? "???") + " for " + triggerZone.transform.parent.gameObject.name);
+            }
 
             triggerZone.gameObject.GetOrAddNavMeshObstacle();
             return true;
@@ -332,12 +339,19 @@ namespace QuestingBots.Components
                 float triggerZoneLocalScaleMagnitude = triggerZoneLocalScale.magnitude;
                 if (triggerZoneLocalScaleMagnitude > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.LabyrinthQuests.MaxColliderMagnitudeToBlockNavmesh)
                 {
-                    Singleton<LoggingUtil>.Instance.LogWarning("NavMeshObstacle will not be added for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude is " + triggerZoneLocalScaleMagnitude);
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("NavMeshObstacle will not be added for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name + " because its local scale is " + triggerZoneLocalScale + " and magnitude is " + triggerZoneLocalScaleMagnitude);
+                    }
                     continue;
                 }
 
                 AddNavMeshObstacleForSwitch(sw, triggerZone.gameObject);
-                Singleton<LoggingUtil>.Instance.LogDebug("Added NavMeshObstacle for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name);
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Added NavMeshObstacle for trap " + triggerZone.transform.parent.gameObject.name + "." + triggerZone.gameObject.name);
+                }
             }
         }
 
@@ -374,7 +388,7 @@ namespace QuestingBots.Components
 
         private void ToggleNavMeshObstacle(NavMeshObstacle navMeshObstacle, bool enabled)
         {
-            if (navMeshObstacle.enabled != enabled)
+            if ((navMeshObstacle.enabled != enabled) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
             {
                 string verb = enabled ? "Enabling" : "Disabling";
                 Singleton<LoggingUtil>.Instance.LogDebug(verb + " NavMeshObstacle for " + navMeshObstacle.transform.parent.gameObject.name + "." + navMeshObstacle.gameObject.name);
@@ -449,7 +463,10 @@ namespace QuestingBots.Components
 
         private void reportSwitchChange(WorldInteractiveObject obj, EDoorState prevState, EDoorState nextState)
         {
-            Singleton<LoggingUtil>.Instance.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Switch " + obj.Id + " has changed from " + prevState.ToString() + " to " + nextState.ToString() + ". Interacting Player: " + (obj.InteractingPlayer?.Profile?.Nickname ?? "(none)"));
+            }
 
             EFT.Interactive.Switch? sw = obj as EFT.Interactive.Switch;
             if (sw == null)
@@ -536,13 +553,21 @@ namespace QuestingBots.Components
                     }
 
                     noPowerTipsForDoors.Add(worldInteractiveObject, noPowerTip);
-                    Singleton<LoggingUtil>.Instance.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
+
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Found NoPowerTip " + noPowerTip.name + " for door " + worldInteractiveObject.Id);
+                    }
+
                     break;
                 }
             }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Found " + areLockedDoorsUnlocked.Count + " locked doors");
-            //Singleton<LoggingUtil>.Instance.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Found " + areLockedDoorsUnlocked.Count + " locked doors");
+                //Singleton<LoggingUtil>.Instance.LogInfo("Found locked doors: " + string.Join(", ", areLockedDoorsUnlocked.Select(s => s.Key.Id)));
+            }
         }
 
         private bool doorHasNoPowerTip(WorldInteractiveObject worldInteractiveObject, NoPowerTip noPowerTip)
@@ -641,7 +666,11 @@ namespace QuestingBots.Components
                 // Check if the door has been unlocked since this method was previously called
                 if (!areLockedDoorsUnlocked[worldInteractiveObject] && (worldInteractiveObject.DoorState != EDoorState.Locked))
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Door " + worldInteractiveObject.Id + " is no longer locked.");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Door " + worldInteractiveObject.Id + " is no longer locked.");
+                    }
+
                     areLockedDoorsUnlocked[worldInteractiveObject] = true;
                 }
 
@@ -846,7 +875,10 @@ namespace QuestingBots.Components
                 distance = Vector3.Distance(position, closestBot.Position);
                 if ((closestBot != null) && (distance < distanceFromPlayers))
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + closestBot.GetText() + " at " + closestBot.Position);
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + closestBot.GetText() + " at " + closestBot.Position);
+                    }
                     return true;
                 }
             }
@@ -856,7 +888,10 @@ namespace QuestingBots.Components
                 distance = Vector3.Distance(position, player.Position);
                 if (distance < distanceFromPlayers)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + player.GetText() + " at " + player.Position);
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug(position + " is within " + distanceFromPlayers + "m of " + player.GetText() + " at " + player.Position);
+                    }
                     return true;
                 }
             }
@@ -915,7 +950,10 @@ namespace QuestingBots.Components
                         .Select(s => allPlayerPositions.Min(p => Vector3.Distance(s.Position, p)))
                         .Max();
 
-                    Singleton<LoggingUtil>.Instance.LogWarning("Maximum distance from other players using " + validSpawnPoints.Count() + " spawn points: " + maxDistance);
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogWarning("Maximum distance from other players using " + validSpawnPoints.Count() + " spawn points: " + maxDistance);
+                    }
                 }
                 else
                 {
@@ -1179,7 +1217,11 @@ namespace QuestingBots.Components
 
                     if (kibaOuterDoor.Any(v => v == false))
                     {
-                        Singleton<LoggingUtil>.Instance.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
+                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                        {
+                            Singleton<LoggingUtil>.Instance.LogInfo("Cannot unlock inner KIBA door until outer KIBA door is unlocked");
+                        }
+
                         continue;
                     }
                 }
@@ -1187,7 +1229,11 @@ namespace QuestingBots.Components
                 // Prevent doors that require power from being unlocked before the power is turned on
                 if (noPowerTipsForDoors.ContainsKey(worldInteractiveObject) && noPowerTipsForDoors[worldInteractiveObject].isActiveAndEnabled)
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("NoPowerTip for door " + worldInteractiveObject.Id + " is still active.");
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("NoPowerTip for door " + worldInteractiveObject.Id + " is still active.");
+                    }
+
                     continue;
                 }
 
