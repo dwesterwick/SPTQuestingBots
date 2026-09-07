@@ -1,9 +1,13 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 {
@@ -23,17 +27,45 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 
         public override bool IsLooting()
         {
-            return false;
+            if (!BotOwner.InLootClusterRadius())
+            {
+                return false;
+            }
+
+            return BotOwner.PatrollingData.LootData.ClusterLootingNow();
         }
 
         public override bool TryPreventBotFromLooting(float duration)
         {
-            return false;
+            BotOwner.PatrollingData.LootData.SetPauseFor(duration);
+
+            return true;
         }
 
         public override bool TryForceBotToScanLoot()
         {
-            return false;
+            //LogLootClusterDistance();
+
+            BotOwner.PatrollingData.LootData.SetPauseFor(0);
+
+            if (!BotOwner.TrySetNewTargetLootCluster())
+            {
+                return false;
+            }
+
+            //LogLootClusterDistance();
+
+            return true;
+        }
+
+        private void LogLootClusterDistance()
+        {
+            Vector3? targetLootClusterPosition = BotOwner.PatrollingData.LootData.TargetLootCluster?.CenterPosition;
+            if (targetLootClusterPosition != null)
+            {
+                float distanceToLootCluster = Vector3.Distance(BotOwner.Position, targetLootClusterPosition.Value);
+                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " will loot around " + targetLootClusterPosition.Value + " (" + distanceToLootCluster + "m away)");
+            }
         }
     }
 }
