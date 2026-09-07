@@ -129,7 +129,7 @@ namespace QuestingBots.Components
 
         private void OutlinePartisanZones()
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled || !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
             {
                 return;
             }
@@ -368,7 +368,7 @@ namespace QuestingBots.Components
                 navMeshObstaclesControlledBySwitches.Add(sw, new List<NavMeshObstacle> { navMeshObstacle });
             }
 
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled || !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
             {
                 return;
             }
@@ -396,7 +396,7 @@ namespace QuestingBots.Components
 
             navMeshObstacle.enabled = enabled;
 
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled || !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
             {
                 return;
             }

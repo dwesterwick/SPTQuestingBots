@@ -176,7 +176,7 @@ namespace QuestingBots.BehaviorExtensions
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
             if (StuckTime > stuckTime)
             {
-                if (drawPath && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
+                if (drawPath && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                 {
                     drawBotPath(Color.red);
                 }

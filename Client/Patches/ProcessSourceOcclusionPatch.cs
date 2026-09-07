@@ -11,7 +11,7 @@ using QuestingBots.Helpers;
 using Comfort.Common;
 using QuestingBots.Utils;
 
-namespace QuestingBots.Patches.DebugPatches
+namespace QuestingBots.Patches
 {
     public class ProcessSourceOcclusionPatch : ModulePatch
     {

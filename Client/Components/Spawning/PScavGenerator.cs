@@ -37,7 +37,7 @@ namespace QuestingBots.Components.Spawning
         protected override int GetMaxGeneratedBots()
         {
             // Check if PMC's are allowed to spawn in the raid
-            if (!PlayerWantsBotsInRaid() && !Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AlwaysSpawnPScavs)
+            if (!PlayerWantsBotsInRaid() && !(Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.AlwaysSpawnPScavs))
             {
                 return 0;
             }

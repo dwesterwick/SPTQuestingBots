@@ -223,7 +223,7 @@ namespace QuestingBots.Helpers
                     {
                         Singleton<LoggingUtil>.Instance.LogError("Cannot find NavMesh point for quest item " + item.Item.LocalizedName());
 
-                        if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+                        if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
                         {
                             Vector3[] itemPositionOutline = DebugHelpers.GetSpherePoints(item.transform.position, 0.5f, 10);
                             Models.Pathing.PathVisualizationData itemPositionSphere = new Models.Pathing.PathVisualizationData("QuestItem_" + item.Item.LocalizedName(), itemPositionOutline, Color.red);

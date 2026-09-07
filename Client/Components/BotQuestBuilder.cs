@@ -436,7 +436,7 @@ namespace QuestingBots.Components
                 zoneIDsInLocation.Add(trigger.Id);
             }
 
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowZoneOutlines)
             {
                 Vector3[] triggerColliderBounds = DebugHelpers.GetBoundingBoxPoints(triggerCollider.bounds);
                 Models.Pathing.PathVisualizationData triggerBoundingBox = new Models.Pathing.PathVisualizationData("Trigger_" + trigger.Id, triggerColliderBounds, Color.cyan);

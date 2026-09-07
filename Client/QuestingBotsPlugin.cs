@@ -79,6 +79,7 @@ namespace QuestingBots
             new Patches.ServerRequestPatch().Enable();
             new Patches.CheckLookEnemyPatch().Enable();
             new Patches.ReturnToPoolPatch().Enable();
+            new Patches.ProcessSourceOcclusionPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
             new Patches.DisableLocalAvoidancePatch().Enable();
         }
@@ -111,7 +112,6 @@ namespace QuestingBots
             AddBenchmarkingPatches();
 #endif
 
-            new Patches.DebugPatches.ProcessSourceOcclusionPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
         }
