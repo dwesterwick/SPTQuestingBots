@@ -17,8 +17,13 @@ namespace QuestingBots.Utils
             logger.Debug(GetLogPrefix() + message);
         }
 
-        public void Info(string message)
+        public void Info(string message, bool forDebug = false)
         {
+            if (forDebug && !_configUtil.CurrentConfig.IsDebugEnabled())
+            {
+                return;
+            }
+
             logger.Info(GetLogPrefix() + message);
         }
 

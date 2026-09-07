@@ -103,7 +103,7 @@ namespace QuestingBots.Services.Spawning
             if (_locationConfig.RogueLighthouseSpawnTimeSettings.WaitTimeSeconds > -1)
             {
                 _locationConfig.RogueLighthouseSpawnTimeSettings.WaitTimeSeconds = -1;
-                _logger.Info("Removed SPT Rogue spawn delay on Lighthouse");
+                _logger.Info("Removed SPT Rogue spawn delay on Lighthouse", true);
             }
         }
 
@@ -117,7 +117,7 @@ namespace QuestingBots.Services.Spawning
 
             if (removedWaves > 0)
             {
-                _logger.Info($"Removed {removedWaves} PvE PMC waves");
+                _logger.Info($"Removed {removedWaves} PvE PMC waves", true);
             }
         }
 
@@ -156,7 +156,7 @@ namespace QuestingBots.Services.Spawning
 
             if (removedWaves > 0)
             {
-                _logger.Info($"Removed {removedWaves} custom {waveName} waves");
+                _logger.Info($"Removed {removedWaves} custom {waveName} waves", true);
             }
         }
 

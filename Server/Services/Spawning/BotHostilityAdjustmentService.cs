@@ -45,7 +45,7 @@ namespace QuestingBots.Services.Spawning
 
         private void AdjustAllBotHostilityChances()
         {
-            _logger.Info("Adjusting bot hostility chances...");
+            _logger.Info("Adjusting bot hostility chances...", true);
 
             foreach (Location location in _locationTable.GetDictionary().Values)
             {
@@ -57,7 +57,7 @@ namespace QuestingBots.Services.Spawning
 
             AdjustScavEnemyBotTypes();
 
-            _logger.Info("Adjusting bot hostility chances...done.");
+            _logger.Info("Adjusting bot hostility chances...done.", true);
         }
 
         private void AdjustAllBotHostilityChancesForLocation(Location location)

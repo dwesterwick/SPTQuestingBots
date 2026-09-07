@@ -1,7 +1,7 @@
 {
 	"enabled": true,
 	"debug": {
-		"enabled": true,
+		"enabled": false,
 		"always_spawn_pmcs": false,
 		"always_spawn_pscavs": false,
 		"show_zone_outlines": false,

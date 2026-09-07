@@ -52,7 +52,7 @@ namespace QuestingBots.Services
                 }
             }
 
-            Logger.Info($"Added {addedBrains} and updated {updatedBrains} Player Scav brain types");
+            Logger.Info($"Added {addedBrains} and updated {updatedBrains} Player Scav brain types", true);
         }
 
         public void RemoveBlacklistedPMCBrains(IEnumerable<string> blacklistedbrainTypes)
@@ -69,7 +69,7 @@ namespace QuestingBots.Services
                 }
             }
 
-            Logger.Info($"Removed {removedBrains} blacklisted PMC brain types");
+            Logger.Info($"Removed {removedBrains} blacklisted PMC brain types", true);
         }
 
         public void RemoveBlacklistedPlayerScavBrains(IEnumerable<string> blacklistedbrainTypes)
@@ -83,7 +83,7 @@ namespace QuestingBots.Services
                 }
             }
 
-            Logger.Info($"Removed {removedBrains} blacklisted Player Scav brain types");
+            Logger.Info($"Removed {removedBrains} blacklisted Player Scav brain types", true);
         }
     }
 }
