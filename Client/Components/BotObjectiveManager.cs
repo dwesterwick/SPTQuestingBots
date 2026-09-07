@@ -249,13 +249,13 @@ namespace QuestingBots.Components
             CurrentAssignment = objective;
             QuestSelector.AcceptNewAssignment();
 
-            if ((CurrentAssignment != null) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + CurrentAssignment.ToString());
-            }
-            else
+            if (CurrentAssignment == null)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Bot " + botOwner.GetText() + " was given a null job assignment");
+            }
+            else if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is now doing " + CurrentAssignment.ToString());
             }
 
             if ((lastAssignment != null) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
