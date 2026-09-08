@@ -10,7 +10,7 @@ namespace QuestingBots
         public List<string>? Contributors { get; init; }
         public SemanticVersioning.Version Version { get; init; } = new(ModInfo.MOD_VERSION);
         public SemanticVersioning.Range SptVersion { get; init; } = new(ModInfo.SPT_VERSION_COMPATIBILITY);
-        public List<string>? Incompatibilities { get; init; }
+        public List<string>? Incompatibilities { get; init; } = ["com.andrudis.questmaniac"];
         public Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; }
         public string? Url { get; init; }
         public bool? IsBundleMod { get; init; } = false;
