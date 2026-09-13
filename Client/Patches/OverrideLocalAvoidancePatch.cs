@@ -16,8 +16,33 @@ namespace QuestingBots.Patches
 {
     public class OverrideLocalAvoidancePatch : ModulePatch
     {
-        private static float DistToBeCloseOverride => 0.75f;
-        private static float DistToBeCloseExtOverride => 1f;
+        private static float? _distToBeCloseOverride = null;
+        public static float DistToBeCloseOverride
+        {
+            get
+            {
+                if (_distToBeCloseOverride == null)
+                {
+                    _distToBeCloseOverride = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AvoidanceRadius.Min;
+                }
+
+                return _distToBeCloseOverride.Value;
+            }
+        }
+
+        private static float? _distToBeCloseExtOverride = null;
+        public static float DistToBeCloseExtOverride
+        {
+            get
+            {
+                if (_distToBeCloseExtOverride == null)
+                {
+                    _distToBeCloseExtOverride = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AvoidanceRadius.Max;
+                }
+
+                return _distToBeCloseExtOverride.Value;
+            }
+        }
 
         protected override MethodBase GetTargetMethod()
         {
@@ -75,23 +100,18 @@ namespace QuestingBots.Patches
         [PatchPrefix]
         protected static bool PatchPrefix(BotOwner ____owner)
         {
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.DisableEFTLocalAvoidance)
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AllowForQuestingBots)
             {
-                return !____owner.IsAllowedToQuest();
+                return true;
             }
 
-            return true;
+            return !____owner.IsAllowedToQuest();
         }
 
         [PatchPostfix]
         protected static void PatchPostfix(BotLocalAvoidance __instance, BotOwner ____owner)
         {
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.DisableEFTLocalAvoidance)
-            {
-                return;
-            }
-
-            if (!____owner.IsAllowedToQuest())
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AllowForQuestingBots && ____owner.IsAllowedToQuest())
             {
                 return;
             }
@@ -102,7 +122,7 @@ namespace QuestingBots.Patches
             }
 
             BotOwner? nearestGroupMember = ____owner.GetNearestGroupMember(out float distance);
-            if (distance > DistToBeCloseExtOverride * 2)
+            if (distance > DistToBeCloseExtOverride * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.RadiusMultiplierToDropOffset)
             {
                 //Singleton<LoggingUtil>.Instance.LogDebug("Dropping local avoidance offset for " + ____owner.GetText());
                 __instance.DropOffset();

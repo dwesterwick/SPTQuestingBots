@@ -27,6 +27,8 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotZoneUpdatesConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\EftLocalAvoidanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LabyrinthQuestsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PlayerScavBrainConversionChancesOverridesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestSelectionConfig.cs" />

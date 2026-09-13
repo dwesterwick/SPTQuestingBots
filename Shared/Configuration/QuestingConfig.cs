@@ -40,8 +40,8 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "default_wait_time_after_objective_completion", IsRequired = true)]
         public float DefaultWaitTimeAfterObjectiveCompletion { get; set; } = 10;
 
-        [DataMember(Name = "update_bot_zone_after_stopping", IsRequired = true)]
-        public bool UpdateBotZoneAfterStopping { get; set; } = true;
+        [DataMember(Name = "bot_zone_updates", IsRequired = true)]
+        public BotZoneUpdatesConfig BotZoneUpdates { get; set; } = new BotZoneUpdatesConfig();
 
         [DataMember(Name = "wait_time_before_planting", IsRequired = true)]
         public float WaitTimeBeforePlanting { get; set; } = 1;

@@ -75,7 +75,15 @@
 		},
 		"min_time_between_switching_objectives": 5,
 		"default_wait_time_after_objective_completion": 5,
-		"update_bot_zone_after_stopping": true,
+		"bot_zone_updates": {
+			"update_bot_zone_after_stopping": true,
+			"update_patrol_point_after_stopping": true,
+			"debounce_time_after_changing_patrol_point_s": 2,
+			"patrol_point_radius_around_boss": {
+				"min": 3,
+				"max": 50
+			}
+		},
 		"wait_time_before_planting": 1,
 		"quest_generation": {
 			"navmesh_search_distance_item": 1.5,
@@ -91,7 +99,14 @@
 		"bot_pathing": {
 			"max_start_position_discrepancy": 0.5,
 			"incomplete_path_retry_interval": 5,
-			"disable_eft_local_avoidance": true
+			"eft_local_avoidance": {
+				"allow_for_questing_bots": true,
+				"avoidance_radius": {
+					"min": 0.75,
+					"max": 1
+				},
+				"radius_multiplier_to_drop_offset": 2
+			}
 		},
 		"bot_questing_requirements": {
 			"exclude_bots_by_level": true,

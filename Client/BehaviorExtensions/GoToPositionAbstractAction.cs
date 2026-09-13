@@ -230,7 +230,7 @@ namespace QuestingBots.BehaviorExtensions
 
         protected void updateBotZoneForGroup(bool allowForFollowers = false)
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UpdateBotZoneAfterStopping)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdateBotZoneAfterStopping)
             {
                 return;
             }
@@ -257,19 +257,29 @@ namespace QuestingBots.BehaviorExtensions
 
         protected void RefreshPatrolPoint()
         {
-            if (TimeSinceLastPatrolPointSet < 2)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdateBotZoneAfterStopping)
             {
                 return;
             }
 
-            float bossExclusionRadius = 3;
-            float maxPatrolPointDistance = 50;
+            if (TimeSinceLastPatrolPointSet < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.DebounceTimeAfterChangingPatrolPoint)
+            {
+                return;
+            }
+
+            float bossExclusionRadius = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min;
+            float maxPatrolPointDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
             PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
+
+            if (newPatrolPoint == BotOwner.PatrollingData.PointControl.PatrolPoint)
+            {
+                return;
+            }
 
             if (newPatrolPoint != null)
             {
-                //float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
-                //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText());
+                float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
+                Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText() + " (" + newPatrolPoint.Position + ")");
             }
 
             BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
