@@ -271,15 +271,15 @@ namespace QuestingBots.BehaviorExtensions
             float maxPatrolPointDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
             PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
 
-            if (newPatrolPoint == BotOwner.PatrollingData.PointControl.PatrolPoint)
+            if (newPatrolPoint?.TargetPoint == BotOwner.PatrollingData.PointControl.PatrolPoint.TargetPoint)
             {
                 return;
             }
 
             if (newPatrolPoint != null)
             {
-                float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
-                Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText() + " (" + newPatrolPoint.Position + ")");
+                //float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
+                //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText() + " (" + newPatrolPoint.Position + ")");
             }
 
             BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
