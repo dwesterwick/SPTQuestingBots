@@ -60,6 +60,17 @@ namespace QuestingBots.Helpers
             return false;
         }
 
+        public static bool IsAllowedToQuest(this BotOwner bot)
+        {
+            Components.BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+            if ((objectiveManager != null) && objectiveManager.IsQuestingAllowed)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static IEnumerable<BotBrainType> AddTestBrains(this IEnumerable<BotBrainType> list)
         {
             return list.Concat(new[]

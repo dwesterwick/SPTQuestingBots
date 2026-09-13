@@ -81,7 +81,7 @@ namespace QuestingBots
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.ProcessSourceOcclusionPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
-            new Patches.DisableLocalAvoidancePatch().Enable();
+            new Patches.OverrideLocalAvoidancePatch().Enable();
         }
 
         private void EnableLighthousePatches()

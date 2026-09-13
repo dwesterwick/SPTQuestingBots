@@ -8,6 +8,7 @@ using Comfort.Common;
 using EFT;
 using QuestingBots.Utils;
 using SPT.Custom.CustomAI;
+using UnityEngine;
 
 namespace QuestingBots.Helpers
 {
@@ -34,6 +35,29 @@ namespace QuestingBots.Helpers
             group.Lock();
 
             return group;
+        }
+
+        public static BotOwner? GetNearestGroupMember(this BotOwner bot, out float distanceToNearestMember)
+        {
+            BotOwner? nearestMember = null;
+            distanceToNearestMember = float.MaxValue;
+
+            foreach (BotOwner member in bot.BotsGroup._members)
+            {
+                if (member.Id == bot.Id)
+                {
+                    continue;
+                }
+
+                float distance = Vector3.Distance(member.Position, bot.Position);
+                if (distance < distanceToNearestMember)
+                {
+                    nearestMember = member;
+                    distanceToNearestMember = distance;
+                }
+            }
+
+            return nearestMember;
         }
 
         public static IEnumerable<BotOwner> FindZryachiyAndFollowers()

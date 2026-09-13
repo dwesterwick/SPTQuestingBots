@@ -263,19 +263,22 @@ namespace QuestingBots.BehaviorExtensions
             }
 
             float bossExclusionRadius = 3;
-            PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(bossExclusionRadius) ?? GetClosestPatrolPoint();
+            float maxPatrolPointDistance = 50;
+            PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
 
             if (newPatrolPoint != null)
             {
                 //float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
                 //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText());
-
-                BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
-                timeSinceLastPatrolPointSetTimer.Restart();
             }
+
+            BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
+            BotOwner.PatrollingData.PointControl.SetPatrolPointOwner(BotOwner.PatrollingData.PointControl.PatrolPoint.TargetPoint);
+
+            timeSinceLastPatrolPointSetTimer.Restart();
         }
 
-        protected PatrolPointContainer? GetClosestPatrolPoint()
+        protected PatrolPointContainer? GetClosestPatrolPoint(float maxDistance)
         {
             float closestPointDistance = float.MaxValue;
             PatrolPointContainer? closestPoint = null;
@@ -287,6 +290,11 @@ namespace QuestingBots.BehaviorExtensions
                 }
 
                 float distance = Vector3.Distance(patrolPoint.Position, BotOwner.Position);
+                if (distance > maxDistance)
+                {
+                    continue;
+                }
+
                 if (distance < closestPointDistance)
                 {
                     closestPointDistance = distance;
@@ -296,7 +304,7 @@ namespace QuestingBots.BehaviorExtensions
             return closestPoint;
         }
 
-        protected PatrolPointContainer? GetClosestPatrolPointNearBoss(float exclusionRadiusAroundBoss)
+        protected PatrolPointContainer? GetClosestPatrolPointNearBoss(float maxDistance, float exclusionRadiusAroundBoss)
         {
             if (!BotOwner.BotFollower.HaveBoss)
             {
@@ -313,6 +321,11 @@ namespace QuestingBots.BehaviorExtensions
                 }
 
                 float distance = Vector3.Distance(patrolPoint.Position, BotOwner.BotFollower.BossToFollow.Position);
+                if (distance > maxDistance)
+                {
+                    continue;
+                }
+
                 if (distance <= exclusionRadiusAroundBoss)
                 {
                     continue;
