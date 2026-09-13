@@ -25,6 +25,7 @@ namespace QuestingBots.BehaviorExtensions
 
         private static FieldInfo botZoneField = null!;
 
+        private Stopwatch timeSinceLastPatrolPointSetTimer = Stopwatch.StartNew();
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceLastVaultTimer = Stopwatch.StartNew();
@@ -32,6 +33,7 @@ namespace QuestingBots.BehaviorExtensions
         private Vector3? lastBotPosition = null;
         private bool loggedBrainLayerError = false;
 
+        protected double TimeSinceLastPatrolPointSet => timeSinceLastPatrolPointSetTimer.ElapsedMilliseconds / 1000.0;
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastVault => timeSinceLastVaultTimer.ElapsedMilliseconds / 1000.0;
@@ -69,6 +71,7 @@ namespace QuestingBots.BehaviorExtensions
             BotOwner.PatrollingData.Unpause();
 
             updateBotZoneForGroup();
+            RefreshPatrolPoint();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)
@@ -250,6 +253,78 @@ namespace QuestingBots.BehaviorExtensions
 
             botZoneField.SetValue(BotOwner.BotsGroup, closestBotZone);
             BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
+        }
+
+        protected void RefreshPatrolPoint()
+        {
+            if (TimeSinceLastPatrolPointSet < 2)
+            {
+                return;
+            }
+
+            float bossExclusionRadius = 3;
+            PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(bossExclusionRadius) ?? GetClosestPatrolPoint();
+
+            if (newPatrolPoint != null)
+            {
+                float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
+                Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText());
+
+                BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
+                timeSinceLastPatrolPointSetTimer.Restart();
+            }
+        }
+
+        protected PatrolPointContainer? GetClosestPatrolPoint()
+        {
+            float closestPointDistance = float.MaxValue;
+            PatrolPointContainer? closestPoint = null;
+            foreach (PatrolPoint patrolPoint in BotOwner.PatrollingData.PointControl.Way.Points)
+            {
+                if (!patrolPoint.IsFreeFor(BotOwner))
+                {
+                    continue;
+                }
+
+                float distance = Vector3.Distance(patrolPoint.Position, BotOwner.Position);
+                if (distance < closestPointDistance)
+                {
+                    closestPointDistance = distance;
+                    closestPoint = new PatrolPointContainer(patrolPoint);
+                }
+            }
+            return closestPoint;
+        }
+
+        protected PatrolPointContainer? GetClosestPatrolPointNearBoss(float exclusionRadiusAroundBoss)
+        {
+            if (!BotOwner.BotFollower.HaveBoss)
+            {
+                return null;
+            }
+
+            float closestPointDistance = float.MaxValue;
+            PatrolPointContainer? closestPoint = null;
+            foreach (PatrolPoint patrolPoint in BotOwner.PatrollingData.PointControl.Way.Points)
+            {
+                if (!patrolPoint.IsFreeFor(BotOwner))
+                {
+                    continue;
+                }
+
+                float distance = Vector3.Distance(patrolPoint.Position, BotOwner.BotFollower.BossToFollow.Position);
+                if (distance <= exclusionRadiusAroundBoss)
+                {
+                    continue;
+                }
+
+                if (distance < closestPointDistance)
+                {
+                    closestPointDistance = distance;
+                    closestPoint = new PatrolPointContainer(patrolPoint);
+                }
+            }
+            return closestPoint;
         }
 
         private void updateBotStuckDetection()

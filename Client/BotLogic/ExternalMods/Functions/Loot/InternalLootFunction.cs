@@ -27,11 +27,13 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 
         public override bool IsLooting()
         {
+            BotOwner.ItemTaker.RefreshClosestItems();
             if (BotOwner.ItemTaker.HaveItemToTake())
             {
                 return true;
             }
 
+            BotOwner.DeadBodyWork.UpdateCheck();
             if (BotOwner.DeadBodyWork.ShallUse)
             {
                 return true;
@@ -41,7 +43,6 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
             {
                 return false;
             }
-
             return BotOwner.PatrollingData.LootData.ClusterLootingNow();
         }
 
