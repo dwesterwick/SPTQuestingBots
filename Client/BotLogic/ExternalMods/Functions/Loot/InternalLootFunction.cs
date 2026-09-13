@@ -39,6 +39,9 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
                 return true;
             }
 
+            float maxDistance = 0.7f * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.BreakForLooting.MaxDistanceFromBoss;
+            BotOwner.PatrollingData.LootData.UpdateFindNextLootPoint(maxDistance);
+
             if (!BotOwner.InLootClusterRadius())
             {
                 return false;

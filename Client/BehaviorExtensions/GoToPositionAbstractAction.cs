@@ -267,8 +267,8 @@ namespace QuestingBots.BehaviorExtensions
 
             if (newPatrolPoint != null)
             {
-                float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
-                Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText());
+                //float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
+                //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText());
 
                 BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
                 timeSinceLastPatrolPointSetTimer.Restart();
