@@ -30,7 +30,7 @@ namespace QuestingBots.BotLogic
         public bool CanLayerBeUsed => layer?.IsActive == true;
         public double TimeSinceLastRequested => lastRequestedTimer.IsRunning ? lastRequestedTimer.ElapsedMilliseconds / 1000.0 : double.MaxValue;
 
-        private static IReadOnlyList<Type> _QuestingBotsBrainLayers = null!;
+        private static IReadOnlyList<Type>? _QuestingBotsBrainLayers = null;
         public static IReadOnlyList<Type> QuestingBotsBrainLayers
         {
             get
@@ -47,7 +47,7 @@ namespace QuestingBots.BotLogic
             }
         }
 
-        private static IReadOnlyList<string> _QuestingBotsBrainLayerNames = null!;
+        private static IReadOnlyList<string>? _QuestingBotsBrainLayerNames = null;
         public static IReadOnlyList<string> QuestingBotsBrainLayerNames
         {
             get

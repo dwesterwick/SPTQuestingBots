@@ -71,7 +71,7 @@ namespace QuestingBots.Components
 
             bool invalidQuestPosition = true;
             int attempts = 0;
-            while (invalidQuestPosition && (attempts < 10))
+            while (invalidQuestPosition && (attempts < 3))
             {
                 // Need to wait at least one frame for the NavMeshObstacle to take effect
                 yield return null;

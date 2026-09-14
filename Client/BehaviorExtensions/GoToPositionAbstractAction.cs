@@ -267,8 +267,8 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            float bossExclusionRadius = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min;
             float maxPatrolPointDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
+            float bossExclusionRadius = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min;
             PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
 
             if (newPatrolPoint?.TargetPoint == BotOwner.PatrollingData.PointControl.PatrolPoint.TargetPoint)
