@@ -14,6 +14,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "avoidance_radius", IsRequired = true)]
         public MinMaxConfig AvoidanceRadius { get; set; } = new MinMaxConfig(0.75, 1);
 
+        [DataMember(Name = "repulsion_power_limit", IsRequired = true)]
+        public float RepulsionPowerLimit { get; set; } = 0.05f;
+
         [DataMember(Name = "radius_multiplier_to_drop_offset", IsRequired = true)]
         public float RadiusMultiplierToDropOffset { get; set; } = 2;
 

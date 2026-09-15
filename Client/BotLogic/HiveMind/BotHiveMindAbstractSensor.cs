@@ -74,6 +74,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public virtual bool CheckForBot(BotOwner bot)
         {
+            if (bot == null)
+            {
+                return false;
+            }
+
             return botState.ContainsKey(bot) && botState[bot];
         }
 
@@ -112,6 +117,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
         private bool? checkBotState(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
+            if (bot == null)
+            {
+                return null;
+            }
+
             if (dict.TryGetValue(bot, out bool value))
             {
                 return value;
@@ -122,6 +132,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
         private bool checkStateForAnyFollowers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
+            if (bot == null)
+            {
+                return false;
+            }
+
             if (!BotHiveMindMonitor.botGroupFollowers.ContainsKey(bot))
             {
                 return false;
@@ -145,6 +160,11 @@ namespace QuestingBots.BotLogic.HiveMind
 
         private bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
         {
+            if (bot == null)
+            {
+                return false;
+            }
+
             BotOwner boss = BotHiveMindMonitor.GetGroupLeader(bot) ?? bot;
 
             if (checkBotState(dict, boss) == true)

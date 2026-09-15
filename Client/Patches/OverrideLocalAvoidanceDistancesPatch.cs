@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace QuestingBots.Patches
 {
-    public class OverrideLocalAvoidancePatch : ModulePatch
+    public class OverrideLocalAvoidanceDistancesPatch : ModulePatch
     {
         private static float? _distToBeCloseOverride = null;
         public static float DistToBeCloseOverride
@@ -52,8 +52,8 @@ namespace QuestingBots.Patches
         [PatchTranspiler]
         protected static IEnumerable<CodeInstruction> PatchTranspiler(IEnumerable<CodeInstruction> originalInstructions)
         {
-            MethodInfo DistToBeCloseExtMethod = AccessTools.Method(typeof(OverrideLocalAvoidancePatch), nameof(GetDistToBeCloseExt));
-            MethodInfo DistToBeCloseMethod = AccessTools.Method(typeof(OverrideLocalAvoidancePatch), nameof(GetDistToBeClose));
+            MethodInfo DistToBeCloseExtMethod = AccessTools.Method(typeof(OverrideLocalAvoidanceDistancesPatch), nameof(GetDistToBeCloseExt));
+            MethodInfo DistToBeCloseMethod = AccessTools.Method(typeof(OverrideLocalAvoidanceDistancesPatch), nameof(GetDistToBeClose));
 
             foreach (CodeInstruction originalInstruction in originalInstructions)
             {
@@ -79,22 +79,32 @@ namespace QuestingBots.Patches
 
         private static float GetDistToBeCloseExt(BotLocalAvoidance __instance)
         {
-            if (__instance._owner.IsAllowedToQuest())
-            {
-                return DistToBeCloseExtOverride;
-            }
-
-            return BotLocalAvoidance.DistToBeCloseExt;
+            return ShouldUseOverrides(__instance._owner) ? DistToBeCloseExtOverride : BotLocalAvoidance.DistToBeCloseExt;
         }
 
         private static float GetDistToBeClose(BotLocalAvoidance __instance)
         {
-            if (__instance._owner.IsAllowedToQuest())
+            return ShouldUseOverrides(__instance._owner) ? DistToBeCloseOverride : BotLocalAvoidance.DistToBeClose;
+        }
+
+        private static bool ShouldUseOverrides(BotOwner bot)
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AllowForQuestingBots)
             {
-                return DistToBeCloseOverride;
+                return false;
             }
 
-            return BotLocalAvoidance.DistToBeClose;
+            if (!bot.IsAllowedToQuest())
+            {
+                return false;
+            }
+
+            if (!bot.IsUsingQuestingBotsBrainLayer())
+            {
+                return false;
+            }
+
+            return true;
         }
 
         [PatchPrefix]
@@ -116,12 +126,14 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            if (__instance.TotalOffset == Vector3.zero)
+            if (__instance.NotLinkedOffset == Vector3.zero)
             {
                 return;
             }
 
-            BotOwner? nearestGroupMember = ____owner.GetNearestGroupMember(out float distance);
+            //Singleton<LoggingUtil>.Instance.LogDebug("NotLinkedOffset offset is " + __instance.NotLinkedOffset.magnitude + " for " + ____owner.GetText());
+
+            BotOwner ? nearestGroupMember = ____owner.GetNearestGroupMember(out float distance);
             if (distance > DistToBeCloseExtOverride * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.RadiusMultiplierToDropOffset)
             {
                 //Singleton<LoggingUtil>.Instance.LogDebug("Dropping local avoidance offset for " + ____owner.GetText());

@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using QuestingBots.BotLogic;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
@@ -36,6 +37,17 @@ namespace QuestingBots.Helpers
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Regrouping);
 
             Singleton<LoggingUtil>.Instance.LogDebug("Questing Bots brain layers added");
+        }
+
+        public static bool IsUsingQuestingBotsBrainLayer(this BotOwner bot)
+        {
+            string activeBrainLayer = bot.Brain.ActiveLayerName() ?? "";
+            if (LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeBrainLayer))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static bool AllowsQuesting(this BotType botType)

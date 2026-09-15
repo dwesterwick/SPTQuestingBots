@@ -81,7 +81,8 @@ namespace QuestingBots
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.ProcessSourceOcclusionPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
-            new Patches.OverrideLocalAvoidancePatch().Enable();
+            new Patches.OverrideLocalAvoidanceDistancesPatch().Enable();
+            new Patches.OverrideLocalAvoidancePowerLimitPatch().Enable();
             new Patches.DisableEftNavMeshCorrectionPatch().Enable();
         }
 

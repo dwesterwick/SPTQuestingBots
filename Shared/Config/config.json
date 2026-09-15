@@ -105,6 +105,7 @@
 					"min": 0.75,
 					"max": 1
 				},
+				"repulsion_power_limit":  0.05,
 				"radius_multiplier_to_drop_offset": 2
 			}
 		},

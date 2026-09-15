@@ -59,7 +59,9 @@ namespace QuestingBots.BehaviorExtensions
             resumeStuckTimer();
 
             timeSinceLastJumpTimer.Restart();
+
             BotOwner.PatrollingData.Pause();
+            RemovePatrolPointReservation();
         }
 
         public override void Stop()
@@ -68,9 +70,9 @@ namespace QuestingBots.BehaviorExtensions
 
             pauseStuckTimer();
 
-            BotOwner.PatrollingData.Unpause();
-
             updateBotZoneForGroup();
+
+            BotOwner.PatrollingData.Unpause();
             RefreshPatrolPoint();
         }
 
@@ -255,9 +257,19 @@ namespace QuestingBots.BehaviorExtensions
             BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
         }
 
+        protected void RemovePatrolPointReservation()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdatePatrolPointAfterStopping)
+            {
+                return;
+            }
+
+            BotOwner.PatrollingData.PointControl._lastSetOwner.SetOwner(null);
+        }
+
         protected void RefreshPatrolPoint()
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdateBotZoneAfterStopping)
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdatePatrolPointAfterStopping)
             {
                 return;
             }
@@ -296,6 +308,7 @@ namespace QuestingBots.BehaviorExtensions
             {
                 if (!patrolPoint.IsFreeFor(BotOwner))
                 {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot use patrol point at " + patrolPoint.Position + "; reserved for " + patrolPoint.Owner.GetText());
                     continue;
                 }
 
@@ -316,7 +329,7 @@ namespace QuestingBots.BehaviorExtensions
 
         protected PatrolPointContainer? GetClosestPatrolPointNearBoss(float maxDistance, float exclusionRadiusAroundBoss)
         {
-            if (!BotOwner.BotFollower.HaveBoss)
+            if (!BotOwner.BotFollower.HaveBoss || !BotOwner.BotFollower.BossToFollow.IsAlive)
             {
                 return null;
             }
@@ -327,6 +340,7 @@ namespace QuestingBots.BehaviorExtensions
             {
                 if (!patrolPoint.IsFreeFor(BotOwner))
                 {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot use patrol point at " + patrolPoint.Position + "; reserved for " + patrolPoint.Owner.GetText());
                     continue;
                 }
 

@@ -1,6 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic;
+using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 using System;
@@ -26,8 +26,7 @@ namespace QuestingBots.Patches
                 return true;
             }
 
-            string activeBrainLayer = ____owner.Brain.ActiveLayerName() ?? "";
-            if (LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeBrainLayer))
+            if (____owner.IsUsingQuestingBotsBrainLayer())
             {
                 return false;
             }
