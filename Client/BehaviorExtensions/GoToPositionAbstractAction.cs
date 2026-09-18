@@ -25,6 +25,7 @@ namespace QuestingBots.BehaviorExtensions
 
         private static FieldInfo botZoneField = null!;
 
+        private PatrolPointSelector patrolPointSelector;
         private Stopwatch timeSinceLastPatrolPointSetTimer = Stopwatch.StartNew();
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
@@ -45,6 +46,8 @@ namespace QuestingBots.BehaviorExtensions
             {
                 botZoneField = AccessTools.Field(typeof(BotsGroup), "<BotZone>k__BackingField");
             }
+
+            patrolPointSelector = new PatrolPointSelector(_BotOwner);
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -280,10 +283,9 @@ namespace QuestingBots.BehaviorExtensions
 
             if (TimeSinceLastPatrolPointSet < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.DebounceTimeAfterChangingPatrolPoint)
             {
-                //return;
+                return;
             }
 
-            PatrolPointSelector patrolPointSelector = new PatrolPointSelector(BotOwner);
             patrolPointSelector.RefreshPatrolPoint();
 
             timeSinceLastPatrolPointSetTimer.Restart();

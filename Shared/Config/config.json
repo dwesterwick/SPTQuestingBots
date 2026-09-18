@@ -78,7 +78,7 @@
 		"bot_zone_updates": {
 			"update_bot_zone_after_stopping": true,
 			"update_patrol_point_after_stopping": true,
-			"debounce_time_after_changing_patrol_point_s": 2,
+			"debounce_time_after_changing_patrol_point_s": 0.5,
 			"patrol_point_radius_around_boss": {
 				"min": 3,
 				"max": 50
