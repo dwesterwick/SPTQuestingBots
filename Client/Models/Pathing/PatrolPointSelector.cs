@@ -26,13 +26,13 @@ namespace QuestingBots.Models.Pathing
             PatrolWay? closestWay = GetClosestPatrolWay();
             if (closestWay == null)
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Could not find patrol point for " + _bot.GetText());
+                //Singleton<LoggingUtil>.Instance.LogDebug("Could not find patrol point for " + _bot.GetText());
             }
 
             if ((closestWay != null) && (_bot.PatrollingData.PointControl.Way != closestWay))
             {
                 _bot.PatrollingData.PointControl.SetWay(closestWay, new FindNextPointDelegate(CreatePointContainer));
-                Singleton<LoggingUtil>.Instance.LogInfo("Patrol way changed for " + _bot.GetText());
+                //Singleton<LoggingUtil>.Instance.LogInfo("Patrol way changed for " + _bot.GetText());
             }
             else
             {
@@ -47,8 +47,8 @@ namespace QuestingBots.Models.Pathing
                 return;
             }
 
-            float distance = Vector3.Distance(_bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position, _bot.Position);
-            Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + _bot.GetText() + " (" + _bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position + ")");
+            //float distance = Vector3.Distance(_bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position, _bot.Position);
+            //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + _bot.GetText() + " (" + _bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position + ")");
         }
 
         private PatrolPointContainer CreatePointContainer(bool withSetting, bool withoutNext, int minSubTargets = -1, bool canCut = true, PatrolPointFilterDelegate? pointFilter = null)
