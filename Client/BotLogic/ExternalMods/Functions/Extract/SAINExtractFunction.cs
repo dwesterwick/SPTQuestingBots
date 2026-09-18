@@ -29,7 +29,6 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
             if (!tryExtractSingleBot(BotOwner))
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to extract. SAIN Interop not initialized properly or is outdated.");
-
                 return false;
             }
 
@@ -45,16 +44,20 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
                     continue;
                 }
 
-                if (tryExtractSingleBot(follower))
-                {
-                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
-                    {
-                        Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
-                    }
-                }
-                else
+                if (!tryExtractSingleBot(follower))
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning("Could not instruct follower " + follower.GetText() + " to extract now. SAIN Interop not initialized properly or is outdated.");
+                    continue;
+                }
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                }
+
+                if (!trySetExfilForBot(follower))
+                {
+                    Singleton<LoggingUtil>.Instance.LogWarning("Could not find an extract for " + follower.GetText());
                 }
             }
 

@@ -165,7 +165,9 @@ namespace QuestingBots.BotLogic.HiveMind
 
         public static ReadOnlyCollection<BotOwner> GetGroupFollowers(BotOwner bot)
         {
-            return botGroupFollowers.ContainsKey(bot) ? botGroupFollowers[bot].AsReadOnly() : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            BotOwner leader = GetGroupLeader(bot) ?? bot;
+
+            return botGroupFollowers.ContainsKey(leader) ? botGroupFollowers[leader].AsReadOnly() : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
         }
 
         public static IEnumerable<BotOwner> GetAllGroupMembers(BotOwner bot)

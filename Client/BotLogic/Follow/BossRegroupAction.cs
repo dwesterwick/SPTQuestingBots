@@ -66,6 +66,7 @@ namespace QuestingBots.BotLogic.Follow
             else
             {
                 ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.RegroupPauseTime;
+                restartStuckTimer();
             }
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 

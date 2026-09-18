@@ -1,5 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
+using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
@@ -26,12 +27,17 @@ namespace QuestingBots.Patches
                 return true;
             }
 
-            if (____owner.IsUsingQuestingBotsBrainLayer())
+            if (!____owner.IsUsingQuestingBotsBrainLayer())
             {
-                return false;
+                return true;
             }
 
-            return true;
+            if (____owner.GetObjectiveManager()?.IsStuck == true)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Comfort.Common;
 using EFT;
 using HarmonyLib;
-using QuestingBots.BotLogic;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
+using QuestingBots.Models.Pathing;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -119,8 +119,7 @@ namespace QuestingBots.BehaviorExtensions
 
         private bool isAQuestingBotsBrainLayerActive()
         {
-            string activeLayerName = BotOwner.Brain.ActiveLayerName();
-            if (LogicLayerMonitor.QuestingBotsBrainLayerNames.Contains(activeLayerName))
+            if (BotOwner.IsUsingQuestingBotsBrainLayer())
             {
                 loggedBrainLayerError = false;
                 return true;
@@ -128,7 +127,8 @@ namespace QuestingBots.BehaviorExtensions
 
             if (!loggedBrainLayerError || (TimeSinceLastBrainLayerMessage >= BRAIN_LAYER_ERROR_MESSAGE_INTERVAL))
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer. This is normally caused by an exception in the update logic of another layer. Active layer name: " + activeLayerName);
+                string activeBrainLayer = BotOwner.Brain.ActiveLayerName() ?? "[NULL]";
+                Singleton<LoggingUtil>.Instance.LogError("Cannot recalculate path for " + BotOwner.GetText() + " because the active brain layer is not a Questing Bots layer. This is normally caused by an exception in the update logic of another layer. Active layer name: " + activeBrainLayer);
 
                 loggedBrainLayerError = true;
                 timeSinceLastBrainLayerMessageTimer.Restart();
@@ -157,11 +157,13 @@ namespace QuestingBots.BehaviorExtensions
         protected void restartStuckTimer()
         {
             botIsStuckTimer.Restart();
+            ObjectiveManager.IsStuck = false;
         }
 
         protected void pauseStuckTimer()
         {
             botIsStuckTimer.Stop();
+            ObjectiveManager.IsStuck = false;
         }
 
         protected void resumeStuckTimer()
@@ -174,24 +176,26 @@ namespace QuestingBots.BehaviorExtensions
             return checkIfBotIsStuck(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.Time, true);
         }
 
-        protected bool checkIfBotIsStuck(float stuckTime, bool drawPath)
+        protected bool checkIfBotIsStuck(float maximumStuckTime, bool drawPath)
         {
             updateBotStuckDetection();
 
             // If the bot hasn't moved enough within a certain time while this layer is active, assume the bot is stuck
-            if (StuckTime > stuckTime)
+            if (StuckTime > maximumStuckTime)
             {
                 if (drawPath && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.ShowFailedPaths)
                 {
                     drawBotPath(Color.red);
                 }
 
+                ObjectiveManager.IsStuck = true;
                 return true;
             }
 
             // If the bot might be stuck but stuckTime hasn't been reached, see if the we can stop the bot from being stuck
             tryToGetUnstuck();
 
+            ObjectiveManager.IsStuck = false;
             return false;
         }
 
@@ -276,96 +280,25 @@ namespace QuestingBots.BehaviorExtensions
 
             if (TimeSinceLastPatrolPointSet < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.DebounceTimeAfterChangingPatrolPoint)
             {
-                return;
+                //return;
             }
 
-            float maxPatrolPointDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
-            float bossExclusionRadius = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min;
-            PatrolPointContainer? newPatrolPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
-
-            if (newPatrolPoint?.TargetPoint == BotOwner.PatrollingData.PointControl.PatrolPoint.TargetPoint)
-            {
-                return;
-            }
-
-            if (newPatrolPoint != null)
-            {
-                //float distance = Vector3.Distance(newPatrolPoint.Position, BotOwner.Position);
-                //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + BotOwner.GetText() + " (" + newPatrolPoint.Position + ")");
-            }
-
-            BotOwner.PatrollingData.PointControl.SetTarget(newPatrolPoint, -1);
-            BotOwner.PatrollingData.PointControl.SetPatrolPointOwner(BotOwner.PatrollingData.PointControl.PatrolPoint.TargetPoint);
+            PatrolPointSelector patrolPointSelector = new PatrolPointSelector(BotOwner);
+            patrolPointSelector.RefreshPatrolPoint();
 
             timeSinceLastPatrolPointSetTimer.Restart();
         }
 
-        protected PatrolPointContainer? GetClosestPatrolPoint(float maxDistance)
-        {
-            float closestPointDistance = float.MaxValue;
-            PatrolPointContainer? closestPoint = null;
-            foreach (PatrolPoint patrolPoint in BotOwner.PatrollingData.PointControl.Way.Points)
-            {
-                if (!patrolPoint.IsFreeFor(BotOwner))
-                {
-                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot use patrol point at " + patrolPoint.Position + "; reserved for " + patrolPoint.Owner.GetText());
-                    continue;
-                }
-
-                float distance = Vector3.Distance(patrolPoint.Position, BotOwner.Position);
-                if (distance > maxDistance)
-                {
-                    continue;
-                }
-
-                if (distance < closestPointDistance)
-                {
-                    closestPointDistance = distance;
-                    closestPoint = new PatrolPointContainer(patrolPoint);
-                }
-            }
-            return closestPoint;
-        }
-
-        protected PatrolPointContainer? GetClosestPatrolPointNearBoss(float maxDistance, float exclusionRadiusAroundBoss)
-        {
-            if (!BotOwner.BotFollower.HaveBoss || !BotOwner.BotFollower.BossToFollow.IsAlive)
-            {
-                return null;
-            }
-
-            float closestPointDistance = float.MaxValue;
-            PatrolPointContainer? closestPoint = null;
-            foreach (PatrolPoint patrolPoint in BotOwner.PatrollingData.PointControl.Way.Points)
-            {
-                if (!patrolPoint.IsFreeFor(BotOwner))
-                {
-                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot use patrol point at " + patrolPoint.Position + "; reserved for " + patrolPoint.Owner.GetText());
-                    continue;
-                }
-
-                float distance = Vector3.Distance(patrolPoint.Position, BotOwner.BotFollower.BossToFollow.Position);
-                if (distance > maxDistance)
-                {
-                    continue;
-                }
-
-                if (distance <= exclusionRadiusAroundBoss)
-                {
-                    continue;
-                }
-
-                if (distance < closestPointDistance)
-                {
-                    closestPointDistance = distance;
-                    closestPoint = new PatrolPointContainer(patrolPoint);
-                }
-            }
-            return closestPoint;
-        }
-
         private void updateBotStuckDetection()
         {
+            if (BotOwner.DoorOpener.Interacting)
+            {
+                pauseStuckTimer();
+                return;
+            }
+
+            resumeStuckTimer();
+
             if (!lastBotPosition.HasValue)
             {
                 lastBotPosition = BotOwner.Position;

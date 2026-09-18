@@ -178,7 +178,7 @@
 				"target_position_variation_allowed": 3,
 				"target_range_questing": {
 					"min": 7,
-					"max": 12
+					"max": 20
 				},
 				"target_range_combat": {
 					"min": 15,

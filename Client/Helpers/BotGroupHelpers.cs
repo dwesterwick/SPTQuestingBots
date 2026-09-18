@@ -144,5 +144,20 @@ namespace QuestingBots.Helpers
                 playerGroup.AddAlly(otherPlayer);
             }
         }
+
+        public static bool CanUsePatrolWay(this BotOwner bot, PatrolWay way)
+        {
+            if (way.PatrolType == PatrolType.reserved)
+            {
+                return false;
+            }
+
+            if (!way.HaveFreeSpace(bot) || !way.CanBeUsedByRole(bot.Profile.Info.Settings.Role))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
