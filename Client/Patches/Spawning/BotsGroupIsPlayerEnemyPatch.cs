@@ -94,12 +94,12 @@ namespace QuestingBots.Patches.Spawning
 
             if (!player.IsAI)
             {
-                return;
+                //return;
             }
 
             if (__instance._initialBot.Profile.Info.Settings.Role == player.Profile.Info.Settings.Role)
             {
-                return;
+                //return;
             }
 
             if (!player.Profile.WillBeAPMC() && !player.Profile.WillBeAPlayerScav())
