@@ -160,13 +160,13 @@ namespace QuestingBots.BehaviorExtensions
         protected void restartStuckTimer()
         {
             botIsStuckTimer.Restart();
-            ObjectiveManager.IsStuck = false;
+            ObjectiveManager.MightBeStuck = false;
         }
 
         protected void pauseStuckTimer()
         {
             botIsStuckTimer.Stop();
-            ObjectiveManager.IsStuck = false;
+            ObjectiveManager.MightBeStuck = false;
         }
 
         protected void resumeStuckTimer()
@@ -190,15 +190,12 @@ namespace QuestingBots.BehaviorExtensions
                 {
                     drawBotPath(Color.red);
                 }
-
-                ObjectiveManager.IsStuck = true;
                 return true;
             }
 
             // If the bot might be stuck but stuckTime hasn't been reached, see if the we can stop the bot from being stuck
             tryToGetUnstuck();
 
-            ObjectiveManager.IsStuck = false;
             return false;
         }
 
@@ -320,6 +317,11 @@ namespace QuestingBots.BehaviorExtensions
             if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.Enabled)
             {
                 return;
+            }
+
+            if (StuckTime >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeNavMeshSnapping)
+            {
+                ObjectiveManager.MightBeStuck = true;
             }
 
             // Try jumping

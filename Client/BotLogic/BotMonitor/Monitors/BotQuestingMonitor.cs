@@ -129,6 +129,12 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             IReadOnlyCollection<BotOwner> followers = HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner);
             foreach (BotOwner follower in followers)
             {
+                // This shouldn't happen, but it does...
+                if (follower.Id == BotOwner.Id)
+                {
+                    continue;
+                }
+
                 Components.BotObjectiveManager? followerObjectiveManager = follower.GetObjectiveManager();
                 if (followerObjectiveManager == null)
                 {
@@ -138,6 +144,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
                 if (followerObjectiveManager.HasTeleportingAssignment)
                 {
+                    if (!FollowersNeedToTeleport)
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " will wait for " + follower.GetText() + " to teleport for its quest");
+                    }
+
                     return true;
                 }
             }

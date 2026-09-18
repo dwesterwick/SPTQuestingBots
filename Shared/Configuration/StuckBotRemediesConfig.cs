@@ -25,6 +25,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "vault_debounce_time", IsRequired = true)]
         public float VaultDebounceTime { get; set; } = 4;
 
+        [DataMember(Name = "min_time_before_nav_mesh_snapping", IsRequired = true)]
+        public float MinTimeBeforeNavMeshSnapping { get; set; } = 4;
+
         public StuckBotRemediesConfig()
         {
 

@@ -32,7 +32,7 @@ namespace QuestingBots.Patches
                 return true;
             }
 
-            if (____owner.GetObjectiveManager()?.IsStuck == true)
+            if (____owner.GetObjectiveManager()?.MightBeStuck == true)
             {
                 return true;
             }

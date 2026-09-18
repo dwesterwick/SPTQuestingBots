@@ -25,7 +25,7 @@ namespace QuestingBots.Components
         public bool IsQuestingAllowed { get; private set; } = false;
         public BotJobAssignment? CurrentAssignment { get; private set; } = null;
         public int StuckCount { get; set; } = 0;
-        public bool IsStuck { get; set; } = false;
+        public bool MightBeStuck { get; set; } = false;
         public float PauseRequest { get; set; } = 0;
         public Models.BotSprintingController BotSprintingController { get; private set; } = null!;
         public BotPathData BotPath { get; private set; } = null!;
@@ -312,6 +312,11 @@ namespace QuestingBots.Components
                 if (followerObjectiveManager == null)
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager component for follower " + follower.GetText() + " of " + botOwner.GetText());
+                    continue;
+                }
+
+                if (followerObjectiveManager.PrioritizeQuestingOverFollowing)
+                {
                     continue;
                 }
 

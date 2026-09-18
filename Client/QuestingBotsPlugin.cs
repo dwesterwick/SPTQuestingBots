@@ -112,10 +112,11 @@ namespace QuestingBots
 
 #if DEBUG
             AddBenchmarkingPatches();
-#endif
 
             //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
+            //new Patches.DebugPatches.TeleportDebuggingPatch().Enable();
+#endif
         }
 
         private void AddBenchmarkingPatches()

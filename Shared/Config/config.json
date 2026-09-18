@@ -55,7 +55,8 @@
 				"min_time_before_jumping": 6,
 				"jump_debounce_time": 4,
 				"min_time_before_vaulting": 8,
-				"vault_debounce_time": 4
+				"vault_debounce_time": 4,
+				"min_time_before_nav_mesh_snapping": 4
 			}
 		},
 		"unlocking_doors": {

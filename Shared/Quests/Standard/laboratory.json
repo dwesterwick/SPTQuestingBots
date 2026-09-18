@@ -2805,111 +2805,114 @@
             }
         ]
     },
-    {
-        "repeatable": false,
-        "minLevel": 0,
-        "maxLevel": 99,
-        "maxBots": 4,
-        "desirability": 30,
-        "name": "Containment Block Labs",
-        "objectives" : [
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
-                "maxRunDistance": 14,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -98.92033,
-                            "y": 0.09169745,
-                            "z": -428.497345
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -94.381134,
-                            "y": 0.09169745,
-                            "z": -428.031647
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -94.49426,
-                            "y": 0.09169745,
-                            "z": -431.924866
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
-                "maxRunDistance": 14,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -93.36049,
-                            "y": 0.09490237,
-                            "z": -434.4911
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
-                "maxRunDistance": 14,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -91.67958,
-                            "y": 0.08355421,
-                            "z": -428.618439
-                        }
-                    }
-                ]
-            },
-            {
-                "repeatable": false,
-                "minDistanceFromBot": 5,
-                "maxDistanceFromBot": 300,
-                "maxRunDistance": 14,
-                "steps": [
-                    {
-                        "position" : {
-                            "x": -86.73149,
-                            "y": 0.06937201,
-                            "z": -426.7874
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -82.8292847,
-                            "y": 0.06937128,
-                            "z": -428.546082
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -85.98061,
-                            "y": 0.06937703,
-                            "z": -430.303223
-                        }
-                    },
-                    {
-                        "position" : {
-                            "x": -82.7718048,
-                            "y": 0.09490238,
-                            "z": -442.207031
-                        }
-                    }
-                ]
-            }
-        ]
+  {
+    "repeatable": false,
+    "minLevel": 0,
+    "maxLevel": 99,
+    "maxBots": 4,
+    "desirability": 30,
+    "requiredSwitches": {
+      "Use": true
     },
+    "name": "Containment Block Labs",
+    "objectives": [
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 5,
+        "maxDistanceFromBot": 300,
+        "maxRunDistance": 14,
+        "steps": [
+          {
+            "position": {
+              "x": -98.92033,
+              "y": 0.09169745,
+              "z": -428.497345
+            }
+          },
+          {
+            "position": {
+              "x": -94.381134,
+              "y": 0.09169745,
+              "z": -428.031647
+            }
+          },
+          {
+            "position": {
+              "x": -94.49426,
+              "y": 0.09169745,
+              "z": -431.924866
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 5,
+        "maxDistanceFromBot": 300,
+        "maxRunDistance": 14,
+        "steps": [
+          {
+            "position": {
+              "x": -93.36049,
+              "y": 0.09490237,
+              "z": -434.4911
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 5,
+        "maxDistanceFromBot": 300,
+        "maxRunDistance": 14,
+        "steps": [
+          {
+            "position": {
+              "x": -91.67958,
+              "y": 0.08355421,
+              "z": -428.618439
+            }
+          }
+        ]
+      },
+      {
+        "repeatable": false,
+        "minDistanceFromBot": 5,
+        "maxDistanceFromBot": 300,
+        "maxRunDistance": 14,
+        "steps": [
+          {
+            "position": {
+              "x": -86.73149,
+              "y": 0.06937201,
+              "z": -426.7874
+            }
+          },
+          {
+            "position": {
+              "x": -82.8292847,
+              "y": 0.06937128,
+              "z": -428.546082
+            }
+          },
+          {
+            "position": {
+              "x": -85.98061,
+              "y": 0.06937703,
+              "z": -430.303223
+            }
+          },
+          {
+            "position": {
+              "x": -82.7718048,
+              "y": 0.09490238,
+              "z": -442.207031
+            }
+          }
+        ]
+      }
+    ]
+  },
     {
         "repeatable": true,
         "isCamping": true,
