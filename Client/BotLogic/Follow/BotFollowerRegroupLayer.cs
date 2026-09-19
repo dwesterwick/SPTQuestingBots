@@ -1,6 +1,9 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +41,7 @@ namespace QuestingBots.BotLogic.Follow
                 return previousState;
             }
 
-            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
             if (decisionMonitor.CurrentDecision != BotQuestingDecision.HelpBoss)
             {
                 return updatePreviousState(false);

@@ -31,7 +31,6 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
-        public float DistanceToBoss => BotHiveMindMonitor.GetDistanceToGroupLeader(BotOwner);
         public bool NeedToRegroupWithFollowers => followersTooFarTimer.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000;
         public bool StuckTooManyTimes => (ObjectiveManager != null) && (ObjectiveManager.StuckCount >= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.MaxCount);
 
@@ -71,6 +70,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 BotHiveMindMonitor.SeparateBotFromGroup(BotOwner);
             }
         }
+
+        public float GetDistanceToBoss() => BotHiveMindMonitor.GetDistanceToGroupLeader(BotOwner);
 
         private bool isQuesting() => BotOwner.IsLayerActive(nameof(BotObjectiveLayer));
         private bool isFollowing() => BotOwner.IsLayerActive(nameof(BotFollowerLayer));

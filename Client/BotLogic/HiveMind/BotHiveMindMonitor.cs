@@ -30,7 +30,7 @@ namespace QuestingBots.BotLogic.HiveMind
     public class BotHiveMindMonitor : MonoBehaviourDelayedUpdate
     {
         internal static List<BotOwner> deadBots = new List<BotOwner>();
-        internal static Dictionary<BotOwner, BotOwner> botGroupLeaders = new Dictionary<BotOwner, BotOwner>();
+        internal static Dictionary<BotOwner, BotOwner?> botGroupLeaders = new Dictionary<BotOwner, BotOwner?>();
         internal static Dictionary<BotOwner, List<BotOwner>> botGroupFollowers = new Dictionary<BotOwner, List<BotOwner>>();
 
         private static Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor> sensors = new Dictionary<BotHiveMindSensorType, BotHiveMindAbstractSensor>();
@@ -77,31 +77,36 @@ namespace QuestingBots.BotLogic.HiveMind
             }
         }
 
-        public static void UpdateValueForBot(BotHiveMindSensorType sensorType, BotOwner bot, bool value)
+        public static void UpdateValueForBot(BotHiveMindSensorType sensorType, BotOwner? bot, bool value)
         {
+            if (bot == null)
+            {
+                return;
+            }
+
             throwIfSensorNotRegistred(sensorType);
             sensors[sensorType].UpdateForBot(bot, value);
         }
 
-        public static bool GetValueForBot(BotHiveMindSensorType sensorType, BotOwner bot)
+        public static bool GetValueForBot(BotHiveMindSensorType sensorType, BotOwner? bot)
         {
             throwIfSensorNotRegistred(sensorType);
             return sensors[sensorType].CheckForBot(bot);
         }
 
-        public static bool GetValueForBossOfBot(BotHiveMindSensorType sensorType, BotOwner bot)
+        public static bool GetValueForBossOfBot(BotHiveMindSensorType sensorType, BotOwner? bot)
         {
             throwIfSensorNotRegistred(sensorType);
             return sensors[sensorType].CheckForBossOfBot(bot);
         }
 
-        public static bool GetValueForFollowers(BotHiveMindSensorType sensorType, BotOwner bot)
+        public static bool GetValueForFollowers(BotHiveMindSensorType sensorType, BotOwner? bot)
         {
             throwIfSensorNotRegistred(sensorType);
             return sensors[sensorType].CheckForFollowers(bot);
         }
 
-        public static bool GetValueForGroup(BotHiveMindSensorType sensorType, BotOwner bot)
+        public static bool GetValueForGroup(BotHiveMindSensorType sensorType, BotOwner? bot)
         {
             throwIfSensorNotRegistred(sensorType);
             return sensors[sensorType].CheckForGroup(bot);
@@ -138,7 +143,7 @@ namespace QuestingBots.BotLogic.HiveMind
             }
         }
 
-        public static bool IsRegistered(BotOwner bot)
+        public static bool IsRegistered(BotOwner? bot)
         {
             if (bot == null)
             {
@@ -148,30 +153,55 @@ namespace QuestingBots.BotLogic.HiveMind
             return botGroupLeaders.ContainsKey(bot);
         }
 
-        public static bool HasGroupLeader(BotOwner bot)
+        public static bool HasGroupLeader(BotOwner? bot)
         {
+            if (bot == null)
+            {
+                return false;
+            }
+
             return botGroupLeaders.ContainsKey(bot) && (botGroupLeaders[bot] != null);
         }
 
-        public static bool HasGroupFollowers(BotOwner bot)
+        public static bool HasGroupFollowers(BotOwner? bot)
         {
+            if (bot == null)
+            {
+                return false;
+            }
+
             return botGroupFollowers.ContainsKey(bot) && (botGroupFollowers[bot]?.Count > 0);
         }
 
-        public static BotOwner GetGroupLeader(BotOwner bot)
+        public static BotOwner? GetGroupLeader(BotOwner? bot)
         {
-            return botGroupLeaders.ContainsKey(bot) ? botGroupLeaders[bot] : null!;
+            if (bot == null)
+            {
+                return null;
+            }
+
+            return botGroupLeaders.ContainsKey(bot) ? botGroupLeaders[bot] : null;
         }
 
-        public static ReadOnlyCollection<BotOwner> GetGroupFollowers(BotOwner bot)
+        public static ReadOnlyCollection<BotOwner> GetGroupFollowers(BotOwner? bot)
         {
+            if (bot == null)
+            {
+                return new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
+            }
+
             BotOwner leader = GetGroupLeader(bot) ?? bot;
 
             return botGroupFollowers.ContainsKey(leader) ? botGroupFollowers[leader].AsReadOnly() : new ReadOnlyCollection<BotOwner>(new BotOwner[0]);
         }
 
-        public static IEnumerable<BotOwner> GetAllGroupMembers(BotOwner bot)
+        public static IEnumerable<BotOwner> GetAllGroupMembers(BotOwner? bot)
         {
+            if (bot == null)
+            {
+                yield break;
+            }
+
             BotOwner leader = GetGroupLeader(bot) ?? bot;
             yield return leader;
 
@@ -186,38 +216,48 @@ namespace QuestingBots.BotLogic.HiveMind
             }
         }
 
-        public static string GetActiveBrainLayerOfGroupLeader(BotOwner bot)
+        public static string? GetActiveBrainLayerOfGroupLeader(BotOwner? bot)
         {
-            if (!HasGroupLeader(bot) || botGroupLeaders[bot].IsDead)
-            {
-                return null!;
-            }
-
-            return botGroupLeaders[bot].GetActiveLayerTypeName();
-        }
-
-        public static float GetDistanceToGroupLeader(BotOwner bot)
-        {
-            if (!HasGroupLeader(bot))
-            {
-                return 0;
-            }
-
-            return Vector3.Distance(bot.Position, botGroupLeaders[bot].Position);
-        }
-
-        public static Vector3? GetLocationOfGroupLeader(BotOwner bot)
-        {
-            if (!HasGroupLeader(bot))
+            if (bot == null)
             {
                 return null;
             }
 
-            return botGroupLeaders[bot].Position;
+            if (!HasGroupLeader(bot) || (botGroupLeaders[bot]?.IsDead == true))
+            {
+                return null;
+            }
+
+            return botGroupLeaders[bot]?.GetActiveLayerTypeName();
         }
 
-        public static Vector3? GetLocationOfNearestGroupMember(BotOwner bot)
+        public static float GetDistanceToGroupLeader(BotOwner? bot)
         {
+            if ((bot == null) || !HasGroupLeader(bot))
+            {
+                return 0;
+            }
+
+            return Vector3.Distance(bot.Position, botGroupLeaders[bot]!.Position);
+        }
+
+        public static Vector3? GetLocationOfGroupLeader(BotOwner? bot)
+        {
+            if ((bot == null) || !HasGroupLeader(bot))
+            {
+                return null;
+            }
+
+            return botGroupLeaders[bot]!.Position;
+        }
+
+        public static Vector3? GetLocationOfNearestGroupMember(BotOwner? bot)
+        {
+            if (bot == null)
+            {
+                return null;
+            }
+
             Vector3? nearestBotPosition = null;
             float nearestBotDistance = float.MaxValue;
 
@@ -369,36 +409,36 @@ namespace QuestingBots.BotLogic.HiveMind
 
                 if (botGroupLeaders[bot] == null)
                 {
-                    botGroupLeaders[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner!;
+                    botGroupLeaders[bot] = bot.BotFollower?.BossToFollow?.Player()?.AIData?.BotOwner;
                 }
                 if (botGroupLeaders[bot] == null)
                 {
                     continue;
                 }
 
-                if (deadBots.Contains(botGroupLeaders[bot]))
+                if (deadBots.Contains(botGroupLeaders[bot]!))
                 {
                     botGroupLeaders[bot] = null!;
                     continue;
                 }
 
-                if (botGroupLeaders[bot].IsDead)
+                if (botGroupLeaders[bot]!.IsDead)
                 {
                     if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
                     {
                         Singleton<LoggingUtil>.Instance.LogDebug("Group leader " + botGroupLeaders[bot].GetText() + " is now dead.");
                     }
 
-                    if (botGroupFollowers.ContainsKey(botGroupLeaders[bot]))
+                    if (botGroupFollowers.ContainsKey(botGroupLeaders[bot]!))
                     {
-                        botGroupFollowers.Remove(botGroupLeaders[bot]);
+                        botGroupFollowers.Remove(botGroupLeaders[bot]!);
                     }
 
-                    deadBots.Add(botGroupLeaders[bot]);
+                    deadBots.Add(botGroupLeaders[bot]!);
                     continue;
                 }
 
-                addGroupFollower(botGroupLeaders[bot], bot);
+                addGroupFollower(botGroupLeaders[bot]!, bot);
             }
         }
 

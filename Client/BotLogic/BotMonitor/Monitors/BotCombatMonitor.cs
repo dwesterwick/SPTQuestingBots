@@ -46,9 +46,22 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     searchTimeAfterCombat = updateSearchTimeAfterCombat();
                     //Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " will spend " + searchTimeAfterCombat + " seconds searching for enemies after combat ends..");
+
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                    {
+                        //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " wants to fight " + BotOwner.Memory.GoalEnemy?.Nickname ?? "[NOBODY]");
+                    }
                 }
 
                 return updateCombatState(true);
+            }
+
+            if (IsInCombat)
+            {
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " is no longer fighting");
+                }
             }
 
             return updateCombatState(false);

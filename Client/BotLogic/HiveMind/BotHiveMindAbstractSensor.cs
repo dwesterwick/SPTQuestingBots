@@ -72,7 +72,7 @@ namespace QuestingBots.BotLogic.HiveMind
             updateDictionaryValue(botState, bot, value);
         }
 
-        public virtual bool CheckForBot(BotOwner bot)
+        public virtual bool CheckForBot(BotOwner? bot)
         {
             if (bot == null)
             {
@@ -82,17 +82,17 @@ namespace QuestingBots.BotLogic.HiveMind
             return botState.ContainsKey(bot) && botState[bot];
         }
 
-        public virtual bool CheckForBossOfBot(BotOwner bot)
+        public virtual bool CheckForBossOfBot(BotOwner? bot)
         {
             return checkBotState(botState, BotHiveMindMonitor.GetGroupLeader(bot)) ?? defaultValue;
         }
 
-        public virtual bool CheckForFollowers(BotOwner bot)
+        public virtual bool CheckForFollowers(BotOwner? bot)
         {
             return checkStateForAnyFollowers(botState, bot);
         }
 
-        public virtual bool CheckForGroup(BotOwner bot)
+        public virtual bool CheckForGroup(BotOwner? bot)
         {
             return checkStateForAnyGroupMembers(botState, bot);
         }
@@ -115,7 +115,7 @@ namespace QuestingBots.BotLogic.HiveMind
             }
         }
 
-        private bool? checkBotState(Dictionary<BotOwner, bool> dict, BotOwner bot)
+        private bool? checkBotState(Dictionary<BotOwner, bool> dict, BotOwner? bot)
         {
             if (bot == null)
             {
@@ -130,7 +130,7 @@ namespace QuestingBots.BotLogic.HiveMind
             return null;
         }
 
-        private bool checkStateForAnyFollowers(Dictionary<BotOwner, bool> dict, BotOwner bot)
+        private bool checkStateForAnyFollowers(Dictionary<BotOwner, bool> dict, BotOwner? bot)
         {
             if (bot == null)
             {
@@ -158,7 +158,7 @@ namespace QuestingBots.BotLogic.HiveMind
             return false;
         }
 
-        private bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner bot)
+        private bool checkStateForAnyGroupMembers(Dictionary<BotOwner, bool> dict, BotOwner? bot)
         {
             if (bot == null)
             {

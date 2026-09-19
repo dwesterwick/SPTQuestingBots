@@ -69,6 +69,7 @@ namespace QuestingBots.Components
 
             // Fix for bots getting stuck in Standby when enemy PMC's are near them
             _botOwner.StandBy.CanDoStandBy = false;
+            _botOwner.StandBy.Activate();
 
             ActivationComplete = true;
         }

@@ -42,7 +42,7 @@ namespace QuestingBots.BotLogic.Follow
                 return previousState;
             }
 
-            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
             if (decisionMonitor.CurrentDecision != BotQuestingDecision.FollowBoss)
             {
                 return updatePreviousState(false);

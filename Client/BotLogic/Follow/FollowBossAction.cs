@@ -42,7 +42,11 @@ namespace QuestingBots.BotLogic.Follow
             }
 
             // Only allow the bot to sprint if its boss is allowed to sprint
-            BotOwner boss = HiveMind.BotHiveMindMonitor.GetGroupLeader(BotOwner);
+            BotOwner? boss = HiveMind.BotHiveMindMonitor.GetGroupLeader(BotOwner);
+            if (boss == null)
+            {
+                return;
+            }
 
             CanSprint = HiveMind.BotHiveMindMonitor.GetValueForBot(HiveMind.BotHiveMindSensorType.CanSprintToObjective, boss);
             CanSprint &= IsAllowedToSprint();

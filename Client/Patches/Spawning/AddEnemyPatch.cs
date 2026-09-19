@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.Components.Spawning;
+using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using SPT.Custom.CustomAI;
 using SPT.Reflection.Patching;
@@ -39,7 +40,7 @@ namespace QuestingBots.Patches.Spawning
 
             // Get the ID's of all group members
             List<BotOwner> groupMemberList = __instance.GetAllMembers();
-            
+
             //string[] groupMemberIDs = groupMemberList.Select(m => m.Profile.Id).ToArray();
             //Singleton<LoggingUtil>.Instance.LogInfo("You are now an enemy of " + string.Join(", ", groupMemberIDs) + " due to reason: " + cause.ToString());
 
@@ -67,7 +68,7 @@ namespace QuestingBots.Patches.Spawning
                 {
                     Singleton<LoggingUtil>.Instance.LogWarning("Preventing BotsGroup::AddEnemy from running due to EBotEnemyCause.pmcBossKill because the victim was in a bot group created by this mod");
                 }
-                    
+
                 return false;
 
                 // TODO: The victim list is updated after this method runs, so this doesn't work. However, I don't think we actually care because you will still
@@ -81,6 +82,25 @@ namespace QuestingBots.Patches.Spawning
             }
 
             return true;
+        }
+
+        [PatchPostfix]
+        protected static void PatchPostfix(bool __result, BotsGroup __instance, IPlayer person, EBotEnemyCause cause)
+        {
+            if (!QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.BotHostilityChanges))
+            {
+                return;
+            }
+
+            string message = "Bot group with " + __instance._initialBot.GetText() + " will add " + person.GetText() + " as an enemy due to " + cause.ToString() + ": " + __result;
+            if (__result)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning(message);
+            }
+            else
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(message);
+            }
         }
     }
 }

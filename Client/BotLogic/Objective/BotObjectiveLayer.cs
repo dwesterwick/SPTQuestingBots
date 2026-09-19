@@ -42,7 +42,7 @@ namespace QuestingBots.BotLogic.Objective
                 return previousState;
             }
 
-            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
 
             if (!decisionMonitor.IsAllowedToQuest())
             {
@@ -79,12 +79,12 @@ namespace QuestingBots.BotLogic.Objective
 
         private bool trySetNextAction()
         {
-            switch (objectiveManager.CurrentQuestAction)
+            switch (ObjectiveManager.CurrentQuestAction)
             {
                 case QuestAction.MoveToPosition:
-                    if (objectiveManager.MustUnlockDoor)
+                    if (ObjectiveManager.MustUnlockDoor)
                     {
-                        string interactiveObjectShortID = objectiveManager.GetCurrentQuestInteractiveObject().Id.Abbreviate();
+                        string interactiveObjectShortID = ObjectiveManager.GetCurrentQuestInteractiveObject().Id.Abbreviate();
                         setNextAction(BotActionType.UnlockDoor, "UnlockDoor (" + interactiveObjectShortID + ")");
                     }
                     else
@@ -94,7 +94,7 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.Teleport:
-                    if (!objectiveManager.IsCloseToObjective())
+                    if (!ObjectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToTeleportPosition");
                     }
@@ -105,44 +105,44 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.HoldAtPosition:
-                    setNextAction(BotActionType.HoldPosition, "HoldPosition (" + objectiveManager.MinElapsedActionTime + "s)");
+                    setNextAction(BotActionType.HoldPosition, "HoldPosition (" + ObjectiveManager.MinElapsedActionTime + "s)");
                     return updatePreviousState(true);
 
                 case QuestAction.Ambush:
-                    if (!objectiveManager.IsCloseToObjective())
+                    if (!ObjectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToAmbushPosition");
                     }
                     else
                     {
-                        setNextAction(BotActionType.Ambush, "Ambush (" + objectiveManager.MinElapsedActionTime + "s)");
+                        setNextAction(BotActionType.Ambush, "Ambush (" + ObjectiveManager.MinElapsedActionTime + "s)");
                     }
                     return updatePreviousState(true);
 
                 case QuestAction.Snipe:
-                    if (!objectiveManager.IsCloseToObjective())
+                    if (!ObjectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToSnipePosition");
                     }
                     else
                     {
-                        setNextAction(BotActionType.Snipe, "Snipe (" + objectiveManager.MinElapsedActionTime + "s)");
+                        setNextAction(BotActionType.Snipe, "Snipe (" + ObjectiveManager.MinElapsedActionTime + "s)");
                     }
                     return updatePreviousState(true);
 
                 case QuestAction.PlantItem:
-                    if (!objectiveManager.IsCloseToObjective())
+                    if (!ObjectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToPlantPosition");
                     }
                     else
                     {
-                        setNextAction(BotActionType.PlantItem, "PlantItem (" + objectiveManager.MinElapsedActionTime + "s)");
+                        setNextAction(BotActionType.PlantItem, "PlantItem (" + ObjectiveManager.MinElapsedActionTime + "s)");
                     }
                     return updatePreviousState(true);
 
                 case QuestAction.ToggleSwitch:
-                    if (!objectiveManager.IsCloseToObjective())
+                    if (!ObjectiveManager.IsCloseToObjective())
                     {
                         setNextAction(BotActionType.GoToObjective, "GoToSwitchPosition");
                     }
@@ -161,11 +161,11 @@ namespace QuestingBots.BotLogic.Objective
                     return updatePreviousState(true);
 
                 case QuestAction.RequestExtract:
-                    if (objectiveManager.BotMonitor.GetMonitor<BotExtractMonitor>().TryInstructBotToExtract())
+                    if (ObjectiveManager.BotMonitor.GetMonitor<BotExtractMonitor>().TryInstructBotToExtract())
                     {
-                        objectiveManager.StopQuesting();
+                        ObjectiveManager.StopQuesting();
                     }
-                    objectiveManager.CompleteObjective();
+                    ObjectiveManager.CompleteObjective();
                     return updatePreviousState(true);
             }
 

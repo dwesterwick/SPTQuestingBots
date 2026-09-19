@@ -307,7 +307,7 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return false;
             }
 
-            return BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceQuesting();
+            return BotMonitor.GetMonitor<BotQuestingMonitor>().GetDistanceToBoss() > getFollowerTargetDistanceQuesting();
         }
 
         private double getFollowerTargetDistanceQuesting()
@@ -329,7 +329,7 @@ namespace QuestingBots.BotLogic.BotMonitor
                 return false;
             }
 
-            return BotMonitor.GetMonitor<BotQuestingMonitor>().DistanceToBoss > getFollowerTargetDistanceCombat();
+            return BotMonitor.GetMonitor<BotQuestingMonitor>().GetDistanceToBoss() > getFollowerTargetDistanceCombat();
         }
 
         private double getFollowerTargetDistanceCombat()
