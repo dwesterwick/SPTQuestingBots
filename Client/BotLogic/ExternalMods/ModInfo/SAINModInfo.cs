@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using HarmonyLib;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.Configuration;
@@ -8,6 +9,7 @@ using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +29,8 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             if (SAIN.Interop.SAINInterop.Init())
             {
                 CanUseInterop = true;
+
+                ForceSainToDetectQuestingBots();
             }
             else
             {
@@ -34,6 +38,31 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
             }
 
             return CanUseInterop;
+        }
+
+        private void ForceSainToDetectQuestingBots()
+        {
+            Type sainModDetection = Type.GetType("SAIN.ModDetection, SAIN");
+            if (sainModDetection == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot find type SAIN.ModDetection");
+                return;
+            }
+
+            PropertyInfo questingBotsLoadedProperty = AccessTools.Property(sainModDetection, "QuestingBotsLoaded");
+            if (questingBotsLoadedProperty == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot find property SAIN.ModDetection.QuestingBotsLoaded");
+                return;
+            }
+
+
+            bool currentValue = (bool)questingBotsLoadedProperty.GetValue(null);
+            if (!currentValue)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Forcing SAIN to detect Questing Bots");
+                questingBotsLoadedProperty.SetValue(null, true);
+            }
         }
 
         public override AbstractExtractFunction CreateExtractFunction(BotOwner _botOwner)
