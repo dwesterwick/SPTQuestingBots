@@ -39,6 +39,9 @@
 		<Reference Include="DrakiaXYZ-BigBrain">
 		  <HintPath>..\Dependencies\DrakiaXYZ-BigBrain.dll</HintPath>
 		</Reference>
+		<Reference Include="Fika.Core">
+		  <HintPath>..\Dependencies\Fika.Core.dll</HintPath>
+		</Reference>
 		<Reference Include="ItemComponent.Types">
 			<HintPath>..\..\..\EscapeFromTarkov_Data\Managed\ItemComponent.Types.dll</HintPath>
 		</Reference>
