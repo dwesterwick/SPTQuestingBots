@@ -5,6 +5,7 @@ using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
+using QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -13,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.BotLogic.ExternalMods.ModInfo
+namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 {
     public abstract class AbstractExternalModInfo
     {
@@ -36,6 +37,7 @@ namespace QuestingBots.BotLogic.ExternalMods.ModInfo
         public virtual AbstractExtractFunction CreateExtractFunction(BotOwner _botOwner) => new InternalExtractFunction(_botOwner);
         public virtual AbstractHearingFunction CreateHearingFunction(BotOwner _botOwner) => new InternalHearingFunction(_botOwner);
         public virtual AbstractLootFunction CreateLootFunction(BotOwner _botOwner) => new InternalLootFunction(_botOwner);
+        public virtual AbstractRunNetworkTransactionsFunction CreateRunNetworkTransactionsFunction(BotOwner _botOwner) => new InternalNetworkTransactionsFunction(_botOwner);
 
         public bool CheckIfInstalled()
         {

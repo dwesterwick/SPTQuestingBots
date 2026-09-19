@@ -9,7 +9,8 @@ using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
-using QuestingBots.BotLogic.ExternalMods.ModInfo;
+using QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions;
+using QuestingBots.BotLogic.ExternalMods.LoadedModInfo;
 using QuestingBots.Configuration;
 using QuestingBots.Utils;
 
@@ -20,19 +21,22 @@ namespace QuestingBots.BotLogic.ExternalMods
         public static SAINModInfo SAINModInfo { get; private set; } = new SAINModInfo();
         public static LootingBotsModInfo LootingBotsModInfo { get; private set; } = new LootingBotsModInfo();
         public static FikaModInfo FikaModInfo { get; private set; } = new FikaModInfo();
-        public static HeadlessModInfo HeadlessModInfo { get; private set; } = new HeadlessModInfo();
+        public static FikaHeadlessModInfo FikaHeadlessModInfo { get; private set; } = new FikaHeadlessModInfo();
+        public static QuestingBotsFikaSyncModInfo QuestingBotsFikaSyncModInfo { get; private set; } = new QuestingBotsFikaSyncModInfo();
 
         private static List<AbstractExternalModInfo> externalMods = new List<AbstractExternalModInfo>
         {
             SAINModInfo,
             LootingBotsModInfo,
             FikaModInfo,
-            HeadlessModInfo
+            FikaHeadlessModInfo,
+            QuestingBotsFikaSyncModInfo
         };
 
         public static AbstractExtractFunction CreateExtractFunction(this BotOwner _botOwner) => SAINModInfo.CreateExtractFunction(_botOwner);
         public static AbstractHearingFunction CreateHearingFunction(this BotOwner _botOwner) => SAINModInfo.CreateHearingFunction(_botOwner);
         public static AbstractLootFunction CreateLootFunction(this BotOwner _botOwner) => LootingBotsModInfo.CreateLootFunction(_botOwner);
+        public static AbstractRunNetworkTransactionsFunction CreateRunNetworkTransactionsFunction(this BotOwner _botOwner) => QuestingBotsFikaSyncModInfo.CreateRunNetworkTransactionsFunction(_botOwner);
 
         public static int GetMinimumCombatLayerPriority(string _brainName) => SAINModInfo.GetMinimumLayerPriority(_brainName);
         public static MinMaxConfig GetSearchTimeAfterCombat(string _brainName) => SAINModInfo.GetSearchTimeAfterCombat(_brainName);

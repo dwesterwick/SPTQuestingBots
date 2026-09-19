@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.BotLogic.ExternalMods.ModInfo
+namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 {
     public class SAINModInfo : AbstractExternalModInfo
     {

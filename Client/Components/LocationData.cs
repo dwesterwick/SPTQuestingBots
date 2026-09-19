@@ -5,7 +5,6 @@ using EFT.GameTriggers;
 using EFT.Interactive;
 using HarmonyLib;
 using JsonType;
-using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
@@ -815,7 +814,7 @@ namespace QuestingBots.Components
             // Fika Headless client does not have a MainPlayer
             if (Singleton<GameWorld>.Instance.MainPlayer == null)
             {
-                return HeadlessModInfo.TryGetHeadlessSpawnPoint();
+                return BotLogic.ExternalMods.LoadedModInfo.FikaHeadlessModInfo.TryGetHeadlessSpawnPoint();
             }
 
             return Singleton<GameWorld>.Instance.MainPlayer.Position;

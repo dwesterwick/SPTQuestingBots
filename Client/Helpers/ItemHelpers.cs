@@ -6,6 +6,8 @@ using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using QuestingBots.BotLogic.ExternalMods;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,8 @@ namespace QuestingBots.Helpers
 
     public static class ItemHelpers
     {
+        public static event Action<Player, Item>? OnTransferItem = null;
+
         public static InventoryController GetInventoryController(this BotOwner bot) => bot.GetPlayer.InventoryController;
 
         public static IEnumerable<WeaponClass> ToWeaponClasses(this IEnumerable<string> weaponClassNames)
@@ -91,7 +95,7 @@ namespace QuestingBots.Helpers
 
         public static List<Weapon> GetEquippedWeapons(this BotOwner botOwner)
         {
-            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
             Weapon? holsterWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Holster).ContainedItem as Weapon;
             Weapon? primaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.FirstPrimaryWeapon).ContainedItem as Weapon;
@@ -107,7 +111,7 @@ namespace QuestingBots.Helpers
 
         public static float HearingMultiplier(this BotOwner botOwner)
         {
-            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
             Item headset = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Earpiece).ContainedItem;
             Item helmet = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Headwear).ContainedItem;
@@ -161,7 +165,7 @@ namespace QuestingBots.Helpers
 
         public static bool TryAddToFakeStash(this Item item, BotOwner botOwner, string stashName)
         {
-            InventoryController inventoryController = GetInventoryController(botOwner);
+            InventoryController inventoryController = botOwner.GetInventoryController();
 
             return item.TryAddToFakeStash(inventoryController, stashName);
         }
@@ -170,7 +174,14 @@ namespace QuestingBots.Helpers
         {
             try
             {
-                InventoryController inventoryController = GetInventoryController(botOwner);
+                BotObjectiveManager? objectiveManager = botOwner.GetObjectiveManager();
+                if (objectiveManager == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager for " + botOwner.GetText());
+                    return false;
+                }
+
+                InventoryController inventoryController = botOwner.GetInventoryController();
 
                 // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
@@ -196,13 +207,16 @@ namespace QuestingBots.Helpers
                     return false;
                 }
 
-                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                if (!objectiveManager.NetworkTransactions.TryMoveItem(moveResult))
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Moved key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot run network transaction to move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    return false;
                 }
 
-                // If we're in a Fika game, execute the transaction to add the key to the bot's inventory in other clients
-                ExternalModHandler.FikaModInfo.TrySendItemAddedPacket(botOwner.GetPlayer, item);
+                if (OnTransferItem != null)
+                {
+                    OnTransferItem(botOwner.GetPlayer, moveResult.Value.Item);
+                }
 
                 return true;
             }
@@ -299,7 +313,7 @@ namespace QuestingBots.Helpers
 
             try
             {
-                InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+                InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
                 IEnumerable<KeyComponent> matchingKeys = inventoryControllerClass.Inventory.Equipment
                     .GetItemComponentsInChildren<KeyComponent>(false)

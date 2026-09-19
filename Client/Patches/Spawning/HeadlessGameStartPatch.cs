@@ -22,7 +22,7 @@ namespace QuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            return ExternalModHandler.HeadlessModInfo.RunMemoryCleanupMethod;
+            return ExternalModHandler.FikaHeadlessModInfo.RunMemoryCleanupMethod;
         }
 
         [PatchPostfix]

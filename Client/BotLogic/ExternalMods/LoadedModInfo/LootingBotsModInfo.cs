@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots.BotLogic.ExternalMods.ModInfo
+namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 {
     public class LootingBotsModInfo : AbstractExternalModInfo
     {

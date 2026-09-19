@@ -1,7 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.ExternalMods;
-using QuestingBots.BotLogic.ExternalMods.ModInfo;
+using QuestingBots.BotLogic.ExternalMods.LoadedModInfo;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;

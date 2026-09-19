@@ -1,6 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic.ExternalMods.ModInfo;
+using QuestingBots.BotLogic.ExternalMods.LoadedModInfo;
 using QuestingBots.BotLogic.Follow;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.BotLogic.Objective;

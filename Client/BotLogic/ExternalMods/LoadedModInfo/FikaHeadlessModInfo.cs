@@ -7,9 +7,9 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-namespace QuestingBots.BotLogic.ExternalMods.ModInfo
+namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 {
-    public class HeadlessModInfo : AbstractExternalModInfo
+    public class FikaHeadlessModInfo : AbstractExternalModInfo
     {
         public override string GUID { get; } = "com.fika.headless";
 
