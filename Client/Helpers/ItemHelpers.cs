@@ -198,9 +198,9 @@ namespace QuestingBots.Helpers
 
                 // Initialize the transaction to transfer the key to the bot
                 OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, false);
-                if (!moveResult.Succeeded)
+                if (moveResult.Failed)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText() + " - " + moveResult.Error.Localized());
                     return false;
                 }
 

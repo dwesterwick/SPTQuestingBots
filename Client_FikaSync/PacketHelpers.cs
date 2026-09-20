@@ -16,6 +16,10 @@ namespace QuestingBots
         {
             if (FikaBackendUtils.IsClient) // safeguard
             {
+#if DEBUG
+                QuestingBotsFikaSyncPlugin.PluginLogger.LogDebug($"Cannot send {packet.GetType().Name} from a client");
+#endif
+
                 return false;
             }
 
