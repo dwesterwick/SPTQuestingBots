@@ -3,7 +3,7 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<AssemblyTitle>QuestingBots</AssemblyTitle>
 		<Authors>DanW</Authors>
-		<Version>1.0.0</Version>
+		<Version>1.1.0</Version>
 		<SPTVersion>~4.1.0</SPTVersion>
 		<SPTGUID>com.danw.questingbots</SPTGUID>
 		<GithubRepoPath>https://github.com/dwesterwick/QuestingBots</GithubRepoPath>

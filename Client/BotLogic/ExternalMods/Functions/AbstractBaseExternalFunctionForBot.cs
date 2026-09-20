@@ -7,11 +7,11 @@ using EFT;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions
 {
-    public class AbstractBaseExternalFunction
+    public class AbstractBaseExternalFunctionForBot : IAbstractBaseExternalFunction
     {
         protected BotOwner BotOwner { get; private set; }
 
-        public AbstractBaseExternalFunction(BotOwner botOwner)
+        public AbstractBaseExternalFunctionForBot(BotOwner botOwner)
         {
             BotOwner = botOwner;
         }

@@ -5,7 +5,6 @@ using Diz.Resources;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
-using QuestingBots.BotLogic.ExternalMods;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Utils;
@@ -36,8 +35,6 @@ namespace QuestingBots.Helpers
 
     public static class ItemHelpers
     {
-        public static event Action<Player, Item>? OnTransferItem = null;
-
         public static InventoryController GetInventoryController(this BotOwner bot) => bot.GetPlayer.InventoryController;
 
         public static IEnumerable<WeaponClass> ToWeaponClasses(this IEnumerable<string> weaponClassNames)
@@ -207,15 +204,10 @@ namespace QuestingBots.Helpers
                     return false;
                 }
 
-                if (!objectiveManager.NetworkTransactions.TryMoveItem(moveResult))
+                if (!objectiveManager.NetworkTransactionFunctions.TryMoveItem(moveResult))
                 {
                     Singleton<LoggingUtil>.Instance.LogError("Cannot run network transaction to move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
                     return false;
-                }
-
-                if (OnTransferItem != null)
-                {
-                    OnTransferItem(botOwner.GetPlayer, moveResult.Value.Item);
                 }
 
                 return true;

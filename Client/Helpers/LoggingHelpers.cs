@@ -32,7 +32,7 @@ namespace QuestingBots.Helpers
                 return "[NULL BOT]";
             }
 
-            return player.Profile.GetCorrectedNickname() + " (Name: " + player.name + ", Level: " + player.Profile.Info.Level.ToString() + ")";
+            return player.GetCorrectedNickname() + " (Name: " + player.name + ", Level: " + player.Profile.Info.Level.ToString() + ")";
         }
 
         public static string GetText(this IPlayer? player)
@@ -42,8 +42,10 @@ namespace QuestingBots.Helpers
                 return "[NULL BOT]";
             }
 
-            return player.Profile.GetCorrectedNickname() + " (Name: ???, Level: " + player.Profile.Info.Level.ToString() + ")";
+            return player.GetCorrectedNickname() + " (Name: ???, Level: " + player.Profile.Info.Level.ToString() + ")";
         }
+
+        public static string GetCorrectedNickname(this IPlayer player) => player.Profile.GetCorrectedNickname();
 
         public static string GetFullName(this BotOwner? bot) => bot?.Profile?.GetFullName() ?? "[NULL BOT]";
 

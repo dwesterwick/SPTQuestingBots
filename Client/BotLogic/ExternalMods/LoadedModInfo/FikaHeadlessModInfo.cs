@@ -1,11 +1,9 @@
 ﻿using Comfort.Common;
 using EFT.Communications;
-using EFT.Game.Spawning;
 using HarmonyLib;
 using QuestingBots.Utils;
 using System;
 using System.Reflection;
-using UnityEngine;
 
 namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 {
@@ -22,21 +20,14 @@ namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 
         public override bool IsCompatible()
         {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled) return true;
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
+            {
+                return true;
+            }
 
             if (base.IsCompatible())
             {
-                Type headlessGameType = AccessTools.TypeByName("Fika.Headless.Classes.GameMode.HeadlessGame");
-                if (headlessGameType != null)
-                {
-                    RunMemoryCleanupMethod = AccessTools.Method(headlessGameType, "RunMemoryCleanup");
-                    if (RunMemoryCleanupMethod != null)
-                    {
-                        new Patches.Spawning.HeadlessGameStartPatch().Enable();
-
-                        return true;
-                    }
-                }
+                return TryPatchGameStart();
             }
 
             NotificationManager.DisplayWarningNotification(IncompatibilityMessage, EFT.Communications.ENotificationDurationType.Long);
@@ -49,24 +40,23 @@ namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 
         public override bool CheckInteropAvailability() => true;
 
-        public static Vector3? TryGetHeadlessSpawnPoint()
+        private bool TryPatchGameStart()
         {
-            Type? fikaGameType = AccessTools.TypeByName("Fika.Core.Main.GameMode.IFikaGame");
-            if (fikaGameType == null) return null;
+            Type headlessGameType = AccessTools.TypeByName("Fika.Headless.Classes.GameMode.HeadlessGame");
+            if (headlessGameType == null)
+            {
+                return false;
+            }
 
-            Type fikaGameSingletonType = typeof(Singleton<>).MakeGenericType(fikaGameType);
-            PropertyInfo? instanceProperty = AccessTools.Property(fikaGameSingletonType, "Instance");
-            object? fikaGame = instanceProperty?.GetValue(null);
-            if (fikaGame == null) return null;
+            RunMemoryCleanupMethod = AccessTools.Method(headlessGameType, "RunMemoryCleanup");
+            if (RunMemoryCleanupMethod == null)
+            {
+                return false;
+            }
 
-            PropertyInfo? baseGameControllerProperty = AccessTools.Property(fikaGameType, "GameController");
-            object? baseGameController = baseGameControllerProperty?.GetValue(fikaGame);
+            new Patches.Spawning.HeadlessGameStartPatch().Enable();
 
-            Type? baseGameControllerType = AccessTools.TypeByName("Fika.Core.Main.GameMode.BaseGameController");
-            PropertyInfo? spawnPointProperty = AccessTools.Property(baseGameControllerType, "SpawnPoint");
-            ISpawnPoint? spawnPoint = spawnPointProperty?.GetValue(baseGameController) as ISpawnPoint;
-
-            return spawnPoint?.Position;
+            return true;
         }
     }
 }

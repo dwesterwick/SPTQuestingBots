@@ -196,56 +196,10 @@ namespace QuestingBots.Components
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
                 SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
-                BotQuest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnPointWander);
-                if (spawnPointQuest != null)
-                {
-                    //Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for going to random spawn points...");
-                    BotJobAssignmentController.AddQuest(spawnPointQuest);
-                }
-                else
-                {
-                    Singleton<LoggingUtil>.Instance.LogError("Could not add quest for going to random spawn points");
-                }
 
-                // Create a quest where initial PMC's can run to your spawn point (not directly to you).
-                Models.Questing.BotQuest spawnRushQuest = null!;
-                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetMainPlayerSpawnPoint();
-                if (playerSpawnPoint.HasValue)
-                {
-                    spawnRushQuest = createGoToPositionQuest(playerSpawnPoint.Value.Position, "Spawn Rush", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnRush);
-                }
-                else
-                {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot find player spawn point.");
-                }
-
-                if (spawnRushQuest != null)
-                {
-                    //Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for rushing your spawn point...");
-                    BotJobAssignmentController.AddQuest(spawnRushQuest);
-                }
-                else
-                {
-                    Singleton<LoggingUtil>.Instance.LogError("Could not add quest for rushing your spawn point");
-                }
-
-                // Create a quest for PMC's to go to boss spawn locations early in the raid to hunt them
-                Dictionary<string, List<string>> bossSpawnZones = getBossSpawnZones();
-                foreach (string boss in bossSpawnZones.Keys)
-                {
-                    IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossSpawnZones[boss].Contains(s.BotZoneName ?? ""));
-                    BotQuest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.BossHunter);
-                    if (bossHunterQuest != null)
-                    {
-                        if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
-                        {
-                            Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
-                        }
-
-                        BotJobAssignmentController.AddQuest(bossHunterQuest);
-                    }
-                }
-
+                AddSpawnPointWanderQuest(allSpawnPoints);
+                AddSpawnRushQuests();
+                AddBossHunterQuests(allSpawnPoints);
                 LoadCustomQuests();
 
                 BotJobAssignmentController.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
@@ -265,6 +219,65 @@ namespace QuestingBots.Components
             finally
             {
                 IsBuildingQuests = false;
+            }
+        }
+
+        private void AddSpawnPointWanderQuest(IEnumerable<SpawnPointParams> allSpawnPoints)
+        {
+            BotQuest spawnPointQuest = createSpawnPointQuest(allSpawnPoints, "Spawn Point Wander", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnPointWander);
+            if (spawnPointQuest == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Could not add quest for going to random spawn points");
+                return;
+            }
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                BotJobAssignmentController.AddQuest(spawnPointQuest);
+            }
+        }
+
+        private void AddSpawnRushQuests()
+        {
+            foreach (Player humanPlayer in Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetHumanPlayers())
+            {
+                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetNearestSpawnPoint(humanPlayer.SpawnPoint.Position);
+                if (playerSpawnPoint == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Cannot find nearby spawn point to add quest for rushing " + humanPlayer.GetCorrectedNickname());
+                    continue;
+                }
+
+                // Create a quest where initial PMC's can run to your spawn point (not directly to you).
+                string questName = "Spawn Rush (" + humanPlayer.GetCorrectedNickname() + ")";
+                Models.Questing.BotQuest spawnRushQuest = createGoToPositionQuest(playerSpawnPoint.Value.Position, questName, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.SpawnRush);
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for rushing " + humanPlayer.GetCorrectedNickname() + "'s spawn point");
+                }
+
+                BotJobAssignmentController.AddQuest(spawnRushQuest);
+            }
+        }
+
+        private void AddBossHunterQuests(IEnumerable<SpawnPointParams> allSpawnPoints)
+        {
+            // Create a quest for PMC's to go to boss spawn locations early in the raid to hunt them
+            Dictionary<string, List<string>> bossSpawnZones = getBossSpawnZones();
+            foreach (string boss in bossSpawnZones.Keys)
+            {
+                IEnumerable<SpawnPointParams> possibleBossSpawnPoints = allSpawnPoints.Where(s => bossSpawnZones[boss].Contains(s.BotZoneName ?? ""));
+                BotQuest bossHunterQuest = createSpawnPointQuest(possibleBossSpawnPoints, "Boss Hunter (" + boss + ")", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.BossHunter);
+                if (bossHunterQuest != null)
+                {
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Adding quest for hunting boss " + boss + "...");
+                    }
+
+                    BotJobAssignmentController.AddQuest(bossHunterQuest);
+                }
             }
         }
 

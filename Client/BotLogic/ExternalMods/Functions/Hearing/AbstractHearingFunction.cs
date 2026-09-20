@@ -7,7 +7,7 @@ using EFT;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.Hearing
 {
-    public abstract class AbstractHearingFunction : AbstractBaseExternalFunction
+    public abstract class AbstractHearingFunction : AbstractBaseExternalFunctionForBot
     {
         public AbstractHearingFunction(BotOwner _botOwner) : base(_botOwner)
         {

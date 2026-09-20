@@ -8,7 +8,7 @@ using QuestingBots.Helpers;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions
 {
-    public abstract class AbstractBaseExternalFunctionWithMonitor : AbstractBaseExternalFunction
+    public abstract class AbstractBaseExternalFunctionForBotWithMonitor : AbstractBaseExternalFunctionForBot
     {
         public abstract string MonitoredLayerName { get; }
 
@@ -16,7 +16,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions
 
         public bool CanMonitoredLayerBeUsed => layerMonitor.CanLayerBeUsed;
 
-        public AbstractBaseExternalFunctionWithMonitor(BotOwner _botOwner) : base(_botOwner)
+        public AbstractBaseExternalFunctionForBotWithMonitor(BotOwner _botOwner) : base(_botOwner)
         {
             layerMonitor = _botOwner.GetPlayer.gameObject.AddComponent<LogicLayerMonitor>();
             layerMonitor.Init(_botOwner, MonitoredLayerName);

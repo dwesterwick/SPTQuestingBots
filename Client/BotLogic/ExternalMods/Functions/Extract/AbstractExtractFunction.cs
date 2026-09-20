@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.Extract
 {
-    public abstract class AbstractExtractFunction : AbstractBaseExternalFunctionWithMonitor
+    public abstract class AbstractExtractFunction : AbstractBaseExternalFunctionForBotWithMonitor
     {
         public AbstractExtractFunction(BotOwner _botOwner) : base(_botOwner)
         {

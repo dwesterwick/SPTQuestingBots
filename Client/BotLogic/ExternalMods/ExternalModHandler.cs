@@ -9,6 +9,7 @@ using EFT;
 using QuestingBots.BotLogic.ExternalMods.Functions.Extract;
 using QuestingBots.BotLogic.ExternalMods.Functions.Hearing;
 using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
+using QuestingBots.BotLogic.ExternalMods.Functions.Multiplayer;
 using QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions;
 using QuestingBots.BotLogic.ExternalMods.LoadedModInfo;
 using QuestingBots.Configuration;
@@ -36,7 +37,8 @@ namespace QuestingBots.BotLogic.ExternalMods
         public static AbstractExtractFunction CreateExtractFunction(this BotOwner _botOwner) => SAINModInfo.CreateExtractFunction(_botOwner);
         public static AbstractHearingFunction CreateHearingFunction(this BotOwner _botOwner) => SAINModInfo.CreateHearingFunction(_botOwner);
         public static AbstractLootFunction CreateLootFunction(this BotOwner _botOwner) => LootingBotsModInfo.CreateLootFunction(_botOwner);
-        public static AbstractRunNetworkTransactionsFunction CreateRunNetworkTransactionsFunction(this BotOwner _botOwner) => QuestingBotsFikaSyncModInfo.CreateRunNetworkTransactionsFunction(_botOwner);
+        public static AbstractRunNetworkTransactionFunctions CreateRunNetworkTransactionFunctions(this BotOwner _botOwner) => QuestingBotsFikaSyncModInfo.CreateRunNetworkTransactionFunctions(_botOwner);
+        public static AbstractMultiplayerFunctions CreateMultiplayerFunctions() => FikaModInfo.CreateMultiplayerFunctions();
 
         public static int GetMinimumCombatLayerPriority(string _brainName) => SAINModInfo.GetMinimumLayerPriority(_brainName);
         public static MinMaxConfig GetSearchTimeAfterCombat(string _brainName) => SAINModInfo.GetSearchTimeAfterCombat(_brainName);

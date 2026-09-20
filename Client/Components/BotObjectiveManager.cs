@@ -31,7 +31,7 @@ namespace QuestingBots.Components
         public float PauseRequest { get; set; } = 0;
         public Models.BotSprintingController BotSprintingController { get; private set; } = null!;
         public BotPathData BotPath { get; private set; } = null!;
-        public AbstractRunNetworkTransactionsFunction NetworkTransactions { get; private set; } = null!;
+        public AbstractRunNetworkTransactionFunctions NetworkTransactionFunctions { get; private set; } = null!;
         public BotLogic.BotMonitor.BotMonitorController BotMonitor { get; private set; } = null!;
         public BotIdentityData IdentityData { get; private set; } = null!;
         public BotQuestSelector QuestSelector { get; private set; } = null!;
@@ -106,7 +106,7 @@ namespace QuestingBots.Components
         {
             BotSprintingController = new Models.BotSprintingController(botOwner);
             BotPath = new BotPathData(botOwner);
-            NetworkTransactions = ExternalModHandler.CreateRunNetworkTransactionsFunction(botOwner);
+            NetworkTransactionFunctions = ExternalModHandler.CreateRunNetworkTransactionFunctions(botOwner);
 
             BotMonitor = BotMonitorController.GetBotMonitorController(botOwner);
             yield return null;

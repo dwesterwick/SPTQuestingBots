@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.Loot
 {
-    public abstract class AbstractLootFunction : AbstractBaseExternalFunctionWithMonitor
+    public abstract class AbstractLootFunction : AbstractBaseExternalFunctionForBotWithMonitor
     {
         public AbstractLootFunction(BotOwner _botOwner) : base(_botOwner)
         {

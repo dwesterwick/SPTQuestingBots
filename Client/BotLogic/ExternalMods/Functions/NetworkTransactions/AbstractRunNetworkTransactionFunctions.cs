@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions
 {
-    public class InternalNetworkTransactionsFunction : AbstractRunNetworkTransactionsFunction
+    public abstract class AbstractRunNetworkTransactionFunctions : AbstractBaseExternalFunctionForBot
     {
-        public InternalNetworkTransactionsFunction(BotOwner botOwner) : base(botOwner)
+        public AbstractRunNetworkTransactionFunctions(BotOwner botOwner) : base (botOwner)
         {
 
         }
 
-        public override bool TryMoveItem(OperationResult<MoveResult> moveResult)
+        public virtual bool TryMoveItem(OperationResult<MoveResult> moveResult)
         {
             InventoryController inventoryController = BotOwner.GetInventoryController();
             Callback callback = new Callback(MoveItemCallback);
@@ -34,7 +34,7 @@ namespace QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions
             return !networkTask.Result.Failed;
         }
 
-        private void MoveItemCallback(IResult result)
+        protected void MoveItemCallback(IResult result)
         {
             if (result.Succeed && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {

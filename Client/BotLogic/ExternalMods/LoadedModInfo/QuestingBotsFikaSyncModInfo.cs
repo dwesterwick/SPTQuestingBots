@@ -2,7 +2,6 @@
 using EFT;
 using EFT.Communications;
 using QuestingBots.BotLogic.ExternalMods.Functions.NetworkTransactions;
-using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,22 +13,8 @@ namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
     {
         public override string GUID { get; } = ModInfo.GUID + "fikasync";
 
-        private System.Version? _currentBuildVersion;
-        public System.Version CurrentBuildVersion
-        {
-            get
-            {
-                if (_currentBuildVersion == null)
-                {
-                    _currentBuildVersion = new System.Version(ModInfo.MOD_VERSION);
-                }
-
-                return _currentBuildVersion;
-            }
-        }
-
-        public override System.Version MinCompatibleVersion => CurrentBuildVersion.MinBuild();
-        public override System.Version MaxCompatibleVersion => CurrentBuildVersion.MaxBuild();
+        public override System.Version MinCompatibleVersion => new System.Version(1, 0, 0);
+        public override System.Version MaxCompatibleVersion => new System.Version(1, 99, 99);
 
         public string Name => ModInfo.MODNAME + "FikaSync";
 
@@ -49,14 +34,14 @@ namespace QuestingBots.BotLogic.ExternalMods.LoadedModInfo
 
         public override bool CheckInteropAvailability() => true;
 
-        public override AbstractRunNetworkTransactionsFunction CreateRunNetworkTransactionsFunction(BotOwner _botOwner)
+        public override AbstractRunNetworkTransactionFunctions CreateRunNetworkTransactionFunctions(BotOwner _botOwner)
         {
             if (IsInstalled && IsCompatible())
             {
-                return new FikaRunNetworkTransactionsFunction(_botOwner);
+                return new FikaRunNetworkTransactionFunctions(_botOwner);
             }
 
-            return base.CreateRunNetworkTransactionsFunction(_botOwner);
+            return base.CreateRunNetworkTransactionFunctions(_botOwner);
         }
     }
 }

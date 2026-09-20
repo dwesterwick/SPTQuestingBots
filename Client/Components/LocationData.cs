@@ -5,6 +5,8 @@ using EFT.GameTriggers;
 using EFT.Interactive;
 using HarmonyLib;
 using JsonType;
+using QuestingBots.BotLogic.ExternalMods;
+using QuestingBots.BotLogic.ExternalMods.Functions.Multiplayer;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
@@ -32,6 +34,7 @@ namespace QuestingBots.Components
         public bool AlarmState { get; private set; } = false;
 
         private readonly DateTime awakeTime = DateTime.Now;
+        private AbstractMultiplayerFunctions multiPlayerFunctions = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private List<TriggerZone> alarmTriggerZones = new List<TriggerZone>();
@@ -51,6 +54,8 @@ namespace QuestingBots.Components
 
         protected void Awake()
         {
+            multiPlayerFunctions = ExternalModHandler.CreateMultiplayerFunctions();
+
             Singleton<GlobalEventDispatcher>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
@@ -804,31 +809,14 @@ namespace QuestingBots.Components
             return false;
         }
 
-        public static Vector3? GetMainPlayerPosition()
+        public IEnumerable<Player> GetHumanPlayers()
         {
             if (Singleton<GameWorld>.Instance == null)
             {
-                return null;
+                return Enumerable.Empty<Player>();
             }
 
-            // Fika Headless client does not have a MainPlayer
-            if (Singleton<GameWorld>.Instance.MainPlayer == null)
-            {
-                return BotLogic.ExternalMods.LoadedModInfo.FikaHeadlessModInfo.TryGetHeadlessSpawnPoint();
-            }
-
-            return Singleton<GameWorld>.Instance.MainPlayer.Position;
-        }
-
-        public SpawnPointParams? GetMainPlayerSpawnPoint()
-        {
-            Vector3? playerPosition = GetMainPlayerPosition();
-            if (!playerPosition.HasValue)
-            {
-                return null;
-            }
-
-            return GetNearestSpawnPoint(playerPosition.Value);
+            return multiPlayerFunctions.GetHumanPlayers();
         }
 
         public Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)

@@ -12,21 +12,23 @@ namespace QuestingBots
 {
     internal static class PacketHelpers
     {
-        internal static void SendToAllClients<T>(this T packet) where T : INetSerializable
+        internal static bool TrySendToAllClients<T>(this T packet) where T : INetSerializable
         {
             if (FikaBackendUtils.IsClient) // safeguard
             {
-                return;
+                return false;
             }
 
-            if (Singleton<IFikaNetworkManager>.Instance is FikaServer server)
+            FikaServer? server = Singleton<IFikaNetworkManager>.Instance as FikaServer;
+            if (server == null)
             {
-                server.SendData(ref packet, Fika.Core.Networking.LiteNetLib.DeliveryMethod.ReliableOrdered);
-
-                return;
+                QuestingBotsFikaSyncPlugin.PluginLogger.LogError($"NetworkManager was not a server when trying to send {packet.GetType().Name}");
+                return false;
             }
 
-            QuestingBotsFikaSyncPlugin.PluginLogger.LogError($"NetworkManager was not a server when trying to send {packet.GetType().Name}");
+            server.SendData(ref packet, Fika.Core.Networking.LiteNetLib.DeliveryMethod.ReliableOrdered);
+
+            return true;
         }
     }
 }
