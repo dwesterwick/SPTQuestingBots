@@ -1,0 +1,59 @@
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace QuestingBots.ExternalMods.Functions.Extract
+{
+    public class InternalExtractFunction : AbstractExtractFunction
+    {
+        public override string MonitoredLayerName => "Exfiltration";
+
+        public InternalExtractFunction(BotOwner _botOwner) : base(_botOwner)
+        {
+            _botOwner.Exfiltration._timeToExfiltration = float.MaxValue;
+        }
+
+        public override bool IsTryingToExtract() => BotOwner.Exfiltration.WannaLeave();
+
+        public override bool TryInstructBotToExtract()
+        {
+            tryExtractSingleBot(BotOwner);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to extract now");
+            }
+
+            foreach (BotOwner follower in BotLogic.HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner))
+            {
+                if ((follower == null) || follower.IsDead)
+                {
+                    continue;
+                }
+
+                tryExtractSingleBot(follower);
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Instructing follower " + follower.GetText() + " to extract now");
+                }
+            }
+
+            return true;
+        }
+
+        private bool tryExtractSingleBot(BotOwner botOwner)
+        {
+            // Game time > _timeToExfiltration ? exfil now
+            botOwner.Exfiltration._timeToExfiltration = 0f;
+
+            return true;
+        }
+    }
+}

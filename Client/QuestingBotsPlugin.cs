@@ -57,7 +57,7 @@ namespace QuestingBots
             EnableLighthousePatches();
             EnableLabyrinthPatches();
 
-            EnableSpawningPatches();
+            EnableBotSpawningPatches();
             EnablePlayerScavGenerationPatches();
             RegisterBotGenerators();
 
@@ -84,6 +84,7 @@ namespace QuestingBots
             new Patches.OverrideLocalAvoidanceDistancesPatch().Enable();
             new Patches.OverrideLocalAvoidancePowerLimitPatch().Enable();
             new Patches.DisableEftNavMeshCorrectionPatch().Enable();
+            new Patches.SelectSpawnPointPatch().Enable();
         }
 
         private void EnableLighthousePatches()
@@ -125,7 +126,7 @@ namespace QuestingBots
             harmony.PatchAll(typeof(BenchmarkingPatchGenerator));
         }
 
-        private void EnableSpawningPatches()
+        private void EnableBotSpawningPatches()
         {
             if (!Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {

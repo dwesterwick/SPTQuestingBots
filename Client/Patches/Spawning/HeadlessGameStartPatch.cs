@@ -1,6 +1,6 @@
 ﻿using Comfort.Common;
 using EFT.NextObservedPlayer.Operations;
-using QuestingBots.BotLogic.ExternalMods;
+using QuestingBots.ExternalMods;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 using System;
@@ -22,7 +22,7 @@ namespace QuestingBots.Patches.Spawning
     {
         protected override MethodBase GetTargetMethod()
         {
-            return ExternalModHandler.HeadlessModInfo.RunMemoryCleanupMethod;
+            return ExternalModHandler.FikaHeadlessModInfo.RunMemoryCleanupMethod;
         }
 
         [PatchPostfix]

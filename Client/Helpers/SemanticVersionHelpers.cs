@@ -77,13 +77,16 @@ namespace QuestingBots.Helpers
             }
         }
 
-        private static Version NextRevision(this Version v) => new Version(v.Major, v.Minor, v.Build, v.Revision + 1);
-        private static Version NextBuild(this Version v) => new Version(v.Major, v.Minor, v.Build + 1, 0);
-        private static Version NextMinor(this Version v) => new Version(v.Major, v.Minor + 1, 0, 0);
-        private static Version NextMajor(this Version v) => new Version(v.Major + 1, 0, 0, 0);
+        public static Version NextRevision(this Version v) => new Version(v.Major, v.Minor, v.Build, v.Revision + 1);
+        public static Version NextBuild(this Version v) => new Version(v.Major, v.Minor, v.Build + 1, 0);
+        public static Version NextMinor(this Version v) => new Version(v.Major, v.Minor + 1, 0, 0);
+        public static Version NextMajor(this Version v) => new Version(v.Major + 1, 0, 0, 0);
 
-        private static Version Min(Version a, Version b) => a.CompareTo(b) <= 0 ? a : b;
-        private static Version Max(Version a, Version b) => a.CompareTo(b) >= 0 ? a : b;
+        public static Version MinBuild(this Version v) => new Version(v.Major, v.Minor, 0, 0);
+        public static Version MaxBuild(this Version v) => new Version(v.Major, v.Minor, Math.Max(v.Build, 999), 0);
+
+        public static Version Min(Version a, Version b) => a.CompareTo(b) <= 0 ? a : b;
+        public static Version Max(Version a, Version b) => a.CompareTo(b) >= 0 ? a : b;
 
         public static Version IncludeRevision(this Version v)
         {

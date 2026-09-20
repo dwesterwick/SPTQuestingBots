@@ -1,0 +1,38 @@
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.ExternalMods.Interop;
+using QuestingBots.Helpers;
+using QuestingBots.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace QuestingBots.ExternalMods.Functions.Hearing
+{
+    public class SAINHearingFunction : AbstractHearingFunction
+    {
+        public SAINHearingFunction(BotOwner _botOwner) : base(_botOwner)
+        {
+
+        }
+
+        public override bool TryIgnoreHearing(bool value, bool ignoreUnderFire = false, float duration = 0)
+        {
+            if (!SAINInterop.IgnoreHearing(BotOwner, value, ignoreUnderFire, duration))
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Cannot instruct " + BotOwner.GetText() + " to ignore hearing. SAIN Interop not initialized properly or is outdated.");
+
+                return false;
+            }
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Instructing " + BotOwner.GetText() + " to " + (value ? "" : "not ") + "ignore hearing for " + duration + "s");
+            }
+
+            return true;
+        }
+    }
+}

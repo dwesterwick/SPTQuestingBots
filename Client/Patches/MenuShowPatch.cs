@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT.Communications;
 using EFT.UI;
+using QuestingBots.ExternalMods;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
@@ -16,6 +17,7 @@ namespace QuestingBots.Patches
     public class MenuShowPatch : ModulePatch
     {
         private static bool _displayedReflexWarning = false;
+        private static bool _displayedFikaWarning = false;
 
         protected override MethodBase GetTargetMethod()
         {
@@ -29,6 +31,17 @@ namespace QuestingBots.Patches
             if (shouldShowNvidiaReflexWarning())
             {
                 showNvidiaReflexWarning();
+            }
+
+            if (!_displayedFikaWarning && fikaInstalledWithoutSyncPlugin())
+            {
+                string message = "You must use " + ExternalModHandler.QuestingBotsFikaSyncModInfo.Name + " when using Fika or spawn-rush quests will be disabled and key spawning will not propogate to client machines when bots unlock doors!";
+                Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(message);
+
+                message = "Missing Questing Bots Fika sync plugin";
+                NotificationManager.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
+
+                _displayedFikaWarning = true;
             }
         }
 
@@ -61,6 +74,21 @@ namespace QuestingBots.Patches
             Singleton<LoggingUtil>.Instance.LogWarningToServerConsole(profileWarningMessage);
 
             _displayedReflexWarning = true;
+        }
+
+        private static bool fikaInstalledWithoutSyncPlugin()
+        {
+            if (!ExternalModHandler.FikaModInfo.IsInstalled)
+            {
+                return false;
+            }
+
+            if (ExternalModHandler.QuestingBotsFikaSyncModInfo.IsInstalled)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

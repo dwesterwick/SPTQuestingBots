@@ -5,6 +5,8 @@ using Diz.Resources;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -90,7 +92,7 @@ namespace QuestingBots.Helpers
 
         public static List<Weapon> GetEquippedWeapons(this BotOwner botOwner)
         {
-            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
             Weapon? holsterWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Holster).ContainedItem as Weapon;
             Weapon? primaryWeapon = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.FirstPrimaryWeapon).ContainedItem as Weapon;
@@ -106,7 +108,7 @@ namespace QuestingBots.Helpers
 
         public static float HearingMultiplier(this BotOwner botOwner)
         {
-            InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+            InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
             Item headset = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Earpiece).ContainedItem;
             Item helmet = inventoryControllerClass.Inventory.Equipment.GetSlot(EquipmentSlot.Headwear).ContainedItem;
@@ -160,7 +162,7 @@ namespace QuestingBots.Helpers
 
         public static bool TryAddToFakeStash(this Item item, BotOwner botOwner, string stashName)
         {
-            InventoryController inventoryController = GetInventoryController(botOwner);
+            InventoryController inventoryController = botOwner.GetInventoryController();
 
             return item.TryAddToFakeStash(inventoryController, stashName);
         }
@@ -169,7 +171,14 @@ namespace QuestingBots.Helpers
         {
             try
             {
-                InventoryController inventoryController = GetInventoryController(botOwner);
+                BotObjectiveManager? objectiveManager = botOwner.GetObjectiveManager();
+                if (objectiveManager == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager for " + botOwner.GetText());
+                    return false;
+                }
+
+                InventoryController inventoryController = botOwner.GetInventoryController();
 
                 // Enumerate all possible equipment slots into which the key can be transferred
                 List<EquipmentSlot> possibleSlots = new List<EquipmentSlot>();
@@ -187,30 +196,19 @@ namespace QuestingBots.Helpers
                     return false;
                 }
 
-                // Initialize the transation to transfer the key to the bot
-                OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, true);
-                if (!moveResult.Succeeded)
+                // Initialize the transaction to transfer the key to the bot
+                OperationResult<MoveResult> moveResult = ItemManipulator.Move(item, locationForItem, inventoryController, false);
+                if (moveResult.Failed)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText() + " - " + moveResult.Error.Localized());
                     return false;
                 }
 
-                Action<IResult> callbackAction = (result) => 
+                if (!objectiveManager.NetworkTransactionFunctions.TryMoveItem(moveResult))
                 {
-                    if (result.Succeed && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
-                    {
-                        Singleton<LoggingUtil>.Instance.LogInfo("Moved key to inventory of " + botOwner.GetText());
-                    }
-
-                    if (result.Failed)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogError("Could not move key to inventory of " + botOwner.GetText());
-                    }
-                };
-
-                // Execute the transation to transfer the key to the bot
-                Callback callback = new Callback(callbackAction);
-                inventoryController.TryRunNetworkTransaction(moveResult, callback);
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot run network transaction to move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
+                    return false;
+                }
 
                 return true;
             }
@@ -307,7 +305,7 @@ namespace QuestingBots.Helpers
 
             try
             {
-                InventoryController inventoryControllerClass = GetInventoryController(botOwner);
+                InventoryController inventoryControllerClass = botOwner.GetInventoryController();
 
                 IEnumerable<KeyComponent> matchingKeys = inventoryControllerClass.Inventory.Equipment
                     .GetItemComponentsInChildren<KeyComponent>(false)

@@ -1,10 +1,10 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic.ExternalMods.ModInfo;
 using QuestingBots.BotLogic.Follow;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.BotLogic.Objective;
 using QuestingBots.Controllers;
+using QuestingBots.ExternalMods.LoadedModInfo;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
