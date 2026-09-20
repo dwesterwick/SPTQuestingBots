@@ -241,7 +241,14 @@ namespace QuestingBots.Components
         {
             foreach (Player humanPlayer in Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetHumanPlayers())
             {
-                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetNearestSpawnPoint(humanPlayer.SpawnPoint.Position);
+                ISpawnPoint? spawnPoint = humanPlayer.GetSpawnPoint();
+                if (spawnPoint == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Cannot find player spawn point to add quest for rushing " + humanPlayer.GetCorrectedNickname());
+                    continue;
+                }
+
+                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetNearestSpawnPoint(spawnPoint.Position);
                 if (playerSpawnPoint == null)
                 {
                     Singleton<LoggingUtil>.Instance.LogInfo("Cannot find nearby spawn point to add quest for rushing " + humanPlayer.GetCorrectedNickname());
