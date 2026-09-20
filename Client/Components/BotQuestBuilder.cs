@@ -239,7 +239,25 @@ namespace QuestingBots.Components
 
         private void AddSpawnRushQuests()
         {
-            foreach (Player humanPlayer in Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetHumanPlayers())
+            LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<LocationData>();
+            if (locationData.CurrentRaidSettings == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Could not get raid settings. Cannot create spawn rush quests.");
+                return;
+            }
+
+            if (locationData.CurrentLocation.Name.ToLower() == "labyrinth")
+            {
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Spawn rush quests cannot be added on Labyrinth");
+                }
+
+                return;
+            }
+
+            Player[] humanPlayers = locationData.GetHumanPlayers().ToArray();
+            foreach (Player humanPlayer in humanPlayers)
             {
                 ISpawnPoint? spawnPoint = humanPlayer.GetSpawnPoint();
                 if (spawnPoint == null)
@@ -248,7 +266,7 @@ namespace QuestingBots.Components
                     continue;
                 }
 
-                SpawnPointParams? playerSpawnPoint = Singleton<GameWorld>.Instance.GetComponent<LocationData>().GetNearestSpawnPoint(spawnPoint.Position);
+                SpawnPointParams? playerSpawnPoint = locationData.GetNearestSpawnPoint(spawnPoint.Position);
                 if (playerSpawnPoint == null)
                 {
                     Singleton<LoggingUtil>.Instance.LogInfo("Cannot find nearby spawn point to add quest for rushing " + humanPlayer.GetCorrectedNickname());
@@ -265,6 +283,16 @@ namespace QuestingBots.Components
                 }
 
                 BotJobAssignmentController.AddQuest(spawnRushQuest);
+
+                if ((locationData.CurrentRaidSettings.PlayersSpawnPlace == EPlayersSpawnPlace.SamePlace) && (humanPlayers.Length > 1))
+                {
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogInfo("Only one spawn-rush quest will be added because all players are spawning together");
+                    }
+
+                    break;
+                }
             }
         }
 
