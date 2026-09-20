@@ -35,7 +35,7 @@ namespace QuestingBots.Patches
 
             if (!_displayedFikaWarning && fikaInstalledWithoutSyncPlugin())
             {
-                string message = "You must use " + ExternalModHandler.QuestingBotsFikaSyncModInfo.Name + " when using Fika or spawn-rush quests will be disabled and key spawning will not propogate to client machines when bots unlock doors!";
+                string message = "You must use " + ExternalModHandler.QuestingBotsFikaSyncModInfo.Name + " when using Fika or spawn-rush quests will be disabled and key spawning will not propagate to client machines when bots unlock doors!";
                 Singleton<LoggingUtil>.Instance.LogErrorToServerConsole(message);
 
                 message = "Missing Questing Bots Fika sync plugin";

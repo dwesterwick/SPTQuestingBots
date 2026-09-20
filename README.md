@@ -5,6 +5,7 @@ You're no longer the only PMC running around placing markers and collecting ques
 **REQUIRES:**
 * [BigBrain](https://sp-mod.com/mod/902/bigbrain) (1.5.0 or later)
 * [Waypoints](https://sp-mod.com/mod/827/waypoints-expanded-navmesh) (1.9.0 or later)
+* If [Fika](https://sp-mod.com/mod/2326/project-fika) is used, a FikaSync plugin is also required. The Questing Bots and FikaSync plugin for it only need to be installed on the host machine. 
 
 **Highly Recommended:**
 * [SAIN](https://sp-mod.com/mod/791/sain-solarints-ai-modifications-full-ai-combat-system-replacement) (4.5.0 or later recommended)
@@ -400,7 +401,6 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **General:**
 * A flicker occurs whenever EFT spawns bots, even when the Questing Bots spawning system is disabled
-* A [Fika](https://sp-mod.com/mod/2326/project-fika) exception occurs when trying to create keys for bots on client machines. They will still unlock doors, but their keys cannot be looted. 
 
 **Objective System:**
 * Mods that add a lot of new quests may cause latency issues that may result in game stability problems and stuttering
