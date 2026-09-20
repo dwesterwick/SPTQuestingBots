@@ -5,6 +5,7 @@
 
 # SPT-specific files
 Dist/
+Dist_FikaSync/
 Icon/
 
 # User-specific files
