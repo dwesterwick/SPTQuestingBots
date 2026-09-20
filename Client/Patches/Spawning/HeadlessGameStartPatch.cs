@@ -1,6 +1,6 @@
 ﻿using Comfort.Common;
 using EFT.NextObservedPlayer.Operations;
-using QuestingBots.BotLogic.ExternalMods;
+using QuestingBots.ExternalMods;
 using QuestingBots.Utils;
 using SPT.Reflection.Patching;
 using System;

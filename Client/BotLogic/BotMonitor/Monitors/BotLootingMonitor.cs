@@ -1,8 +1,8 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic.ExternalMods;
-using QuestingBots.BotLogic.ExternalMods.Functions.Loot;
 using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.ExternalMods;
+using QuestingBots.ExternalMods.Functions.Loot;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;

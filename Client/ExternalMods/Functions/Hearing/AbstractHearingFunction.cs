@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EFT;
+using QuestingBots.ExternalMods.Functions;
+
+namespace QuestingBots.ExternalMods.Functions.Hearing
+{
+    public abstract class AbstractHearingFunction : AbstractBaseExternalFunctionForBot
+    {
+        public AbstractHearingFunction(BotOwner _botOwner) : base(_botOwner)
+        {
+            
+        }
+
+        public abstract bool TryIgnoreHearing(bool value, bool ignoreUnderFire, float duration = 0);
+    }
+}
