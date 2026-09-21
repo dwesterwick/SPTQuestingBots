@@ -70,6 +70,9 @@ namespace QuestingBots.Models.Questing
         [JsonProperty("botRoleFilter")]
         public WildSpawnType[] BotRoleFilter { get; set; } = new WildSpawnType[0];
 
+        [JsonProperty("interruptSettings")]
+        public BotQuestInterruptionSettingsConfig InterruptSettings { get; set; } = new BotQuestInterruptionSettingsConfig();
+
         [JsonIgnore]
         public SptRawQuestClass? Template { get; private set; } = null;
 

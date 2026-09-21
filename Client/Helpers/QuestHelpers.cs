@@ -39,6 +39,9 @@ namespace QuestingBots.Helpers
             quest.MaxRaidET = settings.MaxRaidET;
             quest.MinLevel = settings.MinLevel;
             quest.MaxLevel = settings.MaxLevel;
+            quest.InterruptSettings.Enabled = settings.InterruptionSettings.Enabled;
+            quest.InterruptSettings.TriggerSwitchId = settings.InterruptionSettings.TriggerSwitchId;
+            quest.InterruptSettings.ChancePerDistance = settings.InterruptionSettings.ChancePerDistance;
         }
 
         public static void ApplyQuestSettingsFromConfig(this Models.Questing.BotQuestObjective objective, QuestSettingsConfig settings)

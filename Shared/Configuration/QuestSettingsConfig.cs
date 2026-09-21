@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestingBots.Models.Questing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -42,6 +43,9 @@ namespace QuestingBots.Configuration
 
         [DataMember(Name = "level_range")]
         public double[][] LevelRange { get; set; } = Array.Empty<double[]>();
+
+        [DataMember(Name = "interrupt_settings")]
+        public BotQuestInterruptionSettingsConfig InterruptionSettings { get; set; } = new BotQuestInterruptionSettingsConfig();
 
         public QuestSettingsConfig()
         {

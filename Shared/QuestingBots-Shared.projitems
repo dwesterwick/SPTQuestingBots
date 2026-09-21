@@ -27,6 +27,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Quests\Standard\woods.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotQuestInterruptionSettingsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotZoneUpdatesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EftLocalAvoidanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LabyrinthQuestsConfig.cs" />

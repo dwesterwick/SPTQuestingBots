@@ -292,7 +292,28 @@
 			"airdrop_chaser": {
 				"desirability": 70,
 				"max_bots_per_quest": 3,
-				"max_distance": 400
+				"max_distance": 400,
+				"interrupt_settings": {
+					"enabled": true,
+					"chance_per_distance": [
+						[ 75, 75 ],
+						[ 200, 25 ]
+					]
+				}
+			},
+			"vex_rush": {
+				"desirability": 100,
+				"pmcsOnly": true,
+				"max_bots_per_quest": 2,
+				"min_distance": 25,
+				"max_distance": 100,
+				"interrupt_settings": {
+					"enabled": true,
+					"chance_per_distance": [
+						[ 75, 75 ],
+						[ 150, 25 ]
+					]
+				}
 			}
 		}
 	},

@@ -48,6 +48,24 @@ namespace QuestingBots.Components
             return questPathFinder.GetStaticPaths(target);
         }
 
+        public void AddVexRushQuest(Vector3 position, float extractionTime)
+        {
+            Models.Questing.BotQuest? vexRushQuest = createGoToPositionQuest(position, "VEX Rush", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.VexRush);
+            if (vexRushQuest == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Could not add VEX rush quest");
+                return;
+            }
+
+            vexRushQuest.MaxRaidET = RaidHelpers.GetRaidElapsedSeconds() + extractionTime;
+            BotJobAssignmentController.AddQuest(vexRushQuest);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo($"Added VEX rush quest");
+            }
+        }
+
         public void StartAddAirdropChaserQuest(Vector3 airdropPosition, Bounds airdropBounds)
         {
             if (airdropPosition == null)

@@ -70,6 +70,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "airdrop_chaser", IsRequired = true)]
         public QuestSettingsConfig AirdropChaser { get; set; } = new QuestSettingsConfig();
 
+        [DataMember(Name = "vex_rush", IsRequired = true)]
+        public QuestSettingsConfig VexRush { get; set; } = new QuestSettingsConfig();
+
         public BotQuestsConfig()
         {
 

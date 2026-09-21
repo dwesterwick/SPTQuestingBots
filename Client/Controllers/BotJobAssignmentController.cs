@@ -87,6 +87,8 @@ namespace QuestingBots.Controllers
             }
 
             allQuests.Add(quest);
+
+
         }
 
         public static BotQuest? FindQuest(string questID)
