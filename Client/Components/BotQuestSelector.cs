@@ -112,6 +112,28 @@ namespace QuestingBots.Components
             assignmentCreationJob = null;
         }
 
+        public bool TryForceNewAssignment(BotQuest quest, BotQuestObjective questObjective)
+        {
+            if (!quest.CanAssignToBot(_botOwner))
+            {
+                return false;
+            }
+
+            assignmentCreationJob?.Cancel();
+
+            BotJobAssignment newAssignment = new BotJobAssignment(_botOwner, quest, questObjective);
+            newAssignment.Register();
+
+            assignmentCreationJob = new CompletedBotJobAssignmentCreationJob(newAssignment);
+            
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(_botOwner.GetText() + " has been interrupted for a new assignment: " + newAssignment.ToString());
+            }
+
+            return true;
+        }
+
         public void RefreshJobAssignment()
         {
             if (HasActiveAssignment(out _))

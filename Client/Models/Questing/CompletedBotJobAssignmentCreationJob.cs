@@ -22,5 +22,7 @@ namespace QuestingBots.Models.Questing
         {
             yield break;
         }
+
+        public void Cancel() { }
     }
 }

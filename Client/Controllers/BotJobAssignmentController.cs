@@ -20,6 +20,7 @@ namespace QuestingBots.Controllers
 {
     public static class BotJobAssignmentController
     {
+        private static System.Random random = new System.Random();
         private static CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(Singleton<ConfigUtil>.Instance.CurrentConfig.MaxCalcTimePerFrame);
         private static List<BotQuest> allQuests = new List<BotQuest>();
         private static Dictionary<string, List<BotJobAssignment>> botJobAssignments = new Dictionary<string, List<BotJobAssignment>>();
@@ -88,7 +89,39 @@ namespace QuestingBots.Controllers
 
             allQuests.Add(quest);
 
+            CheckForBotsToBeInterrupted(quest);
+        }
 
+        public static void CheckForBotsToBeInterrupted(BotQuest quest)
+        {
+            foreach (BotQuestObjective objective in quest.GetValidObjectives())
+            {
+                CheckForBotsToBeInterrupted(quest, objective);
+            }
+        }
+
+        public static void CheckForBotsToBeInterrupted(BotQuest quest, BotQuestObjective objective)
+        {
+            foreach (BotOwner bot in Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners)
+            {
+                if (!quest.CanMoreBotsDoQuest())
+                {
+                    return;
+                }
+
+                if (!quest.CanInterrupt(bot))
+                {
+                    continue;
+                }
+
+                BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+                if (objectiveManager == null)
+                {
+                    continue;
+                }
+
+                objectiveManager.QuestSelector.TryForceNewAssignment(quest, objective);
+            }
         }
 
         public static BotQuest? FindQuest(string questID)
@@ -426,6 +459,51 @@ namespace QuestingBots.Controllers
             }
 
             return (DateTime.Now - firstObjectiveEndingTime.Value).TotalSeconds;
+        }
+
+        public static bool CanInterrupt(this BotQuest quest, BotOwner bot)
+        {
+            if (!quest.InterruptSettings.Enabled)
+            {
+                return false;
+            }
+
+            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
+            if (botObjectiveManager == null)
+            {
+                return false;
+            }
+
+            if (!botObjectiveManager.IsQuestingAllowed)
+            {
+                return false;
+            }
+
+            // Only interrupt if the quest is more desirable than the bot's current quest
+            if ((botObjectiveManager.CurrentAssignment?.QuestAssignment?.Desirability ?? 0) > quest.Desirability)
+            {
+                return false;
+            }
+
+            Vector3 questPosition = quest.GetValidObjectives().First().GetFirstStepPosition() ?? Vector3.negativeInfinity;
+            float distanceFromQuest = Vector3.Distance(bot.Position, questPosition);
+
+            foreach (double[] chanceForDistance in quest.InterruptSettings.ChancePerDistance)
+            {
+                if (distanceFromQuest > chanceForDistance[0])
+                {
+                    continue;
+                }
+
+                if (random.Next(1, 100) > chanceForDistance[1])
+                {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public static bool CanAssignToBot(this BotQuest quest, BotOwner bot)

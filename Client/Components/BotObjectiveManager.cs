@@ -250,6 +250,16 @@ namespace QuestingBots.Components
                 return;
             }
 
+            if ((CurrentAssignment != null) && CurrentAssignment.IsActive)
+            {
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Bot " + botOwner.GetText() + " is pausing " + CurrentAssignment.ToString());
+                }
+
+                CurrentAssignment.Inactivate();
+            }
+
             lastAssignment = CurrentAssignment;
             CurrentAssignment = objective;
             QuestSelector.AcceptNewAssignment();

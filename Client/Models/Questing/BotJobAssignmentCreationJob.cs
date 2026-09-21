@@ -20,6 +20,7 @@ namespace QuestingBots.Models.Questing
     {
         public bool IsCreatingAnAssignment { get; private set; } = false;
         public bool NewAssignmentReady { get; private set; } = false;
+        public bool IsCancelled { get; private set; } = false;
 
         private BotOwner _botOwner;
         private BotObjectiveManager _objectiveManager = null!;
@@ -30,7 +31,6 @@ namespace QuestingBots.Models.Questing
         private BotJobAssignment? _assignmentCreationResult = null;
         private BotQuest? _nextRandomQuest = null;
         
-
         public BotJobAssignment? AssignmentCreationResult => NewAssignmentReady ? _assignmentCreationResult : null;
 
         private bool jobHasBeenRunningTooLong => _timeoutMonitor.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.QuestSelection.Timeout;
@@ -56,6 +56,11 @@ namespace QuestingBots.Models.Questing
             }
 
             _objectiveManager = objectiveManager;
+        }
+
+        public void Cancel()
+        {
+            IsCancelled = true;
         }
 
         public IEnumerator CreateNewBotJobAssignment()
@@ -105,6 +110,11 @@ namespace QuestingBots.Models.Questing
 
             while ((quest == null) || (objective == null))
             {
+                if (IsCancelled)
+                {
+                    yield break;
+                }
+
                 yield return ChooseNextRandomQuest();
 
                 quest = _nextRandomQuest;
@@ -236,6 +246,11 @@ namespace QuestingBots.Models.Questing
             double maxWeight = double.MinValue;
             foreach (BotQuest quest in availableQuests)
             {
+                if (IsCancelled)
+                {
+                    yield break;
+                }
+
                 Configuration.MinMaxConfig distanceRange = questDistanceRanges[quest];
                 Configuration.MinMaxConfig exfilAngleRange = questExfilAngleRanges[quest];
 

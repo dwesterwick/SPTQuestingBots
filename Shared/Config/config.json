@@ -297,16 +297,17 @@
 					"enabled": true,
 					"chance_per_distance": [
 						[ 75, 75 ],
-						[ 200, 25 ]
+						[ 200, 25 ],
+						[ 400, 5 ]
 					]
 				}
 			},
 			"vex_rush": {
-				"desirability": 100,
+				"desirability": 50,
 				"pmcsOnly": true,
 				"max_bots_per_quest": 2,
 				"min_distance": 25,
-				"max_distance": 100,
+				"max_distance": 150,
 				"interrupt_settings": {
 					"enabled": true,
 					"chance_per_distance": [

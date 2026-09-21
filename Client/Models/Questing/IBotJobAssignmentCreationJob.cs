@@ -11,6 +11,7 @@ namespace QuestingBots.Models.Questing
         bool NewAssignmentReady { get; }
         BotJobAssignment? AssignmentCreationResult { get; }
 
-        IEnumerator CreateNewBotJobAssignment();
+        public IEnumerator CreateNewBotJobAssignment();
+        public void Cancel();
     }
 }
