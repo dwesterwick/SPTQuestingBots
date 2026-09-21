@@ -85,6 +85,7 @@ namespace QuestingBots
             new Patches.OverrideLocalAvoidancePowerLimitPatch().Enable();
             new Patches.DisableEftNavMeshCorrectionPatch().Enable();
             new Patches.SelectSpawnPointPatch().Enable();
+            new Patches.ExfiltrationOnItemTransferredPatch().Enable();
         }
 
         private void EnableLighthousePatches()

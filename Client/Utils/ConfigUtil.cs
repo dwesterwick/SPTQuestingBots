@@ -60,6 +60,20 @@ namespace QuestingBots.Utils
             }
         }
 
+        private HashSet<string>? _carExtractNames;
+        public HashSet<string> CarExtractNames
+        {
+            get
+            {
+                if (_carExtractNames == null)
+                {
+                    _carExtractNames = GetCarExtractNames();
+                }
+
+                return _carExtractNames!;
+            }
+        }
+
         public ConfigUtil() { }
 
         private Configuration.ModConfig GetConfig()
@@ -167,6 +181,16 @@ namespace QuestingBots.Utils
             }
 
             return standardQuests.Concat(customQuests);
+        }
+
+        private HashSet<string> GetCarExtractNames()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetCarExtractNames");
+            string errorMessage = "Cannot names of car extracts";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out HashSet<string> carExtractNames);
+            return carExtractNames;
         }
 
         private string GetJson(string endpoint, string errorMessage)
