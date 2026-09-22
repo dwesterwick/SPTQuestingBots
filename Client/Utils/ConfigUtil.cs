@@ -46,7 +46,7 @@ namespace QuestingBots.Utils
             }
         }
 
-        private Dictionary<string, Configuration.ScavRaidSettingsConfig> _scavRaidSettings = null!;
+        private Dictionary<string, Configuration.ScavRaidSettingsConfig>? _scavRaidSettings = null;
         public Dictionary<string, Configuration.ScavRaidSettingsConfig> ScavRaidSettings
         {
             get
@@ -57,6 +57,48 @@ namespace QuestingBots.Utils
                 }
 
                 return _scavRaidSettings;
+            }
+        }
+
+        private SptRawQuestClass[]? _eftQuestTemplates = null;
+        public SptRawQuestClass[] EftQuestTemplates
+        {
+            get
+            {
+                if (_eftQuestTemplates == null)
+                {
+                    _eftQuestTemplates = GetAllQuestTemplates();
+                }
+
+                return _eftQuestTemplates;
+            }
+        }
+
+        private Dictionary<string, Dictionary<string, object>>? _eftQuestSettings = null;
+        public Dictionary<string, Dictionary<string, object>> EftQuestSettings
+        {
+            get
+            {
+                if (_eftQuestSettings == null)
+                {
+                    _eftQuestSettings = GetEFTQuestSettings();
+                }
+
+                return _eftQuestSettings;
+            }
+        }
+
+        private Dictionary<string, ZoneAndItemPositionInfoConfig>? _zoneAndItemPositions = null;
+        public Dictionary<string, ZoneAndItemPositionInfoConfig> ZoneAndItemPositions
+        {
+            get
+            {
+                if (_zoneAndItemPositions == null)
+                {
+                    _zoneAndItemPositions = GetZoneAndItemPositions();
+                }
+
+                return _zoneAndItemPositions;
             }
         }
 
@@ -142,6 +184,16 @@ namespace QuestingBots.Utils
             return _positions;
         }
 
+        private HashSet<string> GetCarExtractNames()
+        {
+            string routeName = SharedRouterHelpers.GetRoutePath("GetCarExtractNames");
+            string errorMessage = "Cannot names of car extracts";
+            string json = GetJson(routeName, errorMessage);
+
+            TryDeserializeObject(json, errorMessage, out HashSet<string> carExtractNames);
+            return carExtractNames;
+        }
+
         public IEnumerable<Models.Questing.BotQuest> GetCustomQuests(string locationID)
         {
             Models.Questing.BotQuest[] standardQuests = new Models.Questing.BotQuest[0];
@@ -181,16 +233,6 @@ namespace QuestingBots.Utils
             }
 
             return standardQuests.Concat(customQuests);
-        }
-
-        private HashSet<string> GetCarExtractNames()
-        {
-            string routeName = SharedRouterHelpers.GetRoutePath("GetCarExtractNames");
-            string errorMessage = "Cannot names of car extracts";
-            string json = GetJson(routeName, errorMessage);
-
-            TryDeserializeObject(json, errorMessage, out HashSet<string> carExtractNames);
-            return carExtractNames;
         }
 
         private string GetJson(string endpoint, string errorMessage)

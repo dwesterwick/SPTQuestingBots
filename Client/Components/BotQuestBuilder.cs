@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using Diz.Utils;
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
+using EFT.InventoryLogic;
 using EFT.Quests;
 using Koenigz.PerfectCulling.EFT;
 using QuestingBots.Configuration;
@@ -18,6 +12,13 @@ using QuestingBots.Helpers;
 using QuestingBots.Models.Pathing;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -28,7 +29,6 @@ namespace QuestingBots.Components
         public bool HaveQuestsBeenBuilt { get; private set; } = false;
 
         private CoroutineExtensions.EnumeratorWithTimeLimit enumeratorWithTimeLimit = new CoroutineExtensions.EnumeratorWithTimeLimit(Singleton<ConfigUtil>.Instance.CurrentConfig.MaxCalcTimePerFrame);
-        private IReadOnlyDictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null!;
         private QuestPathFinder questPathFinder = new QuestPathFinder();
         private List<string> zoneIDsInLocation = new List<string>();
 
@@ -50,7 +50,8 @@ namespace QuestingBots.Components
 
         public void AddVexRushQuest(Vector3 position, float extractionTime)
         {
-            Models.Questing.BotQuest? vexRushQuest = createGoToPositionQuest(position, "VEX Rush", Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.VexRush);
+            string questName = "VEX Rush (" + Time.time + ")";
+            Models.Questing.BotQuest? vexRushQuest = createGoToPositionQuest(position, questName, Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.VexRush);
             if (vexRushQuest == null)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not add VEX rush quest");
@@ -62,7 +63,7 @@ namespace QuestingBots.Components
 
             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo($"Added VEX rush quest");
+                Singleton<LoggingUtil>.Instance.LogInfo("Added quest: " + questName);
             }
         }
 
@@ -129,50 +130,14 @@ namespace QuestingBots.Components
         {
             IsBuildingQuests = true;
 
-            zoneAndItemQuestPositions = QuestHelpers.LoadZoneAndItemQuestPositions();
-
             try
             {
-                if (BotJobAssignmentController.QuestCount == 0)
-                {
-                    // Create quests based on the EFT quest templates loaded from the server. This may include custom quests added by mods. 
-                    SptRawQuestClass[] allQuestTemplates = Singleton<ConfigUtil>.Instance.GetAllQuestTemplates();
-
-                    Dictionary<string, Dictionary<string, object>> eftQuestOverrideSettings = Singleton<ConfigUtil>.Instance.GetEFTQuestSettings();
-
-                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
-                    {
-                        Singleton<LoggingUtil>.Instance.LogDebug("Found override settings for " + eftQuestOverrideSettings.Count + " EFT quest(s)");
-                    }
-
-                    // Need to be able to override private properties
-                    BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.BotQuest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
-
-                    foreach (SptRawQuestClass questTemplate in allQuestTemplates)
-                    {
-                        BotQuest quest = new BotQuest(questTemplate);
-
-                        quest.ApplyQuestSettingsFromConfig(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests);
-                        quest.PMCsOnly = true;
-                        
-                        if (eftQuestOverrideSettings.ContainsKey(questTemplate.Id))
-                        {
-                            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
-                            {
-                                Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.GetName() + "...");
-                            }
-
-                            quest.UpdateJSONProperties(eftQuestOverrideSettings[questTemplate.Id], overrideBindingFlags);
-                        }
-
-                        BotJobAssignmentController.AddQuest(quest);
-                    }
-                }
-
                 if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
                 {
                     throw new InvalidOperationException("Could not retrieve TarkovApplication");
                 }
+
+                yield return LoadEftQuests();
 
                 // Check which quests are currently active for the player
                 IEftSession session = tarkovApplication.GetClientBackEndSession();
@@ -213,17 +178,20 @@ namespace QuestingBots.Components
                 }
 
                 // Create a quest where the bots wanders to various spawn points around the map. This was implemented as a stop-gap for maps with few other quests.
-                SpawnPointParams[] allSpawnPoints = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.SpawnPointParams;
+                LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+                SpawnPointParams[] allSpawnPoints = locationData.CurrentLocation.SpawnPointParams;
 
                 AddSpawnPointWanderQuest(allSpawnPoints);
                 AddSpawnRushQuests();
                 AddBossHunterQuests(allSpawnPoints);
                 LoadCustomQuests();
 
-                BotJobAssignmentController.RemoveBlacklistedQuestObjectives(Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Id);
+                BotJobAssignmentController.RemoveBlacklistedQuestObjectives(locationData.CurrentLocation.Id);
 
                 // Update all other settings for EFT quests
                 yield return BotJobAssignmentController.ProcessAllQuests(updateEFTQuestObjectives);
+
+                yield return BotJobAssignmentController.ProcessAllQuests(locationData.TrackRequiredSwitches);
 
                 HaveQuestsBeenBuilt = true;
 
@@ -332,6 +300,49 @@ namespace QuestingBots.Components
                     BotJobAssignmentController.AddQuest(bossHunterQuest);
                 }
             }
+        }
+
+        private IEnumerator LoadEftQuests()
+        {
+            if (BotJobAssignmentController.QuestCount > 0)
+            {
+                yield break;
+            }
+
+            List<BotQuest> eftQuests = new List<BotQuest>();
+            foreach (SptRawQuestClass questTemplate in Singleton<ConfigUtil>.Instance.EftQuestTemplates)
+            {
+                eftQuests.Add(new BotQuest(questTemplate));
+            }
+
+            yield return enumeratorWithTimeLimit.Run(eftQuests, ProcessEftQuest);
+        }
+
+        private void ProcessEftQuest(BotQuest quest)
+        {
+            if (quest.Template == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError(quest.ToString() + " is not an EFT quest");
+                return;
+            }
+
+            quest.ApplyQuestSettingsFromConfig(Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuests.EFTQuests);
+            quest.PMCsOnly = true;
+
+            if (Singleton<ConfigUtil>.Instance.EftQuestSettings.ContainsKey(quest.Template.Id))
+            {
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogInfo("Applying override settings for quest " + quest.GetName() + "...");
+                }
+
+                // Need to be able to override private properties
+                BindingFlags overrideBindingFlags = Models.JSONObject<Models.Questing.BotQuest>.DefaultPropertySearchBindingFlags | System.Reflection.BindingFlags.NonPublic;
+
+                quest.UpdateJSONProperties(Singleton<ConfigUtil>.Instance.EftQuestSettings[quest.Template.Id], overrideBindingFlags);
+            }
+
+            BotJobAssignmentController.AddQuest(quest);
         }
 
         private void LoadCustomQuests()
@@ -532,9 +543,9 @@ namespace QuestingBots.Components
         private Vector3? findNavMeshPointForCollider(Collider collider, string zoneName)
         {
             // Check if a specific position should be used for bots to get the item
-            if ((zoneAndItemQuestPositions?.ContainsKey(zoneName) == true) && (zoneAndItemQuestPositions[zoneName].Position != null))
+            if ((Singleton<ConfigUtil>.Instance.ZoneAndItemPositions?.ContainsKey(zoneName) == true) && (Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[zoneName].Position != null))
             {
-                Vector3 overridePosition = zoneAndItemQuestPositions[zoneName].Position.ToUnityVector3();
+                Vector3 overridePosition = Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[zoneName].Position.ToUnityVector3();
 
                 if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
                 {

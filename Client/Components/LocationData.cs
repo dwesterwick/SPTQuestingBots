@@ -10,6 +10,7 @@ using QuestingBots.Controllers;
 using QuestingBots.ExternalMods;
 using QuestingBots.ExternalMods.Functions.Multiplayer;
 using QuestingBots.Helpers;
+using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace QuestingBots.Components
         private Dictionary<GameObject, List<TriggerZone>> triggerZonesForGameObjects = new Dictionary<GameObject, List<TriggerZone>>();
         private Dictionary<GameObject, HandlerTriggerState> handlerTriggerStatesForGameObjects = new Dictionary<GameObject, HandlerTriggerState>();
         private Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>> navMeshObstaclesControlledBySwitches = new Dictionary<EFT.Interactive.Switch, List<NavMeshObstacle>>();
+        private Dictionary<EFT.Interactive.Switch, List<BotQuest>> questsRequiringSwitches = new Dictionary<EFT.Interactive.Switch, List<BotQuest>>();
         private Dictionary<string, EFT.Interactive.Switch> IdsForSwitches = new Dictionary<string, EFT.Interactive.Switch>();
         private Dictionary<string, WorldInteractiveObject> IDsForWorldInteractiveObjects = new Dictionary<string, WorldInteractiveObject>();
         private Dictionary<WorldInteractiveObject, bool> areLockedDoorsUnlocked = new Dictionary<WorldInteractiveObject, bool>();
@@ -181,6 +183,41 @@ namespace QuestingBots.Components
             }
 
             return lightkeeperIslandMonitor.IsPointOnLightkeeperIsland(position.Value);
+        }
+
+        public void TrackRequiredSwitches(BotQuest quest)
+        {
+            if (!quest.InterruptSettings.Enabled)
+            {
+                return;
+            }
+
+            foreach (string switchId in quest.RequiredSwitches.Keys)
+            {
+                EFT.Interactive.Switch? requiredSwitch = FindSwitch(switchId);
+                if (requiredSwitch == null)
+                {
+                    continue;
+                }
+
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("Tracking switch " + switchId + " to force bots to do quest " + quest.ToString());
+                }
+
+                if (!questsRequiringSwitches.ContainsKey(requiredSwitch))
+                {
+                    questsRequiringSwitches.Add(requiredSwitch, new List<BotQuest> { quest });
+                    continue;
+                }
+
+                if (questsRequiringSwitches[requiredSwitch].Contains(quest))
+                {
+                    continue;
+                }
+
+                questsRequiringSwitches[requiredSwitch].Add(quest);
+            }
         }
 
         public void FindAllInteractiveObjects()
@@ -480,6 +517,16 @@ namespace QuestingBots.Components
             }
 
             DisableAllNavMeshObstaclesForSwitch(sw);
+
+            if (!questsRequiringSwitches.ContainsKey(sw))
+            {
+                return;
+            }
+
+            foreach (BotQuest quest in questsRequiringSwitches[sw])
+            {
+                quest.CheckForBotsToBeInterrupted();
+            }
         }
 
         private void DisableAllNavMeshObstaclesForSwitch(EFT.Interactive.Switch sw)

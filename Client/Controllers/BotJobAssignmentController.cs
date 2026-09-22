@@ -89,18 +89,18 @@ namespace QuestingBots.Controllers
 
             allQuests.Add(quest);
 
-            CheckForBotsToBeInterrupted(quest);
+            quest.CheckForBotsToBeInterrupted();
         }
 
-        public static void CheckForBotsToBeInterrupted(BotQuest quest)
+        public static void CheckForBotsToBeInterrupted(this BotQuest quest)
         {
             foreach (BotQuestObjective objective in quest.GetValidObjectives())
             {
-                CheckForBotsToBeInterrupted(quest, objective);
+                quest.CheckForBotsToBeInterrupted(objective);
             }
         }
 
-        public static void CheckForBotsToBeInterrupted(BotQuest quest, BotQuestObjective objective)
+        public static void CheckForBotsToBeInterrupted(this BotQuest quest, BotQuestObjective objective)
         {
             foreach (BotOwner bot in Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners)
             {

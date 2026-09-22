@@ -11,9 +11,6 @@ namespace QuestingBots.Models.Questing
         [DataMember(Name = "enabled")]
         public bool Enabled { get; set; } = false;
 
-        [DataMember(Name = "trigger_switch_id")]
-        public string TriggerSwitchId { get; set; } = string.Empty;
-
         [DataMember(Name = "chance_per_distance")]
         public double[][] ChancePerDistance { get; set; } = Array.Empty<double[]>();
 

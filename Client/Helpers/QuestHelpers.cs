@@ -17,7 +17,6 @@ namespace QuestingBots.Helpers
 {
     public static class QuestHelpers
     {
-        private static Dictionary<string, Configuration.ZoneAndItemPositionInfoConfig> zoneAndItemQuestPositions = null!;
         private static Dictionary<Condition, IEnumerable<string>> allZoneIDsForCondition = new Dictionary<Condition, IEnumerable<string>>();
         private static Dictionary<Condition, float?> plantTimeForCondition = new Dictionary<Condition, float?>();
         private static Dictionary<Condition, float?> beaconTimeForCondition = new Dictionary<Condition, float?>();
@@ -40,7 +39,6 @@ namespace QuestingBots.Helpers
             quest.MinLevel = settings.MinLevel;
             quest.MaxLevel = settings.MaxLevel;
             quest.InterruptSettings.Enabled = settings.InterruptionSettings.Enabled;
-            quest.InterruptSettings.TriggerSwitchId = settings.InterruptionSettings.TriggerSwitchId;
             quest.InterruptSettings.ChancePerDistance = settings.InterruptionSettings.ChancePerDistance;
         }
 
@@ -66,23 +64,6 @@ namespace QuestingBots.Helpers
             }
 
             return true;
-        }
-
-        public static IReadOnlyDictionary<string, Configuration.ZoneAndItemPositionInfoConfig> LoadZoneAndItemQuestPositions()
-        {
-            if (zoneAndItemQuestPositions != null)
-            {
-                return zoneAndItemQuestPositions;
-            }
-
-            zoneAndItemQuestPositions = Singleton<ConfigUtil>.Instance.GetZoneAndItemPositions();
-
-            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Found override settings for " + zoneAndItemQuestPositions.Count + " zone or item position(s)");
-            }
-
-            return zoneAndItemQuestPositions;
         }
 
         public static IEnumerable<string> GetAllZoneIDs(this BotQuest quest)
@@ -180,12 +161,12 @@ namespace QuestingBots.Helpers
                     Vector3 itemPosition = itemCollider.bounds.center;
                     string doorIDToUnlock = "";
                     Models.SerializableVector3 interactionPositionForDoorToUnlock = null!;
-                    if (zoneAndItemQuestPositions.ContainsKey(target))
+                    if (Singleton<ConfigUtil>.Instance.ZoneAndItemPositions.ContainsKey(target))
                     {
                         // Check if a specific position should be used for bots to get the item
-                        if (zoneAndItemQuestPositions[target].Position != null)
+                        if (Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[target].Position != null)
                         {
-                            itemPosition = zoneAndItemQuestPositions[target].Position.ToUnityVector3();
+                            itemPosition = Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[target].Position.ToUnityVector3();
 
                             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
                             {
@@ -194,9 +175,9 @@ namespace QuestingBots.Helpers
                         }
 
                         // Check if bots should open a specific door to get the item
-                        if (zoneAndItemQuestPositions[target].MustUnlockNearbyDoor)
+                        if (Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[target].MustUnlockNearbyDoor)
                         {
-                            IEnumerable<WorldInteractiveObject> matchingWorldInteractiveObjects = locationData.FindAllWorldInteractiveObjectsNearPosition(itemPosition, zoneAndItemQuestPositions[target].NearbyDoorSearchRadius);
+                            IEnumerable<WorldInteractiveObject> matchingWorldInteractiveObjects = locationData.FindAllWorldInteractiveObjectsNearPosition(itemPosition, Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[target].NearbyDoorSearchRadius);
 
                             int matchingDoorCount = matchingWorldInteractiveObjects.Count();
                             if (matchingDoorCount == 0)
@@ -210,7 +191,7 @@ namespace QuestingBots.Helpers
                             if (matchingDoorCount == 1)
                             {
                                 doorIDToUnlock = matchingWorldInteractiveObjects.First().Id;
-                                interactionPositionForDoorToUnlock = zoneAndItemQuestPositions[target].NearbyDoorInteractionPosition;
+                                interactionPositionForDoorToUnlock = Singleton<ConfigUtil>.Instance.ZoneAndItemPositions[target].NearbyDoorInteractionPosition;
 
                                 if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
                                 {

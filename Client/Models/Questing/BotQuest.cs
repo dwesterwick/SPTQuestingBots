@@ -2,7 +2,6 @@
 using EFT;
 using EFT.Game.Spawning;
 using EFT.Interactive;
-using EFT.Quests;
 using Newtonsoft.Json;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
