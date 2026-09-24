@@ -94,34 +94,37 @@ namespace QuestingBots.Controllers
 
         public static void CheckForBotsToBeInterrupted(this BotQuest quest)
         {
-            foreach (BotQuestObjective objective in quest.GetValidObjectives())
+            foreach (BotOwner bot in Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners)
             {
-                quest.CheckForBotsToBeInterrupted(objective);
+                IEnumerable<BotQuestObjective> sortedObjectives = quest.GetValidObjectives()
+                    .OrderBy(o => Vector3.Distance(o.GetFirstStepPosition() ?? Vector3.negativeInfinity, bot.Position));
+
+                foreach (BotQuestObjective objective in sortedObjectives)
+                {
+                    bot.TryForceNewAssignment(quest, objective);
+                }
             }
         }
 
-        public static void CheckForBotsToBeInterrupted(this BotQuest quest, BotQuestObjective objective)
+        public static bool TryForceNewAssignment(this BotOwner bot, BotQuest quest, BotQuestObjective objective)
         {
-            foreach (BotOwner bot in Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners)
+            BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+            if (objectiveManager == null)
             {
-                if (!quest.CanMoreBotsDoQuest())
-                {
-                    return;
-                }
-
-                if (!quest.CanInterrupt(bot))
-                {
-                    continue;
-                }
-
-                BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
-                if (objectiveManager == null)
-                {
-                    continue;
-                }
-
-                objectiveManager.QuestSelector.TryForceNewAssignment(quest, objective);
+                return false;
             }
+
+            if (!quest.CanMoreBotsDoQuest())
+            {
+                return false;
+            }
+
+            if (!quest.CanInterrupt(bot))
+            {
+                return false;
+            }
+
+            return objectiveManager.QuestSelector.TryForceNewAssignment(quest, objective);
         }
 
         public static BotQuest? FindQuest(string questID)
