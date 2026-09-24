@@ -57,16 +57,5 @@ namespace QuestingBots.Helpers
 
             return false;
         }
-
-        public static ISpawnPoint? GetSpawnPoint(this Player player)
-        {
-            if (player.SpawnPoint != null)
-            {
-                return player.SpawnPoint;
-            }
-
-            player.SpawnPoint = SelectSpawnPointPatch.GetSpawnPoint(player);
-            return player.SpawnPoint;
-        }
     }
 }

@@ -22,9 +22,9 @@ namespace QuestingBots.ExternalMods.Functions.Multiplayer
         {
             if (_getPlayersFunc == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Fika sync plugin did not register a GetHumanPlayers function. Cannot create spawn rush quests.");
+                Singleton<LoggingUtil>.Instance.LogWarning("Fika sync plugin did not register a GetHumanPlayers function. Using base function.");
 
-                return Enumerable.Empty<Player>();
+                return base.GetHumanPlayers();
             }
 
             return _getPlayersFunc();
