@@ -406,7 +406,7 @@ namespace QuestingBots.Components.Spawning
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.UseMapLobbySize)
             {
                 Configuration.MinMaxConfig minMaxPlayerCount = GetMinMaxPmcCount();
-                MaxAliveBots = (int)minMaxPlayerCount.Max;
+                MaxAliveBots = Math.Max(1, (int)minMaxPlayerCount.Max - 1);
 
                 return;
             }
@@ -450,7 +450,17 @@ namespace QuestingBots.Components.Spawning
                 return 1;
             }
 
-            int chanceOfFullLobby = GetChanceOfFullLobby(botSpawnType);
+            bool shouldReduceForNighttime = ShouldReduceForNighttime(botSpawnType);
+            if (shouldReduceForNighttime)
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Applying nighttime lobby-size reductions...");
+            }
+
+            double chanceOfFullLobby = GetChanceOfFullDaytimeLobby(botSpawnType);
+            if (shouldReduceForNighttime)
+            {
+                chanceOfFullLobby *= (100 - botSpawnType.LobbySizeReduction.NighttimeReductions.ChancePercentage) / 100.0;
+            }
             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 Singleton<LoggingUtil>.Instance.LogDebug("Chance of full lobby for " + BotTypeName + "s: " + chanceOfFullLobby + "%");
@@ -458,54 +468,78 @@ namespace QuestingBots.Components.Spawning
 
             if (chanceOfFullLobby > random.Next(0, 99))
             {
+                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug("A full lobby of " + botSpawnType + "s will spawn");
+                }
+
                 return 1;
             }
 
-            int minPercentOfFullLobby = GetMinPercentOfFullLobby(botSpawnType);
+            double minPercentOfFullLobby = GetMinPercentOfFullDaytimeLobby(botSpawnType);
+            if (shouldReduceForNighttime)
+            {
+                minPercentOfFullLobby *= (100 - botSpawnType.LobbySizeReduction.NighttimeReductions.SizePercentage) / 100.0;
+            }
             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 Singleton<LoggingUtil>.Instance.LogDebug("Minimum percent of full lobby for " + BotTypeName + "s: " + minPercentOfFullLobby + "%");
             }
 
-            int lobbySizeMultiplier = random.Next(minPercentOfFullLobby, 100);
-
-            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            int lobbySizeMultiplier = random.Next((int)minPercentOfFullLobby, 100);
+            //if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("The " + BotTypeName + " lobby size will be reduced by " + (100 - lobbySizeMultiplier) + "%");
             }
 
-            return minPercentOfFullLobby / 100.0;
+            return lobbySizeMultiplier / 100.0;
         }
 
-        protected int GetChanceOfFullLobby(Configuration.BotSpawnTypeConfig botSpawnType)
+        protected bool ShouldReduceForNighttime(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            if (!botSpawnType.LobbySizeReduction.NighttimeReductions.Enabled)
+            {
+                return false;
+            }
+
+            string lowercaseLocationName = Singleton<GameWorld>.Instance.GetComponent<LocationData>().CurrentLocation.Name.ToLower();
+            if ((lowercaseLocationName == "laboratory") ||  (lowercaseLocationName == "labyrinth"))
+            {
+                return false;
+            }
+
+            return !RaidHelpers.IsDayInGame();
+        }
+
+        protected int GetChanceOfFullDaytimeLobby(Configuration.BotSpawnTypeConfig botSpawnType)
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (botSpawnType.LobbySizeReduction.ChanceOfFullLobby.ContainsKey(locationID))
+            if (botSpawnType.LobbySizeReduction.ChanceOfFullDaytimeLobby.ContainsKey(locationID))
             {
-                return botSpawnType.LobbySizeReduction.ChanceOfFullLobby[locationID].ClampPercentage();
+                return botSpawnType.LobbySizeReduction.ChanceOfFullDaytimeLobby[locationID].ClampPercentage();
             }
 
-            if (botSpawnType.LobbySizeReduction.ChanceOfFullLobby.ContainsKey("default"))
+            if (botSpawnType.LobbySizeReduction.ChanceOfFullDaytimeLobby.ContainsKey("default"))
             {
-                return botSpawnType.LobbySizeReduction.ChanceOfFullLobby["default"].ClampPercentage();
+                return botSpawnType.LobbySizeReduction.ChanceOfFullDaytimeLobby["default"].ClampPercentage();
             }
 
             throw new InvalidOperationException("Could not find override for ChanceOfFullLobby for " + locationID);
         }
 
-        protected int GetMinPercentOfFullLobby(Configuration.BotSpawnTypeConfig botSpawnType)
+        protected int GetMinPercentOfFullDaytimeLobby(Configuration.BotSpawnTypeConfig botSpawnType)
         {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (botSpawnType.LobbySizeReduction.MinPercentOfFullLobby.ContainsKey(locationID))
+            if (botSpawnType.LobbySizeReduction.MinPercentOfFullDaytimeLobby.ContainsKey(locationID))
             {
-                return botSpawnType.LobbySizeReduction.MinPercentOfFullLobby[locationID].ClampPercentage();
+                return botSpawnType.LobbySizeReduction.MinPercentOfFullDaytimeLobby[locationID].ClampPercentage();
             }
 
-            if (botSpawnType.LobbySizeReduction.MinPercentOfFullLobby.ContainsKey("default"))
+            if (botSpawnType.LobbySizeReduction.MinPercentOfFullDaytimeLobby.ContainsKey("default"))
             {
-                return botSpawnType.LobbySizeReduction.MinPercentOfFullLobby["default"].ClampPercentage();
+                return botSpawnType.LobbySizeReduction.MinPercentOfFullDaytimeLobby["default"].ClampPercentage();
             }
 
             throw new InvalidOperationException("Could not find override for ChanceOfFullLobby for " + locationID);

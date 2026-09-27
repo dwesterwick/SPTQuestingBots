@@ -365,7 +365,7 @@
 			"max_initial_rogues": 10
 		},
 		"max_alive_bots": {
-			"use_map_lobby_size": false,
+			"use_map_lobby_size": true,
 			"overrides_if_not_using_lobby_size": {
 				"default": 6,
 				"factory4_day": 7,
@@ -421,12 +421,16 @@
 				[ 3, 5 ]
 			],
 			"lobby_size_reduction": {
-				"always_use_full_lobbies": true,
+				"always_use_full_lobbies": false,
 				"randomize_between_min_and_max_players": true,
-				"chance_of_full_lobby": {
+				"nighttime_reductions": {
+					"enabled": true,
+					"chance_percentage": 75,
+					"size_percentage": 40
+				},
+				"chance_of_full_daytime_lobby": {
 					"default": 100,
 					"factory4_day": 100,
-					"factory4_night": 50,
 					"bigmap": 100,
 					"woods": 100,
 					"shoreline": 100,
@@ -439,10 +443,9 @@
 					"sandbox": 100,
 					"sandbox_high": 90
 				},
-				"min_percent_of_full_lobby": {
+				"min_percent_of_full_daytime_lobby": {
 					"default": 100,
-					"factory4_day": 70,
-					"factory4_night": 30,
+					"factory4_day": 100,
 					"bigmap": 70,
 					"woods": 70,
 					"shoreline": 70,

@@ -5,58 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
-using QuestingBots.Helpers;
-using UnityEngine;
 
 namespace QuestingBots.Models.DebugGizmos
 {
-    public class PlayerCoordinatesGizmo : AbstractDebugGizmo
+    public class PlayerCoordinatesGizmo : AbstractDebugTextGizmo
     {
-        public DebugOverlay Overlay { get; }
-
-        public PlayerCoordinatesGizmo() : base(100)
+        public PlayerCoordinatesGizmo() : base()
         {
-            Overlay = new DebugOverlay(UpdateGUIStyle);
+            
         }
 
-        public override bool ReadyToDispose() => false;
+        public override bool Enabled => QuestingBotsPluginConfig.ShowCurrentLocation.Value;
 
-        protected override void OnDispose()
+        public override int GizmoIndex => 1;
+
+        protected override string GetDebugText()
         {
-            Overlay.Dispose();
-        }
-
-        protected override void OnUpdate() { }
-
-        public override GUIStyle UpdateGUIStyle()
-        {
-            Overlay.GuiStyle = DebugHelpers.CreateGuiStylePlayerCoordinates();
-            return Overlay.GuiStyle;
-        }
-
-        public override void Draw()
-        {
-            if (!QuestingBotsPluginConfig.ShowCurrentLocation.Value)
-            {
-                return;
-            }
-
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
             if (mainPlayer == null)
             {
-                return;
+                return "???";
             }
 
-            string text = mainPlayer.Position.ToString();
-            Overlay.Draw(text, getGizmoPosition);
-        }
-
-        private Vector2 getGizmoPosition(DebugOverlay.GizmoPositionRequestParams requestParams)
-        {
-            float x = requestParams.ScreenPosition.x - requestParams.GuiSize.x - 3;
-            float y = requestParams.ScreenPosition.y - requestParams.GuiSize.y - 3;
-
-            return new Vector2(x, y);
+            return mainPlayer.Position.ToString();
         }
     }
 }

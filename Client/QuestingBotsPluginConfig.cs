@@ -118,6 +118,7 @@ namespace QuestingBots
         public static ConfigEntry<int> QuestOverlayFontSize = null!;
         public static ConfigEntry<int> QuestOverlayMaxDistance = null!;
         public static ConfigEntry<string> BotFilter = null!;
+        public static ConfigEntry<bool> ShowCurrentGameTime = null!;
         public static ConfigEntry<bool> EnableBenchmarking = null!;
 
         public static ConfigEntry<bool> CreateQuestLocations = null!;
@@ -212,6 +213,8 @@ namespace QuestingBots
                 16, new ConfigDescription("Font Size for Quest Overlays", new AcceptableValueRange<int>(12, 36))); 
             BotFilter = Config.Bind("Debug", "Bot Filter",
                 "", new ConfigDescription("Show debug info only for bots listed e.g 2,4", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
+            ShowCurrentGameTime = Config.Bind("Debug", "Display Current Time in Game",
+                false, new ConfigDescription("Display the current time in the game (HH:mm) on the screen", null, new ConfigurationManagerAttributes { IsAdvanced = true }));
 
 #if DEBUG
             EnableBenchmarking = Config.Bind("Debug", "Enable Performance Benchmarking",

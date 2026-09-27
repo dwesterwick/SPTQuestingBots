@@ -108,7 +108,7 @@ namespace QuestingBots.Helpers
             return guiStyle;
         }
 
-        public static GUIStyle CreateGuiStylePlayerCoordinates()
+        public static GUIStyle CreateGuiStyleDebugText()
         {
             GUIStyle guiStyle = new GUIStyle(GUI.skin.box);
             guiStyle.alignment = TextAnchor.MiddleLeft;

@@ -50,6 +50,7 @@ namespace QuestingBots.Components
             QuestingBotsPluginConfig.BotFilter.BoxedValue = "";
 
             gizmos.Add(new PlayerCoordinatesGizmo());
+            gizmos.Add(new GameTimeGizmo());
         }
 
         private void updateGuiStyles(object sender, EventArgs e) => gizmos.ForEach(gizmo => gizmo.UpdateGUIStyle());

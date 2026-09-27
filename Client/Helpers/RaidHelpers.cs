@@ -32,6 +32,28 @@ namespace QuestingBots.Helpers
         public static bool MinimumSurvivalTimeExceeded() => GetRaidElapsedSeconds() >= MinimumSurvivalTime;
         public static bool HumanPlayersRecentlySpawned() => GetSecondsSinceSpawning() < 5;
 
+        public static bool IsDayInGame()
+        {
+            BotZonesLeaveController? botZonesLeaveController = Singleton<IBotGame>.Instance.BotsController?.ZonesLeaveController;
+            if (botZonesLeaveController == null )
+            {
+                throw new InvalidOperationException("Could not retrieve BotZonesLeaveController");
+            }
+
+            DateTime gameDateTime = GetGameDateTime();
+            return botZonesLeaveController.IsDayByHour(gameDateTime);
+        }
+
+        public static DateTime GetGameDateTime()
+        {
+            if (Singleton<GameWorld>.Instance?.GameDateTime == null)
+            {
+                throw new InvalidOperationException("Could not get current game time");
+            }
+
+            return Singleton<GameWorld>.Instance.GameDateTime.Calculate();
+        }
+
         public static bool ShouldSpawnPScavByChance()
         {
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled && Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.Enabled)
