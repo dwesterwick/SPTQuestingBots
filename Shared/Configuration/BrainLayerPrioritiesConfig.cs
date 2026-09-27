@@ -10,6 +10,9 @@ namespace QuestingBots.Configuration
     [DataContract]
     public class BrainLayerPrioritiesConfig
     {
+        [DataMember(Name = "recovering", IsRequired = true)]
+        public int Recovering { get; set; } = 4;
+
         [DataMember(Name = "questing", IsRequired = true)]
         public int Questing { get; set; } = 18;
 

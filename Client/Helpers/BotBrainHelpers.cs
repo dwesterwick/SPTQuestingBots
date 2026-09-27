@@ -36,6 +36,9 @@ namespace QuestingBots.Helpers
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Following);
             BrainManager.AddCustomLayer(typeof(BotLogic.Follow.BotFollowerRegroupLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Regrouping);
 
+            //Singleton<LoggingUtil>.Instance.LogDebug("Loading QuestingBots...changing bot brains for recovering: " + string.Join(", ", allNonSniperBrains));
+            BrainManager.AddCustomLayer(typeof(BotLogic.Recovery.BotRecoveryLayer), allNonSniperBrains.ToStringList(), brainLayerPriorities.Recovering);
+
             Singleton<LoggingUtil>.Instance.LogDebug("Questing Bots brain layers added");
         }
 

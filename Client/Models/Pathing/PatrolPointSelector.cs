@@ -12,26 +12,36 @@ namespace QuestingBots.Models.Pathing
     public class PatrolPointSelector
     {
         private BotOwner _bot;
+        private PatrolWay? _selectedWay = null;
         private PatrolPoint? _selectedPoint = null;
+
+        public bool HasWay => _selectedWay != null;
+        public bool HasPatrolPoint => _selectedPoint != null;
+        public bool IsWayReserved => _selectedWay?.PatrolType == PatrolType.reserved;
 
         public PatrolPointSelector(BotOwner bot)
         {
             _bot = bot;
         }
 
+        public void ReleasePatrolPointReservation()
+        {
+            _bot.PatrollingData.PointControl._lastSetOwner.SetOwner(null);
+        }
+
         public void RefreshPatrolPoint()
         {
             _selectedPoint = null;
 
-            PatrolWay? closestWay = GetClosestPatrolWay();
-            if (closestWay == null)
+            _selectedWay = GetClosestPatrolWay();
+            if (_selectedWay == null)
             {
                 //Singleton<LoggingUtil>.Instance.LogDebug("Could not find patrol point for " + _bot.GetText());
             }
 
-            if ((closestWay != null) && (_bot.PatrollingData.PointControl.Way != closestWay))
+            if ((_selectedWay != null) && (_bot.PatrollingData.PointControl.Way != _selectedWay))
             {
-                _bot.PatrollingData.PointControl.SetWay(closestWay, new FindNextPointDelegate(CreatePointContainer));
+                _bot.PatrollingData.PointControl.SetWay(_selectedWay, new FindNextPointDelegate(CreatePointContainer));
                 //Singleton<LoggingUtil>.Instance.LogInfo("Patrol way changed for " + _bot.GetText());
             }
             else
@@ -42,7 +52,7 @@ namespace QuestingBots.Models.Pathing
             
             _bot.PatrollingData.PointControl.SetPatrolPointOwner(_bot.PatrollingData.PointControl.PatrolPoint.TargetPoint);
 
-            if (closestWay == null)
+            if (_selectedWay == null)
             {
                 return;
             }

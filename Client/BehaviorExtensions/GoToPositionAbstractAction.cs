@@ -24,8 +24,6 @@ namespace QuestingBots.BehaviorExtensions
         protected bool CanSprint { get; set; } = true;
 
         private static FieldInfo botZoneField = null!;
-
-        private PatrolPointSelector patrolPointSelector;
         private Stopwatch timeSinceLastPatrolPointSetTimer = Stopwatch.StartNew();
         private Stopwatch botIsStuckTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
@@ -46,8 +44,6 @@ namespace QuestingBots.BehaviorExtensions
             {
                 botZoneField = AccessTools.Field(typeof(BotsGroup), "<BotZone>k__BackingField");
             }
-
-            patrolPointSelector = new PatrolPointSelector(_BotOwner);
         }
 
         public GoToPositionAbstractAction(BotOwner _BotOwner) : this(_BotOwner, updateInterval)
@@ -268,7 +264,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            BotOwner.PatrollingData.PointControl._lastSetOwner.SetOwner(null);
+            ObjectiveManager.PatrolPointSelector.ReleasePatrolPointReservation();
         }
 
         protected void RefreshPatrolPoint()
@@ -283,7 +279,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            patrolPointSelector.RefreshPatrolPoint();
+            ObjectiveManager.PatrolPointSelector.RefreshPatrolPoint();
 
             timeSinceLastPatrolPointSetTimer.Restart();
         }

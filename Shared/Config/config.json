@@ -21,12 +21,14 @@
 		"bot_pathing_update_interval_ms": 100,
 		"brain_layer_priorities": {
 			"with_sain": {
+				"recovering": 4,
 				"questing": 18,
 				"following": 19,
 				"regrouping": 26,
 				"sleeping": 250
 			},
 			"without_sain": {
+				"recovering": 4,
 				"questing": 21,
 				"following": 22,
 				"regrouping": 26,
