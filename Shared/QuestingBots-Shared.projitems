@@ -31,6 +31,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\BotZoneUpdatesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EftLocalAvoidanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LabyrinthQuestsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LobbySizeReductionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\MaxAliveBotsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PlayerScavBrainConversionChancesOverridesConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\QuestSelectionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ScavRaidSettingsConfig.cs" />

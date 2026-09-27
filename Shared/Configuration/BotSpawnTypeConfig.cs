@@ -49,6 +49,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "bot_difficulty_as_online", IsRequired = true)]
         public double[][] BotDifficultyAsOnline { get; set; } = Array.Empty<double[]>();
 
+        [DataMember(Name = "lobby_size_reduction")]
+        public LobbySizeReductionConfig LobbySizeReduction { get; set; } = new LobbySizeReductionConfig();
+
         public BotSpawnTypeConfig()
         {
             

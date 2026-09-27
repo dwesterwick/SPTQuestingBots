@@ -47,7 +47,7 @@ namespace QuestingBots.Components.Spawning
                 return 0;
             }
 
-            createBotSpawnSchedule();
+            botSpawnSchedule = CreateBotSpawnSchedule();
 
             return botSpawnSchedule.Count;
         }
@@ -161,7 +161,7 @@ namespace QuestingBots.Components.Spawning
             return spawnPositionsForGroup;
         }
 
-        private void createBotSpawnSchedule()
+        private Dictionary<int, float> CreateBotSpawnSchedule()
         {
             // Get the current location ID and ensure there are SPT Scav-raid raid-time-reduction settings for it
             Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
@@ -177,16 +177,61 @@ namespace QuestingBots.Components.Spawning
                 }
             }
 
-            float originalEscapeTime = RaidHelpers.OriginalEscapeTimeSeconds;
-            int totalPScavs = (int)(locationData.CurrentLocation.MaxPlayers * Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.FractionOfMaxPlayers);
+            Dictionary<int, float> spawnSchedule = CreateSpawnSchedule(locationID);
 
+            // Write the spawn schedule to the game console for debugging
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                IEnumerable<string> spawnTimeTexts = spawnSchedule.Select(s => TimeSpan.FromSeconds(RaidHelpers.OriginalEscapeTimeSeconds - s.Value).ToString("mm':'ss"));
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + spawnSchedule.Count + " " + BotTypeName + "s: " + string.Join(", ", spawnTimeTexts));
+            }
+
+            return spawnSchedule;
+        }
+
+        private Dictionary<int, float> CreateSpawnSchedule(string locationID)
+        {
+            int totalPScavs = GetMaximumBots();
+
+            List<float> possibleSpawnTimes = GetPossibleSpawnTimes(locationID);
+            int maxSpawnTimeAdjustment = (int)Math.Round(RaidHelpers.OriginalEscapeTimeSeconds * Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.TimeRandomness / 100);
+
+            // Create the spawn schedule
+            Dictionary<int, float> spawnSchedule = new Dictionary<int, float>();
+            for (int pScav = 0; pScav < totalPScavs; pScav++)
+            {
+                float randomSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
+                float adjustedRandomSpawnTime = randomSpawnTime + random.Next(-1 * maxSpawnTimeAdjustment, maxSpawnTimeAdjustment);
+
+                spawnSchedule.Add(pScav, Math.Min(possibleSpawnTimes.Max(), Math.Max(possibleSpawnTimes.Min(), adjustedRandomSpawnTime)));
+            }
+
+            Dictionary<int, float> sortedSpawnSchedule = spawnSchedule
+                .OrderBy(x => x.Value)
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            return sortedSpawnSchedule;
+        }
+
+        private int GetMaximumBots()
+        {
+            int maxLobbySize = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.MaxPlayers;
+            double fractionOfMaxPlayers = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.FractionOfMaxPlayers;
+
+            double lobbySizeMultipler = GetLobbySizeMultiplier(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs);
+
+            return (int)(maxLobbySize * fractionOfMaxPlayers * lobbySizeMultipler);
+        }
+
+        private List<float> GetPossibleSpawnTimes(string locationID)
+        {
             // Parse the SPT raid-time-reduction settings
             List<float> possibleSpawnTimes = new List<float>();
             foreach (string fractionString in Singleton<ConfigUtil>.Instance.ScavRaidSettings[locationID].ReductionPercentWeights.Keys)
             {
                 try
                 {
-                    float raidTime = float.Parse(fractionString) / 100f * originalEscapeTime;
+                    float raidTime = float.Parse(fractionString) / 100f * RaidHelpers.OriginalEscapeTimeSeconds;
                     int weight = Singleton<ConfigUtil>.Instance.ScavRaidSettings[locationID].ReductionPercentWeights[fractionString];
 
                     // Add the same number of entries to the List as the weight value for the reduction percentage. This makes the
@@ -202,24 +247,7 @@ namespace QuestingBots.Components.Spawning
                 }
             }
 
-            int maxSpawnTimeAdjustment = (int)Math.Round(originalEscapeTime * Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PScavs.TimeRandomness / 100);
-
-            // Create the spawn schedule
-            for (int pScav = 0; pScav < totalPScavs; pScav++)
-            {
-                float randomSpawnTime = possibleSpawnTimes[random.Next(0, possibleSpawnTimes.Count - 1)];
-                float adjustedRandomSpawnTime = randomSpawnTime + random.Next(-1 * maxSpawnTimeAdjustment, maxSpawnTimeAdjustment);
-
-                botSpawnSchedule.Add(pScav, Math.Min(possibleSpawnTimes.Max(), Math.Max(possibleSpawnTimes.Min(), adjustedRandomSpawnTime)));
-            }
-
-            // Write the spawn schedule to the game console for debugging
-            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
-            {
-                IEnumerable<float> sortedSpawnTimes = botSpawnSchedule.Values.OrderBy(x => x);
-                IEnumerable<string> spawnTimeTexts = sortedSpawnTimes.Select(s => TimeSpan.FromSeconds(originalEscapeTime - s).ToString("mm':'ss"));
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawn times for " + totalPScavs + " PScavs: " + string.Join(", ", spawnTimeTexts));
-            }
+            return possibleSpawnTimes;
         }
     }
 }

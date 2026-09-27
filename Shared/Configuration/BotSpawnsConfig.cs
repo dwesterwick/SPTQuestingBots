@@ -38,7 +38,7 @@ namespace QuestingBots.Configuration
         public LimitInitialBossSpawnsConfig LimitInitialBossSpawns { get; set; } = new LimitInitialBossSpawnsConfig();
 
         [DataMember(Name = "max_alive_bots", IsRequired = true)]
-        public Dictionary<string, int> MaxAliveBots { get; set; } = new Dictionary<string, int>();
+        public MaxAliveBotsConfig MaxAliveBots { get; set; } = new MaxAliveBotsConfig();
 
         [DataMember(Name = "pmc_hostility_adjustments", IsRequired = true)]
         public PMCHostilityAdjustmentsConfig PMCHostilityAdjustments { get; set; } = new PMCHostilityAdjustmentsConfig();

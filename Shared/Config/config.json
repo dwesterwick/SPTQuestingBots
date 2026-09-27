@@ -365,20 +365,23 @@
 			"max_initial_rogues": 10
 		},
 		"max_alive_bots": {
-			"default": 6,
-			"factory4_day": 7,
-			"factory4_night": 7,
-			"bigmap": 7,
-			"woods": 8,
-			"shoreline": 7,
-			"lighthouse": 7,
-			"rezervbase": 7,
-			"interchange": 8,
-			"laboratory": 9,
-			"labyrinth": 4,
-			"tarkovstreets": 8,
-			"sandbox": 7,
-			"sandbox_high": 7
+			"use_map_lobby_size": false,
+			"overrides_if_not_using_lobby_size": {
+				"default": 6,
+				"factory4_day": 7,
+				"factory4_night": 7,
+				"bigmap": 7,
+				"woods": 8,
+				"shoreline": 7,
+				"lighthouse": 7,
+				"rezervbase": 7,
+				"interchange": 8,
+				"laboratory": 9,
+				"labyrinth": 4,
+				"tarkovstreets": 8,
+				"sandbox": 7,
+				"sandbox_high": 7
+			}
 		},
 		"pmc_hostility_adjustments": {
 			"enabled": true,
@@ -416,7 +419,43 @@
 				[ 1, 50 ],
 				[ 2, 20 ],
 				[ 3, 5 ]
-			]
+			],
+			"lobby_size_reduction": {
+				"always_use_full_lobbies": true,
+				"randomize_between_min_and_max_players": true,
+				"chance_of_full_lobby": {
+					"default": 100,
+					"factory4_day": 100,
+					"factory4_night": 50,
+					"bigmap": 100,
+					"woods": 100,
+					"shoreline": 100,
+					"lighthouse": 90,
+					"rezervbase": 100,
+					"interchange": 100,
+					"laboratory": 80,
+					"labyrinth": 50,
+					"tarkovstreets": 70,
+					"sandbox": 100,
+					"sandbox_high": 90
+				},
+				"min_percent_of_full_lobby": {
+					"default": 100,
+					"factory4_day": 70,
+					"factory4_night": 30,
+					"bigmap": 70,
+					"woods": 70,
+					"shoreline": 70,
+					"lighthouse": 70,
+					"rezervbase": 70,
+					"interchange": 70,
+					"laboratory": 30,
+					"labyrinth": 0,
+					"tarkovstreets": 50,
+					"sandbox": 70,
+					"sandbox_high": 70
+				}
+			}
 		},
 		"player_scavs": {
 			"enabled": true,

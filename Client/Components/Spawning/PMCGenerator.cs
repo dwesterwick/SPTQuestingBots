@@ -48,17 +48,42 @@ namespace QuestingBots.Components.Spawning
                 return 0;
             }
 
-            // Determine how many total PMC's to spawn (reduced for Scav raids)
-            Configuration.MinMaxConfig pmcCountRange = getPMCCount();
-            int pmcCount = random.Next((int)pmcCountRange.Min, (int)pmcCountRange.Max);
+            int pmcCount = gePmcCount();
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo(pmcCount + " " + BotTypeName + "s will be generated");
+            }
+
+            return pmcCount;
+        }
+
+        private int gePmcCount()
+        {
+            Configuration.MinMaxConfig pmcCountRange = GetMinMaxPmcCount();
+
+            // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs)
+            double playerCountFactor = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
+            double lobbySizeMultipler = GetLobbySizeMultiplier(Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs);
+
+            if (playerCountFactor < lobbySizeMultipler)
+            {
+                pmcCountRange *= playerCountFactor;
+            }
+            else
+            {
+                pmcCountRange *= lobbySizeMultipler;
+            }
+
+            pmcCountRange *= Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayers;
+
+            int pmcCount = (int)pmcCountRange.Max;
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.LobbySizeReduction.RandomizeBetweenMinAndMaxPlayers)
+            {
+                pmcCount = random.Next((int)pmcCountRange.Min, (int)pmcCountRange.Max);
+            }
 
             // There must be at least 1 PMC still in the map or PScavs will not be allowed to join in live Tarkov
             pmcCount = Math.Max(1, pmcCount);
-
-            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo(pmcCount + " initial PMC groups will be generated (Min: " + pmcCountRange.Min + ", Max: " + pmcCountRange.Max + ")");
-            }
 
             return pmcCount;
         }
@@ -142,22 +167,6 @@ namespace QuestingBots.Components.Spawning
             PendingSpawnPoints.AddRange(spawnPointsForGroup);
 
             return spawnPositionsForGroup;
-        }
-
-        private Configuration.MinMaxConfig getPMCCount()
-        {
-            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
-
-            // Determine how much to reduce the initial PMC's based on raid ET (used for Scav runs)
-            double playerCountFactor = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayersVsRaidET.InterpolateForFirstCol(RaidHelpers.GetRaidTimeRemainingFraction());
-            playerCountFactor *= Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.PMCs.FractionOfMaxPlayers;
-
-            // Choose the number of initial PMC's to spawn
-            int pmcOffset = RaidHelpers.IsScavRun ? 0 : 1;
-            int minPlayers = (int)Math.Floor((locationData.CurrentLocation.MinPlayers * playerCountFactor) - pmcOffset);
-            int maxPlayers = (int)Math.Ceiling((locationData.CurrentLocation.MaxPlayers * playerCountFactor) - pmcOffset);
-
-            return new Configuration.MinMaxConfig(minPlayers, maxPlayers);
         }
     }
 }

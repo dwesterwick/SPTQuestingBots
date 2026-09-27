@@ -403,16 +403,112 @@ namespace QuestingBots.Components.Spawning
 
         protected void SetMaxAliveBots()
         {
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.UseMapLobbySize)
+            {
+                Configuration.MinMaxConfig minMaxPlayerCount = GetMinMaxPmcCount();
+                MaxAliveBots = (int)minMaxPlayerCount.Max;
+
+                return;
+            }
+
+            MaxAliveBots = GetMaxAliveBotsOverride();
+        }
+
+        protected Configuration.MinMaxConfig GetMinMaxPmcCount()
+        {
+            Components.LocationData locationData = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>();
+
+            // Choose the number of initial PMC's to spawn
+            int pmcOffset = RaidHelpers.IsScavRun ? 0 : 1;
+            int minPlayers = locationData.CurrentLocation.MinPlayers - pmcOffset;
+            int maxPlayers = locationData.CurrentLocation.MaxPlayers - pmcOffset;
+
+            return new Configuration.MinMaxConfig(minPlayers, maxPlayers);
+        }
+
+        protected int GetMaxAliveBotsOverride()
+        {
             string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
 
-            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey(locationID))
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.OverridesIfNotUsingLobbySize.ContainsKey(locationID))
             {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots[locationID];
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.OverridesIfNotUsingLobbySize[locationID];
             }
-            else if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.ContainsKey("default"))
+
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.OverridesIfNotUsingLobbySize.ContainsKey("default"))
             {
-                MaxAliveBots = Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots["default"];
+                return Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.MaxAliveBots.OverridesIfNotUsingLobbySize["default"];
             }
+
+            throw new InvalidOperationException("Could not find override for MaxAliveBots for " + locationID);
+        }
+
+        protected double GetLobbySizeMultiplier(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            if (botSpawnType.LobbySizeReduction.AlwaysUseFullLobbies)
+            {
+                return 1;
+            }
+
+            int chanceOfFullLobby = GetChanceOfFullLobby(botSpawnType);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Chance of full lobby for " + BotTypeName + "s: " + chanceOfFullLobby + "%");
+            }
+
+            if (chanceOfFullLobby > random.Next(0, 99))
+            {
+                return 1;
+            }
+
+            int minPercentOfFullLobby = GetMinPercentOfFullLobby(botSpawnType);
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Minimum percent of full lobby for " + BotTypeName + "s: " + minPercentOfFullLobby + "%");
+            }
+
+            int lobbySizeMultiplier = random.Next(minPercentOfFullLobby, 100);
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("The " + BotTypeName + " lobby size will be reduced by " + (100 - lobbySizeMultiplier) + "%");
+            }
+
+            return minPercentOfFullLobby / 100.0;
+        }
+
+        protected int GetChanceOfFullLobby(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
+
+            if (botSpawnType.LobbySizeReduction.ChanceOfFullLobby.ContainsKey(locationID))
+            {
+                return botSpawnType.LobbySizeReduction.ChanceOfFullLobby[locationID].ClampPercentage();
+            }
+
+            if (botSpawnType.LobbySizeReduction.ChanceOfFullLobby.ContainsKey("default"))
+            {
+                return botSpawnType.LobbySizeReduction.ChanceOfFullLobby["default"].ClampPercentage();
+            }
+
+            throw new InvalidOperationException("Could not find override for ChanceOfFullLobby for " + locationID);
+        }
+
+        protected int GetMinPercentOfFullLobby(Configuration.BotSpawnTypeConfig botSpawnType)
+        {
+            string locationID = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id.ToLower();
+
+            if (botSpawnType.LobbySizeReduction.MinPercentOfFullLobby.ContainsKey(locationID))
+            {
+                return botSpawnType.LobbySizeReduction.MinPercentOfFullLobby[locationID].ClampPercentage();
+            }
+
+            if (botSpawnType.LobbySizeReduction.MinPercentOfFullLobby.ContainsKey("default"))
+            {
+                return botSpawnType.LobbySizeReduction.MinPercentOfFullLobby["default"].ClampPercentage();
+            }
+
+            throw new InvalidOperationException("Could not find override for ChanceOfFullLobby for " + locationID);
         }
 
         protected float GetMinSpawnDistanceFromOtherPlayers(Configuration.BotSpawnTypeConfig botSpawnType)
