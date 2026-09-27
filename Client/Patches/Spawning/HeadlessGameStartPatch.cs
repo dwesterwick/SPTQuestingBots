@@ -56,7 +56,7 @@ namespace QuestingBots.Patches.Spawning
             game.StartCoroutine(GameStartPatch.WaitForBotGenerators(source.Complete));
             await source.Task;
 
-            GameStartPatch.SpawnMissedWaves();
+            GameStartPatch.SpawnMissedBossWaves();
         }
     }
 }

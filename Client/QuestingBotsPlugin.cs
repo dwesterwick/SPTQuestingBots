@@ -142,6 +142,7 @@ namespace QuestingBots
             new Patches.Spawning.TryLoadBotsProfilesOnStartPatch().Enable();
             new Patches.Spawning.SetNewBossPatch().Enable();
             new Patches.Spawning.GetAllBossPlayersPatch().Enable();
+            new Patches.Spawning.ActivateBotsByWavePatch().Enable();
 
             new Patches.Spawning.Advanced.GetListByZonePatch().Enable();
             new Patches.Spawning.Advanced.ExceptAIPatch().Enable();

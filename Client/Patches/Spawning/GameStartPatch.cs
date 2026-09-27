@@ -69,15 +69,15 @@ namespace QuestingBots.Patches.Spawning
 
         private static IEnumerator spawnMissedWavesCoroutine()
         {
-            SpawnMissedWaves();
+            IsDelayingGameStart = false;
+
+            SpawnMissedBossWaves();
 
             yield break;
         }
 
-        public static void SpawnMissedWaves()
+        public static void SpawnMissedBossWaves()
         {
-            IsDelayingGameStart = false;
-
             if (missedBossWaves.Any())
             {
                 if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
@@ -145,6 +145,11 @@ namespace QuestingBots.Patches.Spawning
 
             foreach (SpawnWave wave in wavesSpawnScenario.SpawnWaves)
             {
+                if (wave.BotsCount == 0)
+                {
+                    continue;
+                }
+
                 Singleton<LoggingUtil>.Instance.LogInfo($"BotWaveDataClass at {wave.Time}s: {wave.BotsCount} bots of type {wave.WildSpawnType}");
             }
         }

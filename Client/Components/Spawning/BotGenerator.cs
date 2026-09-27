@@ -470,7 +470,7 @@ namespace QuestingBots.Components.Spawning
             {
                 if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug("A full lobby of " + botSpawnType + "s will spawn");
+                    Singleton<LoggingUtil>.Instance.LogDebug("A full lobby of " + BotTypeName + "s will spawn");
                 }
 
                 return 1;
