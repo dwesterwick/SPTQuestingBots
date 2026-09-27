@@ -3,7 +3,6 @@ using EFT;
 using HarmonyLib;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
-using QuestingBots.Models.Pathing;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -73,6 +72,7 @@ namespace QuestingBots.BehaviorExtensions
 
             BotOwner.PatrollingData.Unpause();
             RefreshPatrolPoint();
+            ObjectiveManager.CoverPointSelector.RefreshCoverPoint();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)

@@ -55,6 +55,7 @@ namespace QuestingBots.BotLogic.Recovery
             else
             {
                 restartStuckTimer();
+                return;
             }
 
             if (checkIfBotIsStuck())
