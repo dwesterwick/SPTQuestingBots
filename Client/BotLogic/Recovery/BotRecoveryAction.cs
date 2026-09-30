@@ -1,22 +1,16 @@
-﻿using Comfort.Common;
-using EFT;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
+﻿using EFT;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
 namespace QuestingBots.BotLogic.Recovery
 {
-    internal class BotRecoveryAction : BehaviorExtensions.GoToPositionAbstractAction
+    public class BotRecoveryAction : BehaviorExtensions.GoToPositionAbstractAction
     {
-        private bool wasStuck = false;
-
-        public BotRecoveryAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public BotRecoveryAction(BotOwner _BotOwner) : base(_BotOwner, 20)
         {
-            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
+            SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.holdPosition, BotOwner));
         }
 
         public override void Start()
@@ -31,9 +25,14 @@ namespace QuestingBots.BotLogic.Recovery
 
         public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
-            UpdateBotMovement(CanSprint);
-            UpdateBotSteering();
-            UpdateBotMiscActions();
+            BotOwner.Sprint(false);
+            BotOwner.StopMove();
+
+            float targetPose = ObjectiveManager.CoverPointSelector.GetTargetPoseAtCoverPoint();
+            BotOwner.SetPose(targetPose);
+
+            Vector3 lookDirection = -1 * ObjectiveManager.CoverPointSelector.ToWallVector;
+            BotOwner.Steering.LookToDirection(lookDirection);
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
@@ -41,36 +40,26 @@ namespace QuestingBots.BotLogic.Recovery
                 return;
             }
 
-            if (ObjectiveManager.CoverPointSelector.CoverPoint == null)
-            {
-                return;
-            }
+            BotOwner.BotLight.TurnOff(false, true);
+            BotOwner.Memory.BotCurrentCoverInfo.TryCheckSafe();
+            CheckRemainingAmmo();
+        }
 
-            CanSprint = IsAllowedToSprint();
-
-            if (Vector3.Distance(BotOwner.Position, ObjectiveManager.CoverPointSelector.CoverPoint.Value) > 0.5f)
+        private void CheckRemainingAmmo()
+        {
+            if (BotOwner.WeaponManager.UnderbarrelLauncherController.IsActive)
             {
-                RecalculatePath(ObjectiveManager.CoverPointSelector.CoverPoint);
-            }
-            else
-            {
-                restartStuckTimer();
-                return;
-            }
-
-            if (checkIfBotIsStuck())
-            {
-                if (!wasStuck)
+                if (BotOwner.WeaponManager.UnderbarrelLauncherController.NeedToReload())
                 {
-                    Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " got stuck while seeking cover");
+                    BotOwner.WeaponManager.UnderbarrelLauncherController.TryReload(null);
                 }
-                wasStuck = true;
 
-                restartStuckTimer();
+                return;
             }
-            else
+
+            if (!BotOwner.WeaponManager.HaveBullets)
             {
-                wasStuck = false;
+                BotOwner.WeaponManager.Reload.TryReload();
             }
         }
     }

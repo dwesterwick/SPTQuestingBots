@@ -59,7 +59,7 @@ namespace QuestingBots.BehaviorExtensions
         {
             actionElapsedTime.Stop();
 
-            BotOwner.Mover.Sprint(false);
+            //BotOwner.Mover.Sprint(false);
 
             BotHearingMonitor hearingMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>();
             if (!hearingMonitor.SuspicionAllowedByTime && !ObjectiveManager.IgnoreHearing)

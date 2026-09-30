@@ -26,7 +26,11 @@ namespace QuestingBots.BehaviorExtensions
         UnlockDoor,
         CloseNearbyDoors,
         OpenNearbyDoors,
-        Recover
+        GetToCover,
+        Recover,
+        Heal,
+        EatDrink,
+        Gesture
     }
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
@@ -76,7 +80,11 @@ namespace QuestingBots.BehaviorExtensions
                 case BotActionType.UnlockDoor: return new Action(typeof(BotLogic.Objective.UnlockDoorAction), actionReason);
                 case BotActionType.CloseNearbyDoors: return new Action(typeof(BotLogic.Objective.CloseNearbyDoorsAction), actionReason);
                 case BotActionType.OpenNearbyDoors: return new Action(typeof(BotLogic.Objective.OpenNearbyDoorsAction), actionReason);
+                case BotActionType.GetToCover: return new Action(typeof(BotLogic.Recovery.GetToCoverAction), actionReason);
                 case BotActionType.Recover: return new Action(typeof(BotLogic.Recovery.BotRecoveryAction), actionReason);
+                case BotActionType.Heal: return new Action(typeof(HealNode), actionReason);
+                case BotActionType.EatDrink: return new Action(typeof(EatDrinkNode), actionReason);
+                case BotActionType.Gesture: return new Action(typeof(GestureNode), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

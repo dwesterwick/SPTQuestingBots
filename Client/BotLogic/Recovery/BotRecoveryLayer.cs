@@ -53,8 +53,47 @@ namespace QuestingBots.BotLogic.Recovery
                 return updatePreviousState(false);
             }
 
+            if (!ObjectiveManager.CoverPointSelector.IsAtCoverPoint)
+            {
+                setNextAction(BotActionType.GetToCover, "GetToCover");
+                return updatePreviousState(true);
+            }
+
+            if (MustHeal())
+            {
+                setNextAction(BotActionType.Heal, "Heal");
+                return updatePreviousState(true);
+            }
+
+            if (BotOwner.EatDrinkData.HaveActions())
+            {
+                setNextAction(BotActionType.EatDrink, "EatDrink");
+                return updatePreviousState(true);
+            }
+
+            if (BotOwner.Gesture.HaveRequest())
+            {
+                setNextAction(BotActionType.Gesture, "Gesture");
+                return updatePreviousState(true);
+            }
+
             setNextAction(BotActionType.Recover, "Recover");
             return updatePreviousState(true);
+        }
+
+        private bool MustHeal()
+        {
+            if (BotOwner.Medecine.FirstAid.Have2Do && BotOwner.Medecine.FirstAid.HaveSmth2Use)
+            {
+                return true;
+            }
+
+            if (BotOwner.Medecine.SurgicalKit.HaveWork && BotOwner.Medecine.SurgicalKit.HaveSmth2Use)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
