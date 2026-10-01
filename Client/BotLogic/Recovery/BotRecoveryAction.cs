@@ -1,6 +1,11 @@
 ﻿using EFT;
+using QuestingBots.BotLogic.BotMonitor.Monitors;
+using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using UnityEngine;
 
@@ -8,6 +13,17 @@ namespace QuestingBots.BotLogic.Recovery
 {
     public class BotRecoveryAction : BehaviorExtensions.GoToPositionAbstractAction
     {
+        private Stopwatch lookDirectionChangeTimer = Stopwatch.StartNew();
+        private float lookDirectionChangeDelay = 0;
+
+        private float MaxHorizontalDegrees => 60;
+        private float MaxVerticalDegreesDown => 20;
+        private float MaxVerticalDegreesUp => 5;
+        private float MinLookDirectionChangeDelay => 0.5f;
+        private float MaxLookDirectionChangeDelay => 5f;
+
+        private double ElapsedTimeSinceLastLookDirectionChange => lookDirectionChangeTimer.ElapsedMilliseconds / 1000.0;
+
         public BotRecoveryAction(BotOwner _BotOwner) : base(_BotOwner, 20)
         {
             SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.holdPosition, BotOwner));
@@ -25,14 +41,11 @@ namespace QuestingBots.BotLogic.Recovery
 
         public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
+            RefreshLookDirection();
+            SetPose();
+
             BotOwner.Sprint(false);
             BotOwner.StopMove();
-
-            float targetPose = ObjectiveManager.CoverPointSelector.GetTargetPoseAtCoverPoint();
-            BotOwner.SetPose(targetPose);
-
-            Vector3 lookDirection = -1 * ObjectiveManager.CoverPointSelector.ToWallVector;
-            BotOwner.Steering.LookToDirection(lookDirection);
 
             // Don't allow expensive parts of this behavior to run too often
             if (!canUpdate())
@@ -43,6 +56,65 @@ namespace QuestingBots.BotLogic.Recovery
             BotOwner.BotLight.TurnOff(false, true);
             BotOwner.Memory.BotCurrentCoverInfo.TryCheckSafe();
             CheckRemainingAmmo();
+        }
+
+        private void RefreshLookDirection()
+        {
+            if (ElapsedTimeSinceLastLookDirectionChange < lookDirectionChangeDelay)
+            {
+                return;
+            }
+
+            Vector3 toWallVector = ObjectiveManager.CoverPointSelector.ToWallVector;
+            Vector3 newlookDirection = ChooseRandomLookDirectionAwayFromWall(toWallVector, MaxHorizontalDegrees, MaxVerticalDegreesDown, MaxVerticalDegreesUp);
+            BotOwner.Steering.LookToDirection(newlookDirection);
+
+            lookDirectionChangeDelay = UnityEngine.Random.Range(MinLookDirectionChangeDelay, MaxLookDirectionChangeDelay);
+            lookDirectionChangeTimer.Restart();
+        }
+
+        private Vector3 ChooseRandomLookDirectionAwayFromWall(Vector3 toWallVector, float maxHorizontalDegrees, float maxVerticalDegreesDown, float maxVerticalDegreesUp)
+        {
+            Vector3 oppositeFromWall = -1 * toWallVector;
+
+            float yawChange = UnityEngine.Random.Range(-maxHorizontalDegrees, maxHorizontalDegrees);
+            float pitchChange = UnityEngine.Random.Range(-maxVerticalDegreesDown, maxVerticalDegreesUp);
+
+            Quaternion yawRotation = Quaternion.AngleAxis(yawChange, Vector3.up);
+
+            Vector3 rightAxis = yawRotation * Vector3.right;
+            Quaternion pitchRotation = Quaternion.AngleAxis(pitchChange, rightAxis);
+
+            Vector3 lookDirection = (yawRotation * pitchRotation * oppositeFromWall).normalized;
+            return lookDirection;
+        }
+
+        private void SetPose()
+        {
+            float allowedMinimumPose = IsGroupLeaderQuesting() ? 0.5f : 0.1f;
+            float targetPose = ObjectiveManager.CoverPointSelector.GetTargetPoseAtCoverPoint();
+            targetPose = Math.Max(allowedMinimumPose, targetPose);
+
+            BotOwner.SetPose(targetPose);
+        }
+
+        private bool IsGroupLeaderQuesting()
+        {
+            BotOwner? groupLeader = BotHiveMindMonitor.GetGroupLeader(BotOwner);
+            if (groupLeader == null)
+            {
+                return false;
+            }
+
+            BotObjectiveManager? groupLeaderObjectiveManager = groupLeader.GetObjectiveManager();
+            if (groupLeaderObjectiveManager == null)
+            {
+                return false;
+            }
+
+            BotQuestingMonitor groupLeaderQuestingMonitor = groupLeaderObjectiveManager.BotMonitor.GetMonitor<BotQuestingMonitor>();
+
+            return groupLeaderQuestingMonitor.IsQuesting;
         }
 
         private void CheckRemainingAmmo()

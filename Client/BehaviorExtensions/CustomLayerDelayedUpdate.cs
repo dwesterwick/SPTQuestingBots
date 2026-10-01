@@ -82,9 +82,9 @@ namespace QuestingBots.BehaviorExtensions
                 case BotActionType.OpenNearbyDoors: return new Action(typeof(BotLogic.Objective.OpenNearbyDoorsAction), actionReason);
                 case BotActionType.GetToCover: return new Action(typeof(BotLogic.Recovery.GetToCoverAction), actionReason);
                 case BotActionType.Recover: return new Action(typeof(BotLogic.Recovery.BotRecoveryAction), actionReason);
-                case BotActionType.Heal: return new Action(typeof(HealNode), actionReason);
-                case BotActionType.EatDrink: return new Action(typeof(EatDrinkNode), actionReason);
-                case BotActionType.Gesture: return new Action(typeof(GestureNode), actionReason);
+                case BotActionType.Heal: return new Action(typeof(BotLogic.EftActions.EftHealAction), actionReason);
+                case BotActionType.EatDrink: return new Action(typeof(BotLogic.EftActions.EftEatDrinkAction), actionReason);
+                case BotActionType.Gesture: return new Action(typeof(BotLogic.EftActions.EftGestureAction), actionReason);
             }
 
             throw new InvalidOperationException("Invalid action selected for layer");

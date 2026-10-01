@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
+using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -11,6 +12,12 @@ namespace QuestingBots.BotLogic.Recovery
 {
     internal class BotRecoveryLayer : CustomLayerForQuesting
     {
+        private bool IsInCombat => ObjectiveManager.BotMonitor.GetMonitor<BotCombatMonitor>().IsInCombat;
+        private bool IsHealing => BotOwner.Medecine.FirstAid.Using || BotOwner.Medecine.SurgicalKit.Using;
+        private bool IsEatingOrDrinking => BotOwner.EatDrinkData.Using;
+
+        private bool IsGesturing() => BotOwner.Gesture.CurRequestExecuting();
+
         public BotRecoveryLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
 
@@ -53,25 +60,25 @@ namespace QuestingBots.BotLogic.Recovery
                 return updatePreviousState(false);
             }
 
-            if (!ObjectiveManager.CoverPointSelector.IsAtCoverPoint)
+            if (!ObjectiveManager.CoverPointSelector.IsAtCoverPoint && CanMoveToCoverPoint())
             {
                 setNextAction(BotActionType.GetToCover, "GetToCover");
                 return updatePreviousState(true);
             }
 
-            if (MustHeal())
+            if (ShouldHeal())
             {
                 setNextAction(BotActionType.Heal, "Heal");
                 return updatePreviousState(true);
             }
 
-            if (BotOwner.EatDrinkData.HaveActions())
+            if (ShouldEatOrDrink())
             {
                 setNextAction(BotActionType.EatDrink, "EatDrink");
                 return updatePreviousState(true);
             }
 
-            if (BotOwner.Gesture.HaveRequest())
+            if (ShouldGesture())
             {
                 setNextAction(BotActionType.Gesture, "Gesture");
                 return updatePreviousState(true);
@@ -81,14 +88,74 @@ namespace QuestingBots.BotLogic.Recovery
             return updatePreviousState(true);
         }
 
-        private bool MustHeal()
+        private bool CanMoveToCoverPoint()
         {
+            if (IsHealing)
+            {
+                return false;
+            }
+
+            if (IsEatingOrDrinking)
+            {
+                return false;
+            }
+
+            if (IsGesturing())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ShouldHeal()
+        {
+            if (IsInCombat)
+            {
+                return false;
+            }
+
+            if (IsHealing)
+            {
+                return true;
+            }
+
             if (BotOwner.Medecine.FirstAid.Have2Do && BotOwner.Medecine.FirstAid.HaveSmth2Use)
             {
                 return true;
             }
 
             if (BotOwner.Medecine.SurgicalKit.HaveWork && BotOwner.Medecine.SurgicalKit.HaveSmth2Use)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ShouldEatOrDrink()
+        {
+            if (IsInCombat)
+            {
+                return false;
+            }
+
+            if (IsEatingOrDrinking || BotOwner.EatDrinkData.HaveActions())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ShouldGesture()
+        {
+            if (IsInCombat)
+            {
+                return false;
+            }
+
+            if (IsGesturing() || BotOwner.Gesture.HaveRequest())
             {
                 return true;
             }
