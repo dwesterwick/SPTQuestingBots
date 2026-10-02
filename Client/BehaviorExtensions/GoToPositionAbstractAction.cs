@@ -23,16 +23,16 @@ namespace QuestingBots.BehaviorExtensions
         protected bool CanSprint { get; set; } = true;
 
         private static FieldInfo botZoneField = null!;
-        private Stopwatch timeSinceLastPatrolPointSetTimer = Stopwatch.StartNew();
         private Stopwatch botIsStuckTimer = new Stopwatch();
+        private Stopwatch botNotGroundedTimer = new Stopwatch();
         private Stopwatch timeSinceLastJumpTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceLastVaultTimer = Stopwatch.StartNew();
         private Stopwatch timeSinceLastBrainLayerMessageTimer = Stopwatch.StartNew();
         private Vector3? lastBotPosition = null;
         private bool loggedBrainLayerError = false;
 
-        protected double TimeSinceLastPatrolPointSet => timeSinceLastPatrolPointSetTimer.ElapsedMilliseconds / 1000.0;
         protected double StuckTime => botIsStuckTimer.ElapsedMilliseconds / 1000.0;
+        protected double NotGroundedTime => botNotGroundedTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastJump => timeSinceLastJumpTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastVault => timeSinceLastVaultTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSinceLastBrainLayerMessage => timeSinceLastBrainLayerMessageTimer.ElapsedMilliseconds / 1000.0;
@@ -72,7 +72,7 @@ namespace QuestingBots.BehaviorExtensions
 
             BotOwner.PatrollingData.Unpause();
             RefreshPatrolPoint();
-            ObjectiveManager.CoverPointSelector.RefreshCoverPoint();
+            ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)
@@ -274,14 +274,7 @@ namespace QuestingBots.BehaviorExtensions
                 return;
             }
 
-            if (TimeSinceLastPatrolPointSet < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.DebounceTimeAfterChangingPatrolPoint)
-            {
-                return;
-            }
-
-            ObjectiveManager.PatrolPointSelector.RefreshPatrolPoint();
-
-            timeSinceLastPatrolPointSetTimer.Restart();
+            ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();
         }
 
         private void updateBotStuckDetection()
@@ -366,13 +359,20 @@ namespace QuestingBots.BehaviorExtensions
         {
             //Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " was stuck for " + StuckTime + "s.");
 
-            if (!BotOwner.GetPlayer.MovementContext.IsGrounded)
+            if (BotOwner.GetPlayer.MovementContext.IsGrounded)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
-                return false;
+                botNotGroundedTimer.Restart();
+                return true;
             }
 
-            return true;
+            if (NotGroundedTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping - 0.5f)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck and not grounded; allowing countermeasures anyway");
+                return true;
+            }
+
+            Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
+            return false;
         }
     }
 }

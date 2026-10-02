@@ -41,16 +41,16 @@ namespace QuestingBots.BotLogic.Recovery
                 return;
             }
 
-            if (ObjectiveManager.CoverPointSelector.CoverPoint == null)
+            if (ObjectiveManager.CoverPointSelector.SelectedPoint == null)
             {
                 return;
             }
 
             CanSprint = IsAllowedToSprint();
 
-            if (!ObjectiveManager.CoverPointSelector.IsAtCoverPoint)
+            if (!ObjectiveManager.CoverPointSelector.IsAtSelectedPoint)
             {
-                RecalculatePath(ObjectiveManager.CoverPointSelector.CoverPoint);
+                RecalculatePath(ObjectiveManager.CoverPointSelector.SelectedPosition);
             }
             else
             {

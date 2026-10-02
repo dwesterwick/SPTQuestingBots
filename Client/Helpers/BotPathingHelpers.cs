@@ -36,6 +36,8 @@ namespace QuestingBots.Helpers
             return navMeshPath.status;
         }
 
+        public static bool HasCompletePathTo(this Vector3 start, Vector3 end) => CreatePathSegment(start, end, out Vector3[] _) == NavMeshPathStatus.PathComplete;
+
         public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
             /*if (bot.DoorOpener.Interacting)

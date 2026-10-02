@@ -65,7 +65,7 @@ namespace QuestingBots.BotLogic.Recovery
                 return;
             }
 
-            Vector3 toWallVector = ObjectiveManager.CoverPointSelector.ToWallVector;
+            Vector3 toWallVector = ObjectiveManager.CoverPointSelector.SelectedPointToWallVector;
             Vector3 newlookDirection = ChooseRandomLookDirectionAwayFromWall(toWallVector, MaxHorizontalDegrees, MaxVerticalDegreesDown, MaxVerticalDegreesUp);
             BotOwner.Steering.LookToDirection(newlookDirection);
 

@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
+using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
@@ -18,7 +19,7 @@ namespace QuestingBots.BotLogic.Recovery
 
         private bool IsGesturing() => BotOwner.Gesture.CurRequestExecuting();
 
-        public BotRecoveryLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
+        public BotRecoveryLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 100)
         {
 
         }
@@ -45,12 +46,19 @@ namespace QuestingBots.BotLogic.Recovery
                 return previousState;
             }
 
-            if (ObjectiveManager.PatrolPointSelector.HasPatrolPoint && !ObjectiveManager.PatrolPointSelector.IsWayReserved)
+            ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();
+            if (ObjectiveManager.PatrolPointSelector.HasSelectedPoint && !ObjectiveManager.PatrolPointSelector.IsWayReserved)
             {
-                //return updatePreviousState(false);
+                // Allow bots to roam after arriving at a quest location (i.e. to hunt)
+                BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+                if (decisionMonitor.CurrentDecision == BotQuestingDecision.WaitForAssignment)
+                {
+                    return updatePreviousState(false);
+                }
             }
 
-            if (!ObjectiveManager.CoverPointSelector.HasCoverPoint)
+            ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
+            if (!ObjectiveManager.CoverPointSelector.HasSelectedPoint)
             {
                 if (previousState)
                 {
@@ -60,7 +68,7 @@ namespace QuestingBots.BotLogic.Recovery
                 return updatePreviousState(false);
             }
 
-            if (!ObjectiveManager.CoverPointSelector.IsAtCoverPoint && CanMoveToCoverPoint())
+            if (!ObjectiveManager.CoverPointSelector.IsAtSelectedPoint && CanMoveToCoverPoint())
             {
                 setNextAction(BotActionType.GetToCover, "GetToCover");
                 return updatePreviousState(true);

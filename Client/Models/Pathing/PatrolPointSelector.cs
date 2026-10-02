@@ -4,24 +4,28 @@ using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using UnityEngine;
 
 namespace QuestingBots.Models.Pathing
 {
-    public class PatrolPointSelector
+    public class PatrolPointSelector : AbstractNavigationPointSelector<PatrolPoint>
     {
-        private BotOwner _bot;
+        protected override float MaxSearchDistance => (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
+        protected override float MinSearchDistance => HasBoss ? (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min : 0;
+        protected override float DebounceTimeForSetting => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.DebounceTimeAfterChangingPatrolPoint;
+
         private PatrolWay? _selectedWay = null;
-        private PatrolPoint? _selectedPoint = null;
+
+        protected bool HasBoss => _bot.BotFollower.HaveBoss && _bot.BotFollower.BossToFollow.IsAlive;
 
         public bool HasWay => _selectedWay != null;
-        public bool HasPatrolPoint => _selectedPoint != null;
         public bool IsWayReserved => _selectedWay?.PatrolType == PatrolType.reserved;
 
-        public PatrolPointSelector(BotOwner bot)
+        public PatrolPointSelector(BotOwner bot) : base(bot)
         {
-            _bot = bot;
+            
         }
 
         public void ReleasePatrolPointReservation()
@@ -29,15 +33,35 @@ namespace QuestingBots.Models.Pathing
             _bot.PatrollingData.PointControl._lastSetOwner.SetOwner(null);
         }
 
-        public void RefreshPatrolPoint()
+        protected override Vector3 GetCenterPointForSearch()
         {
-            _selectedPoint = null;
-
-            _selectedWay = GetClosestPatrolWay();
-            if (_selectedWay == null)
+            if (HasBoss)
             {
-                //Singleton<LoggingUtil>.Instance.LogDebug("Could not find patrol point for " + _bot.GetText());
+                return _bot.BotFollower.BossToFollow.Position;
             }
+
+            return _bot.Position;
+        }
+
+        protected override void Refresh_Internal(Vector3 centerPoint)
+        {
+            SetSelectedPoint(null);
+
+            _selectedWay = GetClosestPatrolWay(centerPoint, out PatrolPoint? closestPatrolPoint);
+
+            if (closestPatrolPoint != null)
+            {
+                float distance = Vector3.Distance(centerPoint, closestPatrolPoint.Position);
+                if (!_bot.Position.HasCompletePathTo(closestPatrolPoint.Position))
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(_bot.GetText() + " does not have a complete path to selected patrol point " + distance + "m away");
+                }
+
+                _selectedWay = null;
+                closestPatrolPoint = null;
+            }
+
+            SetSelectedPoint(closestPatrolPoint);
 
             if ((_selectedWay != null) && (_bot.PatrollingData.PointControl.Way != _selectedWay))
             {
@@ -49,40 +73,23 @@ namespace QuestingBots.Models.Pathing
                 PatrolPointContainer? container = CreatePointContainer();
                 _bot.PatrollingData.PointControl.SetTarget(container, -1);
             }
-            
+
             _bot.PatrollingData.PointControl.SetPatrolPointOwner(_bot.PatrollingData.PointControl.PatrolPoint.TargetPoint);
-
-            if (_selectedWay == null)
-            {
-                return;
-            }
-
-            //float distance = Vector3.Distance(_bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position, _bot.Position);
-            //Singleton<LoggingUtil>.Instance.LogDebug("Setting new patrol point " + distance + "m away for " + _bot.GetText() + " (" + _bot.PatrollingData.PointControl.PatrolPoint.TargetPoint.Position + ")");
         }
 
+        // for FindNextPointDelegate
         private PatrolPointContainer CreatePointContainer(bool withSetting, bool withoutNext, int minSubTargets = -1, bool canCut = true, PatrolPointFilterDelegate? pointFilter = null)
         {
             return CreatePointContainer() ?? _bot.PatrollingData.PointChooser.FindNextPoint(withSetting, withoutNext, minSubTargets, canCut, pointFilter);
         }
 
-        private PatrolPointContainer? CreatePointContainer()
-        {
-            if (_selectedPoint != null)
-            {
-                return new PatrolPointContainer(_selectedPoint);
-            }
+        private PatrolPointContainer? CreatePointContainer() => SelectedPoint == null ? null : new PatrolPointContainer(SelectedPoint);
 
-            return null;
-        }
-
-        private PatrolWay? GetClosestPatrolWay()
+        private PatrolWay? GetClosestPatrolWay(Vector3 centerPoint, out PatrolPoint? closestPatrolPoint)
         {
+            closestPatrolPoint = null;
             PatrolWay? closestWay = null;
             float closestPointDistance = float.MaxValue;
-
-            float maxPatrolPointDistance = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Max;
-            float bossExclusionRadius = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.PatrolPointRadiusAroundBoss.Min;
 
             foreach (PatrolWay way in _bot.BotsGroup.BotZone.PatrolWays)
             {
@@ -91,14 +98,14 @@ namespace QuestingBots.Models.Pathing
                     continue;
                 }
 
-                PatrolPoint? closestPoint = GetClosestPatrolPointNearBoss(maxPatrolPointDistance, bossExclusionRadius) ?? GetClosestPatrolPoint(maxPatrolPointDistance);
+                PatrolPoint? closestPoint = GetClosestPatrolPoint(centerPoint);
                 if (closestPoint == null)
                 {
                     continue;
                 }
 
                 float distance = Vector3.Distance(closestPoint.Position, _bot.Position);
-                if (distance > maxPatrolPointDistance)
+                if (distance > MaxSearchDistance)
                 {
                     continue;
                 }
@@ -106,15 +113,15 @@ namespace QuestingBots.Models.Pathing
                 if (distance < closestPointDistance)
                 {
                     closestPointDistance = distance;
-                    _selectedPoint = closestPoint;
                     closestWay = way;
+                    closestPatrolPoint = closestPoint;
                 }
             }
 
             return closestWay;
         }
 
-        private PatrolPoint? GetClosestPatrolPoint(float maxDistance)
+        private PatrolPoint? GetClosestPatrolPoint(Vector3 centerPoint)
         {
             float closestPointDistance = float.MaxValue;
             PatrolPoint? closestPoint = null;
@@ -126,46 +133,13 @@ namespace QuestingBots.Models.Pathing
                     continue;
                 }
 
-                float distance = Vector3.Distance(patrolPoint.Position, _bot.Position);
-                if (distance > maxDistance)
+                float distance = Vector3.Distance(patrolPoint.Position, centerPoint);
+                if (distance > MaxSearchDistance)
                 {
                     continue;
                 }
 
-                if (distance < closestPointDistance)
-                {
-                    closestPointDistance = distance;
-                    closestPoint = patrolPoint;
-                }
-            }
-
-            return closestPoint;
-        }
-
-        private PatrolPoint? GetClosestPatrolPointNearBoss(float maxDistance, float exclusionRadiusAroundBoss)
-        {
-            if (!_bot.BotFollower.HaveBoss || !_bot.BotFollower.BossToFollow.IsAlive)
-            {
-                return null;
-            }
-
-            float closestPointDistance = float.MaxValue;
-            PatrolPoint? closestPoint = null;
-            foreach (PatrolPoint patrolPoint in _bot.PatrollingData.PointControl.Way.Points)
-            {
-                if (!patrolPoint.IsFreeFor(_bot))
-                {
-                    //Singleton<LoggingUtil>.Instance.LogDebug(_bot.GetText() + " cannot use patrol point at " + patrolPoint.Position + "; reserved for " + patrolPoint.Owner.GetText());
-                    continue;
-                }
-
-                float distance = Vector3.Distance(patrolPoint.Position, _bot.BotFollower.BossToFollow.Position);
-                if (distance > maxDistance)
-                {
-                    continue;
-                }
-
-                if (distance <= exclusionRadiusAroundBoss)
+                if (distance <= MinSearchDistance)
                 {
                     continue;
                 }
