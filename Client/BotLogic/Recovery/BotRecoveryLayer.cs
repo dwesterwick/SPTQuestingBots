@@ -41,9 +41,19 @@ namespace QuestingBots.BotLogic.Recovery
 
         public override bool IsActive()
         {
+            if (!ObjectiveManager.IsQuestingAllowed)
+            {
+                return updatePreviousState(false);
+            }
+
             if (!canUpdate())
             {
                 return previousState;
+            }
+
+            if (ObjectiveManager.MightBeStuck)
+            {
+                return updatePreviousState(false);
             }
 
             ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();

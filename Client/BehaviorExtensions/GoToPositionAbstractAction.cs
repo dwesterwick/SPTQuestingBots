@@ -365,13 +365,18 @@ namespace QuestingBots.BehaviorExtensions
                 return true;
             }
 
-            if (NotGroundedTime > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping - 0.5f)
+            float minTimeBeforeJumping = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.StuckBotRemedies.MinTimeBeforeJumping;
+            float maxTimeToBlockCountermeasures = (minTimeBeforeJumping * 1) - (updateInterval * 2);
+            if (NotGroundedTime > maxTimeToBlockCountermeasures)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck and not grounded; allowing countermeasures anyway");
                 return true;
             }
 
-            Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded.");
+            if (NotGroundedTime < updateInterval * 1.5)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning(BotOwner.GetText() + " is stuck, but countermeasures are unavailable until its grounded");
+            }
             return false;
         }
     }
