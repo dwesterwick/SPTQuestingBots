@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos
 {
@@ -87,6 +88,13 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
+            Player? enemyPlayer = bot.Memory.GoalEnemy?.GroupInfo?.Player;
+            if ((enemyPlayer != null) && enemyPlayer.HealthController.IsAlive)
+            {
+                double enemyDistance = Math.Round(Vector3.Distance(bot.Position, enemyPlayer.Position), 1);
+                sb.AppendLabeledValue("Enemy", $"{enemyPlayer.GetText()}: {enemyDistance}m", Color.white, Color.white);
+            }
+
             BotOwner? boss = BotHiveMindMonitor.GetGroupLeader(bot);
             if (boss != null)
             {
@@ -112,7 +120,10 @@ namespace QuestingBots.Models.DebugGizmos
 
             if (shouldShowPathStatus(botQuestingDecisionMonitor.CurrentDecision) && (botObjectiveManager.BotPath != null))
             {
-                sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
+                if (botObjectiveManager.BotPath.Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
+                {
+                    sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
+                }
             }
         }
 
