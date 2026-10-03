@@ -80,11 +80,19 @@
 		"default_wait_time_after_objective_completion": 5,
 		"bot_zone_updates": {
 			"update_bot_zone_after_stopping": true,
-			"update_patrol_point_after_stopping": true,
-			"debounce_time_after_changing_patrol_point_s": 0.5,
-			"patrol_point_radius_around_boss": {
-				"min": 3,
-				"max": 50
+			"patrol_point_updates": {
+				"max_search_distance_for_bosses": 50,
+				"max_search_distance_for_followers": 18,
+				"min_search_distance_for_followers": 3,
+				"debounce_time_after_checking": 0.5,
+				"debounce_time_after_updating": 2
+			},
+			"cover_point_updates": {
+				"max_search_distance_for_bosses": 50,
+				"max_search_distance_for_followers": 18,
+				"min_search_distance_for_followers": 3,
+				"debounce_time_after_checking": 0.5,
+				"debounce_time_after_updating": 0.5
 			}
 		},
 		"wait_time_before_planting": 1,

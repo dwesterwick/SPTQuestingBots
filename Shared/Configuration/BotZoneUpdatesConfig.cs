@@ -11,13 +11,15 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "update_bot_zone_after_stopping", IsRequired = true)]
         public bool UpdateBotZoneAfterStopping { get; set; } = true;
 
-        [DataMember(Name = "update_patrol_point_after_stopping", IsRequired = true)]
-        public bool UpdatePatrolPointAfterStopping { get; set; } = true;
+        [DataMember(Name = "patrol_point_updates", IsRequired = true)]
+        public NavigationPointSelectionConfig PatrolPointUpdates { get; set; } = new NavigationPointSelectionConfig();
 
-        [DataMember(Name = "debounce_time_after_changing_patrol_point_s", IsRequired = true)]
-        public float DebounceTimeAfterChangingPatrolPoint { get; set; } = 2;
+        [DataMember(Name = "cover_point_updates", IsRequired = true)]
+        public NavigationPointSelectionConfig CoverPointUpdates { get; set; } = new NavigationPointSelectionConfig();
 
-        [DataMember(Name = "patrol_point_radius_around_boss", IsRequired = true)]
-        public MinMaxConfig PatrolPointRadiusAroundBoss { get; set; } = new MinMaxConfig(3, 50);
+        public BotZoneUpdatesConfig()
+        {
+
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace QuestingBots.BehaviorExtensions
             timeSinceLastJumpTimer.Restart();
 
             BotOwner.PatrollingData.Pause();
-            RemovePatrolPointReservation();
+            ObjectiveManager.PatrolPointSelector.ReleasePatrolPointReservation();
         }
 
         public override void Stop()
@@ -69,10 +69,7 @@ namespace QuestingBots.BehaviorExtensions
             pauseStuckTimer();
 
             updateBotZoneForGroup();
-
             BotOwner.PatrollingData.Unpause();
-            RefreshPatrolPoint();
-            ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)
@@ -255,26 +252,6 @@ namespace QuestingBots.BehaviorExtensions
 
             botZoneField.SetValue(BotOwner.BotsGroup, closestBotZone);
             BotOwner.PatrollingData.PointChooser.ShallChangeWay(true);
-        }
-
-        protected void RemovePatrolPointReservation()
-        {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdatePatrolPointAfterStopping)
-            {
-                return;
-            }
-
-            ObjectiveManager.PatrolPointSelector.ReleasePatrolPointReservation();
-        }
-
-        protected void RefreshPatrolPoint()
-        {
-            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.UpdatePatrolPointAfterStopping)
-            {
-                return;
-            }
-
-            ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();
         }
 
         private void updateBotStuckDetection()
