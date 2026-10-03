@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
@@ -42,7 +41,11 @@ namespace QuestingBots.BotLogic.Objective
                 return previousState;
             }
 
-            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            BotQuestingDecisionMonitor? decisionMonitor = ObjectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor == null)
+            {
+                return updatePreviousState(false);
+            }
 
             if (!decisionMonitor.IsAllowedToQuest())
             {
@@ -62,13 +65,13 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has wandered too far from its followers
-            if (decisionMonitor.CurrentDecision == BotQuestingDecision.Regroup)
+            if (decisionMonitor.CurrentDecision == EBotQuestingDecision.Regroup)
             {
                 setNextAction(BotActionType.BossRegroup, "BossRegroup");
                 return updatePreviousState(true);
             }
 
-            if (decisionMonitor.CurrentDecision != BotQuestingDecision.Quest)
+            if (decisionMonitor.CurrentDecision != EBotQuestingDecision.Quest)
             {
                 return updatePreviousState(false);
             }

@@ -1,8 +1,7 @@
-﻿using Comfort.Common;
-using EFT;
+﻿using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
-using QuestingBots.Utils;
+using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +12,6 @@ namespace QuestingBots.BotLogic.Follow
 {
     internal class BotFollowerLayer : CustomLayerForQuesting
     {
-        private double maxDistanceFromBoss = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Min;
-
         public BotFollowerLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
             
@@ -42,8 +39,7 @@ namespace QuestingBots.BotLogic.Follow
                 return previousState;
             }
 
-            BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
-            if (decisionMonitor.CurrentDecision != BotQuestingDecision.FollowBoss)
+            if (BotOwner.GetCurrentQuestingDecision() != EBotQuestingDecision.FollowBoss)
             {
                 return updatePreviousState(false);
             }

@@ -14,18 +14,29 @@ namespace QuestingBots.BehaviorExtensions
 {
     internal abstract class CustomLayerForQuesting : CustomLayerDelayedUpdate
     {
-        protected Components.BotObjectiveManager ObjectiveManager { get; private set; } = null!;
+        private Components.BotObjectiveManager? _objectiveManager = null;
+        protected Components.BotObjectiveManager ObjectiveManager
+        {
+            get
+            {
+                if (_objectiveManager == null)
+                {
+                    _objectiveManager = BotOwner.GetObjectiveManager();
+                }
+                if (_objectiveManager == null)
+                {
+                    string errorMessage = this.GetType().Name + ": Could not get BotObjectiveManager for " + BotOwner.GetText();
+                    //Singleton<LoggingUtil>.Instance.LogError(errorMessage);
+                    throw new InvalidOperationException(errorMessage);
+                }
+
+                return _objectiveManager;
+            }
+        }
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority, int delayInterval) : base(_botOwner, _priority, delayInterval)
         {
-            Components.BotObjectiveManager? objectiveManager = _botOwner.GetObjectiveManager();
-            if (objectiveManager == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager for " + _botOwner.GetText());
-                return;
-            }
 
-            ObjectiveManager = objectiveManager;
         }
 
         public CustomLayerForQuesting(BotOwner _botOwner, int _priority) : this(_botOwner, _priority, updateInterval)

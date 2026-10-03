@@ -127,14 +127,14 @@ namespace QuestingBots.Models.DebugGizmos
             }
         }
 
-        private bool shouldShowPathStatus(BotQuestingDecision decision)
+        private bool shouldShowPathStatus(EBotQuestingDecision decision)
         {
             switch (decision)
             {
-                case BotQuestingDecision.Quest:
-                case BotQuestingDecision.Regroup:
-                case BotQuestingDecision.FollowBoss:
-                case BotQuestingDecision.HelpBoss:
+                case EBotQuestingDecision.Quest:
+                case EBotQuestingDecision.Regroup:
+                case EBotQuestingDecision.FollowBoss:
+                case EBotQuestingDecision.HelpBoss:
                     return true;
             }
 

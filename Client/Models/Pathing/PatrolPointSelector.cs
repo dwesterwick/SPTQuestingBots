@@ -1,5 +1,8 @@
 ﻿using Comfort.Common;
 using EFT;
+using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
@@ -34,7 +37,26 @@ namespace QuestingBots.Models.Pathing
             Bot.PatrollingData.PointControl._lastSetOwner.SetOwner(null);
         }
 
-        protected override Vector3 GetCenterPointForSearch() => HasBoss ? Bot.BotFollower.BossToFollow.Position : Bot.Position;
+        protected override Vector3 GetCenterPointForSearch()
+        {
+            if (Bot.HasABoss())
+            {
+                return Bot.BotFollower.BossToFollow.Position;
+            }
+
+            BotObjectiveManager? objectiveManager = Bot.GetObjectiveManager();
+            if ((objectiveManager == null) || !objectiveManager.IsQuestingAllowed)
+            {
+                return Bot.Position;
+            }
+
+            if (Bot.GetCurrentQuestingDecision() != EBotQuestingDecision.WaitForAssignment)
+            {
+                return Bot.Position;
+            }
+
+            return objectiveManager.CurrentAssignment?.Position ?? Bot.Position;
+        }
 
         protected override void Refresh_Internal(Vector3 centerPoint)
         {

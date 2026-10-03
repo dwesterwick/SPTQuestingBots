@@ -1,5 +1,5 @@
 ﻿using EFT;
-using QuestingBots.Components;
+using QuestingBots.Controllers;
 using SPT.Reflection.Patching;
 using System;
 using System.Collections;
@@ -21,7 +21,7 @@ namespace QuestingBots.Patches
         [PatchPostfix]
         protected static void PatchPostfix(BotOwner __instance)
         {
-            BotIdentityData.GetBotIdentityData(__instance);
+            __instance.GetOrAddObjectiveManager();
         }
     }
 }

@@ -40,12 +40,11 @@ namespace QuestingBots.Models.Pathing
         protected float MaxSearchDistanceFollowerSqr => MaxSearchDistanceFollower * MaxSearchDistanceFollower;
         protected double TimeSincePointChecked => timeSincePointCheckedTimer.ElapsedMilliseconds / 1000.0;
         protected double TimeSincePointUpdated => timeSincePointUpdatedTimer.ElapsedMilliseconds / 1000.0;
-        protected bool HasBoss => Bot.BotFollower.HaveBoss && Bot.BotFollower.BossToFollow.IsAlive;
-
-        protected float GetMinSearchDistance() => HasAQuestingBoss() ? MinSearchDistanceFollower : MinSearchDistanceBoss;
-        protected float GetMinSearchDistanceSqr() => HasAQuestingBoss() ? MinSearchDistanceFollowerSqr : MinSearchDistanceBossSqr;
-        protected float GetMaxSearchDistance() => HasAQuestingBoss() ? MaxSearchDistanceFollower : MaxSearchDistanceBoss;
-        protected float GetMaxSearchDistanceSqr() => HasAQuestingBoss() ? MaxSearchDistanceFollowerSqr : MaxSearchDistanceBossSqr;
+        
+        protected float GetMinSearchDistance() => Bot.HasAQuestingBoss() ? MinSearchDistanceFollower : MinSearchDistanceBoss;
+        protected float GetMinSearchDistanceSqr() => Bot.HasAQuestingBoss() ? MinSearchDistanceFollowerSqr : MinSearchDistanceBossSqr;
+        protected float GetMaxSearchDistance() => Bot.HasAQuestingBoss() ? MaxSearchDistanceFollower : MaxSearchDistanceBoss;
+        protected float GetMaxSearchDistanceSqr() => Bot.HasAQuestingBoss() ? MaxSearchDistanceFollowerSqr : MaxSearchDistanceBossSqr;
 
         public AbstractNavigationPointSelector(BotOwner botOwner)
         {
@@ -90,24 +89,6 @@ namespace QuestingBots.Models.Pathing
         {
             SelectedPoint = selectedPoint;
             _botPositionWhenPointSet = Bot.Position;
-        }
-
-        protected bool HasAQuestingBoss()
-        {
-            if (!HasBoss)
-            {
-                return false;
-            }
-
-            BotObjectiveManager? objectiveManager = Bot.GetObjectiveManager();
-            if (objectiveManager == null)
-            {
-                Singleton<LoggingUtil>.Instance.LogError("Could not get BotObjectiveManager for " + Bot.GetText());
-                return false;
-            }
-
-            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
-            return decisionMonitor.HasAQuestingBoss;
         }
     }
 }

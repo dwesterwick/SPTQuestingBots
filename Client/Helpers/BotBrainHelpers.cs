@@ -2,6 +2,7 @@
 using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.BotLogic;
+using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
@@ -84,6 +85,17 @@ namespace QuestingBots.Helpers
             }
 
             return false;
+        }
+
+        public static EBotQuestingDecision GetCurrentQuestingDecision(this BotOwner bot)
+        {
+            Components.BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+            if (objectiveManager == null)
+            {
+                return EBotQuestingDecision.Inactive;
+            }
+
+            return objectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>()?.CurrentDecision ?? EBotQuestingDecision.Inactive;
         }
 
         public static IEnumerable<BotBrainType> AddTestBrains(this IEnumerable<BotBrainType> list)

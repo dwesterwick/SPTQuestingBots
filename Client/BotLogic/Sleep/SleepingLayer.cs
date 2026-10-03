@@ -14,11 +14,9 @@ namespace QuestingBots.BotLogic.Sleep
 {
     internal class SleepingLayer : BehaviorExtensions.CustomLayerDelayedUpdate
     {
-        private Components.BotObjectiveManager objectiveManager = null!;
-
         public SleepingLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 250)
         {
-            objectiveManager = _botOwner.GetOrAddObjectiveManager();
+
         }
 
         public override string GetName()
@@ -62,7 +60,8 @@ namespace QuestingBots.BotLogic.Sleep
 
             // Determine the distance from human players beyond which bots will be disabled
             int mapSpecificHumanDistance = 1000;
-            if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id, out TarkovMaps currentMap))
+            string currentLocationId = Singleton<GameWorld>.Instance.GetComponent<Components.LocationData>().CurrentLocation.Id;
+            if (QuestingBotsPluginConfig.TarkovMapIDToEnum.TryGetValue(currentLocationId, out TarkovMaps currentMap))
             {
                 mapSpecificHumanDistance = getMapSpecificHumanDistance(currentMap);
             }
@@ -78,22 +77,22 @@ namespace QuestingBots.BotLogic.Sleep
             }
 
             // Ensure there are still alive human players on the map
-            IEnumerable<Player> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList.Where(p => !p.IsAI);
-            if (!allPlayers.Any())
+            IEnumerable<IPlayer> allPlayers = Singleton<GameWorld>.Instance.AllAlivePlayersList.NonAIPlayers();
+            if (!allPlayers.AnyNonAlloc())
             {
                 return updatePreviousState(false);
             }
 
             // If the bot is close to any of the human players, don't allow it to sleep
-            if (allPlayers.Any(p => Vector3.Distance(BotOwner.Position, p.Position) < distanceFromHumans))
+            if (allPlayers.AnyNonAlloc(p => Vector3.Distance(BotOwner.Position, p.Position) < distanceFromHumans))
             {
                 return updatePreviousState(false);
             }
 
             // Enumerate all alive bots on the map
             IEnumerable<BotOwner> allBots = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
-                .Where(b => b.BotState == EBotState.Active)
-                .Where(b => !b.IsDead);
+                .ActiveBots()
+                .WhereNonAlloc(b => !b.IsDead);
 
             // Only allow bots to sleep if there are at least a certain number in total on the map
             if (allBots.Count() <= QuestingBotsPluginConfig.MinBotsToEnableSleeping.Value)
@@ -103,11 +102,15 @@ namespace QuestingBots.BotLogic.Sleep
 
             // Of alive bots, enumerate all besides this one that are active
             IEnumerable<BotOwner> allOtherBots = allBots
-                .Where(b => b.gameObject.activeSelf)
-                .Where(b => b.Id != BotOwner.Id);
+                .WhereNonAlloc(b => b.gameObject.activeSelf);
 
             foreach (BotOwner bot in allOtherBots)
             {
+                if (bot.Id == BotOwner.Id)
+                {
+                    continue;
+                }
+
                 if (!isQuestingOrExtracting(bot))
                 {
                     continue;

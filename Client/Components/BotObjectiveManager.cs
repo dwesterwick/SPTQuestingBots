@@ -112,10 +112,10 @@ namespace QuestingBots.Components
             CoverPointSelector = new CoverPointSelector(botOwner);
             NetworkTransactionFunctions = ExternalModHandler.CreateRunNetworkTransactionFunctions(botOwner);
 
-            BotMonitor = BotMonitorController.GetBotMonitorController(botOwner);
+            IdentityData = BotIdentityData.GetBotIdentityData(botOwner);
             yield return null;
 
-            IdentityData = BotIdentityData.GetBotIdentityData(botOwner);
+            BotMonitor = BotMonitorController.GetBotMonitorController(botOwner);
             yield return null;
 
             QuestSelector = BotQuestSelector.GetBotQuestSelector(botOwner);

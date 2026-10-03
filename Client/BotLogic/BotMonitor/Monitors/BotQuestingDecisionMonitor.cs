@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.BotLogic.BotMonitor
 {
-    public enum BotQuestingDecision
+    public enum EBotQuestingDecision
     {
         None,
         Inactive,
@@ -36,7 +36,7 @@ namespace QuestingBots.BotLogic.BotMonitor
 
     public class BotQuestingDecisionMonitor : AbstractBotMonitor
     {
-        public BotQuestingDecision CurrentDecision { get; private set; } = BotQuestingDecision.None;
+        public EBotQuestingDecision CurrentDecision { get; private set; } = EBotQuestingDecision.None;
         public bool HasAQuestingBoss { get; private set; } = false;
 
         private Components.BotQuestBuilder botQuestBuilder = null!;
@@ -52,9 +52,9 @@ namespace QuestingBots.BotLogic.BotMonitor
         {
             if
             (
-                CurrentDecision == BotQuestingDecision.None
-                || CurrentDecision == BotQuestingDecision.Inactive
-                || CurrentDecision == BotQuestingDecision.WaitForQuestData
+                CurrentDecision == EBotQuestingDecision.None
+                || CurrentDecision == EBotQuestingDecision.Inactive
+                || CurrentDecision == EBotQuestingDecision.WaitForQuestData
             )
             {
                 return false;
@@ -88,7 +88,7 @@ namespace QuestingBots.BotLogic.BotMonitor
             botQuestBuilder = Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>();
         }
 
-        public void ForceDecision(BotQuestingDecision decision)
+        public void ForceDecision(EBotQuestingDecision decision)
         {
             CurrentDecision = decision;
         }
@@ -104,16 +104,16 @@ namespace QuestingBots.BotLogic.BotMonitor
             CurrentDecision = getDecision();
         }
 
-        private BotQuestingDecision getDecision()
+        private EBotQuestingDecision getDecision()
         {
             if (!QuestingBotsPluginConfig.QuestingEnabled.Value)
             {
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
             if (!BotOwner.IsAlive())
             {
-                return BotQuestingDecision.Inactive;
+                return EBotQuestingDecision.Inactive;
             }
 
             if (HasAQuestingBoss && !MustQuestBeforeFollowing)
@@ -124,97 +124,97 @@ namespace QuestingBots.BotLogic.BotMonitor
             return getSoloDecision();
         }
 
-        private BotQuestingDecision getFollowerDecision()
+        private EBotQuestingDecision getFollowerDecision()
         {
             if (BotMonitor == null)
             {
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
             Controllers.BotJobAssignmentController.InactivateAllJobAssignmentsForBot(BotOwner.Profile.Id);
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsInCombat)
             {
-                return BotQuestingDecision.Fight;
+                return EBotQuestingDecision.Fight;
             }
 
             if (BotMonitor.GetMonitor<BotHearingMonitor>().IsSuspicious)
             {
-                return BotQuestingDecision.Investigtate;
+                return EBotQuestingDecision.Investigtate;
             }
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
             {
-                return BotQuestingDecision.Hunt;
+                return EBotQuestingDecision.Hunt;
             }
 
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
             {
-                return BotQuestingDecision.StopToHeal;
+                return EBotQuestingDecision.StopToHeal;
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
             {
-                return BotQuestingDecision.GetLost;
+                return EBotQuestingDecision.GetLost;
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().DoesBossNeedHelp && isFollowerTooFarFromBossForCombat())
             {
-                return BotQuestingDecision.HelpBoss;
+                return EBotQuestingDecision.HelpBoss;
             }
 
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
             {
-                return BotQuestingDecision.WaitForGroup;
+                return EBotQuestingDecision.WaitForGroup;
             }
 
             if (BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
             {
-                return BotQuestingDecision.WaitForGroup;
+                return EBotQuestingDecision.WaitForGroup;
             }
 
             if (BotMonitor.GetMonitor<BotLootingMonitor>().IsForcedToSearchForLoot && BotMonitor.GetMonitor<BotLootingMonitor>().BossWillAllowLootingByDistance)
             {
                 setLootingHiveMindState(true);
-                return BotQuestingDecision.CheckForLoot;
+                return EBotQuestingDecision.CheckForLoot;
             }
 
             if (BotMonitor.GetMonitor<BotLootingMonitor>().BossWillAllowLooting)
             {
                 setLootingHiveMindState(true);
-                return BotQuestingDecision.CheckForLoot;
+                return EBotQuestingDecision.CheckForLoot;
             }
 
             setLootingHiveMindState(false);
 
             if (!isFollowerTooFarFromBossForQuesting())
             {
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
-            return BotQuestingDecision.FollowBoss;
+            return EBotQuestingDecision.FollowBoss;
         }
 
-        private BotQuestingDecision getSoloDecision()
+        private EBotQuestingDecision getSoloDecision()
         {
             if ((ObjectiveManager == null) || (BotMonitor == null))
             {
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
             if (!ObjectiveManager.IsQuestingAllowed)
             {
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
             if (!botQuestBuilder.HaveQuestsBeenBuilt)
             {
-                return BotQuestingDecision.WaitForQuestData;
+                return EBotQuestingDecision.WaitForQuestData;
             }
 
             if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotMountedGunMonitor>().WantsToUseStationaryWeapon)
             {
-                return BotQuestingDecision.UseStationaryWeapon;
+                return EBotQuestingDecision.UseStationaryWeapon;
             }
 
             if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotExtractMonitor>().IsTryingToExtract)
@@ -222,80 +222,80 @@ namespace QuestingBots.BotLogic.BotMonitor
                 ObjectiveManager.StopQuesting();
 
                 Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " wants to extract and will no longer quest.");
-                return BotQuestingDecision.None;
+                return EBotQuestingDecision.None;
             }
 
             if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotCombatMonitor>().IsInCombat)
             {
-                return BotQuestingDecision.Fight;
+                return EBotQuestingDecision.Fight;
             }
 
             if (allowedToInvestigate() && BotMonitor.GetMonitor<BotHearingMonitor>().IsSuspicious)
             {
-                return BotQuestingDecision.Investigtate;
+                return EBotQuestingDecision.Investigtate;
             }
 
             if (BotMonitor.GetMonitor<BotCombatMonitor>().IsSAINLayerActive())
             {
-                return BotQuestingDecision.Hunt;
+                return EBotQuestingDecision.Hunt;
             }
 
             if (BotMonitor.GetMonitor<BotHealthMonitor>().NeedsToHeal)
             {
-                return BotQuestingDecision.StopToHeal;
+                return EBotQuestingDecision.StopToHeal;
             }
 
             if (!MustQuestBeforeFollowing)
             {
                 if (allowedToTakeABreak() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.InCombat, BotOwner))
                 {
-                    return BotQuestingDecision.WaitForGroup;
+                    return EBotQuestingDecision.WaitForGroup;
                 }
 
                 if (allowedToInvestigate() && BotHiveMindMonitor.GetValueForGroup(BotHiveMindSensorType.IsSuspicious, BotOwner))
                 {
-                    return BotQuestingDecision.WaitForGroup;
+                    return EBotQuestingDecision.WaitForGroup;
                 }
             }
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
             {
-                return BotQuestingDecision.GetLost;
+                return EBotQuestingDecision.GetLost;
             }
 
             if (BotMonitor.GetMonitor<BotLootingMonitor>().IsForcedToSearchForLoot)
             {
                 setLootingHiveMindState(true);
-                return BotQuestingDecision.CheckForLoot;
+                return EBotQuestingDecision.CheckForLoot;
             }
 
             // Check if the bot wants to loot
             if (allowedToTakeABreak() && BotMonitor.GetMonitor<BotLootingMonitor>().ShouldCheckForLoot())
             {
                 setLootingHiveMindState(true);
-                return BotQuestingDecision.CheckForLoot;
+                return EBotQuestingDecision.CheckForLoot;
             }
 
             setLootingHiveMindState(false);
 
             if (BotMonitor.GetMonitor<BotQuestingMonitor>().FollowersNeedToTeleport)
             {
-                return BotQuestingDecision.WaitForGroup;
+                return EBotQuestingDecision.WaitForGroup;
             }
 
             // Check if the bot has wandered too far from its followers.
             if (allowedToTakeABreak() && !MustQuestBeforeFollowing && BotMonitor.GetMonitor<BotQuestingMonitor>().NeedToRegroupWithFollowers)
             {
-                return BotQuestingDecision.Regroup;
+                return EBotQuestingDecision.Regroup;
             }
 
             // Check if the bot needs to complete its assignment
             if (!ObjectiveManager.IsJobAssignmentActive)
             {
-                return BotQuestingDecision.WaitForAssignment;
+                return EBotQuestingDecision.WaitForAssignment;
             }
 
-            return BotQuestingDecision.Quest;
+            return EBotQuestingDecision.Quest;
         }
 
         private void setLootingHiveMindState(bool value) => BotHiveMindMonitor.UpdateValueForBot(BotHiveMindSensorType.WantsToLoot, BotOwner, value);
@@ -314,7 +314,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         {
             MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting;
 
-            if (CurrentDecision == BotQuestingDecision.FollowBoss)
+            if (CurrentDecision == EBotQuestingDecision.FollowBoss)
             {
                 return targetFollowerRangeQuesting.Min;
             }
@@ -336,7 +336,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         {
             MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeCombat;
 
-            if (CurrentDecision == BotQuestingDecision.HelpBoss)
+            if (CurrentDecision == EBotQuestingDecision.HelpBoss)
             {
                 return targetFollowerRangeQuesting.Min;
             }

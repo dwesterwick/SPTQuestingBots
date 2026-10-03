@@ -19,7 +19,26 @@ namespace QuestingBots.BehaviorExtensions
 {
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
-        protected Components.BotObjectiveManager ObjectiveManager { get; private set; }
+        private Components.BotObjectiveManager? _objectiveManager = null;
+        protected Components.BotObjectiveManager ObjectiveManager
+        {
+            get
+            {
+                if (_objectiveManager == null)
+                {
+                    _objectiveManager = BotOwner.GetObjectiveManager();
+                }
+                if (_objectiveManager == null)
+                {
+                    string errorMessage = this.GetType().Name + ": Could not get BotObjectiveManager for " + BotOwner.GetText();
+                    //Singleton<LoggingUtil>.Instance.LogError(errorMessage);
+                    throw new InvalidOperationException(errorMessage);
+                }
+
+                return _objectiveManager;
+            }
+        }
+
         protected AICoreNode baseAction { get; private set; } = null!;
         protected static int updateInterval { get; private set; } = 100;
 
@@ -37,7 +56,7 @@ namespace QuestingBots.BehaviorExtensions
 
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
-            ObjectiveManager = botOwner.GetOrAddObjectiveManager();
+            
         }
 
         public CustomLogicDelayedUpdate(BotOwner botOwner, int delayInterval) : this(botOwner)

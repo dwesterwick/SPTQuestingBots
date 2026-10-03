@@ -1,6 +1,7 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Configuration;
 using QuestingBots.Helpers;
@@ -161,11 +162,11 @@ namespace QuestingBots.Controllers
         {
             if (!sleepingBotIds.Contains(botOwner.ProfileId))
             {
-                botOwner
-                    .GetOrAddObjectiveManager()
-                    .BotMonitor
-                    .GetMonitor<BotQuestingDecisionMonitor>()
-                    .ForceDecision(BotQuestingDecision.Sleep);
+                BotObjectiveManager? objectiveManager = botOwner.GetObjectiveManager();
+                if (objectiveManager != null)
+                {
+                    objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>().ForceDecision(EBotQuestingDecision.Sleep);
+                }
 
                 sleepingBotIds.Add(botOwner.ProfileId);
             }
@@ -175,11 +176,11 @@ namespace QuestingBots.Controllers
         {
             if (sleepingBotIds.Contains(botOwner.ProfileId))
             {
-                botOwner
-                    .GetOrAddObjectiveManager()
-                    .BotMonitor
-                    .GetMonitor<BotQuestingDecisionMonitor>()
-                    .ForceDecision(BotQuestingDecision.None);
+                BotObjectiveManager? objectiveManager = botOwner.GetObjectiveManager();
+                if (objectiveManager != null)
+                {
+                    objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>().ForceDecision(EBotQuestingDecision.None);
+                }
 
                 sleepingBotIds.Remove(botOwner.ProfileId);
             }

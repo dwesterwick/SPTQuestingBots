@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Utils;
+using SPT.Custom.CustomAI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Utils;
-using SPT.Custom.CustomAI;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Helpers
 {
@@ -58,6 +62,25 @@ namespace QuestingBots.Helpers
             }
 
             return nearestMember;
+        }
+
+        public static bool HasABoss(this BotOwner bot) => bot.BotFollower.HaveBoss && bot.BotFollower.BossToFollow.IsAlive;
+
+        public static bool HasAQuestingBoss(this BotOwner bot)
+        {
+            if (!bot.HasABoss())
+            {
+                return false;
+            }
+
+            BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
+            if (objectiveManager == null)
+            {
+                return false;
+            }
+
+            BotQuestingDecisionMonitor decisionMonitor = objectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
+            return decisionMonitor.HasAQuestingBoss;
         }
 
         public static IEnumerable<BotOwner> FindZryachiyAndFollowers()

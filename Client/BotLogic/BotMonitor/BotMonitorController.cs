@@ -18,7 +18,7 @@ namespace QuestingBots.BotLogic.BotMonitor
         private Dictionary<Type, AbstractBotMonitor> monitors = new Dictionary<Type, AbstractBotMonitor>();
         private BotQuestingDecisionMonitor questingDecisionMonitor = null!;
 
-        public BotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? BotQuestingDecision.None;
+        public EBotQuestingDecision CurrentDecision => questingDecisionMonitor?.CurrentDecision ?? EBotQuestingDecision.None;
         public bool HasAQuestingBoss => questingDecisionMonitor?.HasAQuestingBoss ?? false;
 
         public static BotMonitorController GetBotMonitorController(BotOwner botOwner)
@@ -84,7 +84,7 @@ namespace QuestingBots.BotLogic.BotMonitor
 
             if (!objectiveManager.IsQuestingAllowed)
             {
-                questingDecisionMonitor.ForceDecision(BotQuestingDecision.None);
+                questingDecisionMonitor.ForceDecision(EBotQuestingDecision.None);
                 return;
             }
 

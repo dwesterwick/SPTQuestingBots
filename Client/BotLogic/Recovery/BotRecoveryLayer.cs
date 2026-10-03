@@ -56,12 +56,16 @@ namespace QuestingBots.BotLogic.Recovery
                 return updatePreviousState(false);
             }
 
+            if (ObjectiveManager.BotMonitor?.GetMonitor<BotLootingMonitor>()?.IsLooting == true)
+            {
+                return updatePreviousState(false);
+            }
+
             ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();
             if (ObjectiveManager.PatrolPointSelector.HasSelectedPoint && !ObjectiveManager.PatrolPointSelector.IsWayReserved)
             {
                 // Allow bots to roam after arriving at a quest location (i.e. to hunt)
-                BotQuestingDecisionMonitor decisionMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotQuestingDecisionMonitor>();
-                if (decisionMonitor.CurrentDecision == BotQuestingDecision.WaitForAssignment)
+                if (BotOwner.GetCurrentQuestingDecision() == EBotQuestingDecision.WaitForAssignment)
                 {
                     return updatePreviousState(false);
                 }

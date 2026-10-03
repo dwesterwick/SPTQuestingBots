@@ -1,4 +1,5 @@
 ﻿using Comfort.Common;
+using Diz.Jobs;
 using Diz.Utils;
 using EFT;
 using QuestingBots.Components;
@@ -94,7 +95,31 @@ namespace QuestingBots.Controllers
 
         public static void CheckForBotsToBeInterrupted(this BotQuest quest)
         {
-            foreach (BotOwner bot in Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners)
+            if (!quest.InterruptSettings.Enabled)
+            {
+                return;
+            }
+
+            // Only change MaxRaidET when the raid is running
+            if (!Singleton<JobScheduler>.Instance.IsForceModeEnabled)
+            {
+                float newMaxRaidET = Time.time + quest.InterruptSettings.QuestExpirationAfterFirstTrigger;
+                if (newMaxRaidET < quest.MaxRaidET)
+                {
+                    if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestGeneration))
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug("Changing MaxRaidET of " + quest.ToString() + " from " + quest.MaxRaidET + "s to " + newMaxRaidET + "s");
+                    }
+
+                    quest.MaxRaidET = newMaxRaidET;
+                }
+            }
+
+            IEnumerable<BotOwner> eligibleBotOwners = Singleton<IBotGame>.Instance.BotsController.Bots.BotOwners
+                .WhereNonAlloc(bot => !bot.HasAQuestingBoss() && bot.IsAllowedToQuest())
+                .Randomize();
+
+            foreach (BotOwner bot in eligibleBotOwners)
             {
                 IEnumerable<BotQuestObjective> sortedObjectives = quest.GetValidObjectives()
                     .OrderBy(o => Vector3.Distance(o.GetFirstStepPosition() ?? Vector3.negativeInfinity, bot.Position));
@@ -482,8 +507,14 @@ namespace QuestingBots.Controllers
                 return false;
             }
 
+            float currentQuestDesirability = 0;
+            if ((botObjectiveManager.CurrentAssignment?.QuestAssignment != null) && botObjectiveManager.CurrentAssignment.IsActive)
+            {
+                currentQuestDesirability = botObjectiveManager.CurrentAssignment.QuestAssignment.Desirability;
+            }
+
             // Only interrupt if the quest is more desirable than the bot's current quest
-            if ((botObjectiveManager.CurrentAssignment?.QuestAssignment?.Desirability ?? 0) > quest.Desirability)
+            if (!quest.InterruptSettings.IgnoreDesirability && (currentQuestDesirability > quest.Desirability))
             {
                 return false;
             }

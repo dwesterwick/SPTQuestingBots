@@ -39,7 +39,7 @@ namespace QuestingBots
 
         public static string GetCurrentDecision(this BotOwner bot)
         {
-            BotQuestingDecision defaultDecision = BotQuestingDecision.None;
+            EBotQuestingDecision defaultDecision = EBotQuestingDecision.None;
 
             BotObjectiveManager? botObjectiveManager = bot.GetBotObjectiveManagerForActiveBot();
             if ((botObjectiveManager == null) || (botObjectiveManager.BotMonitor == null))
