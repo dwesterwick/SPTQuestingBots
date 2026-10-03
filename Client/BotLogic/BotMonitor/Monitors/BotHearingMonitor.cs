@@ -1,9 +1,12 @@
 ﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.Components;
+using QuestingBots.Configuration;
 using QuestingBots.ExternalMods;
 using QuestingBots.ExternalMods.Functions.Hearing;
 using QuestingBots.Helpers;
+using QuestingBots.Models;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -20,15 +23,19 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public bool IsSuspicious { get; private set; } = false;
 
         private bool soundPlayedEventAdded = false;
-        private float lastEnemySoundHeardTime = 0;
+        private BotHeardSoundData? lastSoundData = null;
         private AbstractHearingFunction hearingFunction = null!;
         private double suspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private float maxSuspiciousTime = 60;
         private float nextTimeSuspicionAllowed = 0;
+        private MinMaxConfig estimatedSoundPostionError = new MinMaxConfig(1, 25);
+        private float loudnessGain = 1f;
+        private float loudnessThresholdToChangeHearingTarget = 1.2f;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
 
         public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
+        public Vector3? LastEstimatedSoundPosition => lastSoundData?.EstimatedPosition;
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner) { }
 
@@ -57,6 +64,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public override void OnDestroy()
         {
             removeSoundPlayedEvent();
+        }
+
+        public void IgnoreMostRecentSound()
+        {
+            lastSoundData = null;
         }
 
         private void removeSoundPlayedEvent()
@@ -141,7 +153,17 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         private bool shouldBeSuspicious(double maxTimeSinceDangerSensed)
         {
-            bool shouldBeSuspicious = (Time.time - lastEnemySoundHeardTime) < maxTimeSinceDangerSensed;
+            if (lastSoundData == null)
+            {
+                return false;
+            }
+
+            bool shouldBeSuspicious = (Time.time - lastSoundData.Time) < maxTimeSinceDangerSensed;
+            if (!shouldBeSuspicious)
+            {
+                lastSoundData = null;
+            }
+
             return shouldBeSuspicious;
         }
 
@@ -202,21 +224,63 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
 
             // Ignore sounds that the bot cannot hear
-            float hearingRange = BotOwner.Settings.Current.CurrentHearingSense * adjustedPower;
-            float dist = Vector3.Distance(BotOwner.Position, position);
-            if (dist > hearingRange)
+            float botHearingRange = BotOwner.Settings.Current.CurrentHearingSense * adjustedPower;
+            float distanceToSound = Vector3.Distance(BotOwner.Position, position);
+            float loudness = botHearingRange - distanceToSound;
+            if (loudness < 0)
             {
                 return;
             }
 
-            if (shouldIgnoreSound(type, dist))
+            if (shouldIgnoreSound(type, distanceToSound))
             {
                 return;
             }
 
             //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " heard " + type.ToString() + " " + dist + "m away from " + iplayer.GetText());
 
-            lastEnemySoundHeardTime = Time.time;
+            // Don't pay attention to another bot unless it's making more noise
+            if ((lastSoundData != null) && (iplayer != lastSoundData.EnemyPlayer) && (loudness < lastSoundData.Loundness * loudnessThresholdToChangeHearingTarget))
+            {
+                return;
+            }
+
+            int minSuspiciousTime = (int)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
+            if ((lastSoundData != null) && (lastSoundData.Time + minSuspiciousTime < Time.time) && (loudness < lastSoundData.Loundness / loudnessThresholdToChangeHearingTarget))
+            {
+                return;
+            }
+
+            Vector3? estimatedPosition = estimateSoundPosition(position, loudness, botHearingRange, out float positionError);
+            if (estimatedPosition == null)
+            {
+                lastSoundData = new BotHeardSoundData(Time.time, loudness, iplayer, lastSoundData?.EstimatedPosition, lastSoundData?.PositionError);
+
+                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " but could not identify where");
+                return;
+            }
+
+            lastSoundData = new BotHeardSoundData(Time.time, loudness, iplayer, estimatedPosition.Value, positionError);
+
+            Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " " + distanceToSound + "m away (loudness=" + loudness + ", error=" + positionError + "m)");
+        }
+
+        private Vector3? estimateSoundPosition(Vector3 actualPosition, float loudness, float botHearingRange, out float positionError)
+        {
+            double error = Math.Max(0, 1.0 - (loudness * loudnessGain / botHearingRange)) * estimatedSoundPostionError.Max;
+
+            float lastPositionError = lastSoundData?.PositionError ?? float.MaxValue;
+            double maxError = Math.Min(lastPositionError, error);
+
+            positionError = Math.Max((float)maxError, UnityEngine.Random.Range(0, (float)estimatedSoundPostionError.Min));
+
+            Vector3 randomOffset = UnityEngine.Random.insideUnitSphere * positionError;
+            Vector3 testPosition = actualPosition + randomOffset;
+
+            float navMeshSearchRadius = (float)Math.Max(0.5, positionError);
+            Vector3? estimatedPosition = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(testPosition, navMeshSearchRadius);
+
+            return estimatedPosition;
         }
 
         private bool shouldIgnoreSound(AISoundType soundType, float distance)

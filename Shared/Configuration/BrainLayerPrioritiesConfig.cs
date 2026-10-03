@@ -13,6 +13,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "recovering", IsRequired = true)]
         public int Recovering { get; set; } = 4;
 
+        [DataMember(Name = "investigating", IsRequired = true)]
+        public int Investigating { get; set; } = 6;
+
         [DataMember(Name = "questing", IsRequired = true)]
         public int Questing { get; set; } = 18;
 
