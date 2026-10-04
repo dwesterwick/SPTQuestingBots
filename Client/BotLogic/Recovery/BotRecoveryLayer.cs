@@ -76,7 +76,7 @@ namespace QuestingBots.BotLogic.Recovery
             {
                 if (previousState)
                 {
-                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " no longer has a nearby cover point");
+                    //Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " no longer has a nearby cover point");
                 }
 
                 return updatePreviousState(false);

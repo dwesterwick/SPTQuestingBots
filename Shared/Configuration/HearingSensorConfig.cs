@@ -37,14 +37,26 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "loudness_multiplier_helmet_high_deaf", IsRequired = true)]
         public float LoudnessMultiplierHelmetHighDeaf { get; set; } = 0.6f;
 
+        [DataMember(Name = "loudness_gain", IsRequired = true)]
+        public float LoudnessGain { get; set; } = 1f;
+
+        [DataMember(Name = "loudness_threshold_to_change_target", IsRequired = true)]
+        public float LoudnessThresholdToChangeTarget { get; set; } = 1.2f;
+
+        [DataMember(Name = "estimated_sound_position_error", IsRequired = true)]
+        public MinMaxConfig EstimatedSoundPositionError { get; set; } = new MinMaxConfig(1, 25);
+
         [DataMember(Name = "suspicious_time", IsRequired = true)]
-        public MinMaxConfig SuspiciousTime { get; set; } = new MinMaxConfig();
+        public MinMaxConfig SuspiciousTime { get; set; } = new MinMaxConfig(10, 60);
 
         [DataMember(Name = "max_suspicious_time", IsRequired = true)]
         public Dictionary<string, int> MaxSuspiciousTime { get; set; } = new Dictionary<string, int>();
 
         [DataMember(Name = "suspicion_cooldown_time", IsRequired = true)]
-        public float SuspicionCooldownTime { get; set; } = 30;
+        public float SuspicionCooldownTime { get; set; } = 7;
+
+        [DataMember(Name = "chance_to_investigate_sounds", IsRequired = true)]
+        public float ChanceToInvestigateSounds { get; set; } = 30;
 
         public HearingSensorConfig()
         {

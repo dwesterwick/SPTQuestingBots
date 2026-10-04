@@ -377,7 +377,7 @@
 			"max_initial_rogues": 10
 		},
 		"max_alive_bots": {
-			"use_map_lobby_size": true,
+			"use_map_lobby_size": false,
 			"overrides_if_not_using_lobby_size": {
 				"default": 6,
 				"factory4_day": 7,
@@ -388,7 +388,7 @@
 				"lighthouse": 7,
 				"rezervbase": 7,
 				"interchange": 8,
-				"laboratory": 9,
+				"laboratory": 6,
 				"labyrinth": 4,
 				"tarkovstreets": 8,
 				"sandbox": 7,

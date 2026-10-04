@@ -30,20 +30,15 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private double suspiciousTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
         private float maxSuspiciousTime = 60;
         private float nextTimeSuspicionAllowed = 0;
-        private MinMaxConfig estimatedSoundPostionError = new MinMaxConfig(1, 25);
-        private float loudnessGain = 1f;
-        private float loudnessThresholdToChangeHearingTarget = 1.2f;
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
-
-        private float InvestigateSoundsChance => 30;
 
         public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
         public Vector3? LastEstimatedSoundPosition => lastSoundData?.EstimatedPosition;
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner)
         {
-            if (random.Next(1, 100) <= InvestigateSoundsChance)
+            if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.ChanceToInvestigateSounds)
             {
                 WillInvestigateSounds = false;
             }
@@ -250,13 +245,14 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             //Singleton<LoggingUtil>.Instance.LogDebug("Bot " + BotOwner.GetText() + " heard " + type.ToString() + " " + dist + "m away from " + iplayer.GetText());
 
             // Don't pay attention to another bot unless it's making more noise
-            if ((lastSoundData != null) && (iplayer != lastSoundData.EnemyPlayer) && (loudness < lastSoundData.Loundness * loudnessThresholdToChangeHearingTarget))
+            float loudnessThresholdToChangeTarget = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessThresholdToChangeTarget;
+            if ((lastSoundData != null) && (iplayer != lastSoundData.EnemyPlayer) && (loudness < lastSoundData.Loundness * loudnessThresholdToChangeTarget))
             {
                 return;
             }
 
             int minSuspiciousTime = (int)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspiciousTime.Min;
-            if ((lastSoundData != null) && (lastSoundData.Time + minSuspiciousTime < Time.time) && (loudness < lastSoundData.Loundness / loudnessThresholdToChangeHearingTarget))
+            if ((lastSoundData != null) && (lastSoundData.Time + minSuspiciousTime < Time.time) && (loudness < lastSoundData.Loundness / loudnessThresholdToChangeTarget))
             {
                 return;
             }
@@ -266,17 +262,18 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             {
                 lastSoundData = new BotHeardSoundData(Time.time, loudness, iplayer, lastSoundData?.EstimatedPosition, lastSoundData?.PositionError);
 
-                Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " but could not identify where");
+                //Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " but could not identify where");
                 return;
             }
 
             lastSoundData = new BotHeardSoundData(Time.time, loudness, iplayer, estimatedPosition.Value, positionError);
-
-            Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " " + distanceToSound + "m away (loudness=" + loudness + ", error=" + positionError + "m)");
+            //Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " heard " + iplayer.GetText() + " " + distanceToSound + "m away (loudness=" + loudness + ", error=" + positionError + "m)");
         }
 
         private Vector3? estimateSoundPosition(Vector3 actualPosition, float loudness, float botHearingRange, out float positionError)
         {
+            MinMaxConfig estimatedSoundPostionError = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.EstimatedSoundPositionError;
+            float loudnessGain = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.LoudnessGain;
             double error = Math.Max(0, 1.0 - (loudness * loudnessGain / botHearingRange)) * estimatedSoundPostionError.Max;
 
             float lastPositionError = lastSoundData?.PositionError ?? float.MaxValue;

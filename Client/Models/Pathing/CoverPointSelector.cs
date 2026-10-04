@@ -98,11 +98,11 @@ namespace QuestingBots.Models.Pathing
 
             if (!Bot.Position.HasCompletePathTo(newCoverPoint.Position))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(Bot.GetText() + " does not have a complete path to new cover point " + distance + "m away");
+                //Singleton<LoggingUtil>.Instance.LogDebug(Bot.GetText() + " does not have a complete path to new cover point " + distance + "m away");
                 return;
             }
 
-            Singleton<LoggingUtil>.Instance.LogDebug("Found cover point for " + Bot.GetText());
+            //Singleton<LoggingUtil>.Instance.LogDebug("Found cover point for " + Bot.GetText());
             SetSelectedPoint(newCoverPoint);
 
             ReserveSelectedCoverPoint();

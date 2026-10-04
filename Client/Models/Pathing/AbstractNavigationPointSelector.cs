@@ -1,10 +1,4 @@
-﻿using Comfort.Common;
-using EFT;
-using QuestingBots.BotLogic.BotMonitor;
-using QuestingBots.Components;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
-using QuestingBots.Utils;
+﻿using EFT;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
