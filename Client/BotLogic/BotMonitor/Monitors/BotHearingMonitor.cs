@@ -21,7 +21,9 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
     public class BotHearingMonitor : AbstractBotMonitor
     {
         public bool IsSuspicious { get; private set; } = false;
+        public bool WillInvestigateSounds { get; private set; } = true;
 
+        private System.Random random = new System.Random();
         private bool soundPlayedEventAdded = false;
         private BotHeardSoundData? lastSoundData = null;
         private AbstractHearingFunction hearingFunction = null!;
@@ -34,10 +36,18 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         private Stopwatch totalSuspiciousTimer = new Stopwatch();
         private Stopwatch notSuspiciousTimer = Stopwatch.StartNew();
 
+        private float InvestigateSoundsChance => 30;
+
         public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
         public Vector3? LastEstimatedSoundPosition => lastSoundData?.EstimatedPosition;
 
-        public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner) { }
+        public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner)
+        {
+            if (random.Next(1, 100) <= InvestigateSoundsChance)
+            {
+                WillInvestigateSounds = false;
+            }
+        }
 
         public override void Start()
         {

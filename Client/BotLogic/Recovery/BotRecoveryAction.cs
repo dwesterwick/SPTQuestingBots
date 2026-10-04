@@ -116,23 +116,5 @@ namespace QuestingBots.BotLogic.Recovery
 
             return groupLeaderQuestingMonitor.IsQuesting;
         }
-
-        private void CheckRemainingAmmo()
-        {
-            if (BotOwner.WeaponManager.UnderbarrelLauncherController.IsActive)
-            {
-                if (BotOwner.WeaponManager.UnderbarrelLauncherController.NeedToReload())
-                {
-                    BotOwner.WeaponManager.UnderbarrelLauncherController.TryReload(null);
-                }
-
-                return;
-            }
-
-            if (!BotOwner.WeaponManager.HaveBullets)
-            {
-                BotOwner.WeaponManager.Reload.TryReload();
-            }
-        }
     }
 }

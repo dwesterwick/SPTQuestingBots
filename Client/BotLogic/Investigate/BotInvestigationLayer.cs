@@ -17,7 +17,7 @@ namespace QuestingBots.BotLogic.Investigate
 
         public BotInvestigationLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 100)
         {
-
+            
         }
 
         public override string GetName()
@@ -62,6 +62,12 @@ namespace QuestingBots.BotLogic.Investigate
                 return updatePreviousState(false);
             }
 
+            if (hearingMonitor.WillInvestigateSounds)
+            {
+                setNextAction(BotActionType.InvestigateSound, "InvestigateSound");
+                return updatePreviousState(true);
+            }
+
             ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
             if (ObjectiveManager.CoverPointSelector.HasSelectedPoint)
             {
@@ -75,16 +81,13 @@ namespace QuestingBots.BotLogic.Investigate
                 return updatePreviousState(true);
             }
 
-            //setNextAction(BotActionType.EftHoldPosition, "FreezeAndListen");
-            //return updatePreviousState(true);
-
-            if (hearingMonitor.LastEstimatedSoundPosition != null)
+            if (hearingMonitor.LastEstimatedSoundPosition == null)
             {
-                setNextAction(BotActionType.InvestigateSound, "InvestigateSound");
-                return updatePreviousState(true);
+                return updatePreviousState(false);
             }
 
-            return updatePreviousState(false);
+            setNextAction(BotActionType.LookAtSound, "FreezeAndListen");
+            return updatePreviousState(true);
         }
 
         private bool WantsToInvestigate()
