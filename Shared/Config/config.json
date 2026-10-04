@@ -153,9 +153,15 @@
 				"loudness_multiplier_headset": 1.3,
 				"loudness_multiplier_helmet_low_deaf": 0.8,
 				"loudness_multiplier_helmet_high_deaf": 0.6,
+				"loudness_gain": 1,
+				"loudness_threshold_to_change_target": 1.2,
+				"estimated_sound_position_error": {
+					"min": 1,
+					"max": 25
+				},
 				"suspicious_time": {
-					"min": 5,
-					"max": 20
+					"min": 10,
+					"max": 60
 				},
 				"max_suspicious_time": {
 					"default": 60,
@@ -173,7 +179,8 @@
 					"sandbox": 120,
 					"sandbox_high": 120
 				},
-				"suspicion_cooldown_time": 7
+				"suspicion_cooldown_time": 7,
+				"chance_to_investigate_sounds": 30
 			},
 			"break_for_looting": {
 				"enabled": true,
