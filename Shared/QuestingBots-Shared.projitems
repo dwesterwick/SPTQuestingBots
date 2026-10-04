@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EftLocalAvoidanceConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LabyrinthQuestsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\LobbySizeReductionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\LookAroundLimitsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\MaxAliveBotsConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\NavigationPointSelectionConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\NighttimeReductionsConfig.cs" />

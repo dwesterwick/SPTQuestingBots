@@ -97,6 +97,15 @@
 				"debounce_time_after_updating": 0.5
 			}
 		},
+		"look_around_limits": {
+			"horizontal_deg": 60,
+			"vertical_down_deg": 20,
+			"vertical_up_deg": 5,
+			"direction_change_delay": {
+				"min": 0.5,
+				"max": 5
+			}
+		},
 		"wait_time_before_planting": 1,
 		"quest_generation": {
 			"navmesh_search_distance_item": 1.5,

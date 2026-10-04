@@ -1,8 +1,10 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,12 +17,11 @@ namespace QuestingBots.BotLogic.Recovery
     {
         private Stopwatch lookDirectionChangeTimer = Stopwatch.StartNew();
         private float lookDirectionChangeDelay = 0;
-
-        private float MaxHorizontalDegrees => 60;
-        private float MaxVerticalDegreesDown => 20;
-        private float MaxVerticalDegreesUp => 5;
-        private float MinLookDirectionChangeDelay => 0.5f;
-        private float MaxLookDirectionChangeDelay => 5f;
+        private float MaxHorizontalDegrees = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.HorizontalDeg;
+        private float MaxVerticalDegreesDown = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.VerticalDownDeg;
+        private float MaxVerticalDegreesUp = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.VerticalUpDeg;
+        private float MinLookDirectionChangeDelay = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.DirectionChangeDelay.Min;
+        private float MaxLookDirectionChangeDelay = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.DirectionChangeDelay.Max;
 
         private double ElapsedTimeSinceLastLookDirectionChange => lookDirectionChangeTimer.ElapsedMilliseconds / 1000.0;
 

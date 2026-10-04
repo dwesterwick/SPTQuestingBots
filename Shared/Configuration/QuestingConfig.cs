@@ -43,6 +43,9 @@ namespace QuestingBots.Configuration
         [DataMember(Name = "bot_zone_updates", IsRequired = true)]
         public BotZoneUpdatesConfig BotZoneUpdates { get; set; } = new BotZoneUpdatesConfig();
 
+        [DataMember(Name = "look_around_limits", IsRequired = true)]
+        public LookAroundLimitsConfig LookAroundLimits { get; set; } = new LookAroundLimitsConfig();
+
         [DataMember(Name = "wait_time_before_planting", IsRequired = true)]
         public float WaitTimeBeforePlanting { get; set; } = 1;
 
