@@ -16,6 +16,8 @@ namespace QuestingBots.Models.Pathing
 {
     public class CoverPointSelector : AbstractNavigationPointSelector<CustomNavigationPoint>
     {
+        private CoverSearchDefenceData _coverSearchDefenceData;
+
         protected override float MaxSearchDistanceBoss => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.CoverPointUpdates.MaxSearchDistanceForBosses;
         protected override float MaxSearchDistanceFollower => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.CoverPointUpdates.MaxSearchDistanceForFollowers;
         protected override float MinSearchDistanceBoss => Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotZoneUpdates.CoverPointUpdates.MinSearchDistanceForBosses;
@@ -29,12 +31,19 @@ namespace QuestingBots.Models.Pathing
 
         public CoverPointSelector(BotOwner bot) : base(bot)
         {
-
+            _coverSearchDefenceData = new CoverSearchDefenceData(Bot.Settings.FileSettings.Cover.MIN_DEFENCE_LEVEL);
         }
 
         public void ReserveSelectedCoverPoint()
         {
+            //SelectedPoint?.SetOwner(Bot);
             Bot.Memory.SetCoverPoints(SelectedPoint);
+        }
+
+        public void ReleaseSelectedCoverPoint()
+        {
+            SelectedPoint?.SetFree();
+            SetSelectedPoint(null);
         }
 
         public float GetTargetPoseAtCoverPoint()
@@ -80,7 +89,7 @@ namespace QuestingBots.Models.Pathing
                 return;
             }
 
-            SetSelectedPoint(null);
+            ReleaseSelectedCoverPoint();
 
             CustomNavigationPoint? newCoverPoint = GetNewCoverPoint(centerPoint);
             if (newCoverPoint == null)
@@ -110,16 +119,56 @@ namespace QuestingBots.Models.Pathing
 
         private CustomNavigationPoint? GetNewCoverPoint(Vector3 centerPoint)
         {
-            CoverSearchDefenceData coverSearchDefenceData = new CoverSearchDefenceData(Bot.Settings.FileSettings.Cover.MIN_DEFENCE_LEVEL);
+            int maxIterations = 1000;
+            ShootToPoint shootToPoint = Bot.CurrentEnemyTargetPosition(true);
             Vector3? closestFriendCoverPoint = Bot.Covers.ClosestFriendCoverPoint();
-
+            
             CoverSearchData coverSearchData = new CoverSearchData(centerPoint, Bot.CoverSearchInfo, CoverShootType.hide, GetMaxSearchDistanceSqr(),
-                GetMinSearchDistanceSqr(), CoverSearchType.distToBotAndToCenter, Bot.CurrentEnemyTargetPosition(true), closestFriendCoverPoint, null,
-                ECheckSHootHide.shootAndHide, coverSearchDefenceData, PointsArrayType.allWithBush);
+                GetMinSearchDistanceSqr(), CoverSearchType.distToBotAndToCenter, shootToPoint, closestFriendCoverPoint, null,
+                ECheckSHootHide.shootAndHide, _coverSearchDefenceData, PointsArrayType.allWithBush);
 
-            CustomNavigationPoint newCoverPoint = Bot.BotsGroup.CoverPointMaster.GetCoverPointMain(coverSearchData, true);
+            CoverPointEvaluator coverPointEvaluator = new CoverPointEvaluator(coverSearchData);
+            return Bot.Covers._аFindByGraph.GetClosestPoint(Bot, centerPoint, false, coverPointEvaluator.IsPointGood, false, maxIterations);
+        }
 
-            return newCoverPoint;
+        private class CoverPointEvaluator
+        {
+            private CoverSearchData _coverSearchData;
+            private int _environmentId;
+
+            private Vector3 CenterPosition => _coverSearchData.CenterPos;
+            private ICoverSearchBot Bot => _coverSearchData.Bot;
+
+            public CoverPointEvaluator(CoverSearchData coverSearchData)
+            {
+                _coverSearchData = coverSearchData;
+                _environmentId = EnvironmentManagerBase.Instance.TryFindEnvironmentIdByPos(CenterPosition);
+            }
+
+            public bool IsPointGood(GroupPoint groupPoint)
+            {
+                if (!groupPoint.IsFreeById(Bot.Id))
+                {
+                    return false;
+                }
+
+                float distanceSqr = (groupPoint.Position - CenterPosition).sqrMagnitude;
+                if (distanceSqr < _coverSearchData.MinDistSqr)
+                {
+                    return false;
+                }
+                if (distanceSqr > _coverSearchData.MaxDistSqr)
+                {
+                    return false;
+                }
+
+                if (_environmentId != groupPoint.IdEnvironment)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }
