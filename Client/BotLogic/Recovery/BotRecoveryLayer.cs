@@ -51,22 +51,34 @@ namespace QuestingBots.BotLogic.Recovery
                 return previousState;
             }
 
-            if (ObjectiveManager.MightBeStuck)
+            if (ObjectiveManager.BotMonitor?.GetMonitor<BotLootingMonitor>()?.IsLooting == true)
             {
+                if (previousState)
+                {
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot recover because it is looting");
+                }
+
                 return updatePreviousState(false);
             }
 
-            if (ObjectiveManager.BotMonitor?.GetMonitor<BotLootingMonitor>()?.IsLooting == true)
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
             {
-                return updatePreviousState(false);
+                //Singleton<LoggingUtil>.Instance.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                return pauseLayer(pauseRequestTime);
             }
 
             ObjectiveManager.PatrolPointSelector.RefreshCoverPointIfStale();
-            if (ObjectiveManager.PatrolPointSelector.HasSelectedPoint && !ObjectiveManager.PatrolPointSelector.IsWayReserved)
+            if (ObjectiveManager.PatrolPointSelector.CanUseSelectedPoint() && !ObjectiveManager.PatrolPointSelector.IsWayReserved)
             {
                 // Allow bots to roam after arriving at a quest location (i.e. to hunt)
                 if (BotOwner.GetCurrentQuestingDecision() == EBotQuestingDecision.WaitForAssignment)
                 {
+                    if (previousState)
+                    {
+                        Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot recover because it should patrol");
+                    }
+
                     return updatePreviousState(false);
                 }
             }
@@ -76,7 +88,7 @@ namespace QuestingBots.BotLogic.Recovery
             {
                 if (previousState)
                 {
-                    //Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " no longer has a nearby cover point");
+                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " no longer has a nearby cover point");
                 }
 
                 return updatePreviousState(false);

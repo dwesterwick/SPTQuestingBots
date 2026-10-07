@@ -7,6 +7,8 @@ using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
+using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 
@@ -77,7 +79,32 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Determine what type of action is needed for the bot to complete its assignment
-            return updatePreviousState(trySetNextAction());
+            bool willQuest = trySetNextAction();
+            if (willQuest)
+            {
+                informFollowers();
+            }
+
+            return updatePreviousState(willQuest);
+        }
+
+        private void informFollowers()
+        {
+            if (previousState)
+            {
+                return;
+            }
+
+            foreach (BotOwner follower in BotHiveMindMonitor.GetGroupFollowers(BotOwner))
+            {
+                BotQuestingDecisionMonitor? questingDecisionMonitor = follower.GetObjectiveManager()?.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+                if (questingDecisionMonitor == null)
+                {
+                    continue;
+                }
+
+                questingDecisionMonitor.BossHasRestartedQuesting = true;
+            }
         }
 
         private bool trySetNextAction()

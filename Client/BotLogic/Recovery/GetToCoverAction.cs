@@ -66,6 +66,7 @@ namespace QuestingBots.BotLogic.Recovery
                 }
                 wasStuck = true;
 
+                ObjectiveManager.PauseRequest = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.StuckBotDetection.FollowerBreakTime;
                 restartStuckTimer();
             }
             else

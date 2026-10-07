@@ -38,6 +38,7 @@ namespace QuestingBots.BotLogic.BotMonitor
     {
         public EBotQuestingDecision CurrentDecision { get; private set; } = EBotQuestingDecision.None;
         public bool HasAQuestingBoss { get; private set; } = false;
+        public bool BossHasRestartedQuesting { get; set; } = false;
 
         private Components.BotQuestBuilder botQuestBuilder = null!;
 
@@ -314,8 +315,10 @@ namespace QuestingBots.BotLogic.BotMonitor
         {
             MinMaxConfig targetFollowerRangeQuesting = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting;
 
-            if (CurrentDecision == EBotQuestingDecision.FollowBoss)
+            if ((CurrentDecision == EBotQuestingDecision.FollowBoss) || BossHasRestartedQuesting)
             {
+                BossHasRestartedQuesting = false;
+
                 return targetFollowerRangeQuesting.Min;
             }
 

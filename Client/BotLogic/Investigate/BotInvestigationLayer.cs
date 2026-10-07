@@ -62,6 +62,13 @@ namespace QuestingBots.BotLogic.Investigate
                 return updatePreviousState(false);
             }
 
+            float pauseRequestTime = getPauseRequestTime();
+            if (pauseRequestTime > 0)
+            {
+                //Singleton<LoggingUtil>.Instance.LogInfo("Pausing layer for " + pauseRequestTime + "s...");
+                return pauseLayer(pauseRequestTime);
+            }
+
             if (hearingMonitor.WillInvestigateSounds)
             {
                 setNextAction(BotActionType.InvestigateSound, "InvestigateSound");

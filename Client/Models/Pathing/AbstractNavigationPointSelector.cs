@@ -9,6 +9,8 @@ namespace QuestingBots.Models.Pathing
 {
     public abstract class AbstractNavigationPointSelector<T> where T: class, IAICorePointLink
     {
+        private const float STALE_THRESHOLD = 0.75f;
+
         public T? SelectedPoint { get; private set; } = null;
 
         protected BotOwner Bot;
@@ -71,7 +73,7 @@ namespace QuestingBots.Models.Pathing
         public void RefreshCoverPointIfStale()
         {
             float distanceToLastSelectedPoint = Vector3.Distance(Bot.Position, _botPositionWhenPointSet);
-            if ((SelectedPoint != null) && (distanceToLastSelectedPoint < GetMaxSearchDistance() / 2))
+            if ((SelectedPoint != null) && (distanceToLastSelectedPoint < GetMaxSearchDistance() * STALE_THRESHOLD))
             {
                 return;
             }
