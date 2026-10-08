@@ -82,13 +82,13 @@ namespace QuestingBots.BotLogic.Objective
             bool willQuest = trySetNextAction();
             if (willQuest)
             {
-                informFollowers();
+                informFollowersIfRestartingQuesting();
             }
 
             return updatePreviousState(willQuest);
         }
 
-        private void informFollowers()
+        private void informFollowersIfRestartingQuesting()
         {
             if (previousState)
             {

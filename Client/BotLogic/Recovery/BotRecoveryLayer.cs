@@ -1,10 +1,8 @@
-﻿using Comfort.Common;
-using EFT;
+﻿using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.Helpers;
-using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -53,11 +51,6 @@ namespace QuestingBots.BotLogic.Recovery
 
             if (ObjectiveManager.BotMonitor?.GetMonitor<BotLootingMonitor>()?.IsLooting == true)
             {
-                if (previousState)
-                {
-                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot recover because it is looting");
-                }
-
                 return updatePreviousState(false);
             }
 
@@ -74,11 +67,6 @@ namespace QuestingBots.BotLogic.Recovery
                 // Allow bots to roam after arriving at a quest location (i.e. to hunt)
                 if (BotOwner.GetCurrentQuestingDecision() == EBotQuestingDecision.WaitForAssignment)
                 {
-                    if (previousState)
-                    {
-                        Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " cannot recover because it should patrol");
-                    }
-
                     return updatePreviousState(false);
                 }
             }
@@ -86,11 +74,6 @@ namespace QuestingBots.BotLogic.Recovery
             ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
             if (!ObjectiveManager.CoverPointSelector.HasSelectedPoint)
             {
-                if (previousState)
-                {
-                    Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " no longer has a nearby cover point");
-                }
-
                 return updatePreviousState(false);
             }
 

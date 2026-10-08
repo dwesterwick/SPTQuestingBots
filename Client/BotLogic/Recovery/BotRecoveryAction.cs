@@ -1,13 +1,16 @@
 ﻿using Comfort.Common;
+using Diz.Utils;
 using EFT;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -22,6 +25,8 @@ namespace QuestingBots.BotLogic.Recovery
         private float MaxVerticalDegreesUp = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.VerticalUpDeg;
         private float MinLookDirectionChangeDelay = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.DirectionChangeDelay.Min;
         private float MaxLookDirectionChangeDelay = (float)Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.DirectionChangeDelay.Max;
+        private float LookDirectionRandomness = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.DirectionRandomness;
+        private float MaxLookRotationSpeed = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.LookAroundLimits.MaxRotationSpeed;
 
         private double ElapsedTimeSinceLastLookDirectionChange => lookDirectionChangeTimer.ElapsedMilliseconds / 1000.0;
 
@@ -55,7 +60,7 @@ namespace QuestingBots.BotLogic.Recovery
             }
 
             BotOwner.BotLight.TurnOff(false, true);
-            BotOwner.Memory.BotCurrentCoverInfo.TryCheckSafe();
+            //BotOwner.Memory.BotCurrentCoverInfo.TryCheckSafe();
             CheckRemainingAmmo();
         }
 
@@ -66,28 +71,55 @@ namespace QuestingBots.BotLogic.Recovery
                 return;
             }
 
-            Vector3 toWallVector = ObjectiveManager.CoverPointSelector.SelectedPointToWallVector;
-            Vector3 newlookDirection = ChooseRandomLookDirectionAwayFromWall(toWallVector, MaxHorizontalDegrees, MaxVerticalDegreesDown, MaxVerticalDegreesUp);
-            BotOwner.Steering.LookToDirection(newlookDirection);
+            Vector3 newlookDirection = GetRandomLookDirectionTowardAPlayer() ?? GetRandomLookDirection();
+            BotOwner.Steering.LookToDirection(newlookDirection, MaxLookRotationSpeed);
 
             lookDirectionChangeDelay = UnityEngine.Random.Range(MinLookDirectionChangeDelay, MaxLookDirectionChangeDelay);
             lookDirectionChangeTimer.Restart();
         }
 
-        private Vector3 ChooseRandomLookDirectionAwayFromWall(Vector3 toWallVector, float maxHorizontalDegrees, float maxVerticalDegreesDown, float maxVerticalDegreesUp)
+        private Vector3? GetRandomLookDirectionTowardAPlayer()
         {
-            Vector3 oppositeFromWall = -1 * toWallVector;
+            Vector3 oppositeFromWallVector = -1 * ObjectiveManager.CoverPointSelector.SelectedPointToWallVector;
+            Vector3[] eligibleLookDirections = GetDirectionsToAllPlayers()
+                .ApplyRandomOffsets(LookDirectionRandomness, LookDirectionRandomness, LookDirectionRandomness)
+                .ClampToBeWithin(oppositeFromWallVector, MaxHorizontalDegrees, MaxVerticalDegreesDown, MaxVerticalDegreesUp)
+                .ToArray();
 
-            float yawChange = UnityEngine.Random.Range(-maxHorizontalDegrees, maxHorizontalDegrees);
-            float pitchChange = UnityEngine.Random.Range(-maxVerticalDegreesDown, maxVerticalDegreesUp);
+            if (eligibleLookDirections.Length == 0)
+            {
+                return null;
+            }
 
-            Quaternion yawRotation = Quaternion.AngleAxis(yawChange, Vector3.up);
+            Vector3 randomDirection = eligibleLookDirections.RandomElement();
+            return randomDirection;
+        }
 
-            Vector3 rightAxis = yawRotation * Vector3.right;
-            Quaternion pitchRotation = Quaternion.AngleAxis(pitchChange, rightAxis);
+        private Vector3 GetRandomLookDirection()
+        {
+            Vector3 oppositeFromWallVector = -1 * ObjectiveManager.CoverPointSelector.SelectedPointToWallVector;
+            return oppositeFromWallVector.ChooseRandomDirectionAround(MaxHorizontalDegrees, MaxVerticalDegreesDown, MaxVerticalDegreesUp);
+        }
 
-            Vector3 lookDirection = (yawRotation * pitchRotation * oppositeFromWall).normalized;
-            return lookDirection;
+        private int GetNumberOfPlayersWithinLimits()
+        {
+            int playersWithinLimits = GetDirectionsToAllPlayersWithinLimits().CountNonAlloc();
+            return playersWithinLimits;
+        }
+
+        private IEnumerable<Vector3> GetDirectionsToAllPlayersWithinLimits()
+        {
+            Vector3 oppositeFromWallVector = -1 * ObjectiveManager.CoverPointSelector.SelectedPointToWallVector;
+            return GetDirectionsToAllPlayers().AreWithinHorizonalLimitsOf(oppositeFromWallVector, MaxHorizontalDegrees);
+        }
+
+        private IEnumerable<Vector3> GetDirectionsToAllPlayers()
+        {
+            foreach (Player player in Singleton<GameWorld>.Instance.AllAlivePlayersList)
+            {
+                Vector3 vectorToBot = (player.Position - BotOwner.Position).normalized;
+                yield return vectorToBot;
+            }
         }
 
         private void SetPose()

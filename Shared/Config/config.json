@@ -98,13 +98,15 @@
 			}
 		},
 		"look_around_limits": {
-			"horizontal_deg": 60,
-			"vertical_down_deg": 20,
-			"vertical_up_deg": 5,
+			"horizontal_deg": 90,
+			"vertical_down_deg": 30,
+			"vertical_up_deg": 10,
 			"direction_change_delay": {
 				"min": 0.5,
 				"max": 5
-			}
+			},
+			"direction_randomness": 30,
+			"max_rotation_speed": 120
 		},
 		"wait_time_before_planting": 1,
 		"quest_generation": {

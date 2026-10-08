@@ -83,7 +83,7 @@ namespace QuestingBots.BehaviorExtensions
                 case BotActionType.CloseNearbyDoors: return new Action(typeof(BotLogic.Objective.CloseNearbyDoorsAction), actionReason);
                 case BotActionType.OpenNearbyDoors: return new Action(typeof(BotLogic.Objective.OpenNearbyDoorsAction), actionReason);
                 case BotActionType.GetToCover: return new Action(typeof(BotLogic.Recovery.GetToCoverAction), actionReason);
-                case BotActionType.InvestigateSound: return new Action(typeof(BotLogic.Investigate.BotInvestigateAction), actionReason);
+                case BotActionType.InvestigateSound: return new Action(typeof(BotLogic.Investigate.BotInvestigateSoundAction), actionReason);
                 case BotActionType.LookAtSound: return new Action(typeof(BotLogic.Investigate.LookAtSoundAction), actionReason);
                 case BotActionType.Recover: return new Action(typeof(BotLogic.Recovery.BotRecoveryAction), actionReason);
                 case BotActionType.Heal: return new Action(typeof(BotLogic.EftActions.EftHealAction), actionReason);

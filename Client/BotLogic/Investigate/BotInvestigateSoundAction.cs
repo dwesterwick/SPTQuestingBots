@@ -10,11 +10,11 @@ using UnityEngine;
 
 namespace QuestingBots.BotLogic.Investigate
 {
-    public class BotInvestigateAction : BehaviorExtensions.GoToPositionAbstractAction
+    public class BotInvestigateSoundAction : BehaviorExtensions.GoToPositionAbstractAction
     {
         private bool wasStuck = false;
 
-        public BotInvestigateAction(BotOwner _BotOwner) : base(_BotOwner, 100)
+        public BotInvestigateSoundAction(BotOwner _BotOwner) : base(_BotOwner, 100)
         {
             SetBaseAction(AIActionsList.CreateNode(BotLogicDecision.simplePatrol, BotOwner));
         }
