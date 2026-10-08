@@ -35,6 +35,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
         public Vector3? LastEstimatedSoundPosition => lastSoundData?.EstimatedPosition;
+        public float DistanceToLastEstimatedSound => LastEstimatedSoundPosition == null ? float.MaxValue : Vector3.Distance(LastEstimatedSoundPosition.Value, BotOwner.Position);
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner)
         {

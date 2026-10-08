@@ -27,7 +27,8 @@ namespace QuestingBots.Models.Pathing
 
         public CoverLevel SelectedPointCoverLevel => SelectedPoint?.CoverLevel ?? CoverLevel.Stay;
         public Vector3 SelectedPointToWallVector => SelectedPoint?.ToWallVector ?? Vector3.zero;
-        public bool IsAtSelectedPoint => DistanceToSelectedPoint <= 0.5f;
+        public bool IsAtSelectedPoint => DistanceToSelectedPoint <= 1f;
+        public bool IsNearSelectedPoint => DistanceToSelectedPoint <= 2f;
 
         public CoverPointSelector(BotOwner bot) : base(bot)
         {
@@ -112,7 +113,7 @@ namespace QuestingBots.Models.Pathing
             }
 
             //Singleton<LoggingUtil>.Instance.LogDebug("Found cover point for " + Bot.GetText());
-            SetSelectedPoint(newCoverPoint);
+            SetSelectedPoint(newCoverPoint, centerPoint);
 
             ReserveSelectedCoverPoint();
         }

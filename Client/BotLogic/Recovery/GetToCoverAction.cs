@@ -46,7 +46,7 @@ namespace QuestingBots.BotLogic.Recovery
                 return;
             }
 
-            CanSprint = IsAllowedToSprint();
+            CanSprint = !ObjectiveManager.CoverPointSelector.IsNearSelectedPoint && IsAllowedToSprint();
 
             if (!ObjectiveManager.CoverPointSelector.IsAtSelectedPoint)
             {

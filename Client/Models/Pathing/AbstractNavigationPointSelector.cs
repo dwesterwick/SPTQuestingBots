@@ -16,6 +16,7 @@ namespace QuestingBots.Models.Pathing
         protected BotOwner Bot;
 
         private Vector3 _botPositionWhenPointSet = Vector3.negativeInfinity;
+        private Vector3 _centerPointPositionWhenPointSet = Vector3.negativeInfinity;
         private Stopwatch timeSincePointCheckedTimer = Stopwatch.StartNew();
         private Stopwatch timeSincePointUpdatedTimer = Stopwatch.StartNew();
 
@@ -72,8 +73,7 @@ namespace QuestingBots.Models.Pathing
 
         public void RefreshCoverPointIfStale()
         {
-            float distanceToLastSelectedPoint = Vector3.Distance(Bot.Position, _botPositionWhenPointSet);
-            if ((SelectedPoint != null) && (distanceToLastSelectedPoint < GetMaxSearchDistance() * STALE_THRESHOLD))
+            if (!BotHasMovedBeyondStaleThreshold() && !CenterPointHasMovedBeyondStaleThreshold())
             {
                 return;
             }
@@ -81,10 +81,46 @@ namespace QuestingBots.Models.Pathing
             Refresh();
         }
 
-        protected void SetSelectedPoint(T? selectedPoint)
+        protected bool BotHasMovedBeyondStaleThreshold()
+        {
+            if (SelectedPoint == null)
+            {
+                return true;
+            }
+
+            float botTravelDistance = Vector3.Distance(Bot.Position, _botPositionWhenPointSet);
+            if (botTravelDistance < GetMaxSearchDistance() * STALE_THRESHOLD)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected bool CenterPointHasMovedBeyondStaleThreshold()
+        {
+            if (SelectedPoint == null)
+            {
+                return true;
+            }
+
+            Vector3 newCenterPoint = GetCenterPointForSearch();
+            float distanceToLastCenterPoint = Vector3.Distance(newCenterPoint, _centerPointPositionWhenPointSet);
+            if (distanceToLastCenterPoint < GetMaxSearchDistance() * STALE_THRESHOLD)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected void SetSelectedPoint(T? selectedPoint) => SetSelectedPoint(selectedPoint, Vector3.negativeInfinity);
+
+        protected void SetSelectedPoint(T? selectedPoint, Vector3 centerPoint)
         {
             SelectedPoint = selectedPoint;
             _botPositionWhenPointSet = Bot.Position;
+            _centerPointPositionWhenPointSet = centerPoint;
         }
     }
 }

@@ -89,7 +89,7 @@ namespace QuestingBots.Models.Pathing
                 return;
             }
 
-            SetSelectedPoint(closestPatrolPoint);
+            SetSelectedPoint(closestPatrolPoint, centerPoint);
             SetPatrolPointTarget();
         }
 
