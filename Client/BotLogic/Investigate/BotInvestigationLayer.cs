@@ -47,12 +47,8 @@ namespace QuestingBots.BotLogic.Investigate
                 return previousState;
             }
 
-            if (ObjectiveManager.MightBeStuck)
-            {
-                return updatePreviousState(false);
-            }
             BotHearingMonitor hearingMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>();
-            if (!hearingMonitor.IsSuspicious)
+            if (!hearingMonitor.IsSuspicious || (hearingMonitor.LastEstimatedSoundPosition == null))
             {
                 return updatePreviousState(false);
             }
@@ -69,7 +65,7 @@ namespace QuestingBots.BotLogic.Investigate
                 return pauseLayer(pauseRequestTime);
             }
 
-            if (hearingMonitor.WillInvestigateSounds)
+            if (hearingMonitor.WillInvestigateSounds && !hearingMonitor.IsAtLastEstimatedSoundPosition && hearingMonitor.CanGoToLastEstimatedSoundPosition())
             {
                 setNextAction(BotActionType.InvestigateSound, "InvestigateSound");
                 return updatePreviousState(true);
@@ -86,11 +82,6 @@ namespace QuestingBots.BotLogic.Investigate
 
                 setNextAction(BotActionType.Recover, "ListenInCover");
                 return updatePreviousState(true);
-            }
-
-            if (hearingMonitor.LastEstimatedSoundPosition == null)
-            {
-                return updatePreviousState(false);
             }
 
             setNextAction(BotActionType.LookAtSound, "FreezeAndListen");

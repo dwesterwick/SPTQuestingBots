@@ -48,8 +48,7 @@ namespace QuestingBots.BotLogic.Investigate
                 return;
             }
 
-            float distanceToSoundPosition = Vector3.Distance(BotOwner.Position, positionToInvestigate.Value);
-            if (distanceToSoundPosition > 0.5f)
+            if (!hearingMonitor.IsAtLastEstimatedSoundPosition)
             {
                 RecalculatePath(positionToInvestigate);
             }

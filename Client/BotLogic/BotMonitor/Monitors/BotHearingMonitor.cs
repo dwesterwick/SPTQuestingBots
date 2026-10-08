@@ -36,12 +36,15 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public bool SuspicionAllowedByTime => Time.time >= nextTimeSuspicionAllowed;
         public Vector3? LastEstimatedSoundPosition => lastSoundData?.EstimatedPosition;
         public float DistanceToLastEstimatedSound => LastEstimatedSoundPosition == null ? float.MaxValue : Vector3.Distance(LastEstimatedSoundPosition.Value, BotOwner.Position);
+        public bool IsAtLastEstimatedSoundPosition => LastEstimatedSoundPosition == null ? false : Vector3.Distance(BotOwner.Position, LastEstimatedSoundPosition.Value) < 1f;
+
+        public bool CanGoToLastEstimatedSoundPosition() => LastEstimatedSoundPosition == null ? false : BotOwner.Position.HasCompletePathTo(LastEstimatedSoundPosition.Value);
 
         public BotHearingMonitor(BotOwner _botOwner) : base(_botOwner)
         {
             if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.ChanceToInvestigateSounds)
             {
-                WillInvestigateSounds = false;
+                //WillInvestigateSounds = false;
             }
         }
 
@@ -111,10 +114,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
 
             bool wasSuspiciousTooLong = totalSuspiciousTimer.ElapsedMilliseconds / 1000 > maxSuspiciousTime;
-            //if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
-            //{
-            //    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
-            //}
+            if (wasSuspiciousTooLong && totalSuspiciousTimer.IsRunning)
+            {
+                //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " has been suspicious for too long");
+            }
 
             if (!wasSuspiciousTooLong && shouldBeSuspicious(suspiciousTime))
             {
@@ -137,10 +140,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             if (notSuspiciousTimer.ElapsedMilliseconds / 1000 > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.SuspicionCooldownTime)
             {
-                //if (wasSuspiciousTooLong)
-                //{
-                //    Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
-                //}
+                if (wasSuspiciousTooLong)
+                {
+                    //Singleton<LoggingUtil>.Instance.LogInfo(BotOwner.GetText() + " is now allowed to be suspicious");
+                }
 
                 totalSuspiciousTimer.Reset();
             }
@@ -287,6 +290,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
             float navMeshSearchRadius = (float)Math.Max(0.5, positionError);
             Vector3? estimatedPosition = Singleton<GameWorld>.Instance.GetComponent<LocationData>().FindNearestNavMeshPosition(testPosition, navMeshSearchRadius);
+            if (estimatedPosition == null)
+            {
+                return null;
+            }
 
             return estimatedPosition;
         }
