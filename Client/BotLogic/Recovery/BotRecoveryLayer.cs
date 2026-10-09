@@ -46,7 +46,7 @@ namespace QuestingBots.BotLogic.Recovery
 
             if (!canUpdate())
             {
-                return previousState;
+                return PreviousState;
             }
 
             if (ObjectiveManager.BotMonitor?.GetMonitor<BotLootingMonitor>()?.IsLooting == true)

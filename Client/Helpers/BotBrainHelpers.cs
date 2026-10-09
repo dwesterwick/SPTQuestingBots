@@ -3,6 +3,8 @@ using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using QuestingBots.BotLogic;
 using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.BotLogic.Follow;
+using QuestingBots.BotLogic.Objective;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
@@ -459,5 +461,9 @@ namespace QuestingBots.Helpers
 
         public static bool IsLayerActive(this BotOwner bot, string layerTypeName) => bot.GetActiveLayerTypeName()?.Equals(layerTypeName) == true;
         public static bool IsLogicActive(this BotOwner bot, string logicTypeName) => bot.GetActiveLogicTypeName()?.Equals(logicTypeName) == true;
+
+        public static bool IsQuesting(this BotOwner bot) => bot.IsLayerActive(nameof(BotObjectiveLayer));
+        public static bool IsFollowing(this BotOwner bot) => bot.IsLayerActive(nameof(BotFollowerLayer));
+        public static bool IsRegrouping(this BotOwner bot) => bot.IsLogicActive(nameof(BossRegroupAction));
     }
 }

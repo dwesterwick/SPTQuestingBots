@@ -45,7 +45,7 @@ namespace QuestingBots.BotLogic.Sleep
             // Don't run this method too often or performance will be impacted (ironically)
             if (!canUpdate())
             {
-                return previousState;
+                return PreviousState;
             }
 
             if ((BotOwner.BotState != EBotState.Active) || BotOwner.IsDead)

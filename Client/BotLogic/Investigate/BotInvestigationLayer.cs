@@ -44,7 +44,7 @@ namespace QuestingBots.BotLogic.Investigate
 
             if (!canUpdate())
             {
-                return previousState;
+                return PreviousState;
             }
 
             BotHearingMonitor hearingMonitor = ObjectiveManager.BotMonitor.GetMonitor<BotHearingMonitor>();

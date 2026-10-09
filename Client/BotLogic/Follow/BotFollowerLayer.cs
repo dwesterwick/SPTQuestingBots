@@ -36,7 +36,7 @@ namespace QuestingBots.BotLogic.Follow
         {
             if (!canUpdate())
             {
-                return previousState;
+                return PreviousState;
             }
 
             if (BotOwner.GetCurrentQuestingDecision() != EBotQuestingDecision.FollowBoss)

@@ -37,15 +37,18 @@ namespace QuestingBots.BehaviorExtensions
 
     internal abstract class CustomLayerDelayedUpdate : CustomLayer
     {
-        protected static int updateInterval { get; private set; } = 100;
-        protected bool previousState { get; private set; } = false;
-        
-        private BotActionType nextAction = BotActionType.Undefined;
-        private BotActionType previousAction = BotActionType.Undefined;
+        protected int UpdateInterval { get; private set; } = 100;
+        protected bool PreviousState { get; private set; } = false;
+        protected BotActionType NextAction { get; private set; } = BotActionType.Undefined;
+        protected BotActionType PreviousAction { get; private set; } = BotActionType.Undefined;
+
         private string actionReason = "???";
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
+        private Stopwatch layerActiveTimer = new Stopwatch();
         private float pauseLayerTime = 0;
+
+        protected double LayerActiveTime => layerActiveTimer.ElapsedMilliseconds / 1000.0;
         
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
@@ -54,19 +57,19 @@ namespace QuestingBots.BehaviorExtensions
 
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority, int delayInterval) : this(_botOwner, _priority)
         {
-            updateInterval = delayInterval;
+            UpdateInterval = delayInterval;
         }
 
         public override bool IsCurrentActionEnding()
         {
-            return nextAction != previousAction;
+            return NextAction != PreviousAction;
         }
 
         public override Action GetNextAction()
         {
-            previousAction = nextAction;
+            PreviousAction = NextAction;
 
-            switch (nextAction)
+            switch (NextAction)
             {
                 case BotActionType.GoToObjective: return new Action(typeof(BotLogic.Objective.GoToObjectiveAction), actionReason);
                 case BotActionType.Teleport: return new Action(typeof(BotLogic.Objective.TeleportAction), actionReason);
@@ -96,13 +99,13 @@ namespace QuestingBots.BehaviorExtensions
 
         protected void setNextAction(BotActionType actionType, string reason)
         {
-            nextAction = actionType;
+            NextAction = actionType;
             actionReason = reason;
         }
 
         protected bool canUpdate()
         {
-            if (updateTimer.ElapsedMilliseconds < updateInterval)
+            if (updateTimer.ElapsedMilliseconds < UpdateInterval)
             {
                 return false;
             }
@@ -118,8 +121,17 @@ namespace QuestingBots.BehaviorExtensions
 
         protected bool updatePreviousState(bool newState)
         {
-            previousState = newState;
-            return previousState;
+            if (newState)
+            {
+                layerActiveTimer.Start();
+            }
+            else
+            {
+                layerActiveTimer.Reset();
+            }
+
+            PreviousState = newState;
+            return PreviousState;
         }
 
         protected bool pauseLayer()
@@ -129,9 +141,10 @@ namespace QuestingBots.BehaviorExtensions
 
         protected bool pauseLayer(float minTime)
         {
-            previousState = false;
+            PreviousState = false;
             pauseLayerTime = minTime;
             pauseLayerTimer.Restart();
+            layerActiveTimer.Reset();
 
             return false;
         }

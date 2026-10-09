@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Comfort.Common;
 using EFT;
 using QuestingBots.BehaviorExtensions;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.BotMonitor.Monitors;
 using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace QuestingBots.BotLogic.Objective
 {
     internal class BotObjectiveLayer : CustomLayerForQuesting
     {
+        private bool _isWaitingInCover = false;
+
         public BotObjectiveLayer(BotOwner _botOwner, int _priority) : base(_botOwner, _priority, 25)
         {
             
@@ -40,7 +45,7 @@ namespace QuestingBots.BotLogic.Objective
         {
             if (!canUpdate())
             {
-                return previousState;
+                return PreviousState;
             }
 
             BotQuestingDecisionMonitor? decisionMonitor = ObjectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
@@ -67,8 +72,19 @@ namespace QuestingBots.BotLogic.Objective
             }
 
             // Check if the bot has wandered too far from its followers
-            if (decisionMonitor.CurrentDecision == EBotQuestingDecision.Regroup)
+            if (shouldRegroup())
             {
+                _isWaitingInCover = shouldWaitForGroupInCover();
+                if (_isWaitingInCover)
+                {
+                    ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();
+                    if (ObjectiveManager.CoverPointSelector.HasSelectedPoint)
+                    {
+                        setNextAction(BotActionType.GetToCover, "BossWaitForGroup");
+                        return updatePreviousState(true);
+                    }
+                }
+
                 setNextAction(BotActionType.BossRegroup, "BossRegroup");
                 return updatePreviousState(true);
             }
@@ -90,7 +106,7 @@ namespace QuestingBots.BotLogic.Objective
 
         private void informFollowersIfRestartingQuesting()
         {
-            if (previousState)
+            if (PreviousState)
             {
                 return;
             }
@@ -105,6 +121,53 @@ namespace QuestingBots.BotLogic.Objective
 
                 questingDecisionMonitor.BossHasRestartedQuesting = true;
             }
+        }
+
+        private bool shouldRegroup()
+        {
+            BotQuestingDecisionMonitor? decisionMonitor = ObjectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+            if (decisionMonitor == null)
+            {
+                return false;
+            }
+
+            if (decisionMonitor.CurrentDecision == EBotQuestingDecision.Regroup)
+            {
+                return true;
+            }
+
+            if (!PreviousState || (PreviousAction != BotActionType.BossRegroup))
+            {
+                return false;
+            }
+
+            if (LayerActiveTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool shouldWaitForGroupInCover()
+        {
+            MinMaxConfig? followerDistanceRange = ObjectiveManager?.BotMonitor?.GetMonitor<BotQuestingMonitor>()?.FollowerDistanceRangeOverall;
+            if (followerDistanceRange == null)
+            {
+                return false;
+            }
+
+            if (followerDistanceRange.Min < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+            {
+                return true;
+            }
+
+            if (_isWaitingInCover && (followerDistanceRange.Min < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool trySetNextAction()

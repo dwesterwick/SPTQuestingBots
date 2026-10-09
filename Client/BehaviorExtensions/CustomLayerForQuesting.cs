@@ -39,7 +39,7 @@ namespace QuestingBots.BehaviorExtensions
 
         }
 
-        public CustomLayerForQuesting(BotOwner _botOwner, int _priority) : this(_botOwner, _priority, updateInterval)
+        public CustomLayerForQuesting(BotOwner _botOwner, int _priority) : this(_botOwner, _priority, 100)
         {
 
         }

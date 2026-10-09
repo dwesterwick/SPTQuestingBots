@@ -203,7 +203,7 @@
 				"max_distance_from_boss": 50
 			},
 			"max_follower_distance": {
-				"max_wait_time": 5,
+				"max_wait_time": 2,
 				"min_regroup_time": 1,
 				"regroup_pause_time": 2,
 				"target_position_variation_allowed": 3,

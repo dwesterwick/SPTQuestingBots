@@ -3,6 +3,7 @@ using EFT;
 using QuestingBots.BotLogic.Follow;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.BotLogic.Objective;
+using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.ExternalMods.LoadedModInfo;
 using QuestingBots.Helpers;
@@ -26,9 +27,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         public bool IsQuesting { get; private set; } = false;
         public bool IsFollowing { get; private set; } = false;
         public bool IsRegrouping { get; private set; } = false;
+        public MinMaxConfig? FollowerDistanceRangeOverall { get; private set; } = null;
+        public MinMaxConfig? FollowerDistanceRangeFollowing { get; private set; } = null;
         public bool ShouldWaitForFollowers { get; private set; } = false;
         public bool FollowersNeedToTeleport { get; private set; } = false;
-
+        
         private Stopwatch followersTooFarTimer = new Stopwatch();
 
         public bool NeedToRegroupWithFollowers => followersTooFarTimer.ElapsedMilliseconds > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MaxWaitTime * 1000;
@@ -47,9 +50,11 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             HasAQuestingBoss = HasABoss && BotHiveMindMonitor.GetValueForBossOfBot(BotHiveMindSensorType.CanQuest, BotOwner);
             DoesBossNeedHelp = HasABoss && doesBossNeedHelp();
 
-            IsQuesting = isQuesting();
-            IsFollowing= isFollowing();
-            IsRegrouping = isRegrouping();
+            IsQuesting = BotOwner.IsQuesting();
+            IsFollowing= BotOwner.IsFollowing();
+            IsRegrouping = BotOwner.IsRegrouping();
+
+            updateFollowerDistanceRange();
             ShouldWaitForFollowers = shouldWaitForFollowers();
             FollowersNeedToTeleport = followersNeedToTeleport();
 
@@ -62,7 +67,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 followersTooFarTimer.Reset();
             }
 
-            if (ObjectiveManager.IsQuestingAllowed && BotMonitor.GetMonitor<BotQuestingMonitor>().StuckTooManyTimes)
+            if (ObjectiveManager.IsQuestingAllowed && StuckTooManyTimes)
             {
                 Singleton<LoggingUtil>.Instance.LogWarning("Bot " + BotOwner.GetText() + " was stuck " + ObjectiveManager.StuckCount + " times and likely is unable to quest.");
                 ObjectiveManager.StopQuesting();
@@ -73,33 +78,87 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public float GetDistanceToBoss() => BotHiveMindMonitor.GetDistanceToGroupLeader(BotOwner);
 
-        private bool isQuesting() => BotOwner.IsLayerActive(nameof(BotObjectiveLayer));
-        private bool isFollowing() => BotOwner.IsLayerActive(nameof(BotFollowerLayer));
-        private bool isRegrouping() => BotOwner.IsLogicActive(nameof(BossRegroupAction));
-
-        private bool shouldWaitForFollowers()
+        private void updateFollowerDistanceRange()
         {
-            // Check if the bot has any followers
-            IEnumerable<BotOwner> activeFollowers = HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner)
-                .Where(f => (f != null) && !f.IsDead)
-                .Where(f => f.GetObjectiveManager()?.PrioritizeQuestingOverFollowing != true);
+            IEnumerable<BotOwner> totalFollowers = HiveMind.BotHiveMindMonitor.GetGroupFollowers(BotOwner)
+                .WhereNonAlloc(f => (f != null) && !f.IsDead)
+                .WhereNonAlloc(f => f.GetObjectiveManager()?.PrioritizeQuestingOverFollowing != true);
 
-            if (!activeFollowers.Any())
+            if (canUpdateDistanceRange(totalFollowers, out double nearestDistance, out double furthestDistance))
+            {
+                if (FollowerDistanceRangeOverall == null)
+                {
+                    FollowerDistanceRangeOverall = new MinMaxConfig(nearestDistance, furthestDistance);
+                }
+                else
+                {
+                    FollowerDistanceRangeOverall.Min = nearestDistance;
+                    FollowerDistanceRangeOverall.Max = furthestDistance;
+                }
+            }
+
+            IEnumerable<BotOwner> followingFollowers = totalFollowers
+                .Where(follower => follower.IsFollowing());
+
+            if (canUpdateDistanceRange(followingFollowers, out nearestDistance, out furthestDistance))
+            {
+                if (FollowerDistanceRangeFollowing == null)
+                {
+                    FollowerDistanceRangeFollowing = new MinMaxConfig(nearestDistance, furthestDistance);
+                }
+                else
+                {
+                    FollowerDistanceRangeFollowing.Min = nearestDistance;
+                    FollowerDistanceRangeFollowing.Max = furthestDistance;
+                }
+            }
+        }
+
+        private bool canUpdateDistanceRange(IEnumerable<BotOwner> bots, out double nearestDistance, out double furthestDistance)
+        {
+            nearestDistance = float.MaxValue;
+            furthestDistance = 0;
+
+            foreach (BotOwner bot in bots)
+            {
+                float distance = Vector3.Distance(BotOwner.Position, bot.Position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                }
+
+                if (distance > furthestDistance)
+                {
+                    furthestDistance = distance;
+                }
+            }
+
+            if (nearestDistance == float.MaxValue)
             {
                 return false;
             }
 
-            // Check if the bot is too far from any of its followers
-            IEnumerable<float> followerDistances = activeFollowers
-                .Select(f => Vector3.Distance(BotOwner.Position, f.Position));
+            return true;
+        }
 
-            if
-            (
-                followerDistances.Any(d => d > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
-                || followerDistances.All(d => d > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
-            )
+        private bool shouldWaitForFollowers()
+        {
+            if (FollowerDistanceRangeOverall?.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
             {
                 return true;
+            }
+
+            if (FollowerDistanceRangeFollowing?.Min > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+            {
+                return true;
+            }
+
+            if (ShouldWaitForFollowers)
+            {
+                if (FollowerDistanceRangeOverall?.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Max)
+                {
+                    return true;
+                }
             }
 
             return false;
