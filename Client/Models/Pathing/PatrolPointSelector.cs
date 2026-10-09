@@ -1,5 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
+using EFT.EnvironmentEffect;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
@@ -133,7 +134,7 @@ namespace QuestingBots.Models.Pathing
                     continue;
                 }
 
-                PatrolPoint? closestPoint = GetClosestPatrolPoint(centerPoint, way);
+                PatrolPoint? closestPoint = GetClosestPatrolPoint(centerPoint, way) ?? GetClosestPatrolPoint(centerPoint, way, false);
                 if (closestPoint == null)
                 {
                     continue;
@@ -156,7 +157,7 @@ namespace QuestingBots.Models.Pathing
             return closestWay;
         }
 
-        private PatrolPoint? GetClosestPatrolPoint(Vector3 centerPoint, PatrolWay way)
+        private PatrolPoint? GetClosestPatrolPoint(Vector3 centerPoint, PatrolWay way, bool withEnvironmentIdCheck = true)
         {
             float closestPointDistance = float.MaxValue;
             PatrolPoint? closestPoint = null;
@@ -166,7 +167,7 @@ namespace QuestingBots.Models.Pathing
 
             foreach (PatrolPoint patrolPoint in way.Points)
             {
-                if (!IsPatrolPointEligible(patrolPoint, centerPoint))
+                if (!IsPatrolPointEligible(patrolPoint, centerPoint, withEnvironmentIdCheck))
                 {
                     continue;
                 }
@@ -182,7 +183,7 @@ namespace QuestingBots.Models.Pathing
             return closestPoint;
         }
 
-        private bool IsPatrolPointEligible(PatrolPoint patrolPoint, Vector3 centerPoint)
+        private bool IsPatrolPointEligible(PatrolPoint patrolPoint, Vector3 centerPoint, bool withEnvironmentIdCheck = true)
         {
             float maxSearchDistance = GetMaxSearchDistance();
             float minSearchDistance = GetMinSearchDistance();
@@ -202,6 +203,17 @@ namespace QuestingBots.Models.Pathing
             if (distance < minSearchDistance)
             {
                 return false;
+            }
+
+            if (withEnvironmentIdCheck)
+            {
+                int centerPointEnvironmentId = EnvironmentManager.Instance.TryFindEnvironmentIdByPos(centerPoint);
+                int patrolPointEnvironmentId = EnvironmentManager.Instance.TryFindEnvironmentIdByPos(patrolPoint.Position);
+
+                if (centerPointEnvironmentId != patrolPointEnvironmentId)
+                {
+                    return false;
+                }
             }
 
             return true;

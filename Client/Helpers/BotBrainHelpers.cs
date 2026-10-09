@@ -4,7 +4,9 @@ using EFT;
 using QuestingBots.BotLogic;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.Follow;
+using QuestingBots.BotLogic.Investigate;
 using QuestingBots.BotLogic.Objective;
+using QuestingBots.BotLogic.Recovery;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Models;
@@ -464,6 +466,7 @@ namespace QuestingBots.Helpers
 
         public static bool IsQuesting(this BotOwner bot) => bot.IsLayerActive(nameof(BotObjectiveLayer));
         public static bool IsFollowing(this BotOwner bot) => bot.IsLayerActive(nameof(BotFollowerLayer));
-        public static bool IsRegrouping(this BotOwner bot) => bot.IsLogicActive(nameof(BossRegroupAction));
+        public static bool IsRecovering(this BotOwner bot) => bot.IsLogicActive(nameof(BotRecoveryLayer));
+        public static bool IsInvestigating(this BotOwner bot) => bot.IsLogicActive(nameof(BotInvestigationLayer));
     }
 }

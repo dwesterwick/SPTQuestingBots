@@ -1,4 +1,5 @@
 ﻿using EFT;
+using EFT.EnvironmentEffect;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,7 @@ namespace QuestingBots.Models.Pathing
 
         private Vector3 _botPositionWhenPointSet = Vector3.negativeInfinity;
         private Vector3 _centerPointPositionWhenPointSet = Vector3.negativeInfinity;
+        private int _environmentIdOfLastCenterPoint = 0;
         private Stopwatch timeSincePointCheckedTimer = Stopwatch.StartNew();
         private Stopwatch timeSincePointUpdatedTimer = Stopwatch.StartNew();
 
@@ -105,6 +107,12 @@ namespace QuestingBots.Models.Pathing
             }
 
             Vector3 newCenterPoint = GetCenterPointForSearch();
+            int environmentId = EnvironmentManager.Instance.TryFindEnvironmentIdByPos(newCenterPoint);
+            if (environmentId != _environmentIdOfLastCenterPoint)
+            {
+                return true;
+            }
+            
             float distanceToLastCenterPoint = Vector3.Distance(newCenterPoint, _centerPointPositionWhenPointSet);
             if (distanceToLastCenterPoint < GetMaxSearchDistance() * STALE_THRESHOLD)
             {
@@ -121,6 +129,7 @@ namespace QuestingBots.Models.Pathing
             SelectedPoint = selectedPoint;
             _botPositionWhenPointSet = Bot.Position;
             _centerPointPositionWhenPointSet = centerPoint;
+            _environmentIdOfLastCenterPoint = EnvironmentManager.Instance.TryFindEnvironmentIdByPos(centerPoint);
         }
     }
 }

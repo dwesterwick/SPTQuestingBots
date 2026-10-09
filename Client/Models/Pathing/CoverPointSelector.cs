@@ -1,5 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
+using EFT.EnvironmentEffect;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
@@ -86,7 +87,7 @@ namespace QuestingBots.Models.Pathing
 
             if ((SelectedPosition != null) && (Vector3.Distance(centerPoint, SelectedPosition.Value) < maxSearchDistance))
             {
-                //Singleton<LoggingUtil>.Instance.LogDebug(_bot.GetText() + " already has a nearby cover point");
+                //Singleton<LoggingUtil>.Instance.LogDebug(Bot.GetText() + " already has a nearby cover point");
                 return;
             }
 
@@ -95,14 +96,14 @@ namespace QuestingBots.Models.Pathing
             CustomNavigationPoint? newCoverPoint = GetNewCoverPoint(centerPoint);
             if (newCoverPoint == null)
             {
-                //Singleton<LoggingUtil>.Instance.LogDebug("Could not find a new cover point for " + _bot.GetText());
+                //Singleton<LoggingUtil>.Instance.LogDebug("Could not find a new cover point for " + Bot.GetText());
                 return;
             }
 
             float distance = Vector3.Distance(centerPoint, newCoverPoint.Position);
             if (distance > maxSearchDistance)
             {
-                //Singleton<LoggingUtil>.Instance.LogDebug("New cover point for " + _bot.GetText() + " is too far (" + distance + "m)");
+                //Singleton<LoggingUtil>.Instance.LogDebug("New cover point for " + Bot.GetText() + " is too far (" + distance + "m)");
                 return;
             }
 
@@ -120,7 +121,6 @@ namespace QuestingBots.Models.Pathing
 
         private CustomNavigationPoint? GetNewCoverPoint(Vector3 centerPoint)
         {
-            int maxIterations = 1000;
             ShootToPoint shootToPoint = Bot.CurrentEnemyTargetPosition(true);
             Vector3? closestFriendCoverPoint = Bot.Covers.ClosestFriendCoverPoint();
             
@@ -129,21 +129,41 @@ namespace QuestingBots.Models.Pathing
                 ECheckSHootHide.shootAndHide, _coverSearchDefenceData, PointsArrayType.allWithBush);
 
             CoverPointEvaluator coverPointEvaluator = new CoverPointEvaluator(coverSearchData);
-            return Bot.Covers._аFindByGraph.GetClosestPoint(Bot, centerPoint, false, coverPointEvaluator.IsPointGood, false, maxIterations);
+            CustomNavigationPoint? newCoverPoint = GetClosestCoverPoint(centerPoint, coverPointEvaluator);
+            if (newCoverPoint == null)
+            {
+                coverPointEvaluator.SetEnvironmentIdCheck(false);
+                newCoverPoint = GetClosestCoverPoint(centerPoint, coverPointEvaluator);
+            }
+
+            return newCoverPoint;
+        }
+
+        private const int MAX_ITERATIONS = 1000;
+        private CustomNavigationPoint? GetClosestCoverPoint(Vector3 centerPoint, CoverPointEvaluator coverPointEvaluator)
+        {
+            return Bot.Covers._аFindByGraph.GetClosestPoint(Bot, centerPoint, false, coverPointEvaluator.IsPointGood, false, MAX_ITERATIONS);
         }
 
         private class CoverPointEvaluator
         {
             private CoverSearchData _coverSearchData;
+            private bool _withEnvironmentIdCheck;
             private int _environmentId;
 
             private Vector3 CenterPosition => _coverSearchData.CenterPos;
             private ICoverSearchBot Bot => _coverSearchData.Bot;
 
-            public CoverPointEvaluator(CoverSearchData coverSearchData)
+            public CoverPointEvaluator(CoverSearchData coverSearchData, bool withEnvironmentIdCheck = true)
             {
                 _coverSearchData = coverSearchData;
-                _environmentId = EnvironmentManagerBase.Instance.TryFindEnvironmentIdByPos(CenterPosition);
+                _withEnvironmentIdCheck = withEnvironmentIdCheck;
+                _environmentId = EnvironmentManager.Instance.TryFindEnvironmentIdByPos(CenterPosition);
+            }
+
+            public void SetEnvironmentIdCheck(bool state)
+            {
+                _withEnvironmentIdCheck = state;
             }
 
             public bool IsPointGood(GroupPoint groupPoint)
@@ -163,7 +183,7 @@ namespace QuestingBots.Models.Pathing
                     return false;
                 }
 
-                if (_environmentId != groupPoint.IdEnvironment)
+                if (_withEnvironmentIdCheck && (_environmentId != groupPoint.IdEnvironment))
                 {
                     return false;
                 }

@@ -229,7 +229,7 @@
         "minLevel": 0,
         "maxLevel": 99,
         "maxBots": 2,
-        "desirability": 30,
+        "desirability": 20,
         "name": "Flash-Drive Van",
         "objectives" : [
             {

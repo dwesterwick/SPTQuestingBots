@@ -46,10 +46,12 @@ namespace QuestingBots.BehaviorExtensions
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch pauseLayerTimer = Stopwatch.StartNew();
         private Stopwatch layerActiveTimer = new Stopwatch();
+        private Stopwatch logicActiveTimer = new Stopwatch();
         private float pauseLayerTime = 0;
 
         protected double LayerActiveTime => layerActiveTimer.ElapsedMilliseconds / 1000.0;
-        
+        protected double LogicActiveTime => logicActiveTimer.ElapsedMilliseconds / 1000.0;
+
         public CustomLayerDelayedUpdate(BotOwner _botOwner, int _priority) : base(_botOwner, _priority)
         {
             
@@ -62,7 +64,13 @@ namespace QuestingBots.BehaviorExtensions
 
         public override bool IsCurrentActionEnding()
         {
-            return NextAction != PreviousAction;
+            bool isCurrentActionEnding = NextAction != PreviousAction;
+            if (isCurrentActionEnding)
+            {
+                logicActiveTimer.Reset();
+            }
+
+            return isCurrentActionEnding;
         }
 
         public override Action GetNextAction()
@@ -124,10 +132,12 @@ namespace QuestingBots.BehaviorExtensions
             if (newState)
             {
                 layerActiveTimer.Start();
+                logicActiveTimer.Start();
             }
             else
             {
                 layerActiveTimer.Reset();
+                logicActiveTimer.Reset();
             }
 
             PreviousState = newState;
@@ -145,6 +155,7 @@ namespace QuestingBots.BehaviorExtensions
             pauseLayerTime = minTime;
             pauseLayerTimer.Restart();
             layerActiveTimer.Reset();
+            logicActiveTimer.Reset();
 
             return false;
         }

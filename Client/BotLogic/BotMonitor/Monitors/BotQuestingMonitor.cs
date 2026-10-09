@@ -26,7 +26,8 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public bool IsQuesting { get; private set; } = false;
         public bool IsFollowing { get; private set; } = false;
-        public bool IsRegrouping { get; private set; } = false;
+        public bool IsInvestigating { get; private set; } = false;
+        public bool IsRecovering { get; private set; } = false;
         public MinMaxConfig? FollowerDistanceRangeOverall { get; private set; } = null;
         public MinMaxConfig? FollowerDistanceRangeFollowing { get; private set; } = null;
         public bool ShouldWaitForFollowers { get; private set; } = false;
@@ -51,8 +52,9 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             DoesBossNeedHelp = HasABoss && doesBossNeedHelp();
 
             IsQuesting = BotOwner.IsQuesting();
-            IsFollowing= BotOwner.IsFollowing();
-            IsRegrouping = BotOwner.IsRegrouping();
+            IsFollowing = BotOwner.IsFollowing();
+            IsInvestigating = BotOwner.IsInvestigating();
+            IsRecovering = BotOwner.IsRecovering();
 
             updateFollowerDistanceRange();
             ShouldWaitForFollowers = shouldWaitForFollowers();
@@ -96,6 +98,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                     FollowerDistanceRangeOverall.Max = furthestDistance;
                 }
             }
+            else
+            {
+                FollowerDistanceRangeOverall = null;
+            }
 
             IEnumerable<BotOwner> followingFollowers = totalFollowers
                 .Where(follower => follower.IsFollowing());
@@ -111,6 +117,10 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                     FollowerDistanceRangeFollowing.Min = nearestDistance;
                     FollowerDistanceRangeFollowing.Max = furthestDistance;
                 }
+            }
+            else
+            {
+                FollowerDistanceRangeFollowing = null;
             }
         }
 

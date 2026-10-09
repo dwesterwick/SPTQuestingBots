@@ -54,6 +54,7 @@ namespace QuestingBots
             Singleton<LoggingUtil>.Instance.LogInfo("Loading QuestingBots...enabling patches...");
 
             EnableCommonPatches();
+            EnableLocalAvoidancePatches();
             EnableLighthousePatches();
             EnableLabyrinthPatches();
 
@@ -81,11 +82,15 @@ namespace QuestingBots
             new Patches.ReturnToPoolPatch().Enable();
             new Patches.ProcessSourceOcclusionPatch().Enable();
             new Patches.BotOwnerSprintPatch().Enable();
-            new Patches.OverrideLocalAvoidanceDistancesPatch().Enable();
-            new Patches.OverrideLocalAvoidancePowerLimitPatch().Enable();
-            new Patches.DisableEftNavMeshCorrectionPatch().Enable();
             new Patches.ExfiltrationOnItemTransferredPatch().Enable();
             new Patches.PatrolStatusSetPatch().Enable();
+        }
+
+        private void EnableLocalAvoidancePatches()
+        {
+            new Patches.LocalAvoidance.OverrideLocalAvoidanceDistancesPatch().Enable();
+            new Patches.LocalAvoidance.OverrideLocalAvoidancePowerLimitPatch().Enable();
+            //new Patches.LocalAvoidance.DisableEftNavMeshCorrectionPatch().Enable();
         }
 
         private void EnableLighthousePatches()
@@ -117,6 +122,7 @@ namespace QuestingBots
 
             //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
+            new Patches.DebugPatches.OnItemTakenPatch().Enable();
             new Patches.DebugPatches.TeleportDebuggingPatch().Enable();
             new Patches.DebugPatches.SetPlayerToNavMeshDebuggingPatch().Enable();
 #endif

@@ -101,7 +101,7 @@ namespace QuestingBots.BotLogic.Objective
                 informFollowersIfRestartingQuesting();
             }
 
-            return updatePreviousState(willQuest);
+            return willQuest;
         }
 
         private void informFollowersIfRestartingQuesting()
@@ -133,20 +133,38 @@ namespace QuestingBots.BotLogic.Objective
 
             if (decisionMonitor.CurrentDecision == EBotQuestingDecision.Regroup)
             {
+                writeRegroupDebugMessage();
                 return true;
             }
 
-            if (!PreviousState || (PreviousAction != BotActionType.BossRegroup))
+            float minRegroupTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
+            if (PreviousState && (PreviousAction == BotActionType.BossRegroup) && (LogicActiveTime < minRegroupTime))
             {
-                return false;
-            }
-
-            if (LayerActiveTime < Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime)
-            {
+                Singleton<LoggingUtil>.Instance.LogDebug("Keeping " + BotOwner.GetText() + " in BossRegroup because the layer has only been active for " + LogicActiveTime + "s");
                 return true;
             }
 
             return false;
+        }
+
+        private void writeRegroupDebugMessage()
+        {
+            if (LogicActiveTime < 10)
+            {
+                return;
+            }
+
+            BotQuestingMonitor questingMonitor = ObjectiveManager.BotMonitor!.GetMonitor<BotQuestingMonitor>();
+            string message = BotOwner.GetText() + " has been regrouping for " + LogicActiveTime + "s.";
+            if (questingMonitor.FollowerDistanceRangeOverall != null)
+            {
+                message += " Overall: " + Math.Round(questingMonitor.FollowerDistanceRangeOverall.Min, 2) + "-" + Math.Round(questingMonitor.FollowerDistanceRangeOverall.Max, 2);
+            }
+            if (questingMonitor.FollowerDistanceRangeFollowing != null)
+            {
+                message += " Following: " + Math.Round(questingMonitor.FollowerDistanceRangeFollowing.Min, 2) + "-" + Math.Round(questingMonitor.FollowerDistanceRangeFollowing.Max, 2);
+            }
+            Singleton<LoggingUtil>.Instance.LogDebug(message);
         }
 
         private bool shouldWaitForGroupInCover()

@@ -12,7 +12,7 @@ using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.LocalAvoidance
 {
     public class OverrideLocalAvoidanceDistancesPatch : ModulePatch
     {

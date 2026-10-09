@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.LocalAvoidance
 {
     public class DisableEftNavMeshCorrectionPatch : ModulePatch
     {

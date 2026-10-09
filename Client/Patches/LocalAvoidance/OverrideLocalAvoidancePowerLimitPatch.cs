@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace QuestingBots.Patches
+namespace QuestingBots.Patches.LocalAvoidance
 {
     public class OverrideLocalAvoidancePowerLimitPatch : ModulePatch
     {
