@@ -133,7 +133,7 @@ namespace QuestingBots.Patches
 
             //Singleton<LoggingUtil>.Instance.LogDebug("NotLinkedOffset offset is " + __instance.NotLinkedOffset.magnitude + " for " + ____owner.GetText());
 
-            BotOwner ? nearestGroupMember = ____owner.GetNearestGroupMember(out float distance);
+            BotOwner? nearestGroupMember = ____owner.GetNearestGroupMember(out float distance);
             if (distance > DistToBeCloseExtOverride * Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.RadiusMultiplierToDropOffset)
             {
                 //Singleton<LoggingUtil>.Instance.LogDebug("Dropping local avoidance offset for " + ____owner.GetText());

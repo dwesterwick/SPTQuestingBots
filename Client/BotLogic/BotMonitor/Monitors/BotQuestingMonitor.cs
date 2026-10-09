@@ -133,34 +133,35 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 }
             }
 
-            if (nearestDistance == float.MaxValue)
-            {
-                return false;
-            }
-
-            return true;
+            return nearestDistance != float.MaxValue;
         }
 
         private bool shouldWaitForFollowers()
         {
-            if (FollowerDistanceRangeOverall?.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+            if (FollowerDistanceRangeOverall != null)
             {
-                return true;
+                if (FollowerDistanceRangeOverall.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Furthest)
+                {
+                    return true;
+                }
+
+                if (ShouldWaitForFollowers)
+                {
+                    if (FollowerDistanceRangeOverall.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Max)
+                    {
+                        return true;
+                    }
+                }
             }
 
-            if (FollowerDistanceRangeFollowing?.Min > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
+            if (FollowerDistanceRangeFollowing != null)
             {
-                return true;
-            }
-
-            if (ShouldWaitForFollowers)
-            {
-                if (FollowerDistanceRangeOverall?.Max > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetRangeQuesting.Max)
+                if (FollowerDistanceRangeFollowing.Min > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.Nearest)
                 {
                     return true;
                 }
             }
-
+            
             return false;
         }
 

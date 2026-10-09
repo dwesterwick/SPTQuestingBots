@@ -28,7 +28,7 @@ namespace QuestingBots.Patches.DebugPatches
             }
 
             float distance = Vector3.Distance(____owner.Position, rPosition);
-            Singleton<LoggingUtil>.Instance.LogDebug(____owner.GetText() + " will teleport " + distance + "m");
+            Singleton<LoggingUtil>.Instance.LogWarning(____owner.GetText() + " will teleport " + distance + "m");
 
             StackTrace stackTrace = new StackTrace();
             Singleton<LoggingUtil>.Instance.LogDebug(stackTrace.ToString());

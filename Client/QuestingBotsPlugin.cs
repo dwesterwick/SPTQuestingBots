@@ -85,6 +85,7 @@ namespace QuestingBots
             new Patches.OverrideLocalAvoidancePowerLimitPatch().Enable();
             new Patches.DisableEftNavMeshCorrectionPatch().Enable();
             new Patches.ExfiltrationOnItemTransferredPatch().Enable();
+            new Patches.PatrolStatusSetPatch().Enable();
         }
 
         private void EnableLighthousePatches()
@@ -116,7 +117,8 @@ namespace QuestingBots
 
             //new Patches.DebugPatches.HandleFinishedTaskPatch().Enable();
             //new Patches.DebugPatches.HandleFinishedTaskPatch2().Enable();
-            //new Patches.DebugPatches.TeleportDebuggingPatch().Enable();
+            new Patches.DebugPatches.TeleportDebuggingPatch().Enable();
+            new Patches.DebugPatches.SetPlayerToNavMeshDebuggingPatch().Enable();
 #endif
         }
 

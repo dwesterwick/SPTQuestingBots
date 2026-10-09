@@ -266,5 +266,15 @@ namespace QuestingBots.BotLogic
 
             return customLayer;
         }
+
+        public static AICoreLayer<BotLogicDecision> GetCurrentBrainLayer(BotOwner bot)
+        {
+            if (bot?.Brain?.BaseBrain == null)
+            {
+                throw new InvalidOperationException("Invalid base brain for bot " + bot.GetText());
+            }
+
+            return bot.Brain.BaseBrain.CurLayer;
+        }
     }
 }
