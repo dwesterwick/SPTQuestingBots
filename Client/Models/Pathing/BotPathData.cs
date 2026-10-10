@@ -48,8 +48,6 @@ namespace QuestingBots.Models.Pathing
             bool requiresUpdate = false;
             BotPathUpdateNeededReason reason = BotPathUpdateNeededReason.None;
 
-            float distanceFromStartPosition = Vector3.Distance(bot.Position, StartPosition);
-
             if (force)
             {
                 requiresUpdate = true;
@@ -105,6 +103,7 @@ namespace QuestingBots.Models.Pathing
                 Vector3[] currentPath = bot.Mover.GetCurrentPath();
                 if (currentPath == null)
                 {
+                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has no EFT path. Updating path...");
                     requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
@@ -125,16 +124,22 @@ namespace QuestingBots.Models.Pathing
 
                 if (!requiresUpdate && Corners.Any() && currentPath.Any() && (currentPath.Last() != Corners.Last()))
                 {
-                    // Only update the path if the bot has moved from the start position set in the currently cached path. Otherwise, the path may
-                    // constantly be recalculated as brain layers are switched. 
-                    requiresUpdate &= distanceFromStartPosition > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.MaxStartPositionDiscrepancy;
+                    //Singleton<LoggingUtil>.Instance.LogInfo(bot.GetText() + " has been assigned a different path in EFT. Updating path...");
+                    requiresUpdate = true;
                     reason = BotPathUpdateNeededReason.RefreshNeededPath;
                 }
             }
 
             if (requiresUpdate)
             {
-                updateCorners(target, reason == BotPathUpdateNeededReason.IncompletePath);
+                // TODO
+                // Only update the path if the bot has moved from the start position set in the currently cached path. Otherwise, the path may
+                // constantly be recalculated as brain layers are switched. 
+                //float distanceFromStartPosition = Vector3.Distance(bot.Position, StartPosition);
+                //if (distanceFromStartPosition > Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.MaxStartPositionDiscrepancy)
+                {
+                    updateCorners(target, reason == BotPathUpdateNeededReason.IncompletePath);
+                }
             }
 
             return reason;

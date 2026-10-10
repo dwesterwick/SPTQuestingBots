@@ -25,9 +25,11 @@ namespace QuestingBots.BotLogic.EftActions
             base.Stop();
         }
 
+        protected virtual void Update_CustomLogic(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data) { }
         public override void Update(DrakiaXYZ.BigBrain.Brains.CustomLayer.ActionData data)
         {
             baseAction.UpdateNodeByMain(data);
+            Update_CustomLogic(data);
         }
     }
 }

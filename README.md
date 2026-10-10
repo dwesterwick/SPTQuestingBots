@@ -444,7 +444,6 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **Vanilla EFT Issues in SPT 3.11 and later:**
 * Bots sometimes teleport through doors, which also sometimes "breaks" those doors.
-* Bots will sometimes teleport through thin or short obstacles, which might trap them in parts of the map that should inaccessible. 
 
 **General:**
 * A flicker occurs whenever EFT spawns bots, even when the Questing Bots spawning system is disabled

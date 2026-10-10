@@ -60,7 +60,7 @@ namespace QuestingBots.BotLogic.Follow
             if (mustRegroup || Vector3.Distance(BotOwner.Position, targetLocation.Value) > targetDistance)
             {
                 float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
-                RecalculatePath(targetLocation.Value, allowedVariation, targetDistance);
+                RecalculatePath(targetLocation.Value, allowedVariation, targetDistance, false, out Models.Pathing.BotPathUpdateNeededReason updateReason);
 
                 //Vector3 bossPosition = BotHiveMindMonitor.GetBoss(BotOwner).Position;
                 //Singleton<LoggingUtil>.Instance.LogWarning("Follower " + BotOwner.GetText() + " is regrouping. TimeSinceLastSet=" + ObjectiveManager.BotPath.TimeSinceLastSet + "s, BossPos=" + bossPosition + ", PathTarget=" + ObjectiveManager.BotPath.TargetPosition + ", EFTPathTarget=" + BotOwner.Mover.GetCurrentPathTargetPoint().Value);

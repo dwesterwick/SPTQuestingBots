@@ -86,7 +86,7 @@ namespace QuestingBots.Models.Pathing
             float distance = Vector3.Distance(centerPoint, closestPatrolPoint.Position);
             if (!Bot.Position.HasCompletePathTo(closestPatrolPoint.Position))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug(Bot.GetText() + " does not have a complete path to selected patrol point " + distance + "m away");
+                //Singleton<LoggingUtil>.Instance.LogDebug(Bot.GetText() + " does not have a complete path to selected patrol point " + distance + "m away");
                 return;
             }
 

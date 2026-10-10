@@ -61,7 +61,7 @@ namespace QuestingBots.BotLogic.Follow
             if (mustRegroup || Vector3.Distance(BotOwner.Position, locationOfNearestGroupMember.Value) > targetDistance + 2)
             {
                 float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
-                RecalculatePath(locationOfNearestGroupMember, allowedVariation, targetDistance);
+                RecalculatePath(locationOfNearestGroupMember, allowedVariation, targetDistance, false, out Models.Pathing.BotPathUpdateNeededReason updateReason);
             }
             else
             {

@@ -52,7 +52,7 @@ namespace QuestingBots.BotLogic.Follow
             CanSprint &= IsAllowedToSprint();
 
             float allowedVariation = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.TargetPositionVariationAllowed;
-            RecalculatePath(boss.Position, allowedVariation, 0.5f);
+            RecalculatePath(boss.Position, allowedVariation, 0.5f, false, out Models.Pathing.BotPathUpdateNeededReason updateReason);
 
             // Check if the bot is unable to reach its boss. If so, fall back to the default EFT layer for a bit. 
             if (checkIfBotIsStuck())

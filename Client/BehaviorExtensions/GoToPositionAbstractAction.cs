@@ -58,7 +58,7 @@ namespace QuestingBots.BehaviorExtensions
 
             timeSinceLastJumpTimer.Restart();
 
-            DropLocalAvoidanceOffset();
+            //DropLocalAvoidanceOffset();
             BotOwner.PatrollingData.Pause();
             ObjectiveManager.PatrolPointSelector.ReleasePatrolPointReservation();
         }
@@ -71,7 +71,7 @@ namespace QuestingBots.BehaviorExtensions
 
             updateBotZoneForGroup();
 
-            DropLocalAvoidanceOffset();
+            //DropLocalAvoidanceOffset();
             BotOwner.PatrollingData.Unpause();
         }
 
@@ -85,11 +85,13 @@ namespace QuestingBots.BehaviorExtensions
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)
         {
-            return RecalculatePath(position, 0.2f, 0.5f);
+            return RecalculatePath(position, 0.2f, 0.5f, false, out Models.Pathing.BotPathUpdateNeededReason updateReason);
         }
 
-        public NavMeshPathStatus? RecalculatePath(Vector3? position, float targetVariationAllowed, float reachDist, bool force = false)
+        public NavMeshPathStatus? RecalculatePath(Vector3? position, float targetVariationAllowed, float reachDist, bool force, out Models.Pathing.BotPathUpdateNeededReason updateReason)
         {
+            updateReason = Models.Pathing.BotPathUpdateNeededReason.None;
+
             if (position == null)
             {
                 return null;
@@ -107,7 +109,7 @@ namespace QuestingBots.BehaviorExtensions
                 return ObjectiveManager.BotPath.Status;
             }
 
-            Models.Pathing.BotPathUpdateNeededReason updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position.Value, targetVariationAllowed, reachDist, force);
+            updateReason = ObjectiveManager.BotPath.CheckIfUpdateIsNeeded(position.Value, targetVariationAllowed, reachDist, force);
 
             if (ObjectiveManager.BotPath.Status != NavMeshPathStatus.PathInvalid)
             {
