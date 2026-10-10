@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace QuestingBots.BotLogic.Recovery
 {
@@ -51,11 +50,6 @@ namespace QuestingBots.BotLogic.Recovery
             if (!ObjectiveManager.CoverPointSelector.IsAtSelectedPoint)
             {
                 RecalculatePath(ObjectiveManager.CoverPointSelector.SelectedPosition, 0.2f, 0.5f, false, out Models.Pathing.BotPathUpdateNeededReason updateReason);
-
-                if (updateReason != Models.Pathing.BotPathUpdateNeededReason.None)
-                {
-                    //Singleton<LoggingUtil>.Instance.LogDebug(BotOwner.GetText() + " got a new path due to reason " + updateReason.ToString());
-                }
             }
             else
             {

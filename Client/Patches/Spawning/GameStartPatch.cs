@@ -17,7 +17,7 @@ namespace QuestingBots.Patches.Spawning
 {
     public class GameStartPatch : ModulePatch
     {
-        public static bool IsDelayingGameStart { get; set; } = false;
+        public static bool IsDelayingGameStart { get; private set; } = false;
 
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
         private static FieldInfo wavesSpawnScenarioField = null!;
@@ -39,7 +39,7 @@ namespace QuestingBots.Patches.Spawning
             }
 
             IEnumerator originalEnumeratorWithMessage = addDebugMessageAfterEnumerator(__result, "Original start-game IEnumerator completed");
-            __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, WaitForBotGenerators(), spawnMissedWavesCoroutine());
+            __result = new Models.EnumeratorCollection(originalEnumeratorWithMessage, WaitForBotGenerators());
 
             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
@@ -47,9 +47,10 @@ namespace QuestingBots.Patches.Spawning
             }
         }
 
-        public static void ClearMissedWaves()
+        public static void DelayGameStart()
         {
             missedBossWaves.Clear();
+            IsDelayingGameStart = true;
         }
 
         public static void AddMissedBossWave(BossLocationSpawn wave)
@@ -64,36 +65,6 @@ namespace QuestingBots.Patches.Spawning
             if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
             {
                 Singleton<LoggingUtil>.Instance.LogDebug(message);
-            }
-        }
-
-        private static IEnumerator spawnMissedWavesCoroutine()
-        {
-            IsDelayingGameStart = false;
-
-            SpawnMissedBossWaves();
-
-            yield break;
-        }
-
-        public static void SpawnMissedBossWaves()
-        {
-            if (missedBossWaves.Any())
-            {
-                if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
-                {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Spawning missed boss waves...");
-                }
-
-                foreach (BossLocationSpawn missedBossWave in missedBossWaves)
-                {
-                    Singleton<IBotGame>.Instance.BotsController.ActivateBotsByWave(missedBossWave);
-                }
-            }
-
-            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
-            {
-                Singleton<LoggingUtil>.Instance.LogInfo("Spawned all missed boss waves");
             }
         }
 
@@ -123,7 +94,33 @@ namespace QuestingBots.Patches.Spawning
 
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
 
+            IsDelayingGameStart = false;
+            SpawnMissedBossWaves();
+
             onComplete?.Invoke();
+        }
+
+        private static void SpawnMissedBossWaves()
+        {
+            if (!missedBossWaves.Any())
+            {
+                return;
+            }
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawning missed boss waves...");
+            }
+
+            foreach (BossLocationSpawn missedBossWave in missedBossWaves)
+            {
+                Singleton<IBotGame>.Instance.BotsController.ActivateBotsByWave(missedBossWave);
+            }
+
+            if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Spawned all missed boss waves");
+            }
         }
 
         public static void WriteSpawnMessages(object gameObj)

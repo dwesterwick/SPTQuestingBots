@@ -31,8 +31,7 @@ namespace QuestingBots.Patches
 
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {
-                Spawning.GameStartPatch.ClearMissedWaves();
-                Spawning.GameStartPatch.IsDelayingGameStart = true;
+                Spawning.GameStartPatch.DelayGameStart();
 
                 if (QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.SpawningAndDying))
                 {
