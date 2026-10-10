@@ -65,10 +65,15 @@ namespace QuestingBots.BotLogic.Investigate
                 return pauseLayer(pauseRequestTime);
             }
 
-            if (hearingMonitor.WillInvestigateSounds && !hearingMonitor.IsAtLastEstimatedSoundPosition && hearingMonitor.CanGoToLastEstimatedSoundPosition())
+            if (hearingMonitor.WillInvestigateSounds && hearingMonitor.CanGoToLastEstimatedSoundPosition())
             {
-                setNextAction(BotActionType.InvestigateSound, "InvestigateSound");
-                return updatePreviousState(true);
+                if (!hearingMonitor.IsAtLastEstimatedSoundPosition)
+                {
+                    setNextAction(BotActionType.InvestigateSound, "InvestigateSound");
+                    return updatePreviousState(true);
+                }
+
+                hearingMonitor.IgnoreMostRecentSound();
             }
 
             ObjectiveManager.CoverPointSelector.RefreshCoverPointIfStale();

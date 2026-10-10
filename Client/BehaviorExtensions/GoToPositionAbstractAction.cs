@@ -58,6 +58,7 @@ namespace QuestingBots.BehaviorExtensions
 
             timeSinceLastJumpTimer.Restart();
 
+            DropLocalAvoidanceOffset();
             BotOwner.PatrollingData.Pause();
             ObjectiveManager.PatrolPointSelector.ReleasePatrolPointReservation();
         }
@@ -69,7 +70,17 @@ namespace QuestingBots.BehaviorExtensions
             pauseStuckTimer();
 
             updateBotZoneForGroup();
+
+            DropLocalAvoidanceOffset();
             BotOwner.PatrollingData.Unpause();
+        }
+
+        protected void DropLocalAvoidanceOffset()
+        {
+            if (Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotPathing.EFTLocalAvoidance.AllowForQuestingBots)
+            {
+                BotOwner.Mover.LocalAvoidance.DropOffset();
+            }
         }
 
         public NavMeshPathStatus? RecalculatePath(Vector3? position)

@@ -67,6 +67,12 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
 
         public override void UpdateIfQuesting()
         {
+            if (lastSoundData?.EnemyPlayer == null)
+            {
+                // For now, allow bots to travel to sources of noise to confirm threats no longer exist
+                //lastSoundData = null;
+            }
+
             IsSuspicious = isSuspicious();
         }
 

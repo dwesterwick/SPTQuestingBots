@@ -172,7 +172,7 @@
 				},
 				"suspicious_time": {
 					"min": 10,
-					"max": 60
+					"max": 45
 				},
 				"max_suspicious_time": {
 					"default": 60,
@@ -191,7 +191,7 @@
 					"sandbox_high": 120
 				},
 				"suspicion_cooldown_time": 7,
-				"chance_to_investigate_sounds": 30
+				"chance_to_investigate_sounds": 20
 			},
 			"break_for_looting": {
 				"enabled": true,
@@ -204,7 +204,7 @@
 			},
 			"max_follower_distance": {
 				"max_wait_time": 2,
-				"min_regroup_time": 1,
+				"min_regroup_time": 2,
 				"regroup_pause_time": 2,
 				"target_position_variation_allowed": 3,
 				"target_range_questing": {
@@ -322,13 +322,13 @@
 			"airdrop_chaser": {
 				"desirability": 70,
 				"max_bots_per_quest": 3,
-				"max_distance": 400,
+				"max_distance": 250,
 				"interrupt_settings": {
 					"enabled": true,
 					"chance_per_distance": [
 						[ 75, 75 ],
 						[ 200, 25 ],
-						[ 400, 5 ]
+						[ 250, 5 ]
 					]
 				}
 			},

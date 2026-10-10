@@ -1,8 +1,6 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic.Follow;
 using QuestingBots.BotLogic.HiveMind;
-using QuestingBots.BotLogic.Objective;
 using QuestingBots.Configuration;
 using QuestingBots.Controllers;
 using QuestingBots.ExternalMods.LoadedModInfo;
@@ -104,7 +102,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
             }
 
             IEnumerable<BotOwner> followingFollowers = totalFollowers
-                .Where(follower => follower.IsFollowing());
+                .WhereNonAlloc(follower => follower.IsFollowing());
 
             if (canUpdateDistanceRange(followingFollowers, out nearestDistance, out furthestDistance))
             {
@@ -116,6 +114,21 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
                 {
                     FollowerDistanceRangeFollowing.Min = nearestDistance;
                     FollowerDistanceRangeFollowing.Max = furthestDistance;
+                }
+
+                if (FollowerDistanceRangeFollowing.Max > FollowerDistanceRangeOverall!.Max)
+                {
+                    string message = BotOwner.GetText() + " has invalid FollowerDistanceRangeOverall or FollowerDistanceRangeFollowing - ";
+                    if (FollowerDistanceRangeOverall != null)
+                    {
+                        message += " Overall: " + Math.Round(FollowerDistanceRangeOverall.Min, 2) + "-" + Math.Round(FollowerDistanceRangeOverall.Max, 2);
+                    }
+                    if (FollowerDistanceRangeFollowing != null)
+                    {
+                        message += " Following: " + Math.Round(FollowerDistanceRangeFollowing.Min, 2) + "-" + Math.Round(FollowerDistanceRangeFollowing.Max, 2);
+                    }
+                    message += "; Following followers: " + string.Join(", ", followingFollowers.Select(f => f.GetText()));
+                    Singleton<LoggingUtil>.Instance.LogError(message);
                 }
             }
             else

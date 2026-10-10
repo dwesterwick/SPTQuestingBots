@@ -133,14 +133,17 @@ namespace QuestingBots.BotLogic.Objective
 
             if (decisionMonitor.CurrentDecision == EBotQuestingDecision.Regroup)
             {
-                writeRegroupDebugMessage();
+                if (PreviousState && (PreviousAction == BotActionType.BossRegroup))
+                {
+                    //writeRegroupDebugMessage();
+                }
                 return true;
             }
 
             float minRegroupTime = Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.MaxFollowerDistance.MinRegroupTime;
             if (PreviousState && (PreviousAction == BotActionType.BossRegroup) && (LogicActiveTime < minRegroupTime))
             {
-                Singleton<LoggingUtil>.Instance.LogDebug("Keeping " + BotOwner.GetText() + " in BossRegroup because the layer has only been active for " + LogicActiveTime + "s");
+                //`Singleton<LoggingUtil>.Instance.LogDebug("Keeping " + BotOwner.GetText() + " in BossRegroup because the layer has only been active for " + LogicActiveTime + "s");
                 return true;
             }
 

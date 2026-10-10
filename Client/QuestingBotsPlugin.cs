@@ -90,6 +90,8 @@ namespace QuestingBots
         {
             new Patches.LocalAvoidance.OverrideLocalAvoidanceDistancesPatch().Enable();
             new Patches.LocalAvoidance.OverrideLocalAvoidancePowerLimitPatch().Enable();
+
+            // This seems to cause more problems than it solves
             //new Patches.LocalAvoidance.DisableEftNavMeshCorrectionPatch().Enable();
         }
 
