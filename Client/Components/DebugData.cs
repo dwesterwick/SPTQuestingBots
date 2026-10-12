@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
 using QuestingBots.Controllers;
+using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using QuestingBots.Utils.Benchmarking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -20,6 +21,7 @@ namespace QuestingBots.Components
         private readonly static float markerRadius = 0.5f;
 
         private List<AbstractDebugGizmo> gizmos = new List<AbstractDebugGizmo>();
+        private Dictionary<int, NetworkBotDebugInfoGizmo> networkBotDebugInfoGizmos = new Dictionary<int, NetworkBotDebugInfoGizmo>();
 
         private int jobAssignmentGizmoCount => gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
@@ -36,6 +38,20 @@ namespace QuestingBots.Components
                 gizmos.Add(new Models.DebugGizmos.BotPathTargetMarkerGizmo(bot, markerRadius));
                 gizmos.Add(new Models.DebugGizmos.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
             }
+        }
+
+        public void UpdateNetworkBotInfo(int botId, INetworkBotDebugInfo data)
+        {
+            if (!networkBotDebugInfoGizmos.TryGetValue(botId, out NetworkBotDebugInfoGizmo gizmo))
+            {
+                gizmo = new Models.DebugGizmos.NetworkBotDebugInfoGizmo(data);
+                networkBotDebugInfoGizmos.Add(botId, gizmo);
+                gizmos.Add(gizmo);
+
+                return;
+            }
+
+            gizmo.UpdateNetworkBotInfo(data);
         }
 
         protected void Awake()
@@ -57,14 +73,17 @@ namespace QuestingBots.Components
 
         protected void Update()
         {
-            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (RaidHelpers.IsHostRaid())
             {
-                return;
-            }
+                if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+                {
+                    return;
+                }
 
-            if (QuestingBotsPluginConfig.ShowQuestInfoOverlays.Value && (jobAssignmentGizmoCount == 0))
-            {
-                loadAllPossibleJobAssignments();
+                if (QuestingBotsPluginConfig.ShowQuestInfoOverlays.Value && (jobAssignmentGizmoCount == 0))
+                {
+                    loadAllPossibleJobAssignments();
+                }
             }
 
             removeUnneededGizmos();

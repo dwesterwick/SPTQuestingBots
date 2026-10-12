@@ -1,8 +1,12 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using Comfort.Common;
 using EFT;
 using EFT.InventoryLogic;
 using Fika.Core.Main.Players;
+using Fika.Core.Modding;
+using Fika.Core.Modding.Events;
+using Fika.Core.Networking;
 using Fika.Core.Networking.Packets.Player;
 using QuestingBots.ExternalMods.Functions.Multiplayer;
 using QuestingBots.ExternalMods.Functions.NetworkTransactions;
@@ -19,6 +23,8 @@ namespace QuestingBots
     [BepInPlugin(ModInfo.GUID + "fikasync", ModInfo.MODNAME + "FikaSync", ModInfo.MOD_VERSION)]
     internal class QuestingBotsFikaSyncPlugin : BaseUnityPlugin
     {
+        public const int BROADCAST_RATE = 20;
+
         internal static ManualLogSource PluginLogger = null!;
 
         protected void Awake()
@@ -28,6 +34,33 @@ namespace QuestingBots
 
             FikaMultiplayerFunctions.SetGetPayersFunc(FikaHelpers.GetCoopPlayers);
             FikaRunNetworkTransactionFunctions.SetMoveItemFunc(SendSpawnItemInInventoryPacket);
+
+            new CreateBroadcasterPatch().Enable();
+
+            FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(OnNetworkManagerCreated);
+        }
+
+        private void OnNetworkManagerCreated(FikaNetworkManagerCreatedEvent eventInfo)
+        {
+            if (eventInfo.Manager is FikaClient client)
+            {
+                client.RegisterPacket<BotDebugInfoPacket>(OnBotDebugInfoPacket);
+            }
+        }
+
+        private void OnBotDebugInfoPacket(BotDebugInfoPacket packet)
+        {
+            if (!FikaHelpers.TryGetGameWorld(out GameWorld? gameWorld) || (gameWorld == null))
+            {
+                return;
+            }
+
+            if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.DebugData debugData))
+            {
+                return;
+            }
+
+            debugData.UpdateNetworkBotInfo(packet.BotId, packet);
         }
 
         private bool SendSpawnItemInInventoryPacket(Player player, Item item)

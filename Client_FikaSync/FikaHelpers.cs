@@ -11,7 +11,22 @@ namespace QuestingBots
 {
     public static class FikaHelpers
     {
-        public static IEnumerable<Player> GetCoopPlayers()
+        internal static bool TryGetGameWorld(out GameWorld? gameWorld)
+        {
+            gameWorld = null;
+
+            if (Singleton<GameWorld>.Instance == null)
+            {
+                QuestingBotsFikaSyncPlugin.PluginLogger.LogError("GameWorld is null");
+                return false;
+            }
+
+            gameWorld = Singleton<GameWorld>.Instance;
+
+            return true;
+        }
+
+        internal static IEnumerable<Player> GetCoopPlayers()
         {
             foreach (FikaPlayer player in Singleton<IFikaGame>.Instance.GameController.CoopHandler.HumanPlayers)
             {
@@ -19,7 +34,7 @@ namespace QuestingBots
             }
         }
 
-        public static IEnumerable<Vector3> GetCoopPlayerPositions()
+        internal static IEnumerable<Vector3> GetCoopPlayerPositions()
         {
             foreach (Player player in GetCoopPlayers())
             {

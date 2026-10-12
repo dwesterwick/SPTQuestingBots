@@ -1,7 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
 using Comfort.Common;
+using EFT;
 using HarmonyLib;
+using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;
@@ -71,6 +73,7 @@ namespace QuestingBots
         private void EnableCommonPatches()
         {
             new Patches.TarkovInitPatch().Enable();
+            new Patches.GameWorldStartedPatch().Enable();
             new Patches.BotsControllerInitPatch().Enable();
             new Patches.BotsControllerStopPatch().Enable();
             new Patches.BotOwnerBrainActivatePatch().Enable();

@@ -8,6 +8,7 @@ using EFT;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Models.DebugGizmos;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -206,6 +207,11 @@ namespace QuestingBots.Helpers
             }
 
             return false;
+        }
+
+        public static bool CanDisplayDebugData(this INetworkBotDebugInfo botDebugInfo, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        {
+            return true;
         }
     }
 }

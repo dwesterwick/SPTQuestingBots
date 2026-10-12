@@ -88,7 +88,6 @@ namespace QuestingBots.Components
             {
                 QuestHelpers.ClearCache();
                 Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<BotQuestBuilder>();
-                Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
             }
 
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)

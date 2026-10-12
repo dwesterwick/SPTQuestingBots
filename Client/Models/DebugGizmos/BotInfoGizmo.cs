@@ -5,14 +5,12 @@ using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
-using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos
 {

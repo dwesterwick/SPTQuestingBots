@@ -6,7 +6,7 @@ using System.Text;
 
 namespace QuestingBots.Helpers
 {
-    internal static class LoggingHelpers
+    public static class LoggingHelpers
     {
         public static string GetText(this IEnumerable<Player> players) => string.Join(",", players.Select(b => b?.GetText()));
         public static string GetText(this IEnumerable<IPlayer> players) => string.Join(",", players.Select(b => b?.GetText()));
