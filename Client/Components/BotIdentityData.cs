@@ -21,7 +21,7 @@ namespace QuestingBots.Components
         private bool _initComplete = false;
 
         public bool ActivationComplete { get; private set; } = false;
-        public BotType BotType { get; private set; } = BotType.Undetermined;
+        public EBotType BotType { get; private set; } = EBotType.Undetermined;
 
         public static BotIdentityData GetBotIdentityData(BotOwner botOwner)
         {
@@ -125,7 +125,7 @@ namespace QuestingBots.Components
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(_botOwner);
         }
 
-        private BotType getBotType()
+        private EBotType getBotType()
         {
             return Controllers.BotRegistrationManager.GetBotType(_botOwner);
         }

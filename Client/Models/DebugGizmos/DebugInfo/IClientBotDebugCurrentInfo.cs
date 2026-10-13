@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuestingBots.Models.DebugGizmos
+namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
-    public interface INetworkBotDebugInfo
+    public interface IClientBotDebugCurrentInfo : IClientBotDebugInfo
     {
-        public int BotId { get; }
         public bool IsDead { get; }
         public ClassVector3 Position { get; }
     }

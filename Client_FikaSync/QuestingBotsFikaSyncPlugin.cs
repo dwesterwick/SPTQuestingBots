@@ -34,7 +34,7 @@ namespace QuestingBots
 
             GameStartPatch.OnWaitForBotGeneratorsProgressChanged += PacketHandlers.BotGeneratorProgressHandler.OnWaitForBotGeneratorsProgressChanged;
 
-            new CreateBroadcasterPatch().Enable();
+            new Patches.CreateBotInfoBroadcasterPatch().Enable();
 
             FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(OnNetworkManagerCreated);
         }
@@ -43,7 +43,8 @@ namespace QuestingBots
         {
             if (eventInfo.Manager is FikaClient client)
             {
-                client.RegisterPacket<BotDebugInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugInfoPacket);
+                client.RegisterPacket<BotDebugStaticInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugStaticInfoPacket);
+                client.RegisterPacket<BotDebugCurrentInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugCurrentInfoPacket);
                 client.RegisterPacket<BotGeneratorProgressPacket>(PacketHandlers.BotGeneratorProgressHandler.OnBotGeneratorProgressPacketReceived);
             }
         }

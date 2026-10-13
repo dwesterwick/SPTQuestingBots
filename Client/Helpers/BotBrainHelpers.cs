@@ -17,6 +17,15 @@ using System.Linq;
 
 namespace QuestingBots.Helpers
 {
+    public enum EBotType
+    {
+        Undetermined,
+        Scav,
+        PScav,
+        PMC,
+        Boss
+    }
+
     public static class BotBrainHelpers
     {
         public const int MAX_VANILLA_EFT_WILDSPAWNTYPE_VALUE = 67;
@@ -61,21 +70,21 @@ namespace QuestingBots.Helpers
             return false;
         }
 
-        public static bool AllowsQuesting(this BotType botType)
+        public static bool AllowsQuesting(this EBotType botType)
         {
-            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PMC)
+            if ((botType == EBotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PMC)
             {
                 return true;
             }
-            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Boss)
+            if ((botType == EBotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Boss)
             {
                 return true;
             }
-            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Scav)
+            if ((botType == EBotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.Scav)
             {
                 return true;
             }
-            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PScav)
+            if ((botType == EBotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.AllowedBotTypesForQuesting.PScav)
             {
                 return true;
             }

@@ -1,6 +1,4 @@
-﻿using Comfort.Common;
-using EFT;
-using QuestingBots.Helpers;
+﻿using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,19 +7,24 @@ namespace QuestingBots.PacketHandlers
 {
     internal static class BotDebugInfoHandler
     {
-        internal static void OnBotDebugInfoPacket(BotDebugInfoPacket packet)
+        internal static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
         {
-            if (!FikaHelpers.TryGetGameWorld(out GameWorld? gameWorld) || (gameWorld == null))
+            if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
             {
                 return;
             }
 
-            if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.DebugData debugData))
+            debugData.UpdateClientBotCurrentInfo(packet);
+        }
+
+        internal static void OnBotDebugStaticInfoPacket(BotDebugStaticInfoPacket packet)
+        {
+            if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
             {
                 return;
             }
 
-            debugData.UpdateNetworkBotInfo(packet.BotId, packet);
+            debugData.UpdateClientBotStaticInfo(packet);
         }
     }
 }

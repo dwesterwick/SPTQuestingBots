@@ -245,21 +245,21 @@ namespace QuestingBots.BotLogic.Objective
                 return false;
             }
 
-            BotType botType = Controllers.BotRegistrationManager.GetBotType(BotOwner);
+            EBotType botType = Controllers.BotRegistrationManager.GetBotType(BotOwner);
 
-            if ((botType == BotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PMC)
+            if ((botType == EBotType.PMC) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PMC)
             {
                 return true;
             }
-            if ((botType == BotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Scav)
+            if ((botType == EBotType.Scav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Scav)
             {
                 return true;
             }
-            if ((botType == BotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PScav)
+            if ((botType == EBotType.PScav) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.PScav)
             {
                 return true;
             }
-            if ((botType == BotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Boss)
+            if ((botType == EBotType.Boss) && Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.UnlockingDoors.Enabled.Boss)
             {
                 return true;
             }

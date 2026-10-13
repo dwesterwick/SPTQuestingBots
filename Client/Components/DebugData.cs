@@ -3,6 +3,7 @@ using EFT;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using QuestingBots.Utils.Benchmarking;
@@ -40,18 +41,29 @@ namespace QuestingBots.Components
             }
         }
 
-        public void UpdateNetworkBotInfo(int botId, INetworkBotDebugInfo data)
+        public void UpdateClientBotStaticInfo(IClientBotDebugStaticInfo data)
         {
-            if (!networkBotDebugInfoGizmos.TryGetValue(botId, out NetworkBotDebugInfoGizmo gizmo))
+            if (!networkBotDebugInfoGizmos.TryGetValue(data.BotId, out NetworkBotDebugInfoGizmo gizmo))
             {
                 gizmo = new Models.DebugGizmos.NetworkBotDebugInfoGizmo(data);
-                networkBotDebugInfoGizmos.Add(botId, gizmo);
+                networkBotDebugInfoGizmos.Add(data.BotId, gizmo);
                 gizmos.Add(gizmo);
 
                 return;
             }
 
-            gizmo.UpdateNetworkBotInfo(data);
+            gizmo.UpdateStaticBotInfo(data);
+        }
+
+        public void UpdateClientBotCurrentInfo(IClientBotDebugCurrentInfo data)
+        {
+            if (!networkBotDebugInfoGizmos.TryGetValue(data.BotId, out NetworkBotDebugInfoGizmo gizmo))
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot update debug info for bot" + data.BotId + " because a gizmo for it does not exist");
+                return;
+            }
+
+            gizmo.UpdateCurrentBotInfo(data);
         }
 
         protected void Awake()
@@ -111,6 +123,12 @@ namespace QuestingBots.Components
         {
             foreach (AbstractDebugGizmo gizmo in gizmos.Where(gizmo => gizmo.ReadyToDispose()))
             {
+                NetworkBotDebugInfoGizmo? networkBotDebugInfoGizmo = gizmo as NetworkBotDebugInfoGizmo;
+                if (networkBotDebugInfoGizmo != null)
+                {
+                    networkBotDebugInfoGizmos.Remove(networkBotDebugInfoGizmo.BotId);
+                }
+
                 gizmo.Dispose();
             }
 

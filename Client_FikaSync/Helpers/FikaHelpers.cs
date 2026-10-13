@@ -2,6 +2,7 @@
 using EFT;
 using Fika.Core.Main.GameMode;
 using Fika.Core.Main.Players;
+using QuestingBots.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,15 +14,23 @@ namespace QuestingBots.Helpers
     {
         internal static bool TryGetGameWorld(out GameWorld? gameWorld)
         {
-            gameWorld = null;
+            gameWorld = Singleton<GameWorld>.Instance;
+            return Singleton<GameWorld>.Instantiated;
+        }
 
-            if (Singleton<GameWorld>.Instance == null)
+        internal static bool TryGetDebugData(out DebugData? debugData)
+        {
+            debugData = null;
+
+            if (!TryGetGameWorld(out GameWorld? gameWorld) || (gameWorld == null))
             {
-                QuestingBotsFikaSyncPlugin.PluginLogger.LogError("GameWorld is null");
                 return false;
             }
 
-            gameWorld = Singleton<GameWorld>.Instance;
+            if (!gameWorld.TryGetComponent(out debugData) || (debugData == null))
+            {
+                return false;
+            }
 
             return true;
         }

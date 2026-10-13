@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
 using QuestingBots.Helpers;
+using QuestingBots.Components;
 
-namespace QuestingBots
+namespace QuestingBots.Patches
 {
-    public class CreateBroadcasterPatch : ModulePatch
+    public class CreateBotInfoBroadcasterPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
