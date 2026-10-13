@@ -35,13 +35,7 @@ namespace QuestingBots
 
         private void SendBotInfoDataPacket(BotOwner bot)
         {
-            BotDebugInfoPacket packet = new BotDebugInfoPacket()
-            {
-                BotId = bot.Id,
-                IsDead = bot.IsDead,
-                Position = bot.Position,
-            };
-
+            BotDebugInfoPacket packet = BotDebugInfoPacket.Create(bot);
             packet.TrySendToAllClients();
         }
     }

@@ -26,6 +26,16 @@ namespace QuestingBots
             return true;
         }
 
+        internal static Player? GetPlayer(string name)
+        {
+            if (Singleton<IFikaGame>.Instance.GameController.Bots.TryGetValue(name, out Player player))
+            {
+                return player;
+            }
+
+            return null;
+        }
+
         internal static IEnumerable<Player> GetCoopPlayers()
         {
             foreach (FikaPlayer player in Singleton<IFikaGame>.Instance.GameController.CoopHandler.HumanPlayers)

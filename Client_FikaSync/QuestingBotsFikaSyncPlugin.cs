@@ -4,12 +4,15 @@ using Comfort.Common;
 using EFT;
 using EFT.InventoryLogic;
 using Fika.Core.Main.Players;
+using Fika.Core.Main.Utils;
 using Fika.Core.Modding;
 using Fika.Core.Modding.Events;
 using Fika.Core.Networking;
 using Fika.Core.Networking.Packets.Player;
+using QuestingBots.Components.Spawning;
 using QuestingBots.ExternalMods.Functions.Multiplayer;
 using QuestingBots.ExternalMods.Functions.NetworkTransactions;
+using QuestingBots.Patches.Spawning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +38,8 @@ namespace QuestingBots
             FikaMultiplayerFunctions.SetGetPayersFunc(FikaHelpers.GetCoopPlayers);
             FikaRunNetworkTransactionFunctions.SetMoveItemFunc(SendSpawnItemInInventoryPacket);
 
+            GameStartPatch.OnWaitForBotGeneratorsProgressChanged += OnWaitForBotGeneratorsProgressChanged;
+
             new CreateBroadcasterPatch().Enable();
 
             FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(OnNetworkManagerCreated);
@@ -45,6 +50,41 @@ namespace QuestingBots
             if (eventInfo.Manager is FikaClient client)
             {
                 client.RegisterPacket<BotDebugInfoPacket>(OnBotDebugInfoPacket);
+                client.RegisterPacket<BotGeneratorProgressPacket>(OnBotGeneratorProgressPacketReceived);
+            }
+        }
+
+        private void OnWaitForBotGeneratorsProgressChanged()
+        {
+            BotGeneratorProgressPacket packet = new BotGeneratorProgressPacket()
+            {
+                RemainingBotGenerators = BotGenerator.RemainingBotGenerators,
+                CurrentBotGeneratorType = BotGenerator.CurrentBotGeneratorType,
+                CurrentBotGeneratorProgress = BotGenerator.CurrentBotGeneratorProgress
+            };
+
+            if (!packet.TrySendToAllClients())
+            {
+                PluginLogger.LogError("Could not send BotGeneratorProgressPacket");
+            }
+        }
+
+        private void OnBotGeneratorProgressPacketReceived(BotGeneratorProgressPacket packet)
+        {
+            if (!FikaBackendUtils.IsClient)
+            {
+                PluginLogger.LogWarning("Ignoring BotGeneratorProgressPacket for the host machine");
+                return;
+            }
+
+            if (packet.RemainingBotGenerators > 0)
+            {
+                string screenMessageText = TimeHasComeScreenClassChangeStatusPatch.GetWaitingForGeneratorsText(packet.CurrentBotGeneratorType);
+                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(screenMessageText, packet.CurrentBotGeneratorProgress / 100f);
+            }
+            else
+            {
+                TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
             }
         }
 

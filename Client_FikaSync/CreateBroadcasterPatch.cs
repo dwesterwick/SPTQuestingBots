@@ -17,7 +17,7 @@ namespace QuestingBots
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix()
+        protected static void PatchPostfix(BotsController __instance)
         {
             if (!FikaHelpers.TryGetGameWorld(out GameWorld? gameWorld) || (gameWorld == null))
             {
