@@ -1,17 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using Comfort.Common;
-using EFT;
-using EFT.InventoryLogic;
-using Fika.Core.Main.Players;
-using Fika.Core.Main.Utils;
 using Fika.Core.Modding;
 using Fika.Core.Modding.Events;
 using Fika.Core.Networking;
-using Fika.Core.Networking.Packets.Player;
-using QuestingBots.Components.Spawning;
 using QuestingBots.ExternalMods.Functions.Multiplayer;
 using QuestingBots.ExternalMods.Functions.NetworkTransactions;
+using QuestingBots.Helpers;
 using QuestingBots.Patches.Spawning;
 using System;
 using System.Collections.Generic;
@@ -36,9 +30,9 @@ namespace QuestingBots
             PluginLogger.LogInfo($"{nameof(QuestingBotsFikaSyncPlugin)} has been loaded.");
 
             FikaMultiplayerFunctions.SetGetPayersFunc(FikaHelpers.GetCoopPlayers);
-            FikaRunNetworkTransactionFunctions.SetMoveItemFunc(SendSpawnItemInInventoryPacket);
+            FikaRunNetworkTransactionFunctions.SetMoveItemFunc(PacketHandlers.SpawnItemInInventoryHandler.SendSpawnItemInInventoryPacket);
 
-            GameStartPatch.OnWaitForBotGeneratorsProgressChanged += OnWaitForBotGeneratorsProgressChanged;
+            GameStartPatch.OnWaitForBotGeneratorsProgressChanged += PacketHandlers.BotGeneratorProgressHandler.OnWaitForBotGeneratorsProgressChanged;
 
             new CreateBroadcasterPatch().Enable();
 
@@ -49,83 +43,9 @@ namespace QuestingBots
         {
             if (eventInfo.Manager is FikaClient client)
             {
-                client.RegisterPacket<BotDebugInfoPacket>(OnBotDebugInfoPacket);
-                client.RegisterPacket<BotGeneratorProgressPacket>(OnBotGeneratorProgressPacketReceived);
+                client.RegisterPacket<BotDebugInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugInfoPacket);
+                client.RegisterPacket<BotGeneratorProgressPacket>(PacketHandlers.BotGeneratorProgressHandler.OnBotGeneratorProgressPacketReceived);
             }
-        }
-
-        private void OnWaitForBotGeneratorsProgressChanged()
-        {
-            BotGeneratorProgressPacket packet = new BotGeneratorProgressPacket()
-            {
-                RemainingBotGenerators = BotGenerator.RemainingBotGenerators,
-                CurrentBotGeneratorType = BotGenerator.CurrentBotGeneratorType,
-                CurrentBotGeneratorProgress = BotGenerator.CurrentBotGeneratorProgress
-            };
-
-            if (!packet.TrySendToAllClients())
-            {
-                PluginLogger.LogError("Could not send BotGeneratorProgressPacket");
-            }
-        }
-
-        private void OnBotGeneratorProgressPacketReceived(BotGeneratorProgressPacket packet)
-        {
-            if (!FikaBackendUtils.IsClient)
-            {
-                PluginLogger.LogWarning("Ignoring BotGeneratorProgressPacket for the host machine");
-                return;
-            }
-
-            if (packet.RemainingBotGenerators > 0)
-            {
-                string screenMessageText = TimeHasComeScreenClassChangeStatusPatch.GetWaitingForGeneratorsText(packet.CurrentBotGeneratorType);
-                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(screenMessageText, packet.CurrentBotGeneratorProgress / 100f);
-            }
-            else
-            {
-                TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
-            }
-        }
-
-        private void OnBotDebugInfoPacket(BotDebugInfoPacket packet)
-        {
-            if (!FikaHelpers.TryGetGameWorld(out GameWorld? gameWorld) || (gameWorld == null))
-            {
-                return;
-            }
-
-            if (!Singleton<GameWorld>.Instance.TryGetComponent(out Components.DebugData debugData))
-            {
-                return;
-            }
-
-            debugData.UpdateNetworkBotInfo(packet.BotId, packet);
-        }
-
-        private bool SendSpawnItemInInventoryPacket(Player player, Item item)
-        {
-            FikaBot? fikaBot = player as FikaBot;
-            if (fikaBot == null)
-            {
-                PluginLogger.LogError(player.name + " is not a FikaBot. Cannot send SpawnItemInInventoryPacket.");
-                return false;
-            }
-
-            SpawnItemInInventoryPacket packet = new SpawnItemInInventoryPacket()
-            {
-                NetId = fikaBot.NetId,
-                ItemId = item.Id,
-                TemplateId = item.TemplateId,
-                Amount = item.StackObjectsCount,
-                ItemAddress = item.Parent,
-            };
-
-#if DEBUG
-            PluginLogger.LogInfo("Moving " + item.LocalizedName() + " to inventory of " + player.name + "...");
-#endif
-
-            return packet.TrySendToAllClients();
         }
     }
 }

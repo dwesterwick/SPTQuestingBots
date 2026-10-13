@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace QuestingBots
+namespace QuestingBots.Helpers
 {
     public static class FikaHelpers
     {

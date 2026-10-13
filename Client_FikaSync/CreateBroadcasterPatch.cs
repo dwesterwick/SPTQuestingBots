@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SPT.Reflection.Patching;
 using EFT;
+using QuestingBots.Helpers;
 
 namespace QuestingBots
 {

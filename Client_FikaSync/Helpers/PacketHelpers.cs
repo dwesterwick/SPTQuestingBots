@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestingBots
+namespace QuestingBots.Helpers
 {
     internal static class PacketHelpers
     {
