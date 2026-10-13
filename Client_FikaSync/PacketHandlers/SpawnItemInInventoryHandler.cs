@@ -1,7 +1,9 @@
 ﻿using EFT;
 using EFT.InventoryLogic;
 using Fika.Core.Main.Players;
+using Fika.Core.Networking;
 using Fika.Core.Networking.Packets.Player;
+using QuestingBots.ExternalMods.Functions.NetworkTransactions;
 using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
@@ -9,8 +11,20 @@ using System.Text;
 
 namespace QuestingBots.PacketHandlers
 {
-    internal static class SpawnItemInInventoryHandler
+    internal class SpawnItemInInventoryHandler : AbstractPacketHandler
     {
+        internal SpawnItemInInventoryHandler() { }
+
+        internal override void Setup()
+        {
+            FikaRunNetworkTransactionFunctions.SetMoveItemFunc(SendSpawnItemInInventoryPacket);
+        }
+
+        internal override void RegisterPackets(FikaClient client)
+        {
+
+        }
+
         internal static bool SendSpawnItemInInventoryPacket(Player player, Item item)
         {
             FikaBot? fikaBot = player as FikaBot;

@@ -91,7 +91,7 @@ namespace QuestingBots.Models.DebugGizmos
                 level = _StaticData.Level;
             }
 
-            sb.AppendLabeledValue(botTypeText, $"{nickname} (Name: bot{id}, Level: {level})", Color.white, Color.white);
+            sb.AppendLabeledValue(botTypeText, $"{nickname} (Name: Bot{id}, Level: {level})", Color.white, Color.white);
         }
 
         public override void Draw()

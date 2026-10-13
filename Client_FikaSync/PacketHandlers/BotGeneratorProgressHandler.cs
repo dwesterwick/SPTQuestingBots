@@ -1,4 +1,5 @@
 ﻿using Fika.Core.Main.Utils;
+using Fika.Core.Networking;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Patches.Spawning;
@@ -8,8 +9,20 @@ using System.Text;
 
 namespace QuestingBots.PacketHandlers
 {
-    internal static class BotGeneratorProgressHandler
+    internal class BotGeneratorProgressHandler : AbstractPacketHandler
     {
+        internal BotGeneratorProgressHandler() { }
+
+        internal override void Setup()
+        {
+            GameStartPatch.OnWaitForBotGeneratorsProgressChanged += OnWaitForBotGeneratorsProgressChanged;
+        }
+
+        internal override void RegisterPackets(FikaClient client)
+        {
+            client.RegisterPacket<BotGeneratorProgressPacket>(OnBotGeneratorProgressPacketReceived);
+        }
+
         internal static void OnWaitForBotGeneratorsProgressChanged()
         {
             BotGeneratorProgressPacket packet = new BotGeneratorProgressPacket()

@@ -15,7 +15,7 @@ namespace QuestingBots.Components
 
         public BotInfoDataBroadcaster()
         {
-            UpdateInterval = QuestingBotsFikaSyncPlugin.BROADCAST_RATE;
+            UpdateInterval = 20;
         }
 
         protected void Update()

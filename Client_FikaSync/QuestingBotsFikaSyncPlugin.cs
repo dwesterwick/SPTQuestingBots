@@ -1,15 +1,12 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using Fika.Core.Modding;
-using Fika.Core.Modding.Events;
-using Fika.Core.Networking;
 using QuestingBots.ExternalMods.Functions.Multiplayer;
-using QuestingBots.ExternalMods.Functions.NetworkTransactions;
 using QuestingBots.Helpers;
-using QuestingBots.Patches.Spawning;
+using QuestingBots.PacketHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,8 +17,6 @@ namespace QuestingBots
     [BepInPlugin(ModInfo.GUID + "fikasync", ModInfo.MODNAME + "FikaSync", ModInfo.MOD_VERSION)]
     internal class QuestingBotsFikaSyncPlugin : BaseUnityPlugin
     {
-        public const int BROADCAST_RATE = 20;
-
         internal static ManualLogSource PluginLogger = null!;
 
         protected void Awake()
@@ -30,23 +25,8 @@ namespace QuestingBots
             PluginLogger.LogInfo($"{nameof(QuestingBotsFikaSyncPlugin)} has been loaded.");
 
             FikaMultiplayerFunctions.SetGetPayersFunc(FikaHelpers.GetCoopPlayers);
-            FikaRunNetworkTransactionFunctions.SetMoveItemFunc(PacketHandlers.SpawnItemInInventoryHandler.SendSpawnItemInInventoryPacket);
 
-            GameStartPatch.OnWaitForBotGeneratorsProgressChanged += PacketHandlers.BotGeneratorProgressHandler.OnWaitForBotGeneratorsProgressChanged;
-
-            new Patches.CreateBotInfoBroadcasterPatch().Enable();
-
-            FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(OnNetworkManagerCreated);
-        }
-
-        private void OnNetworkManagerCreated(FikaNetworkManagerCreatedEvent eventInfo)
-        {
-            if (eventInfo.Manager is FikaClient client)
-            {
-                client.RegisterPacket<BotDebugStaticInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugStaticInfoPacket);
-                client.RegisterPacket<BotDebugCurrentInfoPacket>(PacketHandlers.BotDebugInfoHandler.OnBotDebugCurrentInfoPacket);
-                client.RegisterPacket<BotGeneratorProgressPacket>(PacketHandlers.BotGeneratorProgressHandler.OnBotGeneratorProgressPacketReceived);
-            }
+            AbstractPacketHandler.SetupAllPacketHandlers();
         }
     }
 }

@@ -1,12 +1,26 @@
-﻿using QuestingBots.Helpers;
+﻿using Fika.Core.Networking;
+using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace QuestingBots.PacketHandlers
 {
-    internal static class BotDebugInfoHandler
+    internal class BotDebugInfoHandler : AbstractPacketHandler
     {
+        internal BotDebugInfoHandler() { }
+
+        internal override void Setup()
+        {
+            new Patches.CreateBotInfoBroadcasterPatch().Enable();
+        }
+
+        internal override void RegisterPackets(FikaClient client)
+        {
+            client.RegisterPacket<BotDebugStaticInfoPacket>(OnBotDebugStaticInfoPacket);
+            client.RegisterPacket<BotDebugCurrentInfoPacket>(OnBotDebugCurrentInfoPacket);
+        }
+
         internal static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
         {
             if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
