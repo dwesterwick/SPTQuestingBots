@@ -1,9 +1,12 @@
 ﻿using EFT;
 using Fika.Core.Main.Players;
 using Fika.Core.Networking.LiteNetLib.Utils;
+using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -128,6 +131,59 @@ namespace QuestingBots
                 CurrentEnemyPlayerId = currentEnemyPlayerId,
                 HasBoss = hasBoss,
                 BossPlayerId = bossPlayerId
+            };
+        }
+    }
+
+    public struct BotDebugQuestingInfoPacket : INetSerializable, IClientBotDebugQuestingInfo
+    {
+        public int NetId { get; set; }
+        public bool IsQuesting { get; set; }
+        public string QuestName { get; set; }
+        public string QuestObjectiveName { get; set; }
+        public string QuestObjectiveStepName { get; set; }
+        public EJobAssignmentStatus QuestStatus { get; set; }
+        public EBotQuestingDecision CurrentDecision { get; set; }
+        public UnityEngine.AI.NavMeshPathStatus PathStatus { get; set; }
+
+        public void Deserialize(NetDataReader reader)
+        {
+            NetId = reader.GetInt();
+            IsQuesting = reader.GetBool();
+            QuestName = reader.GetString();
+            QuestObjectiveName = reader.GetString();
+            QuestObjectiveStepName = reader.GetString();
+            QuestStatus = reader.GetEnum<EJobAssignmentStatus>();
+            CurrentDecision = reader.GetEnum<EBotQuestingDecision>();
+            PathStatus = reader.GetEnum<UnityEngine.AI.NavMeshPathStatus>();
+        }
+
+        public void Serialize(NetDataWriter writer)
+        {
+            writer.Put(NetId);
+            writer.Put(IsQuesting);
+            writer.Put(QuestName);
+            writer.Put(QuestObjectiveName);
+            writer.Put(QuestObjectiveStepName);
+            writer.PutEnum(QuestStatus);
+            writer.PutEnum(CurrentDecision);
+            writer.PutEnum(PathStatus);
+        }
+
+        public static BotDebugQuestingInfoPacket Create(FikaBot bot)
+        {
+            bool isQuesting = bot.AIData.BotOwner.IsQuesting(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision);
+
+            return new BotDebugQuestingInfoPacket()
+            {
+                NetId = bot.NetId,
+                IsQuesting = isQuesting,
+                QuestName = botObjectiveManager?.CurrentAssignment?.QuestAssignment?.ToString() ?? string.Empty,
+                QuestObjectiveName = botObjectiveManager?.CurrentAssignment?.QuestObjectiveAssignment?.ToString() ?? string.Empty,
+                QuestObjectiveStepName = botObjectiveManager?.CurrentAssignment?.QuestObjectiveStepAssignment?.ToString() ?? string.Empty,
+                QuestStatus = botObjectiveManager?.CurrentAssignment?.Status ?? EJobAssignmentStatus.NotStarted,
+                CurrentDecision = currentDecision,
+                PathStatus = botObjectiveManager?.BotPath?.Status ?? UnityEngine.AI.NavMeshPathStatus.PathComplete,
             };
         }
     }

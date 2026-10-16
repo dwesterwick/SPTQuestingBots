@@ -27,7 +27,7 @@ namespace QuestingBots.Patches
                 return;
             }
 
-            gameWorld.gameObject.GetOrAddComponent<BotInfoDataBroadcaster>();
+            gameWorld.gameObject.GetOrAddComponent<BotInfoDataBroadcasterComponent>();
         }
     }
 }

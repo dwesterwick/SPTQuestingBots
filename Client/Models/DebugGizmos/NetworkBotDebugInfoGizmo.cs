@@ -1,8 +1,11 @@
 ﻿using Comfort.Common;
 using EFT;
+using EFT.UI.Matchmaker;
+using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,9 @@ namespace QuestingBots.Models.DebugGizmos
 
         private static object _currentDataLock = new object();
         private IClientBotDebugCurrentInfo? _CurrentData = null;
+
+        private static object _questingDataLock = new object();
+        private IClientBotDebugQuestingInfo? _QuestingData = null;
 
         public int NetId
         {
@@ -53,6 +59,14 @@ namespace QuestingBots.Models.DebugGizmos
             lock (_currentDataLock)
             {
                 _CurrentData = data;
+            }
+        }
+
+        public void UpdateQuestingBotInfo(IClientBotDebugQuestingInfo data)
+        {
+            lock (_questingDataLock)
+            {
+                _QuestingData = data;
             }
         }
 
@@ -185,6 +199,44 @@ namespace QuestingBots.Models.DebugGizmos
                     sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, Color.white);
                 }
             }
+
+            if (_QuestingData == null)
+            {
+                return;
+            }
+
+            bool isQuesting;
+            string questName;
+            string questObjectiveName;
+            string questObjectiveStepName;
+            EJobAssignmentStatus questStatus;
+            EBotQuestingDecision currentDecision;
+            UnityEngine.AI.NavMeshPathStatus pathStatus;
+            lock (_questingDataLock)
+            {
+                isQuesting = _QuestingData.IsQuesting;
+                questName = _QuestingData.QuestName;
+                questObjectiveName = _QuestingData.QuestObjectiveName;
+                questObjectiveStepName = _QuestingData.QuestObjectiveStepName;
+                questStatus = _QuestingData.QuestStatus;
+                currentDecision = _QuestingData.CurrentDecision;
+                pathStatus = _QuestingData.PathStatus;
+            }
+
+            if (isQuesting)
+            {
+                sb.AppendLabeledValue("Quest", questName, Color.cyan, Color.cyan);
+                sb.AppendLabeledValue("Objective", questObjectiveName, Color.white, Color.white);
+                sb.AppendLabeledValue("Step", questObjectiveStepName, Color.white, Color.white);
+                sb.AppendLabeledValue("Status", questStatus.ToString(), Color.white, Color.white);
+            }
+
+            sb.AppendLabeledValue("Current Decision", currentDecision.ToString(), Color.white, Color.white);
+
+            if (currentDecision.ShouldShowPathStatus() && (pathStatus != UnityEngine.AI.NavMeshPathStatus.PathComplete))
+            {
+                sb.AppendLabeledValue("Path Status", pathStatus.ToString(), Color.white, pathStatus.GetDebugColor());
+            }
         }
 
         public override void Draw()
@@ -217,9 +269,25 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            Vector3 botPosition = botPlayer.Position;
+            Player? myPlayer = Singleton<PlayerData>.Instance.GetMyPlayer();
+            if (myPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get your position");
+                return;
+            }
 
-            Overlay.Draw(Overlay.StaticText, botPosition + new Vector3(0, 1.5f, 0));
+            double distanceToBot = Math.Round(Vector3.Distance(botPlayer.Position, myPlayer.Position), 1);
+
+            Overlay.Draw(addDistanceToStaticText(distanceToBot), botPlayer.Position + new Vector3(0, 1.5f, 0));
+        }
+
+        private string addDistanceToStaticText(double distance)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Overlay.StaticText);
+            sb.AppendLabeledValue("Distance", distance + "m", Color.white, Color.white);
+
+            return sb.ToString();
         }
     }
 }

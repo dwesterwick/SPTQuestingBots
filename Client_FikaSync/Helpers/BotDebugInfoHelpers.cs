@@ -1,7 +1,9 @@
 ﻿using EFT;
+using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,33 @@ namespace QuestingBots.Helpers
             }
 
             return false;
+        }
+
+        internal static bool IsQuesting(this BotOwner bot, out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision)
+        {
+            currentDecision = EBotQuestingDecision.Inactive;
+
+            botObjectiveManager = bot.GetObjectiveManager();
+            if ((botObjectiveManager == null) || !botObjectiveManager.IsQuestingAllowed)
+            {
+                return false;
+            }
+
+            if (botObjectiveManager.CurrentAssignment == null)
+            {
+                return false;
+            }
+
+            BotQuestingDecisionMonitor? questingDecisionMonitor = botObjectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+            if (questingDecisionMonitor == null)
+            {
+                return false;
+            }
+
+            currentDecision = questingDecisionMonitor.CurrentDecision;
+
+            bool hasBoss = bot.HasBoss(out int _);
+            return !hasBoss || questingDecisionMonitor.MustQuestBeforeFollowing;
         }
 
         internal static int[] EnemyPlayerIdsArray(this BotOwner bot)

@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace QuestingBots.Models.Questing
 {
-    public enum JobAssignmentStatus
+    public enum EJobAssignmentStatus
     {
         NotStarted,
         Pending,
@@ -26,7 +26,7 @@ namespace QuestingBots.Models.Questing
 
     public class BotJobAssignment : JobAssignment
     {
-        public JobAssignmentStatus Status { get; private set; } = JobAssignmentStatus.NotStarted;
+        public EJobAssignmentStatus Status { get; private set; } = EJobAssignmentStatus.NotStarted;
         public BotOwner BotOwner { get; private set; }
         public string BotName { get; private set; } = "???";
         public string BotNickname { get; private set; } = "???";
@@ -37,8 +37,8 @@ namespace QuestingBots.Models.Questing
         public bool HasCompletePath { get; set; } = true;
         public double MinElapsedTime { get; private set; } = 0;
 
-        public bool IsActive => Status == JobAssignmentStatus.Active || Status == JobAssignmentStatus.Pending;
-        public bool IsCompletedOrArchived => Status == JobAssignmentStatus.Completed || Status == JobAssignmentStatus.Archived;
+        public bool IsActive => Status == EJobAssignmentStatus.Active || Status == EJobAssignmentStatus.Pending;
+        public bool IsCompletedOrArchived => Status == EJobAssignmentStatus.Completed || Status == EJobAssignmentStatus.Archived;
         public Vector3? LookToPosition => QuestObjectiveStepAssignment?.LookToPosition;
         public Vector3? TargetPosition => QuestObjectiveStepAssignment?.TargetPosition;
         public bool IgnoreHearing => QuestObjectiveAssignment?.IgnoreHearing ?? false;
@@ -119,7 +119,7 @@ namespace QuestingBots.Models.Questing
 
         public bool TrySetNextObjectiveStep(bool allowReset = false)
         {
-            if ((Status != JobAssignmentStatus.Completed) && (Status != JobAssignmentStatus.NotStarted))
+            if ((Status != EJobAssignmentStatus.Completed) && (Status != EJobAssignmentStatus.NotStarted))
             {
                 return false;
             }
@@ -154,12 +154,12 @@ namespace QuestingBots.Models.Questing
 
             endInternal();
 
-            if ((Status != JobAssignmentStatus.Completed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            if ((Status != EJobAssignmentStatus.Completed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has completed " + ToString());
             }
 
-            Status = JobAssignmentStatus.Completed;
+            Status = EJobAssignmentStatus.Completed;
         }
 
         private void InstructFollowersToComplete()
@@ -204,32 +204,32 @@ namespace QuestingBots.Models.Questing
         {
             endInternal();
 
-            if ((Status != JobAssignmentStatus.Failed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            if ((Status != EJobAssignmentStatus.Failed) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " has failed " + ToString());
             }
 
-            Status = JobAssignmentStatus.Failed;
+            Status = EJobAssignmentStatus.Failed;
         }
 
         public void Start()
         {
-            Status = JobAssignmentStatus.Active;
+            Status = EJobAssignmentStatus.Active;
         }
 
         public void Inactivate()
         {
-            if ((Status == JobAssignmentStatus.Active) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
+            if ((Status == EJobAssignmentStatus.Active) && QuestingBotsPluginConfig.VerboseLogging.Value.HasFlag(VerboseLoggingType.QuestingActions))
             {
                 Singleton<LoggingUtil>.Instance.LogInfo("Bot " + BotOwner.GetText() + " is no longer doing " + ToString());
 
-                Status = JobAssignmentStatus.Pending;
+                Status = EJobAssignmentStatus.Pending;
             }
         }
 
         public void Archive()
         {
-            Status = JobAssignmentStatus.Archived;
+            Status = EJobAssignmentStatus.Archived;
         }
 
         public void SetDoorToUnlock(WorldInteractiveObject door)
@@ -256,7 +256,7 @@ namespace QuestingBots.Models.Questing
                 StartTime = DateTime.Now;
             }
 
-            Status = JobAssignmentStatus.Pending;
+            Status = EJobAssignmentStatus.Pending;
             HasCompletePath = true;
         }
 

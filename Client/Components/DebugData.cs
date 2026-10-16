@@ -73,11 +73,20 @@ namespace QuestingBots.Components
         {
             if (!networkBotDebugInfoGizmos.TryGetValue(data.NetId, out NetworkBotDebugInfoGizmo gizmo))
             {
-                //Singleton<LoggingUtil>.Instance.LogError("Cannot update debug info for bot with NetId=" + data.NetId + " because a gizmo for it does not exist");
                 return;
             }
 
             gizmo.UpdateCurrentBotInfo(data);
+        }
+
+        public void UpdateClientBotQuestingInfo(IClientBotDebugQuestingInfo data)
+        {
+            if (!networkBotDebugInfoGizmos.TryGetValue(data.NetId, out NetworkBotDebugInfoGizmo gizmo))
+            {
+                return;
+            }
+
+            gizmo.UpdateQuestingBotInfo(data);
         }
 
         protected void Awake()

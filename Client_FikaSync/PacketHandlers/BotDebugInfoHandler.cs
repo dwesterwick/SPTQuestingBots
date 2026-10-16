@@ -29,6 +29,7 @@ namespace QuestingBots.PacketHandlers
         {
             client.RegisterPacket<BotDebugStaticInfoPacket>(OnBotDebugStaticInfoPacket);
             client.RegisterPacket<BotDebugCurrentInfoPacket>(OnBotDebugCurrentInfoPacket);
+            client.RegisterPacket<BotDebugQuestingInfoPacket>(OnBotDebugQuestingInfoPacket);
         }
 
         private static void OnGameWorldStartedEvent(GameWorldStartedEvent eventInfo)
@@ -49,16 +50,6 @@ namespace QuestingBots.PacketHandlers
             Patches.BotsControllerStopPatch.RemoveCommonGameWorldComponents();
         }
 
-        private static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
-        {
-            if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
-            {
-                return;
-            }
-
-            debugData.UpdateClientBotCurrentInfo(packet);
-        }
-
         private static void OnBotDebugStaticInfoPacket(BotDebugStaticInfoPacket packet)
         {
             if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
@@ -70,6 +61,26 @@ namespace QuestingBots.PacketHandlers
             {
                 QuestingBotsFikaSyncPlugin.PluginLogger.LogError("Could not update static debug info for bot with NetId=" + packet.NetId);
             }
+        }
+
+        private static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
+        {
+            if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
+            {
+                return;
+            }
+
+            debugData.UpdateClientBotCurrentInfo(packet);
+        }
+
+        private static void OnBotDebugQuestingInfoPacket(BotDebugQuestingInfoPacket packet)
+        {
+            if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
+            {
+                return;
+            }
+
+            debugData.UpdateClientBotQuestingInfo(packet);
         }
     }
 }

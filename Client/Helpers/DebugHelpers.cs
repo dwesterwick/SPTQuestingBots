@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Comfort.Common;
+﻿using Comfort.Common;
 using EFT;
+using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -202,6 +203,20 @@ namespace QuestingBots.Helpers
             }
 
             return Color.green;
+        }
+
+        public static bool ShouldShowPathStatus(this EBotQuestingDecision decision)
+        {
+            switch (decision)
+            {
+                case EBotQuestingDecision.Quest:
+                case EBotQuestingDecision.Regroup:
+                case EBotQuestingDecision.FollowBoss:
+                case EBotQuestingDecision.HelpBoss:
+                    return true;
+            }
+
+            return false;
         }
 
         public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)

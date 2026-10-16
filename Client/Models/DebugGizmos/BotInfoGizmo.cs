@@ -111,27 +111,13 @@ namespace QuestingBots.Models.DebugGizmos
 
             sb.AppendLabeledValue("Current Decision", botQuestingDecisionMonitor.CurrentDecision.ToString(), Color.white, Color.white);
 
-            if (shouldShowPathStatus(botQuestingDecisionMonitor.CurrentDecision) && (botObjectiveManager.BotPath != null))
+            if (botQuestingDecisionMonitor.CurrentDecision.ShouldShowPathStatus() && (botObjectiveManager.BotPath != null))
             {
                 if (botObjectiveManager.BotPath.Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
                 {
                     sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
                 }
             }
-        }
-
-        private bool shouldShowPathStatus(EBotQuestingDecision decision)
-        {
-            switch (decision)
-            {
-                case EBotQuestingDecision.Quest:
-                case EBotQuestingDecision.Regroup:
-                case EBotQuestingDecision.FollowBoss:
-                case EBotQuestingDecision.HelpBoss:
-                    return true;
-            }
-
-            return false;
         }
 
         public override void Draw()
