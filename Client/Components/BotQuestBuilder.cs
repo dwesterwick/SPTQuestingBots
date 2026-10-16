@@ -242,7 +242,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            Player[] humanPlayers = locationData.GetHumanPlayers().ToArray();
+            Player[] humanPlayers = Singleton<GameWorld>.Instance.GetComponent<PlayerData>().GetAllAliveHumanPlayers().ToArray();
             foreach (Player humanPlayer in humanPlayers)
             {
                 SpawnPointParams? playerSpawnPoint = locationData.GetNearestSpawnPoint(humanPlayer.Position);

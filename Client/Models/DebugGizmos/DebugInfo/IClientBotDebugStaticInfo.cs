@@ -7,9 +7,8 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public interface IClientBotDebugStaticInfo : IClientBotDebugInfo
     {
+        public int BotId { get; }
         public bool IsInitialized { get; }
         public EBotType BotType { get; }
-        public string CorrectedNickname { get; }
-        public int Level { get; }
     }
 }

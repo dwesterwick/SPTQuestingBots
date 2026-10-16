@@ -1,4 +1,8 @@
-﻿using Fika.Core.Networking;
+﻿using Comfort.Common;
+using Fika.Core.Main.Utils;
+using Fika.Core.Modding;
+using Fika.Core.Modding.Events;
+using Fika.Core.Networking;
 using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
@@ -8,11 +12,17 @@ namespace QuestingBots.PacketHandlers
 {
     internal class BotDebugInfoHandler : AbstractPacketHandler
     {
-        internal BotDebugInfoHandler() { }
+        public BotDebugInfoHandler() { }
 
         internal override void Setup()
         {
             new Patches.CreateBotInfoBroadcasterPatch().Enable();
+
+            //if (!FikaBackendUtils.IsHeadless)
+            {
+                FikaEventDispatcher.SubscribeEvent<GameWorldStartedEvent>(OnGameWorldStartedEvent);
+                FikaEventDispatcher.SubscribeEvent<FikaGameEndedEvent>(OnFikaGameEndedEvent);
+            }
         }
 
         internal override void RegisterPackets(FikaClient client)
@@ -21,7 +31,25 @@ namespace QuestingBots.PacketHandlers
             client.RegisterPacket<BotDebugCurrentInfoPacket>(OnBotDebugCurrentInfoPacket);
         }
 
-        internal static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
+        private static void OnGameWorldStartedEvent(GameWorldStartedEvent eventInfo)
+        {
+#if DEBUG
+            QuestingBotsFikaSyncPlugin.PluginLogger.LogDebug("Adding GameWorld components...");
+#endif
+
+            Patches.BotsControllerInitPatch.GetOrAddCommonGameWorldComponents();
+        }
+
+        private static void OnFikaGameEndedEvent(FikaGameEndedEvent eventInfo)
+        {
+#if DEBUG
+            QuestingBotsFikaSyncPlugin.PluginLogger.LogDebug("Removing GameWorld components...");
+#endif
+
+            Patches.BotsControllerStopPatch.RemoveCommonGameWorldComponents();
+        }
+
+        private static void OnBotDebugCurrentInfoPacket(BotDebugCurrentInfoPacket packet)
         {
             if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
             {
@@ -31,14 +59,17 @@ namespace QuestingBots.PacketHandlers
             debugData.UpdateClientBotCurrentInfo(packet);
         }
 
-        internal static void OnBotDebugStaticInfoPacket(BotDebugStaticInfoPacket packet)
+        private static void OnBotDebugStaticInfoPacket(BotDebugStaticInfoPacket packet)
         {
             if (!FikaHelpers.TryGetDebugData(out Components.DebugData? debugData) || (debugData == null))
             {
                 return;
             }
 
-            debugData.UpdateClientBotStaticInfo(packet);
+            if (!debugData.TryUpdateClientBotStaticInfo(packet))
+            {
+                QuestingBotsFikaSyncPlugin.PluginLogger.LogError("Could not update static debug info for bot with NetId=" + packet.NetId);
+            }
         }
     }
 }

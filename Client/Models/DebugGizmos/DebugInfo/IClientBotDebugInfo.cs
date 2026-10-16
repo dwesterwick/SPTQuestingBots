@@ -6,6 +6,6 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public interface IClientBotDebugInfo
     {
-        public int BotId { get; }
+        public int NetId { get; }
     }
 }

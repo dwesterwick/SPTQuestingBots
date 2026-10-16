@@ -7,8 +7,6 @@ using HarmonyLib;
 using JsonType;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
-using QuestingBots.ExternalMods;
-using QuestingBots.ExternalMods.Functions.Multiplayer;
 using QuestingBots.Helpers;
 using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
@@ -35,7 +33,6 @@ namespace QuestingBots.Components
         public bool AlarmState { get; private set; } = false;
 
         private readonly DateTime awakeTime = DateTime.Now;
-        private AbstractMultiplayerFunctions multiPlayerFunctions = null!;
         private LightkeeperIslandMonitor lightkeeperIslandMonitor = null!;
         private Dictionary<Vector3, Vector3> nearestNavMeshPoint = new Dictionary<Vector3, Vector3>();
         private List<TriggerZone> alarmTriggerZones = new List<TriggerZone>();
@@ -56,8 +53,6 @@ namespace QuestingBots.Components
 
         protected void Awake()
         {
-            multiPlayerFunctions = ExternalModHandler.CreateMultiplayerFunctions();
-
             Singleton<GlobalEventDispatcher>.Instance.OnEvent += HandleBotEvent;
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
@@ -853,16 +848,6 @@ namespace QuestingBots.Components
             }
 
             return false;
-        }
-
-        public IEnumerable<Player> GetHumanPlayers()
-        {
-            if (Singleton<GameWorld>.Instance == null)
-            {
-                return Enumerable.Empty<Player>();
-            }
-
-            return multiPlayerFunctions.GetHumanPlayers();
         }
 
         public Vector3? FindNearestNavMeshPosition(Vector3 position, float searchDistance)

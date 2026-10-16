@@ -6,7 +6,6 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public interface IClientBotDebugCurrentInfo : IClientBotDebugInfo
     {
-        public bool IsDead { get; }
-        public ClassVector3 Position { get; }
+        
     }
 }

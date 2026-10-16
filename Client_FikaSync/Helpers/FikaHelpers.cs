@@ -35,7 +35,7 @@ namespace QuestingBots.Helpers
             return true;
         }
 
-        internal static Player? GetPlayer(string name)
+        internal static Player? GetBotPlayer(string name)
         {
             if (Singleton<IFikaGame>.Instance.GameController.Bots.TryGetValue(name, out Player player))
             {
@@ -45,19 +45,34 @@ namespace QuestingBots.Helpers
             return null;
         }
 
-        internal static IEnumerable<Player> GetCoopPlayers()
+        internal static FikaPlayer? GetPlayer(int netId)
         {
-            foreach (FikaPlayer player in Singleton<IFikaGame>.Instance.GameController.CoopHandler.HumanPlayers)
+            if (Singleton<IFikaGame>.Instance.GameController.CoopHandler.Players.TryGetValue(netId, out FikaPlayer player))
+            {
+                return player;
+            }
+
+            return null;
+        }
+
+        internal static FikaPlayer? GetMyPlayer()
+        {
+            return Singleton<IFikaGame>.Instance.GameController.CoopHandler.MyPlayer;
+        }
+
+        internal static IEnumerable<FikaPlayer> GetPlayers()
+        {
+            foreach (FikaPlayer player in Singleton<IFikaGame>.Instance.GameController.CoopHandler.Players.Values)
             {
                 yield return player;
             }
         }
 
-        internal static IEnumerable<Vector3> GetCoopPlayerPositions()
+        internal static IEnumerable<FikaPlayer> GetHumanPlayers()
         {
-            foreach (Player player in GetCoopPlayers())
+            foreach (FikaPlayer player in Singleton<IFikaGame>.Instance.GameController.CoopHandler.HumanPlayers)
             {
-                yield return player.Position;
+                yield return player;
             }
         }
     }

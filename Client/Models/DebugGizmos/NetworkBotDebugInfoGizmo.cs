@@ -1,6 +1,9 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,11 +21,11 @@ namespace QuestingBots.Models.DebugGizmos
         private static object _currentDataLock = new object();
         private IClientBotDebugCurrentInfo? _CurrentData = null;
 
-        public int BotId
+        public int NetId
         {
             get
             {
-                lock (_staticDataLock) {  return _StaticData.BotId; }
+                lock (_staticDataLock) {  return _StaticData.NetId; }
             }
         }
 
@@ -52,7 +55,22 @@ namespace QuestingBots.Models.DebugGizmos
             }
         }
 
-        public override bool ReadyToDispose() => _CurrentData?.IsDead == true;
+        public override bool ReadyToDispose()
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
+            int netId;
+            lock (_staticDataLock)
+            {
+                netId = _StaticData.NetId;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            return (botPlayer == null) || !botPlayer.HealthController.IsAlive;
+        }
 
         public override GUIStyle UpdateGUIStyle()
         {
@@ -79,19 +97,25 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void updateOverlayText(StringBuilder sb)
         {
-            string botTypeText;
-            string nickname;
-            int id;
-            int level;
-            lock (_staticDataLock)
+            if (!Singleton<PlayerData>.Instantiated)
             {
-                botTypeText = _StaticData.BotType.ToString();
-                nickname = _StaticData.CorrectedNickname;
-                id = _StaticData.BotId;
-                level = _StaticData.Level;
+                return;
             }
 
-            sb.AppendLabeledValue(botTypeText, $"{nickname} (Name: Bot{id}, Level: {level})", Color.white, Color.white);
+            int netId;
+            int botId;
+            string botTypeText;
+            lock (_staticDataLock)
+            {
+                netId = _StaticData.NetId;
+                botId = _StaticData.BotId;
+                botTypeText = _StaticData.BotType.ToString();
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            string botInfoText = botPlayer.GetText();
+
+            sb.AppendLabeledValue(botTypeText, botInfoText, Color.white, Color.white);
         }
 
         public override void Draw()
@@ -106,13 +130,27 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            Vector3 botHeadPosition;
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return;
+            }
+
+            int netId;
             lock (_currentDataLock)
             {
-                botHeadPosition = _CurrentData.Position + new Vector3(0, 1.5f, 0);
+                netId = _CurrentData.NetId;
             }
-            
-            Overlay.Draw(Overlay.StaticText, botHeadPosition);
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            if (botPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + netId);
+                return;
+            }
+
+            Vector3 botPosition = botPlayer.Position;
+
+            Overlay.Draw(Overlay.StaticText, botPosition + new Vector3(0, 1.5f, 0));
         }
     }
 }

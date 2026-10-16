@@ -13,7 +13,7 @@ namespace QuestingBots.PacketHandlers
 {
     internal class SpawnItemInInventoryHandler : AbstractPacketHandler
     {
-        internal SpawnItemInInventoryHandler() { }
+        public SpawnItemInInventoryHandler() { }
 
         internal override void Setup()
         {
@@ -25,7 +25,7 @@ namespace QuestingBots.PacketHandlers
 
         }
 
-        internal static bool SendSpawnItemInInventoryPacket(Player player, Item item)
+        private static bool SendSpawnItemInInventoryPacket(Player player, Item item)
         {
             FikaBot? fikaBot = player as FikaBot;
             if (fikaBot == null)

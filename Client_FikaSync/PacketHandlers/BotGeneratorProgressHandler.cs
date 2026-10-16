@@ -11,7 +11,7 @@ namespace QuestingBots.PacketHandlers
 {
     internal class BotGeneratorProgressHandler : AbstractPacketHandler
     {
-        internal BotGeneratorProgressHandler() { }
+        public BotGeneratorProgressHandler() { }
 
         internal override void Setup()
         {
@@ -23,7 +23,7 @@ namespace QuestingBots.PacketHandlers
             client.RegisterPacket<BotGeneratorProgressPacket>(OnBotGeneratorProgressPacketReceived);
         }
 
-        internal static void OnWaitForBotGeneratorsProgressChanged()
+        private static void OnWaitForBotGeneratorsProgressChanged()
         {
             BotGeneratorProgressPacket packet = new BotGeneratorProgressPacket()
             {
@@ -38,7 +38,7 @@ namespace QuestingBots.PacketHandlers
             }
         }
 
-        internal static void OnBotGeneratorProgressPacketReceived(BotGeneratorProgressPacket packet)
+        private static void OnBotGeneratorProgressPacketReceived(BotGeneratorProgressPacket packet)
         {
             if (!FikaBackendUtils.IsClient)
             {

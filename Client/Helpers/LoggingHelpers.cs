@@ -1,4 +1,6 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,17 +31,19 @@ namespace QuestingBots.Helpers
         {
             if (player == null)
             {
-                return "[NULL BOT]";
+                return "[NULL PLAYER]";
             }
 
-            return player.GetCorrectedNickname() + " (Name: " + player.name + ", Level: " + player.Profile.Info.Level.ToString() + ")";
+            string nameText = Singleton<PlayerData>.Instantiated ? Singleton<PlayerData>.Instance.GetBotNameText(player) : player.name;
+
+            return player.GetCorrectedNickname() + " (Name: " + nameText + ", Level: " + player.Profile.Info.Level.ToString() + ")";
         }
 
         public static string GetText(this IPlayer? player)
         {
             if (player == null)
             {
-                return "[NULL BOT]";
+                return "[NULL IPLAYER]";
             }
 
             return player.GetCorrectedNickname() + " (Name: ???, Level: " + player.Profile.Info.Level.ToString() + ")";

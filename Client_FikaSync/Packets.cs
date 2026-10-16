@@ -1,13 +1,10 @@
-﻿using EFT;
+﻿using Fika.Core.Main.Players;
 using Fika.Core.Networking;
 using Fika.Core.Networking.LiteNetLib.Utils;
-using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace QuestingBots
@@ -35,6 +32,7 @@ namespace QuestingBots
 
     public struct BotDebugStaticInfoPacket : INetSerializable, IClientBotDebugStaticInfo
     {
+        public int NetId { get; set; }
         public int BotId { get; set; }
         public bool IsInitialized { get; set; }
         public EBotType BotType { get; set; }
@@ -43,62 +41,51 @@ namespace QuestingBots
 
         public void Deserialize(NetDataReader reader)
         {
+            NetId = reader.GetInt();
             BotId = reader.GetInt();
             IsInitialized = reader.GetBool();
             BotType = reader.GetEnum<EBotType>();
-            CorrectedNickname = reader.GetString();
-            Level = reader.GetInt();
         }
 
         public void Serialize(NetDataWriter writer)
         {
+            writer.Put(NetId);
             writer.Put(BotId);
             writer.Put(IsInitialized);
             writer.PutEnum(BotType);
-            writer.Put(CorrectedNickname);
-            writer.Put(Level);
         }
 
-        public static BotDebugStaticInfoPacket Create(BotOwner bot)
+        public static BotDebugStaticInfoPacket Create(FikaBot bot)
         {
             return new BotDebugStaticInfoPacket()
             {
+                NetId = bot.NetId,
                 BotId = bot.Id,
-                IsInitialized = bot.IsInitialized(),
-                BotType = Controllers.BotRegistrationManager.GetBotType(bot),
-                CorrectedNickname = bot.GetCorrectedNickname(),
-                Level = bot.Profile.Info.Level
+                IsInitialized = bot.AIData.BotOwner.IsInitialized(),
+                BotType = Controllers.BotRegistrationManager.GetBotType(bot.AIData.BotOwner),
             };
         }
     }
 
     public struct BotDebugCurrentInfoPacket : INetSerializable, IClientBotDebugCurrentInfo
     {
-        public int BotId { get; set; }
-        public bool IsDead { get; set; }
-        public ClassVector3 Position { get; set; }
+        public int NetId { get; set; }
 
         public void Deserialize(NetDataReader reader)
         {
-            BotId = reader.GetInt();
-            IsDead = reader.GetBool();
-            Position = reader.GetClassVector3();
+            NetId = reader.GetInt();
         }
 
         public void Serialize(NetDataWriter writer)
         {
-            writer.Put(BotId);
-            writer.Put(IsDead);
-            writer.PutClassVector3(Position);
+            writer.Put(NetId);
         }
 
-        public static BotDebugCurrentInfoPacket Create(BotOwner bot)
+        public static BotDebugCurrentInfoPacket Create(FikaBot bot)
         {
             return new BotDebugCurrentInfoPacket()
             {
-                BotId = bot.Id,
-                IsDead = bot.IsDead,
-                Position = bot.Position,
+                NetId = bot.NetId,
             };
         }
     }

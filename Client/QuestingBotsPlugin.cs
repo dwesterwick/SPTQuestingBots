@@ -73,7 +73,6 @@ namespace QuestingBots
         private void EnableCommonPatches()
         {
             new Patches.TarkovInitPatch().Enable();
-            new Patches.GameWorldStartedPatch().Enable();
             new Patches.BotsControllerInitPatch().Enable();
             new Patches.BotsControllerStopPatch().Enable();
             new Patches.BotOwnerBrainActivatePatch().Enable();

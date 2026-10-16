@@ -24,7 +24,9 @@ namespace QuestingBots
             PluginLogger = Logger;
             PluginLogger.LogInfo($"{nameof(QuestingBotsFikaSyncPlugin)} has been loaded.");
 
-            FikaMultiplayerFunctions.SetGetPayersFunc(FikaHelpers.GetCoopPlayers);
+            FikaMultiplayerFunctions.SetGetPayerFunc(FikaHelpers.GetPlayer);
+            FikaMultiplayerFunctions.SetGetAlivePayersFunc(FikaHelpers.GetPlayers);
+            FikaMultiplayerFunctions.SetGetAliveHumanPayersFunc(FikaHelpers.GetHumanPlayers);
 
             AbstractPacketHandler.SetupAllPacketHandlers();
         }
