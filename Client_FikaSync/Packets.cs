@@ -1,6 +1,5 @@
 ﻿using EFT;
 using Fika.Core.Main.Players;
-using Fika.Core.Networking;
 using Fika.Core.Networking.LiteNetLib.Utils;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
@@ -79,6 +78,10 @@ namespace QuestingBots
         public int[] EnemyPlayerIds { get; set; }
         public string ActiveLayerName { get; set; }
         public string ActiveLogicName { get; set; }
+        public bool HasCurrentEnemy { get; set; }
+        public int CurrentEnemyPlayerId { get; set; }
+        public bool HasBoss { get; set; }
+        public int BossPlayerId { get; set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -88,6 +91,10 @@ namespace QuestingBots
             EnemyPlayerIds = reader.GetIntArray();
             ActiveLayerName = reader.GetString();
             ActiveLogicName = reader.GetString();
+            HasCurrentEnemy = reader.GetBool();
+            CurrentEnemyPlayerId = reader.GetInt();
+            HasBoss = reader.GetBool();
+            BossPlayerId = reader.GetInt();
         }
 
         public void Serialize(NetDataWriter writer)
@@ -98,10 +105,17 @@ namespace QuestingBots
             writer.PutArray(EnemyPlayerIds);
             writer.Put(ActiveLayerName);
             writer.Put(ActiveLogicName);
+            writer.Put(HasCurrentEnemy);
+            writer.Put(CurrentEnemyPlayerId);
+            writer.Put(HasBoss);
+            writer.Put(BossPlayerId);
         }
 
         public static BotDebugCurrentInfoPacket Create(FikaBot bot)
         {
+            bool hasCurrentEnemy = bot.AIData.BotOwner.HasCurrentEnemy(out int currentEnemyPlayerId);
+            bool hasBoss = bot.AIData.BotOwner.HasBoss(out int bossPlayerId);
+
             return new BotDebugCurrentInfoPacket()
             {
                 NetId = bot.NetId,
@@ -110,6 +124,10 @@ namespace QuestingBots
                 EnemyPlayerIds = bot.AIData.BotOwner.EnemyPlayerIdsArray(),
                 ActiveLayerName = bot.AIData.BotOwner.GetActiveLayerName(),
                 ActiveLogicName = bot.AIData.BotOwner.GetActiveLogicName(),
+                HasCurrentEnemy = hasCurrentEnemy,
+                CurrentEnemyPlayerId = currentEnemyPlayerId,
+                HasBoss = hasBoss,
+                BossPlayerId = bossPlayerId
             };
         }
     }

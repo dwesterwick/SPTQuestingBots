@@ -128,6 +128,10 @@ namespace QuestingBots.Models.DebugGizmos
             Color botTypeColor;
             string activeLayerName;
             string activeLogicName;
+            bool hasCurrentEnemy;
+            int currentEnemyPlayerId;
+            bool hasBoss;
+            int bossPlayerId;
             lock (_currentDataLock)
             {
                 botState = _CurrentData.BotState;
@@ -135,6 +139,10 @@ namespace QuestingBots.Models.DebugGizmos
                 botTypeColor = _CurrentData.GetDebugColor();
                 activeLayerName = _CurrentData.ActiveLayerName;
                 activeLogicName = _CurrentData.ActiveLogicName;
+                hasCurrentEnemy = _CurrentData.HasCurrentEnemy;
+                currentEnemyPlayerId = _CurrentData.CurrentEnemyPlayerId;
+                hasBoss = _CurrentData.HasBoss;
+                bossPlayerId = _CurrentData.BossPlayerId;
             }
 
             sb.AppendLabeledValue(botTypeText, botInfoText, botTypeColor, Color.white);
@@ -146,12 +154,36 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
+            if (botPlayer == null)
+            {
+                return;
+            }
+
             sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
             sb.AppendLabeledValue("Reason", activeLogicName, Color.white, Color.white);
 
             if (isSleeping)
             {
                 return;
+            }
+
+            if (hasCurrentEnemy)
+            {
+                Player? enemyPlayer = Singleton<PlayerData>.Instance.GetPlayer(currentEnemyPlayerId);
+                if (enemyPlayer != null)
+                {
+                    double enemyDistance = Math.Round(Vector3.Distance(botPlayer.Position, enemyPlayer.Position), 1);
+                    sb.AppendLabeledValue("Enemy", $"{enemyPlayer.GetText()}: {enemyDistance}m", Color.white, Color.white);
+                }
+            }
+
+            if (hasBoss)
+            {
+                Player? boss = Singleton<PlayerData>.Instance.GetPlayer(bossPlayerId);
+                if (boss != null)
+                {
+                    sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, Color.white);
+                }
             }
         }
 

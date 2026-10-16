@@ -1,4 +1,5 @@
 ﻿using EFT;
+using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using System;
@@ -31,6 +32,32 @@ namespace QuestingBots.Helpers
             return bot.EnemiesController.EnemyInfos
                 .SelectNonAlloc(info => info.Value.EnemyPlayerId)
                 .ToArray();
+        }
+
+        internal static bool HasCurrentEnemy(this BotOwner bot, out int enemyPlayerId)
+        {
+            enemyPlayerId = -1;
+            Player? enemyPlayer = bot.Memory.GoalEnemy?.GroupInfo?.Player;
+            if (enemyPlayer == null)
+            {
+                return false;
+            }
+
+            enemyPlayerId = enemyPlayer.GetPlayer.Id;
+            return enemyPlayer.HealthController.IsAlive;
+        }
+
+        internal static bool HasBoss(this BotOwner bot, out int bossPlayerId)
+        {
+            bossPlayerId = -1;
+            BotOwner? boss = BotHiveMindMonitor.GetGroupLeader(bot);
+            if (boss == null)
+            {
+                return false;
+            }
+
+            bossPlayerId = boss.GetPlayer.Id;
+            return boss.HealthController.IsAlive;
         }
     }
 }

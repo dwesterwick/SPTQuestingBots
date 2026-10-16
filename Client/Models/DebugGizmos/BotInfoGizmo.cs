@@ -76,11 +76,6 @@ namespace QuestingBots.Models.DebugGizmos
             sb.AppendLabeledValue("Layer", bot.GetActiveLayerName(), Color.magenta, Color.magenta);
             sb.AppendLabeledValue("Reason", bot.GetActiveLogicName(), Color.white, Color.white);
 
-            if (botObjectiveManager == null)
-            {
-                return;
-            }
-
             if (BotRegistrationManager.IsBotSleeping(bot.Profile.Id))
             {
                 return;
@@ -99,7 +94,7 @@ namespace QuestingBots.Models.DebugGizmos
                 sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
             }
 
-            if ((botQuestingDecisionMonitor == null) || !botObjectiveManager.IsQuestingAllowed)
+            if ((botQuestingDecisionMonitor == null) || (botObjectiveManager == null) || !botObjectiveManager.IsQuestingAllowed)
             {
                 return;
             }
