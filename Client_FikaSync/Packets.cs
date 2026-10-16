@@ -138,6 +138,7 @@ namespace QuestingBots
     public struct BotDebugQuestingInfoPacket : INetSerializable, IClientBotDebugQuestingInfo
     {
         public int NetId { get; set; }
+        public bool AllowedToQuest { get; set; }
         public bool IsQuesting { get; set; }
         public string QuestName { get; set; }
         public string QuestObjectiveName { get; set; }
@@ -149,6 +150,7 @@ namespace QuestingBots
         public void Deserialize(NetDataReader reader)
         {
             NetId = reader.GetInt();
+            AllowedToQuest = reader.GetBool();
             IsQuesting = reader.GetBool();
             QuestName = reader.GetString();
             QuestObjectiveName = reader.GetString();
@@ -161,6 +163,7 @@ namespace QuestingBots
         public void Serialize(NetDataWriter writer)
         {
             writer.Put(NetId);
+            writer.Put(AllowedToQuest);
             writer.Put(IsQuesting);
             writer.Put(QuestName);
             writer.Put(QuestObjectiveName);
@@ -172,11 +175,13 @@ namespace QuestingBots
 
         public static BotDebugQuestingInfoPacket Create(FikaBot bot)
         {
-            bool isQuesting = bot.AIData.BotOwner.IsQuesting(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision);
+            bool allowedToQuest = bot.AIData.BotOwner.AllowedToQuest(out BotObjectiveManager? botObjectiveManager);
+            bool isQuesting = bot.AIData.BotOwner.IsQuesting(out botObjectiveManager, out EBotQuestingDecision currentDecision);
 
             return new BotDebugQuestingInfoPacket()
             {
                 NetId = bot.NetId,
+                AllowedToQuest = allowedToQuest,
                 IsQuesting = isQuesting,
                 QuestName = botObjectiveManager?.CurrentAssignment?.QuestAssignment?.ToString() ?? string.Empty,
                 QuestObjectiveName = botObjectiveManager?.CurrentAssignment?.QuestObjectiveAssignment?.ToString() ?? string.Empty,

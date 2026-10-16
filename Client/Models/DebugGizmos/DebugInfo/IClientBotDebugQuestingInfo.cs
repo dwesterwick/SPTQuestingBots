@@ -8,6 +8,7 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public interface IClientBotDebugQuestingInfo : IClientBotDebugInfo
     {
+        public bool AllowedToQuest { get; }
         public bool IsQuesting { get; }
         public string QuestName { get; }
         public string QuestObjectiveName { get; }

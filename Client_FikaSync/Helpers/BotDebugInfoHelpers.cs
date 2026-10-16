@@ -28,8 +28,7 @@ namespace QuestingBots.Helpers
         {
             currentDecision = EBotQuestingDecision.Inactive;
 
-            botObjectiveManager = bot.GetObjectiveManager();
-            if ((botObjectiveManager == null) || !botObjectiveManager.IsQuestingAllowed)
+            if (!bot.AllowedToQuest(out botObjectiveManager) || (botObjectiveManager == null))
             {
                 return false;
             }
@@ -49,6 +48,17 @@ namespace QuestingBots.Helpers
 
             bool hasBoss = bot.HasBoss(out int _);
             return !hasBoss || questingDecisionMonitor.MustQuestBeforeFollowing;
+        }
+
+        internal static bool AllowedToQuest(this BotOwner bot, out BotObjectiveManager? botObjectiveManager)
+        {
+            botObjectiveManager = bot.GetObjectiveManager();
+            if (botObjectiveManager == null)
+            {
+                return false;
+            }
+
+            return botObjectiveManager.IsQuestingAllowed;
         }
 
         internal static int[] EnemyPlayerIdsArray(this BotOwner bot)

@@ -241,17 +241,17 @@ namespace QuestingBots.Models.DebugGizmos
 
         public override void Draw()
         {
-            if (_CurrentData == null)
-            {
-                return;
-            }
-
-            if (!_StaticData.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotInfoOverlays))
+            if ((_CurrentData == null) || (_QuestingData == null))
             {
                 return;
             }
 
             if (!Singleton<PlayerData>.Instantiated)
+            {
+                return;
+            }
+
+            if (!DebugHelpers.CanDisplayDebugData(_CurrentData, _QuestingData, QuestingBotsPluginConfig.ShowBotInfoOverlays))
             {
                 return;
             }

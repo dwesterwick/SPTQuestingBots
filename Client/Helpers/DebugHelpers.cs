@@ -5,6 +5,7 @@ using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Helpers
 {
@@ -223,7 +225,9 @@ namespace QuestingBots.Helpers
         {
             // Check if filter not empty (no filter), and bot is not included in the filter
             if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(bot.GetPlayer.name))
+            {
                 return false;
+            }
 
             if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
             {
@@ -251,9 +255,46 @@ namespace QuestingBots.Helpers
             return false;
         }
 
-        public static bool CanDisplayDebugData(this IClientBotDebugStaticInfo botDebugInfo, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        public static bool CanDisplayDebugData(IClientBotDebugCurrentInfo currentInfo, IClientBotDebugQuestingInfo questingInfo, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
-            return true;
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(currentInfo.NetId);
+            if (botPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + currentInfo.NetId);
+                return false;
+            }
+
+            // Check if filter not empty (no filter), and bot is not included in the filter
+            string botName = Singleton<PlayerData>.Instance.GetBotNameText(botPlayer);
+            if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(botName))
+            {
+                return false;
+            }
+
+            if (questingInfo.AllowedToQuest)
+            {
+                // Check if overlays are enabled for questing bosses (leaders)
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !currentInfo.HasBoss)
+                {
+                    return true;
+                }
+
+                // Check if overlays are enabled for questing followers
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && currentInfo.HasBoss)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // Check if overlays are enabled for bots that are not questing
+                if (config.Value.HasFlag(QuestingBotType.NonQuestingBots))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
