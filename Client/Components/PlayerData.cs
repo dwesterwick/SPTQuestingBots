@@ -15,6 +15,7 @@ namespace QuestingBots.Components
         private Dictionary<int, IClientBotDebugStaticInfo> clientBotInfo = new Dictionary<int, IClientBotDebugStaticInfo>();
 
         public Player? GetPlayer(int netId) => multiPlayerFunctions.GetPlayer(netId);
+        public Player? GetMyPlayer() => multiPlayerFunctions.GetMyPlayer();
         public IEnumerable<Player> GetAllAlivePlayers() => multiPlayerFunctions.GetAllAlivePlayers();
         public IEnumerable<Player> GetAllAliveHumanPlayers() => multiPlayerFunctions.GetAllAliveHumanPlayers();
 

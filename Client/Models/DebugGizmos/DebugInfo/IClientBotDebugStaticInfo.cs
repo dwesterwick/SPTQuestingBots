@@ -10,5 +10,6 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         public int BotId { get; }
         public bool IsInitialized { get; }
         public EBotType BotType { get; }
+        public string BaseBrainName { get; }
     }
 }

@@ -24,11 +24,17 @@ namespace QuestingBots
             PluginLogger = Logger;
             PluginLogger.LogInfo($"{nameof(QuestingBotsFikaSyncPlugin)} has been loaded.");
 
-            FikaMultiplayerFunctions.SetGetPayerFunc(FikaHelpers.GetPlayer);
-            FikaMultiplayerFunctions.SetGetAlivePayersFunc(FikaHelpers.GetPlayers);
-            FikaMultiplayerFunctions.SetGetAliveHumanPayersFunc(FikaHelpers.GetHumanPlayers);
+            AttachMultiplayerFunctions();
 
             AbstractPacketHandler.SetupAllPacketHandlers();
+        }
+
+        private void AttachMultiplayerFunctions()
+        {
+            FikaMultiplayerFunctions.SetGetPayerFunc(FikaHelpers.GetPlayer);
+            FikaMultiplayerFunctions.SetGetMyPayerFunc(FikaHelpers.GetMyPlayer);
+            FikaMultiplayerFunctions.SetGetAlivePayersFunc(FikaHelpers.GetPlayers);
+            FikaMultiplayerFunctions.SetGetAliveHumanPayersFunc(FikaHelpers.GetHumanPlayers);
         }
     }
 }

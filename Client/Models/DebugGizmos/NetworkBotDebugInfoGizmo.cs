@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos
 {
@@ -97,6 +98,11 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void updateOverlayText(StringBuilder sb)
         {
+            if (_CurrentData == null)
+            {
+                return;
+            }
+
             if (!Singleton<PlayerData>.Instantiated)
             {
                 return;
@@ -105,17 +111,48 @@ namespace QuestingBots.Models.DebugGizmos
             int netId;
             int botId;
             string botTypeText;
+            string brainNameText;
             lock (_staticDataLock)
             {
                 netId = _StaticData.NetId;
                 botId = _StaticData.BotId;
                 botTypeText = _StaticData.BotType.ToString();
+                brainNameText = _StaticData.BaseBrainName;
             }
 
             Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
             string botInfoText = botPlayer.GetText();
 
-            sb.AppendLabeledValue(botTypeText, botInfoText, Color.white, Color.white);
+            EBotState botState;
+            bool isSleeping;
+            Color botTypeColor;
+            string activeLayerName;
+            string activeLogicName;
+            lock (_currentDataLock)
+            {
+                botState = _CurrentData.BotState;
+                isSleeping = _CurrentData.IsSleeping;
+                botTypeColor = _CurrentData.GetDebugColor();
+                activeLayerName = _CurrentData.ActiveLayerName;
+                activeLogicName = _CurrentData.ActiveLogicName;
+            }
+
+            sb.AppendLabeledValue(botTypeText, botInfoText, botTypeColor, Color.white);
+            sb.AppendLabeledValue("Brain Type", brainNameText, Color.white, Color.white);
+
+            if (botState != EBotState.Active)
+            {
+                sb.AppendLabeledValue("Bot State", botState.ToString(), Color.white, botState.GetDebugColor());
+                return;
+            }
+
+            sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
+            sb.AppendLabeledValue("Reason", activeLogicName, Color.white, Color.white);
+
+            if (isSleeping)
+            {
+                return;
+            }
         }
 
         public override void Draw()

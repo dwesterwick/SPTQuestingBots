@@ -13,6 +13,9 @@ namespace QuestingBots.ExternalMods.Functions.Multiplayer
         public static void SetGetPayerFunc(Func<int, Player?> func) => _getPlayerFunc = func;
         private static Func<int, Player?>? _getPlayerFunc = null;
 
+        public static void SetGetMyPayerFunc(Func<Player?> func) => _getMyPlayerFunc = func;
+        private static Func<Player?>? _getMyPlayerFunc = null;
+
         public static void SetGetAlivePayersFunc(Func<IEnumerable<Player>> func) => _getPlayersFunc = func;
         private static Func<IEnumerable<Player>>? _getPlayersFunc = null;
 
@@ -34,6 +37,18 @@ namespace QuestingBots.ExternalMods.Functions.Multiplayer
             }
 
             return _getPlayerFunc(netId);
+        }
+
+        public override Player? GetMyPlayer()
+        {
+            if (_getMyPlayerFunc == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogWarning("Fika sync plugin did not register a GetMyPlayer function. Using base function.");
+
+                return base.GetMyPlayer();
+            }
+
+            return _getMyPlayerFunc();
         }
 
         public override IEnumerable<Player> GetAllAlivePlayers()

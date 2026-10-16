@@ -3,6 +3,7 @@ using QuestingBots.Components;
 using QuestingBots.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuestingBots.Helpers
@@ -18,6 +19,18 @@ namespace QuestingBots.Helpers
             }
 
             return false;
+        }
+
+        internal static int[] EnemyPlayerIdsArray(this BotOwner bot)
+        {
+            if (bot.EnemiesController?.EnemyInfos == null)
+            {
+                return new int[0];
+            }
+
+            return bot.EnemiesController.EnemyInfos
+                .SelectNonAlloc(info => info.Value.EnemyPlayerId)
+                .ToArray();
         }
     }
 }

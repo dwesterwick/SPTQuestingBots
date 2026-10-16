@@ -177,6 +177,33 @@ namespace QuestingBots.Helpers
             return botTypeColor;
         }
 
+        public static Color GetDebugColor(this IClientBotDebugCurrentInfo botDebugInfo)
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return Color.white;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(botDebugInfo.NetId);
+            if ((botPlayer == null) || !botPlayer.HealthController.IsAlive)
+            {
+                return Color.white;
+            }
+
+            Player? myPlayer = Singleton<PlayerData>.Instance.GetMyPlayer();
+            if (myPlayer == null)
+            {
+                return Color.white;
+            }
+
+            if (botDebugInfo.EnemyPlayerIds.AnyNonAlloc(id => id == myPlayer.Id))
+            {
+                return Color.red;
+            }
+
+            return Color.green;
+        }
+
         public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
             // Check if filter not empty (no filter), and bot is not included in the filter
