@@ -12,7 +12,7 @@ namespace QuestingBots.Components
     public class PlayerData : MonoBehaviour
     {
         private AbstractMultiplayerFunctions multiPlayerFunctions = null!;
-        private Dictionary<int, IClientBotDebugStaticInfo> clientBotInfo = new Dictionary<int, IClientBotDebugStaticInfo>();
+        private Dictionary<int, IBotDebugStaticInfo> botInfo = new Dictionary<int, IBotDebugStaticInfo>();
 
         public Player? GetPlayer(int netId) => multiPlayerFunctions.GetPlayer(netId);
         public Player? GetMyPlayer() => multiPlayerFunctions.GetMyPlayer();
@@ -24,24 +24,24 @@ namespace QuestingBots.Components
             multiPlayerFunctions = ExternalModHandler.CreateMultiplayerFunctions();
         }
 
-        public void RegisterClientBot(Player bot, IClientBotDebugStaticInfo info)
+        public void RegisterBot(Player bot, IBotDebugStaticInfo info)
         {
-            if (clientBotInfo.ContainsKey(bot.Id))
+            if (botInfo.ContainsKey(bot.Id))
             {
                 return;
             }
 
-            clientBotInfo.Add(bot.Id, info);
+            botInfo.Add(bot.Id, info);
         }
 
         public string GetBotNameText(Player bot)
         {
-            if (!clientBotInfo.ContainsKey(bot.Id))
+            if (!botInfo.ContainsKey(bot.Id))
             {
                 return bot.name;
             }
 
-            return $"Bot{clientBotInfo[bot.Id].BotId}";
+            return $"Bot{botInfo[bot.Id].BotId}";
         }
     }
 }

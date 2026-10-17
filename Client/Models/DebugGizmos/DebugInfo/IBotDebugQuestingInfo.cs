@@ -6,7 +6,7 @@ using System.Text;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
-    public interface IClientBotDebugQuestingInfo : IClientBotDebugInfo
+    public interface IBotDebugQuestingInfo : IBotDebugInfo
     {
         public bool AllowedToQuest { get; }
         public bool IsQuesting { get; }

@@ -180,14 +180,14 @@ namespace QuestingBots.Helpers
             return botTypeColor;
         }
 
-        public static Color GetDebugColor(this IClientBotDebugCurrentInfo botDebugInfo)
+        public static Color GetDebugColor(this IBotDebugInfoSource debugInfoSource)
         {
             if (!Singleton<PlayerData>.Instantiated)
             {
                 return Color.white;
             }
 
-            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(botDebugInfo.NetId);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(debugInfoSource.NetId);
             if ((botPlayer == null) || !botPlayer.HealthController.IsAlive)
             {
                 return Color.white;
@@ -199,7 +199,7 @@ namespace QuestingBots.Helpers
                 return Color.white;
             }
 
-            if (botDebugInfo.EnemyPlayerIds.AnyNonAlloc(id => id == myPlayer.Id))
+            if (debugInfoSource.EnemyPlayerIds.AnyNonAlloc(id => id == myPlayer.Id))
             {
                 return Color.red;
             }
@@ -255,12 +255,12 @@ namespace QuestingBots.Helpers
             return false;
         }
 
-        public static bool CanDisplayDebugData(IClientBotDebugCurrentInfo currentInfo, IClientBotDebugQuestingInfo questingInfo, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        public static bool CanDisplayDebugData(this IBotDebugInfoSource debugInfoSource, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
-            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(currentInfo.NetId);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(debugInfoSource.NetId);
             if (botPlayer == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + currentInfo.NetId);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + debugInfoSource.NetId);
                 return false;
             }
 
@@ -271,16 +271,16 @@ namespace QuestingBots.Helpers
                 return false;
             }
 
-            if (questingInfo.AllowedToQuest)
+            if (debugInfoSource.AllowedToQuest)
             {
                 // Check if overlays are enabled for questing bosses (leaders)
-                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !currentInfo.HasBoss)
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !debugInfoSource.HasBoss)
                 {
                     return true;
                 }
 
                 // Check if overlays are enabled for questing followers
-                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && currentInfo.HasBoss)
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && debugInfoSource.HasBoss)
                 {
                     return true;
                 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
-    public interface IClientBotDebugStaticInfo : IClientBotDebugInfo
+    public interface IBotDebugStaticInfo : IBotDebugInfo
     {
         public int BotId { get; }
         public bool IsInitialized { get; }

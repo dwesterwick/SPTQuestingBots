@@ -34,7 +34,7 @@ namespace QuestingBots
         }
     }
 
-    public struct BotDebugStaticInfoPacket : INetSerializable, IClientBotDebugStaticInfo
+    public struct BotDebugStaticInfoPacket : INetSerializable, IBotDebugStaticInfo
     {
         public int NetId { get; set; }
         public int BotId { get; set; }
@@ -73,7 +73,7 @@ namespace QuestingBots
         }
     }
 
-    public struct BotDebugCurrentInfoPacket : INetSerializable, IClientBotDebugCurrentInfo
+    public struct BotDebugCurrentInfoPacket : INetSerializable, IBotDebugCurrentInfo
     {
         public int NetId { get; set; }
         public EBotState BotState { get; set; }
@@ -135,7 +135,7 @@ namespace QuestingBots
         }
     }
 
-    public struct BotDebugQuestingInfoPacket : INetSerializable, IClientBotDebugQuestingInfo
+    public struct BotDebugQuestingInfoPacket : INetSerializable, IBotDebugQuestingInfo
     {
         public int NetId { get; set; }
         public bool AllowedToQuest { get; set; }

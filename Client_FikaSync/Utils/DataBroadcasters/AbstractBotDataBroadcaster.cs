@@ -12,7 +12,7 @@ using System.Text;
 
 namespace QuestingBots.Utils.DataBroadcasters
 {
-    internal abstract class AbstractBotDataBroadcaster<T> : IAbstractBotDataBroadcaster where T : INetSerializable, IClientBotDebugInfo
+    internal abstract class AbstractBotDataBroadcaster<T> : IAbstractBotDataBroadcaster where T : INetSerializable, IBotDebugInfo
     {
         protected float BroadcastRate { get; private set; }
 

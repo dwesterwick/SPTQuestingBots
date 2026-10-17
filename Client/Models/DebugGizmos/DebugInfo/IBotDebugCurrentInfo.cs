@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
-    public interface IClientBotDebugCurrentInfo : IClientBotDebugInfo
+    public interface IBotDebugCurrentInfo : IBotDebugInfo
     {
         public EBotState BotState { get; }
         public bool IsSleeping { get; }

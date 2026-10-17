@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
-    public interface IClientBotDebugInfo
+    public interface IBotDebugInfo
     {
         public int NetId { get; }
     }

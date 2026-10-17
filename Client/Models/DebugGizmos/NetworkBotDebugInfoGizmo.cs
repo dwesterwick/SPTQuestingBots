@@ -1,17 +1,13 @@
 ﻿using Comfort.Common;
 using EFT;
-using EFT.UI.Matchmaker;
-using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
-using QuestingBots.Models.Questing;
 using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos
 {
@@ -19,55 +15,14 @@ namespace QuestingBots.Models.DebugGizmos
     {
         public DebugOverlay Overlay { get; set; }
 
-        private static object _staticDataLock = new object();
-        private IClientBotDebugStaticInfo _StaticData;
+        private IBotDebugInfoSource _debugInfoSource;
 
-        private static object _currentDataLock = new object();
-        private IClientBotDebugCurrentInfo? _CurrentData = null;
+        public int BotNetId => _debugInfoSource.NetId;
 
-        private static object _questingDataLock = new object();
-        private IClientBotDebugQuestingInfo? _QuestingData = null;
-
-        public int NetId
+        public NetworkBotDebugInfoGizmo(IBotDebugInfoSource debugInfoSource) : base(100)
         {
-            get
-            {
-                lock (_staticDataLock) {  return _StaticData.NetId; }
-            }
-        }
-
-        public NetworkBotDebugInfoGizmo(IClientBotDebugStaticInfo data) : base(100)
-        {
-            lock (_staticDataLock)
-            {
-                _StaticData = data;
-            }
-
+            _debugInfoSource = debugInfoSource;
             Overlay = new DebugOverlay(UpdateGUIStyle);
-        }
-
-        public void UpdateStaticBotInfo(IClientBotDebugStaticInfo data)
-        {
-            lock (_staticDataLock)
-            {
-                _StaticData = data;
-            }
-        }
-
-        public void UpdateCurrentBotInfo(IClientBotDebugCurrentInfo data)
-        {
-            lock (_currentDataLock)
-            {
-                _CurrentData = data;
-            }
-        }
-
-        public void UpdateQuestingBotInfo(IClientBotDebugQuestingInfo data)
-        {
-            lock (_questingDataLock)
-            {
-                _QuestingData = data;
-            }
         }
 
         public override bool ReadyToDispose()
@@ -77,13 +32,7 @@ namespace QuestingBots.Models.DebugGizmos
                 return false;
             }
 
-            int netId;
-            lock (_staticDataLock)
-            {
-                netId = _StaticData.NetId;
-            }
-
-            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
             return (botPlayer == null) || !botPlayer.HealthController.IsAlive;
         }
 
@@ -100,7 +49,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override void OnUpdate()
         {
-            if (_CurrentData == null)
+            if (!_debugInfoSource.HasCurrentData)
             {
                 return;
             }
@@ -112,7 +61,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void updateOverlayText(StringBuilder sb)
         {
-            if (_CurrentData == null)
+            if (!_debugInfoSource.HasCurrentData)
             {
                 return;
             }
@@ -122,49 +71,15 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            int netId;
-            int botId;
-            string botTypeText;
-            string brainNameText;
-            lock (_staticDataLock)
-            {
-                netId = _StaticData.NetId;
-                botId = _StaticData.BotId;
-                botTypeText = _StaticData.BotType.ToString();
-                brainNameText = _StaticData.BaseBrainName;
-            }
-
-            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
             string botInfoText = botPlayer.GetText();
 
-            EBotState botState;
-            bool isSleeping;
-            Color botTypeColor;
-            string activeLayerName;
-            string activeLogicName;
-            bool hasCurrentEnemy;
-            int currentEnemyPlayerId;
-            bool hasBoss;
-            int bossPlayerId;
-            lock (_currentDataLock)
-            {
-                botState = _CurrentData.BotState;
-                isSleeping = _CurrentData.IsSleeping;
-                botTypeColor = _CurrentData.GetDebugColor();
-                activeLayerName = _CurrentData.ActiveLayerName;
-                activeLogicName = _CurrentData.ActiveLogicName;
-                hasCurrentEnemy = _CurrentData.HasCurrentEnemy;
-                currentEnemyPlayerId = _CurrentData.CurrentEnemyPlayerId;
-                hasBoss = _CurrentData.HasBoss;
-                bossPlayerId = _CurrentData.BossPlayerId;
-            }
+            sb.AppendLabeledValue(_debugInfoSource.BotType.ToString(), botInfoText, _debugInfoSource.GetDebugColor(), Color.white);
+            sb.AppendLabeledValue("Brain Type", _debugInfoSource.BaseBrainName, Color.white, Color.white);
 
-            sb.AppendLabeledValue(botTypeText, botInfoText, botTypeColor, Color.white);
-            sb.AppendLabeledValue("Brain Type", brainNameText, Color.white, Color.white);
-
-            if (botState != EBotState.Active)
+            if (_debugInfoSource.BotState != EBotState.Active)
             {
-                sb.AppendLabeledValue("Bot State", botState.ToString(), Color.white, botState.GetDebugColor());
+                sb.AppendLabeledValue("Bot State", _debugInfoSource.BotState.ToString(), Color.white, _debugInfoSource.BotState.GetDebugColor());
                 return;
             }
 
@@ -173,17 +88,17 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            sb.AppendLabeledValue("Layer", activeLayerName, Color.magenta, Color.magenta);
-            sb.AppendLabeledValue("Reason", activeLogicName, Color.white, Color.white);
+            sb.AppendLabeledValue("Layer", _debugInfoSource.ActiveLayerName, Color.magenta, Color.magenta);
+            sb.AppendLabeledValue("Reason", _debugInfoSource.ActiveLogicName, Color.white, Color.white);
 
-            if (isSleeping)
+            if (_debugInfoSource.IsSleeping)
             {
                 return;
             }
 
-            if (hasCurrentEnemy)
+            if (_debugInfoSource.HasCurrentEnemy)
             {
-                Player? enemyPlayer = Singleton<PlayerData>.Instance.GetPlayer(currentEnemyPlayerId);
+                Player? enemyPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.CurrentEnemyPlayerId);
                 if (enemyPlayer != null)
                 {
                     double enemyDistance = Math.Round(Vector3.Distance(botPlayer.Position, enemyPlayer.Position), 1);
@@ -191,57 +106,39 @@ namespace QuestingBots.Models.DebugGizmos
                 }
             }
 
-            if (hasBoss)
+            if (_debugInfoSource.HasBoss)
             {
-                Player? boss = Singleton<PlayerData>.Instance.GetPlayer(bossPlayerId);
+                Player? boss = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.BossPlayerId);
                 if (boss != null)
                 {
                     sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, Color.white);
                 }
             }
 
-            if (_QuestingData == null)
+            if (!_debugInfoSource.HasQuestingData || !_debugInfoSource.AllowedToQuest)
             {
                 return;
             }
 
-            bool isQuesting;
-            string questName;
-            string questObjectiveName;
-            string questObjectiveStepName;
-            EJobAssignmentStatus questStatus;
-            EBotQuestingDecision currentDecision;
-            UnityEngine.AI.NavMeshPathStatus pathStatus;
-            lock (_questingDataLock)
+            if (_debugInfoSource.IsQuesting)
             {
-                isQuesting = _QuestingData.IsQuesting;
-                questName = _QuestingData.QuestName;
-                questObjectiveName = _QuestingData.QuestObjectiveName;
-                questObjectiveStepName = _QuestingData.QuestObjectiveStepName;
-                questStatus = _QuestingData.QuestStatus;
-                currentDecision = _QuestingData.CurrentDecision;
-                pathStatus = _QuestingData.PathStatus;
+                sb.AppendLabeledValue("Quest", _debugInfoSource.QuestName, Color.cyan, Color.cyan);
+                sb.AppendLabeledValue("Objective", _debugInfoSource.QuestObjectiveName, Color.white, Color.white);
+                sb.AppendLabeledValue("Step", _debugInfoSource.QuestObjectiveStepName, Color.white, Color.white);
+                sb.AppendLabeledValue("Status", _debugInfoSource.QuestStatus.ToString(), Color.white, Color.white);
             }
 
-            if (isQuesting)
-            {
-                sb.AppendLabeledValue("Quest", questName, Color.cyan, Color.cyan);
-                sb.AppendLabeledValue("Objective", questObjectiveName, Color.white, Color.white);
-                sb.AppendLabeledValue("Step", questObjectiveStepName, Color.white, Color.white);
-                sb.AppendLabeledValue("Status", questStatus.ToString(), Color.white, Color.white);
-            }
+            sb.AppendLabeledValue("Current Decision", _debugInfoSource.CurrentDecision.ToString(), Color.white, Color.white);
 
-            sb.AppendLabeledValue("Current Decision", currentDecision.ToString(), Color.white, Color.white);
-
-            if (currentDecision.ShouldShowPathStatus() && (pathStatus != UnityEngine.AI.NavMeshPathStatus.PathComplete))
+            if (_debugInfoSource.CurrentDecision.ShouldShowPathStatus() && (_debugInfoSource.PathStatus != UnityEngine.AI.NavMeshPathStatus.PathComplete))
             {
-                sb.AppendLabeledValue("Path Status", pathStatus.ToString(), Color.white, pathStatus.GetDebugColor());
+                sb.AppendLabeledValue("Path Status", _debugInfoSource.PathStatus.ToString(), Color.white, _debugInfoSource.PathStatus.GetDebugColor());
             }
         }
 
         public override void Draw()
         {
-            if ((_CurrentData == null) || (_QuestingData == null))
+            if (!_debugInfoSource.HasCurrentData || !_debugInfoSource.HasQuestingData)
             {
                 return;
             }
@@ -251,21 +148,15 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            if (!DebugHelpers.CanDisplayDebugData(_CurrentData, _QuestingData, QuestingBotsPluginConfig.ShowBotInfoOverlays))
+            if (!_debugInfoSource.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotInfoOverlays))
             {
                 return;
             }
 
-            int netId;
-            lock (_currentDataLock)
-            {
-                netId = _CurrentData.NetId;
-            }
-
-            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(netId);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
             if (botPlayer == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + netId);
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + _debugInfoSource.NetId);
                 return;
             }
 
