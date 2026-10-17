@@ -1,6 +1,5 @@
 ﻿using Fika.Core.Main.Utils;
 using Fika.Core.Networking;
-using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Patches.Spawning;
 using System;
@@ -25,12 +24,7 @@ namespace QuestingBots.PacketHandlers
 
         private static void OnWaitForBotGeneratorsProgressChanged()
         {
-            BotGeneratorProgressPacket packet = new BotGeneratorProgressPacket()
-            {
-                RemainingBotGenerators = BotGenerator.RemainingBotGenerators,
-                CurrentBotGeneratorType = BotGenerator.CurrentBotGeneratorType,
-                CurrentBotGeneratorProgress = BotGenerator.CurrentBotGeneratorProgress
-            };
+            BotGeneratorProgressPacket packet = BotGeneratorProgressPacket.Create();
 
             if (!packet.TrySendToAllClients())
             {

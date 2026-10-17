@@ -121,7 +121,7 @@ namespace QuestingBots.Components
 
         private void registerBotComponents()
         {
-            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterBot(_botOwner);
+            Singleton<GameWorld>.Instance.GetComponent<Components.DebugData>().RegisterLocalBot(_botOwner);
             BotLogic.HiveMind.BotHiveMindMonitor.RegisterBot(_botOwner);
         }
 

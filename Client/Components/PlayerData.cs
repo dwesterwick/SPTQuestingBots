@@ -34,6 +34,9 @@ namespace QuestingBots.Components
             botDebugInfo.Add(bot.Id, info);
         }
 
+        public void IsRegistered(Player bot) => IsRegistered(bot.Id);
+        public void IsRegistered(int botId) => botDebugInfo.ContainsKey(botId);
+
         public string GetBotNameText(Player bot)
         {
             if (!botDebugInfo.ContainsKey(bot.Id))

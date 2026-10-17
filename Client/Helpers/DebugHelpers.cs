@@ -18,6 +18,8 @@ namespace QuestingBots.Helpers
 {
     public static class DebugHelpers
     {
+        public static bool IsSameAs(this ClassVector3 v1, ClassVector3 v2) => (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z);
+
         public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.Select(point => point + offset);
 
         public static Vector3 IncreaseVector3ToMinSize(Vector3 vector, float minSize)

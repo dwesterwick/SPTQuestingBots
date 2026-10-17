@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Val;
 
 namespace QuestingBots.Components
 {
@@ -22,12 +23,12 @@ namespace QuestingBots.Components
         private readonly static float markerRadius = 0.5f;
 
         private List<AbstractDebugGizmo> _gizmos = new List<AbstractDebugGizmo>();
-        private Dictionary<int, NetworkBotDebugInfoSource> _networkBotDebugInfoSources = new Dictionary<int, NetworkBotDebugInfoSource>();
+        private Dictionary<int, NetworkBotDebugInfoSource> _botDebugInfoSources = new Dictionary<int, NetworkBotDebugInfoSource>();
 
         private int jobAssignmentGizmoCount => _gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
         [Benchmark]
-        public void RegisterBot(BotOwner bot)
+        public void RegisterLocalBot(BotOwner bot)
         {
             _gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
             _gizmos.Add(new Models.DebugGizmos.BotPathVisualizationGizmo(bot, Color.magenta));
@@ -41,7 +42,7 @@ namespace QuestingBots.Components
             }
         }
 
-        public bool TryUpdateClientBotStaticInfo(IBotDebugStaticInfo data)
+        private bool TryRegisterBot_Internal(IBotDebugStaticInfo data)
         {
             if (!Singleton<PlayerData>.Instantiated)
             {
@@ -56,22 +57,32 @@ namespace QuestingBots.Components
 
             Singleton<PlayerData>.Instance.RegisterBotDebugInfo(botPlayer, data);
 
-            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            NetworkBotDebugInfoSource source = new NetworkBotDebugInfoSource(data);
+            _botDebugInfoSources.Add(data.NetId, source);
+            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
+
+            return true;
+        }
+
+        public bool TryUpdateClientBotStaticInfo(IBotDebugStaticInfo data)
+        {
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
                 source.UpdateStaticBotInfo(data);
                 return true;
             }
 
-            source = new NetworkBotDebugInfoSource(data);
-            _networkBotDebugInfoSources.Add(data.NetId, source);
-            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
+            if (!TryRegisterBot_Internal(data))
+            {
+                return false;
+            }
 
             return true;
         }
 
         public void UpdateClientBotCurrentInfo(IBotDebugCurrentInfo data)
         {
-            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
                 source.UpdateCurrentBotInfo(data);
             }
@@ -79,7 +90,7 @@ namespace QuestingBots.Components
 
         public void UpdateClientBotQuestingInfo(IBotDebugQuestingInfo data)
         {
-            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
                 source.UpdateQuestingBotInfo(data);
             }
@@ -145,7 +156,7 @@ namespace QuestingBots.Components
                 NetworkBotDebugInfoGizmo? networkBotDebugInfoGizmo = gizmo as NetworkBotDebugInfoGizmo;
                 if (networkBotDebugInfoGizmo != null)
                 {
-                    _networkBotDebugInfoSources.Remove(networkBotDebugInfoGizmo.BotNetId);
+                    _botDebugInfoSources.Remove(networkBotDebugInfoGizmo.BotNetId);
                 }
 
                 gizmo.Dispose();

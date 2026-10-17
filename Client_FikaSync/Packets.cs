@@ -4,6 +4,7 @@ using Fika.Core.Networking;
 using Fika.Core.Networking.LiteNetLib.Utils;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
+using QuestingBots.Components.Spawning;
 using QuestingBots.Controllers;
 using QuestingBots.Helpers;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
@@ -17,9 +18,9 @@ namespace QuestingBots
 {
     public struct BotGeneratorProgressPacket : INetSerializable
     {
-        public int RemainingBotGenerators { get; set; }
-        public string CurrentBotGeneratorType { get; set; }
-        public int CurrentBotGeneratorProgress { get; set; }
+        public int RemainingBotGenerators { get; private set; }
+        public string CurrentBotGeneratorType { get; private set; }
+        public int CurrentBotGeneratorProgress { get; private set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -34,15 +35,25 @@ namespace QuestingBots
             writer.Put(CurrentBotGeneratorType);
             writer.Put(CurrentBotGeneratorProgress);
         }
+
+        public static BotGeneratorProgressPacket Create()
+        {
+            return new BotGeneratorProgressPacket()
+            {
+                RemainingBotGenerators = BotGenerator.RemainingBotGenerators,
+                CurrentBotGeneratorType = BotGenerator.CurrentBotGeneratorType,
+                CurrentBotGeneratorProgress = BotGenerator.CurrentBotGeneratorProgress
+            };
+        }
     }
 
     public struct BotDebugStaticInfoPacket : INetSerializable, IBotDebugStaticInfo
     {
-        public int NetId { get; set; }
-        public int BotId { get; set; }
-        public bool IsInitialized { get; set; }
-        public EBotType BotType { get; set; }
-        public string BaseBrainName { get; set; }
+        public int NetId { get; private set; }
+        public int BotId { get; private set; }
+        public bool IsInitialized { get; private set; }
+        public EBotType BotType { get; private set; }
+        public string BaseBrainName { get; private set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -77,19 +88,19 @@ namespace QuestingBots
 
     public struct BotDebugCurrentInfoPacket : INetSerializable, IBotDebugCurrentInfo
     {
-        public int NetId { get; set; }
-        public EBotState BotState { get; set; }
-        public bool IsSleeping { get; set; }
-        public int[] EnemyPlayerIds { get; set; }
-        public string ActiveLayerName { get; set; }
-        public string ActiveLogicName { get; set; }
-        public bool HasCurrentEnemy { get; set; }
-        public int CurrentEnemyPlayerId { get; set; }
-        public bool HasBoss { get; set; }
-        public int BossPlayerId { get; set; }
-        public bool HasEftPath { get; set; }
-        public ClassVector3 CurrentEftPathCorner { get; set; }
-        public ClassVector3 CurrentEftPathTarget { get; set; }
+        public int NetId { get; private set; }
+        public EBotState BotState { get; private set; }
+        public bool IsSleeping { get; private set; }
+        public int[] EnemyPlayerIds { get; private set; }
+        public string ActiveLayerName { get; private set; }
+        public string ActiveLogicName { get; private set; }
+        public bool HasCurrentEnemy { get; private set; }
+        public int CurrentEnemyPlayerId { get; private set; }
+        public bool HasBoss { get; private set; }
+        public int BossPlayerId { get; private set; }
+        public bool HasEftPath { get; private set; }
+        public ClassVector3 CurrentEftPathCorner { get; private set; }
+        public ClassVector3 CurrentEftPathTarget { get; private set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -152,15 +163,15 @@ namespace QuestingBots
 
     public struct BotDebugQuestingInfoPacket : INetSerializable, IBotDebugQuestingInfo
     {
-        public int NetId { get; set; }
-        public bool AllowedToQuest { get; set; }
-        public bool IsQuesting { get; set; }
-        public string QuestName { get; set; }
-        public string QuestObjectiveName { get; set; }
-        public string QuestObjectiveStepName { get; set; }
-        public EJobAssignmentStatus QuestStatus { get; set; }
-        public EBotQuestingDecision CurrentDecision { get; set; }
-        public UnityEngine.AI.NavMeshPathStatus PathStatus { get; set; }
+        public int NetId { get; private set; }
+        public bool AllowedToQuest { get; private set; }
+        public bool IsQuesting { get; private set; }
+        public string QuestName { get; private set; }
+        public string QuestObjectiveName { get; private set; }
+        public string QuestObjectiveStepName { get; private set; }
+        public EJobAssignmentStatus QuestStatus { get; private set; }
+        public EBotQuestingDecision CurrentDecision { get; private set; }
+        public UnityEngine.AI.NavMeshPathStatus PathStatus { get; private set; }
 
         public void Deserialize(NetDataReader reader)
         {

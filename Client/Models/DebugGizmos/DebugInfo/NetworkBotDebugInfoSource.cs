@@ -6,82 +6,134 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public class NetworkBotDebugInfoSource: IBotDebugInfoSource
     {
-        private readonly static ClassVector3 _invalidVector3 = ClassVector3.FromUnityVector3(Vector3.negativeInfinity);
+        private int _netId;
+        public int NetId => _netId;
 
-        private static object _staticDataLock = new object();
-        private IBotDebugStaticInfo _StaticData;
+        private int _botId;
+        public int BotId => _botId;
 
-        private static object _currentDataLock = new object();
-        private IBotDebugCurrentInfo? _CurrentData = null;
+        private bool _isInitialized;
+        public bool IsInitialized => _isInitialized;
 
-        private static object _questingDataLock = new object();
-        private IBotDebugQuestingInfo? _QuestingData = null;
+        private EBotType _botType;
+        public EBotType BotType => _botType;
 
-        public int NetId { get { lock (_staticDataLock) { return _StaticData.NetId; } } }
-        public int BotId { get { lock (_staticDataLock) { return _StaticData.BotId; } } }
-        public bool IsInitialized { get { lock (_staticDataLock) { return _StaticData.IsInitialized; } } }
-        public EBotType BotType { get { lock (_staticDataLock) { return _StaticData.BotType; } } }
-        public string BaseBrainName { get { lock (_staticDataLock) { return _StaticData.BaseBrainName; } } }
+        private string _baseBrainName = null!;
+        public string BaseBrainName => _baseBrainName;
 
-        public bool HasCurrentData { get { lock (_currentDataLock) { return _CurrentData != null; } } }
+        public bool HasCurrentData { get; private set; } = false;
 
-        public EBotState BotState { get { lock (_currentDataLock) { return _CurrentData == null ? EBotState.NonActive : _CurrentData.BotState; } } }
-        public bool IsSleeping { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.IsSleeping; } } }
-        public int[] EnemyPlayerIds { get { lock (_currentDataLock) { return _CurrentData == null ? new int[0] : _CurrentData.EnemyPlayerIds; } } }
-        public string ActiveLayerName { get { lock (_currentDataLock) { return _CurrentData == null ? string.Empty : _CurrentData.ActiveLayerName; } } }
-        public string ActiveLogicName { get { lock (_currentDataLock) { return _CurrentData == null ? string.Empty : _CurrentData.ActiveLogicName; } } }
-        public bool HasCurrentEnemy { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.HasCurrentEnemy; } } }
-        public int CurrentEnemyPlayerId { get { lock (_currentDataLock) { return _CurrentData == null ? -1 : _CurrentData.CurrentEnemyPlayerId; } } }
-        public bool HasBoss { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.HasBoss; } } }
-        public int BossPlayerId { get { lock (_currentDataLock) { return _CurrentData == null ? -1 : _CurrentData.BossPlayerId; } } }
-        public bool HasEftPath { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.HasEftPath; } } }
-        public ClassVector3 CurrentEftPathCorner { get { lock (_currentDataLock) { return _CurrentData == null ? _invalidVector3 : _CurrentData.CurrentEftPathCorner; } } }
-        public ClassVector3 CurrentEftPathTarget { get { lock (_currentDataLock) { return _CurrentData == null ? _invalidVector3 : _CurrentData.CurrentEftPathTarget; } } }
+        private EBotState _botState = EBotState.NonActive;
+        public EBotState BotState => _botState;
 
-        public bool HasQuestingData { get { lock (_questingDataLock) { return _QuestingData != null; } } }
+        private bool _isSleeping = false;
+        public bool IsSleeping => _isSleeping;
 
-        public bool AllowedToQuest { get { lock (_questingDataLock) { return _QuestingData == null ? false : _QuestingData.AllowedToQuest; } } }
-        public bool IsQuesting { get { lock (_questingDataLock) { return _QuestingData == null ? false : _QuestingData.IsQuesting; } } }
-        public string QuestName { get { lock (_questingDataLock) { return _QuestingData == null ? string.Empty : _QuestingData.QuestName; } } }
-        public string QuestObjectiveName { get { lock (_questingDataLock) { return _QuestingData == null ? string.Empty : _QuestingData.QuestObjectiveName; } } }
-        public string QuestObjectiveStepName { get { lock (_questingDataLock) { return _QuestingData == null ? string.Empty : _QuestingData.QuestObjectiveStepName; } } }
-        public EJobAssignmentStatus QuestStatus { get { lock (_questingDataLock) { return _QuestingData == null ? EJobAssignmentStatus.NotStarted : _QuestingData.QuestStatus; } } }
-        public EBotQuestingDecision CurrentDecision { get { lock (_questingDataLock) { return _QuestingData == null ? EBotQuestingDecision.Inactive : _QuestingData.CurrentDecision; } } }
-        public NavMeshPathStatus PathStatus { get { lock (_questingDataLock) { return _QuestingData == null ? NavMeshPathStatus.PathComplete : _QuestingData.PathStatus; } } }
+        private int[] _enemyPlayerIds = Array.Empty<int>();
+        public int[] EnemyPlayerIds => _enemyPlayerIds;
+
+        private string _activeLayerName = string.Empty;
+        public string ActiveLayerName => _activeLayerName;
+
+        private string _activeLogicName = string.Empty;
+        public string ActiveLogicName => _activeLogicName;
+
+        private bool _hasCurrentEnemy = false;
+        public bool HasCurrentEnemy => _hasCurrentEnemy;
+
+        private int _currentEnemyPlayerId = -1;
+        public int CurrentEnemyPlayerId => _currentEnemyPlayerId;
+
+        private bool _hasBoss = false;
+        public bool HasBoss => _hasBoss;
+
+        private int _bossPlayerId = -1;
+        public int BossPlayerId => _bossPlayerId;
+
+        private bool _hasEftPath = false;
+        public bool HasEftPath => _hasEftPath;
+
+        private ClassVector3 _currentEftPathCorner = ClassVector3.FromUnityVector3(Vector3.negativeInfinity);
+        public ClassVector3 CurrentEftPathCorner => _currentEftPathCorner;
+
+        private ClassVector3 _currentEftPathTarget = ClassVector3.FromUnityVector3(Vector3.negativeInfinity);
+        public ClassVector3 CurrentEftPathTarget => _currentEftPathTarget;
+
+        public bool HasQuestingData { get; private set; } = false;
+
+        private bool _allowedToQuest = false;
+        public bool AllowedToQuest => _allowedToQuest;
+
+        private bool _isQuesting = false;
+        public bool IsQuesting => _isQuesting;
+
+        private string _questName = string.Empty;
+        public string QuestName => _questName;
+
+        private string _questObjectiveName = string.Empty;
+        public string QuestObjectiveName => _questObjectiveName;
+
+        private string _questObjectiveStepName = string.Empty;
+        public string QuestObjectiveStepName => _questObjectiveStepName;
+
+        private EJobAssignmentStatus _questStatus = EJobAssignmentStatus.NotStarted;
+        public EJobAssignmentStatus QuestStatus => _questStatus;
+
+        private EBotQuestingDecision _currentDecision = EBotQuestingDecision.Inactive;
+        public EBotQuestingDecision CurrentDecision => _currentDecision;
+
+        private UnityEngine.AI.NavMeshPathStatus _pathStatus = UnityEngine.AI.NavMeshPathStatus.PathComplete;
+        public UnityEngine.AI.NavMeshPathStatus PathStatus => _pathStatus;
 
         public NetworkBotDebugInfoSource(IBotDebugStaticInfo staticInfo)
         {
-            _StaticData = staticInfo;
+            UpdateStaticBotInfo(staticInfo);
         }
 
         public void UpdateStaticBotInfo(IBotDebugStaticInfo data)
         {
-            lock (_staticDataLock)
-            {
-                _StaticData = data;
-            }
+            _netId = data.NetId;
+            _botId = data.BotId;
+            _isInitialized = data.IsInitialized;
+            _botType = data.BotType;
+            if (_baseBrainName != data.BaseBrainName) { _baseBrainName = data.BaseBrainName; }
         }
 
         public void UpdateCurrentBotInfo(IBotDebugCurrentInfo data)
         {
-            lock (_currentDataLock)
-            {
-                _CurrentData = data;
-            }
+            _botState = data.BotState;
+            _isSleeping = data.IsSleeping;
+            if (_enemyPlayerIds != data.EnemyPlayerIds) { _enemyPlayerIds = data.EnemyPlayerIds; }
+            if (_activeLayerName != data.ActiveLayerName) { _activeLayerName = data.ActiveLayerName; }
+            if (_activeLogicName != data.ActiveLogicName) { _activeLogicName = data.ActiveLogicName; }
+            _hasCurrentEnemy = data.HasCurrentEnemy;
+            _currentEnemyPlayerId = data.CurrentEnemyPlayerId;
+            _hasBoss = data.HasBoss;
+            _bossPlayerId = data.BossPlayerId;
+            _hasEftPath = data.HasEftPath;
+            if (!_currentEftPathCorner.IsSameAs(data.CurrentEftPathCorner)) { _currentEftPathCorner = data.CurrentEftPathCorner; }
+            if (!_currentEftPathTarget.IsSameAs(data.CurrentEftPathTarget)) { _currentEftPathTarget = data.CurrentEftPathTarget; }
+
+            HasCurrentData = true;
         }
 
         public void UpdateQuestingBotInfo(IBotDebugQuestingInfo data)
         {
-            lock (_questingDataLock)
-            {
-                _QuestingData = data;
-            }
+            _allowedToQuest = data.AllowedToQuest;
+            _isQuesting = data.IsQuesting;
+            if (_questName != data.QuestName) { _questName = data.QuestName; }
+            if (_questObjectiveName != data.QuestObjectiveName) { _questObjectiveName = data.QuestObjectiveName; }
+            if (_questObjectiveStepName != data.QuestObjectiveStepName) { _questObjectiveStepName = data.QuestObjectiveStepName; }
+            _questStatus = data.QuestStatus;
+            _currentDecision = data.CurrentDecision;
+            _pathStatus = data.PathStatus;
+
+            HasQuestingData = true;
         }
     }
 }
