@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QuestingBots.Utils.DataBroadcasters
 {
-    internal interface IAbstractBotDataBroadcaster
+    internal interface IBotDataBroadcaster
     {
         public void Broadcast(IEnumerable<Player> botPlayers);
     }

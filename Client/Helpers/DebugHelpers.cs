@@ -200,6 +200,11 @@ namespace QuestingBots.Helpers
                 return Color.white;
             }
 
+            if (!debugInfoSource.HasCurrentData)
+            {
+                return Color.white;
+            }
+
             if (debugInfoSource.EnemyPlayerIds.AnyNonAlloc(id => id == myPlayer.Id))
             {
                 return Color.red;
@@ -272,7 +277,7 @@ namespace QuestingBots.Helpers
                 return false;
             }
 
-            if (debugInfoSource.AllowedToQuest)
+            if (debugInfoSource.HasQuestingData && debugInfoSource.AllowedToQuest)
             {
                 // Check if overlays are enabled for questing bosses (leaders)
                 if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !debugInfoSource.HasBoss)

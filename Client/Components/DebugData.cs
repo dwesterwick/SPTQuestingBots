@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static Val;
 
 namespace QuestingBots.Components
 {
@@ -23,14 +22,22 @@ namespace QuestingBots.Components
         private readonly static float markerRadius = 0.5f;
 
         private List<AbstractDebugGizmo> _gizmos = new List<AbstractDebugGizmo>();
-        private Dictionary<int, NetworkBotDebugInfoSource> _botDebugInfoSources = new Dictionary<int, NetworkBotDebugInfoSource>();
+        private Dictionary<int, IBotDebugInfoSource> _botDebugInfoSources = new Dictionary<int, IBotDebugInfoSource>();
 
         private int jobAssignmentGizmoCount => _gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
         [Benchmark]
         public void RegisterLocalBot(BotOwner bot)
         {
-            _gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
+            LocalBotDebugInfoSource source = new LocalBotDebugInfoSource(bot);
+            RegisterBot_Internal(source);
+
+            if (!TryRegisterBotDebugInfo(source))
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Could not register bot debug info for " + bot.GetText());
+            }
+
+            //_gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
             _gizmos.Add(new Models.DebugGizmos.BotPathVisualizationGizmo(bot, Color.magenta));
 
             BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
@@ -42,7 +49,13 @@ namespace QuestingBots.Components
             }
         }
 
-        private bool TryRegisterBot_Internal(IBotDebugStaticInfo data)
+        private void RegisterBot_Internal(IBotDebugInfoSource source)
+        {
+            _botDebugInfoSources.Add(source.NetId, source);
+            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
+        }
+
+        private bool TryRegisterBotDebugInfo(IBotDebugStaticInfo data)
         {
             if (!Singleton<PlayerData>.Instantiated)
             {
@@ -56,43 +69,62 @@ namespace QuestingBots.Components
             }
 
             Singleton<PlayerData>.Instance.RegisterBotDebugInfo(botPlayer, data);
-
-            NetworkBotDebugInfoSource source = new NetworkBotDebugInfoSource(data);
-            _botDebugInfoSources.Add(data.NetId, source);
-            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
-
             return true;
         }
 
         public bool TryUpdateClientBotStaticInfo(IBotDebugStaticInfo data)
         {
-            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
             {
-                source.UpdateStaticBotInfo(data);
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return false;
+                }
+
+                networkBotDebugInfoSource.UpdateStaticBotInfo(data);
                 return true;
             }
 
-            if (!TryRegisterBot_Internal(data))
+            if (!TryRegisterBotDebugInfo(data))
             {
                 return false;
             }
+
+            source = new NetworkBotDebugInfoSource(data);
+            RegisterBot_Internal(source);
 
             return true;
         }
 
         public void UpdateClientBotCurrentInfo(IBotDebugCurrentInfo data)
         {
-            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
             {
-                source.UpdateCurrentBotInfo(data);
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return;
+                }
+
+                networkBotDebugInfoSource.UpdateCurrentBotInfo(data);
             }
         }
 
         public void UpdateClientBotQuestingInfo(IBotDebugQuestingInfo data)
         {
-            if (_botDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
             {
-                source.UpdateQuestingBotInfo(data);
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return;
+                }
+
+                networkBotDebugInfoSource.UpdateQuestingBotInfo(data);
             }
         }
 

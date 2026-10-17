@@ -3,7 +3,6 @@ using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
-using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +11,9 @@ using UnityEngine;
 
 namespace QuestingBots.Helpers
 {
-    internal static class BotDebugInfoHelpers
+    public static class BotDebugInfoHelpers
     {
-        internal static bool IsInitialized(this BotOwner bot)
+        public static bool IsInitialized(this BotOwner bot)
         {
             BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();
             if (objectiveManager != null)
@@ -25,11 +24,29 @@ namespace QuestingBots.Helpers
             return false;
         }
 
-        internal static bool IsQuesting(this BotOwner bot, out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision)
+        public static bool AllowedToQuest(this BotOwner bot, out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision)
         {
             currentDecision = EBotQuestingDecision.Inactive;
 
-            if (!bot.AllowedToQuest(out botObjectiveManager) || (botObjectiveManager == null))
+            botObjectiveManager = bot.GetObjectiveManager();
+            if (botObjectiveManager == null)
+            {
+                return false;
+            }
+
+            BotQuestingDecisionMonitor? questingDecisionMonitor = botObjectiveManager.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>();
+            if (questingDecisionMonitor == null)
+            {
+                return false;
+            }
+
+            currentDecision = questingDecisionMonitor.CurrentDecision;
+            return botObjectiveManager.IsQuestingAllowed;
+        }
+
+        public static bool IsQuesting(this BotOwner bot, out BotObjectiveManager? botObjectiveManager)
+        {
+            if (!bot.AllowedToQuest(out botObjectiveManager, out EBotQuestingDecision currentDecision) || (botObjectiveManager == null))
             {
                 return false;
             }
@@ -45,26 +62,13 @@ namespace QuestingBots.Helpers
                 return false;
             }
 
-            currentDecision = questingDecisionMonitor.CurrentDecision;
-
             bool hasBoss = bot.HasBoss(out int _);
             return !hasBoss || questingDecisionMonitor.MustQuestBeforeFollowing;
         }
 
-        internal static bool AllowedToQuest(this BotOwner bot, out BotObjectiveManager? botObjectiveManager)
+        public static bool HasQuestingPath(this BotOwner bot, out Vector3[] questingPathCorners)
         {
-            botObjectiveManager = bot.GetObjectiveManager();
-            if (botObjectiveManager == null)
-            {
-                return false;
-            }
-
-            return botObjectiveManager.IsQuestingAllowed;
-        }
-
-        internal static bool HasQuestingPath(this BotOwner bot, out Vector3[] questingPathCorners)
-        {
-            if (!bot.AllowedToQuest(out BotObjectiveManager? botObjectiveManager) || (botObjectiveManager == null))
+            if (!bot.AllowedToQuest(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision) || (botObjectiveManager == null))
             {
                 questingPathCorners = new Vector3[0];
                 return false;
@@ -74,7 +78,7 @@ namespace QuestingBots.Helpers
             return true;
         }
 
-        internal static bool HasEftPath(this BotOwner bot, out Vector3? targetPoint, out Vector3? currentCorner)
+        public static bool HasEftPath(this BotOwner bot, out Vector3? targetPoint, out Vector3? currentCorner)
         {
             if (bot.Mover?.ActualPathController?.HavePath != true)
             {
@@ -90,7 +94,7 @@ namespace QuestingBots.Helpers
             return true;
         }
 
-        internal static int[] EnemyPlayerIdsArray(this BotOwner bot)
+        public static int[] EnemyPlayerIdsArray(this BotOwner bot)
         {
             if (bot.EnemiesController?.EnemyInfos == null)
             {
@@ -102,7 +106,7 @@ namespace QuestingBots.Helpers
                 .ToArray();
         }
 
-        internal static bool HasCurrentEnemy(this BotOwner bot, out int enemyPlayerId)
+        public static bool HasCurrentEnemy(this BotOwner bot, out int enemyPlayerId)
         {
             enemyPlayerId = -1;
             Player? enemyPlayer = bot.Memory.GoalEnemy?.GroupInfo?.Player;
@@ -115,7 +119,7 @@ namespace QuestingBots.Helpers
             return enemyPlayer.HealthController.IsAlive;
         }
 
-        internal static bool HasBoss(this BotOwner bot, out int bossPlayerId)
+        public static bool HasBoss(this BotOwner bot, out int bossPlayerId)
         {
             bossPlayerId = -1;
             BotOwner? boss = BotHiveMindMonitor.GetGroupLeader(bot);

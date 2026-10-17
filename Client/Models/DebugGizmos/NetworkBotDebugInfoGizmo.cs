@@ -49,11 +49,6 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override void OnUpdate()
         {
-            if (!_debugInfoSource.HasCurrentData)
-            {
-                return;
-            }
-
             StringBuilder sb = new StringBuilder();
             updateOverlayText(sb);
             Overlay.StaticText = sb.ToString();
@@ -61,11 +56,6 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void updateOverlayText(StringBuilder sb)
         {
-            if (!_debugInfoSource.HasCurrentData)
-            {
-                return;
-            }
-
             if (!Singleton<PlayerData>.Instantiated)
             {
                 return;
@@ -83,7 +73,7 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
-            if (botPlayer == null)
+            if (!_debugInfoSource.HasCurrentData)
             {
                 return;
             }
@@ -92,6 +82,11 @@ namespace QuestingBots.Models.DebugGizmos
             sb.AppendLabeledValue("Reason", _debugInfoSource.ActiveLogicName, Color.white, Color.white);
 
             if (_debugInfoSource.IsSleeping)
+            {
+                return;
+            }
+
+            if (botPlayer == null)
             {
                 return;
             }
@@ -138,11 +133,6 @@ namespace QuestingBots.Models.DebugGizmos
 
         public override void Draw()
         {
-            if (!_debugInfoSource.HasCurrentData || !_debugInfoSource.HasQuestingData)
-            {
-                return;
-            }
-
             if (!Singleton<PlayerData>.Instantiated)
             {
                 return;

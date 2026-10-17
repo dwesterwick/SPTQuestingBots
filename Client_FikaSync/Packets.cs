@@ -81,7 +81,7 @@ namespace QuestingBots
                 BotId = bot.Id,
                 IsInitialized = bot.AIData.BotOwner.IsInitialized(),
                 BotType = Controllers.BotRegistrationManager.GetBotType(bot.AIData.BotOwner),
-                BaseBrainName = bot.AIData.BotOwner.Brain.BaseBrain.ShortName()
+                BaseBrainName = bot.AIData.BotOwner.Brain?.BaseBrain?.ShortName() ?? "[NOT INITIALIZED]",
             };
         }
     }
@@ -201,8 +201,8 @@ namespace QuestingBots
 
         public static BotDebugQuestingInfoPacket Create(FikaBot bot)
         {
-            bool allowedToQuest = bot.AIData.BotOwner.AllowedToQuest(out BotObjectiveManager? botObjectiveManager);
-            bool isQuesting = bot.AIData.BotOwner.IsQuesting(out botObjectiveManager, out EBotQuestingDecision currentDecision);
+            bool allowedToQuest = bot.AIData.BotOwner.AllowedToQuest(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision);
+            bool isQuesting = bot.AIData.BotOwner.IsQuesting(out botObjectiveManager);
 
             return new BotDebugQuestingInfoPacket()
             {

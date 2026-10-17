@@ -14,6 +14,8 @@ namespace QuestingBots.Utils.DataBroadcasters
 
         }
 
+        protected override bool CanSendPacket(FikaBot bot) => bot.AIData.BotOwner != null;
+
         protected override BotDebugStaticInfoPacket CreatePacket(FikaBot bot) => BotDebugStaticInfoPacket.Create(bot);
     }
 }

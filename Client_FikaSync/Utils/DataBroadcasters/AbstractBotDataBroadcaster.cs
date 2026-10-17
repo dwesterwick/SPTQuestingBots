@@ -12,22 +12,24 @@ using System.Text;
 
 namespace QuestingBots.Utils.DataBroadcasters
 {
-    internal abstract class AbstractBotDataBroadcaster<T> : IAbstractBotDataBroadcaster where T : INetSerializable, IBotDebugInfo
+    internal abstract class AbstractBotDataBroadcaster<T> : IBotDataBroadcaster where T : INetSerializable, IBotDebugInfo
     {
         protected float BroadcastRate { get; private set; }
 
         private Stopwatch broadcastTimer = Stopwatch.StartNew();
 
-        protected bool CanBroadcast => broadcastTimer.ElapsedMilliseconds >= 1000f / BroadcastRate;
+        protected bool CanBroadcastByTime => broadcastTimer.ElapsedMilliseconds >= 1000f / BroadcastRate;
 
         public AbstractBotDataBroadcaster(float broadcastRate)
         {
             BroadcastRate = broadcastRate;
         }
 
+        protected abstract bool CanSendPacket(FikaBot bot);
+
         public void Broadcast(IEnumerable<Player> botPlayers)
         {
-            if (!CanBroadcast)
+            if (!CanBroadcastByTime)
             {
                 return;
             }
@@ -39,6 +41,11 @@ namespace QuestingBots.Utils.DataBroadcasters
                 {
                     QuestingBotsFikaSyncPlugin.PluginLogger.LogError("Player " + botPlayer.name + " is not a FikaBot");
                     continue;
+                }
+
+                if (!CanSendPacket(bot))
+                {
+                    return;
                 }
 
                 try

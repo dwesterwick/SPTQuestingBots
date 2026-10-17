@@ -1,4 +1,5 @@
 ﻿using Fika.Core.Main.Players;
+using QuestingBots.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,8 @@ namespace QuestingBots.Utils.DataBroadcasters
         {
 
         }
+
+        protected override bool CanSendPacket(FikaBot bot) => bot.AIData.BotOwner.IsInitialized();
 
         protected override BotDebugQuestingInfoPacket CreatePacket(FikaBot bot) => BotDebugQuestingInfoPacket.Create(bot);
     }

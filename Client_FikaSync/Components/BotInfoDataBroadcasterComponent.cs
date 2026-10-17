@@ -27,8 +27,8 @@ namespace QuestingBots.Components
             }
         }
 
-        private static List<IAbstractBotDataBroadcaster>? _dataBroadcasters = null;
-        public static List<IAbstractBotDataBroadcaster> DataBroadcasters
+        private static List<IBotDataBroadcaster>? _dataBroadcasters = null;
+        public static List<IBotDataBroadcaster> DataBroadcasters
         {
             get
             {
@@ -60,16 +60,16 @@ namespace QuestingBots.Components
                 return;
             }
 
-            foreach (IAbstractBotDataBroadcaster botDataBroadcaster in DataBroadcasters)
+            foreach (IBotDataBroadcaster botDataBroadcaster in DataBroadcasters)
             {
                 botDataBroadcaster.Broadcast(hostGameController.Bots.Values);
             }
         }
 
-        private static List<IAbstractBotDataBroadcaster> CreateAllDataBroadcasters()
+        private static List<IBotDataBroadcaster> CreateAllDataBroadcasters()
         {
-            List<IAbstractBotDataBroadcaster> allDataBroadcasters = AllDataBroadcasterTypes
-                .Select(t => (IAbstractBotDataBroadcaster)Activator.CreateInstance(t))
+            List<IBotDataBroadcaster> allDataBroadcasters = AllDataBroadcasterTypes
+                .Select(t => (IBotDataBroadcaster)Activator.CreateInstance(t))
                 .ToList();
 
 #if DEBUG
@@ -83,7 +83,7 @@ namespace QuestingBots.Components
         {
             return Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(t => !t.IsInterface && !t.IsAbstract && typeof(IAbstractBotDataBroadcaster).IsAssignableFrom(t));
+                .Where(t => !t.IsInterface && !t.IsAbstract && typeof(IBotDataBroadcaster).IsAssignableFrom(t));
         }
     }
 }
