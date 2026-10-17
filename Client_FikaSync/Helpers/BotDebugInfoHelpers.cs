@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace QuestingBots.Helpers
 {
@@ -59,6 +60,34 @@ namespace QuestingBots.Helpers
             }
 
             return botObjectiveManager.IsQuestingAllowed;
+        }
+
+        internal static bool HasQuestingPath(this BotOwner bot, out Vector3[] questingPathCorners)
+        {
+            if (!bot.AllowedToQuest(out BotObjectiveManager? botObjectiveManager) || (botObjectiveManager == null))
+            {
+                questingPathCorners = new Vector3[0];
+                return false;
+            }
+
+            questingPathCorners = botObjectiveManager.BotPath.Corners;
+            return true;
+        }
+
+        internal static bool HasEftPath(this BotOwner bot, out Vector3? targetPoint, out Vector3? currentCorner)
+        {
+            if (bot.Mover?.ActualPathController?.HavePath != true)
+            {
+                targetPoint = null;
+                currentCorner = null;
+
+                return false;
+            }
+
+            targetPoint = bot.Mover.ActualPathController.TargetPoint;
+            currentCorner = bot.Mover.ActualPathController.CurrentCorner();
+
+            return true;
         }
 
         internal static int[] EnemyPlayerIdsArray(this BotOwner bot)

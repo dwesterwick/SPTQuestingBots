@@ -1,5 +1,6 @@
 ﻿using EFT;
 using Fika.Core.Main.Players;
+using Fika.Core.Networking;
 using Fika.Core.Networking.LiteNetLib.Utils;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.Components;
@@ -10,6 +11,7 @@ using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace QuestingBots
 {
@@ -85,6 +87,9 @@ namespace QuestingBots
         public int CurrentEnemyPlayerId { get; set; }
         public bool HasBoss { get; set; }
         public int BossPlayerId { get; set; }
+        public bool HasEftPath { get; set; }
+        public ClassVector3 CurrentEftPathCorner { get; set; }
+        public ClassVector3 CurrentEftPathTarget { get; set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -98,6 +103,9 @@ namespace QuestingBots
             CurrentEnemyPlayerId = reader.GetInt();
             HasBoss = reader.GetBool();
             BossPlayerId = reader.GetInt();
+            HasEftPath = reader.GetBool();
+            CurrentEftPathCorner = reader.GetClassVector3();
+            CurrentEftPathTarget = reader.GetClassVector3();
         }
 
         public void Serialize(NetDataWriter writer)
@@ -112,12 +120,16 @@ namespace QuestingBots
             writer.Put(CurrentEnemyPlayerId);
             writer.Put(HasBoss);
             writer.Put(BossPlayerId);
+            writer.Put(HasEftPath);
+            writer.PutClassVector3(CurrentEftPathCorner);
+            writer.PutClassVector3(CurrentEftPathTarget);
         }
 
         public static BotDebugCurrentInfoPacket Create(FikaBot bot)
         {
             bool hasCurrentEnemy = bot.AIData.BotOwner.HasCurrentEnemy(out int currentEnemyPlayerId);
             bool hasBoss = bot.AIData.BotOwner.HasBoss(out int bossPlayerId);
+            bool hasEftPath = bot.AIData.BotOwner.HasEftPath(out Vector3? targetPoint, out Vector3? currentCorner);
 
             return new BotDebugCurrentInfoPacket()
             {
@@ -130,7 +142,10 @@ namespace QuestingBots
                 HasCurrentEnemy = hasCurrentEnemy,
                 CurrentEnemyPlayerId = currentEnemyPlayerId,
                 HasBoss = hasBoss,
-                BossPlayerId = bossPlayerId
+                BossPlayerId = bossPlayerId,
+                HasEftPath = hasEftPath,
+                CurrentEftPathCorner = currentCorner ?? Vector3.negativeInfinity,
+                CurrentEftPathTarget = targetPoint ?? Vector3.negativeInfinity,
             };
         }
     }

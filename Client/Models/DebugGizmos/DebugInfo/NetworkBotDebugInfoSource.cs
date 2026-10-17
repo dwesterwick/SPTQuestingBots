@@ -5,12 +5,15 @@ using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
     public class NetworkBotDebugInfoSource: IBotDebugInfoSource
     {
+        private readonly static ClassVector3 _invalidVector3 = ClassVector3.FromUnityVector3(Vector3.negativeInfinity);
+
         private static object _staticDataLock = new object();
         private IBotDebugStaticInfo _StaticData;
 
@@ -37,6 +40,9 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         public int CurrentEnemyPlayerId { get { lock (_currentDataLock) { return _CurrentData == null ? -1 : _CurrentData.CurrentEnemyPlayerId; } } }
         public bool HasBoss { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.HasBoss; } } }
         public int BossPlayerId { get { lock (_currentDataLock) { return _CurrentData == null ? -1 : _CurrentData.BossPlayerId; } } }
+        public bool HasEftPath { get { lock (_currentDataLock) { return _CurrentData == null ? false : _CurrentData.HasEftPath; } } }
+        public ClassVector3 CurrentEftPathCorner { get { lock (_currentDataLock) { return _CurrentData == null ? _invalidVector3 : _CurrentData.CurrentEftPathCorner; } } }
+        public ClassVector3 CurrentEftPathTarget { get { lock (_currentDataLock) { return _CurrentData == null ? _invalidVector3 : _CurrentData.CurrentEftPathTarget; } } }
 
         public bool HasQuestingData { get { lock (_questingDataLock) { return _QuestingData != null; } } }
 

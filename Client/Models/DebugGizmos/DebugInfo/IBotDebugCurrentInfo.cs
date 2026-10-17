@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
@@ -16,5 +17,8 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         public int CurrentEnemyPlayerId { get; }
         public bool HasBoss { get; }
         public int BossPlayerId { get; }
+        public bool HasEftPath { get; }
+        public ClassVector3 CurrentEftPathCorner { get; }
+        public ClassVector3 CurrentEftPathTarget { get; }
     }
 }

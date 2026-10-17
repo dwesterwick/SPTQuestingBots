@@ -41,7 +41,14 @@ namespace QuestingBots.Utils.DataBroadcasters
                     continue;
                 }
 
-                SendBotDataPacket(bot);
+                try
+                {
+                    SendBotDataPacket(bot);
+                }
+                catch (Exception ex)
+                {
+                    QuestingBotsFikaSyncPlugin.PluginLogger.LogError("Exception when sending packet " + typeof(T).Name + " for bot with NetId=" + bot.NetId + ": " + ex.Message);
+                }
             }
 
             broadcastTimer.Restart();
@@ -53,8 +60,7 @@ namespace QuestingBots.Utils.DataBroadcasters
             T packet = CreatePacket(bot);
             if (!packet.TrySendToAllClients())
             {
-                QuestingBotsFikaSyncPlugin.PluginLogger.LogError("Could not send " + typeof(T).Name + " for " + bot.name);
-                return;
+                throw new InvalidOperationException("Could not send " + typeof(T).Name + " for bot with NetId=" + bot.NetId);
             }
         }
     }

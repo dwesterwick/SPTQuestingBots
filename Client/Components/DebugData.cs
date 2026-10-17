@@ -54,39 +54,35 @@ namespace QuestingBots.Components
                 return false;
             }
 
-            Singleton<PlayerData>.Instance.RegisterBot(botPlayer, data);
+            Singleton<PlayerData>.Instance.RegisterBotDebugInfo(botPlayer, data);
 
-            if (!_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
-                source = new NetworkBotDebugInfoSource(data);
-                _networkBotDebugInfoSources.Add(data.NetId, source);
-                _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
-
+                source.UpdateStaticBotInfo(data);
                 return true;
             }
 
-            source.UpdateStaticBotInfo(data);
+            source = new NetworkBotDebugInfoSource(data);
+            _networkBotDebugInfoSources.Add(data.NetId, source);
+            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
+
             return true;
         }
 
         public void UpdateClientBotCurrentInfo(IBotDebugCurrentInfo data)
         {
-            if (!_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
-                return;
+                source.UpdateCurrentBotInfo(data);
             }
-
-            source.UpdateCurrentBotInfo(data);
         }
 
         public void UpdateClientBotQuestingInfo(IBotDebugQuestingInfo data)
         {
-            if (!_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
+            if (_networkBotDebugInfoSources.TryGetValue(data.NetId, out NetworkBotDebugInfoSource source))
             {
-                return;
+                source.UpdateQuestingBotInfo(data);
             }
-
-            source.UpdateQuestingBotInfo(data);
         }
 
         protected void Awake()
