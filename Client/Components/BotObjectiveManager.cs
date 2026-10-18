@@ -23,6 +23,7 @@ namespace QuestingBots.Components
 {
     public class BotObjectiveManager : BehaviorExtensions.MonoBehaviourDelayedUpdate
     {
+        public bool IsInitialized { get; private set; } = false;
         public bool HasInitialQuestBeenSelected { get; private set; } = false;
         public bool IsQuestingAllowed { get; private set; } = false;
         public BotJobAssignment? CurrentAssignment { get; private set; } = null;
@@ -42,7 +43,6 @@ namespace QuestingBots.Components
 
         private BotOwner botOwner = null!;
         private bool isInitializing = false;
-        private bool isInitialized = false;
         private BotJobAssignment? lastAssignment = null;
         private Stopwatch timeSpentAtObjectiveTimer = new Stopwatch();
 
@@ -87,7 +87,7 @@ namespace QuestingBots.Components
 
         public void Init(BotOwner _botOwner)
         {
-            if (isInitialized || isInitializing)
+            if (IsInitialized || isInitializing)
             {
                 return;
             }
@@ -121,7 +121,7 @@ namespace QuestingBots.Components
             QuestSelector = BotQuestSelector.GetBotQuestSelector(botOwner);
             yield return null;
 
-            isInitialized = true;
+            IsInitialized = true;
             isInitializing = false;
         }
 
@@ -138,7 +138,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            if (!isInitialized)
+            if (!IsInitialized)
             {
                 return;
             }
@@ -221,7 +221,7 @@ namespace QuestingBots.Components
             }
 
             IsQuestingAllowed = IdentityData.BotType.AllowsQuesting();
-            if (IdentityData.BotType == BotType.Undetermined)
+            if (IdentityData.BotType == EBotType.Undetermined)
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not determine bot type for " + botOwner.GetText() + " (Brain type: " + botOwner.Brain.BaseBrain.ShortName() + ")");
             }

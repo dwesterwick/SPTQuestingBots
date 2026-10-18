@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Controllers;
+using QuestingBots.Helpers;
+using QuestingBots.Models.DebugGizmos;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Models.Questing;
+using QuestingBots.Utils;
+using QuestingBots.Utils.Benchmarking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Controllers;
-using QuestingBots.Models.DebugGizmos;
-using QuestingBots.Models.Questing;
-using QuestingBots.Utils;
-using QuestingBots.Utils.Benchmarking;
 using UnityEngine;
 
 namespace QuestingBots.Components
@@ -19,22 +21,103 @@ namespace QuestingBots.Components
         public static List<string> BotFilter = new List<string>();
         private readonly static float markerRadius = 0.5f;
 
-        private List<AbstractDebugGizmo> gizmos = new List<AbstractDebugGizmo>();
+        private List<AbstractDebugGizmo> _gizmos = new List<AbstractDebugGizmo>();
+        private Dictionary<int, IBotDebugInfoSource> _botDebugInfoSources = new Dictionary<int, IBotDebugInfoSource>();
 
-        private int jobAssignmentGizmoCount => gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
+        private int jobAssignmentGizmoCount => _gizmos.Count(gizmo => gizmo is Models.DebugGizmos.JobAssignmentGizmo);
 
         [Benchmark]
-        public void RegisterBot(BotOwner bot)
+        public void RegisterLocalBot(BotOwner bot)
         {
-            gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
-            gizmos.Add(new Models.DebugGizmos.BotPathVisualizationGizmo(bot, Color.magenta));
+            LocalBotDebugInfoSource source = new LocalBotDebugInfoSource(bot);
+            RegisterBot_Internal(source);
 
-            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
-            if (botObjectiveManager != null)
+            if (!TryRegisterBotDebugInfo(source))
             {
-                gizmos.Add(new Models.DebugGizmos.BotObjectivePositionMarkerGizmo(bot, markerRadius));
-                gizmos.Add(new Models.DebugGizmos.BotPathTargetMarkerGizmo(bot, markerRadius));
-                gizmos.Add(new Models.DebugGizmos.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
+                Singleton<LoggingUtil>.Instance.LogError("Could not register bot debug info for " + bot.GetText());
+            }
+        }
+
+        private void RegisterBot_Internal(IBotDebugInfoSource source)
+        {
+            _botDebugInfoSources.Add(source.NetId, source);
+            _gizmos.Add(new BotInfoGizmo(source));
+            _gizmos.Add(new BotPathVisualizationGizmo(source, Color.magenta));
+            _gizmos.Add(new BotObjectivePositionMarkerGizmo(source, markerRadius));
+            _gizmos.Add(new BotPathTargetMarkerGizmo(source, markerRadius));
+            _gizmos.Add(new BotPathCurrentCornerMarkerGizmo(source, markerRadius));
+        }
+
+        private bool TryRegisterBotDebugInfo(IBotDebugStaticInfo data)
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return true;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(data.NetId);
+            if (botPlayer == null)
+            {
+                return false;
+            }
+
+            Singleton<PlayerData>.Instance.RegisterBotDebugInfo(botPlayer, data);
+            return true;
+        }
+
+        public bool TryUpdateClientBotStaticInfo(IBotDebugStaticInfo data)
+        {
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
+            {
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return false;
+                }
+
+                networkBotDebugInfoSource.UpdateStaticBotInfo(data);
+                return true;
+            }
+
+            if (!TryRegisterBotDebugInfo(data))
+            {
+                return false;
+            }
+
+            source = new NetworkBotDebugInfoSource(data);
+            RegisterBot_Internal(source);
+
+            return true;
+        }
+
+        public void UpdateClientBotCurrentInfo(IBotDebugCurrentInfo data)
+        {
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
+            {
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return;
+                }
+
+                networkBotDebugInfoSource.UpdateCurrentBotInfo(data);
+            }
+        }
+
+        public void UpdateClientBotQuestingInfo(IBotDebugQuestingInfo data)
+        {
+            if (_botDebugInfoSources.TryGetValue(data.NetId, out IBotDebugInfoSource source))
+            {
+                NetworkBotDebugInfoSource? networkBotDebugInfoSource = source as NetworkBotDebugInfoSource;
+                if (networkBotDebugInfoSource == null)
+                {
+                    Singleton<LoggingUtil>.Instance.LogError("Cannot update IBotDebugInfoSource using network packet for bot with NetID=" + data.NetId);
+                    return;
+                }
+
+                networkBotDebugInfoSource.UpdateQuestingBotInfo(data);
             }
         }
 
@@ -49,27 +132,30 @@ namespace QuestingBots.Components
             // Reset to default since filter from previous raid won't matter in the next
             QuestingBotsPluginConfig.BotFilter.BoxedValue = "";
 
-            gizmos.Add(new PlayerCoordinatesGizmo());
-            gizmos.Add(new GameTimeGizmo());
+            _gizmos.Add(new PlayerCoordinatesGizmo());
+            _gizmos.Add(new GameTimeGizmo());
         }
 
-        private void updateGuiStyles(object sender, EventArgs e) => gizmos.ForEach(gizmo => gizmo.UpdateGUIStyle());
+        private void updateGuiStyles(object sender, EventArgs e) => _gizmos.ForEach(gizmo => gizmo.UpdateGUIStyle());
 
         protected void Update()
         {
-            if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+            if (RaidHelpers.IsHostRaid())
             {
-                return;
-            }
+                if (!Singleton<GameWorld>.Instance.GetComponent<BotQuestBuilder>().HaveQuestsBeenBuilt)
+                {
+                    return;
+                }
 
-            if (QuestingBotsPluginConfig.ShowQuestInfoOverlays.Value && (jobAssignmentGizmoCount == 0))
-            {
-                loadAllPossibleJobAssignments();
+                if (QuestingBotsPluginConfig.ShowQuestInfoOverlays.Value && (jobAssignmentGizmoCount == 0))
+                {
+                    loadAllPossibleJobAssignments();
+                }
             }
 
             removeUnneededGizmos();
 
-            foreach (AbstractDebugGizmo gizmo in gizmos)
+            foreach (AbstractDebugGizmo gizmo in _gizmos)
             {
                 gizmo.Update();
             }
@@ -82,7 +168,7 @@ namespace QuestingBots.Components
                 return;
             }
 
-            foreach (AbstractDebugGizmo gizmo in gizmos)
+            foreach (AbstractDebugGizmo gizmo in _gizmos)
             {
                 gizmo.Draw();
             }
@@ -90,12 +176,12 @@ namespace QuestingBots.Components
 
         private void removeUnneededGizmos()
         {
-            foreach (AbstractDebugGizmo gizmo in gizmos.Where(gizmo => gizmo.ReadyToDispose()))
+            foreach (AbstractDebugGizmo gizmo in _gizmos.Where(gizmo => gizmo.ReadyToDispose()))
             {
                 gizmo.Dispose();
             }
 
-            gizmos.RemoveAll(gizmo => gizmo.ReadyToDispose());
+            _gizmos.RemoveAll(gizmo => gizmo.ReadyToDispose());
         }
 
         private void loadAllPossibleJobAssignments()
@@ -140,7 +226,7 @@ namespace QuestingBots.Components
             questText += "\nStep: " + jobAssignment.QuestObjectiveStepAssignment.ToString();
             questText += "\nDistance: ";
 
-            gizmos.Add(new JobAssignmentGizmo(jobAssignment, position, questText, markerRadius, Color.red));
+            _gizmos.Add(new JobAssignmentGizmo(jobAssignment, position, questText, markerRadius, Color.red));
         }
 
         private void addGizmosForQuestWaypoint(JobAssignment jobAssignment, Vector3 position, int waypointNumber)
@@ -149,7 +235,7 @@ namespace QuestingBots.Components
             questText += "\nWaypoint #" + waypointNumber + ": " + position;
             questText += "\nDistance: ";
 
-            gizmos.Add(new JobAssignmentGizmo(jobAssignment, position, questText, markerRadius, Color.blue));
+            _gizmos.Add(new JobAssignmentGizmo(jobAssignment, position, questText, markerRadius, Color.blue));
         }
 
         private static void ValidateBotFilter(string configString)

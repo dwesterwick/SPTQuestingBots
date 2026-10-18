@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components;
+using QuestingBots.Helpers;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using QuestingBots.Components;
-using QuestingBots.Controllers;
-using QuestingBots.Helpers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,25 +19,17 @@ namespace QuestingBots.Models.DebugGizmos
         public string MarkerName { get; private set; }
         public Color MarkerColor { get; private set; }
         
-        protected BotOwner BotOwner = null!;
-        protected BotObjectiveManager BotObjectiveManager = null!;
+        protected IBotDebugInfoSource DebugInfoSource;
 
         public bool IsActive => MarkerAndOverlay.IsActive;
         public float MarkerRadius => MarkerAndOverlay.MarkerRadius;
 
-        public AbstractBotPathMarkerGizmo(BotOwner _bot, float _markerRadius, string _markerName, Color _color) : base(100)
+        public AbstractBotPathMarkerGizmo(IBotDebugInfoSource debugInfoSource, float _markerRadius, string _markerName, Color _color) : base(100)
         {
             MarkerName = _markerName;
             MarkerColor = _color;
 
-            BotOwner = _bot;
-
-            BotObjectiveManager? botObjectiveManager = BotOwner.GetObjectiveManager();
-            if (botObjectiveManager == null)
-            {
-                throw new InvalidOperationException($"Cannot retrieve objective manager for {_bot.GetText()}");
-            }
-            BotObjectiveManager = botObjectiveManager;
+            DebugInfoSource = debugInfoSource;
 
             GameObject marker = DebugHelpers.CreateSphere(Vector3.negativeInfinity, _markerRadius * 2, MarkerColor);
             DebugOverlay overlay = new DebugOverlay(UpdateGUIStyle);
@@ -47,8 +40,17 @@ namespace QuestingBots.Models.DebugGizmos
         protected abstract bool HasValidPath();
         protected abstract Vector3? GetPosition();
         protected abstract NavMeshPathStatus? GetPathStatus();
-        
-        public override bool ReadyToDispose() => (BotOwner == null) || BotOwner.IsDead;
+
+        public override bool ReadyToDispose()
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(DebugInfoSource.NetId);
+            return (botPlayer == null) || !botPlayer.HealthController.IsAlive;
+        }
 
         public override GUIStyle UpdateGUIStyle()
         {
@@ -85,6 +87,11 @@ namespace QuestingBots.Models.DebugGizmos
                 return;
             }
 
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return;
+            }
+
             MarkerAndOverlay.Position = position.Value;
             MarkerAndOverlay.Marker.transform.position = MarkerAndOverlay.Position;
             MarkerAndOverlay.Overlay.StaticText = createOverlayText(MarkerName, MarkerAndOverlay.Position, GetPathStatus());
@@ -94,7 +101,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         private bool shouldShow()
         {
-            if (!BotOwner.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotPathOverlays))
+            if (!DebugInfoSource.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotPathOverlays))
             {
                 return false;
             }
@@ -104,9 +111,11 @@ namespace QuestingBots.Models.DebugGizmos
 
         private string createOverlayText(string markerName, Vector3 markerPosition, NavMeshPathStatus? pathStatus)
         {
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(DebugInfoSource.NetId);
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLabeledValue(markerName, markerPosition.ToString(), Color.white, Color.white);
-            sb.AppendLabeledValue("Bot", BotOwner.GetText(), Color.white, Color.white);
+            sb.AppendLabeledValue("Bot", botPlayer.GetText(), Color.white, Color.white);
 
             if (pathStatus.HasValue)
             {

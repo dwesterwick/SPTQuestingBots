@@ -11,7 +11,10 @@ namespace QuestingBots.Configuration
     public class DebugConfig
     {
         [DataMember(Name = "enabled", IsRequired = true)]
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
+
+        [DataMember(Name = "broadcast_debug_data_to_fika_clients", IsRequired = true)]
+        public bool BroadcastDebugDataToFikaClients { get; set; } = true;
 
         [DataMember(Name = "always_spawn_pmcs", IsRequired = true)]
         public bool AlwaysSpawnPMCs { get; set; } = false;

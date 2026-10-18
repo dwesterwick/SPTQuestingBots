@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.BotLogic.BotMonitor;
+using QuestingBots.BotLogic.HiveMind;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using EFT;
-using QuestingBots.BotLogic.HiveMind;
-using QuestingBots.Components;
-using QuestingBots.Controllers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,7 +18,9 @@ namespace QuestingBots.Helpers
 {
     public static class DebugHelpers
     {
-        public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.Select(point => point + offset);
+        public static bool IsSameAs(this ClassVector3 v1, ClassVector3 v2) => (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z);
+
+        public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.SelectNonAlloc(point => point + offset);
 
         public static Vector3 IncreaseVector3ToMinSize(Vector3 vector, float minSize)
         {
@@ -151,47 +156,83 @@ namespace QuestingBots.Helpers
             }
         }
 
-        public static Color GetDebugColor(this BotOwner bot)
+        public static Color GetDebugColor(this IBotDebugInfoSource debugInfoSource)
         {
-            if ((bot == null) || bot.IsDead)
+            if (!Singleton<PlayerData>.Instantiated)
             {
                 return Color.white;
             }
 
-            Color botTypeColor = Color.green;
-
-            // If you're dead, there's no reason to worry about overlay colors
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (mainPlayer == null)
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(debugInfoSource.NetId);
+            if ((botPlayer == null) || !botPlayer.HealthController.IsAlive)
             {
-                return botTypeColor;
+                return Color.white;
             }
 
-            // Check if the bot doesn't like you
-            if (bot.EnemiesController?.EnemyInfos?.Any(i => i.Value.ProfileId == mainPlayer.ProfileId) == true)
+            Player? myPlayer = Singleton<PlayerData>.Instance.GetMyPlayer();
+            if (myPlayer == null)
             {
-                botTypeColor = Color.red;
+                return Color.white;
             }
 
-            return botTypeColor;
+            if (!debugInfoSource.HasCurrentData)
+            {
+                return Color.white;
+            }
+
+            if (debugInfoSource.EnemyPlayerIds.AnyNonAlloc(id => id == myPlayer.Id))
+            {
+                return Color.red;
+            }
+
+            return Color.green;
         }
 
-        public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        public static bool ShouldShowPathStatus(this EBotQuestingDecision decision)
         {
-            // Check if filter not empty (no filter), and bot is not included in the filter
-            if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(bot.GetPlayer.name))
-                return false;
+            switch (decision)
+            {
+                case EBotQuestingDecision.Quest:
+                case EBotQuestingDecision.Regroup:
+                case EBotQuestingDecision.FollowBoss:
+                case EBotQuestingDecision.HelpBoss:
+                    return true;
+            }
 
-            if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
+            return false;
+        }
+
+        public static bool CanDisplayDebugData(this IBotDebugInfoSource debugInfoSource, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(debugInfoSource.NetId);
+            if (botPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + debugInfoSource.NetId);
+                return false;
+            }
+
+            // Check if filter not empty (no filter), and bot is not included in the filter
+            string botName = Singleton<PlayerData>.Instance.GetBotNameText(botPlayer);
+            if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(botName))
+            {
+                return false;
+            }
+
+            if (debugInfoSource.HasQuestingData && debugInfoSource.AllowedToQuest)
             {
                 // Check if overlays are enabled for questing bosses (leaders)
-                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasGroupLeader(bot))
+                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !debugInfoSource.HasBoss)
                 {
                     return true;
                 }
 
                 // Check if overlays are enabled for questing followers
-                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasGroupLeader(bot))
+                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && debugInfoSource.HasBoss)
                 {
                     return true;
                 }

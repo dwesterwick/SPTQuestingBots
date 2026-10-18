@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components;
+using QuestingBots.Utils;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Utils;
 
 namespace QuestingBots.Patches
 {
@@ -28,6 +29,7 @@ namespace QuestingBots.Patches
             }
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
+            GetOrAddCommonGameWorldComponents();
 
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.DelayGameStartUntilBotGenFinishes)
             {
@@ -38,6 +40,15 @@ namespace QuestingBots.Patches
                     Singleton<LoggingUtil>.Instance.LogInfo("Delaying the game start until bot generation finishes...");
                 }
             }
+        }
+
+        public static void GetOrAddCommonGameWorldComponents()
+        {
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
+
+            PlayerData playerData = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PlayerData>();
+            Singleton<PlayerData>.Create(playerData);
         }
     }
 }

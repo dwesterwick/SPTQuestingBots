@@ -1,7 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
 using Comfort.Common;
+using EFT;
 using HarmonyLib;
+using QuestingBots.Components;
 using QuestingBots.Components.Spawning;
 using QuestingBots.Helpers;
 using QuestingBots.Utils;

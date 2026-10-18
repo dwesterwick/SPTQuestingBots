@@ -2,6 +2,7 @@
 using EFT;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuestingBots.ExternalMods.Functions.Multiplayer
@@ -13,22 +14,43 @@ namespace QuestingBots.ExternalMods.Functions.Multiplayer
 
         }
 
-        public virtual IEnumerable<Player> GetHumanPlayers()
+        public virtual Player? GetPlayer(int netId)
+        {
+            Singleton<GameWorld>.Instance.TryGetAlivePlayer(netId, out Player? player);
+            return player;
+        }
+
+        public virtual Player? GetMyPlayer()
         {
             if (Singleton<GameWorld>.Instance == null)
             {
-                yield break;
+                return null;
             }
 
-            foreach (Player player in Singleton<GameWorld>.Instance.AllAlivePlayersList)
+            return Singleton<GameWorld>.Instance.MainPlayer;
+        }
+
+        public virtual IEnumerable<Player> GetAllAliveHumanPlayers()
+        {
+            foreach (Player player in GetAllAlivePlayers())
             {
-                if (player.IsAI || !player.HealthController.IsAlive)
+                if (player.IsAI)
                 {
                     continue;
                 }
 
                 yield return player;
             }
+        }
+
+        public virtual IEnumerable<Player> GetAllAlivePlayers()
+        {
+            if (Singleton<GameWorld>.Instance == null)
+            {
+                return Enumerable.Empty<Player>();
+            }
+
+            return Singleton<GameWorld>.Instance.AllAlivePlayersList;
         }
     }
 }

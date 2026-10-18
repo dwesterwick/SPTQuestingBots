@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Comfort.Common;
+using Fika.Core.Main.Utils;
+using Fika.Core.Networking;
+using Fika.Core.Networking.LiteNetLib.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Comfort.Common;
-using Fika.Core.Main.Utils;
-using Fika.Core.Networking;
-using Fika.Core.Networking.LiteNetLib.Utils;
 
-namespace QuestingBots
+namespace QuestingBots.Helpers
 {
     internal static class PacketHelpers
     {

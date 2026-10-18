@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 using UnityEngine.AI;
 using UnityEngine;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Models.DebugGizmos
 {
     public class BotPathTargetMarkerGizmo : AbstractBotPathMarkerGizmo
     {
-        public BotPathTargetMarkerGizmo(BotOwner _bot, float _markerRadius) : base(_bot, _markerRadius, "Target Position", Color.cyan)
+        public BotPathTargetMarkerGizmo(IBotDebugInfoSource debugInfoSource, float _markerRadius) : base(debugInfoSource, _markerRadius, "Target Position", Color.cyan)
         {
             
         }
@@ -20,38 +22,40 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override bool HasValidPath()
         {
-            if (BotOwner?.Mover?.ActualPathController?.HavePath != true)
+            if (!DebugInfoSource.HasEftPath)
             {
                 return false;
             }
 
-            if (!BotOwner.Mover.ActualPathController.TargetPoint.HasValue)
+            if (DebugInfoSource.CurrentEftPathTarget == Vector3.negativeInfinity)
             {
                 return false;
             }
 
-            if (QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.QuestTarget))
+            if (!QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.QuestTarget))
             {
-                if ((BotObjectiveManager?.BotPath?.HasPath == true) && BotObjectiveManager.IsQuestingAllowed)
+                return true;
+            }
+
+            if (DebugInfoSource.HasQuestingPath && DebugInfoSource.AllowedToQuest)
+            {
+                Vector3? position = GetPosition();
+                if (position == null)
                 {
-                    Vector3? position = GetPosition();
-                    if (!position.HasValue)
-                    {
-                        return true;
-                    }
+                    return false;
+                }
 
-                    // If the EFT path target position is basically the same as the bot's quest target position, we don't need to show the marker
-                    if (Vector3.Distance(position.Value, BotObjectiveManager.BotPath.TargetPosition) < MarkerRadius)
-                    {
-                        return false;
-                    }
+                // If the EFT path target position is basically the same as the bot's quest target position, we don't need to show the marker
+                if (Vector3.Distance(position.Value, DebugInfoSource.CurrentQuestingPathTarget) < MarkerRadius)
+                {
+                    return false;
                 }
             }
 
             return true;
         }
 
-        protected override Vector3? GetPosition() => BotOwner.Mover.ActualPathController.TargetPoint;
+        protected override Vector3? GetPosition() => DebugInfoSource.CurrentEftPathTarget;
         protected override NavMeshPathStatus? GetPathStatus() => null;
     }
 }

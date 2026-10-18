@@ -15,15 +15,6 @@ using System.Threading.Tasks;
 
 namespace QuestingBots.Controllers
 {
-    public enum BotType
-    {
-        Undetermined,
-        Scav,
-        PScav,
-        PMC,
-        Boss
-    }
-
     public static class BotRegistrationManager
     {
         public static int SpawnedBotCount { get; set; } = 0;
@@ -68,42 +59,42 @@ namespace QuestingBots.Controllers
             sleepingBotIds.Clear();
         }
 
-        public static BotType GetBotType(BotOwner botOwner)
+        public static EBotType GetBotType(BotOwner botOwner)
         {
             if (botOwner?.Profile?.Side == null)
             {
-                return BotType.Undetermined;
+                return EBotType.Undetermined;
             }
 
             if (IsBotAPMC(botOwner))
             {
-                return BotType.PMC;
+                return EBotType.PMC;
             }
             if (IsBotABoss(botOwner))
             {
-                return BotType.Boss;
+                return EBotType.Boss;
             }
             if (botOwner.Profile.Side == EPlayerSide.Savage)
             {
                 if (botOwner.Profile.WillBeAPlayerScav())
                 {
-                    return BotType.PScav;
+                    return EBotType.PScav;
                 }
 
-                return BotType.Scav;
+                return EBotType.Scav;
             }
 
-            return BotType.Undetermined;
+            return EBotType.Undetermined;
         }
 
-        public static float? GetValue(this BotTypeValueConfig botTypeValueConfig, BotType botType)
+        public static float? GetValue(this BotTypeValueConfig botTypeValueConfig, EBotType botType)
         {
             switch (botType)
             {
-                case BotType.Scav: return botTypeValueConfig.Scav;
-                case BotType.PScav: return botTypeValueConfig.PScav;
-                case BotType.PMC: return botTypeValueConfig.PMC;
-                case BotType.Boss: return botTypeValueConfig.Boss;
+                case EBotType.Scav: return botTypeValueConfig.Scav;
+                case EBotType.PScav: return botTypeValueConfig.PScav;
+                case EBotType.PMC: return botTypeValueConfig.PMC;
+                case EBotType.Boss: return botTypeValueConfig.Boss;
             }
 
             return null;

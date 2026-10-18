@@ -17,6 +17,7 @@ namespace QuestingBots.Patches.Spawning
 {
     public class GameStartPatch : ModulePatch
     {
+        public static event Action? OnWaitForBotGeneratorsProgressChanged = null;
         public static bool IsDelayingGameStart { get; private set; } = false;
 
         private static readonly List<BossLocationSpawn> missedBossWaves = new List<BossLocationSpawn>();
@@ -84,7 +85,13 @@ namespace QuestingBots.Patches.Spawning
 
                 yield return waitForSeconds;
 
-                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus($"Generating {BotGenerator.CurrentBotGeneratorType}s", BotGenerator.CurrentBotGeneratorProgress / 100f);
+                string screenMessageText = TimeHasComeScreenClassChangeStatusPatch.GetWaitingForGeneratorsText(BotGenerator.CurrentBotGeneratorType);
+                TimeHasComeScreenClassChangeStatusPatch.ChangeStatus(screenMessageText, BotGenerator.CurrentBotGeneratorProgress / 100f);
+
+                if (OnWaitForBotGeneratorsProgressChanged != null)
+                {
+                    OnWaitForBotGeneratorsProgressChanged();
+                }
             }
 
             if (hadToWait)
@@ -93,6 +100,11 @@ namespace QuestingBots.Patches.Spawning
             }
 
             TimeHasComeScreenClassChangeStatusPatch.RestorePreviousStatus();
+
+            if (OnWaitForBotGeneratorsProgressChanged != null)
+            {
+                OnWaitForBotGeneratorsProgressChanged();
+            }
 
             IsDelayingGameStart = false;
             SpawnMissedBossWaves();

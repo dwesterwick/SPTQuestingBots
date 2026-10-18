@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Comfort.Common;
+using EFT;
+using QuestingBots.Components;
+using QuestingBots.Controllers;
+using QuestingBots.Utils.Benchmarking;
+using SPT.Reflection.Patching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SPT.Reflection.Patching;
-using Comfort.Common;
-using EFT;
-using QuestingBots.Controllers;
-using QuestingBots.Utils.Benchmarking;
 
 namespace QuestingBots.Patches
 {
@@ -28,6 +29,8 @@ namespace QuestingBots.Patches
                 //Singleton<LoggingUtil>.Instance.LogInfo("Disabling " + debugController.GetType().FullName + "...");
                 debugController.enabled = false;
             }
+
+            RemoveCommonGameWorldComponents();
 
             // Disable all bot generators
             foreach (Components.Spawning.BotGenerator botGenerator in Singleton<GameWorld>.Instance.gameObject.GetComponents(typeof(Components.Spawning.BotGenerator)))
@@ -55,6 +58,14 @@ namespace QuestingBots.Patches
 
             // Not really needed since BotHiveMindMonitor is attached to GameWorld, but this may reduce CPU load a tad
             BotLogic.HiveMind.BotHiveMindMonitor.Clear();
+        }
+
+        public static void RemoveCommonGameWorldComponents()
+        {
+            if (Singleton<PlayerData>.Instance != null)
+            {
+                Singleton<PlayerData>.Release(Singleton<PlayerData>.Instance);
+            }
         }
     }
 }

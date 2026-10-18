@@ -47,6 +47,8 @@ namespace QuestingBots.Patches.Spawning
             changeStatus(previousText, previousProgress);
         }
 
+        public static string GetWaitingForGeneratorsText(string botType) => $"Generating {botType}s";
+
         private static void checkForInstances()
         {
             if (instance == null)

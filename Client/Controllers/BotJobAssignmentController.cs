@@ -297,7 +297,7 @@ namespace QuestingBots.Controllers
 
             IEnumerable<BotJobAssignment> matchingAssignments = botJobAssignments[bot.Profile.Id]
                 .Reverse<BotJobAssignment>()
-                .TakeWhile(a => a.Status == JobAssignmentStatus.Failed);
+                .TakeWhile(a => a.Status == EJobAssignmentStatus.Failed);
 
             return matchingAssignments.Count();
         }
@@ -335,7 +335,7 @@ namespace QuestingBots.Controllers
                 return false;
             }
 
-            if ((botAssignment.Status == JobAssignmentStatus.Pending) && (botAssignment.TimeSinceStarted() >= PENDING_STATUS_TIME_LIMIT))
+            if ((botAssignment.Status == EJobAssignmentStatus.Pending) && (botAssignment.TimeSinceStarted() >= PENDING_STATUS_TIME_LIMIT))
             {
                 return false;
             }
@@ -376,7 +376,7 @@ namespace QuestingBots.Controllers
         {
             foreach (BotJobAssignment assignment in assignments)
             {
-                if (assignment.Status == JobAssignmentStatus.Archived)
+                if (assignment.Status == EJobAssignmentStatus.Archived)
                 {
                     continue;
                 }
@@ -430,7 +430,7 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                if (assignment.Status == JobAssignmentStatus.Archived)
+                if (assignment.Status == EJobAssignmentStatus.Archived)
                 {
                     continue;
                 }
@@ -643,7 +643,7 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                if (assignment.Status != JobAssignmentStatus.Completed)
+                if (assignment.Status != EJobAssignmentStatus.Completed)
                 {
                     continue;
                 }
@@ -672,12 +672,12 @@ namespace QuestingBots.Controllers
                     continue;
                 }
 
-                if (!objective.IsRepeatable && (assignment.Status == JobAssignmentStatus.Completed))
+                if (!objective.IsRepeatable && (assignment.Status == EJobAssignmentStatus.Completed))
                 {
                     return false;
                 }
 
-                allArchived = allArchived & assignment.Status == JobAssignmentStatus.Archived;
+                allArchived = allArchived & assignment.Status == EJobAssignmentStatus.Archived;
                 matchingAssignments++;
             }
 
