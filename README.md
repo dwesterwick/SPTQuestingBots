@@ -214,7 +214,8 @@ If Scav spawns are blocked by either the **Permitted Scav Spawn Rate** or **Max 
 
 **Main Options:**
 * **enabled**: Completely enable or disable all featues of this mod. 
-* **debug.enabled**: Enable debug mode.
+* **debug.enabled**: Enable debug mode. This is **false** by default.
+* **debug.broadcast_debug_data_to_fika_clients**: Send data to all [Fika](https://sp-mod.com/mod/2326/project-fika) clients to allow them to use bot debugging gizmos. **This will significantly increase network traffic.** This is **true** by default. 
 * **debug.always_spawn_pmcs**: If **true**, PMC's will spawn even when you select "None" for the amount of bots when starting a raid. 
 * **debug.always_spawn_pscavs**: If **true**, player Scavs will spawn even when you select "None" for the amount of bots when starting a raid. 
 * **debug.show_zone_outlines**: If **true**, EFT quest zones will be outlined in light blue. Target locations for each zone will have light-blue spherical outlines.
