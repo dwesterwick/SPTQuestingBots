@@ -66,14 +66,16 @@ namespace QuestingBots.Helpers
             return !hasBoss || questingDecisionMonitor.MustQuestBeforeFollowing;
         }
 
-        public static bool HasQuestingPath(this BotOwner bot, out Vector3[] questingPathCorners)
+        public static bool HasQuestingPath(this BotOwner bot, out Vector3? targetPosition, out Vector3[] questingPathCorners)
         {
             if (!bot.AllowedToQuest(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision) || (botObjectiveManager == null))
             {
-                questingPathCorners = new Vector3[0];
+                targetPosition = null;
+                questingPathCorners = Array.Empty<Vector3>();
                 return false;
             }
 
+            targetPosition = botObjectiveManager.BotPath.TargetPosition;
             questingPathCorners = botObjectiveManager.BotPath.Corners;
             return true;
         }

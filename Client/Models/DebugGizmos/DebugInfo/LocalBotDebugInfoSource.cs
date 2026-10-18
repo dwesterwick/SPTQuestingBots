@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
@@ -113,6 +114,23 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
             {
                 if (!Bot.AIData.BotOwner.AllowedToQuest(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision) || (botObjectiveManager == null)) { return UnityEngine.AI.NavMeshPathStatus.PathComplete; }
                 return botObjectiveManager.BotPath.Status;
+            }
+        }
+        public bool HasQuestingPath => Bot.AIData.BotOwner.HasQuestingPath(out Vector3? targetPosition, out Vector3[] questingPathCorners);
+        public ClassVector3 CurrentQuestingPathTarget
+        {
+            get
+            {
+               if (!Bot.AIData.BotOwner.HasQuestingPath(out Vector3? targetPosition, out Vector3[] questingPathCorners) || (targetPosition == null)) { return Vector3.negativeInfinity; }
+                return targetPosition;
+            }
+        }
+        public Vector3[] CurrentQuestingPath
+        {
+            get
+            {
+                if (!Bot.AIData.BotOwner.HasQuestingPath(out Vector3? targetPosition, out Vector3[] questingPathCorners)) { return Array.Empty<Vector3>(); }
+                return questingPathCorners;
             }
         }
 

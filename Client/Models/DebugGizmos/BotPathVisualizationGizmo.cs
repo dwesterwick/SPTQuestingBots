@@ -7,6 +7,7 @@ using Comfort.Common;
 using EFT;
 using QuestingBots.Components;
 using QuestingBots.Helpers;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
 using UnityEngine;
 
 namespace QuestingBots.Models.DebugGizmos
@@ -17,15 +18,15 @@ namespace QuestingBots.Models.DebugGizmos
 
         public Color PathColor { get; private set; }
 
-        protected BotOwner BotOwner = null!;
+        protected IBotDebugInfoSource DebugInfoSource;
 
         private string pathName = null!;
         private Models.Pathing.PathVisualizationData botPathRendering = null!;
         private PathRenderer pathRenderer = null!;
 
-        public BotPathVisualizationGizmo(BotOwner _botOwner, Color _pathColor) : base(100)
+        public BotPathVisualizationGizmo(IBotDebugInfoSource debugInfoSource, Color _pathColor) : base(100)
         {
-            BotOwner = _botOwner;
+            DebugInfoSource = debugInfoSource;
 
             PathColor = _pathColor;
 
@@ -34,7 +35,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void init()
         {
-            pathName = "CurrentBotPath_" + BotOwner.Id;
+            pathName = "CurrentBotPath_" + DebugInfoSource.NetId;
             Vector3[] initialPath = getBotPath().ToArray();
             botPathRendering = new Models.Pathing.PathVisualizationData(pathName, initialPath, PathColor);
 
@@ -43,7 +44,16 @@ namespace QuestingBots.Models.DebugGizmos
 
         public override void Draw() { }
 
-        public override bool ReadyToDispose() => (BotOwner == null) || BotOwner.IsDead;
+        public override bool ReadyToDispose()
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(DebugInfoSource.NetId);
+            return (botPlayer == null) || !botPlayer.HealthController.IsAlive;
+        }
 
         public override GUIStyle UpdateGUIStyle() => null!;
 
@@ -51,7 +61,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override void OnUpdate()
         {
-            if (BotOwner.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotPathVisualizations))
+            if (DebugInfoSource.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotPathVisualizations))
             {
                 botPathRendering.PathData = getBotPath();
                 pathRenderer.AddOrUpdatePath(botPathRendering, false);
@@ -67,8 +77,6 @@ namespace QuestingBots.Models.DebugGizmos
             pathRenderer.RemovePath(pathName);
         }
 
-        private IEnumerable<Vector3> getBotPath() => BotOwner.Mover
-            .GetCurrentPath()
-            .ApplyOffset(pathOffset);
+        private IEnumerable<Vector3> getBotPath() => DebugInfoSource.CurrentQuestingPath.ApplyOffset(pathOffset);
     }
 }

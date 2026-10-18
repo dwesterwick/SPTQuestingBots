@@ -55,8 +55,6 @@ namespace QuestingBots.Components
         {
             Singleton<GlobalEventDispatcher>.Instance.OnEvent += HandleBotEvent;
 
-            PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
-
             if (!TarkovApplication.Exist(out TarkovApplication tarkovApplication))
             {
                 throw new InvalidOperationException("Could not retrieve TarkovApplication");

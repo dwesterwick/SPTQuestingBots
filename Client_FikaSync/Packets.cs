@@ -172,6 +172,9 @@ namespace QuestingBots
         public EJobAssignmentStatus QuestStatus { get; private set; }
         public EBotQuestingDecision CurrentDecision { get; private set; }
         public UnityEngine.AI.NavMeshPathStatus PathStatus { get; private set; }
+        public bool HasQuestingPath { get; private set; }
+        public ClassVector3 CurrentQuestingPathTarget { get; private set; }
+        public Vector3[] CurrentQuestingPath { get; private set; }
 
         public void Deserialize(NetDataReader reader)
         {
@@ -184,6 +187,9 @@ namespace QuestingBots
             QuestStatus = reader.GetEnum<EJobAssignmentStatus>();
             CurrentDecision = reader.GetEnum<EBotQuestingDecision>();
             PathStatus = reader.GetEnum<UnityEngine.AI.NavMeshPathStatus>();
+            HasQuestingPath = reader.GetBool();
+            CurrentQuestingPathTarget = reader.GetClassVector3();
+            CurrentQuestingPath = reader.GetUnmanagedArray<Vector3>();
         }
 
         public void Serialize(NetDataWriter writer)
@@ -197,12 +203,16 @@ namespace QuestingBots
             writer.PutEnum(QuestStatus);
             writer.PutEnum(CurrentDecision);
             writer.PutEnum(PathStatus);
+            writer.Put(HasQuestingPath);
+            writer.PutClassVector3(CurrentQuestingPathTarget);
+            writer.PutUnmanagedArray(CurrentQuestingPath);
         }
 
         public static BotDebugQuestingInfoPacket Create(FikaBot bot)
         {
             bool allowedToQuest = bot.AIData.BotOwner.AllowedToQuest(out BotObjectiveManager? botObjectiveManager, out EBotQuestingDecision currentDecision);
             bool isQuesting = bot.AIData.BotOwner.IsQuesting(out botObjectiveManager);
+            bool hasQuestingPath = bot.AIData.BotOwner.HasQuestingPath(out Vector3? targetPosition, out Vector3[] questingPathCorners);
 
             return new BotDebugQuestingInfoPacket()
             {
@@ -215,6 +225,9 @@ namespace QuestingBots
                 QuestStatus = botObjectiveManager?.CurrentAssignment?.Status ?? EJobAssignmentStatus.NotStarted,
                 CurrentDecision = currentDecision,
                 PathStatus = botObjectiveManager?.BotPath?.Status ?? UnityEngine.AI.NavMeshPathStatus.PathComplete,
+                HasQuestingPath = hasQuestingPath,
+                CurrentQuestingPathTarget = targetPosition ?? Vector3.negativeInfinity,
+                CurrentQuestingPath = questingPathCorners,
             };
         }
     }

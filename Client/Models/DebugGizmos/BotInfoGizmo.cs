@@ -1,10 +1,9 @@
 ﻿using Comfort.Common;
 using EFT;
-using QuestingBots.BotLogic.BotMonitor;
-using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
-using QuestingBots.Controllers;
 using QuestingBots.Helpers;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +17,26 @@ namespace QuestingBots.Models.DebugGizmos
     {
         public DebugOverlay Overlay { get; set; }
 
-        private BotOwner bot = null!;
-        private BotObjectiveManager? botObjectiveManager = null;
-        private BotQuestingDecisionMonitor botQuestingDecisionMonitor = null!;
+        private IBotDebugInfoSource _debugInfoSource;
 
-        public BotInfoGizmo(BotOwner _bot) : base(100)
+        public int BotNetId => _debugInfoSource.NetId;
+
+        public BotInfoGizmo(IBotDebugInfoSource debugInfoSource) : base(100)
         {
-            bot = _bot;
+            _debugInfoSource = debugInfoSource;
             Overlay = new DebugOverlay(UpdateGUIStyle);
         }
 
-        public override bool ReadyToDispose() => (bot == null) || bot.IsDead;
+        public override bool ReadyToDispose()
+        {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
+            return (botPlayer == null) || !botPlayer.HealthController.IsAlive;
+        }
 
         public override GUIStyle UpdateGUIStyle()
         {
@@ -43,20 +51,6 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override void OnUpdate()
         {
-            if (!bot.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotInfoOverlays))
-            {
-                return;
-            }
-
-            if (botObjectiveManager == null)
-            {
-                botObjectiveManager = bot.GetObjectiveManager();
-            }
-            if (botQuestingDecisionMonitor == null)
-            {
-                botQuestingDecisionMonitor = botObjectiveManager?.BotMonitor?.GetMonitor<BotQuestingDecisionMonitor>()!;
-            }
-
             StringBuilder sb = new StringBuilder();
             updateOverlayText(sb);
             Overlay.StaticText = sb.ToString();
@@ -64,86 +58,122 @@ namespace QuestingBots.Models.DebugGizmos
 
         private void updateOverlayText(StringBuilder sb)
         {
-            sb.AppendLabeledValue(Controllers.BotRegistrationManager.GetBotType(bot).ToString(), bot.GetText(), bot.GetDebugColor(), Color.white);
-            sb.AppendLabeledValue("Brain Type", bot.Brain.BaseBrain.ShortName(), Color.white, Color.white);
-
-            if (bot.BotState != EBotState.Active)
-            {
-                sb.AppendLabeledValue("Bot State", bot.BotState.ToString(), Color.white, bot.BotState.GetDebugColor());
-                return;
-            }
-
-            sb.AppendLabeledValue("Layer", bot.GetActiveLayerName(), Color.magenta, Color.magenta);
-            sb.AppendLabeledValue("Reason", bot.GetActiveLogicName(), Color.white, Color.white);
-
-            if (BotRegistrationManager.IsBotSleeping(bot.Profile.Id))
+            if (!Singleton<PlayerData>.Instantiated)
             {
                 return;
             }
 
-            Player? enemyPlayer = bot.Memory.GoalEnemy?.GroupInfo?.Player;
-            if ((enemyPlayer != null) && enemyPlayer.HealthController.IsAlive)
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
+            string botInfoText = botPlayer.GetText();
+
+            sb.AppendLabeledValue(_debugInfoSource.BotType.ToString(), botInfoText, _debugInfoSource.GetDebugColor(), Color.white);
+            sb.AppendLabeledValue("Brain Type", _debugInfoSource.BaseBrainName, Color.white, Color.white);
+
+            if (_debugInfoSource.BotState != EBotState.Active)
             {
-                double enemyDistance = Math.Round(Vector3.Distance(bot.Position, enemyPlayer.Position), 1);
-                sb.AppendLabeledValue("Enemy", $"{enemyPlayer.GetText()}: {enemyDistance}m", Color.white, Color.white);
+                sb.AppendLabeledValue("Bot State", _debugInfoSource.BotState.ToString(), Color.white, _debugInfoSource.BotState.GetDebugColor());
+                return;
             }
 
-            BotOwner? boss = BotHiveMindMonitor.GetGroupLeader(bot);
-            if (boss != null)
-            {
-                sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, boss.IsDead ? Color.red : Color.white);
-            }
-
-            if ((botQuestingDecisionMonitor == null) || (botObjectiveManager == null) || !botObjectiveManager.IsQuestingAllowed)
+            if (!_debugInfoSource.HasCurrentData)
             {
                 return;
             }
 
-            bool mustQuest = (boss == null) || botQuestingDecisionMonitor.MustQuestBeforeFollowing;
+            sb.AppendLabeledValue("Layer", _debugInfoSource.ActiveLayerName, Color.magenta, Color.magenta);
+            sb.AppendLabeledValue("Reason", _debugInfoSource.ActiveLogicName, Color.white, Color.white);
 
-            if ((botObjectiveManager.CurrentAssignment != null) && mustQuest)
+            if (_debugInfoSource.IsSleeping)
             {
-                sb.AppendLabeledValue("Quest", botObjectiveManager.CurrentAssignment.QuestAssignment?.ToString(), Color.cyan, Color.cyan);
-                sb.AppendLabeledValue("Objective", botObjectiveManager.CurrentAssignment.QuestObjectiveAssignment?.ToString(), Color.white, Color.white);
-                sb.AppendLabeledValue("Step", botObjectiveManager.CurrentAssignment.QuestObjectiveStepAssignment?.ToString(), Color.white, Color.white);
-                sb.AppendLabeledValue("Status", botObjectiveManager.CurrentAssignment.Status.ToString(), Color.white, Color.white);
+                return;
             }
 
-            sb.AppendLabeledValue("Current Decision", botQuestingDecisionMonitor.CurrentDecision.ToString(), Color.white, Color.white);
-
-            if (botQuestingDecisionMonitor.CurrentDecision.ShouldShowPathStatus() && (botObjectiveManager.BotPath != null))
+            if (botPlayer == null)
             {
-                if (botObjectiveManager.BotPath.Status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
+                return;
+            }
+
+            if (_debugInfoSource.HasCurrentEnemy)
+            {
+                Player? enemyPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.CurrentEnemyPlayerId);
+                if (enemyPlayer != null)
                 {
-                    sb.AppendLabeledValue("Path Status", botObjectiveManager.BotPath.Status.ToString(), Color.white, botObjectiveManager.BotPath.Status.GetDebugColor());
+                    double enemyDistance = Math.Round(Vector3.Distance(botPlayer.Position, enemyPlayer.Position), 1);
+                    sb.AppendLabeledValue("Enemy", $"{enemyPlayer.GetText()}: {enemyDistance}m", Color.white, Color.white);
                 }
+            }
+
+            if (_debugInfoSource.HasBoss)
+            {
+                Player? boss = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.BossPlayerId);
+                if (boss != null)
+                {
+                    sb.AppendLabeledValue("Boss", boss.GetText(), Color.white, Color.white);
+                }
+            }
+
+            addQuestingInfoToOverlayText(sb);
+        }
+
+        private void addQuestingInfoToOverlayText(StringBuilder sb)
+        {
+            if (!_debugInfoSource.HasQuestingData || !_debugInfoSource.AllowedToQuest)
+            {
+                return;
+            }
+
+            if (_debugInfoSource.IsQuesting)
+            {
+                sb.AppendLabeledValue("Quest", _debugInfoSource.QuestName, Color.cyan, Color.cyan);
+                sb.AppendLabeledValue("Objective", _debugInfoSource.QuestObjectiveName, Color.white, Color.white);
+                sb.AppendLabeledValue("Step", _debugInfoSource.QuestObjectiveStepName, Color.white, Color.white);
+                sb.AppendLabeledValue("Status", _debugInfoSource.QuestStatus.ToString(), Color.white, Color.white);
+            }
+
+            sb.AppendLabeledValue("Current Decision", _debugInfoSource.CurrentDecision.ToString(), Color.white, Color.white);
+
+            if (_debugInfoSource.CurrentDecision.ShouldShowPathStatus() && (_debugInfoSource.PathStatus != UnityEngine.AI.NavMeshPathStatus.PathComplete))
+            {
+                sb.AppendLabeledValue("Path Status", _debugInfoSource.PathStatus.ToString(), Color.white, _debugInfoSource.PathStatus.GetDebugColor());
             }
         }
 
         public override void Draw()
         {
-            if (!bot.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotInfoOverlays))
+            if (!Singleton<PlayerData>.Instantiated)
             {
                 return;
             }
 
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (mainPlayer == null)
+            if (!_debugInfoSource.CanDisplayDebugData(QuestingBotsPluginConfig.ShowBotInfoOverlays))
             {
                 return;
             }
 
-            Vector3 botHeadPosition = bot.Position + new Vector3(0, 1.5f, 0);
-            Overlay.Draw(addDistanceToStaticText(mainPlayer.Position), botHeadPosition);
+            Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(_debugInfoSource.NetId);
+            if (botPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get position for bot with NetId=" + _debugInfoSource.NetId);
+                return;
+            }
+
+            Player? myPlayer = Singleton<PlayerData>.Instance.GetMyPlayer();
+            if (myPlayer == null)
+            {
+                Singleton<LoggingUtil>.Instance.LogError("Cannot get your position");
+                return;
+            }
+
+            double distanceToBot = Math.Round(Vector3.Distance(botPlayer.Position, myPlayer.Position), 1);
+
+            Overlay.Draw(addDistanceToStaticText(distanceToBot), botPlayer.Position + new Vector3(0, 1.5f, 0));
         }
 
-        private string addDistanceToStaticText(Vector3 sourcePosition)
+        private string addDistanceToStaticText(double distance)
         {
-            double distanceToBot = Math.Round(Vector3.Distance(bot.Position, sourcePosition), 1);
-
             StringBuilder sb = new StringBuilder();
             sb.Append(Overlay.StaticText);
-            sb.AppendLabeledValue("Distance", distanceToBot + "m", Color.white, Color.white);
+            sb.AppendLabeledValue("Distance", distance + "m", Color.white, Color.white);
 
             return sb.ToString();
         }

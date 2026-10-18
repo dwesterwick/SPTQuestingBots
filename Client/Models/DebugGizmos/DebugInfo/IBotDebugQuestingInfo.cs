@@ -3,6 +3,7 @@ using QuestingBots.Models.Questing;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
@@ -16,5 +17,8 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         public EJobAssignmentStatus QuestStatus { get; }
         public EBotQuestingDecision CurrentDecision { get; }
         public UnityEngine.AI.NavMeshPathStatus PathStatus { get; }
+        public bool HasQuestingPath { get; }
+        public ClassVector3 CurrentQuestingPathTarget { get; }
+        public Vector3[] CurrentQuestingPath { get; }
     }
 }

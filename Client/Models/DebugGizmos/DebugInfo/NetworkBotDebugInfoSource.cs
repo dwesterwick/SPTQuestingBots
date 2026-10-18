@@ -90,6 +90,15 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         private UnityEngine.AI.NavMeshPathStatus _pathStatus = UnityEngine.AI.NavMeshPathStatus.PathComplete;
         public UnityEngine.AI.NavMeshPathStatus PathStatus => _pathStatus;
 
+        private bool _hasQuestingPath = false;
+        public bool HasQuestingPath => _hasQuestingPath;
+
+        private ClassVector3 _currentQuestingPathTarget = ClassVector3.FromUnityVector3(Vector3.negativeInfinity);
+        public ClassVector3 CurrentQuestingPathTarget => _currentQuestingPathTarget;
+
+        private Vector3[] _currentQuestingPath = Array.Empty<Vector3>();
+        public Vector3[] CurrentQuestingPath => _currentQuestingPath;
+
         public NetworkBotDebugInfoSource(IBotDebugStaticInfo staticInfo)
         {
             UpdateStaticBotInfo(staticInfo);
@@ -132,6 +141,9 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
             _questStatus = data.QuestStatus;
             _currentDecision = data.CurrentDecision;
             _pathStatus = data.PathStatus;
+            _hasQuestingPath = data.HasQuestingPath;
+            if (!_currentQuestingPathTarget.IsSameAs(data.CurrentQuestingPathTarget)) { _currentQuestingPathTarget = data.CurrentQuestingPathTarget; }
+            if (_currentQuestingPath != data.CurrentQuestingPath) { _currentQuestingPath = data.CurrentQuestingPath; }
 
             HasQuestingData = true;
         }

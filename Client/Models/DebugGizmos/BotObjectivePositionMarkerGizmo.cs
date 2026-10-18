@@ -1,10 +1,9 @@
-﻿using System;
+﻿using QuestingBots.Models.DebugGizmos.DebugInfo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
-using QuestingBots.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,14 +11,14 @@ namespace QuestingBots.Models.DebugGizmos
 {
     public class BotObjectivePositionMarkerGizmo : AbstractBotPathMarkerGizmo
     {
-        public BotObjectivePositionMarkerGizmo(BotOwner _bot, float _markerRadius) : base(_bot, _markerRadius, "Objective Position", Color.green)
+        public BotObjectivePositionMarkerGizmo(IBotDebugInfoSource debugInfoSource, float _markerRadius) : base(debugInfoSource, _markerRadius, "Objective Position", Color.green)
         {
             
         }
 
         protected override bool IsEnabled() => QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.QuestTarget);
-        protected override bool HasValidPath() => (BotObjectiveManager?.BotPath?.HasPath == true) && BotObjectiveManager.IsQuestingAllowed;
-        protected override Vector3? GetPosition() => BotObjectiveManager.BotPath.TargetPosition;
-        protected override NavMeshPathStatus? GetPathStatus() => BotObjectiveManager.BotPath.Status;
+        protected override bool HasValidPath() => DebugInfoSource.AllowedToQuest && DebugInfoSource.HasQuestingPath;
+        protected override Vector3? GetPosition() => DebugInfoSource.CurrentQuestingPathTarget;
+        protected override NavMeshPathStatus? GetPathStatus() => DebugInfoSource.PathStatus;
     }
 }

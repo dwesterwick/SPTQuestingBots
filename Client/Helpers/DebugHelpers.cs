@@ -263,6 +263,11 @@ namespace QuestingBots.Helpers
 
         public static bool CanDisplayDebugData(this IBotDebugInfoSource debugInfoSource, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
         {
+            if (!Singleton<PlayerData>.Instantiated)
+            {
+                return false;
+            }
+
             Player? botPlayer = Singleton<PlayerData>.Instance.GetPlayer(debugInfoSource.NetId);
             if (botPlayer == null)
             {

@@ -45,6 +45,7 @@ namespace QuestingBots.Patches
         public static void GetOrAddCommonGameWorldComponents()
         {
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<DebugData>();
+            Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
 
             PlayerData playerData = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PlayerData>();
             Singleton<PlayerData>.Create(playerData);

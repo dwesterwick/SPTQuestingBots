@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EFT;
 using UnityEngine.AI;
 using UnityEngine;
+using QuestingBots.Models.DebugGizmos.DebugInfo;
 
 namespace QuestingBots.Models.DebugGizmos
 {
     public class BotPathCurrentCornerMarkerGizmo : AbstractBotPathMarkerGizmo
     {
-        public BotPathCurrentCornerMarkerGizmo(BotOwner _bot, float _markerRadius) : base(_bot, _markerRadius, "Current Corner", Color.yellow)
+        public BotPathCurrentCornerMarkerGizmo(IBotDebugInfoSource debugInfoSource, float _markerRadius) : base(debugInfoSource, _markerRadius, "Current Corner", Color.yellow)
         {
 
         }
@@ -20,7 +20,7 @@ namespace QuestingBots.Models.DebugGizmos
 
         protected override bool HasValidPath()
         {
-            if (BotOwner?.Mover?.ActualPathController?.HavePath != true)
+            if (!DebugInfoSource.HasEftPath)
             {
                 return false;
             }
@@ -28,7 +28,7 @@ namespace QuestingBots.Models.DebugGizmos
             // If the current corner is the same as the target point, we don't need to show the marker
             if (QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.EFTTarget))
             {
-                if (GetPosition() == BotOwner.Mover.ActualPathController.TargetPoint)
+                if (GetPosition() == DebugInfoSource.CurrentEftPathTarget)
                 {
                     return false;
                 }
@@ -37,7 +37,7 @@ namespace QuestingBots.Models.DebugGizmos
             return true;
         }
 
-        protected override Vector3? GetPosition() => BotOwner.Mover.ActualPathController.CurrentCorner();
+        protected override Vector3? GetPosition() => DebugInfoSource.CurrentEftPathCorner;
         protected override NavMeshPathStatus? GetPathStatus() => null;
     }
 }

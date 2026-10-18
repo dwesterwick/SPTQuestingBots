@@ -36,23 +36,16 @@ namespace QuestingBots.Components
             {
                 Singleton<LoggingUtil>.Instance.LogError("Could not register bot debug info for " + bot.GetText());
             }
-
-            //_gizmos.Add(new Models.DebugGizmos.BotInfoGizmo(bot));
-            _gizmos.Add(new Models.DebugGizmos.BotPathVisualizationGizmo(bot, Color.magenta));
-
-            BotObjectiveManager? botObjectiveManager = bot.GetObjectiveManager();
-            if (botObjectiveManager != null)
-            {
-                _gizmos.Add(new Models.DebugGizmos.BotObjectivePositionMarkerGizmo(bot, markerRadius));
-                _gizmos.Add(new Models.DebugGizmos.BotPathTargetMarkerGizmo(bot, markerRadius));
-                _gizmos.Add(new Models.DebugGizmos.BotPathCurrentCornerMarkerGizmo(bot, markerRadius));
-            }
         }
 
         private void RegisterBot_Internal(IBotDebugInfoSource source)
         {
             _botDebugInfoSources.Add(source.NetId, source);
-            _gizmos.Add(new NetworkBotDebugInfoGizmo(source));
+            _gizmos.Add(new BotInfoGizmo(source));
+            _gizmos.Add(new BotPathVisualizationGizmo(source, Color.magenta));
+            _gizmos.Add(new BotObjectivePositionMarkerGizmo(source, markerRadius));
+            _gizmos.Add(new BotPathTargetMarkerGizmo(source, markerRadius));
+            _gizmos.Add(new BotPathCurrentCornerMarkerGizmo(source, markerRadius));
         }
 
         private bool TryRegisterBotDebugInfo(IBotDebugStaticInfo data)
@@ -185,12 +178,6 @@ namespace QuestingBots.Components
         {
             foreach (AbstractDebugGizmo gizmo in _gizmos.Where(gizmo => gizmo.ReadyToDispose()))
             {
-                NetworkBotDebugInfoGizmo? networkBotDebugInfoGizmo = gizmo as NetworkBotDebugInfoGizmo;
-                if (networkBotDebugInfoGizmo != null)
-                {
-                    _botDebugInfoSources.Remove(networkBotDebugInfoGizmo.BotNetId);
-                }
-
                 gizmo.Dispose();
             }
 
