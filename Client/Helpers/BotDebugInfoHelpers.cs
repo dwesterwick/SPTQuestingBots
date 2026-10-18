@@ -1,8 +1,10 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
 using QuestingBots.BotLogic.BotMonitor;
 using QuestingBots.BotLogic.HiveMind;
 using QuestingBots.Components;
 using QuestingBots.Controllers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,23 @@ namespace QuestingBots.Helpers
 {
     public static class BotDebugInfoHelpers
     {
+        public static bool CanEnableBotDebugDataBroadcasting()
+        {
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.IsDebugEnabled())
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot debug data broadcasting disabled because debug is disabled in the server config");
+                return false;
+            }
+
+            if (!Singleton<ConfigUtil>.Instance.CurrentConfig.Debug.BroadcastDebugDataToFikaClients)
+            {
+                Singleton<LoggingUtil>.Instance.LogInfo("Bot debug data broadcasting disabled in the server config");
+                return false;
+            }
+
+            return true;
+        }
+
         public static bool IsInitialized(this BotOwner bot)
         {
             BotObjectiveManager? objectiveManager = bot.GetObjectiveManager();

@@ -20,7 +20,7 @@ namespace QuestingBots.Helpers
     {
         public static bool IsSameAs(this ClassVector3 v1, ClassVector3 v2) => (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z);
 
-        public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.Select(point => point + offset);
+        public static IEnumerable<Vector3> ApplyOffset(this IEnumerable<Vector3> points, Vector3 offset) => points.SelectNonAlloc(point => point + offset);
 
         public static Vector3 IncreaseVector3ToMinSize(Vector3 vector, float minSize)
         {
@@ -156,31 +156,6 @@ namespace QuestingBots.Helpers
             }
         }
 
-        public static Color GetDebugColor(this BotOwner bot)
-        {
-            if ((bot == null) || bot.IsDead)
-            {
-                return Color.white;
-            }
-
-            Color botTypeColor = Color.green;
-
-            // If you're dead, there's no reason to worry about overlay colors
-            Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
-            if (mainPlayer == null)
-            {
-                return botTypeColor;
-            }
-
-            // Check if the bot doesn't like you
-            if (bot.EnemiesController?.EnemyInfos?.Any(i => i.Value.ProfileId == mainPlayer.ProfileId) == true)
-            {
-                botTypeColor = Color.red;
-            }
-
-            return botTypeColor;
-        }
-
         public static Color GetDebugColor(this IBotDebugInfoSource debugInfoSource)
         {
             if (!Singleton<PlayerData>.Instantiated)
@@ -222,40 +197,6 @@ namespace QuestingBots.Helpers
                 case EBotQuestingDecision.FollowBoss:
                 case EBotQuestingDecision.HelpBoss:
                     return true;
-            }
-
-            return false;
-        }
-
-        public static bool CanDisplayDebugData(this BotOwner bot, BepInEx.Configuration.ConfigEntry<QuestingBotType> config)
-        {
-            // Check if filter not empty (no filter), and bot is not included in the filter
-            if (!DebugData.BotFilter.IsNullOrEmpty() && !DebugData.BotFilter.Contains(bot.GetPlayer.name))
-            {
-                return false;
-            }
-
-            if (bot.GetObjectiveManager()?.IsQuestingAllowed == true)
-            {
-                // Check if overlays are enabled for questing bosses (leaders)
-                if (config.Value.HasFlag(QuestingBotType.QuestingLeaders) && !BotHiveMindMonitor.HasGroupLeader(bot))
-                {
-                    return true;
-                }
-
-                // Check if overlays are enabled for questing followers
-                if (config.Value.HasFlag(QuestingBotType.QuestingFollowers) && BotHiveMindMonitor.HasGroupLeader(bot))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                // Check if overlays are enabled for bots that are not questing
-                if (config.Value.HasFlag(QuestingBotType.NonQuestingBots))
-                {
-                    return true;
-                }
             }
 
             return false;

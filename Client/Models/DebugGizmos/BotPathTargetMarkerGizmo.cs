@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using UnityEngine.AI;
 using UnityEngine;
 using QuestingBots.Models.DebugGizmos.DebugInfo;
+using Comfort.Common;
+using QuestingBots.Utils;
 
 namespace QuestingBots.Models.DebugGizmos
 {
@@ -30,21 +32,23 @@ namespace QuestingBots.Models.DebugGizmos
                 return false;
             }
 
-            if (QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.QuestTarget))
+            if (!QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.QuestTarget))
             {
-                if (DebugInfoSource.HasQuestingPath && DebugInfoSource.AllowedToQuest)
-                {
-                    Vector3? position = GetPosition();
-                    if (!position.HasValue)
-                    {
-                        return true;
-                    }
+                return true;
+            }
 
-                    // If the EFT path target position is basically the same as the bot's quest target position, we don't need to show the marker
-                    if (Vector3.Distance(position.Value, DebugInfoSource.CurrentQuestingPathTarget) < MarkerRadius)
-                    {
-                        return false;
-                    }
+            if (DebugInfoSource.HasQuestingPath && DebugInfoSource.AllowedToQuest)
+            {
+                Vector3? position = GetPosition();
+                if (position == null)
+                {
+                    return false;
+                }
+
+                // If the EFT path target position is basically the same as the bot's quest target position, we don't need to show the marker
+                if (Vector3.Distance(position.Value, DebugInfoSource.CurrentQuestingPathTarget) < MarkerRadius)
+                {
+                    return false;
                 }
             }
 

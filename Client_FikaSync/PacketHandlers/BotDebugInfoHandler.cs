@@ -1,9 +1,9 @@
-﻿using Comfort.Common;
-using Fika.Core.Main.Utils;
+﻿using Fika.Core.Main.Utils;
 using Fika.Core.Modding;
 using Fika.Core.Modding.Events;
 using Fika.Core.Networking;
 using QuestingBots.Helpers;
+using QuestingBots.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +16,13 @@ namespace QuestingBots.PacketHandlers
 
         internal override void Setup()
         {
+            if (!BotDebugInfoHelpers.CanEnableBotDebugDataBroadcasting())
+            {
+                return;
+            }
+
+            QuestingBotsFikaSyncPlugin.PluginLogger.LogInfo("Enabling bot debug data broadcasting...");
+
             new Patches.CreateBotInfoBroadcasterPatch().Enable();
 
             //if (!FikaBackendUtils.IsHeadless)

@@ -2,6 +2,7 @@
 	"enabled": true,
 	"debug": {
 		"enabled": false,
+		"broadcast_debug_data_to_fika_clients": true,
 		"always_spawn_pmcs": false,
 		"always_spawn_pscavs": false,
 		"show_zone_outlines": false,
