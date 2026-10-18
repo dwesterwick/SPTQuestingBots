@@ -14,7 +14,11 @@ namespace QuestingBots.ExternalMods.Functions.Multiplayer
 
         }
 
-        public virtual Player? GetPlayer(int netId) => null;
+        public virtual Player? GetPlayer(int netId)
+        {
+            Singleton<GameWorld>.Instance.TryGetAlivePlayer(netId, out Player? player);
+            return player;
+        }
 
         public virtual Player? GetMyPlayer()
         {

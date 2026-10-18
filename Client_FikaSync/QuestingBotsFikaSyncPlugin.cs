@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace QuestingBots
 {
     [BepInDependency("com.fika.core", "2.4.3")]
-    [BepInDependency(ModInfo.GUID, "1.1.0")]
+    [BepInDependency(ModInfo.GUID, "1.2.0")]
     [BepInPlugin(ModInfo.GUID + "fikasync", ModInfo.MODNAME + "FikaSync", ModInfo.MOD_VERSION)]
     internal class QuestingBotsFikaSyncPlugin : BaseUnityPlugin
     {
