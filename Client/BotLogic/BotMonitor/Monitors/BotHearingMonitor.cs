@@ -44,7 +44,7 @@ namespace QuestingBots.BotLogic.BotMonitor.Monitors
         {
             if (random.Next(1, 100) <= Singleton<ConfigUtil>.Instance.CurrentConfig.Questing.BotQuestingRequirements.HearingSensor.ChanceToInvestigateSounds)
             {
-                //WillInvestigateSounds = false;
+                WillInvestigateSounds = false;
             }
         }
 

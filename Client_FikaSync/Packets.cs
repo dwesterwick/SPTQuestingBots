@@ -51,6 +51,7 @@ namespace QuestingBots
     {
         public int NetId { get; private set; }
         public int BotId { get; private set; }
+        public string BotName { get; private set; }
         public bool IsInitialized { get; private set; }
         public EBotType BotType { get; private set; }
         public string BaseBrainName { get; private set; }
@@ -59,6 +60,7 @@ namespace QuestingBots
         {
             NetId = reader.GetInt();
             BotId = reader.GetInt();
+            BotName = reader.GetString();
             IsInitialized = reader.GetBool();
             BotType = reader.GetEnum<EBotType>();
             BaseBrainName = reader.GetString();
@@ -68,6 +70,7 @@ namespace QuestingBots
         {
             writer.Put(NetId);
             writer.Put(BotId);
+            writer.Put(BotName);
             writer.Put(IsInitialized);
             writer.PutEnum(BotType);
             writer.Put(BaseBrainName);
@@ -79,6 +82,7 @@ namespace QuestingBots
             {
                 NetId = bot.NetId,
                 BotId = bot.Id,
+                BotName = bot.name,
                 IsInitialized = bot.AIData.BotOwner.IsInitialized(),
                 BotType = Controllers.BotRegistrationManager.GetBotType(bot.AIData.BotOwner),
                 BaseBrainName = bot.AIData.BotOwner.Brain?.BaseBrain?.ShortName() ?? "[NOT INITIALIZED]",

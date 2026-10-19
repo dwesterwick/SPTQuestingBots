@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using static Assets.CommonAssets.Scripts.Utilities.ColliderExtendedDebug;
 
 namespace QuestingBots.Models.DebugGizmos.DebugInfo
 {
@@ -19,6 +18,7 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         public int NetId => Bot.Id;
 
         public int BotId => Bot.Id;
+        public string BotName => Bot.name;
         public bool IsInitialized => Bot.AIData.BotOwner.IsInitialized();
         public EBotType BotType => Controllers.BotRegistrationManager.GetBotType(Bot.AIData.BotOwner);
         public string BaseBrainName => Bot.AIData.BotOwner.Brain.BaseBrain.ShortName();

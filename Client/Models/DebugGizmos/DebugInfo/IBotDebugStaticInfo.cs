@@ -8,6 +8,7 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
     public interface IBotDebugStaticInfo : IBotDebugInfo
     {
         public int BotId { get; }
+        public string BotName { get; }
         public bool IsInitialized { get; }
         public EBotType BotType { get; }
         public string BaseBrainName { get; }

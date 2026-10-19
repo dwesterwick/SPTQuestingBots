@@ -143,7 +143,7 @@ namespace QuestingBots
             if (Singleton<ConfigUtil>.Instance.CurrentConfig.BotSpawns.Enabled)
             {
                 ScavLimitsEnabled = Config.Bind("Scav Spawn Restrictions", "Enable Scav Spawn Restrictions",
-                    true, "Restrict where and how frequently Scavs are allowed to spawn");
+                    false, "Restrict where and how frequently Scavs are allowed to spawn");
                 ScavSpawningExclusionRadiusMapFraction = Config.Bind("Scav Spawn Restrictions", "Map Fraction for Scav Spawning Exclusion Radius",
                     0.1f, new ConfigDescription("Adjusts the distance (relative to the map size) that Scavs are allowed to spawn near human players, PMC's, and player Scavs", new AcceptableValueRange<float>(0.01f, 0.15f)));
                 ScavSpawnRateLimit = Config.Bind("Scav Spawn Restrictions", "Permitted Scav Spawn Rate",

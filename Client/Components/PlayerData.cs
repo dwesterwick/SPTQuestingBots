@@ -44,7 +44,7 @@ namespace QuestingBots.Components
                 return bot.name;
             }
 
-            return $"Bot{botDebugInfo[bot.Id].BotId}";
+            return botDebugInfo[bot.Id].BotName;
         }
     }
 }

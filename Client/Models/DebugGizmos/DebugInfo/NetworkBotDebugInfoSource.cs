@@ -17,6 +17,9 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         private int _botId;
         public int BotId => _botId;
 
+        private string _botName = null!;
+        public string BotName => _botName;
+
         private bool _isInitialized;
         public bool IsInitialized => _isInitialized;
 
@@ -108,6 +111,7 @@ namespace QuestingBots.Models.DebugGizmos.DebugInfo
         {
             _netId = data.NetId;
             _botId = data.BotId;
+            if (_botName != data.BotName) { _botName = data.BotName; }
             _isInitialized = data.IsInitialized;
             _botType = data.BotType;
             if (_baseBrainName != data.BaseBrainName) { _baseBrainName = data.BaseBrainName; }
