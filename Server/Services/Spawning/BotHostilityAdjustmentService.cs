@@ -88,6 +88,8 @@ namespace QuestingBots.Services.Spawning
             if (_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstScavs)
             {
                 settings.SavagePlayerBehaviour = "AlwaysEnemies";
+
+                AddMissingRolesToChancedEnemies(settings.ChancedEnemies, DatabaseHelpers.NormalScavRoleNames);
             }
 
             if (_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
@@ -95,7 +97,7 @@ namespace QuestingBots.Services.Spawning
                 settings.BearEnemyChance = 100;
                 settings.UsecEnemyChance = 100;
 
-                AddMissingPMCRolesToChancedEnemies(settings);
+                AddMissingRolesToChancedEnemies(settings.ChancedEnemies, DatabaseHelpers.PMCRoleNames);
             }
 
             if (settings.ChancedEnemies == null)
@@ -116,30 +118,30 @@ namespace QuestingBots.Services.Spawning
             }
         }
 
-        private void AddMissingPMCRolesToChancedEnemies(AdditionalHostilitySettings settings)
+        private void AddMissingRolesToChancedEnemies(List<ChancedEnemy>? chancedEnemies, IEnumerable<string> enemyRoles)
         {
-            foreach (string pmcRole in DatabaseHelpers.PMCRoleNames)
+            foreach (string enemyRole in enemyRoles)
             {
-                if (!_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCEnemyRoles.Contains(pmcRole))
+                if (!_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCEnemyRoles.Contains(enemyRole))
                 {
                     continue;
                 }
 
-                if (settings.ChancedEnemies == null)
+                if (chancedEnemies == null)
                 {
-                    settings.ChancedEnemies = new List<ChancedEnemy>();
+                    chancedEnemies = new List<ChancedEnemy>();
                 }
 
-                if (settings.ChancedEnemies.Any(enemy => enemy.Role == pmcRole) == true)
+                if (chancedEnemies.Any(enemy => enemy.Role == enemyRole) == true)
                 {
                     continue;
                 }
 
                 ChancedEnemy enemy = new ChancedEnemy();
-                enemy.Role = pmcRole;
+                enemy.Role = enemyRole;
                 enemy.EnemyChance = 100;
 
-                settings.ChancedEnemies.Add(enemy);
+                chancedEnemies.Add(enemy);
             }
         }
 
@@ -147,15 +149,24 @@ namespace QuestingBots.Services.Spawning
         {
             settings.SavageEnemyChance = _config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.GlobalScavEnemyChance;
 
+            if (settings.SavageEnemyChance != null)
+            {
+                settings.SavageEnemyChance = _config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.GlobalScavEnemyChance;
+            }
+
             if (_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstScavs)
             {
                 settings.SavagePlayerBehaviour = "AlwaysEnemies";
+
+                AddMissingRolesToChancedEnemies(settings.ChancedEnemies, DatabaseHelpers.NormalScavRoleNames);
             }
 
             if (_config.CurrentConfig.BotSpawns.PMCHostilityAdjustments.PMCsAlwaysHostileAgainstPMCs)
             {
                 settings.BearEnemyChance = 100;
                 settings.UsecEnemyChance = 100;
+
+                AddMissingRolesToChancedEnemies(settings.ChancedEnemies, DatabaseHelpers.PMCRoleNames);
             }
 
             if (settings.ChancedEnemies == null)

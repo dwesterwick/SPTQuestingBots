@@ -102,6 +102,11 @@ namespace QuestingBots.Patches.Spawning
                 //return;
             }
 
+            if ((__instance._initialBot.Profile.Info.Side == EPlayerSide.Savage) && (player.Profile.Info.Side == EPlayerSide.Savage) && !__result)
+            {
+                return;
+            }
+
             if (!player.Profile.WillBeAPMC() && !player.Profile.WillBeAPlayerScav())
             {
                 //return;

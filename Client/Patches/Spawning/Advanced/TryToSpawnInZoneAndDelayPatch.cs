@@ -27,7 +27,7 @@ namespace QuestingBots.Patches.Spawning.Advanced
                 return;
             }
 
-            IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.Nickname + "]");
+            IEnumerable<string> botData = data.Profiles.Select(p => "[" + p.Info.Settings.Role.ToString() + " " + p.GetCorrectedNickname() + "]");
             Singleton<LoggingUtil>.Instance.LogInfo("Trying to spawn wave with: " + string.Join(", ", botData) + "...");
         }
     }
