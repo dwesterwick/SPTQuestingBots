@@ -13,9 +13,9 @@ namespace QuestingBots.Models.DebugGizmos
     {
         public struct GizmoPositionRequestParams
         {
-            public Vector2 ScreenPosition;
-            public Vector2 CorrectedScreenPosition;
-            public Vector2 GuiSize;
+            public Vector2 ScreenPosition { get; private set; }
+            public Vector2 CorrectedScreenPosition { get; private set; }
+            public Vector2 GuiSize { get; private set; }
 
             public GizmoPositionRequestParams(Vector2 screenPosition, Vector2 correctedScreenPosition, Vector2 guiSize)
             {
